@@ -1,5 +1,16 @@
 <?php
 ob_start();
+require_once "../php/registrar.php";
+
+$mostrar = new m_almacen();
+$datos = $mostrar->MostrarInfraestructuraPDF();;
+$countInfra = $mostrar->contarInfraestructuraPDF();
+// var_dump($datos);
+for ($i = 0; $i < count($datos); $i++) {
+    var_dump($datos[$i][1]);
+}
+// $countZona = $mostrar->contarZonaAreasPDF();
+
 ?>
 
 
@@ -64,8 +75,8 @@ ob_start();
             <td>S3</td>
             <td>S4</td>
         </tr>
-        <tr>
-            <td rowspan="3">x</td>
+        <!-- <tr>
+            <th rowspan="3">A</th>
             <td>x</td>
             <td>x</td>
             <td>x</td>
@@ -232,11 +243,56 @@ ob_start();
             <td>x</td>
             <td>x</td>
             <td>x</td>
-        </tr>
+        </tr> -->
+        <?php
+        // $num_filas = 5;
+        $num_filas = $countInfra;
+        $rowspan_variable = 2;
 
+        for ($i = 1; $i <= $num_filas; $i++) {
+            echo '<tr>';
+
+            if ($i === 1 || ($i - 1) % $rowspan_variable === 0) {
+                echo "<td rowspan=\"$rowspan_variable\">Zona $i</td>";
+
+                for ($j = 0; $j < 54; $j++) {
+                    echo "<td >FilaJ $j</td>";
+                }
+            } else {
+                for ($j = 0; $j < 54; $j++) {
+                    echo "<td >Fila $j</td>";
+                }
+                // $html .= "<td>Filax $i</td>";
+            }
+
+            echo '</tr>';
+        }
+
+
+        ?>
     </tbody>
 </table>
+<table style="margin-top: 50px;">
+    <tbody>
+        <?php
+        foreach ($datos as $fila) {
+            echo '<tr><td>' . $fila['NOMBRE_T_ZONA_AREAS'] .  '</td></tr>';
+        }
 
+        ?>
+    </tbody>
+</table>
+<table style="margin-top: 50px;">
+    <tbody>
+        <tr>
+            <td rowspan="4">Logo</td>
+            <td rowspan="4">MONITOREO</td>
+            <td>xd</td>
+            <td>xd</td>
+            <td>xd</td>
+        </tr>
+    </tbody>
+</table>
 <?php
 $html = ob_get_clean();
 

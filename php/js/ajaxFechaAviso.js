@@ -26,7 +26,8 @@ $(function () {
         );
 
         var fechaActual = new Date();
-
+        console.log("fechaTo", fechaTotal);
+        console.log(fechaActual);
         var diferenciaMilisegundos = fechaTotal - fechaActual;
         var milisegundosEnUnDia = 24 * 60 * 60 * 1000;
         var diferenciaDias = Math.floor(
@@ -94,6 +95,7 @@ $(function () {
               <textarea class="form-control" id="observacion-${task.COD_ALERTA}" rows="3" style="display: none;"></textarea>
                `,
           icon: "info",
+          allowOutsideClick: false,
           confirmButtonText: "Aceptar",
           preConfirm: () => {
             const realizadoRadio = document.querySelector(

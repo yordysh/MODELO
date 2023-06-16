@@ -364,18 +364,50 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function contarInfraestructuraPDF()
+  {
+    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_INFRAESTRUCTURA");
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['count'];
 
-  public function MostrarAlertaSemanal()
+    return $count;
+  }
+  public function contarZonaAreasPDF()
+  {
+    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_INFRAESTRUCTURA ");
+
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['count'];
+
+    return $count;
+  }
+  public function MostrarZonaConteoPDF()
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_AREA,T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,
-      T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,T_INFRAESTRUCTURA.NDIAS AS NDIAS,T_ALERTA.COD_ALERTA AS COD_ALERTA,
-      T_ALERTA.FECHA_CREACION AS FECHA_CREACION,T_ALERTA.FECHA_TOTAL AS FECHA_TOTAL, T_ALERTA.FECHA_ACORDAR AS FECHA_ACORDAR, T_ALERTA.ESTADO AS ESTADO FROM T_ALERTA INNER JOIN T_INFRAESTRUCTURA
-      ON T_ALERTA.COD_INFRAESTRUCTURA= T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA inner join T_ZONA_AREAS ON 
-      T_ZONA_AREAS.COD_ZONA= T_INFRAESTRUCTURA.COD_ZONA");
+
+      $stm = $this->bd->prepare("SELECT DISTINCT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS
+      FROM T_INFRAESTRUCTURA AS I
+      INNER JOIN T_ZONA_AREAS AS Z ON I.COD_ZONA = Z.COD_ZONA");
+
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function MostrarInfraestructuraPDF()
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS, I.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA FROM T_INFRAESTRUCTURA AS I INNER JOIN T_ZONA_AREAS AS Z
+      ON I.COD_ZONA= Z.COD_ZONA");
+      $stm->execute();
+      $datos = $stm->fetchAll();
 
       return $datos;
     } catch (Exception $e) {

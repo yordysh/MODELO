@@ -13,11 +13,6 @@ if (isset($_POST["COD_INFRAESTRUCTURA"])) {
     $NOMBRE_INFRAESTRUCTURA = $_POST["NOMBRE_INFRAESTRUCTURA"];
     $NDIAS = $_POST["NDIAS"];
 
-    // $query = $dats->prepare("UPDATE T_INFRAESTRUCTURA SET NOMBRE_INFRAESTRUCTURA = :NOMBRE_INFRAESTRUCTURA, NDIAS = :NDIAS  WHERE COD_INFRAESTRUCTURA = :COD_INFRAESTRUCTURA");
-    // $query->bindParam(':COD_INFRAESTRUCTURA', $task_id, PDO::PARAM_STR);
-    // $query->bindParam(':NOMBRE_INFRAESTRUCTURA', $NOMBRE_INFRAESTRUCTURA, PDO::PARAM_STR);
-    // $query->bindParam(':NDIAS', $NDIAS, PDO::PARAM_STR);
-    // $resultado = $query->execute();
     $mostrar->editarInfraestructura($NOMBRE_INFRAESTRUCTURA, $NDIAS, $task_id);
 
     if ($resultado) {
