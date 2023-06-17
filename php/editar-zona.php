@@ -11,12 +11,10 @@ $mostrar = new m_almacen();
 if (isset($_POST["COD_ZONA"])) {
     $COD_ZONA = $_POST["COD_ZONA"];
 
-    $stm = $dats->prepare("SELECT * FROM T_ZONA_AREAS WHERE COD_ZONA = :COD_ZONA");
-    $stm->bindParam(':COD_ZONA', $COD_ZONA, PDO::PARAM_STR);
-    $stm->execute();
+    $selectZ = $mostrar->SelectZona($COD_ZONA);
 
     $json = array();
-    foreach ($stm as $row) {
+    foreach ($selectZ as $row) {
         $json[] = array(
             "COD_ZONA" => $row['COD_ZONA'],
             "NOMBRE_T_ZONA_AREAS" => $row['NOMBRE_T_ZONA_AREAS'],

@@ -1,5 +1,5 @@
 <?php
-require_once "DataBaseA.php";
+
 require_once "registrar.php";
 
 try {
@@ -26,4 +26,3 @@ try {
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
 }
-// echo "hola infraes";

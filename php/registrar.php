@@ -28,6 +28,19 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function SelectZona($COD_ZONA)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT * FROM T_ZONA_AREAS WHERE COD_ZONA = :COD_ZONA");
+      $stm->bindParam(':COD_ZONA', $COD_ZONA, PDO::PARAM_STR);
+      $stm->execute();
+
+      return $stm;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function MostrarAlmacenMuestraBusqueda($search)
   {
     try {
@@ -233,6 +246,19 @@ class m_almacen
     }
   }
 
+  public function SelectInfra($COD_INFRAESTRUCTURA)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT * FROM T_INFRAESTRUCTURA WHERE COD_INFRAESTRUCTURA = :COD_INFRAESTRUCTURA");
+      $stm->bindParam(':COD_INFRAESTRUCTURA', $COD_INFRAESTRUCTURA, PDO::PARAM_STR);
+      $stm->execute();
+
+      return $stm;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function insertarInfraestructura($valorSeleccionado, $NOMBRE_INFRAESTRUCTURA, $NDIAS)
   {
     try {
@@ -364,6 +390,51 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
+  public function InsertarAlerta($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $taskNdias)
+  {
+    $stm = $this->bd->prepare("INSERT INTO T_ALERTA (COD_INFRAESTRUCTURA, FECHA_CREACION, FECHA_TOTAL,N_DIAS_POS) VALUES (:COD_INFRAESTRUCTURA, :FECHA_CREACION, :FECHA_TOTAL,:N_DIAS_POS)");
+
+
+    $stm->bindParam(':FECHA_CREACION', $FECHA_CREACION);
+    $stm->bindParam(':COD_INFRAESTRUCTURA', $codInfraestructura);
+    $stm->bindParam(':FECHA_TOTAL', $FECHA_TOTAL);
+    $stm->bindParam(':N_DIAS_POS', $taskNdias);
+
+    $insert1 = $stm->execute();
+    return $insert1;
+  }
+
+  public function InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION)
+  {
+    $stm = $this->bd->prepare("INSERT INTO T_ALERTA (COD_INFRAESTRUCTURA, FECHA_CREACION, FECHA_TOTAL, FECHA_ACORDAR, N_DIAS_POS,POSTERGACION) VALUES (:COD_INFRAESTRUCTURA, :FECHA_CREACION, :FECHA_TOTAL, :FECHA_ACORDAR, :N_DIAS_POS,:POSTERGACION)");
+
+    $stm->bindParam(':COD_INFRAESTRUCTURA', $codInfraestructura);
+    $stm->bindParam(':FECHA_CREACION', $fechaActual);
+    $stm->bindParam(':FECHA_TOTAL', $fechaPostergacion);
+    $stm->bindParam(':FECHA_ACORDAR', $fechaAcordar);
+    $stm->bindParam(':N_DIAS_POS', $taskNdias);
+    $stm->bindParam(':POSTERGACION', $POSTERGACION);
+
+    $insert2 = $stm->execute();
+    return $insert2;
+  }
+
+  public function InsertarAlertaMayorSinPost($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $FECHA_ACORDAR, $taskNdias)
+  {
+    $stm = $this->bd->prepare("INSERT INTO T_ALERTA (COD_INFRAESTRUCTURA, FECHA_CREACION, FECHA_TOTAL, FECHA_ACORDAR,N_DIAS_POS) VALUES (:COD_INFRAESTRUCTURA, :FECHA_CREACION, :FECHA_TOTAL,:FECHA_ACORDAR,:N_DIAS_POS)");
+
+
+    $stm->bindParam(':FECHA_CREACION', $FECHA_CREACION);
+    $stm->bindParam(':COD_INFRAESTRUCTURA', $codInfraestructura);
+    $stm->bindParam(':FECHA_TOTAL', $FECHA_TOTAL);
+    $stm->bindParam(':FECHA_ACORDAR', $FECHA_ACORDAR);
+    $stm->bindParam(':N_DIAS_POS', $taskNdias);
+
+    $insert2 = $stm->execute();
+    return $insert2;
+  }
+
   public function contarInfraestructuraPDF()
   {
     $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_INFRAESTRUCTURA");

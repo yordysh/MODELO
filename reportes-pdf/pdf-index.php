@@ -285,11 +285,19 @@ for ($i = 0; $i < count($datos); $i++) {
 <table style="margin-top: 50px;">
     <tbody>
         <tr>
-            <td rowspan="4">Logo</td>
-            <td rowspan="4">MONITOREO</td>
-            <td>xd</td>
-            <td>xd</td>
-            <td>xd</td>
+            <td rowspan="4">LOGO</td>
+            <td rowspan="4" style="text-align: center;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS</td>
+            <td>LBS-PHS-FR-01</td>
+
+        </tr>
+        <tr>
+            <td>Versión:04</td>
+        </tr>
+        <tr>
+            <td>Página:01</td>
+        </tr>
+        <tr>
+            <td>Fecha:Enero 2023</td>
         </tr>
     </tbody>
 </table>

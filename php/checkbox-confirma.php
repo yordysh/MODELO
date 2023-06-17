@@ -10,7 +10,7 @@ if (isset($_POST['observacion'])) {
 
     $stmt = $conn->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacion, FECHA_POSTERGACION= :fechaPostergacion WHERE COD_ALERTA = :COD_ALERTA");
 
-    // Vincular los parámetros a los marcadores de posición
+
     $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
     $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
     $stmt->bindParam(':observacion', $observacion, PDO::PARAM_STR);
@@ -22,14 +22,14 @@ if (isset($_POST['observacion'])) {
 
     $stmt = $conn->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacionTextArea WHERE COD_ALERTA = :COD_ALERTA");
 
-    // Vincular los parámetros a los marcadores de posición
+
     $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
     $stmt->bindParam(':observacionTextArea', $observacionTextArea, PDO::PARAM_STR);
     $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
 }
 
 
-// Ejecutar la consulta
+
 if ($stmt->execute()) {
     $response = array(
         'success' => true,
@@ -41,5 +41,5 @@ if ($stmt->execute()) {
         // 'message' => 'Error al actualizar el estado: ' . $conn->error
     );
 }
-// Devolver una respuesta JSON
+
 echo json_encode($response);
