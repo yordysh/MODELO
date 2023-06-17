@@ -435,6 +435,34 @@ class m_almacen
     return $insert2;
   }
 
+  public function actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION)
+  {
+    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacion, FECHA_POSTERGACION= :fechaPostergacion WHERE COD_ALERTA = :COD_ALERTA");
+
+
+    $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
+    $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
+    $stmt->bindParam(':observacion', $observacion, PDO::PARAM_STR);
+    $stmt->bindParam(':fechaPostergacion',  $FECHA_POSTERGACION);
+
+
+    $insert2 = $stmt->execute();
+    return $insert2;
+  }
+
+  public function actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea)
+  {
+    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacionTextArea WHERE COD_ALERTA = :COD_ALERTA");
+
+
+    $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
+    $stmt->bindParam(':observacionTextArea', $observacionTextArea, PDO::PARAM_STR);
+    $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
+
+    $insert2 = $stmt->execute();
+    return $insert2;
+  }
+
   public function contarInfraestructuraPDF()
   {
     $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_INFRAESTRUCTURA");

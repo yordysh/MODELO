@@ -1,6 +1,6 @@
 <?php
 
-require_once "registrar.php";
+require_once "m_almacen.php";
 
 try {
     $search = $_POST["search"];

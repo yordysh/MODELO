@@ -1,6 +1,6 @@
 <?php
-require_once "DataBaseA.php";
-require_once "registrar.php";
+
+require_once "m_almacen.php";
 require_once "../funciones/f_funcion.php";
 
 $conexion = new DataBase();

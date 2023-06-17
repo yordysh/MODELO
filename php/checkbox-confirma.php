@@ -1,36 +1,25 @@
 <?php
-require_once "./registrar.php";
-$c = new DataBase();
-$conn = $c->Conectar();
+require_once "./m_almacen.php";
+$mostrar = new m_almacen();
+
 if (isset($_POST['observacion'])) {
     $estado = $_POST['estado'];
     $taskId = $_POST['taskId'];
     $observacion = $_POST['observacion'];
     $FECHA_POSTERGACION = $_POST['fechaPostergacion'];
 
-    $stmt = $conn->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacion, FECHA_POSTERGACION= :fechaPostergacion WHERE COD_ALERTA = :COD_ALERTA");
-
-
-    $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
-    $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
-    $stmt->bindParam(':observacion', $observacion, PDO::PARAM_STR);
-    $stmt->bindParam(':fechaPostergacion',  $FECHA_POSTERGACION);
+    $alert = $mostrar->actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION);
 } else {
     $estado = $_POST['estado'];
     $taskId = $_POST['taskId'];
     $observacionTextArea = $_POST['observacionTextArea'];
 
-    $stmt = $conn->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacionTextArea WHERE COD_ALERTA = :COD_ALERTA");
-
-
-    $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
-    $stmt->bindParam(':observacionTextArea', $observacionTextArea, PDO::PARAM_STR);
-    $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
+    $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea);
 }
 
 
 
-if ($stmt->execute()) {
+if ($insert2->execute()) {
     $response = array(
         'success' => true,
         'message' => 'Estado actualizado correctamente'
