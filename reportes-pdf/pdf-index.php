@@ -5,6 +5,7 @@ require_once "../php/m_almacen.php";
 $mostrar = new m_almacen();
 $datos = $mostrar->MostrarInfraestructuraPDF();;
 $countInfra = $mostrar->contarInfraestructuraPDF();
+
 // var_dump($datos);
 // for ($i = 0; $i < count($datos); $i++) {
 //     var_dump($datos[$i][1]);
@@ -41,12 +42,17 @@ $countInfra = $mostrar->contarInfraestructuraPDF();
     .cabecera-fila {
         background-color: #9dcdec;
     }
+
+    .cabecera-fila td,
+    .cabecera {
+        text-align: center;
+    }
 </style>
 
 <table style="margin-bottom: 50px;">
     <tbody>
         <tr>
-            <td rowspan="4">LOGO</td>
+            <td rowspan="4"><img src="../assets/images/logo-covifarmaRecorte.png" alt=""></td>
             <td rowspan="4" style="text-align: center;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS</td>
             <td>LBS-PHS-FR-01</td>
 
@@ -97,199 +103,52 @@ $countInfra = $mostrar->contarInfraestructuraPDF();
             <td>S3</td>
             <td>S4</td>
         </tr>
-        <!-- <tr>
-            <th rowspan="3">A</th>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-        </tr>
-        <tr>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-        </tr>
-        <tr>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-        </tr> -->
         <?php
-        // $num_filas = 5;
-        $num_filas = $countInfra;
-        $rowspan_variable = 2;
 
-        for ($i = 1; $i <= $num_filas; $i++) {
-            echo '<tr>';
+        // $num_filas = $countInfra;
+        // $rowspan_variable = 2;
 
-            if ($i === 1 || ($i - 1) % $rowspan_variable === 0) {
-                echo "<td rowspan=\"$rowspan_variable\">Zona $i</td>";
+        // for ($i = 1; $i <= $num_filas; $i++) {
+        //     echo '<tr>';
 
-                for ($j = 0; $j < 54; $j++) {
-                    echo "<td >FilaJ $j</td>";
-                }
-            } else {
-                for ($j = 0; $j < 54; $j++) {
-                    echo "<td >Fila $j</td>";
-                }
-                // $html .= "<td>Filax $i</td>";
+        //     if ($i === 1 || ($i - 1) % $rowspan_variable === 0) {
+        //         echo "<td rowspan=\"$rowspan_variable\">Zona $i</td>";
+
+        //         for ($j = 0; $j < 54; $j++) {
+        //             echo "<td >FilaJ $j</td>";
+        //         }
+        //     } else {
+        //         for ($j = 0; $j < 54; $j++) {
+        //             echo "<td >Fila $j</td>";
+        //         }
+        //         // $html .= "<td>Filax $i</td>";
+        //     }
+
+        //     echo '</tr>';
+        // }
+        $grupos = array();
+        foreach ($datos as $fila) {
+            $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
+            $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
+
+            if (!isset($grupos[$nombreZona])) {
+                $grupos[$nombreZona] = array();
             }
 
-            echo '</tr>';
+            $grupos[$nombreZona][] = $nombreInfraestructura;
         }
+        foreach ($grupos as $nombreZona => $valores) {
+            echo '<tr class="cabecera">';
+            echo '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
+            echo '<td >' . $valores[0] . '</td>';
+            echo '</tr>';
 
+            for ($i = 1; $i < count($valores); $i++) {
+                echo '<tr>';
+                echo '<td class="cabecera">' . $valores[$i] . '</td>';
+                echo '</tr>';
+            }
+        }
 
         ?>
     </tbody>
