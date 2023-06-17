@@ -1,4 +1,5 @@
 <?php
+
 require_once "./m_almacen.php";
 $mostrar = new m_almacen();
 
@@ -16,10 +17,9 @@ if (isset($_POST['observacion'])) {
 
     $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea);
 }
+$insert2 = $alert->execute();
 
-
-
-if ($insert2->execute()) {
+if ($insert2) {
     $response = array(
         'success' => true,
         'message' => 'Estado actualizado correctamente'

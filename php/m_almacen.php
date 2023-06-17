@@ -444,10 +444,8 @@ class m_almacen
     $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
     $stmt->bindParam(':observacion', $observacion, PDO::PARAM_STR);
     $stmt->bindParam(':fechaPostergacion',  $FECHA_POSTERGACION);
-
-
-    $insert2 = $stmt->execute();
-    return $insert2;
+    $stmt->execute();
+    return $stmt;
   }
 
   public function actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea)
@@ -458,9 +456,8 @@ class m_almacen
     $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
     $stmt->bindParam(':observacionTextArea', $observacionTextArea, PDO::PARAM_STR);
     $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
-
-    $insert2 = $stmt->execute();
-    return $insert2;
+    $stmt->execute();
+    return $stmt;
   }
 
   public function contarInfraestructuraPDF()

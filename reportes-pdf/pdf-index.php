@@ -1,14 +1,14 @@
 <?php
 ob_start();
-require_once "../php/registrar.php";
+require_once "../php/m_almacen.php";
 
 $mostrar = new m_almacen();
 $datos = $mostrar->MostrarInfraestructuraPDF();;
 $countInfra = $mostrar->contarInfraestructuraPDF();
 // var_dump($datos);
-for ($i = 0; $i < count($datos); $i++) {
-    var_dump($datos[$i][1]);
-}
+// for ($i = 0; $i < count($datos); $i++) {
+//     var_dump($datos[$i][1]);
+// }
 // $countZona = $mostrar->contarZonaAreasPDF();
 
 ?>
@@ -37,13 +37,35 @@ for ($i = 0; $i < count($datos); $i++) {
     tbody td {
         border: 1px solid black;
     }
+
+    .cabecera-fila {
+        background-color: #9dcdec;
+    }
 </style>
 
+<table style="margin-bottom: 50px;">
+    <tbody>
+        <tr>
+            <td rowspan="4">LOGO</td>
+            <td rowspan="4" style="text-align: center;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS</td>
+            <td>LBS-PHS-FR-01</td>
 
+        </tr>
+        <tr>
+            <td>Versión:04</td>
+        </tr>
+        <tr>
+            <td>Página:01</td>
+        </tr>
+        <tr>
+            <td>Fecha:Enero 2023</td>
+        </tr>
+    </tbody>
+</table>
 <table>
     <tbody>
 
-        <tr>
+        <tr class="cabecera-fila">
             <td rowspan="2">Zonas/areas</td>
             <td rowspan="2">Infraestructura, accesorios complementarios</td>
             <td colspan="24">Diario</td>
@@ -53,7 +75,7 @@ for ($i = 0; $i < count($datos); $i++) {
             <td colspan="4">Mensual</td>
             <td rowspan="2">Responsable de ejecución</td>
         </tr>
-        <tr>
+        <tr class="cabecera-fila">
             <td colspan="6">S1</td>
             <td colspan="6">S2</td>
             <td colspan="6">S3</td>
@@ -272,35 +294,20 @@ for ($i = 0; $i < count($datos); $i++) {
         ?>
     </tbody>
 </table>
-<table style="margin-top: 50px;">
+<!-- <table style="margin-top: 50px;">
     <tbody>
         <?php
         foreach ($datos as $fila) {
-            echo '<tr><td>' . $fila['NOMBRE_T_ZONA_AREAS'] .  '</td></tr>';
+            echo '<tr>
+            <td>' . $fila['NOMBRE_T_ZONA_AREAS'] .  '</td>
+            <td>' . $fila['NOMBRE_INFRAESTRUCTURA'] .  '</td>
+            </tr>';
         }
 
         ?>
     </tbody>
-</table>
-<table style="margin-top: 50px;">
-    <tbody>
-        <tr>
-            <td rowspan="4">LOGO</td>
-            <td rowspan="4" style="text-align: center;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS</td>
-            <td>LBS-PHS-FR-01</td>
+</table> -->
 
-        </tr>
-        <tr>
-            <td>Versión:04</td>
-        </tr>
-        <tr>
-            <td>Página:01</td>
-        </tr>
-        <tr>
-            <td>Fecha:Enero 2023</td>
-        </tr>
-    </tbody>
-</table>
 <?php
 $html = ob_get_clean();
 
