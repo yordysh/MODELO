@@ -19,62 +19,171 @@ $html .= '<tbody>';
 
 
 
-$grupos = array();
 
-foreach ($datos as $fila) {
-    $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
-    $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
-    $estado = $fila['ESTADO'];
-    $fechaTotal = $fila['FECHA_TOTAL'];
+// $grupos = array();
 
-    if (!isset($grupos[$nombreZona])) {
-        $grupos[$nombreZona] = array();
-    }
+// foreach ($datos as $fila) {
+//     $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
+//     $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
+//     $estado = $fila['ESTADO'];
+//     $fechaTotal = $fila['FECHA_TOTAL'];
 
-    // Agregar la condición para omitir los estados 'P'
-    if ($estado != 'P') {
-        $grupos[$nombreZona][] = array(
-            'nombreInfraestructura' => $nombreInfraestructura,
-            'estado' => $estado,
-            'fechaTotal' => $fechaTotal
-        );
-    }
-}
+//     if (!isset($grupos[$nombreZona])) {
+//         $grupos[$nombreZona] = array(
+//             'infraestructuras' => array(),
+//             'estados' => array()
+//         );
+//     }
 
-foreach ($grupos as $nombreZona => $valores) {
-    $html .= '<tr>';
-    $html .= '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
-    $html .= '<td>' . $valores[0]['nombreInfraestructura'] . '</td>';
+//     // Verificar si la infraestructura ya existe en la zona actual
+//     $infraestructuraExistente = -1;
+//     foreach ($grupos[$nombreZona]['infraestructuras'] as $index => $infraestructura) {
+//         if ($infraestructura === $nombreInfraestructura) {
+//             $infraestructuraExistente = $index;
+//             break;
+//         }
+//     }
 
-    // Obtener el mes y año de fechaTotal del primer valor
-    $fechaTotal = new DateTime($valores[0]['fechaTotal']);
-    $mes = $fechaTotal->format('m');
-    $anio = $fechaTotal->format('Y');
+//     // Agregar la infraestructura solo si no existe en la zona actual
+//     if ($infraestructuraExistente === -1) {
+//         $grupos[$nombreZona]['infraestructuras'][] = $nombreInfraestructura;
+//         $grupos[$nombreZona]['estados'][] = $estado;
+//     } elseif ($infraestructuraExistente !== -1) {
+//         // Actualizar el estado si la infraestructura ya existe en la zona actual
+//         $grupos[$nombreZona]['estados'][$infraestructuraExistente] = $estado;
+//     }
+// }
 
-    // Imprimir columnas para los días del mes
-    for ($dia = 1; $dia <= 31; $dia++) {
-        $html .= '<td>' . ($mes == $fechaTotal->format('m') && $anio == $fechaTotal->format('Y') && $dia == $fechaTotal->format('d') ? $valores[0]['estado'] : '') . '</td>';
-    }
+// foreach ($grupos as $nombreZona => $valores) {
+//     $fechaEstado = array();
+//     foreach ($valores['infraestructuras'] as $index => $infraestructura) {
+//         $estado = $valores['estados'][$index];
+//         $fechaEstado[$index] = array();
 
-    $html .= '</tr>';
+//         foreach ($datos as $fila) {
+//             $nombreZonaFila = $fila['NOMBRE_T_ZONA_AREAS'];
+//             $nombreInfraestructuraFila = $fila['NOMBRE_INFRAESTRUCTURA'];
+//             $estadoFila = $fila['ESTADO'];
+//             $fechaTotalFila = $fila['FECHA_TOTAL'];
 
-    for ($j = 1; $j < count($valores); $j++) {
-        $html .= '<tr>';
-        $html .= '<td>' . $valores[$j]['nombreInfraestructura'] . '</td>';
+//             if ($nombreZona === $nombreZonaFila && $infraestructura === $nombreInfraestructuraFila && $estadoFila != 'P') {
+//                 $fechaEstado[$index][$fechaTotalFila] = $estadoFila;
+//             }
+//         }
+//     }
 
-        // Obtener el mes y año de fechaTotal del valor actual
-        $fechaTotal = new DateTime($valores[$j]['fechaTotal']);
-        $mes = $fechaTotal->format('m');
-        $anio = $fechaTotal->format('Y');
+//     $html .= '<tr>';
+//     $html .= '<td rowspan="' . count($valores['infraestructuras']) . '">' . $nombreZona . '</td>';
+//     $html .= '<td>' . $valores['infraestructuras'][0] . '</td>';
 
-        // Imprimir columnas para los días del mes
-        for ($dia = 1; $dia <= 31; $dia++) {
-            $html .= '<td>' . ($mes == $fechaTotal->format('m') && $anio == $fechaTotal->format('Y') && $dia == $fechaTotal->format('d') ? $valores[$j]['estado'] : '') . '</td>';
-        }
+//     foreach ($valores['infraestructuras'] as $index => $infraestructura) {
+//         $fechaEstadoActual = $fechaEstado[$index];
 
-        $html .= '</tr>';
-    }
-}
+//         foreach ($fechaEstadoActual as $fecha => $estado) {
+//             $html .= '<td>' . $estado . '</td>';
+//         }
+
+//         // Imprimir columnas restantes si no hay estado para todas las fechas
+//         $diasFaltantes = 31 - count($fechaEstadoActual);
+//         for ($i = 0; $i < $diasFaltantes; $i++) {
+//             $html .= '<td></td>';
+//         }
+
+//         if ($index < count($valores['infraestructuras']) - 1) {
+//             $html .= '</tr><tr>';
+//             $html .= '<td>' . $valores['infraestructuras'][$index + 1] . '</td>';
+//         }
+//     }
+
+//     $html .= '</tr>';
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -92,7 +201,9 @@ foreach ($grupos as $nombreZona => $valores) {
 $html .= '</tbody>';
 $html .= '</table>';
 $html .= '</body>';
-$html .= '</html>';
+$html .= '
+
+</html>';
 
 
 // Generar el PDF con DOMPDF
