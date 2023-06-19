@@ -173,13 +173,18 @@ $html = ob_get_clean();
 require_once '../assets/DomPDF/autoload.inc.php';
 
 use Dompdf\Dompdf;
+use Dompdf\Options;
+
+$options = new Options();
+$options->set('isRemoteEnabled', TRUE);
+$dompdf = new DOMPDF($options);
 
 // Create an instance of Dompdf
 $dompdf = new Dompdf();
 
 // Load the HTML content into Dompdf
 $dompdf->loadHtml($html);
-
+// $dompdf->loadHtml("<img src='logo-covifarmaRecorte.png'");
 // Set the paper size and orientation
 $dompdf->setPaper('A2', 'landscape');
 
