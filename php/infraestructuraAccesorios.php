@@ -20,6 +20,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <!--====== Estilo de ICON ======-->
     <link rel="stylesheet" href="../assets/styleIcons/style.css">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
     <title>Covifarma</title>
 </head>
@@ -89,7 +90,28 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         <div class="bt-guardar">
                             <input type="hidden" id="taskId">
                             <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
-                            <a class="btn btn-primary" href="../reportes-pdf/pdf-index.php" target="_blank"><i class="fa fa-download"></i> Descargar PDF</a>
+                            <div class="pdf" style="margin-left: 35%; margin-top:-4%;">
+                                <label for="mes">Seleccione el año:</label>
+                                <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
+                                <label for="mes">Seleccione el mes:</label>
+                                <select id="mes" name="mes">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    <option value="01">Enero</option>
+                                    <option value="02">Febrero</option>
+                                    <option value="03">Marzo</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Mayo</option>
+                                    <option value="06">Junio</option>
+                                    <option value="07">Julio</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
+                                <a class="btn btn-primary" href="#" onclick="generarPDF()">Generar PDF</a>
+                            </div>
+
                         </div>
                     </form>
                     <div class="card my-4" id="task-result">
@@ -117,6 +139,19 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <!-- <script src="../assets/js/jquery-tabledit/jquery.tabledit.js"></script> -->
     <script src="./js/ajaxInfra.js"></script>
     <!-- <script src="js/ajaxAlerta.js"></script> -->
+    <script>
+        function generarPDF() {
+            var anioSeleccionado = document.getElementById("anio").value;
+            var mesSeleccionado = document.getElementById("mes").value;
+
+            // Enviar los valores a tu script de generación de PDF
+            var url = "../reportes-pdf/pdfejemplo.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
+            window.open(url, "_blank");
+        }
+    </script>
+
+
+
 </body>
 
 </html>

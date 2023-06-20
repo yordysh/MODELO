@@ -496,7 +496,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function MostrarInfraestructuraPDF()
+  public function MostrarInfraestructuraPDF($anioSeleccionado, $mesSeleccionado)
   {
     try {
 
@@ -507,7 +507,10 @@ class m_almacen
       A.FECHA_TOTAL AS FECHA_TOTAL
       FROM T_ALERTA A
       INNER JOIN T_INFRAESTRUCTURA AS I ON A.COD_INFRAESTRUCTURA = I.COD_INFRAESTRUCTURA
-      INNER JOIN T_ZONA_AREAS AS Z ON Z.COD_ZONA = I.COD_ZONA;");
+      INNER JOIN T_ZONA_AREAS AS Z ON Z.COD_ZONA = I.COD_ZONA
+      WHERE MONTH(A.FECHA_TOTAL) = :mesSeleccionado AND YEAR(A.FECHA_TOTAL) = :anioSeleccionado ");
+      $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
+      $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
       $stm->execute();
       $datos = $stm->fetchAll();
 

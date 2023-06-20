@@ -5,9 +5,11 @@ require_once '../assets/DomPDF/autoload.inc.php';
 require_once "../php/m_almacen.php";
 // require_once "../funciones/f_funcion.php";
 
-$mostrar = new m_almacen();
-$datos = $mostrar->MostrarInfraestructuraPDF();
+$anioSeleccionado = $_GET['anio'];
+$mesSeleccionado = $_GET['mes'];
 
+$mostrar = new m_almacen();
+$datos = $mostrar->MostrarInfraestructuraPDF($anioSeleccionado, $mesSeleccionado);
 
 // Generar el contenido HTML
 $html = '<html>';
@@ -35,7 +37,7 @@ $html .= '<tbody>';
 //         );
 //     }
 
-//     // Verificar si la infraestructura ya existe en la zona actual
+//     // Verifica si la infraestructura ya existe en la zona actual
 //     $infraestructuraExistente = -1;
 //     foreach ($grupos[$nombreZona]['infraestructuras'] as $index => $infraestructura) {
 //         if ($infraestructura === $nombreInfraestructura) {
@@ -44,12 +46,12 @@ $html .= '<tbody>';
 //         }
 //     }
 
-//     // Agregar la infraestructura solo si no existe en la zona actual
+//     // Agrega la infraestructura solo si no existe en la zona actual
 //     if ($infraestructuraExistente === -1) {
 //         $grupos[$nombreZona]['infraestructuras'][] = $nombreInfraestructura;
 //         $grupos[$nombreZona]['estados'][] = $estado;
 //     } elseif ($infraestructuraExistente !== -1) {
-//         // Actualizar el estado si la infraestructura ya existe en la zona actual
+//         // Actualiza el estado si la infraestructura ya existe en la zona actual
 //         $grupos[$nombreZona]['estados'][$infraestructuraExistente] = $estado;
 //     }
 // }
@@ -99,220 +101,101 @@ $html .= '<tbody>';
 // }
 
 
+
+
+
+
 $grupos = array();
 
 foreach ($datos as $fila) {
     $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
     $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
-    $estado = $fila['ESTADO'];
+    $ndiaspos = $fila['N_DIAS_POS'];
+
     $fechaTotal = $fila['FECHA_TOTAL'];
 
     if (!isset($grupos[$nombreZona])) {
-        $grupos[$nombreZona] = array(
-            'infraestructuras' => array(),
-            'estados' => array()
-        );
+        $grupos[$nombreZona] = array();
     }
 
-    // Verificar si la infraestructura ya existe en la zona actual
-    $infraestructuraExistente = -1;
-    foreach ($grupos[$nombreZona]['infraestructuras'] as $index => $infraestructura) {
-        if ($infraestructura === $nombreInfraestructura) {
-            $infraestructuraExistente = $index;
-            break;
-        }
-    }
+    $grupos[$nombreZona][] = array(
+        'nombreInfraestructura' => $nombreInfraestructura,
 
-    // Agregar la infraestructura solo si no existe en la zona actual
-    if ($infraestructuraExistente === -1) {
-        $grupos[$nombreZona]['infraestructuras'][] = $nombreInfraestructura;
-        $grupos[$nombreZona]['estados'][] = array();
-        $infraestructuraExistente = count($grupos[$nombreZona]['infraestructuras']) - 1;
-    }
-
-    // Agregar el estado a la infraestructura actual
-    $grupos[$nombreZona]['estados'][$infraestructuraExistente][$fechaTotal] = $estado;
+        'ndiaspos' => $ndiaspos,
+        'fechaTotal' => $fechaTotal
+    );
 }
+
 
 
 foreach ($grupos as $nombreZona => $valores) {
-    $infraestructuras = $valores['infraestructuras'];
-    $estados = $valores['estados'];
+    $html .= '<tr class="cabecera">';
+    $html .= '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
+    $html .= '<td>' . $valores[0]['nombreInfraestructura'] . '</td>';
+    if ($valores[0]['ndiaspos'] == 1) {
+        $html .= '<td>Diaria</td>';
+    } elseif ($valores[0]['ndiaspos'] == 2) {
+        $html .= '<td>Interdiaria</td>';
+    } elseif ($valores[0]['ndiaspos'] == 7) {
+        $html .= '<td>Semanal</td>';
+    } elseif ($valores[0]['ndiaspos'] == 15) {
+        $html .= '<td>Quincenal</td>';
+    } elseif ($valores[0]['ndiaspos'] == 30) {
+        $html .= '<td>Mensual</td>';
+    } else {
+        $html .= '<td>' . $valores[0]['ndiaspos'] . '</td>';
+    }
 
-    $html .= '<tr>';
-    $html .= '<td rowspan="' . count($infraestructuras) . '">' . $nombreZona . '</td>';
+    // Añadir las columnas de acuerdo a la FECHA_TOTAL
+    $fechaTotal = $valores[0]['fechaTotal'];
+    $numeroDiasMes = date('t', strtotime($fechaTotal));
+    $columnasFechaTotal = $numeroDiasMes;
 
-    foreach ($infraestructuras as $index => $infraestructura) {
-        $html .= '<td>' . $infraestructura . '</td>';
+    for ($i = 1; $i <= $columnasFechaTotal; $i++) {
+        $html .= '<td>' . $i . '</td>';
+    }
 
-        for ($dia = 1; $dia <= 31; $dia++) {
-            $fecha = sprintf("%02d", $dia);
-            $estadoColumna = '';
+    // Agrega columna en blanco si el mes tiene 30 días
+    if ($columnasFechaTotal == 30) {
+        $html .= '<td></td>';
+    }
 
-            foreach ($estados[$index] as $fechaEstado => $estado) {
-                if ($fechaEstado === $fecha) {
-                    $estadoColumna = $estado;
-                    break;
-                }
-            }
+    $html .= '</tr>';
 
-            $html .= '<td>' . $estadoColumna . '</td>';
+    for ($i = 1; $i < count($valores); $i++) {
+        $html .= '<tr>';
+        $html .= '<td class="cabecera">' . $valores[$i]['nombreInfraestructura'] . '</td>';
+        if ($valores[$i]['ndiaspos'] == 1) {
+            $html .= '<td>Diaria</td>';
+        } elseif ($valores[$i]['ndiaspos'] == 2) {
+            $html .= '<td>Interdiaria</td>';
+        } elseif ($valores[$i]['ndiaspos'] == 7) {
+            $html .= '<td>Semanal</td>';
+        } elseif ($valores[$i]['ndiaspos'] == 15) {
+            $html .= '<td>Quincenal</td>';
+        } elseif ($valores[$i]['ndiaspos'] == 30) {
+            $html .= '<td>Mensual</td>';
+        } else {
+            $html .= '<td>' . $valores[0]['ndiaspos'] . '</td>';
+        }
+
+        // Añadir las columnas de acuerdo a la FECHA_TOTAL
+        $fechaTotal = $valores[$i]['fechaTotal'];
+        $numeroDiasMes = date('t', strtotime($fechaTotal));
+        $columnasFechaTotal = $numeroDiasMes;
+
+        for ($j = 1; $j <= $columnasFechaTotal; $j++) {
+            $html .= '<td>' . $j . '</td>';
+        }
+
+        // Agrega columna en blanco si el mes tiene 30 días
+        if ($columnasFechaTotal == 30) {
+            $html .= '<td></td>';
         }
 
         $html .= '</tr>';
-
-        if ($index < count($infraestructuras) - 1) {
-            $html .= '<tr>';
-        }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
