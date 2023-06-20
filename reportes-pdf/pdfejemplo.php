@@ -99,6 +99,129 @@ $html .= '<tbody>';
 // }
 
 
+$grupos = array();
+
+foreach ($datos as $fila) {
+    $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
+    $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
+    $estado = $fila['ESTADO'];
+    $fechaTotal = $fila['FECHA_TOTAL'];
+
+    if (!isset($grupos[$nombreZona])) {
+        $grupos[$nombreZona] = array(
+            'infraestructuras' => array(),
+            'estados' => array()
+        );
+    }
+
+    // Verificar si la infraestructura ya existe en la zona actual
+    $infraestructuraExistente = -1;
+    foreach ($grupos[$nombreZona]['infraestructuras'] as $index => $infraestructura) {
+        if ($infraestructura === $nombreInfraestructura) {
+            $infraestructuraExistente = $index;
+            break;
+        }
+    }
+
+    // Agregar la infraestructura solo si no existe en la zona actual
+    if ($infraestructuraExistente === -1) {
+        $grupos[$nombreZona]['infraestructuras'][] = $nombreInfraestructura;
+        $grupos[$nombreZona]['estados'][] = array();
+        $infraestructuraExistente = count($grupos[$nombreZona]['infraestructuras']) - 1;
+    }
+
+    // Agregar el estado a la infraestructura actual
+    $grupos[$nombreZona]['estados'][$infraestructuraExistente][$fechaTotal] = $estado;
+}
+
+
+foreach ($grupos as $nombreZona => $valores) {
+    $infraestructuras = $valores['infraestructuras'];
+    $estados = $valores['estados'];
+
+    $html .= '<tr>';
+    $html .= '<td rowspan="' . count($infraestructuras) . '">' . $nombreZona . '</td>';
+
+    foreach ($infraestructuras as $index => $infraestructura) {
+        $html .= '<td>' . $infraestructura . '</td>';
+
+        for ($dia = 1; $dia <= 31; $dia++) {
+            $fecha = sprintf("%02d", $dia);
+            $estadoColumna = '';
+
+            foreach ($estados[$index] as $fechaEstado => $estado) {
+                if ($fechaEstado === $fecha) {
+                    $estadoColumna = $estado;
+                    break;
+                }
+            }
+
+            $html .= '<td>' . $estadoColumna . '</td>';
+        }
+
+        $html .= '</tr>';
+
+        if ($index < count($infraestructuras) - 1) {
+            $html .= '<tr>';
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
