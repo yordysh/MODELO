@@ -6,7 +6,7 @@ require_once "../php/m_almacen.php";
 // require_once "../funciones/f_funcion.php";
 
 $mostrar = new m_almacen();
-$datos = $mostrar->MostrarInfraestructuraPDF();
+// $datos = $mostrar->MostrarInfraestructuraPDF();
 
 
 // Generar el contenido HTML
@@ -20,13 +20,15 @@ $html .= '<tbody>';
 
 
 
+
+
 $grupos = array();
 
 foreach ($datos as $fila) {
     $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
     $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
     $ndiaspos = $fila['N_DIAS_POS'];
-    $estado = $fila['ESTADO'];
+
     $fechaTotal = $fila['FECHA_TOTAL'];
 
     if (!isset($grupos[$nombreZona])) {
@@ -35,7 +37,7 @@ foreach ($datos as $fila) {
 
     $grupos[$nombreZona][] = array(
         'nombreInfraestructura' => $nombreInfraestructura,
-        'estado' => $estado,
+
         'ndiaspos' => $ndiaspos,
         'fechaTotal' => $fechaTotal
     );
