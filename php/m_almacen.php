@@ -465,14 +465,12 @@ class m_almacen
     try {
 
       $stm = $this->bd->prepare("SELECT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
-      I.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,
-      A.N_DIAS_POS,
-      A.ESTADO AS ESTADO,
-      A.FECHA_TOTAL AS FECHA_TOTAL
-      FROM T_ALERTA A
-      INNER JOIN T_INFRAESTRUCTURA AS I ON A.COD_INFRAESTRUCTURA = I.COD_INFRAESTRUCTURA
-      INNER JOIN T_ZONA_AREAS AS Z ON Z.COD_ZONA = I.COD_ZONA
-      WHERE MONTH(A.FECHA_TOTAL) = :mesSeleccionado AND YEAR(A.FECHA_TOTAL) = :anioSeleccionado AND ESTADO != 'P'");
+                               I.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA, A.N_DIAS_POS,
+                               A.ESTADO AS ESTADO, A.FECHA_TOTAL AS FECHA_TOTAL, A.OBSERVACION AS OBSERVACION
+                               FROM T_ALERTA A
+                               INNER JOIN T_INFRAESTRUCTURA AS I ON A.COD_INFRAESTRUCTURA = I.COD_INFRAESTRUCTURA
+                               INNER JOIN T_ZONA_AREAS AS Z ON Z.COD_ZONA = I.COD_ZONA
+                               WHERE MONTH(A.FECHA_TOTAL) = :mesSeleccionado AND YEAR(A.FECHA_TOTAL) = :anioSeleccionado AND ESTADO != 'P'");
       $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
       $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
       $stm->execute();

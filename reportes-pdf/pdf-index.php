@@ -219,9 +219,9 @@ $versionMuestra = $mostrar->VersionMostrar();
                 }
 
                 // Agregar columna en blanco si el mes tiene 30 días
-                if ($columnasFechaTotal == 30) {
-                    $columnas[31] = '';
-                }
+                // if ($columnasFechaTotal == 30) {
+                //     $columnas[31] = '';
+                // }
 
                 // Asignar los estados a las columnas correspondientes
                 foreach ($valor['estados'] as $fecha => $estado) {
@@ -286,7 +286,24 @@ $versionMuestra = $mostrar->VersionMostrar();
         </tr>
     </thead>
     <tbody>
-        <tr></tr>
+        <?php
+
+        foreach ($datos as $fils) {
+            echo '<tr>';
+            echo '<td></td>';
+            echo '<td class="cabecera">' . $fils['FECHA_TOTAL'] . '</td>';
+            echo '<td class="cabecera">' . $fils['NOMBRE_T_ZONA_AREAS'] . '</td>';
+            echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
+            echo '<td></td>';
+            echo '<td></td>';
+            echo '<td></td>';
+            echo '</tr>';
+        }
+
+
+
+        ?>
+
     </tbody>
 </table>
 <?php

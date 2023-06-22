@@ -13,11 +13,11 @@ if ($taskNdias == 1) {
     $codInfraestructura = $_POST['codInfraestructura'];
 
     $fechaCreacion = new DateTime();
-    $fechaCreacion = $fechaCreacion->format('Y-m-d');
+    $fechaCrea = $fechaCreacion->format('Y-m-d');
 
-    $FECHA_CREACION = retunrFechaSqlphp($fechaCreacion);
+    $FECHA_CREACION = retunrFechaSqlphp($fechaCrea);
 
-    $fechaTotal = date('Y-m-d', strtotime($fechaCreacion . '+' . $taskNdias . ' days'));
+    $fechaTotal = date('Y-m-d', strtotime($fechaCrea . '+' . $taskNdias . ' days'));
 
     // Verificar si la fecha total cae en domingo
     if (date('N', strtotime($fechaTotal)) == 7) {
