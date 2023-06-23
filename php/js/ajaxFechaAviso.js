@@ -89,8 +89,11 @@ $(function () {
               <label>
                 <input type="radio" name="estado-${task.COD_ALERTA}" value="NR"> No Realizado
               </label>
-              <label id="observacion">
-              <input type="radio" name="estado-${task.COD_ALERTA}" value="O"> Postergación
+              <label>
+                <input type="radio" name="estado-${task.COD_ALERTA}" value="OB"> Observación
+              </label>
+              <label id="postergacion">
+              <input type="radio" name="estado-${task.COD_ALERTA}" value="PO"> Postergación
               </label>
               <textarea class="form-control" id="observacion-${task.COD_ALERTA}" rows="3" style="display: none;"></textarea>
                `,
@@ -104,27 +107,33 @@ $(function () {
             const noRealizadoRadio = document.querySelector(
               `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
             );
-            const observacionRadio = document.querySelector(
-              `input[name="estado-${task.COD_ALERTA}"][value="O"]`
+            const obRadio = document.querySelector(
+              `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
+            );
+            const postergacionRadio = document.querySelector(
+              `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
             );
 
             if (
               realizadoRadio.checked ||
               noRealizadoRadio.checked ||
-              observacionRadio.checked
+              obRadio.checked ||
+              postergacionRadio.checked
             ) {
               const estado = realizadoRadio.checked
                 ? "R"
                 : noRealizadoRadio.checked
                 ? "NR"
-                : "O";
+                : obRadio.checked
+                ? "OB"
+                : "PO";
 
-              const observacion = observacionRadio.checked
-                ? document.querySelector(`#observacion-${task.COD_ALERTA}`)
+              const observacion = postergacionRadio.checked
+                ? document.querySelector(`#postergacion-${task.COD_ALERTA}`)
                     .value
                 : "";
               const observacionTextArea = observacionTextarea.value;
-              if (observacionRadio.checked) {
+              if (postergacionRadio.checked) {
                 // Abrir modal
                 $("#myModalExito").modal("show");
                 // Resuelve la promesa para confirmar la acción
@@ -172,14 +181,14 @@ $(function () {
         }).then((result) => {
           if (result.isConfirmed) {
             // Comprobar si el botón de radio de observación está seleccionado
-            const observacionRadio = document.querySelector(
-              `input[name="estado-${task.COD_ALERTA}"][value="O"]`
+            const postergacionRadio = document.querySelector(
+              `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
             );
             const observacionTextarea = document.querySelector(
               `#observacion-${task.COD_ALERTA}`
             );
 
-            if (observacionRadio.checked) {
+            if (postergacionRadio.checked) {
               // Abrir modal
               $("#myModalExito").modal("show");
               // Resolves the promise to confirm the action
@@ -203,15 +212,15 @@ $(function () {
                   const fechaPostergacion = document.querySelector(
                     "input[name='fecha_postergacion']"
                   ).value;
-                  console.log(fechaPostergacion);
+                  // console.log(fechaPostergacion);
                   const observacion = observacionTextarea.value;
 
-                  // Realizar la actualización del estado con "O" utilizando una solicitud AJAX
+                  // Realizar la actualización del estado con "PO" utilizando una solicitud AJAX
                   $.ajax({
                     url: "./php/checkbox-confirma.php",
                     method: "POST",
                     data: {
-                      estado: "O",
+                      estado: "PO",
                       taskId: task.COD_ALERTA,
                       observacion: observacion,
                       fechaPostergacion: fechaPostergacion,
@@ -251,14 +260,14 @@ $(function () {
             }
           }
         });
-        const observacionRadio = document.querySelector(
-          `input[name="estado-${task.COD_ALERTA}"][value="O"]`
+        const postergacionRadio = document.querySelector(
+          `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
         );
         const observacionTextarea = document.querySelector(
           `#observacion-${task.COD_ALERTA}`
         );
 
-        observacionRadio.addEventListener("change", function () {
+        postergacionRadio.addEventListener("change", function () {
           observacionTextarea.style.display = this.checked ? "block" : "none";
         });
 
@@ -269,19 +278,23 @@ $(function () {
           observacionTextarea.style.display = this.checked ? "block" : "none";
         });
 
+        const obRadio = document.querySelector(
+          `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
+        );
+        obRadio.addEventListener("change", function () {
+          observacionTextarea.style.display = this.checked ? "block" : "none";
+        });
+
         const realizadoRadio = document.querySelector(
           `input[name="estado-${task.COD_ALERTA}"][value="R"]`
         );
         realizadoRadio.addEventListener("change", function () {
           observacionTextarea.style.display = this.checked ? "block" : "none";
         });
-        const obs = document.getElementById("observacion");
-        // realizadoRadio.addEventListener("change", function () {
-        //   observacionTextarea.style.display = "none";
-        // });
+        const obs = document.getElementById("postergacion");
 
         if (task.NDIAS > 6 && task.POSTERGACION == "NO") {
-          observacionRadio.style.display = "block";
+          postergacionRadio.style.display = "block";
           realizadoRadio.addEventListener("change", function () {
             observacionTextarea.style.display = "block";
           });
@@ -298,7 +311,7 @@ $(function () {
               observacionTextarea.style.display = "block";
             });
           }
-          observacionRadio.style.display = "none";
+          postergacionRadio.style.display = "none";
           obs.style.visibility = "hidden";
         }
       }

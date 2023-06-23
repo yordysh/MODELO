@@ -189,6 +189,88 @@ margin-bottom: 10px;
   font-weight: 500;
   font-size: 28px;
 }
+
+/*-------------- Estilo de reporte PDF ---------------------*/
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  width: 100%;
+}
+
+thead th {
+  border: 1px solid black;
+}
+
+tbody td {
+  border: 1px solid black;
+}
+
+.cabecera-fila {
+  background-color: #9dcdec;
+  text-align: center;
+}
+
+.cabecera-fila td,
+.cabecera {
+  text-align: center;
+}
+
+.column-1:nth-child(1),
+.column-2:nth-child(2) {
+  width: 320px;
+
+}
+
+td.estado-vacio {
+  background-color: #f2f2f2;
+
+}
+
+td.estado-R {
+  background-color: #0a5e9c;
+  color: #f2f2f2;
+  text-align: center;
+  height: 30px;
+
+}
+
+td.estado-NR {
+  background-color: #E72b3c;
+  color: #f2f2f2;
+  text-align: center;
+  height: 30px;
+}
+
+td.estado-OB {
+  background-color: #F39A11;
+  color: #f2f2f2;
+  text-align: center;
+  height: 30px;
+}
+
+.mover-derecha {
+  padding-left: 20px;
+}
+
+.ancho {
+  padding-left: 10px;
+  border: none;
+}
+
+.borde {
+  border-right: 2.4px solid #000;
+
+}
+
+td.cabecera-fila {
+  width: 30px;
+  height: 30px;
+}
+/*---------------------------------------------------------*/
+
 /*-------------- Estilo de responsive ---------------------*/
 @media screen and (max-width:992px){
 .top-div{

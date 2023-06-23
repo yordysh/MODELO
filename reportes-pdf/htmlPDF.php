@@ -23,17 +23,18 @@ $mesesEnLetras = array(
 $mesConvert = $mesesEnLetras[$mesNumerico];
 
 $mostrar = new m_almacen();
-// $datos = $mostrar->MostrarAlertapd();
 $datos = $mostrar->MostrarInfraestructuraPDF($anioSeleccionado, $mesSeleccionado);
 $versionMuestra = $mostrar->VersionMostrar();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>COVIFARMA</title>
+    <!-- <link rel="stylesheet" href="../assets/css/responsive.css"> -->
 </head>
 
 <body>
@@ -42,12 +43,6 @@ $versionMuestra = $mostrar->VersionMostrar();
         table {
             width: 100%;
             border-collapse: collapse;
-        }
-
-        table,
-        th,
-        td {
-            border: 1px solid black;
         }
 
         thead {
@@ -87,6 +82,7 @@ $versionMuestra = $mostrar->VersionMostrar();
             background-color: #0a5e9c;
             color: #f2f2f2;
             text-align: center;
+            height: 30px;
 
         }
 
@@ -94,12 +90,14 @@ $versionMuestra = $mostrar->VersionMostrar();
             background-color: #E72b3c;
             color: #f2f2f2;
             text-align: center;
+            height: 30px;
         }
 
-        td.estado-O {
+        td.estado-OB {
             background-color: #F39A11;
             color: #f2f2f2;
             text-align: center;
+            height: 30px;
         }
 
         .mover-derecha {
@@ -114,6 +112,11 @@ $versionMuestra = $mostrar->VersionMostrar();
         .borde {
             border-right: 2.4px solid #000;
 
+        }
+
+        td.cabecera-fila {
+            width: 30px;
+            height: 30px;
         }
     </style>
     <!-- Table titulo-->
@@ -197,9 +200,9 @@ $versionMuestra = $mostrar->VersionMostrar();
 
             for ($l = 1; $l <= $columnasFechaTotales; $l++) {
                 if ($l == $columnasFechaTotales) {
-                    echo '<td class="cabecera-fila borde">' . $l . '</td>';
+                    echo '<td class="cabecera-fila borde" style="witdh:100px;">' . $l . '</td>';
                 } else {
-                    echo '<td class="cabecera-fila">' . $l . '</td>';
+                    echo '<td class="cabecera-fila" style="witdh:100px;">' . $l . '</td>';
                 }
             }
 
@@ -236,14 +239,14 @@ $versionMuestra = $mostrar->VersionMostrar();
                     $columnasFechaTotal = $numeroDiasMes;
                     $dias = date('d', strtotime($fechaTotal));
                     $diasConver = intval($dias);
+
                     $columnas = array();
                     for ($i = 1; $i <= $columnasFechaTotal; $i++) {
-                        print_r('i' . $i);
-                        print_r('d' . $diasConver);
+
                         if ($i == $diasConver) {
                             $columnas[$i] = '';
                         } else {
-                            $columnas[$i] = 'x';
+                            $columnas[$i] = '';
                         }
                     }
 
@@ -251,7 +254,7 @@ $versionMuestra = $mostrar->VersionMostrar();
                     // if ($columnasFechaTotal == 30) {
                     //     $columnas[31] = '';
                     // }
-                    // print_r($valor['estados']);
+                    print_r($valor['estados']);
                     // Asignar los estados a las columnas correspondientes
                     foreach ($valor['estados'] as $fecha => $estado) {
                         $dia = date('d', strtotime($fecha));
@@ -261,7 +264,7 @@ $versionMuestra = $mostrar->VersionMostrar();
                             if ($columnas[$diasCon] === '') {
                                 $columnas[$diasCon] = $estado;
                             } else {
-                                $columnas[$dia] .= '' . $estado;
+                                $columnas[$diasCon] .= '' . $estado;
                             }
                         }
                     }
@@ -270,7 +273,7 @@ $versionMuestra = $mostrar->VersionMostrar();
                     foreach ($columnas as $columna) {
                         $estadoClass = $columna !== '' ? 'estado-' . $columna : 'estado-vacio';
                         echo '<td class="' . $estadoClass . '">' . $columna . '</td>';
-                        // echo '<td class="cabecera">' . $columna . '</td>';
+                        //echo '<td class="cabecera">' . $columna . '</td>';
                     }
                     //Colocar este td para que rellene de responsable de ejecucion
                     echo '<td></td>';
@@ -300,7 +303,7 @@ $versionMuestra = $mostrar->VersionMostrar();
                 <td class="mover-derecha ancho">L&D realizada</td>
                 <td class="estado-NR ancho"></td>
                 <td class="mover-derecha ancho">L&D pendiente</td>
-                <td class="estado-O ancho"></td>
+                <td class="estado-OB ancho"></td>
                 <td class="mover-derecha ancho">L&D observado</td>
             </tr>
         </tbody>
@@ -321,9 +324,13 @@ $versionMuestra = $mostrar->VersionMostrar();
         <tbody>
             <?php
 
+            $nContador = 1;
             foreach ($datos as $fils) {
                 echo '<tr>';
-                echo '<td></td>';
+
+                echo '<td class="cabecera">' . $nContador . '</td>';
+                $nContador++;
+
                 echo '<td class="cabecera">' . convFecSistema($fils['FECHA_TOTAL']) . '</td>';
                 echo '<td class="cabecera">' . $fils['NOMBRE_T_ZONA_AREAS'] . '</td>';
 

@@ -470,7 +470,7 @@ class m_almacen
                                FROM T_ALERTA A
                                INNER JOIN T_INFRAESTRUCTURA AS I ON A.COD_INFRAESTRUCTURA = I.COD_INFRAESTRUCTURA
                                INNER JOIN T_ZONA_AREAS AS Z ON Z.COD_ZONA = I.COD_ZONA
-                               WHERE MONTH(A.FECHA_TOTAL) = :mesSeleccionado AND YEAR(A.FECHA_TOTAL) = :anioSeleccionado AND ESTADO != 'P'");
+                               WHERE MONTH(A.FECHA_TOTAL) = :mesSeleccionado AND YEAR(A.FECHA_TOTAL) = :anioSeleccionado AND ESTADO != 'P' AND ESTADO !='PO'");
       $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
       $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
       $stm->execute();
