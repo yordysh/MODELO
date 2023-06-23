@@ -34,7 +34,7 @@ $versionMuestra = $mostrar->VersionMostrar();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COVIFARMA</title>
-    <!-- <link rel="stylesheet" href="../assets/css/responsive.css"> -->
+
 </head>
 
 <body>
@@ -123,7 +123,7 @@ $versionMuestra = $mostrar->VersionMostrar();
     <table style="margin-bottom: 50px;">
         <tbody>
             <tr>
-                <td rowspan="4"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/assets/images/logo-covifarmaRecorte.png" alt=""></td>
+                <td rowspan="4" class="cabecera"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/assets/images/logo-covifarmaRecorte.png" alt=""></td>
                 <td rowspan="4" style="text-align: center;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS - MES DE <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                 <td>LBS-PHS-FR-01</td>
 
@@ -187,6 +187,8 @@ $versionMuestra = $mostrar->VersionMostrar();
 
             $numeroDiasMe = date('t', strtotime($fechaTotal));
             $columnasFechaTotales = $numeroDiasMe;
+
+
 
             echo '<tr>';
             echo '<td class="cabecera-fila column-1" rowspan="2">Zonas/areas</td>';
@@ -366,6 +368,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 
         </tr>
     </table>
+
 </body>
 
 </html>

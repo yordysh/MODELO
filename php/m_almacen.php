@@ -139,11 +139,6 @@ class m_almacen
       $COD_ZONA = $cod->generarCodigo();
       $VERSION = $cod->generarVersion();
 
-      // $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_ZONA_AREAS WHERE NOMBRE_T_ZONA_AREAS = :NOMBRE_T_ZONA_AREAS");
-      // $repetir->bindParam(':NOMBRE_T_ZONA_AREAS', $NOMBRE_T_ZONA_AREAS, PDO::PARAM_STR);
-      // $repetir->execute();
-      // $result = $repetir->fetch(PDO::FETCH_ASSOC);
-      // $count = $result['count'];
       $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
 
       if ($repetir == 0) {
@@ -152,13 +147,21 @@ class m_almacen
 
 
         $insert = $stm->execute();
-        if ($VERSION == '01') {
-          $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values($VERSION)");
-        } else {
-          $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION");
-          $stm1->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+
+        $fechaDHoy = date('Y-m-d');
+        $fechaVer = $cod->MostrarVersion();
+        $fechaConVer = date('Y-m-d', strtotime($fechaVer[0]['FECHA_VERSION']));
+
+        if ($fechaConVer != $fechaDHoy) {
+          if ($VERSION == '01') {
+            $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values($VERSION)");
+          } else {
+            $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
+            $stm1->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+            $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
+          }
+          $stm1->execute();
         }
-        $stm1->execute();
 
 
         $insert = $this->bd->commit();
@@ -182,7 +185,7 @@ class m_almacen
       if ($repetir == 0) {
         $stmt = $this->bd->prepare("UPDATE T_ZONA_AREAS SET NOMBRE_T_ZONA_AREAS = :NOMBRE_T_ZONA_AREAS, VERSION =:VERSION WHERE COD_ZONA = :COD_ZONA");
 
-        $cod = new m_almacen();
+
         $VERSION = $cod->generarVersion();
 
         $stmt->bindParam(':NOMBRE_T_ZONA_AREAS', $NOMBRE_T_ZONA_AREAS, PDO::PARAM_STR);
@@ -259,6 +262,20 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function MostrarVersion()
+  {
+    try {
+
+
+      $stm = $this->bd->prepare("SELECT FECHA_VERSION FROM T_VERSION ");
+
+      $stm->execute();
+      $datos = $stm->fetchAll();
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function insertarInfraestructura($valorSeleccionado, $NOMBRE_INFRAESTRUCTURA, $NDIAS)
   {
     try {
@@ -268,14 +285,35 @@ class m_almacen
       $this->bd->beginTransaction();
       $cod = new m_almacen();
       $COD_INFRAESTRUCTURA = $cod->generarCodigoInfraestructura();
+      $VERSION = $cod->generarVersion();
       $repetir = $cod->contarRegistrosInfraestructura($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado);
 
 
       if ($repetir == 0) {
-        $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA) 
-                                  VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA')");
+        $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION) 
+                                  VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION')");
 
         $insert = $stm->execute();
+
+        $fechaDHoy = date('Y-m-d');
+        $fechaVer = $cod->MostrarVersion();
+        $fechaConVer = date('Y-m-d', strtotime($fechaVer[0]['FECHA_VERSION']));
+
+        if ($fechaConVer != $fechaDHoy) {
+          if ($VERSION == '01') {
+            $stmVersion = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values($VERSION)");
+          } else {
+
+            $stmVersion = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
+            $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+            $stmVersion->bindParam(':FECHA_VERSION', $fechaDHoy);
+          }
+
+          $stmVersion->execute();
+        }
+
+
+
         $FECHA = date('Y-m-d');
         $DIAS_DESCUENTO = 2;
 
@@ -488,26 +526,6 @@ class m_almacen
 
 
       $stm = $this->bd->prepare("SELECT VERSION FROM T_VERSION");
-
-      $stm->execute();
-      $datos = $stm->fetchAll();
-
-      return $datos;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-  public function MostrarAlertapd()
-  {
-    try {
-
-
-      $stm = $this->bd->prepare("SELECT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
-      I.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA, A.N_DIAS_POS,
-      A.ESTADO AS ESTADO, A.FECHA_TOTAL AS FECHA_TOTAL, A.OBSERVACION AS OBSERVACION
-      FROM T_ALERTA A
-      INNER JOIN T_INFRAESTRUCTURA AS I ON A.COD_INFRAESTRUCTURA = I.COD_INFRAESTRUCTURA
-      INNER JOIN T_ZONA_AREAS AS Z ON Z.COD_ZONA = I.COD_ZONA");
 
       $stm->execute();
       $datos = $stm->fetchAll();

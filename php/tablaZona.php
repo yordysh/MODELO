@@ -53,30 +53,3 @@ $data = $mostrar->MostrarAlmacenMuestra();
         <?php } ?>
     </tbody>
 </table>
-
-<!-- <script>
-    $(document).ready(function() {
-        $('#tbalmacen').Tabledit({
-            deleteButton: false,
-            editButton: false,
-            columns: {
-                identifier: [0, 'taskId'],
-                editable: [
-                    [2, 'nombreArea']
-                ]
-            },
-            hideIdentifier: true,
-            url: 'actualizar-zona.php',
-            onSuccess: function(data, textStatus, jqXHR) {
-                console.log(data);
-                if (data == 1) {
-
-                    Swal.fire('¡Éxito!', 'Se ha editado exitosamente', 'success');
-                }
-            }
-
-        });
-    });
-</script> -->
-
-<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
