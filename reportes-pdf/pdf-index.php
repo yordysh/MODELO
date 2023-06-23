@@ -241,10 +241,12 @@ $versionMuestra = $mostrar->VersionMostrar();
 
                     $columnas = array();
                     for ($i = 1; $i <= $columnasFechaTotal; $i++) {
+
                         if ($i == $dias) {
                             $columnas[$i] = '';
+                            error_log(" $columnas[$i]");
                         } else {
-                            $columnas[$i] = '';
+                            $columnas[$i] = 'x';
                         }
                     }
 
@@ -252,10 +254,11 @@ $versionMuestra = $mostrar->VersionMostrar();
                     // if ($columnasFechaTotal == 30) {
                     //     $columnas[31] = '';
                     // }
-
+                    print_r($valor['estados']);
                     // Asignar los estados a las columnas correspondientes
                     foreach ($valor['estados'] as $fecha => $estado) {
                         $dia = date('d', strtotime($fecha));
+
                         if (isset($columnas[$dia])) {
                             if ($columnas[$dia] === '') {
                                 $columnas[$dia] = $estado;
@@ -267,9 +270,9 @@ $versionMuestra = $mostrar->VersionMostrar();
 
                     // Imprimir los estados en las columnas correspondientes
                     foreach ($columnas as $columna) {
-                        $estadoClass = $columna !== '' ? 'estado-' . $columna : 'estado-vacio';
-                        echo '<td class="' . $estadoClass . '">' . $columna . '</td>';
-                        // echo '<td class="cabecera">' . $columna . '</td>';
+                        //$estadoClass = $columna !== '' ? 'estado-' . $columna : 'estado-vacio';
+                        //echo '<td class="' . $estadoClass . '">' . $columna . '</td>';
+                        echo '<td class="cabecera">' . $columna . '</td>';
                     }
                     //Colocar este td para que rellene de responsable de ejecucion
                     echo '<td></td>';

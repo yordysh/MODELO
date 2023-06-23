@@ -1,7 +1,4 @@
 <?php
-ob_start();
-?>
-<?php
 require_once "../php/m_almacen.php";
 
 $anioSeleccionado = $_GET['anio'];
@@ -82,7 +79,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         }
 
         td.estado-vacio {
-            background-color: #000;
+            background-color: #f2f2f2;
 
         }
 
@@ -146,7 +143,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 
         </tbody>
     </table>
-    <!-- Calendario-->
+    <!-- Table calendario-->
     <table>
         <tbody>
             <?php
@@ -176,31 +173,14 @@ $versionMuestra = $mostrar->VersionMostrar();
                 if ($existingIndex !== -1) {
                     $grupos[$nombreZona][$existingIndex]['estados'][$fechaTotal] = $estado;
                 } else {
-                    $diad = date('d', strtotime($fechaTotal));
                     $grupos[$nombreZona][] = array(
                         'nombreInfraestructura' => $nombreInfraestructura,
-                        'estados' => array($diad => $estado),
+                        'estados' => array($fechaTotal => $estado),
                         'ndiaspos' => $ndiaspos,
                         'fechaTotal' => $fechaTotal
                     );
                 }
             }
-            // foreach ($grupos as $nombreZona => $grupo) {
-            //     echo '<p>Nombre de la Zona: ' . $nombreZona . '</p><br>';
-
-            //     foreach ($grupo as $elemento) {
-            //         echo '<p>Nombre de la Infraestructura: ' . $elemento['nombreInfraestructura'] . '</p><br>';
-
-            //         foreach ($elemento['estados'] as $diad => $estado) {
-            //             echo '<p>Fecha Total: ' . $diad . ' - Estado: ' . $estado . '</p><br>';
-            //         }
-
-            //         echo '<p>Número de días pos: ' . $elemento['ndiaspos'] . '</p><br>';
-            //         echo '<p>Fecha Total: ' . $elemento['fechaTotal'] . '</p><br>';
-
-            //         echo '<br><br><br>';
-            //     }
-            // }
 
             $numeroDiasMe = date('t', strtotime($fechaTotal));
             $columnasFechaTotales = $numeroDiasMe;
@@ -250,61 +230,47 @@ $versionMuestra = $mostrar->VersionMostrar();
                         echo '<td class="cabecera">' . $valor['ndiaspos'] . '</td>';
                     }
 
-
-
-
+                    // Crear array con columnas de acuerdo a la FECHA_TOTAL
                     $fechaTotal = $valor['fechaTotal'];
                     $numeroDiasMes = date('t', strtotime($fechaTotal));
                     $columnasFechaTotal = $numeroDiasMes;
-                    $dias = date('j', strtotime($fechaTotal));
-
+                    $dias = date('d', strtotime($fechaTotal));
+                    $diasConver = intval($dias);
                     $columnas = array();
-
                     for ($i = 1; $i <= $columnasFechaTotal; $i++) {
-
-                        /* foreach ($valor['estados'] as $diad => $estado) {
-                            var_dump($i . '==' . $diad);
-                            if ($i == $diad) {
-                                $columnas[$i] =  $estado;
-                            } else {
-                                $columnas[$i] = 'x';
-                            }
-                            //echo '<p>Fecha Total: ' . $diad . ' - Estado: ' . $estado . '</p><br>';
-                        }*/
-
-                        if ($i == $dias) {
-                            $columnas[$i] =  'z';
+                        print_r('i' . $i);
+                        print_r('d' . $diasConver);
+                        if ($i == $diasConver) {
+                            $columnas[$i] = '';
                         } else {
                             $columnas[$i] = 'x';
-                            // echo '<td>X</td>';
-
                         }
                     }
 
-                    //Asignar los estados a las columnas correspondientes
-                    foreach ($valor['estados'] as $diad => $estado) {
-                        // $dia = date('d', strtotime($fecha));
-                        if (isset($columnas[$diad])) {
-                            if ($columnas[$diad] === '') {
-                                $columnas[$diad] = $estado;
+                    // Agregar columna en blanco si el mes tiene 30 días
+                    // if ($columnasFechaTotal == 30) {
+                    //     $columnas[31] = '';
+                    // }
+                    // print_r($valor['estados']);
+                    // Asignar los estados a las columnas correspondientes
+                    foreach ($valor['estados'] as $fecha => $estado) {
+                        $dia = date('d', strtotime($fecha));
+                        $diasCon = intval($dia);
+
+                        if (isset($columnas[$diasCon])) {
+                            if ($columnas[$diasCon] === '') {
+                                $columnas[$diasCon] = $estado;
                             } else {
-                                $columnas[$diad] .= '' . $estado;
+                                $columnas[$dia] .= '' . $estado;
                             }
                         }
                     }
-
 
                     // Imprimir los estados en las columnas correspondientes
                     foreach ($columnas as $columna) {
-                        // $estadoClass = $columna !== '' ? 'estado-' . $columna : 'estado-vacio';
-                        // if ($estadoClass = $columna !== '') {
-                        //     'estado-' . $columna;
-                        //     echo '<p>' . $columna . '</p>';
-                        // } else {
-                        //     'estado-vacio';
-                        // }
-                        // echo '<td class="' . $estadoClass . '">' . $columna . '</td>';
-                        echo '<td class="cabecera">' . $columna . '</td>';
+                        $estadoClass = $columna !== '' ? 'estado-' . $columna : 'estado-vacio';
+                        echo '<td class="' . $estadoClass . '">' . $columna . '</td>';
+                        // echo '<td class="cabecera">' . $columna . '</td>';
                     }
                     //Colocar este td para que rellene de responsable de ejecucion
                     echo '<td></td>';
@@ -315,27 +281,84 @@ $versionMuestra = $mostrar->VersionMostrar();
 
                 echo '</tr>';
             }
-
             ?>
         </tbody>
     </table>
+    <!-- Table colores-->
+    <table style="margin-top: 50px; border:none;">
+        <tbody>
+            <tr>
+                <td class="ancho"></td>
+                <td class="ancho"></td>
+                <td class="ancho"></td>
+                <td class="ancho"></td>
+                <td class="ancho"></td>
+                <td class="ancho"></td>
+                <td class="ancho"></td>
+                <td class="ancho"></td>
+                <td class="estado-R ancho"></td>
+                <td class="mover-derecha ancho">L&D realizada</td>
+                <td class="estado-NR ancho"></td>
+                <td class="mover-derecha ancho">L&D pendiente</td>
+                <td class="estado-O ancho"></td>
+                <td class="mover-derecha ancho">L&D observado</td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- Table observaciones-->
+    <table style="margin-top: 50px;">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>Fecha</th>
+                <th>Área/ Zona identificada</th>
+                <th>Hallazgo/ Observación</th>
+                <th>Acción correctiva</th>
+                <th>Verificación realizada</th>
+                <th>V°b°Supervisor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
 
+            foreach ($datos as $fils) {
+                echo '<tr>';
+                echo '<td></td>';
+                echo '<td class="cabecera">' . convFecSistema($fils['FECHA_TOTAL']) . '</td>';
+                echo '<td class="cabecera">' . $fils['NOMBRE_T_ZONA_AREAS'] . '</td>';
+
+                echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
+                echo '<td></td>';
+                echo '<td></td>';
+                echo '<td></td>';
+                echo '</tr>';
+            }
+
+
+
+            ?>
+
+        </tbody>
+    </table>
+    <!-- Table firma y fecha-->
+    <table style="margin-top: 50px; border:none;">
+        <tr>
+            <td style="padding-left: 200px; border:none;"></td>
+            <td style="border: none;"></td>
+            <td style="padding-left: 400px; border:none;">Fecha:</td>
+            <td style="padding-left: 400px; border:none;"></td>
+            <td style="padding-left: 800px; border:none;"></td>
+
+        </tr>
+        <tr>
+            <td style="padding-left: 200px; border:none;"></td>
+            <td style="border-left: none; border-bottom:none; border-right: none;">Firma del jefe de Aseguramiento de la calidad</td>
+            <td style="padding-left: 400px; border:none;"></td>
+            <td style="padding-left: 400px;border-left: none; border-bottom:none; border-right: none;"></td>
+            <td style="padding-left: 800px; border:none;"></td>
+
+        </tr>
+    </table>
 </body>
 
 </html>
-<?php
-$html = ob_get_clean();
-
-
-require_once '../assets/DomPDF/autoload.inc.php';
-
-$dompdf = new Dompdf\Dompdf();
-
-$options = $dompdf->getOptions();
-$options->set(array('isRemoteEnabled' => true));
-$dompdf->setOptions($options);
-$dompdf->loadHtml($html);
-$dompdf->setPaper('A2', 'landscape');
-$dompdf->render();
-$dompdf->stream('tabla.pdf', array('Attachment' => 0));
-?>
