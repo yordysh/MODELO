@@ -7,18 +7,18 @@ $mesSeleccionado = $_GET['mes'];
 $mesNumerico = intval($mesSeleccionado);
 
 $mesesEnLetras = array(
-    1 => "Enero",
-    2 => "Febrero",
-    3 => "Marzo",
-    4 => "Abril",
-    5 => "Mayo",
-    6 => "Junio",
-    7 => "Julio",
-    8 => "Agosto",
-    9 => "Setiembre",
-    10 => "Octubre",
-    11 => "Noviembre",
-    12 => "Diciembre",
+    1 => "ENERO",
+    2 => "FEBRERO",
+    3 => "MARZO",
+    4 => "ABRIL",
+    5 => "MAYO",
+    6 => "JUNIO",
+    7 => "JULIO",
+    8 => "AGOSTO",
+    9 => "SETIEMBRE",
+    10 => "OCTUBRE",
+    11 => "NOVIEMBRE",
+    12 => "DICIEMBRE",
 );
 $mesConvert = $mesesEnLetras[$mesNumerico];
 
