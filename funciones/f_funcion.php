@@ -166,6 +166,7 @@ function retunrFechaActualphp()
     }
     $ano = date("Y");
 
+
     $fecha = $ano . "-" . $mes . "-" . $dia;
 
     return $fecha;

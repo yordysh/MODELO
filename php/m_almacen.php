@@ -1,7 +1,7 @@
 <?php
 
 require_once("DataBaseA.php");
-include("../funciones/f_funcion.php");
+//include("../funciones/f_funcion.php");
 
 class m_almacen
 {
@@ -150,7 +150,9 @@ class m_almacen
 
         $fechaDHoy = date('Y-m-d');
         $fechaVer = $cod->MostrarVersion();
-        $fechaConVer = date('Y-m-d', strtotime($fechaVer[0]['FECHA_VERSION']));
+        $fechaVer =   $fechaVer[0];
+
+        $fechaConVer = date('Y-m-d', strtotime($fechaVer[0]));
 
         if ($fechaConVer != $fechaDHoy) {
           if ($VERSION == '01') {
@@ -193,9 +195,21 @@ class m_almacen
         $stmt->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
         $update = $stmt->execute();
 
-        $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION");
-        $stm1->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-        $stm1->execute();
+        $fechaDHoy = date('Y-m-d');
+        $fechaVer = $cod->MostrarVersion();
+        $fechaVer =   $fechaVer[0];
+
+        $fechaConVer = date('Y-m-d', strtotime($fechaVer[0]));
+        if ($fechaConVer != $fechaDHoy) {
+          if ($VERSION == '01') {
+            $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values($VERSION)");
+          } else {
+            $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
+            $stm1->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+            $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
+          }
+          $stm1->execute();
+        }
 
         $update = $this->bd->commit();
 

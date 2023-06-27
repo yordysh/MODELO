@@ -31,25 +31,36 @@ $(function () {
   //------------- Añadiendo con ajax zonaArea----------------//
   $("#formularioZona").submit((e) => {
     e.preventDefault();
-    const postData = {
-      NOMBRE_T_ZONA_AREAS: $("#NOMBRE_T_ZONA_AREAS").val(),
-      COD_ZONA: $("#taskId").val(),
-    };
 
-    const url =
-      edit === false ? "./insertar-zona.php" : "./actualizar-zona.php";
+    const accion = edit === false ? "insertar" : "actualizar";
 
     $.ajax({
-      url: url,
-      data: postData,
+      url: "../c_almacen.php",
+      data: {
+        accion: accion,
+        nombrezonaArea: $("#NOMBRE_T_ZONA_AREAS").val(),
+        codzona: $("#taskId").val(),
+      },
+
       type: "POST",
       success: function (response) {
-        if (!response.error) {
+        if (response == "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
             text: "Los datos se han guardado correctamente.",
             icon: "success",
             confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              fetchTasks();
+              $("#formularioZona").trigger("reset");
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Hubo un Error!",
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
@@ -65,7 +76,7 @@ $(function () {
 
   function fetchTasks() {
     $.ajax({
-      // url: "./zonaAreas.php",
+      url: "./tablaZona.php",
       type: "GET",
       success: function (data) {
         $("#tablaAlmacen").html(data);
