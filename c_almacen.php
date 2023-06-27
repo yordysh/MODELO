@@ -3,41 +3,108 @@ require_once("./php/m_almacen.php");
 include("./funciones/f_funcion.php");
 
 if ($_POST['accion'] == 'insertar') {
-    $respuesta = c_almacen::c_insertar_zona();
+    // $codzona = $_POST['codzona'];
+    $nombrezonaArea = $_POST['nombrezonaArea'];
+    $respuesta = c_almacen::c_insertar_zona($nombrezonaArea);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'editar') {
+    $codzona = $_POST['codzona'];
+    // $nombrezonaArea = $_POST['nombrezonaArea'];
+    $respuesta = c_almacen::c_editar_zona($codzona);
     echo $respuesta;
 }
 
 if ($_POST['accion'] == 'actualizar') {
-    $var1 = $_POST['codzona'];
-    $var2 = $_POST['nombrezonaArea'];
-    $respuesta = c_almacen::c_actualizar_zona($var1, $var2);
+    $codzona = $_POST['codzona'];
+    $nombrezonaArea = $_POST['nombrezonaArea'];
+    $respuesta = c_almacen::c_actualizar_zona($codzona, $nombrezonaArea);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'eliminarzona') {
+    echo "e";
+    $codzona = $_POST['codzona'];
+
+    $respuesta = c_almacen::c_eliminar_zona($codzona);
     echo $respuesta;
 }
 class c_almacen
 {
 
-    static function c_balamcen($cod, $oficina)
+
+    static function c_insertar_zona($nombrezonaArea)
     {
         $m_formula = new m_almacen();
-        $produccion = $m_formula->MostrarAlmacenMuestra(trim($cod), $oficina);
+        // if (isset($_POST["nombrezonaArea"])) {
+        //     $NOMBRE_T_ZONA_AREAS = trim($_POST['nombrezonaArea']);
+        // $m_formula->InsertarAlmacen($NOMBRE_T_ZONA_AREAS);
+        if (isset($nombrezonaArea)) {
+            $respuesta = $m_formula->InsertarAlmacen($nombrezonaArea);
+            if ($respuesta) {
 
-        $dato = array('dato' => $produccion);
-        echo json_encode($dato, JSON_FORCE_OBJECT);
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
     }
 
-    static function c_insertar_zona()
+    static function c_editar_zona($codzona)
     {
-        $m_formula = new m_almacen();
-        if (isset($_POST["nombrezonaArea"])) {
-            $NOMBRE_T_ZONA_AREAS = trim($_POST['nombrezonaArea']);
+        $mostrar = new m_almacen();
 
-            $m_formula->InsertarAlmacen($NOMBRE_T_ZONA_AREAS);
 
-            if (!$m_formula) {
-                return "error";
+        // if (isset($_POST["COD_ZONA"])) {
+        //     $COD_ZONA = $_POST["COD_ZONA"];
+        if (isset($codzona)) {
+            $selectZ = $mostrar->SelectZona($codzona);
+
+            $json = array();
+            foreach ($selectZ as $row) {
+                $json[] = array(
+                    "COD_ZONA" => $row['COD_ZONA'],
+                    "NOMBRE_T_ZONA_AREAS" => $row['NOMBRE_T_ZONA_AREAS'],
+                );
             }
 
-            return "ok";
+            $jsonstring = json_encode($json[0]);
+            echo $jsonstring;
+        }
+    }
+
+    static function c_actualizar_zona($codzona, $nombrezonaArea)
+    {
+
+        $m_formula = new m_almacen();
+
+        // if (isset($_POST["codzona"])) {
+        if (isset($codzona)) {
+            // $task_id = $_POST["codzona"];
+            // $NOMBRE_T_ZONA_AREAS = $_POST["nombrezonaArea"];
+
+            // $respuesta = $m_formula->editarAlmacen($NOMBRE_T_ZONA_AREAS, $task_id);
+            $respuesta = $m_formula->editarAlmacen($nombrezonaArea, $codzona);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+    static function c_eliminar_zona($codzona)
+    {
+        $mostrar = new m_almacen();
+
+        // if (isset($_POST['COD_ZONA'])) {
+        //     $COD_ZONA = $_POST['COD_ZONA'];
+        if (isset($codzona)) {
+            $respuesta = $mostrar->eliminarAlmacen($codzona);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
         }
     }
 
@@ -56,26 +123,6 @@ class c_almacen
             } else {
                 echo "Error al actualizar la tarea";
             }
-        }
-    }
-
-    static function c_actualizar_zona($var1, $var2)
-    {
-
-        $m_formula = new m_almacen();
-
-        // if (isset($_POST["codzona"])) {
-        if (isset($var1)) {
-            // $task_id = $_POST["codzona"];
-            // $NOMBRE_T_ZONA_AREAS = $_POST["nombrezonaArea"];
-
-            // $respuesta = $m_formula->editarAlmacen($NOMBRE_T_ZONA_AREAS, $task_id);
-            $respuesta = $m_formula->editarAlmacen($var2, $var1);
-            if ($respuesta) {
-                return "ok";
-            } else {
-                return "error";
-            };
         }
     }
 
@@ -221,29 +268,6 @@ class c_almacen
         }
     }
 
-    function c_editar_zona()
-    {
-        $mostrar = new m_almacen();
-
-
-        if (isset($_POST["COD_ZONA"])) {
-            $COD_ZONA = $_POST["COD_ZONA"];
-
-            $selectZ = $mostrar->SelectZona($COD_ZONA);
-
-            $json = array();
-            foreach ($selectZ as $row) {
-                $json[] = array(
-                    "COD_ZONA" => $row['COD_ZONA'],
-                    "NOMBRE_T_ZONA_AREAS" => $row['NOMBRE_T_ZONA_AREAS'],
-                );
-            }
-
-            $jsonstring = json_encode($json[0]);
-            echo $jsonstring;
-        }
-    }
-
     function c_eliminar_infra()
     {
         $mostrar = new m_almacen();
@@ -254,15 +278,6 @@ class c_almacen
         }
     }
 
-    function c_eliminar_zona()
-    {
-        $mostrar = new m_almacen();
-
-        if (isset($_POST['COD_ZONA'])) {
-            $COD_ZONA = $_POST['COD_ZONA'];
-            $mostrar->eliminarAlmacen($COD_ZONA);
-        }
-    }
     function c_fecha_alerta()
     {
         $mostrar = new m_almacen();

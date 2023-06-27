@@ -44,7 +44,9 @@ $(function () {
 
       type: "POST",
       success: function (response) {
-        if (response == "ok") {
+        // alert(response);
+        // console.log(response);
+        if (!response.error) {
           Swal.fire({
             title: "¡Guardado exitoso!",
             text: "Los datos se han guardado correctamente.",
@@ -61,6 +63,7 @@ $(function () {
             icon: "error",
             title: "Oops...",
             text: "Hubo un Error!",
+            confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
@@ -94,11 +97,13 @@ $(function () {
 
     var COD_ZONA = $(element).attr("taskId");
     // console.log(COD_ZONA);
-    var url = "./editar-zona.php";
+    // var url = "./editar-zona.php";
+    const accion = "editar";
     // console.log(COD_ZONA);
     $.ajax({
-      url,
-      data: { COD_ZONA: COD_ZONA },
+      // url,
+      url: "../c_almacen.php",
+      data: { accion: accion, codzona: COD_ZONA },
       type: "POST",
       success: function (response) {
         if (!response.error) {
@@ -118,7 +123,9 @@ $(function () {
   $(document).on("click", ".task-delete", function (e) {
     e.preventDefault();
     // var COD_ZONA = $(this).data("COD_ZONA");
+
     var COD_ZONA = $(this).attr("data-COD_ZONA");
+    const accion = "eliminarzona";
     console.log(COD_ZONA);
 
     Swal.fire({
@@ -133,9 +140,11 @@ $(function () {
     }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: "./eliminar-zona.php",
+          // url: "./eliminar-zona.php",
+          // accion: "eliminarzona",
+          url: "../c_almacen.php",
+          data: { accion: accion, codzona: COD_ZONA },
           type: "POST",
-          data: { COD_ZONA: COD_ZONA },
           success: function (response) {
             fetchTasks();
             Swal.fire({
@@ -145,7 +154,7 @@ $(function () {
               showConfirmButton: false,
               timer: 1500,
             });
-            console.log(response);
+            // console.log(response);
           },
           error: function (xhr, status, error) {
             console.error("Error:", error);

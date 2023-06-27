@@ -62,7 +62,8 @@ class m_almacen
     $stm = $this->bd->prepare("SELECT MAX(COD_ZONA) as COD_ZONA FROM T_ZONA_AREAS");
     $stm->execute();
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
-    $maxCodigo = $resultado['COD_ZONA'];
+    $maxCodigo = intval($resultado['COD_ZONA']);
+
     $nuevoCodigo = $maxCodigo + 1;
 
     $codigoAumento = str_pad($nuevoCodigo, 2, '0', STR_PAD_LEFT);
@@ -88,7 +89,7 @@ class m_almacen
     $stm = $this->bd->prepare("SELECT MAX(VERSION) as VERSION FROM T_VERSION");
     $stm->execute();
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
-    $maxContadorVersion = $resultado['VERSION'];
+    $maxContadorVersion = intval($resultado['VERSION']);
     if ($maxContadorVersion == null) {
       $maxContadorVersion = 0;
     }

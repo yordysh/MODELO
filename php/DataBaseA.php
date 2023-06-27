@@ -6,8 +6,8 @@ class DataBase
     public static  function Conectar()
     {
         try {
-            //$base_de_datos = new PDO("sqlsrv:server=DESKTOP-C8GLM7A;database=monitoring", "sa", "123");
-            $base_de_datos = new PDO("sqlsrv:server=YORDY;database=monitoring", "sa", "70836940");
+            $base_de_datos = new PDO("sqlsrv:server=DESKTOP-C8GLM7A;database=monitoring", "sa", "123");
+            //$base_de_datos = new PDO("sqlsrv:server=YORDY;database=monitoring", "sa", "70836940");
 
             $base_de_datos->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
