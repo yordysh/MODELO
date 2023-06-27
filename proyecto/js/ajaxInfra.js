@@ -3,24 +3,24 @@ $(function () {
   fetchTasks();
   let edit = false;
 
-  //------------- Busqueda con ajax zonaArea----------------//
+  //------------- Busqueda con ajax infraestructura Accesorio----------------//
 
   $("#search").keyup(() => {
     if ($("#search").val()) {
-      var search = $("#search").val();
-      const accion = "buscarzona";
-      // console.log(search);
+      let search = $("#search").val();
+      const accion = "buscarinfra";
+
       $.ajax({
-        // url: "./buscar-tarea.php",
-        url: "../c_almacen.php",
-        data: { accion: accion, buscarzona: search },
+        url: "./c_almacen.php",
+        data: { accion: accion, buscarinfra: search },
         type: "POST",
         success: function (response) {
           if (!response.error) {
             let tasks = JSON.parse(response);
+
             let template = ``;
             tasks.forEach((task) => {
-              template += `<li class="task-item">${task.NOMBRE_T_ZONA_AREAS}</li>`;
+              template += `<li class="task-item">${task.NOMBRE_INFRAESTRUCTURA}</li>`;
             });
             $("#task-result").show();
             $("#container").html(template);
@@ -30,25 +30,28 @@ $(function () {
     }
   });
 
-  //------------- Añadiendo con ajax zonaArea----------------//
-  $("#formularioZona").submit((e) => {
+  //------------- Añadiendo con ajax InfraestructuraAccesorios----------------//
+  $("#formularioInfra").submit((e) => {
     e.preventDefault();
 
-    const accion = edit === false ? "insertar" : "actualizar";
+    var selectInfra = document.getElementById("selectInfra");
+    selectInfra.disabled = false;
+
+    const accion = edit === false ? "insertarinfra" : "actualizarinfra";
 
     $.ajax({
-      url: "../c_almacen.php",
+      url: "./c_almacen.php",
       data: {
         accion: accion,
-        nombrezonaArea: $("#NOMBRE_T_ZONA_AREAS").val(),
-        codzona: $("#taskId").val(),
+        nombreinfraestructura: $("#NOMBRE_INFRAESTRUCTURA").val(),
+        ndias: $("#NDIAS").val(),
+        codinfra: $("#taskId").val(),
+        valorSeleccionado: $("#selectInfra").val(),
       },
-
       type: "POST",
       success: function (response) {
-        // alert(response);
         // console.log(response);
-        if (!response.error) {
+        if (response == "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
             text: "Los datos se han guardado correctamente.",
@@ -57,22 +60,23 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
-              $("#formularioZona").trigger("reset");
+              $("#formularioInfra").trigger("reset");
             }
           });
         } else {
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: "Hubo un Error!",
+            text: "Nose inserto por duplicado!",
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
-              $("#formularioZona").trigger("reset");
+              $("#formularioInfra").trigger("reset");
             }
           });
         }
+        // console.log(data);
       },
     });
   });
@@ -81,10 +85,10 @@ $(function () {
 
   function fetchTasks() {
     $.ajax({
-      url: "./tablaZona.php",
+      url: "./tablaInfraestructura.php",
       type: "GET",
       success: function (data) {
-        $("#tablaAlmacen").html(data);
+        $("#tablaInfra").html(data);
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);
@@ -96,22 +100,24 @@ $(function () {
 
   $(document).on("click", ".task-update", () => {
     var element = $(this)[0].activeElement.parentElement.parentElement;
+    var selectInfra = document.getElementById("selectInfra");
+    selectInfra.disabled = true;
 
-    var COD_ZONA = $(element).attr("taskId");
-
-    const accion = "editar";
+    var COD_INFRAESTRUCTURA = $(element).attr("taskId");
+    const accion = "editarinfra";
 
     $.ajax({
-      url: "../c_almacen.php",
-      data: { accion: accion, codzona: COD_ZONA },
+      url: "./c_almacen.php",
+      data: { accion: accion, codinfra: COD_INFRAESTRUCTURA },
       type: "POST",
       success: function (response) {
         if (!response.error) {
-          console.log(response);
           const task = JSON.parse(response);
-          console.log(task);
-          $("#NOMBRE_T_ZONA_AREAS").val(task.NOMBRE_T_ZONA_AREAS);
-          $("#taskId").val(task.COD_ZONA);
+
+          $("#NOMBRE_INFRAESTRUCTURA").val(task.NOMBRE_INFRAESTRUCTURA);
+          $("#NDIAS").val(task.NDIAS);
+          $("#taskId").val(task.COD_INFRAESTRUCTURA);
+
           edit = true;
         }
       },
@@ -122,11 +128,8 @@ $(function () {
 
   $(document).on("click", ".task-delete", function (e) {
     e.preventDefault();
-    // var COD_ZONA = $(this).data("COD_ZONA");
-
-    var COD_ZONA = $(this).attr("data-COD_ZONA");
-    const accion = "eliminarzona";
-    console.log(COD_ZONA);
+    var COD_INFRAESTRUCTURA = $(this).attr("data-COD_INFRAESTRUCTURA");
+    const accion = "eliminarinfra";
 
     Swal.fire({
       title: "¿Está seguro de eliminar este registro?",
@@ -140,11 +143,9 @@ $(function () {
     }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          // url: "./eliminar-zona.php",
-          // accion: "eliminarzona",
-          url: "../c_almacen.php",
-          data: { accion: accion, codzona: COD_ZONA },
+          url: "./c_almacen.php",
           type: "POST",
+          data: { accion: accion, codinfra: COD_INFRAESTRUCTURA },
           success: function (response) {
             fetchTasks();
             Swal.fire({
@@ -154,7 +155,7 @@ $(function () {
               showConfirmButton: false,
               timer: 1500,
             });
-            // console.log(response);
+            console.log(response);
           },
           error: function (xhr, status, error) {
             console.error("Error:", error);

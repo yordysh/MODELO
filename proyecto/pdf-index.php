@@ -9,7 +9,7 @@ include "./htmlPDF.php";
 $html = ob_get_clean();
 
 
-require_once '../assets/DomPDF/autoload.inc.php';
+require_once './Dompdf/autoload.inc.php';
 
 $dompdf = new Dompdf\Dompdf();
 

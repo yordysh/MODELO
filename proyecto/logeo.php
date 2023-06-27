@@ -1,6 +1,6 @@
 <?php
 
-require_once './php/m_almacen.php';
+require_once 'm_almacen.php';
 // require_once './php/DataBaseA.php';
 session_start();
 

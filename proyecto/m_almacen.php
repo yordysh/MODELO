@@ -1,6 +1,6 @@
 <?php
 
-require_once("DataBaseA.php");
+require_once("../funciones/DataBaseA.php");
 //include("../funciones/f_funcion.php");
 
 class m_almacen

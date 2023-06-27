@@ -56,11 +56,13 @@ $(function () {
           mostrarMensaje(data, index + 1);
         });
       }
-
+      const accion = "fechaalertamensaje";
       $.ajax({
-        url: "php/fecha-alerta-mensaje.php",
-        method: "GET",
+        // url: "php/fecha-alerta-mensaje.php",
+        url: "c_almacen.php",
+        method: "POST",
         dataType: "json",
+        data: { accion: accion },
         success: function (data) {
           if (data.length > 0) {
             mostrarMensaje(data, 0);
@@ -147,11 +149,13 @@ $(function () {
                 // Resuelve la promesa para confirmar la acción
                 return Promise.resolve();
               }
-
+              const accion = "actualizaalerta";
               return $.ajax({
-                url: "./php/checkbox-confirma.php",
+                // url: "./php/checkbox-confirma.php",
+                url: "c_almacen.php",
                 method: "POST",
                 data: {
+                  accion: accion,
                   estado: estado,
                   taskId: task.COD_ALERTA,
                   taskFecha: task.FECHA_TOTAL,
@@ -165,11 +169,13 @@ $(function () {
 
                   // Crea una nueva alerta con la fecha total
                   const nuevaFechaTotal = new Date();
-
+                  const accion = "insertaralertamix";
                   return $.ajax({
-                    url: "./php/insertar-alertamix.php",
+                    // url: "./php/insertar-alertamix.php",
+                    url: "c_almacen.php",
                     method: "POST",
                     data: {
+                      accion: accion,
                       fechaCreacion: nuevaFechaTotal.toISOString(),
                       codInfraestructura: task.COD_INFRAESTRUCTURA,
                       taskNdias: task.NDIAS,
@@ -223,12 +229,14 @@ $(function () {
                   ).value;
                   console.log(fechaPostergacion);
                   const observacion = observacionTextarea.value;
-
+                  const accion = "actualizaalerta";
                   // Realizar la actualización del estado con "PO" utilizando una solicitud AJAX
                   $.ajax({
-                    url: "./php/checkbox-confirma.php",
+                    url: "c_almacen.php",
+                    // url: "./php/checkbox-confirma.php",
                     method: "POST",
                     data: {
+                      accion: accion,
                       estado: "PO",
                       taskId: task.COD_ALERTA,
                       taskFecha: task.FECHA_TOTAL,
@@ -244,12 +252,14 @@ $(function () {
 
                       // Crea una nueva alerta con la fecha total
                       const nuevaFechaTotal = new Date();
-
+                      const accion = "insertaralertamix";
                       // Insertar nueva alerta con la fecha total utilizando una solicitud AJAX
                       $.ajax({
-                        url: "./php/insertar-alertamix.php",
+                        // url: "./php/insertar-alertamix.php",
+                        url: "c_almacen.php",
                         method: "POST",
                         data: {
+                          accion: accion,
                           fechaCreacion: nuevaFechaTotal.toISOString(),
                           codInfraestructura: task.COD_INFRAESTRUCTURA,
                           taskNdias: task.NDIAS,
@@ -302,9 +312,6 @@ $(function () {
           observacionTextarea.style.display = this.checked ? "block" : "none";
         });
         const obs = document.getElementById("postergacion");
-        // realizadoRadio.addEventListener("change", function () {
-        //   observacionTextarea.style.display = "none";
-        // });
 
         if (task.NDIAS > 6 && task.POSTERGACION == "NO") {
           postergacionRadio.style.display = "block";
@@ -328,13 +335,15 @@ $(function () {
           obs.style.visibility = "hidden";
         }
       }
-
+      const accion = "fechaalerta";
       $.ajax({
-        url: "php/fecha-alerta.php",
-        method: "GET",
+        url: "c_almacen.php",
+        // url: "php/fecha-alerta.php",
+        method: "POST",
         dataType: "json",
+        data: { accion: accion },
         success: function (data) {
-          mostrarAlertas(data, 0); // Iniciar la secuencia de alertas
+          mostrarAlertas(data, 0);
         },
       });
     });

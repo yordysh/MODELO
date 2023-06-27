@@ -1,6 +1,6 @@
 <?php
-require_once("./php/m_almacen.php");
-include("./funciones/f_funcion.php");
+require_once("./m_almacen.php");
+include("../funciones/f_funcion.php");
 
 if ($_POST['accion'] == 'insertar') {
     // $codzona = $_POST['codzona'];
@@ -78,6 +78,23 @@ if ($_POST['accion'] == 'buscarinfra') {
     echo $respuesta;
 }
 
+if ($_POST['accion'] == 'fechaalertamensaje') {
+
+    $respuesta = c_almacen::c_fecha_alerta_mensaje();
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'actualizaalerta') {
+    $respuesta = c_almacen::c_checkbox_confirma();
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'insertaralertamix') {
+    $respuesta = c_almacen::c_insertar_alertamix();
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'fechaalerta') {
+    $respuesta = c_almacen::c_fecha_alerta();
+    echo $respuesta;
+}
 
 class c_almacen
 {
@@ -248,7 +265,7 @@ class c_almacen
         }
     }
 
-    static function c_buscar_infra()
+    static function c_buscar_infra($buscarinfra)
     {
         try {
 
@@ -276,7 +293,38 @@ class c_almacen
     }
 
 
-    function c_checkbox_confirma()
+    static function c_fecha_alerta_mensaje()
+    {
+
+        $mostrar = new m_almacen();
+        $datos = $mostrar->AlertaMensaje();
+        try {
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_ALERTA" => $row->COD_ALERTA,
+                    "NDIAS" => $row->NDIAS,
+                    "NOMBRE_AREA" => $row->NOMBRE_AREA,
+                    "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
+                    "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
+                    "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                    "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
+                    "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
+
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_checkbox_confirma()
     {
         $mostrar = new m_almacen();
 
@@ -334,42 +382,7 @@ class c_almacen
         echo json_encode($response);
     }
 
-    function c_fecha_alerta()
-    {
-        $mostrar = new m_almacen();
-
-
-        $datos = $mostrar->MostrarAlerta();
-        try {
-            if (!$datos) {
-                throw new Exception("Hubo un error en la consulta");
-            }
-
-            $json = array();
-            foreach ($datos as $row) {
-                $json[] = array(
-                    "COD_ALERTA" => $row->COD_ALERTA,
-                    "NDIAS" => $row->NDIAS,
-                    "NOMBRE_AREA" => $row->NOMBRE_AREA,
-                    "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
-                    "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
-                    "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
-                    "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
-                    "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
-                    "N_DIAS_POS" =>  $row->N_DIAS_POS,
-                    "POSTERGACION" =>  $row->POSTERGACION,
-
-                );
-            }
-
-            $jsonstring = json_encode($json);
-            echo $jsonstring;
-        } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
-        }
-    }
-
-    function c_insertar_alertamix()
+    static function c_insertar_alertamix()
     {
         $mostrar = new m_almacen();
 
@@ -597,6 +610,41 @@ class c_almacen
                     echo "Error en la inserción: ";
                 }
             }
+        }
+    }
+
+    static function c_fecha_alerta()
+    {
+        $mostrar = new m_almacen();
+
+
+        $datos = $mostrar->MostrarAlerta();
+        try {
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_ALERTA" => $row->COD_ALERTA,
+                    "NDIAS" => $row->NDIAS,
+                    "NOMBRE_AREA" => $row->NOMBRE_AREA,
+                    "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
+                    "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
+                    "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                    "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
+                    "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
+                    "N_DIAS_POS" =>  $row->N_DIAS_POS,
+                    "POSTERGACION" =>  $row->POSTERGACION,
+
+                );
+            }
+
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 }

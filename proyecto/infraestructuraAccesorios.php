@@ -12,15 +12,13 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/css/responsive.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/responsive.css">
     <!--====== Favicon Icon ======-->
-    <link rel="shortcut icon" href="../assets/images/icon/covifarma-ico.ico" type="images/png">
+    <link rel="shortcut icon" href="../images/icon/covifarma-ico.ico" type="images/png">
 
     <!--====== Estilo de ICON ======-->
-    <link rel="stylesheet" href="../assets/styleIcons/style.css">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="../proyecto/styleIcons/style.css">
 
     <title>Covifarma</title>
 </head>
@@ -28,12 +26,12 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-light" href="../"><img src="../assets/images/logo-covifarma.png" alt=""></a>
+            <a class="navbar-brand fw-bold text-light" href="../"><img src="../images/logo-covifarma.png" alt=""></a>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="../php/zonaAreas.php">Zona/Areas</a>
+                        <a class="nav-link" aria-current="page" href="../proyecto/zonaAreas.php">Zona/Areas</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Infraestructura Accesorios</a>
@@ -151,9 +149,9 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
         Covifarma-2023
     </footer>
-    <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="../assets/js/jquery-3.7.0.min.js"></script>
-    <script src="../assets/js/sweetalert2.all.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery-3.7.0.min.js"></script>
+    <script src="../js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxInfra.js"></script>
     <!-- <script src="js/ajaxAlerta.js"></script> -->
     <script>
@@ -162,7 +160,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
             var mesSeleccionado = document.getElementById("mes").value;
 
             // Enviar los valores a tu script de generación de PDF
-            var url = "../reportes-pdf/pdf-index.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
+            var url = "./pdf-index.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
             window.open(url, "_blank");
         }
     </script>

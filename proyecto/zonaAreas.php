@@ -15,16 +15,16 @@ $data = $mostrar->MostrarAlmacenMuestra();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/css/responsive.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/responsive.css">
     <!--====== Favicon Icon ======-->
-    <link rel="shortcut icon" href="../assets/images/icon/covifarma-ico.ico" type="images/png">
+    <link rel="shortcut icon" href="../images/icon/covifarma-ico.ico" type="images/png">
 
     <!--====== Estilo de ICON ======-->
-    <link rel="stylesheet" href="../assets/styleIcons/style.css">
+    <link rel="stylesheet" href="../proyecto/styleIcons/style.css">
 
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-    <script src="../assets/js/jquery-3.7.0.min.js"></script>
+    <script src="../js/jquery-3.7.0.min.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
 
 
@@ -35,7 +35,7 @@ $data = $mostrar->MostrarAlmacenMuestra();
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-light" href="../"><img src="../assets/images/logo-covifarma.png" alt=""></a>
+            <a class="navbar-brand fw-bold text-light" href="../"><img src="../images/logo-covifarma.png" alt=""></a>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
@@ -96,12 +96,9 @@ $data = $mostrar->MostrarAlmacenMuestra();
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
         Covifarma-2023
     </footer>
-    <script src="../assets/js/bootstrap.min.js"></script>
-    <!-- <script src="../assets/js/jquery-3.7.0.min.js"></script> -->
-    <script src="../assets/js/sweetalert2.all.min.js"></script>
-    <!-- <script src="../assets/js/jquery-tabledit/jquery.tabledit.js"></script> -->
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxZona.js"></script>
-    <!-- <script src="js/ajaxAlerta.js"></script> -->
 </body>
 
 </html>
