@@ -8,10 +8,12 @@ $(function () {
   $("#search").keyup(() => {
     if ($("#search").val()) {
       var search = $("#search").val();
-      console.log(search);
+      const accion = "buscarzona";
+      // console.log(search);
       $.ajax({
-        url: "./buscar-tarea.php",
-        data: { search },
+        // url: "./buscar-tarea.php",
+        url: "../c_almacen.php",
+        data: { accion: accion, buscarzona: search },
         type: "POST",
         success: function (response) {
           if (!response.error) {
@@ -96,12 +98,10 @@ $(function () {
     var element = $(this)[0].activeElement.parentElement.parentElement;
 
     var COD_ZONA = $(element).attr("taskId");
-    // console.log(COD_ZONA);
-    // var url = "./editar-zona.php";
+
     const accion = "editar";
-    // console.log(COD_ZONA);
+
     $.ajax({
-      // url,
       url: "../c_almacen.php",
       data: { accion: accion, codzona: COD_ZONA },
       type: "POST",

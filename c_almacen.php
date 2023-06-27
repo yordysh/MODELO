@@ -22,12 +22,63 @@ if ($_POST['accion'] == 'actualizar') {
     echo $respuesta;
 }
 if ($_POST['accion'] == 'eliminarzona') {
-    echo "e";
+
     $codzona = $_POST['codzona'];
 
     $respuesta = c_almacen::c_eliminar_zona($codzona);
     echo $respuesta;
 }
+if ($_POST['accion'] == 'buscarzona') {
+
+    $buscarzona = $_POST['buscarzona'];
+
+    $respuesta = c_almacen::c_buscar_zona($buscarzona);
+    echo $respuesta;
+}
+
+
+
+if ($_POST['accion'] == 'insertarinfra') {
+
+    $nombreinfraestructura = $_POST['nombreinfraestructura'];
+    $ndias = $_POST['ndias'];
+    // $codinfra = trim($_POST['codinfra']);
+    $valorSeleccionado = $_POST['valorSeleccionado'];
+    $respuesta = c_almacen::c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'editarinfra') {
+
+    $codinfra = trim($_POST['codinfra']);
+
+    $respuesta = c_almacen::c_editar_infra($codinfra);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'actualizarinfra') {
+    $codinfra = $_POST["codinfra"];
+    $nombreinfraestructura = $_POST['nombreinfraestructura'];
+    $ndias = $_POST['ndias'];
+    // $codinfra = trim($_POST['codinfra']);
+
+    $respuesta = c_almacen::c_actualizar_infra($nombreinfraestructura, $ndias, $codinfra);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'eliminarinfra') {
+
+    $codinfra = $_POST['codinfra'];
+
+    $respuesta = c_almacen::c_eliminar_infra($codinfra);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'buscarinfra') {
+
+    $buscarinfra = $_POST['buscarinfra'];
+
+    $respuesta = c_almacen::c_buscar_infra($buscarinfra);
+    echo $respuesta;
+}
+
+
 class c_almacen
 {
 
@@ -35,9 +86,7 @@ class c_almacen
     static function c_insertar_zona($nombrezonaArea)
     {
         $m_formula = new m_almacen();
-        // if (isset($_POST["nombrezonaArea"])) {
-        //     $NOMBRE_T_ZONA_AREAS = trim($_POST['nombrezonaArea']);
-        // $m_formula->InsertarAlmacen($NOMBRE_T_ZONA_AREAS);
+
         if (isset($nombrezonaArea)) {
             $respuesta = $m_formula->InsertarAlmacen($nombrezonaArea);
             if ($respuesta) {
@@ -53,9 +102,6 @@ class c_almacen
     {
         $mostrar = new m_almacen();
 
-
-        // if (isset($_POST["COD_ZONA"])) {
-        //     $COD_ZONA = $_POST["COD_ZONA"];
         if (isset($codzona)) {
             $selectZ = $mostrar->SelectZona($codzona);
 
@@ -77,12 +123,9 @@ class c_almacen
 
         $m_formula = new m_almacen();
 
-        // if (isset($_POST["codzona"])) {
-        if (isset($codzona)) {
-            // $task_id = $_POST["codzona"];
-            // $NOMBRE_T_ZONA_AREAS = $_POST["nombrezonaArea"];
 
-            // $respuesta = $m_formula->editarAlmacen($NOMBRE_T_ZONA_AREAS, $task_id);
+        if (isset($codzona)) {
+
             $respuesta = $m_formula->editarAlmacen($nombrezonaArea, $codzona);
             if ($respuesta) {
                 return "ok";
@@ -96,8 +139,6 @@ class c_almacen
     {
         $mostrar = new m_almacen();
 
-        // if (isset($_POST['COD_ZONA'])) {
-        //     $COD_ZONA = $_POST['COD_ZONA'];
         if (isset($codzona)) {
             $respuesta = $mostrar->eliminarAlmacen($codzona);
             if ($respuesta) {
@@ -108,33 +149,112 @@ class c_almacen
         }
     }
 
-    function c_actualizar_infra()
-    {
-        $m_formula = new m_almacen();
-        if (isset($_POST["COD_INFRAESTRUCTURA"])) {
-            $task_id = $_POST["COD_INFRAESTRUCTURA"];
-            $NOMBRE_INFRAESTRUCTURA = $_POST["NOMBRE_INFRAESTRUCTURA"];
-            $NDIAS = $_POST["NDIAS"];
-
-            $m_formula->editarInfraestructura($NOMBRE_INFRAESTRUCTURA, $NDIAS, $task_id);
-
-            if ($m_formula) {
-                echo "La tarea ha sido actualizada";
-            } else {
-                echo "Error al actualizar la tarea";
-            }
-        }
-    }
-
-    function c_buscar_infra()
+    static function c_buscar_zona($buscarzona)
     {
         try {
 
-            $search = $_POST["search"];
-
-            if (!empty($search)) {
+            if (!empty($buscarzona)) {
                 $mostrar = new m_almacen();
-                $datos = $mostrar->MostrarInfraestructuraBusqueda($search);
+                $datos = $mostrar->MostrarAlmacenMuestraBusqueda($buscarzona);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_ZONA" => $row->COD_ZONA,
+                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias)
+    {
+        $mostrar = new m_almacen();
+        if (isset($nombreinfraestructura) && isset($ndias) && isset($valorSeleccionado)) {
+
+            $respuesta = $mostrar->insertarInfraestructura($valorSeleccionado, $nombreinfraestructura, $ndias);
+            if ($respuesta) {
+
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+    static function c_editar_infra($codinfra)
+    {
+        $mostrar = new m_almacen();
+
+
+        if (isset($codinfra)) {
+
+
+
+            $select = $mostrar->SelectInfra($codinfra);
+
+
+            $json = array();
+
+            foreach ($select as $row) {
+                $json[] = array(
+                    "COD_INFRAESTRUCTURA" => $row['COD_INFRAESTRUCTURA'],
+                    "NOMBRE_INFRAESTRUCTURA" => $row['NOMBRE_INFRAESTRUCTURA'],
+                    "NDIAS" => $row['NDIAS']
+                );
+            }
+
+            $jsonstring = json_encode($json[0]);
+            echo $jsonstring;
+        }
+    }
+
+    static function c_actualizar_infra($nombreinfraestructura, $ndias, $codinfra)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($nombreinfraestructura) && isset($ndias) && isset($codinfra)) {
+            $resultado = $m_formula->editarInfraestructura($nombreinfraestructura, $ndias, $codinfra);
+
+            if ($resultado) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+    static function c_eliminar_infra($codinfra)
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($codinfra)) {
+
+            $resultado = $mostrar->eliminarInfraestructura($codinfra);
+            if ($resultado) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+    static function c_buscar_infra()
+    {
+        try {
+
+            if (!empty($buscarinfra)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarInfraestructuraBusqueda($buscarinfra);
 
                 if (!$datos) {
                     throw new Exception("Hubo un error en la consulta");
@@ -155,33 +275,6 @@ class c_almacen
         }
     }
 
-    function c_buscar_tarea()
-    {
-        try {
-            $search = $_POST["search"];
-
-            if (!empty($search)) {
-                $mostrar = new m_almacen();
-                $datos = $mostrar->MostrarAlmacenMuestraBusqueda($search);
-
-                if (!$datos) {
-                    throw new Exception("Hubo un error en la consulta");
-                }
-
-                $json = array();
-                foreach ($datos as $row) {
-                    $json[] = array(
-                        "COD_ZONA" => $row->COD_ZONA,
-                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
-                    );
-                }
-                $jsonstring = json_encode($json);
-                echo $jsonstring;
-            }
-        } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
-        }
-    }
 
     function c_checkbox_confirma()
     {
@@ -239,43 +332,6 @@ class c_almacen
         }
 
         echo json_encode($response);
-    }
-
-    function c_editar_infra()
-    {
-        $mostrar = new m_almacen();
-
-
-        if (isset($_POST["COD_INFRAESTRUCTURA"])) {
-
-            $COD_INFRAESTRUCTURA = $_POST["COD_INFRAESTRUCTURA"];
-
-            $select = $mostrar->SelectInfra($COD_INFRAESTRUCTURA);
-
-
-            $json = array();
-
-            foreach ($select as $row) {
-                $json[] = array(
-                    "COD_INFRAESTRUCTURA" => $row['COD_INFRAESTRUCTURA'],
-                    "NOMBRE_INFRAESTRUCTURA" => $row['NOMBRE_INFRAESTRUCTURA'],
-                    "NDIAS" => $row['NDIAS']
-                );
-            }
-
-            $jsonstring = json_encode($json[0]);
-            echo $jsonstring;
-        }
-    }
-
-    function c_eliminar_infra()
-    {
-        $mostrar = new m_almacen();
-
-        if (isset($_POST['COD_INFRAESTRUCTURA'])) {
-            $COD_INFRAESTRUCTURA = $_POST['COD_INFRAESTRUCTURA'];
-            $mostrar->eliminarInfraestructura($COD_INFRAESTRUCTURA);
-        }
     }
 
     function c_fecha_alerta()

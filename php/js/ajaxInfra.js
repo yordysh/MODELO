@@ -8,15 +8,16 @@ $(function () {
   $("#search").keyup(() => {
     if ($("#search").val()) {
       let search = $("#search").val();
+      const accion = "buscarinfra";
 
       $.ajax({
-        url: "./buscar-infra.php",
-        data: { search },
+        url: "../c_almacen.php",
+        data: { accion: accion, buscarinfra: search },
         type: "POST",
         success: function (response) {
           if (!response.error) {
             let tasks = JSON.parse(response);
-
+            console.log(tasks);
             let template = ``;
             tasks.forEach((task) => {
               template += `<li class="task-item">${task.NOMBRE_INFRAESTRUCTURA}</li>`;
@@ -32,22 +33,21 @@ $(function () {
   //------------- Añadiendo con ajax InfraestructuraAccesorios----------------//
   $("#formularioInfra").submit((e) => {
     e.preventDefault();
-    // console.log($("#taskId").val());
+
     var selectInfra = document.getElementById("selectInfra");
     selectInfra.disabled = false;
-    const postData = {
-      NOMBRE_INFRAESTRUCTURA: $("#NOMBRE_INFRAESTRUCTURA").val(),
-      NDIAS: $("#NDIAS").val(),
-      COD_INFRAESTRUCTURA: $("#taskId").val(),
-      valorSeleccionado: $("#selectInfra").val(),
-    };
 
-    const url =
-      edit === false ? "./insertar-infra.php" : "./actualizar-infra.php";
+    const accion = edit === false ? "insertarinfra" : "actualizarinfra";
 
     $.ajax({
-      url: url,
-      data: postData,
+      url: "../c_almacen.php",
+      data: {
+        accion: accion,
+        nombreinfraestructura: $("#NOMBRE_INFRAESTRUCTURA").val(),
+        ndias: $("#NDIAS").val(),
+        codinfra: $("#taskId").val(),
+        valorSeleccionado: $("#selectInfra").val(),
+      },
       type: "POST",
       success: function (response) {
         // console.log(response);
@@ -92,19 +92,16 @@ $(function () {
     selectInfra.disabled = true;
 
     var COD_INFRAESTRUCTURA = $(element).attr("taskId");
-    // console.log(COD_INFRAESTRUCTURA);
-    let url = "./editar-infra.php";
+    const accion = "editarinfra";
 
     $.ajax({
-      url,
-      data: { COD_INFRAESTRUCTURA },
+      url: "../c_almacen.php",
+      data: { accion: accion, codinfra: COD_INFRAESTRUCTURA },
       type: "POST",
       success: function (response) {
         if (!response.error) {
           const task = JSON.parse(response);
-          // let tasks = response;
-          console.log(task);
-          // console.log(task);
+
           $("#NOMBRE_INFRAESTRUCTURA").val(task.NOMBRE_INFRAESTRUCTURA);
           $("#NDIAS").val(task.NDIAS);
           $("#taskId").val(task.COD_INFRAESTRUCTURA);
@@ -119,9 +116,8 @@ $(function () {
 
   $(document).on("click", ".task-delete", function (e) {
     e.preventDefault();
-    // var COD_ZONA = $(this).data("COD_ZONA");
     var COD_INFRAESTRUCTURA = $(this).attr("data-COD_INFRAESTRUCTURA");
-    console.log(COD_INFRAESTRUCTURA);
+    const accion = "eliminarinfra";
 
     Swal.fire({
       title: "¿Está seguro de eliminar este registro?",
@@ -135,9 +131,9 @@ $(function () {
     }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: "./eliminar-infra.php",
+          url: "../c_almacen.php",
           type: "POST",
-          data: { COD_INFRAESTRUCTURA: COD_INFRAESTRUCTURA },
+          data: { accion: accion, codinfra: COD_INFRAESTRUCTURA },
           success: function (response) {
             fetchTasks();
             Swal.fire({
