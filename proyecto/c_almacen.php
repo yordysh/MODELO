@@ -3,34 +3,33 @@ require_once("./m_almacen.php");
 include("../funciones/f_funcion.php");
 
 if ($_POST['accion'] == 'insertar') {
-    // $codzona = $_POST['codzona'];
-    $nombrezonaArea = $_POST['nombrezonaArea'];
+
+    $nombrezonaArea = trim($_POST['nombrezonaArea']);
     $respuesta = c_almacen::c_insertar_zona($nombrezonaArea);
     echo $respuesta;
 }
 if ($_POST['accion'] == 'editar') {
-    $codzona = $_POST['codzona'];
-    // $nombrezonaArea = $_POST['nombrezonaArea'];
+    $codzona = trim($_POST['codzona']);
     $respuesta = c_almacen::c_editar_zona($codzona);
     echo $respuesta;
 }
 
 if ($_POST['accion'] == 'actualizar') {
-    $codzona = $_POST['codzona'];
-    $nombrezonaArea = $_POST['nombrezonaArea'];
+    $codzona = trim($_POST['codzona']);
+    $nombrezonaArea = trim($_POST['nombrezonaArea']);
     $respuesta = c_almacen::c_actualizar_zona($codzona, $nombrezonaArea);
     echo $respuesta;
 }
 if ($_POST['accion'] == 'eliminarzona') {
 
-    $codzona = $_POST['codzona'];
+    $codzona = trim($_POST['codzona']);
 
     $respuesta = c_almacen::c_eliminar_zona($codzona);
     echo $respuesta;
 }
 if ($_POST['accion'] == 'buscarzona') {
 
-    $buscarzona = $_POST['buscarzona'];
+    $buscarzona = trim($_POST['buscarzona']);
 
     $respuesta = c_almacen::c_buscar_zona($buscarzona);
     echo $respuesta;
@@ -40,10 +39,9 @@ if ($_POST['accion'] == 'buscarzona') {
 
 if ($_POST['accion'] == 'insertarinfra') {
 
-    $nombreinfraestructura = $_POST['nombreinfraestructura'];
-    $ndias = $_POST['ndias'];
-    // $codinfra = trim($_POST['codinfra']);
-    $valorSeleccionado = $_POST['valorSeleccionado'];
+    $nombreinfraestructura = trim($_POST['nombreinfraestructura']);
+    $ndias = trim($_POST['ndias']);
+    $valorSeleccionado = trim($_POST['valorSeleccionado']);
     $respuesta = c_almacen::c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias);
     echo $respuesta;
 }
@@ -55,24 +53,23 @@ if ($_POST['accion'] == 'editarinfra') {
     echo $respuesta;
 }
 if ($_POST['accion'] == 'actualizarinfra') {
-    $codinfra = $_POST["codinfra"];
-    $nombreinfraestructura = $_POST['nombreinfraestructura'];
-    $ndias = $_POST['ndias'];
-    // $codinfra = trim($_POST['codinfra']);
+    $codinfra = trim($_POST["codinfra"]);
+    $nombreinfraestructura = trim($_POST['nombreinfraestructura']);
+    $ndias = trim($_POST['ndias']);
 
     $respuesta = c_almacen::c_actualizar_infra($nombreinfraestructura, $ndias, $codinfra);
     echo $respuesta;
 }
 if ($_POST['accion'] == 'eliminarinfra') {
 
-    $codinfra = $_POST['codinfra'];
+    $codinfra = trim($_POST['codinfra']);
 
     $respuesta = c_almacen::c_eliminar_infra($codinfra);
     echo $respuesta;
 }
 if ($_POST['accion'] == 'buscarinfra') {
 
-    $buscarinfra = $_POST['buscarinfra'];
+    $buscarinfra = trim($_POST['buscarinfra']);
 
     $respuesta = c_almacen::c_buscar_infra($buscarinfra);
     echo $respuesta;

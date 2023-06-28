@@ -75,7 +75,7 @@ class m_almacen
     $stm = $this->bd->prepare("SELECT MAX(COD_INFRAESTRUCTURA) as COD_INFRAESTRUCTURA FROM T_INFRAESTRUCTURA");
     $stm->execute();
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
-    $maxCodigo = $resultado['COD_INFRAESTRUCTURA'];
+    $maxCodigo = intval($resultado['COD_INFRAESTRUCTURA']);
     $nuevoCodigo = $maxCodigo + 1;
     $codigoAumento = str_pad($nuevoCodigo, 2, '0', STR_PAD_LEFT);
     return $codigoAumento;
@@ -93,7 +93,7 @@ class m_almacen
     if ($maxContadorVersion == null) {
       $maxContadorVersion = 0;
     }
-    var_dump("VERSION " . $maxContadorVersion);
+
     $fechaDHoy = date('Y-m-d');
     $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
     $stmver->execute();
@@ -105,15 +105,10 @@ class m_almacen
       $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
     } else {
       $maxContadorVersion;
-      //   // if ($maxContadorVersion == '1') {
-      //   //   $maxC = '01';
+
       $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
-      //   // }
-      //   $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
-      //   // var_dump('contador' . $maxContadorVersion);
     }
-    // $nuevaversion = $maxContadorVersion + 1;
-    // $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
+
     return $versionAumento;
   }
 
@@ -143,7 +138,7 @@ class m_almacen
   {
     try {
       if (isset($FECHA)) {
-        // $fecha = retunrFechaActualphp();
+
         if (empty($FECHA)) {
           $FECHA = retunrFechaActualphp();
         }
@@ -168,12 +163,11 @@ class m_almacen
         $insert = $stm->execute();
 
         $fechaDHoy = date('Y-m-d');
-        // $fechaVer = $cod->MostrarVersion();
 
 
 
         if ($VERSION == '01') {
-          var_dump("hoy " . $VERSION);
+
           $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
 
 

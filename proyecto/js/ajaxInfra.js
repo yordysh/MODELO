@@ -50,7 +50,7 @@ $(function () {
       },
       type: "POST",
       success: function (response) {
-        // console.log(response);
+        console.log(response);
         if (response == "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
@@ -65,9 +65,9 @@ $(function () {
           });
         } else {
           Swal.fire({
-            title: "¡Guardado exitoso!",
-            text: "Los datos se han guardado correctamente.",
-            icon: "success",
+            icon: "error",
+            title: "Oops...",
+            text: "Duplicado!",
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {

@@ -46,9 +46,7 @@ $(function () {
 
       type: "POST",
       success: function (response) {
-        // alert(response);
-        // console.log(response);
-        if (response == "ok") {
+        if (response.toLowerCase() === "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
             text: "Los datos se han guardado correctamente.",
@@ -62,9 +60,9 @@ $(function () {
           });
         } else {
           Swal.fire({
-            title: "¡Guardado exitoso!",
-            text: "Los datos se han guardado correctamente.",
-            icon: "success",
+            icon: "error",
+            title: "Oops...",
+            text: "Duplicado!",
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
@@ -73,6 +71,7 @@ $(function () {
             }
           });
         }
+        // console.log("RESPONSE" + response);
       },
     });
   });
@@ -126,7 +125,7 @@ $(function () {
 
     var COD_ZONA = $(this).attr("data-COD_ZONA");
     const accion = "eliminarzona";
-    console.log(COD_ZONA);
+    // console.log(COD_ZONA);
 
     Swal.fire({
       title: "¿Está seguro de eliminar este registro?",

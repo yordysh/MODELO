@@ -12,7 +12,7 @@ $data = $mostrar->MostrarAlmacenMuestra();
 
 ?>
 
-<table id="tbalmacen" class="table table-sm mb-3 table-hover">
+<table id="tbalmacen" class="table table-sm mb-3 table-hover table_id">
     <thead>
         <tr>
 

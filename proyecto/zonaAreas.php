@@ -48,7 +48,7 @@ $data = $mostrar->MostrarAlmacenMuestra();
                 </ul>
             </div>
             <form class="d-flex">
-                <input type="search" id="search" placeholder="Buscar" class="form-control me-2">
+                <input type="search" id="search" placeholder="Buscar" data-table="table_id" class="form-control me-2">
                 <button type="submit" class="btn btn-primary">Buscar</button>
             </form>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
