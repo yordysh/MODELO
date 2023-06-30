@@ -5,7 +5,7 @@ require_once "../funciones/f_funcion.php";
 
 
 $mostrar = new m_almacen();
-$dataInfra = $mostrar->MostrarInfraestructura();
+$dataInfra = $mostrar->MostrarInfraestructuraTabla();
 
 
 ?>
@@ -14,7 +14,7 @@ $dataInfra = $mostrar->MostrarInfraestructura();
     <thead>
         <tr>
 
-            <th class="thtitulo" scope="col">CODIGO INFRAESTRUCTURA</th>
+            <!-- <th class="thtitulo" scope="col">CODIGO INFRAESTRUCTURA</th> -->
             <th class="thtitulo" scope="col">CODIGO ZONA</th>
             <th class="thtitulo" scope="col">NOMBRE DE INFRAESTRUCTURA</th>
             <th class="thtitulo" scope="col">N°DIAS</th>
@@ -30,8 +30,10 @@ $dataInfra = $mostrar->MostrarInfraestructura();
         ?>
             <?php foreach ($dataInfra as $listado) { ?>
                 <tr taskId="<?php echo $listado->COD_INFRAESTRUCTURA; ?>">
-                    <td><?php echo $listado->COD_INFRAESTRUCTURA ?></td>
-                    <td><?php echo $listado->COD_ZONA ?></td>
+                    <!-- <td><?php
+                                //  echo $listado->COD_INFRAESTRUCTURA 
+                                ?></td> -->
+                    <td><?php echo $listado->NOMBRE_T_ZONA_AREAS ?></td>
                     <td class="NOMBRE_INFRAESTRUCTURA"><?php echo $listado->NOMBRE_INFRAESTRUCTURA ?></td>
                     <td id="numerodias"><?php echo $listado->NDIAS; ?></td>
                     <td><?php $FECHA = $listado->FECHA;

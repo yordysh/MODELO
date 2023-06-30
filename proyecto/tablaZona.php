@@ -16,7 +16,7 @@ $data = $mostrar->MostrarAlmacenMuestra();
     <thead>
         <tr>
 
-            <th class="thtitulo" scope="col">CODIGO</th>
+            <!-- <th class="thtitulo" scope="col">CODIGO</th> -->
             <th class="thtitulo" scope="col">NOMBRE DE AREA</th>
             <th class="thtitulo" scope="col">FECHA</th>
             <th class="thtitulo" scope="col">VERSION</th>
@@ -31,7 +31,9 @@ $data = $mostrar->MostrarAlmacenMuestra();
         ?>
             <?php foreach ($data as $lista) { ?>
                 <tr taskId=" <?php echo $lista->COD_ZONA ?>">
-        <td class="codigo"><?php echo $lista->COD_ZONA ?></td>
+        <!-- <td class="codigo"><?php
+                                // echo $lista->COD_ZONA 
+                                ?></td> -->
 
         <td class="NOMBRE_T_ZONA_AREAS"><?php echo $lista->NOMBRE_T_ZONA_AREAS ?></td>
         <td><?php $FECHA = $lista->FECHA;
