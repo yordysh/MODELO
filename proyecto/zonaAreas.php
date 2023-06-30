@@ -99,6 +99,30 @@ $data = $mostrar->MostrarAlmacenMuestra();
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxZona.js"></script>
+    <!-- <script>
+        $(document).ready(function() {
+            $("#search").on("keyup", function() {
+                // var value = $(this).val().toLowerCase();
+                var search = $(this).val();
+                const accion = "buscarzona";
+
+                $.ajax({
+                    url: "./c_almacen.php",
+                    data: {
+                        accion: accion,
+                        buscarzona: search
+                    },
+                    type: "POST",
+                    success: function(response) {
+
+                    },
+                });
+                // $("#myTable tr").filter(function() {
+                //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                // });
+            });
+        });
+    </script> -->
 </body>
 
 </html>
