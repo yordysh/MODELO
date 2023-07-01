@@ -62,9 +62,9 @@ $(function () {
           });
         } else {
           Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Nose inserto por duplicado!",
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {

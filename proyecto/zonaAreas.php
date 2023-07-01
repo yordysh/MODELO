@@ -35,7 +35,7 @@ $data = $mostrar->MostrarAlmacenMuestra();
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-light" href="../"><img src="../images/logo-covifarma.png" alt=""></a>
+            <a class="navbar-brand fw-bold text-light" href="./"><img src="../images/logo-covifarma.png" alt=""></a>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">

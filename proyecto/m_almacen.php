@@ -1,7 +1,7 @@
 <?php
 
 require_once("../funciones/DataBaseA.php");
-//include("../funciones/f_funcion.php");
+// require_once("../funciones/f_funcion.php");
 
 class m_almacen
 {
@@ -89,14 +89,30 @@ class m_almacen
     $stm = $this->bd->prepare("SELECT MAX(VERSION) as VERSION FROM T_VERSION");
     $stm->execute();
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
-    $maxContadorVersion = intval($resultado['VERSION']);
+    $maxContadorVersion = $resultado['VERSION'];
     if ($maxContadorVersion == null) {
       $maxContadorVersion = 0;
     }
-    $nuevaversion = $maxContadorVersion + 1;
+
+    $fechaDHoy = date('Y-m-d');
+    $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+    $stmver->execute();
+    $valor = $stmver->fetchAll();
+
+    $valor1 = count($valor);
+    if ($valor1 == 0) {
+      $nuevaversion = $maxContadorVersion + 1;
+      $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
+    } else {
+      $maxContadorVersion;
+      if ($maxContadorVersion == '1') {
+        $maxC = '01';
+        $versionAumento = str_pad($maxC, 2, '0', STR_PAD_LEFT);
+      }
+      // var_dump('contador' . $maxContadorVersion);
+    }
 
 
-    $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
     return $versionAumento;
   }
 
@@ -143,6 +159,7 @@ class m_almacen
       $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
 
       if ($repetir == 0) {
+
         $stm = $this->bd->prepare("INSERT INTO T_ZONA_AREAS (COD_ZONA, NOMBRE_T_ZONA_AREAS, FECHA, VERSION) 
                                   VALUES ( '$COD_ZONA', '$NOMBRE_T_ZONA_AREAS', '$FECHA', '$VERSION')");
 
@@ -150,21 +167,35 @@ class m_almacen
         $insert = $stm->execute();
 
         $fechaDHoy = date('Y-m-d');
-        $fechaVer = $cod->MostrarVersion();
-        $fechaVer =   $fechaVer[0];
+        // $fechaVer = $cod->MostrarVersion();
 
-        $fechaConVer = date('Y-m-d', strtotime($fechaVer[0]));
+        var_dump("antes " . $VERSION);
 
-        if ($fechaConVer != $fechaDHoy) {
-          if ($VERSION == '01') {
-            $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values($VERSION)");
-          } else {
+        if ($VERSION == '01') {
+          var_dump("hoy " . $VERSION);
+
+          $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) VALUES (:version)");
+          $stm1->bindParam(':version', $VERSION, PDO::PARAM_STR);
+          $stm1->execute();
+        } else {
+          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+          // var_dump($stmver);
+
+          $stmver->execute();
+          $valor = $stmver->fetchAll();
+
+          $valor1 = count($valor);
+
+          var_dump("vers" . $VERSION);
+          if ($valor1 == 0) {
             $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
             $stm1->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
             $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
+            $stm1->execute();
           }
-          $stm1->execute();
         }
+
+
 
 
         $insert = $this->bd->commit();

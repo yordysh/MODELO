@@ -320,7 +320,7 @@ class c_almacen
             $jsonstring = json_encode($json);
             echo $jsonstring;
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
+            echo "Error: ";
         }
     }
 
@@ -644,7 +644,7 @@ class c_almacen
             $jsonstring = json_encode($json);
             echo $jsonstring;
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
+            echo "Error: ";
         }
     }
 }

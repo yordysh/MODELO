@@ -4,7 +4,7 @@ $(function () {
       alerta();
     })
     .catch(function (error) {
-      console.error(error);
+      // console.error(error);
       alerta();
     });
 
