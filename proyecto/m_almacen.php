@@ -93,7 +93,7 @@ class m_almacen
     if ($maxContadorVersion == null) {
       $maxContadorVersion = 0;
     }
-
+    var_dump("VERSION " . $maxContadorVersion);
     $fechaDHoy = date('Y-m-d');
     $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
     $stmver->execute();
@@ -105,14 +105,15 @@ class m_almacen
       $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
     } else {
       $maxContadorVersion;
-      if ($maxContadorVersion == '1') {
-        $maxC = '01';
-        $versionAumento = str_pad($maxC, 2, '0', STR_PAD_LEFT);
-      }
-      // var_dump('contador' . $maxContadorVersion);
+      //   // if ($maxContadorVersion == '1') {
+      //   //   $maxC = '01';
+      $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
+      //   // }
+      //   $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
+      //   // var_dump('contador' . $maxContadorVersion);
     }
-
-
+    // $nuevaversion = $maxContadorVersion + 1;
+    // $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
     return $versionAumento;
   }
 
@@ -169,24 +170,32 @@ class m_almacen
         $fechaDHoy = date('Y-m-d');
         // $fechaVer = $cod->MostrarVersion();
 
-        var_dump("antes " . $VERSION);
+
 
         if ($VERSION == '01') {
           var_dump("hoy " . $VERSION);
-
-          $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) VALUES (:version)");
-          $stm1->bindParam(':version', $VERSION, PDO::PARAM_STR);
-          $stm1->execute();
-        } else {
           $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
-          // var_dump($stmver);
+
 
           $stmver->execute();
           $valor = $stmver->fetchAll();
 
           $valor1 = count($valor);
 
-          var_dump("vers" . $VERSION);
+          if ($valor1 == 0) {
+            $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) VALUES ( :version)");
+            $stm1->bindParam(':version', $VERSION, PDO::PARAM_STR);
+            $stm1->execute();
+          }
+        } else {
+          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+          $stmver->execute();
+          $valor = $stmver->fetchAll();
+
+          $valor1 = count($valor);
+
           if ($valor1 == 0) {
             $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
             $stm1->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
@@ -228,19 +237,26 @@ class m_almacen
         $update = $stmt->execute();
 
         $fechaDHoy = date('Y-m-d');
-        $fechaVer = $cod->MostrarVersion();
-        $fechaVer =   $fechaVer[0];
 
-        $fechaConVer = date('Y-m-d', strtotime($fechaVer[0]));
-        if ($fechaConVer != $fechaDHoy) {
-          if ($VERSION == '01') {
-            $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values($VERSION)");
-          } else {
+        if ($VERSION == '01') {
+          $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
+          $stm1->bindParam(':version', $VERSION, PDO::PARAM_STR);
+          $stm1->execute();
+        } else {
+          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+          $stmver->execute();
+          $valor = $stmver->fetchAll();
+
+          $valor1 = count($valor);
+
+          if ($valor1 == 0) {
             $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
             $stm1->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
             $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
+            $stm1->execute();
           }
-          $stm1->execute();
         }
 
         $update = $this->bd->commit();
@@ -342,20 +358,36 @@ class m_almacen
         $insert = $stm->execute();
 
         $fechaDHoy = date('Y-m-d');
-        $fechaVer = $cod->MostrarVersion();
-        $fechaConVer = date('Y-m-d', strtotime($fechaVer[0]['FECHA_VERSION']));
 
-        if ($fechaConVer != $fechaDHoy) {
-          if ($VERSION == '01') {
-            $stmVersion = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values($VERSION)");
-          } else {
+        if ($VERSION == '01') {
+          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
 
+
+          $stmver->execute();
+          $valor = $stmver->fetchAll();
+
+          $valor1 = count($valor);
+
+          if ($valor1 == 0) {
+            $stmVersion = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
+            $stmVersion->bindParam(':version', $VERSION, PDO::PARAM_STR);
+            $stmVersion->execute();
+          }
+        } else {
+          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+          $stmver->execute();
+          $valor = $stmver->fetchAll();
+
+          $valor1 = count($valor);
+
+          if ($valor1 == 0) {
             $stmVersion = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
             $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
             $stmVersion->bindParam(':FECHA_VERSION', $fechaDHoy);
+            $stmVersion->execute();
           }
-
-          $stmVersion->execute();
         }
 
 
@@ -399,7 +431,7 @@ class m_almacen
       $stmt->bindParam(':NOMBRE_INFRAESTRUCTURA', $NOMBRE_INFRAESTRUCTURA, PDO::PARAM_STR);
       $stmt->bindParam(':NDIAS', $NDIAS, PDO::PARAM_STR);
       $update = $stmt->execute();
-      // $stm1 = "insert into version(version) values($version)";
+
       return $update;
     } catch (Exception $e) {
       die($e->getMessage());
