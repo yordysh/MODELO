@@ -82,7 +82,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         }
 
         td.estado-vacio {
-            background-color: #f2f2f2;
+            background-color: #000;
 
         }
 
@@ -146,127 +146,179 @@ $versionMuestra = $mostrar->VersionMostrar();
 
         </tbody>
     </table>
-    <!-- Table calendario-->
-    <!-- <table>
-        <tbody> -->
-    <?php
+    <table>
+        <tbody>
+            <?php
 
 
-    $grupos = array();
+            $grupos = array();
 
-    foreach ($datos as $fila) {
+            foreach ($datos as $fila) {
+                $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
+                $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
+                $ndiaspos = $fila['N_DIAS_POS'];
+                $estado = $fila['ESTADO'];
+                $fechaTotal = $fila['FECHA_TOTAL'];
 
-        $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
-        $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
-        // $ndiaspos = $fila['N_DIAS_POS'];
-        // $estado = $fila['ESTADO'];
-        // $fechaTotal = $fila['FECHA_TOTAL'];
-        if (!isset($grupos[$nombreZona])) {
-            $grupos[$nombreZona] = array(
-                'nombreInfraestructura' => $nombreInfraestructura,
-            );
-        }
+                if (!isset($grupos[$nombreZona])) {
+                    $grupos[$nombreZona] = array();
+                }
 
-        // $existingIndex = -1;
-        // foreach ($grupos[$nombreZona] as $index => $value) {
-        //     if ($value['nombreInfraestructura'] === $nombreInfraestructura) {
-        //         $existingIndex = $index;
-        //         break;
-        //     }
-        // }
+                $existingIndex = -1;
+                foreach ($grupos[$nombreZona] as $index => $value) {
+                    if ($value['nombreInfraestructura'] === $nombreInfraestructura) {
+                        $existingIndex = $index;
+                        break;
+                    }
+                }
 
-        // if ($existingIndex !== -1) {
-        //     $grupos[$nombreZona][$existingIndex]['estados'][$fechaTotal] = $estado;
-        // } else {
-        //     $dias = date('d', strtotime($fechaTotal));
-        //     $grupos[$nombreZona][] = array(
-        //         'nombreInfraestructura' => $nombreInfraestructura,
-        //         'estados' => array($fechaTotal => $estado),
-        //         'ndiaspos' => $ndiaspos,
-        //         'fechaTotal' => $fechaTotal,
-        //         'dias' => $dias,
-        //     );
-        // }
-    }
-    echo "$grupos[DOSIMETRÍA]";
+                if ($existingIndex !== -1) {
+                    $grupos[$nombreZona][$existingIndex]['estados'][$fechaTotal] = $estado;
+                } else {
+                    $diad = date('d', strtotime($fechaTotal));
+                    $grupos[$nombreZona][] = array(
+                        'nombreInfraestructura' => $nombreInfraestructura,
+                        'estados' => array($diad => $estado),
+                        'ndiaspos' => $ndiaspos,
+                        'fechaTotal' => $fechaTotal
+                    );
+                }
+            }
+            // foreach ($grupos as $nombreZona => $grupo) {
+            //     echo '<p>Nombre de la Zona: ' . $nombreZona . '</p><br>';
+
+            //     foreach ($grupo as $elemento) {
+            //         echo '<p>Nombre de la Infraestructura: ' . $elemento['nombreInfraestructura'] . '</p><br>';
+
+            //         foreach ($elemento['estados'] as $diad => $estado) {
+            //             echo '<p>Fecha Total: ' . $diad . ' - Estado: ' . $estado . '</p><br>';
+            //         }
+
+            //         echo '<p>Número de días pos: ' . $elemento['ndiaspos'] . '</p><br>';
+            //         echo '<p>Fecha Total: ' . $elemento['fechaTotal'] . '</p><br>';
+
+            //         echo '<br><br><br>';
+            //     }
+            // }
+
+            $numeroDiasMe = date('t', strtotime($fechaTotal));
+            $columnasFechaTotales = $numeroDiasMe;
+
+            echo '<tr>';
+            echo '<td class="cabecera-fila column-1" rowspan="2">Zonas/areas</td>';
+            echo '<td class="cabecera-fila column-2" rowspan="2">Infraestructura, accesorios complementarios</td>';
+            echo '<td class="cabecera-fila" rowspan="2">Frecuencia</td>';
+            echo '<td class="cabecera-fila" colspan="' . $columnasFechaTotales . '">Dias</td>';
+            echo '<td class="cabecera-fila" rowspan="2">Responsable de ejecucion</td>';
+            echo '</tr>';
+
+            echo '<tr>';
+
+            for ($l = 1; $l <= $columnasFechaTotales; $l++) {
+                if ($l == $columnasFechaTotales) {
+                    echo '<td class="cabecera-fila borde">' . $l . '</td>';
+                } else {
+                    echo '<td class="cabecera-fila">' . $l . '</td>';
+                }
+            }
+
+            echo '</tr>';
+
+
+            foreach ($grupos as $nombreZona => $valores) {
+                echo '<tr">';
+                echo '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
+
+                foreach ($valores as $index => $valor) {
+                    if ($index !== 0) {
+                        echo '<tr>';
+                    }
+
+                    echo '<td class="cabecera">' . $valor['nombreInfraestructura'] . '</td>';
+                    if ($valor['ndiaspos'] == 1) {
+                        echo '<td class="cabecera">Diaria</td>';
+                    } elseif ($valor['ndiaspos'] == 2) {
+                        echo '<td class="cabecera">Interdiaria</td>';
+                    } elseif ($valor['ndiaspos'] == 7) {
+                        echo '<td class="cabecera">Semanal</td>';
+                    } elseif ($valor['ndiaspos'] == 15) {
+                        echo '<td class="cabecera">Quincenal</td>';
+                    } elseif ($valor['ndiaspos'] == 30) {
+                        echo '<td class="cabecera">Mensual</td>';
+                    } else {
+                        echo '<td class="cabecera">' . $valor['ndiaspos'] . '</td>';
+                    }
 
 
 
-    // foreach ($grupos as $nombreZona => $valores) {
-    //     echo '<tr">';
-    //     echo '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
 
-    //     foreach ($valores as $index => $valor) {
-    //         if ($index !== 0) {
-    //             echo '<tr>';
-    //         }
+                    $fechaTotal = $valor['fechaTotal'];
+                    $numeroDiasMes = date('t', strtotime($fechaTotal));
+                    $columnasFechaTotal = $numeroDiasMes;
+                    $dias = date('j', strtotime($fechaTotal));
 
-    //         echo '<td class="cabecera">' . $valor['nombreInfraestructura'] . '</td>';
-    //         if ($valor['ndiaspos'] == 1) {
-    //             echo '<td class="cabecera">Diaria</td>';
-    //         } elseif ($valor['ndiaspos'] == 2) {
-    //             echo '<td class="cabecera">Interdiaria</td>';
-    //         } elseif ($valor['ndiaspos'] == 7) {
-    //             echo '<td class="cabecera">Semanal</td>';
-    //         } elseif ($valor['ndiaspos'] == 15) {
-    //             echo '<td class="cabecera">Quincenal</td>';
-    //         } elseif ($valor['ndiaspos'] == 30) {
-    //             echo '<td class="cabecera">Mensual</td>';
-    //         } else {
-    //             echo '<td class="cabecera">' . $valor['ndiaspos'] . '</td>';
-    //         }
+                    $columnas = array();
 
-    //         // Crear array con columnas de acuerdo a la FECHA_TOTAL
-    //         $fechaTotal = $valor['fechaTotal'];
-    //         $numeroDiasMes = date('t', strtotime($fechaTotal));
-    //         $columnasFechaTotal = $numeroDiasMes;
-    //         $dias = date('d', strtotime($fechaTotal));
+                    for ($i = 1; $i <= $columnasFechaTotal; $i++) {
 
-    //         $columnas = array();
-    //         for ($i = 1; $i <= $columnasFechaTotal; $i++) {
+                        /* foreach ($valor['estados'] as $diad => $estado) {
+                            var_dump($i . '==' . $diad);
+                            if ($i == $diad) {
+                                $columnas[$i] =  $estado;
+                            } else {
+                                $columnas[$i] = 'x';
+                            }
+                            //echo '<p>Fecha Total: ' . $diad . ' - Estado: ' . $estado . '</p><br>';
+                        }*/
 
-    //             if ($i == $dias) {
-    //                 $columnas[$i] = 'X' . $estado;
-    //             } else {
-    //                 $columnas[$i] = '-';
-    //             }
-    //         }
+                        if ($i == $dias) {
+                            $columnas[$i] =  '';
+                        } else {
+                            $columnas[$i] = 'x';
+                            // echo '<td>X</td>';
 
-    //         // Agregar columna en blanco si el mes tiene 30 días
-    //         // if ($columnasFechaTotal == 30) {
-    //         //     $columnas[31] = '';
-    //         // }
+                        }
+                    }
 
-    //         // Asignar los estados a las columnas correspondientes
-    //         foreach ($valor['estados'] as $fecha => $estado) {
-    //             $dia = date('d', strtotime($fecha));
-    //             if (isset($columnas[$dia])) {
-    //                 if ($columnas[$dia] === '') {
-    //                     $columnas[$dia] = $estado;
-    //                 } else {
-    //                     $columnas[$dia] .= '' . $estado;
-    //                 }
-    //             }
-    //         }
+                    //Asignar los estados a las columnas correspondientes
+                    foreach ($valor['estados'] as $diad => $estado) {
+                        // $dia = date('d', strtotime($fecha));
+                        if (isset($columnas[$diad])) {
+                            if ($columnas[$diad] === '') {
+                                $columnas[$diad] = $estado;
+                            } else {
+                                $columnas[$diad] .= '' . $estado;
+                            }
+                        }
+                    }
 
-    //         // Imprimir los estados en las columnas correspondientes
-    //         foreach ($columnas as $columna) {
-    //             // $estadoClass = $columna !== '' ? 'estado-' . $columna : 'estado-vacio';
-    //             // echo '<td class="' . $estadoClass . '">' . $columna . '</td>';
-    //             echo '<td class="cabecera">' . $columna . '</td>';
-    //         }
-    //         //Colocar este td para que rellene de responsable de ejecucion
-    //         echo '<td></td>';
-    //         if ($index !== 0) {
-    //             echo '</tr>';
-    //         }
-    //     }
 
-    //     echo '</tr>';
-    // }
-    ?>
-    <!-- </tbody>
-    </table> -->
+                    // Imprimir los estados en las columnas correspondientes
+                    foreach ($columnas as $columna) {
+                        // $estadoClass = $columna !== '' ? 'estado-' . $columna : 'estado-vacio';
+                        // if ($estadoClass = $columna !== '') {
+                        //     'estado-' . $columna;
+                        //     echo '<p>' . $columna . '</p>';
+                        // } else {
+                        //     'estado-vacio';
+                        // }
+                        // echo '<td class="' . $estadoClass . '">' . $columna . '</td>';
+                        echo '<td class="cabecera">' . $columna . '</td>';
+                    }
+                    //Colocar este td para que rellene de responsable de ejecucion
+                    echo '<td></td>';
+                    if ($index !== 0) {
+                        echo '</tr>';
+                    }
+                }
+
+                echo '</tr>';
+            }
+
+            ?>
+        </tbody>
+    </table>
+
 </body>
 
 </html>
