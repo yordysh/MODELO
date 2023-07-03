@@ -11,7 +11,6 @@
   <link rel="shortcut icon" href="../images/icon/covifarma-ico.ico" type="images/png">
 
   <!--==== Estilos de SWEETALERT2 =====-->
-  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css"> -->
   <link rel="stylesheet" href="../css/sweetalert2.min.css">
 
   <title>Covifarma</title>
@@ -31,6 +30,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="./infraestructuraAccesorios.php">Infraestructura Accesorios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./preparacionSolucion.php">Preparación de soluciones</a>
           </li>
         </ul>
       </div>

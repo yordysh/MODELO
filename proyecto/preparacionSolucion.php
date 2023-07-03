@@ -2,7 +2,7 @@
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataInfra = $mostrar->MostrarAlmacenMuestra();
+$dataInsumos = $mostrar->MostrarSoluciones();
 
 ?>
 <!DOCTYPE html>
@@ -34,10 +34,10 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         <a class="nav-link" aria-current="page" href="../proyecto/zonaAreas.php">Zona/Areas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Infraestructura Accesorios</a>
+                        <a class="nav-link active" href="../proyecto/infraestructuraAccesorios.php">Infraestructura Accesorios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./preparacionSolucion.php">Preparación de soluciones</a>
+                        <a class="nav-link active" href="#">Preparación de soluciones</a>
                     </li>
                 </ul>
             </div>
@@ -54,45 +54,55 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
         <section>
             <div class="container g-4 mt-100 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">INFRAESTRUCTURA, ACCESORIOS COMPLEMENTARIOS</label></center>
+                    <center><label class="title">PREPARACIÓN DE SOLUCIONES</label></center>
                 </div>
                 <div class="main">
-                    <form method="post" action="" id="formularioInfra">
+                    <form method="post" action="" id="formularioSoluciones">
 
-                        <!-- Text input -->
+                        <!-- Text input Insumos -->
                         <div class="form-outline mb-4">
-                            <input id="id" type="hidden" class="form-control" name="id" />
-                        </div>
-
-                        <!-- Text input nombre -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Nombre de infraestructura</label>
-                            <input type="text" id="NOMBRE_INFRAESTRUCTURA" class="form-control" name="NOMBRE_INFRAESTRUCTURA" required>
-                        </div>
-                        <!-- Text input dias-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Dias</label>
-                            <input type="text" id="NDIAS" class="form-control" name="NDIAS" required>
-                        </div>
-
-                        <!--Combo zona areas -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Zona/Areas</label>
-                            <select id="selectInfra" class="form-select" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione Zona/Areas</option>
-                                <?php foreach ($dataInfra as $lis) { ?>
-                                    <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
+                            <label class="form-label">Insumos</label>
+                            <select id="selectInsumos" class="form-select" aria-label="Default select example">
+                                <option value="0" selected disabled>Seleccione insumos</option>
+                                <?php foreach ($dataInsumos as $lista) { ?>
+                                    <option value="<?php echo $lista['ID_SOLUCIONES']; ?>" class="option"><?php echo $lista['NOMBRE_INSUMOS']; ?></option>
                                 <?php } ?>
                             </select>
-
                         </div>
-
-                        <!-- Submit button -->
+                        <!-- Text input Preparacion-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Preparación</label>
+                            <select id="selectPreparaciones" class="form-select" aria-label="Default select example">
+                                <option value="0" selected disabled>Seleccione preparación</option>
+                            </select>
+                        </div>
+                        <!-- Text input cantidad-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Cantidad ("%" o "ppm")</label>
+                            <select id="selectCantidad" class="form-select" aria-label="Default select example">
+                                <option value="0" selected disabled>Seleccione cantidad</option>
+                            </select>
+                        </div>
+                        <!-- Text input numeroPreparacion-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Número de preparacion en ml</label>
+                            <select id="selectML" class="form-select" aria-label="Default select example">
+                                <option value="0" selected disabled>Seleccione cantidad ML</option>
+                            </select>
+                        </div>
+                        <!-- Text input numeroPreparacion-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Número de preparacion en L</label>
+                            <select id="selectL" class="form-select" aria-label="Default select example">
+                                <option value="0" selected disabled>Seleccione cantidad L</option>
+                            </select>
+                        </div>
                         <div class="container">
                             <div class="row">
+                                <!-- Submit button -->
                                 <div class="col-2">
                                     <input type="hidden" id="taskId">
-                                    <button id="boton" type="submit" name="insert" class="btn btn-primary ">Guardar </button>
+                                    <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
                                 </div>
                                 <div class=" col-10 pdf" style="margin-left: 35%; margin-top:-4%;">
                                     <div class="row">
@@ -139,7 +149,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         </div>
                     </div>
 
-                    <div id="tablaInfra" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                    <div id="tabla" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
 
                     </div>
 
@@ -155,7 +165,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/jquery-3.7.0.min.js"></script>
     <script src="../js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxInfra.js"></script>
+    <script src="./js/ajaxPreparacion.js"></script>
     <!-- <script src="js/ajaxAlerta.js"></script> -->
     <script>
         function generarPDF() {

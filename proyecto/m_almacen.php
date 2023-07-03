@@ -612,12 +612,150 @@ class m_almacen
     }
   }
 
-  public function VersionMostrar()
+
+
+  public function MostrarSoluciones()
   {
     try {
 
 
-      $stm = $this->bd->prepare("SELECT VERSION FROM T_VERSION");
+      $stm = $this->bd->prepare(
+        "SELECT * FROM T_SOLUCIONES"
+      );
+
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarPreparaciones($ID_SOLUCIONES)
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT * FROM T_PREPARACIONES WHERE ID_SOLUCIONES=:ID_SOLUCIONES"
+      );
+      $stm->bindParam(':ID_SOLUCIONES', $ID_SOLUCIONES);
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarCantidades($ID_PREPARACIONES)
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT * FROM T_CANTIDAD WHERE ID_PREPARACIONES=:ID_PREPARACIONES"
+      );
+      $stm->bindParam(':ID_PREPARACIONES', $ID_PREPARACIONES);
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarML($ID_CANTIDAD)
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT * FROM T_ML WHERE ID_CANTIDAD=:ID_CANTIDAD"
+      );
+      $stm->bindParam(':ID_CANTIDAD', $ID_CANTIDAD);
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarL($ID_L)
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT T_L.ID_L AS ID_LI, T_L.CANTIDAD_LITROS AS CANTIDAD_LITROS  FROM T_ML
+        INNER JOIN T_L  ON T_ML.ID_L=T_L.ID_L WHERE ID_ML=:ID_L"
+      );
+      $stm->bindParam(':ID_L', $ID_L);
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarPreparacionSoluciones()
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT TS.NOMBRE_INSUMOS AS NOMBRE_INSUMOS, TP.NOMBRE_PREPARACION AS NOMBRE_PREPARACION, 
+                                  TC.CANTIDAD_PORCENTAJE AS CANTIDAD_PORCENTAJE,TM.CANTIDAD_MILILITROS AS CANTIDAD_MILILITROS, 
+                                  TL.CANTIDAD_LITROS AS CANTIDAD_LITROS  FROM T_SOLUCIONES AS TS
+                                  INNER JOIN T_PREPARACIONES AS TP ON TP.ID_SOLUCIONES = TS.ID_SOLUCIONES
+                                  INNER JOIN T_CANTIDAD AS TC ON TC.ID_PREPARACIONES = TP.ID_PREPARACIONES
+                                  INNER JOIN T_ML AS TM ON TM.ID_CANTIDAD=TC.ID_CANTIDAD
+                                  INNER JOIN T_L AS TL ON TL.ID_L = TM.ID_L"
+      );
+
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL)
+  {
+    try {
+
+
+
+      $stm = $this->bd->prepare("INSERT INTO T_UNION(NOMBRE_INSUMOS, NOMBRE_PREPARACION,CANTIDAD_PORCENTAJE,CANTIDAD_MILILITROS, CANTIDAD_LITROS) 
+                                  VALUES ('$selectSolucion','$selectPreparacion', '$selectCantidad','$selectML', '$selectL')");
+
+      $insert = $stm->execute();
+
+
+      return $insert;
+    } catch (Exception $e) {
+
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarUnion()
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT * FROM T_UNION"
+      );
 
       $stm->execute();
       $datos = $stm->fetchAll();
