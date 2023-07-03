@@ -6,7 +6,7 @@ require_once "../php/m_almacen.php";
 // require_once "../funciones/f_funcion.php";
 
 $mostrar = new m_almacen();
-// $datos = $mostrar->MostrarInfraestructuraPDF();
+$datos = $mostrar->MostrarAlertapd();
 
 
 // Generar el contenido HTML
@@ -93,7 +93,7 @@ foreach ($grupos as $nombreZona => $valores) {
         } elseif ($valores[$i]['ndiaspos'] == 30) {
             $html .= '<td>Mensual</td>';
         } else {
-            $html .= '<td>' . $valores[0]['ndiaspos'] . '</td>';
+            $html .= '<td>' . $valores[$i]['ndiaspos'] . '</td>';
         }
 
         // Añadir las columnas de acuerdo a la FECHA_TOTAL

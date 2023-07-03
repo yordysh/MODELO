@@ -497,4 +497,24 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function MostrarAlertapd()
+  {
+    try {
+
+
+      $stm = $this->bd->prepare("SELECT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
+      I.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA, A.N_DIAS_POS,
+      A.ESTADO AS ESTADO, A.FECHA_TOTAL AS FECHA_TOTAL, A.OBSERVACION AS OBSERVACION
+      FROM T_ALERTA A
+      INNER JOIN T_INFRAESTRUCTURA AS I ON A.COD_INFRAESTRUCTURA = I.COD_INFRAESTRUCTURA
+      INNER JOIN T_ZONA_AREAS AS Z ON Z.COD_ZONA = I.COD_ZONA");
+
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 }
