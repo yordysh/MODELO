@@ -173,7 +173,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
             var mesSeleccionado = document.getElementById("mes").value;
 
             // Enviar los valores a tu script de generación de PDF
-            var url = "./pdf-index.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
+            var url = "./pdf-preparacionSolucion.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
             window.open(url, "_blank");
         }
     </script>

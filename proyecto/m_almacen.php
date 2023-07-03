@@ -785,4 +785,23 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
+  public function MostrarPreparacionSolucionPDF($anioSeleccionado, $mesSeleccionado)
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT * FROM T_UNION WHERE MONTH(FECHA) = :mesSeleccionado AND YEAR(FECHA) = :anioSeleccionado"
+      );
+      $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
+      $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 }
