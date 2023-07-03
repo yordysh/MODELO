@@ -31,7 +31,7 @@ $dataInsumos = $mostrar->MostrarUnion();
                 <tr taskId="<?php echo $listado['ID_UNION']; ?>">
 
                     <td><?php echo $listado['NOMBRE_INSUMOS']; ?></td>
-                    <td><?php echo $listado['NOMBRE_PREPARACION']; ?></td>
+                    <td style="text-align: center;"><?php echo $listado['NOMBRE_PREPARACION']; ?></td>
                     <td style="text-align: center;"><?php echo $listado['CANTIDAD_PORCENTAJE']; ?></td>
                     <td style="text-align: center;"><?php echo $listado['CANTIDAD_MILILITROS']; ?></td>
                     <td style="text-align: center;"><?php echo $listado['CANTIDAD_LITROS']; ?></td>

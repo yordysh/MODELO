@@ -91,7 +91,6 @@ $(function () {
           html: `
               <div><h2 class="nombre_area">Nombre del área:</h2> <p>${task.NOMBRE_AREA}</p></div>
               <div><h2 class="nombre_infra">Nombre de la infraestructura:</h2> <p>${task.NOMBRE_INFRAESTRUCTURA}</p></div>
-              // <div><h2 class="nombre_infra">COD_ALERTA1:</h2> <p>${task.COD_ALERTA}</p></div>
       
               <label>
                 <input type="radio" name="estado-${task.COD_ALERTA}" value="R"> Realizado
@@ -255,7 +254,6 @@ $(function () {
                       const accion = "insertaralertamix";
                       // Insertar nueva alerta con la fecha total utilizando una solicitud AJAX
                       $.ajax({
-                        // url: "./php/insertar-alertamix.php",
                         url: "c_almacen.php",
                         method: "POST",
                         data: {
@@ -264,7 +262,6 @@ $(function () {
                           codInfraestructura: task.COD_INFRAESTRUCTURA,
                           taskNdias: task.NDIAS,
                           fechaPostergacion: fechaPostergacion,
-                          // taskPostergacion:
                         },
                         dataType: "json",
                       });
@@ -338,7 +335,6 @@ $(function () {
       const accion = "fechaalerta";
       $.ajax({
         url: "c_almacen.php",
-        // url: "php/fecha-alerta.php",
         method: "POST",
         dataType: "json",
         data: { accion: accion },

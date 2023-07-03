@@ -612,6 +612,26 @@ class m_almacen
     }
   }
 
+  public function VersionMostrar()
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT * FROM T_VERSION"
+      );
+
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+
 
 
   public function MostrarSoluciones()
