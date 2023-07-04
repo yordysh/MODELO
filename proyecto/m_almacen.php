@@ -811,4 +811,27 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
+
+  public function MostrarLimpieza()
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT T_FRECUENCIA.COD_FRECUENCIA AS COD_FRECUENCIA, 
+          T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
+          T_FRECUENCIA.NOMBRE_FRECUENCIA AS NOMBRE_FRECUENCIA ,T_FRECUENCIA.FECHA AS FECHA,
+          T_FRECUENCIA.VERSION AS VERSION  FROM T_FRECUENCIA INNER JOIN T_ZONA_AREAS
+          ON T_FRECUENCIA.COD_ZONA=T_ZONA_AREAS.COD_ZONA"
+      );
+
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 }

@@ -2,7 +2,7 @@
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataInfra = $mostrar->MostrarAlmacenMuestra();
+$dataZona = $mostrar->MostrarAlmacenMuestra();
 
 ?>
 <!DOCTYPE html>
@@ -57,37 +57,36 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
         <section>
             <div class="container g-4 mt-100 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">INFRAESTRUCTURA, ACCESORIOS COMPLEMENTARIOS</label></center>
+                    <center><label class="title">LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS DE LIMPIEZA</label></center>
                 </div>
                 <div class="main">
-                    <form method="post" action="" id="formularioInfra">
+                    <form method="post" action="" id="formularioLimpieza">
 
                         <!-- Text input -->
                         <div class="form-outline mb-4">
                             <input id="id" type="hidden" class="form-control" name="id" />
                         </div>
 
-                        <!-- Text input nombre -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Nombre de infraestructura</label>
-                            <input type="text" id="NOMBRE_INFRAESTRUCTURA" class="form-control" name="NOMBRE_INFRAESTRUCTURA" required>
-                        </div>
-                        <!-- Text input dias-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Dias</label>
-                            <input type="text" id="NDIAS" class="form-control" name="NDIAS" required>
-                        </div>
-
                         <!--Combo zona areas -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Zona/Areas</label>
-                            <select id="selectInfra" class="form-select" aria-label="Default select example">
+                            <select id="selectZona" class="form-select" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione Zona/Areas</option>
-                                <?php foreach ($dataInfra as $lis) { ?>
+                                <?php foreach ($dataZona as $lis) {
+                                    // if ($lis->NOMBRE_T_ZONA_AREAS != "DOSIMETRÍA") {
+                                ?>
                                     <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
-                                <?php } ?>
+                                <?php
+                                    // }
+                                } ?>
                             </select>
 
+                        </div>
+
+                        <!-- Text input dias-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Nombre de frecuencia</label>
+                            <input type="text" id="nombreFrecuencia" class="form-control" name="nombreFrecuencia" required>
                         </div>
 
                         <!-- Submit button -->
@@ -142,7 +141,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         </div>
                     </div>
 
-                    <div id="tablaInfra" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                    <div id="tablalimpieza" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
 
                     </div>
 
@@ -158,7 +157,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/jquery-3.7.0.min.js"></script>
     <script src="../js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxInfra.js"></script>
+    <script src="./js/ajaxLimpieza.js"></script>
     <script>
         function generarPDF() {
             var anioSeleccionado = document.getElementById("anio").value;

@@ -83,9 +83,11 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                             <label class="form-label">Zona/Areas</label>
                             <select id="selectInfra" class="form-select" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione Zona/Areas</option>
-                                <?php foreach ($dataInfra as $lis) { ?>
+                                <?php foreach ($dataInfra as $lis) {
+                                ?>
                                     <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
-                                <?php } ?>
+                                <?php }
+                                ?>
                             </select>
 
                         </div>
