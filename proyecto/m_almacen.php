@@ -752,14 +752,20 @@ class m_almacen
   public function insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL)
   {
     try {
+      $fechaDHoy = date('Y-m-d');
 
+      $stmU = $this->bd->prepare("SELECT * FROM T_UNION WHERE cast(FECHA as DATE) =cast('$fechaDHoy' as date)");
+      $stmU->execute();
+      $valor = $stmU->fetchAll();
 
+      $valor1 = count($valor);
 
-      $stm = $this->bd->prepare("INSERT INTO T_UNION(NOMBRE_INSUMOS, NOMBRE_PREPARACION,CANTIDAD_PORCENTAJE,CANTIDAD_MILILITROS, CANTIDAD_LITROS) 
+      if ($valor1 == 0) {
+        $stm = $this->bd->prepare("INSERT INTO T_UNION(NOMBRE_INSUMOS, NOMBRE_PREPARACION,CANTIDAD_PORCENTAJE,CANTIDAD_MILILITROS, CANTIDAD_LITROS) 
                                   VALUES ('$selectSolucion','$selectPreparacion', '$selectCantidad','$selectML', '$selectL')");
 
-      $insert = $stm->execute();
-
+        $insert = $stm->execute();
+      }
 
       return $insert;
     } catch (Exception $e) {

@@ -37,7 +37,22 @@ $(function () {
         url: "./c_almacen.php",
       }).done(function (data) {
         preparacion.html(data);
-        // console.log(data);
+        cantidad
+          .empty()
+          .append(
+            '<option value="0" selected disabled>Seleccione cantidad</option>'
+          );
+
+        mililitros
+          .empty()
+          .append(
+            '<option value="0" selected disabled>Seleccione cantidad ML</option>'
+          );
+        litros
+          .empty()
+          .append(
+            '<option value="0" selected disabled>Seleccione cantidad L</option>'
+          );
       });
     });
 
@@ -53,7 +68,16 @@ $(function () {
         url: "./c_almacen.php",
       }).done(function (data) {
         cantidad.html(data);
-        // console.log(data);
+        mililitros
+          .empty()
+          .append(
+            '<option value="0" selected disabled>Seleccione cantidad ML</option>'
+          );
+        litros
+          .empty()
+          .append(
+            '<option value="0" selected disabled>Seleccione cantidad L</option>'
+          );
       });
     });
 
@@ -69,6 +93,11 @@ $(function () {
         url: "./c_almacen.php",
       }).done(function (data) {
         mililitros.html(data);
+        litros
+          .empty()
+          .append(
+            '<option value="0" selected disabled>Seleccione cantidad L</option>'
+          );
       });
     });
 
@@ -128,7 +157,15 @@ $(function () {
       },
       success: function (response) {
         fetchTasks();
-        alert(response);
+        if (response == "ok") {
+          Swal.fire("Éxito", "Se añadio correctamente", "success");
+        } else {
+          Swal.fire(
+            "Error",
+            "Solo se puede añadir una preparación por día",
+            "error"
+          );
+        }
       },
     });
   }
