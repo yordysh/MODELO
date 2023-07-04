@@ -125,13 +125,19 @@ $(function () {
     var selectCantidad = $("#selectCantidad option:selected").text();
     var selectML = $("#selectML option:selected").text();
     var selectL = $("#selectL option:selected").text();
+    var textAreaObservacion = $("#textAreaObservacion").val();
+    var textAreaAccion = $("#textAreaAccion").val();
+    var selectVerificacion = $("#selectVerificacion option:selected").text();
 
     enviarCombos(
       selectSolucion,
       selectPreparacion,
       selectCantidad,
       selectML,
-      selectL
+      selectL,
+      textAreaObservacion,
+      textAreaAccion,
+      selectVerificacion
     );
     $("#formularioSoluciones").trigger("reset");
   });
@@ -141,7 +147,10 @@ $(function () {
     selectPreparacion,
     selectCantidad,
     selectML,
-    selectL
+    selectL,
+    textAreaObservacion,
+    textAreaAccion,
+    selectVerificacion
   ) {
     var accion = "enviarSelectCombo";
     $.ajax({
@@ -153,6 +162,9 @@ $(function () {
         selectCantidad: selectCantidad,
         selectML: selectML,
         selectL: selectL,
+        textAreaObservacion: textAreaObservacion,
+        textAreaAccion: textAreaAccion,
+        selectVerificacion: selectVerificacion,
         accion: accion,
       },
       success: function (response) {

@@ -749,7 +749,7 @@ class m_almacen
     }
   }
 
-  public function insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL)
+  public function insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion)
   {
     try {
       $fechaDHoy = date('Y-m-d');
@@ -761,8 +761,9 @@ class m_almacen
       $valor1 = count($valor);
 
       if ($valor1 == 0) {
-        $stm = $this->bd->prepare("INSERT INTO T_UNION(NOMBRE_INSUMOS, NOMBRE_PREPARACION,CANTIDAD_PORCENTAJE,CANTIDAD_MILILITROS, CANTIDAD_LITROS) 
-                                  VALUES ('$selectSolucion','$selectPreparacion', '$selectCantidad','$selectML', '$selectL')");
+        $stm = $this->bd->prepare("INSERT INTO T_UNION(NOMBRE_INSUMOS, NOMBRE_PREPARACION,CANTIDAD_PORCENTAJE,
+                                    CANTIDAD_MILILITROS, CANTIDAD_LITROS, OBSERVACION, ACCION_CORRECTIVA, VERIFICACION) 
+                                  VALUES ('$selectSolucion','$selectPreparacion', '$selectCantidad','$selectML', '$selectL','$textAreaObservacion','$textAreaAccion','$selectVerificacion')");
 
         $insert = $stm->execute();
       }

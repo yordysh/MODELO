@@ -26,13 +26,16 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="./zonaAreas.php">Zona/Areas</a>
+            <a class="nav-link" aria-current="page" href="./zonaAreas.php">Zona/Areas</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="./infraestructuraAccesorios.php">Infraestructura Accesorios</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="./preparacionSolucion.php">Preparación de soluciones</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./limpiezaDesinfeccion.php">Limpieza y desinfección</a>
           </li>
         </ul>
       </div>

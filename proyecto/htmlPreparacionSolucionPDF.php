@@ -281,6 +281,54 @@ $versionMuestra = $mostrar->VersionMostrar();
             ?>
         </tbody>
     </table>
+
+    <!-- Table Observacion y otros-->
+    <table style="margin-top: 50px;">
+        <thead>
+            <tr>
+
+                <th>FECHA</th>
+                <th>OBSERVACIONES</th>
+                <th>ACCIONES CORRECTIVAS</th>
+                <th>VERIFICACION</th>
+                <th>V°B°</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+
+            foreach ($datos as $fils) {
+                echo '<tr>';
+                echo '<td class="cabecera">' . convFecSistema($fils['FECHA']) . '</td>';
+                echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
+                echo '<td class="cabecera">' . $fils['ACCION_CORRECTIVA'] . '</td>';
+                echo '<td class="cabecera">' . $fils['VERIFICACION'] . '</td>';
+                echo '<td></td>';
+                echo '</tr>';
+            }
+            ?>
+
+        </tbody>
+    </table>
+    <!-- Table firma y fecha-->
+    <table style="margin-top: 50px; border:none;">
+        <tr>
+            <td style="padding-left: 200px; border:none;"></td>
+            <td style="border: none;"></td>
+            <td style="padding-left: 400px; border:none;">Fecha:</td>
+            <td style="padding-left: 400px; border:none;"></td>
+            <td style="padding-left: 800px; border:none;"></td>
+
+        </tr>
+        <tr>
+            <td style="padding-left: 200px; border:none;"></td>
+            <td style="border-left: none; border-bottom:none; border-right: none;">Firma del jefe de Aseguramiento de la calidad</td>
+            <td style="padding-left: 400px; border:none;"></td>
+            <td style="padding-left: 400px;border-left: none; border-bottom:none; border-right: none;"></td>
+            <td style="padding-left: 800px; border:none;"></td>
+
+        </tr>
+    </table>
 </body>
 
 </html>

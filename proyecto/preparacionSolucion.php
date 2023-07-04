@@ -3,7 +3,7 @@ require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
 $dataInsumos = $mostrar->MostrarSoluciones();
-
+$dataUnion = $mostrar->MostrarUnion();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,10 +34,13 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                         <a class="nav-link" aria-current="page" href="../proyecto/zonaAreas.php">Zona/Areas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="../proyecto/infraestructuraAccesorios.php">Infraestructura Accesorios</a>
+                        <a class="nav-link" href="../proyecto/infraestructuraAccesorios.php">Infraestructura Accesorios</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Preparación de soluciones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./limpiezaDesinfeccion.php">Limpieza y desinfección</a>
                     </li>
                 </ul>
             </div>
@@ -83,18 +86,38 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                                 <option value="0" selected disabled>Seleccione cantidad</option>
                             </select>
                         </div>
-                        <!-- Text input numeroPreparacion-->
+                        <!-- Text input numero ML-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Número de preparacion en ml</label>
                             <select id="selectML" class="form-select" aria-label="Default select example">
                                 <option value="0" selected disabled>Seleccione cantidad ML</option>
                             </select>
                         </div>
-                        <!-- Text input numeroPreparacion-->
+                        <!-- Text input numero L-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Número de preparacion en L</label>
                             <select id="selectL" class="form-select" aria-label="Default select example">
                                 <option value="0" selected disabled>Seleccione cantidad L</option>
+                            </select>
+                        </div>
+                        <!-- Text input Observacion-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Observaciones</label>
+                            <textarea class="form-control" id="textAreaObservacion" rows="3"></textarea>
+                        </div>
+                        <!-- Text input Acciones-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Acciones correctivas</label>
+                            <textarea class="form-control" id="textAreaAccion" rows="3"></textarea>
+                        </div>
+                        <!-- Text input verificacion-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Verificación</label>
+                            <select id="selectVerificacion" class="form-select" aria-label="Default select example">
+                                <option value="0" selected disabled>Seleccione verificación</option>
+                                <option value="1">Conforme</option>
+                                <option value="2">No conforme</option>
+
                             </select>
                         </div>
                         <div class="container">

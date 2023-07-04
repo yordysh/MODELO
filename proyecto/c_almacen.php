@@ -124,8 +124,11 @@ if ($_POST['accion'] == 'enviarSelectCombo') {
     $selectCantidad = trim($_POST['selectCantidad']);
     $selectML = trim($_POST['selectML']);
     $selectL = trim($_POST['selectL']);
+    $textAreaObservacion = trim($_POST['textAreaObservacion']);
+    $textAreaAccion = trim($_POST['textAreaAccion']);
+    $selectVerificacion = trim($_POST['selectVerificacion']);
 
-    $respuesta = c_almacen::c_selectCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL);
+    $respuesta = c_almacen::c_selectCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion);
     echo $respuesta;
 }
 
@@ -755,12 +758,12 @@ class c_almacen
             echo '<option value="' . $datos[$i]["ID_LI"] . '">' . $datos[$i]["CANTIDAD_LITROS"] . '</option>';
         }
     }
-    static function c_selectCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL)
+    static function c_selectCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion)
     {
         $mostrar = new m_almacen();
-        if (isset($selectSolucion) && isset($selectPreparacion) && isset($selectCantidad) && isset($selectML) && isset($selectL)) {
+        if (isset($selectSolucion) && isset($selectPreparacion) && isset($selectCantidad) && isset($selectML) && isset($selectL) && isset($textAreaObservacion) && isset($textAreaAccion) && isset($selectVerificacion)) {
 
-            $respuesta = $mostrar->insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL);
+            $respuesta = $mostrar->insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion);
             if ($respuesta) {
 
                 return "ok";

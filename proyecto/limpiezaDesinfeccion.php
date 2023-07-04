@@ -34,13 +34,13 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         <a class="nav-link" aria-current="page" href="../proyecto/zonaAreas.php">Zona/Areas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Infraestructura Accesorios</a>
+                        <a class="nav-link" href="#">Infraestructura Accesorios</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="./preparacionSolucion.php">Preparación de soluciones</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./limpiezaDesinfeccion.php">Limpieza y desinfección</a>
+                        <a class="nav-link active" href="#">Limpieza y desinfección</a>
                     </li>
                 </ul>
             </div>

@@ -48,6 +48,9 @@ $data = $mostrar->MostrarAlmacenMuestra();
                     <li class="nav-item">
                         <a class="nav-link" href="./preparacionSolucion.php">Preparación de soluciones</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./limpiezaDesinfeccion.php">Limpieza y desinfección</a>
+                    </li>
                 </ul>
             </div>
             <form class="d-flex">
