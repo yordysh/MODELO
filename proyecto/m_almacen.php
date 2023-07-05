@@ -951,4 +951,44 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
+  public function MostrarLimpiezaPDF($anioSeleccionado, $mesSeleccionado)
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT * FROM T_UNION WHERE MONTH(FECHA) = :mesSeleccionado AND YEAR(FECHA) = :anioSeleccionado"
+      );
+      $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
+      $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function MostrarLimpiezaPD()
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT T_FRECUENCIA.COD_FRECUENCIA AS COD_FRECUENCIA, 
+        T_FRECUENCIA.NOMBRE_FRECUENCIA AS NOMBRE_FRECUENCIA, 
+        T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
+        T_FRECUENCIA.FECHA AS FECHA
+        FROM T_FRECUENCIA INNER JOIN T_ZONA_AREAS ON T_FRECUENCIA.COD_ZONA=T_ZONA_AREAS.COD_ZONA "
+      );
+
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 }

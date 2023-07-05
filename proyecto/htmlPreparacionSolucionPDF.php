@@ -102,7 +102,7 @@ $versionMuestra = $mostrar->VersionMostrar();
             <tr>
                 <td rowspan="4" class="cabecera"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/images/logo-covifarmaRecorte.png" alt=""></td>
                 <td rowspan="4" style="text-align: center;">PREPARACIÓN DE SOLUCIÓN DE LIMPIEZA Y DESINFECCIÓN - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
-                <td>LBS-PHS-FR-02</td>
+                <td>LBS-PHS-FR-03</td>
 
             </tr>
             <tr>
