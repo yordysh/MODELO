@@ -228,38 +228,7 @@ $versionMuestra = $mostrar->VersionMostrar();
                     }
                 }
                 ?>
-                <!-- <td>x</td>
-                <td>x</td>
-                <td>x</td>
-                <td>x</td>
-                <td>x</td>
-                <td>x</td>
-                <td>x</td>
-                <td>x</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td> -->
+
             </tr>
         </tbody>
     </table>
