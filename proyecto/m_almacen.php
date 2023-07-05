@@ -28,12 +28,12 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function SelectZona($COD_ZONA)
+  public function SelectZona($cod_zona)
   {
     try {
 
       $stm = $this->bd->prepare("SELECT * FROM T_ZONA_AREAS WHERE COD_ZONA = :COD_ZONA");
-      $stm->bindParam(':COD_ZONA', $COD_ZONA, PDO::PARAM_STR);
+      $stm->bindParam(':COD_ZONA', $cod_zona, PDO::PARAM_STR);
       $stm->execute();
 
       return $stm;
@@ -81,6 +81,16 @@ class m_almacen
     return $codigoAumento;
   }
 
+  public function generarCodigoLimpieza()
+  {
+    $stm = $this->bd->prepare("SELECT MAX(COD_FRECUENCIA) as COD_FRECUENCIA FROM T_FRECUENCIA");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $maxCodigo = intval($resultado['COD_FRECUENCIA']);
+    $nuevoCodigo = $maxCodigo + 1;
+    $codigoAumento = str_pad($nuevoCodigo, 2, '0', STR_PAD_LEFT);
+    return $codigoAumento;
+  }
 
   public function generarVersion()
   {
@@ -127,6 +137,17 @@ class m_almacen
     $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_INFRAESTRUCTURA WHERE NOMBRE_INFRAESTRUCTURA = :NOMBRE_INFRAESTRUCTURA AND COD_ZONA = :COD_ZONA");
     $repetir->bindParam(':NOMBRE_INFRAESTRUCTURA', $NOMBRE_INFRAESTRUCTURA, PDO::PARAM_STR);
     $repetir->bindParam(':COD_ZONA', $valorSeleccionado, PDO::PARAM_STR);
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['count'];
+
+    return $count;
+  }
+  public function contarRegistrosLimpieza($textfrecuencia, $selectZona)
+  {
+    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_FRECUENCIA WHERE NOMBRE_FRECUENCIA = :NOMBRE_FRECUENCIA AND COD_ZONA=:COD_ZONA");
+    $repetir->bindParam(':NOMBRE_FRECUENCIA', $textfrecuencia, PDO::PARAM_STR);
+    $repetir->bindParam(':COD_ZONA', $selectZona, PDO::PARAM_STR);
     $repetir->execute();
     $result = $repetir->fetch(PDO::FETCH_ASSOC);
     $count = $result['count'];
@@ -220,7 +241,7 @@ class m_almacen
       $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
 
       if ($repetir == 0) {
-        $stmt = $this->bd->prepare("UPDATE T_ZONA_AREAS SET NOMBRE_T_ZONA_AREAS = :NOMBRE_T_ZONA_AREAS, VERSION =:VERSION WHERE COD_ZONA = :COD_ZONA");
+        $stmt = $this->bd->prepare("UPDATE T_ZONA_AREAS SET NOMBRE_T_ZONA_AREAS = UPPER(:NOMBRE_T_ZONA_AREAS), VERSION =:VERSION WHERE COD_ZONA = :COD_ZONA");
 
 
         $VERSION = $cod->generarVersion();
@@ -435,7 +456,7 @@ class m_almacen
   {
     try {
 
-      $stmt = $this->bd->prepare("UPDATE T_INFRAESTRUCTURA SET NOMBRE_INFRAESTRUCTURA = :NOMBRE_INFRAESTRUCTURA, NDIAS = :NDIAS  WHERE COD_INFRAESTRUCTURA = :COD_INFRAESTRUCTURA");
+      $stmt = $this->bd->prepare("UPDATE T_INFRAESTRUCTURA SET NOMBRE_INFRAESTRUCTURA = UPPER(:NOMBRE_INFRAESTRUCTURA), NDIAS = :NDIAS  WHERE COD_INFRAESTRUCTURA = :COD_INFRAESTRUCTURA");
       $stmt->bindParam(':COD_INFRAESTRUCTURA', $task_id, PDO::PARAM_STR);
       $stmt->bindParam(':NOMBRE_INFRAESTRUCTURA', $NOMBRE_INFRAESTRUCTURA, PDO::PARAM_STR);
       $stmt->bindParam(':NDIAS', $NDIAS, PDO::PARAM_STR);
@@ -830,6 +851,102 @@ class m_almacen
       $datos = $stm->fetchAll();
 
       return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function insertarLimpieza($selectZona, $textfrecuencia)
+  {
+    try {
+
+      $this->bd->beginTransaction();
+      $codGen = new m_almacen();
+
+      $codFrecuencia = $codGen->generarCodigoLimpieza();
+      $version = $codGen->generarVersion();
+
+      $repetir = $codGen->contarRegistrosLimpieza($textfrecuencia, $selectZona);
+
+      if ($repetir == 0) {
+        $stm = $this->bd->prepare("INSERT INTO T_FRECUENCIA(COD_FRECUENCIA, COD_ZONA, NOMBRE_FRECUENCIA, VERSION) 
+                                  VALUES ('$codFrecuencia','$selectZona', '$textfrecuencia','$version')");
+
+        $insert = $stm->execute();
+
+        $fechaDHoy = date('Y-m-d');
+
+
+
+        if ($version == '01') {
+
+          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+          $stmver->execute();
+          $valor = $stmver->fetchAll();
+
+          $valor1 = count($valor);
+
+          if ($valor1 == 0) {
+            $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) VALUES ( :version)");
+            $stm1->bindParam(':version', $version, PDO::PARAM_STR);
+            $stm1->execute();
+          }
+        } else {
+          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+          $stmver->execute();
+          $valor = $stmver->fetchAll();
+
+          $valor1 = count($valor);
+
+          if ($valor1 == 0) {
+            $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
+            $stm1->bindParam(':VERSION', $version, PDO::PARAM_STR);
+            $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
+            $stm1->execute();
+          }
+        }
+
+        $insert = $this->bd->commit();
+
+        return $insert;
+      }
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+
+  public function SelectLimpieza($cod_frecuencia)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT T_FRECUENCIA.COD_FRECUENCIA AS COD_FRECUENCIA, 
+      T_FRECUENCIA.NOMBRE_FRECUENCIA AS NOMBRE_FRECUENCIA, 
+      T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS
+      FROM T_FRECUENCIA INNER JOIN T_ZONA_AREAS ON T_FRECUENCIA.COD_ZONA=T_ZONA_AREAS.COD_ZONA WHERE COD_FRECUENCIA=:COD_FRECUENCIA");
+      $stm->bindParam(':COD_FRECUENCIA', $cod_frecuencia, PDO::PARAM_STR);
+      $stm->execute();
+
+      return $stm;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function editarLimpieza($codfre, $textfrecuencia)
+  {
+    try {
+
+      $stmt = $this->bd->prepare("UPDATE T_FRECUENCIA SET NOMBRE_FRECUENCIA = UPPER(:NOMBRE_FRECUENCIA)  WHERE COD_FRECUENCIA = :COD_FRECUENCIA");
+      $stmt->bindParam(':COD_FRECUENCIA', $codfre, PDO::PARAM_STR);
+      $stmt->bindParam(':NOMBRE_FRECUENCIA', $textfrecuencia, PDO::PARAM_STR);
+      $update = $stmt->execute();
+
+      return $update;
     } catch (Exception $e) {
       die($e->getMessage());
     }

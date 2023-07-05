@@ -102,11 +102,10 @@ $(function () {
 
     $.ajax({
       url: "./c_almacen.php",
-      data: { accion: accion, codzona: COD_ZONA },
+      data: { accion: accion, cod_zona: COD_ZONA },
       type: "POST",
       success: function (response) {
         if (!response.error) {
-          console.log(response);
           const task = JSON.parse(response);
           console.log(task);
           $("#NOMBRE_T_ZONA_AREAS").val(task.NOMBRE_T_ZONA_AREAS);

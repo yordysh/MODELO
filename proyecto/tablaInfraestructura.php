@@ -13,9 +13,8 @@ $dataInfra = $mostrar->MostrarInfraestructuraTabla();
 <table id="tbInfra" class="table table-sm mb-3 table-hover">
     <thead>
         <tr>
-
-            <!-- <th class="thtitulo" scope="col">CODIGO INFRAESTRUCTURA</th> -->
-            <th class="thtitulo" scope="col">CODIGO ZONA</th>
+            <th class="thtitulo" scope="col">CODIGO INFRAESTRUCTURA</th>
+            <th class="thtitulo" scope="col">NOMBRE ZONA</th>
             <th class="thtitulo" scope="col">NOMBRE DE INFRAESTRUCTURA</th>
             <th class="thtitulo" scope="col">N°DIAS</th>
             <th class="thtitulo" scope="col">FECHA</th>
@@ -30,11 +29,9 @@ $dataInfra = $mostrar->MostrarInfraestructuraTabla();
         ?>
             <?php foreach ($dataInfra as $listado) { ?>
                 <tr taskId="<?php echo $listado->COD_INFRAESTRUCTURA; ?>">
-                    <!-- <td><?php
-                                //  echo $listado->COD_INFRAESTRUCTURA 
-                                ?></td> -->
-                    <td><?php echo $listado->NOMBRE_T_ZONA_AREAS ?></td>
-                    <td class="NOMBRE_INFRAESTRUCTURA"><?php echo $listado->NOMBRE_INFRAESTRUCTURA ?></td>
+                    <td><?php echo $listado->COD_INFRAESTRUCTURA; ?></td>
+                    <td><?php echo $listado->NOMBRE_T_ZONA_AREAS; ?></td>
+                    <td class="NOMBRE_INFRAESTRUCTURA"><?php echo $listado->NOMBRE_INFRAESTRUCTURA; ?></td>
                     <td id="numerodias"><?php echo $listado->NDIAS; ?></td>
                     <td><?php $FECHA = $listado->FECHA;
                         echo convFecSistema($FECHA) ?>

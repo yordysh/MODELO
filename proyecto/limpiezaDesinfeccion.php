@@ -34,7 +34,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                         <a class="nav-link" aria-current="page" href="../proyecto/zonaAreas.php">Zona/Areas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Infraestructura Accesorios</a>
+                        <a class="nav-link" href="./infraestructuraAccesorios.php">Infraestructura Accesorios</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="./preparacionSolucion.php">Preparación de soluciones</a>
@@ -73,11 +73,11 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                             <select id="selectZona" class="form-select" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione Zona/Areas</option>
                                 <?php foreach ($dataZona as $lis) {
-                                    // if ($lis->NOMBRE_T_ZONA_AREAS != "DOSIMETRÍA") {
+                                    if ($lis->NOMBRE_T_ZONA_AREAS != "PASADIZO" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES)" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(VARONES)") {
                                 ?>
-                                    <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
+                                        <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
                                 <?php
-                                    // }
+                                    }
                                 } ?>
                             </select>
 

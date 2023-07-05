@@ -84,9 +84,12 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                             <select id="selectInfra" class="form-select" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione Zona/Areas</option>
                                 <?php foreach ($dataInfra as $lis) {
+                                    if ($lis->NOMBRE_T_ZONA_AREAS != "TRANSITO DE PERSONAL" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES Y VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES Y VARONES)") {
                                 ?>
-                                    <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
-                                <?php }
+                                        <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
+                                <?php
+                                    }
+                                }
                                 ?>
                             </select>
 

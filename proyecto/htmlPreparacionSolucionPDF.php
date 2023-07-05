@@ -86,6 +86,15 @@ $versionMuestra = $mostrar->VersionMostrar();
             width: 30px;
             height: 30px;
         }
+
+        .tdFecha::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 0.5px;
+            background-color: black;
+            margin-top: 15px;
+        }
     </style>
     <!-- Table titulo-->
     <table style="margin-bottom: 50px;">
@@ -313,20 +322,16 @@ $versionMuestra = $mostrar->VersionMostrar();
     <!-- Table firma y fecha-->
     <table style="margin-top: 50px; border:none;">
         <tr>
+            <td style="padding-left: 500px; border:none;"></td>
             <td style="padding-left: 200px; border:none;"></td>
-            <td style="border: none;"></td>
-            <td style="padding-left: 400px; border:none;">Fecha:</td>
-            <td style="padding-left: 400px; border:none;"></td>
-            <td style="padding-left: 800px; border:none;"></td>
-
+            <td style="padding-left: 200px; border-left: none; border-bottom:none; border-right: none;">JEFE DE ASEGURAMIENTO DE LA CALIDAD</td>
+            <td style="padding-left: 700px; border:none;"></td>
         </tr>
         <tr>
+            <td style="padding-left: 500px; border:none;"></td>
             <td style="padding-left: 200px; border:none;"></td>
-            <td style="border-left: none; border-bottom:none; border-right: none;">Firma del jefe de Aseguramiento de la calidad</td>
-            <td style="padding-left: 400px; border:none;"></td>
-            <td style="padding-left: 400px;border-left: none; border-bottom:none; border-right: none;"></td>
-            <td style="padding-left: 800px; border:none;"></td>
-
+            <td class="tdFecha" style="margin-top:10px; padding-left: 300px; border:0; display:inline-block;">Fecha: </td>
+            <td style="padding-left: 700px; border:none;"></td>
         </tr>
     </table>
 </body>

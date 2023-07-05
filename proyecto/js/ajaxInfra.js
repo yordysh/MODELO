@@ -100,6 +100,7 @@ $(function () {
 
   $(document).on("click", ".task-update", () => {
     var element = $(this)[0].activeElement.parentElement.parentElement;
+
     var selectInfra = document.getElementById("selectInfra");
     selectInfra.disabled = true;
 

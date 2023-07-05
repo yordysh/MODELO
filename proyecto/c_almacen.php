@@ -4,13 +4,13 @@ include("../funciones/f_funcion.php");
 
 if ($_POST['accion'] == 'insertar') {
 
-    $nombrezonaArea = trim($_POST['nombrezonaArea']);
+    $nombrezonaArea = strtoupper(trim($_POST['nombrezonaArea']));
     $respuesta = c_almacen::c_insertar_zona($nombrezonaArea);
     echo $respuesta;
 }
 if ($_POST['accion'] == 'editar') {
-    $codzona = trim($_POST['codzona']);
-    $respuesta = c_almacen::c_editar_zona($codzona);
+    $cod_zona = trim($_POST['cod_zona']);
+    $respuesta = c_almacen::c_editar_zona($cod_zona);
     echo $respuesta;
 }
 
@@ -39,7 +39,7 @@ if ($_POST['accion'] == 'buscarzona') {
 
 if ($_POST['accion'] == 'insertarinfra') {
 
-    $nombreinfraestructura = trim($_POST['nombreinfraestructura']);
+    $nombreinfraestructura = strtoupper(trim($_POST['nombreinfraestructura']));
     $ndias = trim($_POST['ndias']);
     $valorSeleccionado = trim($_POST['valorSeleccionado']);
     $respuesta = c_almacen::c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias);
@@ -132,6 +132,35 @@ if ($_POST['accion'] == 'enviarSelectCombo') {
     echo $respuesta;
 }
 
+
+
+if ($_POST['accion'] == 'insertarLimpieza') {
+
+
+    $selectZona = trim($_POST['selectZona']);
+    $textfrecuencia = strtoupper(trim($_POST['textfrecuencia']));
+
+
+    $respuesta = c_almacen::c_insertar_limpieza($selectZona, $textfrecuencia);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'editarLimpieza') {
+
+    $cod_frecuencia = trim($_POST['cod_frecuencia']);
+
+    $respuesta = c_almacen::c_editar_limpieza($cod_frecuencia);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'actualizarLimpieza') {
+    $codfre = trim($_POST["codfre"]);
+    $textfrecuencia = trim($_POST['textfrecuencia']);
+
+
+    $respuesta = c_almacen::c_actualizar_limpieza($codfre, $textfrecuencia);
+    echo $respuesta;
+}
+
+
 class c_almacen
 {
 
@@ -151,12 +180,12 @@ class c_almacen
         }
     }
 
-    static function c_editar_zona($codzona)
+    static function c_editar_zona($cod_zona)
     {
         $mostrar = new m_almacen();
 
-        if (isset($codzona)) {
-            $selectZ = $mostrar->SelectZona($codzona);
+        if (isset($cod_zona)) {
+            $selectZ = $mostrar->SelectZona($cod_zona);
 
             $json = array();
             foreach ($selectZ as $row) {
@@ -766,6 +795,63 @@ class c_almacen
             $respuesta = $mostrar->insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion);
             if ($respuesta) {
 
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+
+    static function c_insertar_limpieza($selectZona, $textfrecuencia)
+    {
+        $mostrar = new m_almacen();
+        if (isset($selectZona) && isset($textfrecuencia)) {
+
+            $respuesta = $mostrar->insertarLimpieza($selectZona, $textfrecuencia);
+            if ($respuesta) {
+
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function c_editar_limpieza($cod_frecuencia)
+    {
+        $mostrar = new m_almacen();
+
+
+        if (isset($cod_frecuencia)) {
+
+
+
+            $select = $mostrar->SelectLimpieza($cod_frecuencia);
+
+
+            $json = array();
+
+            foreach ($select as $row) {
+                $json[] = array(
+                    "COD_FRECUENCIA" => $row['COD_FRECUENCIA'],
+                    "NOMBRE_T_ZONA_AREAS" => $row['NOMBRE_T_ZONA_AREAS'],
+                    "NOMBRE_FRECUENCIA" => $row['NOMBRE_FRECUENCIA'],
+
+                );
+            }
+
+            $jsonstring = json_encode($json[0]);
+            echo $jsonstring;
+        }
+    }
+    static function c_actualizar_limpieza($codfre, $textfrecuencia)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($textfrecuencia) &&  isset($codfre)) {
+            $resultado = $m_formula->editarLimpieza($codfre, $textfrecuencia);
+
+            if ($resultado) {
                 return "ok";
             } else {
                 return "error";
