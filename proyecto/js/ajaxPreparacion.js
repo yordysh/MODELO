@@ -168,15 +168,25 @@ $(function () {
         accion: accion,
       },
       success: function (response) {
-        fetchTasks();
         if (response == "ok") {
-          Swal.fire("Éxito", "Se añadio correctamente", "success");
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              fetchTasks();
+              $("#formularioSoluciones").trigger("reset");
+            }
+          });
         } else {
           Swal.fire(
             "Error",
             "Solo se puede añadir una preparación por día",
             "error"
           );
+          $("#formularioSoluciones").trigger("reset");
         }
       },
     });

@@ -35,16 +35,34 @@ $(function () {
       type: "POST",
       success: function (response) {
         console.log(response);
-        fetchTasks();
+
         if (response == "ok") {
-          Swal.fire("Éxito", "Se añadio correctamente", "success");
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              fetchTasks();
+              $("#formularioLimpieza").trigger("reset");
+            }
+          });
         } else {
-          Swal.fire("Error", "Se duplico", "error");
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Duplicado!",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              fetchTasks();
+              $("#formularioLimpieza").trigger("reset");
+            }
+          });
         }
       },
     });
-
-    $("#formularioLimpieza").trigger("reset");
   });
 
   //------------------------ Actualiza un dato de mi tabla ----------------- //

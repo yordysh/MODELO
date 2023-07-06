@@ -242,20 +242,17 @@ class c_almacen
                 if (!$datos) {
                     throw new Exception("Hubo un error en la consulta");
                 }
-                // $data = '';
-                // $json = array();
-                // foreach ($datos as $row) {
-                //     $json[] = array(
-                //         "COD_ZONA" => $row->COD_ZONA,
-                //         "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
-                //         "FECHA" => $row->FECHA,
-                //         "VERSION" => $row->VERSION,
-                //     );
-                // }
-
-                $jsonstring = json_encode($datos);
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_INFRAESTRUCTURA" => $row->COD_ZONA,
+                        "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_T_ZONA_AREAS,
+                        "FECHA" =>  convFecSistema1($row->FECHA),
+                        "VERSION" => $row->VERSION,
+                    );
+                }
+                $jsonstring = json_encode($json);
                 echo $jsonstring;
-                // echo $data;
             } else {
                 $mostrar = new m_almacen();
                 $datos = $mostrar->MostrarAlmacenMuestra();

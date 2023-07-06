@@ -46,7 +46,7 @@ class m_almacen
     try {
 
 
-      $stm = $this->bd->prepare("SELECT * FROM T_ZONA_AREAS WHERE NOMBRE_T_ZONA_AREAS LIKE '$search%'");
+      $stm = $this->bd->prepare("SELECT COD_ZONA,NOMBRE_T_ZONA_AREAS,FECHA,VERSION FROM T_ZONA_AREAS WHERE NOMBRE_T_ZONA_AREAS LIKE '$search%' OR COD_ZONA LIKE '$search%'");
 
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
@@ -868,13 +868,22 @@ class m_almacen
 
       $repetir = $codGen->contarRegistrosLimpieza($textfrecuencia, $selectZona);
 
-      if ($repetir == 0) {
+      $fechaDHoy = date('Y-m-d');
+
+      $stmFre = $this->bd->prepare("SELECT * FROM T_FRECUENCIA WHERE cast(FECHA as DATE) =cast('$fechaDHoy' as date)");
+      $stmFre->execute();
+      $valor = $stmFre->fetchAll();
+
+      $contador = count($valor);
+
+      if ($repetir == 0 && $contador == 0) {
+
+
         $stm = $this->bd->prepare("INSERT INTO T_FRECUENCIA(COD_FRECUENCIA, COD_ZONA, NOMBRE_FRECUENCIA, VERSION) 
                                   VALUES ('$codFrecuencia','$selectZona', '$textfrecuencia','$version')");
 
         $insert = $stm->execute();
 
-        $fechaDHoy = date('Y-m-d');
 
 
 
@@ -913,6 +922,89 @@ class m_almacen
         $insert = $this->bd->commit();
 
         return $insert;
+      } else if ($contador != 0) {
+
+        if ($repetir == 0) {
+          $stm = $this->bd->prepare("INSERT INTO T_FRECUENCIA(COD_FRECUENCIA, COD_ZONA, NOMBRE_FRECUENCIA, VERSION) 
+                                        VALUES ('$codFrecuencia','$selectZona', '$textfrecuencia','$version')");
+          $insert = $stm->execute();
+
+          if ($version == '01') {
+
+            $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+            $stmver->execute();
+            $valor = $stmver->fetchAll();
+
+            $valor1 = count($valor);
+
+            if ($valor1 == 0) {
+              $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) VALUES ( :version)");
+              $stm1->bindParam(':version', $version, PDO::PARAM_STR);
+              $stm1->execute();
+            }
+          } else {
+            $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+            $stmver->execute();
+            $valor = $stmver->fetchAll();
+
+            $valor1 = count($valor);
+
+            if ($valor1 == 0) {
+              $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
+              $stm1->bindParam(':VERSION', $version, PDO::PARAM_STR);
+              $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
+              $stm1->execute();
+            }
+          }
+
+          $insert = $this->bd->commit();
+
+          return $insert;
+        } elseif ($repetir != 0) {
+          $stm = $this->bd->prepare("INSERT INTO T_FRECUENCIA(COD_FRECUENCIA, COD_ZONA, NOMBRE_FRECUENCIA, VERSION) 
+          VALUES ('$codFrecuencia','$selectZona', '$textfrecuencia','$version')");
+          $insert = $stm->execute();
+
+          if ($version == '01') {
+
+            $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+            $stmver->execute();
+            $valor = $stmver->fetchAll();
+
+            $valor1 = count($valor);
+
+            if ($valor1 == 0) {
+              $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) VALUES ( :version)");
+              $stm1->bindParam(':version', $version, PDO::PARAM_STR);
+              $stm1->execute();
+            }
+          } else {
+            $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+            $stmver->execute();
+            $valor = $stmver->fetchAll();
+
+            $valor1 = count($valor);
+
+            if ($valor1 == 0) {
+              $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
+              $stm1->bindParam(':VERSION', $version, PDO::PARAM_STR);
+              $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
+              $stm1->execute();
+            }
+          }
+
+          $insert = $this->bd->commit();
+
+          return $insert;
+        }
       }
     } catch (Exception $e) {
       $this->bd->rollBack();

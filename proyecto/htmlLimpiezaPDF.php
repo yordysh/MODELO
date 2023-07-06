@@ -128,12 +128,8 @@ $versionMuestra = $mostrar->VersionMostrar();
     <!-- Table solucion y preparaciones-->
     <table>
         <tbody>
-            <tr>
-                <td class="cabecera-fila" rowspan="2">ÁREA</td>
-                <td class="cabecera-fila" rowspan="2">ÍTEM</td>
-                <td class="cabecera-fila" colspan="30">VERIFICACIÓN DE LA LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS PARA HEGIENIZACIÓN</td>
-            </tr>
-            <tr>
+
+            <!-- <tr>
                 <td>1</td>
                 <td>2</td>
                 <td>3</td>
@@ -164,69 +160,88 @@ $versionMuestra = $mostrar->VersionMostrar();
                 <td>28</td>
                 <td>29</td>
                 <td>30</td>
-            </tr>
+            </tr> -->
             <tr>
                 <?php
+
                 $grupos = array();
+                $fechasEliminadas = array();
 
                 foreach ($dataLimpieza as $filas) {
-
                     $nombreZona = $filas['NOMBRE_T_ZONA_AREAS'];
                     $nombreFrecuencia = $filas['NOMBRE_FRECUENCIA'];
                     $fecha = $filas['FECHA'];
 
-                    if (!isset($grupos[$nombreZona])) {
-                        $grupos[$nombreZona] = array();
+                    if (!isset($grupos[$nombreZona][$nombreFrecuencia])) {
+                        $grupos[$nombreZona][$nombreFrecuencia] = array();
                     }
-                    // $grupos[$nombreZona][] = $nombreFrecuencia;
-                    $grupos[$nombreZona][] = array(
-                        'nombreFrecuencia' => $nombreFrecuencia,
-                        'fecha' => $fecha
-                    );
+
+                    if (in_array($fecha, $grupos[$nombreZona][$nombreFrecuencia])) {
+                        $fechasEliminadas[] = $fecha;
+                    } else {
+                        $grupos[$nombreZona][$nombreFrecuencia][] = $fecha;
+                    }
                 }
 
-
+                $numeroDiasMes = date('t', strtotime($fecha));
+                echo "<tr>";
+                echo "<td class='cabecera-fila' rowspan='2'>ÁREA</td>";
+                echo "<td class='cabecera-fila' rowspan='2'>ÍTEM</td>";
+                echo "<td class='cabecera-fila' colspan='$numeroDiasMes'>VERIFICACIÓN DE LA LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS PARA HEGIENIZACIÓN</td>";
+                echo "</tr>";
+                echo "<tr>";
+                var_dump($numeroDiasMes);
+                for ($i = 1; $i <= $numeroDiasMes; $i++) {
+                    echo "<td>" . $i . "</td>";
+                }
+                echo "</tr>";
                 foreach ($grupos as $nombreZona => $frecuencias) {
                     echo "<tr>";
-                    echo "<td rowspan='" . count($frecuencias) . "'>" . $nombreZona . "</td>";
 
-                    foreach ($frecuencias as $indice => $frecuencia) {
-                        var_dump($frecuencia);
-                        if ($indice > 0) {
-                            echo "<tr>";
+                    $numFilas = count($frecuencias);
+                    echo '<td rowspan="' . $numFilas . '">' . $nombreZona . '</td>';
+
+                    $firstRow = true;
+
+                    foreach ($frecuencias as $nombreFrecuencia => $fechas) {
+                        if (!$firstRow) {
+                            echo '<tr>';
                         }
-                        echo "<td>" . $frecuencia['nombreFrecuencia'] . "</td>";
 
-                        // Crear array con columnas de acuerdo a la FECHA_TOTAL
-                        // $fecha = $dataLimpieza[$nombreZona][$frecuencia]['FECHA'];
-                        // $numeroDiasMes = date('t', strtotime($fecha));
-                        // $columnasFechaTotal = $numeroDiasMes;
-                        // $dias = date('d', strtotime($fecha));
-                        // $diasConver = intval($dias);
+                        echo "<td>" . $nombreFrecuencia . "</td>";
 
-                        // $columnas = array();
 
-                        // for ($i = 1; $i <= $columnasFechaTotal; $i++) {
+                        if (!empty($fechas)) {
+                            $fecha = reset($fechas);
+                            $numDias = date('t', strtotime($fecha));
+                            $fechasArray = [];
 
-                        //     if ($i == $diasConver) {
-                        //         $columnas[$i] = '';
-                        //     } else {
-                        //         $columnas[$i] = '';
-                        //     }
-                        // }
-                        // // Imprimir los estados en las columnas correspondientes
-                        // foreach ($columnas as $columna) {
+                            foreach ($fechas as $fecha) {
+                                $dias = date('d', strtotime($fecha));
+                                $diasConver = intval($dias);
+                                $fechasArray[] = $diasConver;
+                            }
 
-                        //     echo '<td class="cabecera">' . $columna . '</td>';
-                        // }
-                        // //Colocar este td para que rellene de responsable de ejecucion
-                        // echo '<td></td>';
-                        // if ($indice !== 0) {
-                        //     echo '</tr>';
-                        // }
-                        echo "</tr>";
+                            for ($i = 1; $i <= $numDias; $i++) {
+                                if (in_array($i, $fechasArray)) {
+                                    // echo "<td>" . $i . "</td>";
+                                    echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                                } else {
+                                    echo "<td></td>";
+                                }
+                            }
+                        } else {
+                            echo "<td>No hay fechas</td>";
+                        }
+
+                        $firstRow = false;
                     }
+
+                    echo "</tr>";
                 }
+
+
+
                 ?>
 
             </tr>
