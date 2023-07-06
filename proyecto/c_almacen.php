@@ -243,23 +243,24 @@ class c_almacen
                     throw new Exception("Hubo un error en la consulta");
                 }
                 // $data = '';
-                $json = array();
-                foreach ($datos as $row) {
-                    $json[] = array(
-                        "COD_ZONA" => $row->COD_ZONA,
-                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
-                        "FECHA" => $row->FECHA,
-                        "VERSION" => $row->VERSION,
-                    );
-                    //     $data .= "<tr><td>" . $row->COD_ZONA .
-                    //         "</td><td>" . $row->NOMBRE_T_ZONA_AREAS .
-                    //         "</td><td>" . $row->FECHA .
-                    //         "</td><td>" . $row->VERSION .
-                    //         "</td><td><button></button></td><td><button></button></td></tr>";
-                }
-                $jsonstring = json_encode($json);
+                // $json = array();
+                // foreach ($datos as $row) {
+                //     $json[] = array(
+                //         "COD_ZONA" => $row->COD_ZONA,
+                //         "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                //         "FECHA" => $row->FECHA,
+                //         "VERSION" => $row->VERSION,
+                //     );
+                // }
+
+                $jsonstring = json_encode($datos);
                 echo $jsonstring;
                 // echo $data;
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarAlmacenMuestra();
+                $jsonstring = json_encode($datos);
+                echo $jsonstring;
             }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();

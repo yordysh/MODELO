@@ -83,14 +83,23 @@ $data = $mostrar->MostrarAlmacenMuestra();
                             <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
                         </div>
                     </form>
-                    <div class="card my-4" id="task-result">
-                        <div class="card-body">
-                            <ul id="container"></ul>
-                        </div>
-                    </div>
-
                     <div id="tablaAlmacen" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbalmacen" class="table table-sm mb-3 table-hover table_id">
+                            <thead>
+                                <tr>
 
+                                    <th class="thtitulo" scope="col">CODIGO</th>
+                                    <th class="thtitulo" scope="col">NOMBRE DE AREA</th>
+                                    <th class="thtitulo" scope="col">FECHA</th>
+                                    <th class="thtitulo" scope="col">VERSION</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablita">
+
+                            </tbody>
+                        </table>
                     </div>
 
 

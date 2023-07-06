@@ -1,5 +1,4 @@
 $(function () {
-  $("#task-result").hide();
   fetchTasks();
   let edit = false;
 
@@ -9,9 +8,7 @@ $(function () {
     if ($("#search").val()) {
       var search = $("#search").val();
       const accion = "buscarzona";
-      // console.log(search);
       $.ajax({
-        // url: "./buscar-tarea.php",
         url: "./c_almacen.php",
         data: { accion: accion, buscarzona: search },
         type: "POST",
@@ -20,10 +17,20 @@ $(function () {
             let tasks = JSON.parse(response);
             let template = ``;
             tasks.forEach((task) => {
-              template += `<li class="task-item">${task.NOMBRE_T_ZONA_AREAS}</li>`;
+              template += `<tr taskId="${task.COD_ZONA}">
+
+              <td>${task.COD_ZONA}</td>
+              <td class="NOMBRE_T_ZONA_AREAS">${task.NOMBRE_T_ZONA_AREAS}</td>
+              <td>${task.FECHA}</td>
+              <td>${task.VERSION}</td>
+
+              <td><button class="btn btn-danger task-delete" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-trash"></i></button></td>
+              <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-edit"></i></button></td>
+
+          </tr>`;
             });
-            $("#task-result").show();
-            $("#container").html(template);
+
+            $("#tablita").html(template);
           }
         },
       });
@@ -79,11 +86,32 @@ $(function () {
   // Cargar registros ZONA AREA
 
   function fetchTasks() {
+    const accion = "buscarzona";
+    const search = "";
     $.ajax({
-      url: "./tablaZona.php",
-      type: "GET",
-      success: function (data) {
-        $("#tablaAlmacen").html(data);
+      url: "./c_almacen.php",
+      type: "POST",
+      data: { accion: accion, buscarzona: search },
+      success: function (response) {
+        if (!response.error) {
+          let tasks = JSON.parse(response);
+          let template = ``;
+          tasks.forEach((task) => {
+            template += `<tr taskId="${task.COD_ZONA}">
+
+            <td>${task.COD_ZONA}</td>
+            <td class="NOMBRE_T_ZONA_AREAS">${task.NOMBRE_T_ZONA_AREAS}</td>
+            <td>${task.FECHA}</td>
+            <td>${task.VERSION}</td>
+
+            <td><button class="btn btn-danger task-delete" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-trash"></i></button></td>
+            <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-edit"></i></button></td>
+
+        </tr>`;
+          });
+
+          $("#tablita").html(template);
+        }
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);
