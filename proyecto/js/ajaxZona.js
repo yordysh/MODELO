@@ -98,16 +98,16 @@ $(function () {
           let tasks = JSON.parse(response);
           console.log(tasks);
           let template = ``;
-          tasks.forEach((tasks) => {
-            template += `<tr taskId="${tasks.COD_ZONA}">
+          tasks.forEach((task) => {
+            template += `<tr taskId="${task.COD_ZONA}">
 
-            <td>${tasks.COD_ZONA}</td>
-            <td class="NOMBRE_T_ZONA_AREAS">${tasks.NOMBRE_T_ZONA_AREAS}</td>
-            <td>${tasks.FECHA}</td>
-            <td>${tasks.VERSION}</td>
+            <td>${task.COD_ZONA}</td>
+            <td class="NOMBRE_T_ZONA_AREAS">${task.NOMBRE_T_ZONA_AREAS}</td>
+            <td>${task.FECHA}</td>
+            <td>${task.VERSION}</td>
 
-            <td><button class="btn btn-danger task-delete" data-COD_ZONA="${tasks.COD_ZONA}"><i class="icon-trash"></i></button></td>
-            <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_ZONA="${tasks.COD_ZONA}"><i class="icon-edit"></i></button></td>
+            <td><button class="btn btn-danger task-delete" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-trash"></i></button></td>
+            <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-edit"></i></button></td>
 
         </tr>`;
           });

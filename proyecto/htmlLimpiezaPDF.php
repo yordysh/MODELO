@@ -61,6 +61,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         .cabecera-fila {
             background-color: #EEB4F5;
             text-align: center;
+
         }
 
         .cabecera-valores {
@@ -73,12 +74,6 @@ $versionMuestra = $mostrar->VersionMostrar();
             text-align: center;
         }
 
-        .column-1:nth-child(1),
-        .column-2:nth-child(2) {
-            width: 320px;
-
-        }
-
         .mover-derecha {
             padding-left: 20px;
         }
@@ -88,13 +83,13 @@ $versionMuestra = $mostrar->VersionMostrar();
             height: 30px;
         }
 
-        .tdFecha::after {
+        .tdRaya::after {
             content: '';
             position: absolute;
-            width: 120px;
+            width: 220px;
             height: 0.5px;
             background-color: black;
-            margin-top: 15px;
+            margin-top: 18px;
         }
     </style>
     <!-- Table titulo-->
@@ -124,43 +119,24 @@ $versionMuestra = $mostrar->VersionMostrar();
 
         </tbody>
     </table>
-
+    <!-- Table Firma y año-->
+    <table style="margin-bottom: 50px;">
+        <tbody>
+            <tr>
+                <td style="padding-left: 50px; border:none;"></td>
+                <td style="padding-left: 50px; border:none;"></td>
+                <td class='tdRaya' style="padding-left: 30px; border:none; font-size:23px; display:inline-block; font-weight:200;">Mes/Año:</td>
+                <td style="padding-left: 50px;  border:none"></td>
+                <td style="padding-left: 50px; border:none;"></td>
+                <td style="padding-left: 50px; border:none;"></td>
+                <td class='tdRaya' style="padding-left: 10px; border:none; font-size:23px;  display:inline-block; font-weight:200;">Responsable:</td>
+                <td style="padding-left: 50px; border: none;"></td>
+            </tr>
+        </tbody>
+    </table>
     <!-- Table solucion y preparaciones-->
     <table>
         <tbody>
-
-            <!-- <tr>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
-                <td>5</td>
-                <td>6</td>
-                <td>7</td>
-                <td>8</td>
-                <td>9</td>
-                <td>10</td>
-                <td>11</td>
-                <td>12</td>
-                <td>13</td>
-                <td>14</td>
-                <td>15</td>
-                <td>16</td>
-                <td>17</td>
-                <td>18</td>
-                <td>19</td>
-                <td>20</td>
-                <td>21</td>
-                <td>22</td>
-                <td>23</td>
-                <td>24</td>
-                <td>25</td>
-                <td>26</td>
-                <td>27</td>
-                <td>28</td>
-                <td>29</td>
-                <td>30</td>
-            </tr> -->
             <tr>
                 <?php
 
@@ -186,13 +162,12 @@ $versionMuestra = $mostrar->VersionMostrar();
                 $numeroDiasMes = date('t', strtotime($fecha));
                 echo "<tr>";
                 echo "<td class='cabecera-fila' rowspan='2'>ÁREA</td>";
-                echo "<td class='cabecera-fila' rowspan='2'>ÍTEM</td>";
+                echo "<td class='cabecera-fila' rowspan='2'>ÍTEM(FRECUENCIA)</td>";
                 echo "<td class='cabecera-fila' colspan='$numeroDiasMes'>VERIFICACIÓN DE LA LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS PARA HEGIENIZACIÓN</td>";
                 echo "</tr>";
                 echo "<tr>";
-                var_dump($numeroDiasMes);
                 for ($i = 1; $i <= $numeroDiasMes; $i++) {
-                    echo "<td>" . $i . "</td>";
+                    echo "<td style='text-align:center; width: 10px;'>" . $i . "</td>";
                 }
                 echo "</tr>";
                 foreach ($grupos as $nombreZona => $frecuencias) {
@@ -224,8 +199,8 @@ $versionMuestra = $mostrar->VersionMostrar();
 
                             for ($i = 1; $i <= $numDias; $i++) {
                                 if (in_array($i, $fechasArray)) {
-                                    // echo "<td>" . $i . "</td>";
-                                    echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+
+                                    echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt="" width="25"></td>';
                                 } else {
                                     echo "<td></td>";
                                 }

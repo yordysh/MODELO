@@ -148,7 +148,23 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                     </div>
 
                     <div id="tablaInfra" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbInfra" class="table table-sm mb-3 table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="thtitulo" scope="col">CODIGO INFRAESTRUCTURA</th>
+                                    <th class="thtitulo" scope="col">NOMBRE ZONA</th>
+                                    <th class="thtitulo" scope="col">NOMBRE DE INFRAESTRUCTURA</th>
+                                    <th class="thtitulo" scope="col">N°DIAS</th>
+                                    <th class="thtitulo" scope="col">FECHA</th>
+                                    <th class="thtitulo" scope="col">USUARIO</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="tbInfras">
 
+                            </tbody>
+                        </table>
                     </div>
 
 
