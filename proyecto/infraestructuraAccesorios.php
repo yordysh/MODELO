@@ -141,11 +141,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                             </div>
                         </div>
                     </form>
-                    <div class="card my-4" id="task-result">
-                        <div class="card-body">
-                            <ul id="container"></ul>
-                        </div>
-                    </div>
+
 
                     <div id="tablaInfra" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
                         <table id="tbInfra" class="table table-sm mb-3 table-hover">

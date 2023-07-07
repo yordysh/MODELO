@@ -1,14 +1,62 @@
 $(function () {
-  $("#task-result").hide();
   fetchTasks();
   let edit = false;
 
+  $("#search").keyup(() => {
+    if ($("#search").val()) {
+      var search = $("#search").val();
+      const accion = "buscarlimpieza";
+      $.ajax({
+        url: "./c_almacen.php",
+        data: { accion: accion, buscarLimpieza: search },
+        type: "POST",
+        success: function (response) {
+          if (!response.error) {
+            let tasks = JSON.parse(response);
+            let template = ``;
+            tasks.forEach((task) => {
+              template += `<tr taskId="${task.COD_FRECUENCIA}">
+              <td>${task.COD_FRECUENCIA}</td>
+              <td>${task.NOMBRE_T_ZONA_AREAS}</td>
+              <td>${task.NOMBRE_FRECUENCIA}</td>
+              <td>${task.FECHA}</td>
+              <td>${task.VERSION}</td>
+              
+              <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_FRECUENCIA="${task.COD_FRECUENCIA}"><i class="icon-edit"></i></button></td>
+          </tr>`;
+            });
+            $("#tdLimpiezadesinfeccion").html(template);
+          }
+        },
+      });
+    }
+  });
+
   function fetchTasks() {
+    var search = "";
+    const accion = "buscarlimpieza";
     $.ajax({
-      url: "./tablaLimpieza.php",
-      type: "GET",
-      success: function (data) {
-        $("#tablalimpieza").html(data);
+      // url: "./tablaLimpieza.php",
+      url: "./c_almacen.php",
+      data: { accion: accion, buscarLimpieza: search },
+      type: "POST",
+      success: function (response) {
+        if (!response.error) {
+          let tasks = JSON.parse(response);
+          let template = ``;
+          tasks.forEach((task) => {
+            template += `<tr taskId="${task.COD_FRECUENCIA}">
+            <td>${task.COD_FRECUENCIA}</td>
+            <td>${task.NOMBRE_T_ZONA_AREAS}</td>
+            <td>${task.NOMBRE_FRECUENCIA}</td>
+            <td>${task.FECHA}</td>
+            <td>${task.VERSION}</td>
+            
+            <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_FRECUENCIA="${task.COD_FRECUENCIA}"><i class="icon-edit"></i></button></td>
+        </tr>`;
+          });
+          $("#tdLimpiezadesinfeccion").html(template);
+        }
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);
@@ -88,7 +136,7 @@ $(function () {
 
           var selectZon = $("#selectZona");
 
-          selectZon.prop("disabled", true); // Deshabilitar el elemento
+          selectZon.prop("disabled", true);
 
           if (task.NOMBRE_T_ZONA_AREAS) {
             selectZon.val(

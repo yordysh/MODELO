@@ -1,13 +1,66 @@
 $(function () {
-  $("#task-result").hide();
   fetchTasks();
   cargarSelect();
+
+  $("#search").keyup(() => {
+    if ($("#search").val()) {
+      var search = $("#search").val();
+      const accion = "buscarprepararacion";
+      $.ajax({
+        url: "./c_almacen.php",
+        data: { accion: accion, buscarPrepa: search },
+        type: "POST",
+        success: function (response) {
+          if (!response.error) {
+            let tasks = JSON.parse(response);
+
+            let template = ``;
+            tasks.forEach((task) => {
+              template += `<tr taskId="${task.ID_UNION}">
+
+                <td>${task.NOMBRE_INSUMOS}</td>
+                <td>${task.NOMBRE_PREPARACION}</td>
+                <td>${task.CANTIDAD_PORCENTAJE}</td>
+                <td>${task.CANTIDAD_MILILITROS}</td>
+                <td>${task.CANTIDAD_LITROS}</td>
+                <td>${task.FECHA}</td>
+
+              </tr>`;
+            });
+
+            $("#tbPreparacion").html(template);
+          }
+        },
+      });
+    }
+  });
+
   function fetchTasks() {
+    var search = "";
+    const accion = "buscarprepararacion";
     $.ajax({
-      url: "./tablaPreparacion.php",
-      type: "GET",
-      success: function (data) {
-        $("#tabla").html(data);
+      url: "./c_almacen.php",
+      data: { accion: accion, buscarPrepa: search },
+      type: "POST",
+      success: function (response) {
+        if (!response.error) {
+          let tasks = JSON.parse(response);
+          let template = ``;
+          tasks.forEach((task) => {
+            template += `<tr taskId="${task.ID_UNION}">
+
+              <td>${task.NOMBRE_INSUMOS}</td>
+              <td>${task.NOMBRE_PREPARACION}</td>
+              <td>${task.CANTIDAD_PORCENTAJE}</td>
+              <td>${task.CANTIDAD_MILILITROS}</td>
+              <td>${task.CANTIDAD_LITROS}</td>
+              <td>${task.FECHA}</td>
+
+            </tr>`;
+          });
+
+          $("#tbPreparacion").html(template);
+        }
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);

@@ -1,5 +1,4 @@
 $(function () {
-  $("#task-result").hide();
   fetchTasks();
   let edit = false;
 
@@ -139,8 +138,8 @@ $(function () {
   $(document).on("click", ".task-update", () => {
     var element = $(this)[0].activeElement.parentElement.parentElement;
 
-    var selectInfra = document.getElementById("selectInfra");
-    selectInfra.disabled = true;
+    // var selectInfra = document.getElementById("selectInfra");
+    // selectInfra.disabled = true;
 
     var COD_INFRAESTRUCTURA = $(element).attr("taskId");
     const accion = "editarinfra";
@@ -152,6 +151,18 @@ $(function () {
       success: function (response) {
         if (!response.error) {
           const task = JSON.parse(response);
+
+          var selectInfra = $("#selectInfra");
+
+          selectInfra.prop("disabled", true);
+
+          if (task.NOMBRE_T_ZONA_AREAS) {
+            selectInfra.val(
+              selectInfra
+                .find("option:contains('" + task.NOMBRE_T_ZONA_AREAS + "')")
+                .val()
+            );
+          }
 
           $("#NOMBRE_INFRAESTRUCTURA").val(task.NOMBRE_INFRAESTRUCTURA);
           $("#NDIAS").val(task.NDIAS);

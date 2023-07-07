@@ -96,7 +96,7 @@ $(function () {
       success: function (response) {
         if (!response.error) {
           let tasks = JSON.parse(response);
-          console.log(tasks);
+
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_ZONA}">

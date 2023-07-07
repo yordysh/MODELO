@@ -3,7 +3,7 @@ require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
 $dataInsumos = $mostrar->MostrarSoluciones();
-$dataUnion = $mostrar->MostrarUnion();
+// $dataUnion = $mostrar->MostrarUnion();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -166,14 +166,25 @@ $dataUnion = $mostrar->MostrarUnion();
                             </div>
                         </div>
                     </form>
-                    <div class="card my-4" id="task-result">
-                        <div class="card-body">
-                            <ul id="container"></ul>
-                        </div>
-                    </div>
 
                     <div id="tabla" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbInsumos" class="table table-sm mb-3 table-hover">
+                            <thead>
+                                <tr>
 
+                                    <th class="thtitulo" scope="col">INSUMOS</th>
+                                    <th class="thtitulo" scope="col">PRODUCTOS</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD("%" o "ppm")</th>
+                                    <th class="thtitulo" scope="col">NÚMERO EN ML</th>
+                                    <th class="thtitulo" scope="col">NÚMERO EN L</th>
+                                    <th class="thtitulo" scope="col">FECHA</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="tbPreparacion">
+
+                            </tbody>
+                        </table>
                     </div>
 
 

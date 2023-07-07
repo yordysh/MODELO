@@ -132,6 +132,16 @@ if ($_POST['accion'] == 'enviarSelectCombo') {
     echo $respuesta;
 }
 
+if ($_POST['accion'] == 'buscarprepararacion') {
+
+    $buscarPrepa = trim($_POST['buscarPrepa']);
+
+    $respuesta = c_almacen::c_buscar_preparacion($buscarPrepa);
+    echo $respuesta;
+}
+
+
+
 
 
 if ($_POST['accion'] == 'insertarLimpieza') {
@@ -157,6 +167,13 @@ if ($_POST['accion'] == 'actualizarLimpieza') {
 
 
     $respuesta = c_almacen::c_actualizar_limpieza($codfre, $textfrecuencia);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'buscarlimpieza') {
+
+    $buscarLimpieza = trim($_POST['buscarLimpieza']);
+
+    $respuesta = c_almacen::c_buscar_limpieza($buscarLimpieza);
     echo $respuesta;
 }
 
@@ -307,6 +324,7 @@ class c_almacen
             foreach ($select as $row) {
                 $json[] = array(
                     "COD_INFRAESTRUCTURA" => $row['COD_INFRAESTRUCTURA'],
+                    "NOMBRE_T_ZONA_AREAS" => $row['NOMBRE_T_ZONA_AREAS'],
                     "NOMBRE_INFRAESTRUCTURA" => $row['NOMBRE_INFRAESTRUCTURA'],
                     "NDIAS" => $row['NDIAS']
                 );
@@ -830,6 +848,61 @@ class c_almacen
             };
         }
     }
+    static function c_buscar_preparacion($buscarPrepa)
+    {
+        try {
+
+            if (!empty($buscarPrepa)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarUnionBusqueda($buscarPrepa);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "ID_UNION" => $row['ID_UNION'],
+                        "NOMBRE_INSUMOS" => $row['NOMBRE_INSUMOS'],
+                        "NOMBRE_PREPARACION" => $row['NOMBRE_PREPARACION'],
+                        "CANTIDAD_PORCENTAJE" => $row['CANTIDAD_PORCENTAJE'],
+                        "CANTIDAD_MILILITROS" => $row['CANTIDAD_MILILITROS'],
+                        "CANTIDAD_LITROS" => $row['CANTIDAD_LITROS'],
+                        "FECHA" =>  convFecSistema($row['FECHA']),
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+                // $jsonstring = json_encode($datos);
+                // echo $jsonstring;
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarUnionBusqueda($buscarPrepa);
+
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "ID_UNION" => $row['ID_UNION'],
+                        "NOMBRE_INSUMOS" => $row['NOMBRE_INSUMOS'],
+                        "NOMBRE_PREPARACION" => $row['NOMBRE_PREPARACION'],
+                        "CANTIDAD_PORCENTAJE" => $row['CANTIDAD_PORCENTAJE'],
+                        "CANTIDAD_MILILITROS" => $row['CANTIDAD_MILILITROS'],
+                        "CANTIDAD_LITROS" => $row['CANTIDAD_LITROS'],
+                        "FECHA" =>  convFecSistema($row['FECHA']),
+
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+                // $jsonstring = json_encode($datos);
+                // echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+
 
 
     static function c_insertar_limpieza($selectZona, $textfrecuencia)
@@ -885,6 +958,51 @@ class c_almacen
             } else {
                 return "error";
             };
+        }
+    }
+    static function c_buscar_limpieza($buscarLimpieza)
+    {
+        try {
+
+            if (!empty($buscarLimpieza)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarLimpiezaBusqueda($buscarLimpieza);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_FRECUENCIA" => $row['COD_FRECUENCIA'],
+                        "NOMBRE_T_ZONA_AREAS" => $row['NOMBRE_T_ZONA_AREAS'],
+                        "NOMBRE_FRECUENCIA" => $row['NOMBRE_FRECUENCIA'],
+                        "FECHA" =>  convFecSistema($row['FECHA']),
+                        "VERSION" => $row['VERSION'],
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarLimpiezaBusqueda($buscarLimpieza);
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_FRECUENCIA" => $row['COD_FRECUENCIA'],
+                        "NOMBRE_T_ZONA_AREAS" => $row['NOMBRE_T_ZONA_AREAS'],
+                        "NOMBRE_FRECUENCIA" => $row['NOMBRE_FRECUENCIA'],
+                        "FECHA" =>  convFecSistema($row['FECHA']),
+                        "VERSION" => $row['VERSION'],
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+                // $jsonstring = json_encode($datos);
+                // echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 }

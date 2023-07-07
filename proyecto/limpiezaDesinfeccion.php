@@ -135,14 +135,23 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                             </div>
                         </div>
                     </form>
-                    <div class="card my-4" id="task-result">
-                        <div class="card-body">
-                            <ul id="container"></ul>
-                        </div>
-                    </div>
 
                     <div id="tablalimpieza" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbLimpieza" class="table table-sm mb-3 table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="thtitulo" scope="col">COD. FRECUENCIA</th>
+                                    <th class="thtitulo" scope="col">ZONA/ÁREA</th>
+                                    <th class="thtitulo" scope="col">ÍTEM(FRECUENCIA)</th>
+                                    <th class="thtitulo" scope="col">FECHA</th>
+                                    <th class="thtitulo" scope="col">VERSION</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tdLimpiezadesinfeccion">
 
+                            </tbody>
+                        </table>
                     </div>
 
 
