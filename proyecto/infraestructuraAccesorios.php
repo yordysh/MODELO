@@ -161,7 +161,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody class="tbInfras">
+                            <tbody id="tablaInfraestructura">
 
                             </tbody>
                         </table>

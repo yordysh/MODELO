@@ -15,25 +15,28 @@ $(function () {
         data: { accion: accion, buscarinfra: search },
         type: "POST",
         success: function (response) {
+          console.log(response);
           if (!response.error) {
             let tasks = JSON.parse(response);
 
             let template = ``;
             tasks.forEach((task) => {
-              template += ` <tr taskId="${task.COD_INFRAESTRUCTURA}">
+              template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
+
               <td>${task.COD_INFRAESTRUCTURA}</td>
               <td>${task.NOMBRE_T_ZONA_AREAS}</td>
-              <td class="NOMBRE_INFRAESTRUCTURA">${task.NOMBRE_INFRAESTRUCTURA}</td>
-              <td id="numerodias">${task.NDIAS}</td>
+              <td class='NOMBRE_INFRAESTRUCTURA'>${task.NOMBRE_INFRAESTRUCTURA}</td>
+              <td>${task.NDIAS}</td>
               <td>${task.FECHA}</td>
               <td>${task.USUARIO}</td>
+
+              <td><button class="btn btn-danger task-delete" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-trash"></i></button></td>
               <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
-              <td><button class="btn btn-danger task-delete" name="eliminar" id="delete" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-trash"></i></button></td>
 
           </tr>`;
             });
 
-            $("#tbInfras").html(template);
+            $("#tablaInfraestructura").html(template);
           }
         },
       });
@@ -94,11 +97,36 @@ $(function () {
   // Cargar registros ZONA AREA
 
   function fetchTasks() {
+    const accion = "buscarinfra";
+    const search = "";
     $.ajax({
-      url: "./tablaInfraestructura.php",
-      type: "GET",
-      success: function (data) {
-        $("#tablaInfra").html(data);
+      // url: "./tablaInfraestructura.php",
+      url: "./c_almacen.php",
+      data: { accion: accion, buscarinfra: search },
+      type: "POST",
+      success: function (response) {
+        if (!response.error) {
+          let tasks = JSON.parse(response);
+
+          let template = ``;
+          tasks.forEach((task) => {
+            template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
+
+              <td>${task.COD_INFRAESTRUCTURA}</td>
+              <td>${task.NOMBRE_T_ZONA_AREAS}</td>
+              <td class='NOMBRE_INFRAESTRUCTURA'>${task.NOMBRE_INFRAESTRUCTURA}</td>
+              <td>${task.NDIAS}</td>
+              <td>${task.FECHA}</td>
+              <td>${task.USUARIO}</td>
+
+              <td><button class="btn btn-danger task-delete" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-trash"></i></button></td>
+              <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
+
+          </tr>`;
+          });
+
+          $("#tablaInfraestructura").html(template);
+        }
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);

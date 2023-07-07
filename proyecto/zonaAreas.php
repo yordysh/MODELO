@@ -23,10 +23,7 @@ $data = $mostrar->MostrarAlmacenMuestra();
     <!--====== Estilo de ICON ======-->
     <link rel="stylesheet" href="../proyecto/styleIcons/style.css">
 
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
     <script src="../js/jquery-3.7.0.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
-
 
 
     <title>Covifarma</title>

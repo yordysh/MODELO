@@ -245,9 +245,9 @@ class c_almacen
                 $json = array();
                 foreach ($datos as $row) {
                     $json[] = array(
-                        "COD_INFRAESTRUCTURA" => $row->COD_ZONA,
-                        "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_T_ZONA_AREAS,
-                        "FECHA" =>  convFecSistema1($row->FECHA),
+                        "COD_ZONA" => $row->COD_ZONA,
+                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                        "FECHA" =>  convFecSistema($row->FECHA),
                         "VERSION" => $row->VERSION,
                     );
                 }
@@ -256,8 +256,19 @@ class c_almacen
             } else {
                 $mostrar = new m_almacen();
                 $datos = $mostrar->MostrarAlmacenMuestra();
-                $jsonstring = json_encode($datos);
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_ZONA" => $row->COD_ZONA,
+                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                        "FECHA" =>  convFecSistema($row->FECHA),
+                        "VERSION" => $row->VERSION,
+                    );
+                }
+                $jsonstring = json_encode($json);
                 echo $jsonstring;
+                // $jsonstring = json_encode($datos);
+                // echo $jsonstring;
             }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
@@ -352,7 +363,27 @@ class c_almacen
                 foreach ($datos as $row) {
                     $json[] = array(
                         "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
+                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
                         "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
+                        "NDIAS" => $row->NDIAS,
+                        "FECHA" =>  convFecSistema($row->FECHA),
+                        "USUARIO" => $row->USUARIO,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarInfraestructuraBusqueda($buscarinfra);
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
+                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                        "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
+                        "NDIAS" => $row->NDIAS,
+                        "FECHA" =>  convFecSistema($row->FECHA),
+                        "USUARIO" => $row->USUARIO,
                     );
                 }
                 $jsonstring = json_encode($json);
