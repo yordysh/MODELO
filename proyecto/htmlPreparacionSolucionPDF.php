@@ -97,35 +97,45 @@ $versionMuestra = $mostrar->VersionMostrar();
         }
     </style>
     <!-- Table titulo-->
-    <table style="margin-bottom: 50px;">
-        <tbody>
-            <tr>
-                <td rowspan="4" class="cabecera"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/images/logo-covifarmaRecorte.png" alt=""></td>
-                <td rowspan="4" style="text-align: center;">PREPARACIÓN DE SOLUCIÓN DE LIMPIEZA Y DESINFECCIÓN - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
-                <td>LBS-PHS-FR-03</td>
+    <header style="position: fixed;top: 0;left: 0;width: 100%;">
+        <table>
+            <tbody>
+                <tr>
+                    <td rowspan="4" class="cabecera"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/images/logo-covifarmaRecorte.png" alt=""></td>
+                    <td rowspan="4" style="text-align: center;">PREPARACIÓN DE SOLUCIÓN DE LIMPIEZA Y DESINFECCIÓN - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                    <td>LBS-PHS-FR-03</td>
 
-            </tr>
-            <tr>
-                <?php foreach ($versionMuestra as $version) { ?>
-                    <td>Versión: <?php echo $version['VERSION'] ?> </td>
-                <?php
-                }
-                ?>
+                </tr>
+                <tr>
+                    <?php foreach ($versionMuestra as $version) { ?>
+                        <td>Versión: <?php echo $version['VERSION'] ?> </td>
+                    <?php
+                    }
+                    ?>
 
-            </tr>
-            <tr>
-                <td>Página:01</td>
-            </tr>
-            <tr>
-                <td>Fecha: <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
-            </tr>
+                </tr>
+                <tr>
+                    <?php $contador = 0;
+                    foreach ($datos as $filas) {
+                        $contador++;
+                    } ?>
+                    <td>Página:1/<?php if ($contador < 19) {
+                                        echo "1";
+                                    } else {
+                                        echo "2";
+                                    }; ?></td>
+                </tr>
+                <tr>
+                    <td>Fecha: <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                </tr>
 
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </header>
 
     <!-- Table solucion y preparaciones-->
-    <table>
+    <table style="margin-top: 180px;">
         <tbody>
 
             <tr>
@@ -220,7 +230,10 @@ $versionMuestra = $mostrar->VersionMostrar();
                 <td class="cabecera-valores">10L</td>
             </tr>
             <?php
+            $contadorN = 0;
             foreach ($datos as $filas) {
+                $contadorN++;
+
                 echo '<tr>';
                 echo '<td style="text-align:center;">' . convFecSistema($filas['FECHA']) . '</td>';
                 for ($i = 0; $i < 28; $i++) {
@@ -286,13 +299,23 @@ $versionMuestra = $mostrar->VersionMostrar();
                 }
                 echo '<td style="text-align:center;">USUARIO</td>';
                 echo '</tr>';
+                if ($contadorN % 22 == 0) {
+                    // Insert a blank row
+                    echo '<tr>';
+                    for ($i = 0; $i < 30; $i++) {
+                        echo '<td style="text-align:center;height:19.5rem;;border-left:none; border:rght:none;"></td>';
+                    }
+                    echo '</tr>';
+                }
             }
+
+            // printf('<tr><td>Total de filas: ' . $contador . '</td></tr>');
             ?>
         </tbody>
-    </table>
 
+    </table>
     <!-- Table Observacion y otros-->
-    <table style="margin-top: 50px;">
+    <table style="margin-top: 100px;">
         <thead>
             <tr>
 

@@ -86,12 +86,26 @@ $(function () {
 
         const task = data[index];
 
+        let accionCorrectiva;
+        let selectVerificacion;
+
         Swal.fire({
           title: "Información",
           html: `
               <div><h2 class="nombre_area">Nombre del área:</h2> <p>${task.NOMBRE_AREA}</p></div>
               <div><h2 class="nombre_infra">Nombre de la infraestructura:</h2> <p>${task.NOMBRE_INFRAESTRUCTURA}</p></div>
-      
+              <div>
+              <h3>Accion correctiva:</h3> 
+              <textarea class="form-control" id="accionCorrectiva" rows='3' "></textarea>
+              </div>
+              <div>
+              <h3>Verificacion realizada:</h3> 
+               <select id="selectVerificacion" class="form-select" style="width:250px; margin-left:140px;" aria-label="Default select example">
+                  <option selected>Seleccione una verificacion</option>
+                  <option value="1">Conforme</option>
+                  <option value="2">No conforme</option>
+                </select>
+              </div>
               <label>
                 <input type="radio" name="estado-${task.COD_ALERTA}" value="R"> Realizado
               </label>
@@ -107,6 +121,7 @@ $(function () {
               <textarea class="form-control" id="observacion-${task.COD_ALERTA}" rows="3" style="display: none;"></textarea>
                `,
           icon: "info",
+          width: 600,
           allowOutsideClick: false,
           confirmButtonText: "Aceptar",
           preConfirm: () => {
@@ -142,10 +157,18 @@ $(function () {
                     .value
                 : "";
               const observacionTextArea = observacionTextarea.value;
+
+              accionCorrectiva =
+                document.getElementById("accionCorrectiva").value;
+
+              selectVerificacion = $(
+                "#selectVerificacion option:selected"
+              ).text();
+
               if (postergacionRadio.checked) {
                 // Abrir modal
                 $("#myModalExito").modal("show");
-                // Resuelve la promesa para confirmar la acción
+
                 return Promise.resolve();
               }
               const accion = "actualizaalerta";
@@ -159,6 +182,8 @@ $(function () {
                   taskId: task.COD_ALERTA,
                   taskFecha: task.FECHA_TOTAL,
                   observacionTextArea: observacionTextArea,
+                  accionCorrectiva: accionCorrectiva,
+                  selectVerificacion: selectVerificacion,
                 },
                 dataType: "json",
               })
@@ -226,9 +251,13 @@ $(function () {
                   const fechaPostergacion = document.querySelector(
                     "input[name='fecha_postergacion']"
                   ).value;
-                  console.log(fechaPostergacion);
+
+                  console.log("accionCorrectiva: " + accionCorrectiva);
+                  console.log("selectVerificacion: " + selectVerificacion);
+
                   const observacion = observacionTextarea.value;
                   const accion = "actualizaalerta";
+
                   // Realizar la actualización del estado con "PO" utilizando una solicitud AJAX
                   $.ajax({
                     url: "c_almacen.php",
@@ -241,6 +270,8 @@ $(function () {
                       taskFecha: task.FECHA_TOTAL,
                       observacion: observacion,
                       fechaPostergacion: fechaPostergacion,
+                      accionCorrectiva: accionCorrectiva,
+                      selectVerificacion: selectVerificacion,
                     },
                     dataType: "json",
                   })
@@ -262,6 +293,8 @@ $(function () {
                           codInfraestructura: task.COD_INFRAESTRUCTURA,
                           taskNdias: task.NDIAS,
                           fechaPostergacion: fechaPostergacion,
+                          accionCorrectiva: accionCorrectiva,
+                          selectVerificacion: selectVerificacion,
                         },
                         dataType: "json",
                       });

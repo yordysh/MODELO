@@ -352,8 +352,8 @@ $versionMuestra = $mostrar->VersionMostrar();
                 echo '<td class="cabecera">' . convFecSistema($fils['FECHA_TOTAL']) . '</td>';
                 echo '<td class="cabecera">' . $fils['NOMBRE_T_ZONA_AREAS'] . '</td>';
                 echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
-                echo '<td></td>';
-                echo '<td></td>';
+                echo '<td class="cabecera">' . $fils['ACCION_CORRECTIVA'] . '</td>';
+                echo '<td class="cabecera">' . $fils['VERIFICACION_REALIZADA'] . '</td>';
                 echo '<td></td>';
 
                 echo '</tr>';
