@@ -86,8 +86,8 @@ $(function () {
 
         const task = data[index];
 
-        var accionCorrectiva;
-        var selectVerificacion;
+        let accionCorrectiva;
+        let selectVerificacion;
 
         Swal.fire({
           title: "Información",
@@ -121,6 +121,7 @@ $(function () {
               <textarea class="form-control" id="observacion-${task.COD_ALERTA}" rows="3" style="display: none;"></textarea>
                `,
           icon: "info",
+          width: 600,
           allowOutsideClick: false,
           confirmButtonText: "Aceptar",
           preConfirm: () => {
@@ -157,17 +158,17 @@ $(function () {
                 : "";
               const observacionTextArea = observacionTextarea.value;
 
-              const accionCorrectiva =
+              accionCorrectiva =
                 document.getElementById("accionCorrectiva").value;
 
-              var selectVerificacion = $(
+              selectVerificacion = $(
                 "#selectVerificacion option:selected"
               ).text();
 
               if (postergacionRadio.checked) {
                 // Abrir modal
                 $("#myModalExito").modal("show");
-                // Resuelve la promesa para confirmar la acción
+
                 return Promise.resolve();
               }
               const accion = "actualizaalerta";
@@ -218,9 +219,6 @@ $(function () {
           },
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log("accionCorrectiva: " + accionCorrectiva);
-            console.log("selectVerificacion: " + selectVerificacion);
-
             // Comprobar si el botón de radio de observación está seleccionado
             const postergacionRadio = document.querySelector(
               `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
@@ -254,13 +252,8 @@ $(function () {
                     "input[name='fecha_postergacion']"
                   ).value;
 
-                  const accionCorrectiva =
-                    document.getElementById("accionCorrectiva").value;
-                  console.log("accionCorrectiva     " + accionCorrectiva);
-
-                  var selectVerificacion = $(
-                    "#selectVerificacion option:selected"
-                  ).text();
+                  console.log("accionCorrectiva: " + accionCorrectiva);
+                  console.log("selectVerificacion: " + selectVerificacion);
 
                   const observacion = observacionTextarea.value;
                   const accion = "actualizaalerta";
@@ -300,6 +293,8 @@ $(function () {
                           codInfraestructura: task.COD_INFRAESTRUCTURA,
                           taskNdias: task.NDIAS,
                           fechaPostergacion: fechaPostergacion,
+                          accionCorrectiva: accionCorrectiva,
+                          selectVerificacion: selectVerificacion,
                         },
                         dataType: "json",
                       });
