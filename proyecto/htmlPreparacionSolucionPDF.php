@@ -97,7 +97,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         }
     </style>
     <!-- Table titulo-->
-    <header style="position: fixed;top: 0;left: 0;width: 100%;">
+    <header style="position: fixed;top: 0;left: 0;width: 100%; ">
         <table>
             <tbody>
                 <tr>
@@ -115,16 +115,24 @@ $versionMuestra = $mostrar->VersionMostrar();
 
                 </tr>
                 <tr>
-                    <?php $contador = 0;
-                    foreach ($datos as $filas) {
-                        $contador++;
-                    } ?>
-                    <td>Página:1/<?php if ($contador < 19) {
-                                        echo "1";
-                                    } else {
-                                        echo "2";
-                                    }; ?></td>
+
+                    <td>
+                        <?php
+                        $filasPorPagina = 15; // Definir la cantidad de filas por página
+                        $totalFilas = count($datos); // Suponiendo que $datos contiene el total de filas
+                        $totalPaginas = ceil($totalFilas / $filasPorPagina);
+                        if ($totalFilas % $filasPorPagina == 0) {
+                            $paginaActual = 1;
+                        } else {
+                            $paginaActual = 2;
+                        }
+
+
+                        echo 'Página: ' . $paginaActual . '/' . $totalPaginas;
+                        ?>
+                    </td>
                 </tr>
+
                 <tr>
                     <td>Fecha: <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                 </tr>
@@ -231,6 +239,7 @@ $versionMuestra = $mostrar->VersionMostrar();
             </tr>
             <?php
             $contadorN = 0;
+
             foreach ($datos as $filas) {
                 $contadorN++;
 
@@ -299,23 +308,30 @@ $versionMuestra = $mostrar->VersionMostrar();
                 }
                 echo '<td style="text-align:center;">USUARIO</td>';
                 echo '</tr>';
-                if ($contadorN % 22 == 0) {
-                    // Insert a blank row
+                // if ($contadorN % 22 == 0) {
+                if ($contadorN % 15 == 0) {
                     echo '<tr>';
                     for ($i = 0; $i < 30; $i++) {
-                        echo '<td style="text-align:center;height:19.5rem;;border-left:none; border:rght:none;"></td>';
+                        echo '<td style="text-align:center;height:10.5rem;border-left:none; border:rght:none;"></td>';
+                    }
+                    echo '</tr>';
+                }
+                if ($contadorN % count($datos) == 0) {
+                    echo '<tr>';
+                    for ($i = 0; $i < 30; $i++) {
+                        echo '<td style="text-align:center;height:45rem;border-left:none; border:rght:none;"></td>';
                     }
                     echo '</tr>';
                 }
             }
 
-            // printf('<tr><td>Total de filas: ' . $contador . '</td></tr>');
+            // printf('<tr><td>Total de filas: ' . count($datos) . '</td></tr>');
             ?>
         </tbody>
 
     </table>
     <!-- Table Observacion y otros-->
-    <table style="margin-top: 100px;">
+    <table style="margin-top: 5px;">
         <thead>
             <tr>
 

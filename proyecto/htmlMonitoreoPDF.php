@@ -219,8 +219,9 @@ $versionMuestra = $mostrar->VersionMostrar();
 
             echo '</tr>';
 
-
+            $contadorF = 0;
             foreach ($grupos as $nombreZona => $valores) {
+                $contadorF++;
                 echo '<tr">';
                 echo '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
 
@@ -294,6 +295,13 @@ $versionMuestra = $mostrar->VersionMostrar();
                 }
 
                 echo '</tr>';
+                if ($contadorF % 15 == 0) {
+                    echo '<tr>';
+                    for ($i = 0; $i < 30; $i++) {
+                        echo '<td style="text-align:center;height:10.5rem;border-left:none; border:rght:none;"></td>';
+                    }
+                    echo '</tr>';
+                }
             }
             ?>
         </tbody>
