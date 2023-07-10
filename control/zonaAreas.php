@@ -15,15 +15,15 @@ $data = $mostrar->MostrarAlmacenMuestra();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/responsiveControl.css">
     <!--====== Favicon Icon ======-->
-    <link rel="shortcut icon" href="../images/icon/covifarma-ico.ico" type="images/png">
+    <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
 
     <!--====== Estilo de ICON ======-->
-    <link rel="stylesheet" href="../proyecto/styleIcons/style.css">
+    <link rel="stylesheet" href="./styleIcons/style.css">
 
-    <script src="../js/jquery-3.7.0.min.js"></script>
+    <script src="./js/jquery-3.7.0.min.js"></script>
 
 
     <title>Covifarma</title>
@@ -32,7 +32,7 @@ $data = $mostrar->MostrarAlmacenMuestra();
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-light" href="./"><img src="../images/logo-covifarma.png" alt=""></a>
+            <a class="navbar-brand fw-bold text-light" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
@@ -43,10 +43,10 @@ $data = $mostrar->MostrarAlmacenMuestra();
                         <a class="nav-link" href="infraestructuraAccesorios.php">Infraestructura Accesorios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./preparacionSolucion.php">Preparación de soluciones</a>
+                        <a class="nav-link" href="preparacionSolucion.php">Preparación de soluciones</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./limpiezaDesinfeccion.php">Limpieza y desinfección</a>
+                        <a class="nav-link" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
                     </li>
                 </ul>
             </div>
@@ -108,8 +108,8 @@ $data = $mostrar->MostrarAlmacenMuestra();
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
         Covifarma-2023
     </footer>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/sweetalert2.all.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxZona.js"></script>
 </body>
 

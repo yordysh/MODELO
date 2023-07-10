@@ -1,0 +1,99 @@
+INSERT INTO [monitoring].[dbo].[T_SOLUCIONES]
+           ([NOMBRE_INSUMOS])
+     VALUES
+            
+           ('Detergente'),
+           ('Desinfectante')
+GO
+
+
+
+INSERT INTO [monitoring].[dbo].[T_PREPARACIONES]
+           ([ID_SOLUCIONES]
+           ,[NOMBRE_PREPARACION])
+     VALUES
+           ('1'
+           ,'Alcalino'),
+           ('1'
+           ,'Ácido'),
+             ('1'
+           ,'En polvo'),
+             ('2'
+           ,'Hipoclorito de Sodio 7.5%'),
+             ('2'
+           ,'Amonio cuaternario 11.59%')
+GO
+
+
+
+
+
+
+
+INSERT INTO [monitoring].[dbo].[T_CANTIDAD]
+           ([ID_PREPARACIONES]
+           ,[CANTIDAD_PORCENTAJE])
+    VALUES
+           ('1','5%'),
+           ('2','3.9%'),
+           ('3','N°de preparaciones'),
+           ('4','50ppm'),
+           ('4','100ppm'),
+           ('4','200ppm'),
+           ('4','300ppm'),
+           ('4','400ppm'),
+           ('5','200ppm')
+GO
+
+
+
+
+INSERT INTO [monitoring].[dbo].[T_L]
+           ([CANTIDAD_LITROS])
+      VALUES
+           ('1L'),
+           ('5L'),
+           ('10L'),
+           ('20L'),
+           ('40L')
+GO
+
+
+
+
+INSERT INTO [monitoring].[dbo].[T_ML]
+           ([ID_CANTIDAD]
+           ,[ID_L]
+           ,[CANTIDAD_MILILITROS])
+     VALUES
+           ('1','1','50ml'),
+           ('1','2','250ml'),
+           ('1','3','500ml'),
+           ('2','1','39ml'),
+           ('2','2','195ml'),
+           ('2','3','390ml'),
+           ('3','2','75g'),
+           ('3','3','150g'),
+           ('3','4','300g'),
+           ('3','5','400g'),
+           ('4','1','0.7ml'),
+           ('4','2','3.3ml'),
+           ('4','3','6.7ml'),
+           ('5','1','1.3ml'),
+           ('5','2','6.7ml'),
+           ('5','3','13.3ml'),
+           ('6','1','2.7ml'),
+           ('6','2','13.3ml'),
+           ('6','3','26.7ml'),
+           ('7','1','4ml'),
+           ('7','2','20ml'),
+           ('7','3','40ml'),
+           ('8','1','5.3ml'),
+           ('8','2','26.7ml'),
+           ('8','3','53.3ml'),
+           ('9','1','1.7ml'),
+           ('9','2','8.6ml'),
+           ('9','3','17.2ml')
+GO
+
+

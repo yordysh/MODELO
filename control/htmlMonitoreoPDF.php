@@ -127,15 +127,28 @@ $versionMuestra = $mostrar->VersionMostrar();
             width: 30px;
             height: 30px;
         }
+
+        /* header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+        } */
+
+        /* .tablaSeparada {
+            page-break-inside: avoid;
+            margin-top: 330px;
+        } */
     </style>
     <!-- Table titulo-->
-    <table style="margin-bottom: 50px;">
-        <tbody>
-            <tr>
-                <td rowspan="4" class="cabecera"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/images/logo-covifarmaRecorte.png" alt=""></td>
-                <td rowspan="4" style="text-align: center;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS - MES DE <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
-                <td>LBS-PHS-FR-01</td>
+    <header>
+        <table>
 
+            <tr>
+                <td rowspan="4" class="cabecera"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/control/images/logo-covifarmaRecorte.png" alt=""></td>
+                <td rowspan="4" style="text-align: center;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS - MES DE <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                <td>LBS-PHS-FR-01</th>
             </tr>
             <tr>
                 <?php foreach ($versionMuestra as $version) { ?>
@@ -152,11 +165,11 @@ $versionMuestra = $mostrar->VersionMostrar();
                 <td>Fecha: <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
             </tr>
 
+        </table>
+    </header>
 
-        </tbody>
-    </table>
     <!-- Table calendario-->
-    <table>
+    <table style="margin-top: 100px;">
         <tbody>
             <?php
 
@@ -222,7 +235,7 @@ $versionMuestra = $mostrar->VersionMostrar();
             $contadorF = 0;
             foreach ($grupos as $nombreZona => $valores) {
                 $contadorF++;
-                echo '<tr">';
+                echo '<tr>';
                 echo '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
 
                 foreach ($valores as $index => $valor) {
@@ -295,7 +308,7 @@ $versionMuestra = $mostrar->VersionMostrar();
                 }
 
                 echo '</tr>';
-                if ($contadorF % 15 == 0) {
+                if ($contadorF % 24 == 0) {
                     echo '<tr>';
                     for ($i = 0; $i < 30; $i++) {
                         echo '<td style="text-align:center;height:10.5rem;border-left:none; border:rght:none;"></td>';
@@ -306,6 +319,7 @@ $versionMuestra = $mostrar->VersionMostrar();
             ?>
         </tbody>
     </table>
+
     <!-- Table colores-->
     <table style="margin-top: 50px; border:none;">
         <tbody>
@@ -330,21 +344,21 @@ $versionMuestra = $mostrar->VersionMostrar();
         </tbody>
     </table>
     <!-- Table observaciones-->
-    <table style="margin-top: 50px;">
-        <thead>
-            <tr>
-                <th>N°</th>
-                <th>Fecha</th>
-                <th>Área/ Zona identificada</th>
-                <th>Hallazgo/ Observación</th>
-                <th>Acción correctiva</th>
-                <th>Verificación realizada</th>
-                <th>V°b°Supervisor</th>
-            </tr>
-        </thead>
+    <table style="margin-top: 50px; ">
+
+        <tr>
+            <td style="text-align: center; font-weight: 200;">N°</td>
+            <td style="text-align: center; font-weight: 200;">Fecha</td>
+            <td style="text-align: center; font-weight: 200;">Área/ Zona identificada</td>
+            <td style="text-align: center; font-weight: 200;">Hallazgo/ Observación</td>
+            <td style="text-align: center; font-weight: 200;">Acción correctiva</td>
+            <td style="text-align: center; font-weight: 200;">Verificación realizada</td>
+            <td style="text-align: center; font-weight: 200;">V°b°Supervisor</td>
+        </tr>
+
         <tbody>
             <?php
-
+            $contadorN = 0;
             $nContador = 1;
 
             $fechas = array_column($datos, 'FECHA_TOTAL');
@@ -352,6 +366,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 
 
             foreach ($datos as $fils) {
+                $contadorN++;
                 echo '<tr>';
 
                 echo '<td class="cabecera">' . $nContador . '</td>';
@@ -365,11 +380,19 @@ $versionMuestra = $mostrar->VersionMostrar();
                 echo '<td></td>';
 
                 echo '</tr>';
+                // if ($contadorN % 15 == 0) {
+                //     echo '<tr>';
+                //     for ($i = 0; $i < 7; $i++) {
+                //         echo '<td style="text-align:center;height:13.5rem; border-left:none; border-right:none;"></td>';
+                //     }
+                //     echo '</tr>';
+                // }
             }
             ?>
 
         </tbody>
     </table>
+
     <!-- Table firma y fecha-->
     <table style="margin-top: 50px; border:none;">
         <tr>
@@ -389,7 +412,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 
         </tr>
     </table>
-    <!-- <link rel="stylesheet" href="../assets/css/estilos.css"> -->
+
 </body>
 
 </html>

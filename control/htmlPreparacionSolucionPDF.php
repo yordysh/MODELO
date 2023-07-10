@@ -101,7 +101,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         <table>
             <tbody>
                 <tr>
-                    <td rowspan="4" class="cabecera"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/images/logo-covifarmaRecorte.png" alt=""></td>
+                    <td rowspan="4" class="cabecera"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/CONTROL/images/logo-covifarmaRecorte.png" alt=""></td>
                     <td rowspan="4" style="text-align: center;">PREPARACIÓN DE SOLUCIÓN DE LIMPIEZA Y DESINFECCIÓN - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                     <td>LBS-PHS-FR-03</td>
 
@@ -118,8 +118,8 @@ $versionMuestra = $mostrar->VersionMostrar();
 
                     <td>
                         <?php
-                        $filasPorPagina = 15; // Definir la cantidad de filas por página
-                        $totalFilas = count($datos); // Suponiendo que $datos contiene el total de filas
+                        $filasPorPagina = 26;
+                        $totalFilas = count($datos);
                         $totalPaginas = ceil($totalFilas / $filasPorPagina);
                         if ($totalFilas % $filasPorPagina == 0) {
                             $paginaActual = 1;
@@ -247,69 +247,69 @@ $versionMuestra = $mostrar->VersionMostrar();
                 echo '<td style="text-align:center;">' . convFecSistema($filas['FECHA']) . '</td>';
                 for ($i = 0; $i < 28; $i++) {
                     if ($i == 0 && $filas['CANTIDAD_MILILITROS'] == '50ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 1 && $filas['CANTIDAD_MILILITROS'] == '250ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 2 && $filas['CANTIDAD_MILILITROS'] == '500ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 3 && $filas['CANTIDAD_MILILITROS'] == '39ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 4 && $filas['CANTIDAD_MILILITROS'] == '195ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 5 && $filas['CANTIDAD_MILILITROS'] == '390ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 6 && $filas['CANTIDAD_MILILITROS'] == '75g') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 7 && $filas['CANTIDAD_MILILITROS'] == '150g') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 8 && $filas['CANTIDAD_MILILITROS'] == '300g') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 9 && $filas['CANTIDAD_MILILITROS'] == '400g') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 10 && $filas['CANTIDAD_MILILITROS'] == '0.7ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 11 && $filas['CANTIDAD_MILILITROS'] == '3.3ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 12 && $filas['CANTIDAD_MILILITROS'] == '6.7ml' && $filas['CANTIDAD_LITROS'] == '10L') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 13 && $filas['CANTIDAD_MILILITROS'] == '1.3ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 14 && $filas['CANTIDAD_MILILITROS'] == '6.7ml' && $filas['CANTIDAD_LITROS'] == '5L') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 15 && $filas['CANTIDAD_MILILITROS'] == '13.3ml' && $filas['CANTIDAD_LITROS'] == '10L') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 16 && $filas['CANTIDAD_MILILITROS'] == '2.7ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 17 && $filas['CANTIDAD_MILILITROS'] == '13.3ml' && $filas['CANTIDAD_LITROS'] == '5L') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 18 && $filas['CANTIDAD_MILILITROS'] == '26.7ml' && $filas['CANTIDAD_LITROS'] == '10L') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 19 && $filas['CANTIDAD_MILILITROS'] == '4ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 20 && $filas['CANTIDAD_MILILITROS'] == '20ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 21 && $filas['CANTIDAD_MILILITROS'] == '40ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 22 && $filas['CANTIDAD_MILILITROS'] == '5.3ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 23 && $filas['CANTIDAD_MILILITROS'] == '26.7ml' && $filas['CANTIDAD_LITROS'] == '5L') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 24 && $filas['CANTIDAD_MILILITROS'] == '53.3ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 25 && $filas['CANTIDAD_MILILITROS'] == '1.7ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 26 && $filas['CANTIDAD_MILILITROS'] == '8.6ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else if ($i == 27 && $filas['CANTIDAD_MILILITROS'] == '17.2ml') {
-                        echo '<td style="text-align:center;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/control/images/check.png" alt=""></td>';
                     } else {
                         echo '<td style="text-align:center;"></td>';
                     }
                 }
                 echo '<td style="text-align:center;">USUARIO</td>';
                 echo '</tr>';
-                // if ($contadorN % 22 == 0) {
-                if ($contadorN % 15 == 0) {
+                if ($contadorN % 26 == 0) {
+                    // if ($contadorN % 15 == 0) {
                     echo '<tr>';
                     for ($i = 0; $i < 30; $i++) {
                         echo '<td style="text-align:center;height:10.5rem;border-left:none; border:rght:none;"></td>';
@@ -319,7 +319,7 @@ $versionMuestra = $mostrar->VersionMostrar();
                 if ($contadorN % count($datos) == 0) {
                     echo '<tr>';
                     for ($i = 0; $i < 30; $i++) {
-                        echo '<td style="text-align:center;height:45rem;border-left:none; border:rght:none;"></td>';
+                        echo '<td style="text-align:center;height:20rem;border-left:none; border:right:none;"></td>';
                     }
                     echo '</tr>';
                 }

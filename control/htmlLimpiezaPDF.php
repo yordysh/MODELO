@@ -106,7 +106,7 @@ $versionMuestra = $mostrar->VersionMostrar();
     <table style="margin-bottom: 50px;">
         <tbody>
             <tr>
-                <td rowspan="4" style="text-align: center;"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/images/logo-covifarmaRecorte.png" alt=""></td>
+                <td rowspan="4" style="text-align: center;"><img src="./images/logo-covifarmaRecorte.png" alt=""></td>
                 <td rowspan="4" style="text-align: center;">LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS DE LIMPIEZA - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                 <td>LBS-PHS-FR-04</td>
 

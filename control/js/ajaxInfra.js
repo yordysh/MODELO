@@ -116,7 +116,7 @@ $(function () {
               <td class='NOMBRE_INFRAESTRUCTURA'>${task.NOMBRE_INFRAESTRUCTURA}</td>
               <td>${task.NDIAS}</td>
               <td>${task.FECHA}</td>
-              <td>${task.USUARIO}</td>
+          
 
               <td><button class="btn btn-danger task-delete" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-trash"></i></button></td>
               <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>

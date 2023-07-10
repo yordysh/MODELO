@@ -3,7 +3,7 @@ ob_start();
 ?>
 
 <?php
-include "./htmlLimpiezaPDF.php";
+include "htmlMonitoreoPDF.php";
 ?>
 <?php
 $html = ob_get_clean();
@@ -19,5 +19,5 @@ $dompdf->setOptions($options);
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A2', 'landscape');
 $dompdf->render();
-$dompdf->stream('LimpiezayDesinfeccion.pdf', array('Attachment' => 0));
+$dompdf->stream('Monitoreo.pdf', array('Attachment' => 0));
 ?>

@@ -1,7 +1,6 @@
 <?php
 
 require_once("../funciones/DataBaseA.php");
-// require_once("../funciones/f_funcion.php");
 
 class m_almacen
 {
@@ -489,21 +488,21 @@ class m_almacen
       die("Error al eliminar los datos: " . $e->getMessage());
     }
   }
-  public function MostrarUsuario($USUARIO, $CLAVE)
-  {
-    try {
+  // public function MostrarUsuario($USUARIO, $CLAVE)
+  // {
+  //   try {
 
-      $stm = $this->bd->prepare("SELECT * FROM T_USUARIO WHERE USUARIO=:USUARIO AND CLAVE = :CLAVE;");
-      $stm->bindParam(':USUARIO', $USUARIO, PDO::PARAM_STR);
-      $stm->bindParam(':CLAVE', $CLAVE, PDO::PARAM_STR);
-      $stm->execute();
-      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+  //     $stm = $this->bd->prepare("SELECT * FROM T_USUARIO WHERE USUARIO=:USUARIO AND CLAVE = :CLAVE;");
+  //     $stm->bindParam(':USUARIO', $USUARIO, PDO::PARAM_STR);
+  //     $stm->bindParam(':CLAVE', $CLAVE, PDO::PARAM_STR);
+  //     $stm->execute();
+  //     $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
-      return $datos;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
+  //     return $datos;
+  //   } catch (Exception $e) {
+  //     die($e->getMessage());
+  //   }
+  // }
 
   public function AlertaMensaje()
   {
@@ -992,25 +991,4 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  // public function MostrarLimpiezaPD()
-  // {
-  //   try {
-
-
-  //     $stm = $this->bd->prepare(
-  //       "SELECT T_FRECUENCIA.COD_FRECUENCIA AS COD_FRECUENCIA, 
-  //       T_FRECUENCIA.NOMBRE_FRECUENCIA AS NOMBRE_FRECUENCIA, 
-  //       T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
-  //       T_FRECUENCIA.FECHA AS FECHA
-  //       FROM T_FRECUENCIA INNER JOIN T_ZONA_AREAS ON T_FRECUENCIA.COD_ZONA=T_ZONA_AREAS.COD_ZONA "
-  //     );
-
-  //     $stm->execute();
-  //     $datos = $stm->fetchAll();
-
-  //     return $datos;
-  //   } catch (Exception $e) {
-  //     die($e->getMessage());
-  //   }
-  // }
 }

@@ -26,14 +26,6 @@ $(function () {
         );
 
         var fechaActual = new Date();
-        // var fechaConvertida = new Intl.DateTimeFormat("es").format(fechaActual);
-        // var fechaString = new Date(Date.parse(fecha));
-
-        // var fechaActualMs = fechaActual.getTime();
-        // var fechaMs = fechaString.getTime();
-        // var diferenciaMs = fechaMs - fechaActualMs;
-        // var diferenciaDias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
-        // console.log("DIFERENCIA: " + diferenciaDias);
 
         var diferenciaMilisegundos = fechaTotal - fechaActual;
         var milisegundosEnUnDia = 24 * 60 * 60 * 1000;
