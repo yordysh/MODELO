@@ -210,7 +210,7 @@ $versionMuestra = $mostrar->VersionMostrar();
                             for ($i = 1; $i <= $numDias; $i++) {
                                 if (in_array($i, $fechasArray)) {
 
-                                    echo '<td style="text-align:center; max-width: 10px;"><img src="http://' . $_SERVER['HTTP_HOST'] . '/MASTER/images/check.png" alt="" width="25"></td>';
+                                    echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt="" width="25"></td>';
                                 } else {
                                     echo "<td></td>";
                                 }

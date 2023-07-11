@@ -7,6 +7,7 @@ $mesSeleccionado = $_GET['mes'];
 /*convierte el valor en enetero*/
 $mesNumerico = intval($mesSeleccionado);
 
+
 $mesesEnLetras = array(
     1 => "ENERO",
     2 => "FEBRERO",
@@ -128,25 +129,29 @@ $versionMuestra = $mostrar->VersionMostrar();
             height: 30px;
         }
 
-        /* header {
+        body {
+            margin: 50mm 8mm 2mm 8mm;
+        }
+
+        header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 100px;
-        } */
+        }
 
         /* .tablaSeparada {
             page-break-inside: avoid;
             margin-top: 330px;
         } */
     </style>
+
     <!-- Table titulo-->
     <header>
         <table>
 
             <tr>
-                <td rowspan="4" class="cabecera"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/control/images/logo-covifarmaRecorte.png" alt=""></td>
+                <td rowspan="4" class="cabecera"><img src="images/logo-covifarmaRecorte.png" alt=""></td>
                 <td rowspan="4" style="text-align: center;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS - MES DE <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                 <td>LBS-PHS-FR-01</th>
             </tr>
@@ -160,6 +165,16 @@ $versionMuestra = $mostrar->VersionMostrar();
             </tr>
             <tr>
                 <td>Página:01</td>
+                <?php
+                // $totalDatos = count($datos);
+
+                // $datosPorPagina = 20;
+                // $paginaActual = 1;
+                // $totalPaginas = ceil($totalDatos / $datosPorPagina);
+
+                // echo "<td>Página: " . $paginaActual . " de " . $totalPaginas . "</td>";
+
+                ?>
             </tr>
             <tr>
                 <td>Fecha: <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
@@ -169,7 +184,7 @@ $versionMuestra = $mostrar->VersionMostrar();
     </header>
 
     <!-- Table calendario-->
-    <table style="margin-top: 100px;">
+    <table style="margin-top: 10px;">
         <tbody>
             <?php
 
@@ -412,6 +427,8 @@ $versionMuestra = $mostrar->VersionMostrar();
 
         </tr>
     </table>
+
+
 
 </body>
 

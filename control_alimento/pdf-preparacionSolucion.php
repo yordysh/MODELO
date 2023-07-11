@@ -1,15 +1,12 @@
 <?php
 ob_start();
-?>
 
-<?php
 include "htmlPreparacionSolucionPDF.php";
-?>
-<?php
+
 $html = ob_get_clean();
 
 
-require_once './Dompdf/autoload.inc.php';
+require_once 'DomPDF/autoload.inc.php';
 
 $dompdf = new Dompdf\Dompdf();
 
@@ -20,4 +17,3 @@ $dompdf->loadHtml($html);
 $dompdf->setPaper('A2', 'landscape');
 $dompdf->render();
 $dompdf->stream('PreparacionSolucion.pdf', array('Attachment' => 0));
-?>

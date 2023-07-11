@@ -1,23 +1,19 @@
 <?php
 ob_start();
-?>
 
-<?php
-include "htmlMonitoreoPDF.php";
-?>
-<?php
+include "htmlLimpiezaPDF.php";
+
 $html = ob_get_clean();
 
 
-require_once './Dompdf/autoload.inc.php';
+require_once 'DomPDF/autoload.inc.php';
 
 $dompdf = new Dompdf\Dompdf();
 
 $options = $dompdf->getOptions();
-$options->set(array('isRemoteEnabled' => true));
+// $options->set(array('isRemoteEnabled' => true));
 $dompdf->setOptions($options);
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A2', 'landscape');
 $dompdf->render();
-$dompdf->stream('Monitoreo.pdf', array('Attachment' => 0));
-?>
+$dompdf->stream('LimpiezayDesinfeccion.pdf', array('Attachment' => 0));

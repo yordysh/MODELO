@@ -635,6 +635,7 @@ class m_almacen
                                   WHERE MONTH(A.FECHA_TOTAL) = :mesSeleccionado AND YEAR(A.FECHA_TOTAL) = :anioSeleccionado AND ESTADO != 'P'");
       $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
       $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
+      var_dump($stm);
       $stm->execute();
       $datos = $stm->fetchAll();
 

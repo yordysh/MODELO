@@ -2,8 +2,8 @@
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataInsumos = $mostrar->MostrarSoluciones();
-// $dataUnion = $mostrar->MostrarUnion();
+$dataZona = $mostrar->MostrarAlmacenMuestra();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,10 +37,10 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                         <a class="nav-link" href="infraestructuraAccesorios.php">Infraestructura Accesorios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Preparación de soluciones</a>
+                        <a class="nav-link" href="preparacionSolucion.php">Preparación de soluciones</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
+                        <a class="nav-link active" href="#">Limpieza y desinfección</a>
                     </li>
                 </ul>
             </div>
@@ -57,49 +57,38 @@ $dataInsumos = $mostrar->MostrarSoluciones();
         <section>
             <div class="container g-4 mt-100 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">PREPARACIÓN DE SOLUCIONES</label></center>
+                    <center><label class="title">LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS DE LIMPIEZA</label></center>
                 </div>
                 <div class="main">
-                    <form method="post" action="" id="formularioSoluciones">
+                    <form method="post" action="" id="formularioLimpieza">
 
-                        <!-- Text input Insumos -->
+                        <!-- Text input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label">Insumos</label>
-                            <select id="selectInsumos" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione insumos</option>
-                                <?php foreach ($dataInsumos as $lista) { ?>
-                                    <option value="<?php echo $lista['ID_SOLUCIONES']; ?>" class="option"><?php echo $lista['NOMBRE_INSUMOS']; ?></option>
-                                <?php } ?>
-                            </select>
+                            <input id="id" type="hidden" class="form-control" name="id" />
                         </div>
-                        <!-- Text input Preparacion-->
+
+                        <!--Combo zona areas -->
                         <div class="form-outline mb-4">
-                            <label class="form-label">Preparación</label>
-                            <select id="selectPreparaciones" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione preparación</option>
+                            <label class="form-label">Zona/Areas</label>
+                            <select id="selectZona" class="form-select" aria-label="Default select example">
+                                <option value="none" selected disabled>Seleccione Zona/Areas</option>
+                                <?php foreach ($dataZona as $lis) {
+                                    if ($lis->NOMBRE_T_ZONA_AREAS != "PASADIZO" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES)" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(VARONES)") {
+                                ?>
+                                        <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
+                                <?php
+                                    }
+                                } ?>
                             </select>
+
                         </div>
-                        <!-- Text input cantidad-->
+
+                        <!-- Text input dias-->
                         <div class="form-outline mb-4">
-                            <label class="form-label">Cantidad ("%" o "ppm")</label>
-                            <select id="selectCantidad" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione cantidad</option>
-                            </select>
+                            <label class="form-label">Nombre de frecuencia</label>
+                            <input type="text" id="nombreFrecuencia" class="form-control" name="nombreFrecuencia" required>
                         </div>
-                        <!-- Text input numero ML-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Número de preparacion en ml</label>
-                            <select id="selectML" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione cantidad ML</option>
-                            </select>
-                        </div>
-                        <!-- Text input numero L-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Número de preparacion en L</label>
-                            <select id="selectL" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione cantidad L</option>
-                            </select>
-                        </div>
+
                         <!-- Text input Observacion-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Observaciones</label>
@@ -120,12 +109,13 @@ $dataInsumos = $mostrar->MostrarSoluciones();
 
                             </select>
                         </div>
+
+                        <!-- Submit button -->
                         <div class="container">
                             <div class="row">
-                                <!-- Submit button -->
                                 <div class="col-2">
                                     <input type="hidden" id="taskId">
-                                    <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+                                    <button id="boton" type="submit" name="insert" class="btn btn-primary ">Guardar </button>
                                 </div>
                                 <div class=" col-10 pdf" style="margin-left: 35%; margin-top:-4%;">
                                     <div class="row">
@@ -167,21 +157,19 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                         </div>
                     </form>
 
-                    <div id="tabla" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbInsumos" class="table table-sm mb-3 table-hover">
+                    <div id="tablalimpieza" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbLimpieza" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
-
-                                    <th class="thtitulo" scope="col">INSUMOS</th>
-                                    <th class="thtitulo" scope="col">PRODUCTOS</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD("%" o "ppm")</th>
-                                    <th class="thtitulo" scope="col">NÚMERO EN ML</th>
-                                    <th class="thtitulo" scope="col">NÚMERO EN L</th>
+                                    <th class="thtitulo" scope="col">COD. FRECUENCIA</th>
+                                    <th class="thtitulo" scope="col">ZONA/ÁREA</th>
+                                    <th class="thtitulo" scope="col">ÍTEM(FRECUENCIA)</th>
                                     <th class="thtitulo" scope="col">FECHA</th>
-
+                                    <th class="thtitulo" scope="col">VERSION</th>
+                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="tbPreparacion">
+                            <tbody id="tdLimpiezadesinfeccion">
 
                             </tbody>
                         </table>
@@ -199,21 +187,17 @@ $dataInsumos = $mostrar->MostrarSoluciones();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxPreparacion.js"></script>
-    <!-- <script src="js/ajaxAlerta.js"></script> -->
+    <script src="./js/ajaxLimpieza.js"></script>
     <script>
         function generarPDF() {
             var anioSeleccionado = document.getElementById("anio").value;
             var mesSeleccionado = document.getElementById("mes").value;
 
             // Enviar los valores a tu script de generación de PDF
-            var url = "./pdf-preparacionSolucion.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
+            var url = "pdf-limpieza.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
             window.open(url, "_blank");
         }
     </script>
-
-
-
 </body>
 
 </html>

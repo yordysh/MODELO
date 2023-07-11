@@ -25,7 +25,7 @@ if (isset($_POST['insert'])) {
         $_SESSION['clave'] = $USUARIO;
         f_regSession($anexo, $codusuario, $nombre, $oficina, $zona);
         // header('Location: ../MASTER/control/');
-        $redirectUrl = '../MASTER/control/?usuario=' . urlencode($USUARIO);
+        $redirectUrl = '../MASTER/control_alimento/?usuario=' . urlencode($USUARIO);
         header('Location: ' . $redirectUrl);
         die();
     } else {
