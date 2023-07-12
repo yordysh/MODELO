@@ -476,9 +476,15 @@ $versionMuestra = $mostrar->VersionMostrar();
 
         </tr>
     </table>
+    <?php
+    echo '<pre>';
+    print_r("AÑO: " . $anioSeleccionado . "<br> MES: " . $mesSeleccionado);
+    echo  '</pre>';
 
-
-
+    echo '<pre>';
+    print_r($datos);
+    echo  '</pre>';
+    ?>
 </body>
 
 </html>

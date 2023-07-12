@@ -157,15 +157,6 @@ class m_almacen
   public function InsertarAlmacen($NOMBRE_T_ZONA_AREAS)
   {
     try {
-      if (isset($FECHA)) {
-
-        if (empty($FECHA)) {
-          $FECHA = retunrFechaActualphp();
-        }
-      } else {
-        $FECHA = retunrFechaActualphp();
-      }
-
 
       $this->bd->beginTransaction();
       $cod = new m_almacen();
@@ -174,6 +165,7 @@ class m_almacen
 
       $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
 
+      $FECHA = $cod->c_horaserversql('F');
       if ($repetir == 0) {
 
         $stm = $this->bd->prepare("INSERT INTO T_ZONA_AREAS (COD_ZONA, NOMBRE_T_ZONA_AREAS, FECHA, VERSION) 
@@ -182,7 +174,8 @@ class m_almacen
 
         $insert = $stm->execute();
 
-        $fechaDHoy = date('Y-m-d');
+        // $fechaDHoy = date('Y-m-d');
+        $fechaDHoy = $cod->c_horaserversql('F');
 
 
 
@@ -250,7 +243,8 @@ class m_almacen
         $stmt->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
         $update = $stmt->execute();
 
-        $fechaDHoy = date('Y-m-d');
+        // $fechaDHoy = date('Y-m-d');
+        $fechaDHoy = $cod->c_horaserversql('F');
 
         if ($VERSION == '01') {
           $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
@@ -375,18 +369,32 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function c_horaserversql($tipo)
+  {
+    try {
+      $second_name = $tipo;
+      $weight = '';
+      $stmt = $this->bd->prepare("{CALL SP_FECHASISTEMA (?,?)}");
+      $stmt->bindParam(1, $second_name);
+      $stmt->bindParam(2, $weight, PDO::PARAM_STR, 10);
+      $rpta = $stmt->execute();
+      return $weight;
+    } catch (Exception $e) {
+      print_r("Error al buscar fecha sql" . $e);
+    }
+  }
   public function insertarInfraestructura($valorSeleccionado, $NOMBRE_INFRAESTRUCTURA, $NDIAS)
   {
     try {
-      if (empty($FECHA)) {
-        $FECHA = retunrFechaActualphp();
-      }
+
       $this->bd->beginTransaction();
       $cod = new m_almacen();
       $COD_INFRAESTRUCTURA = $cod->generarCodigoInfraestructura();
       $VERSION = $cod->generarVersion();
       $repetir = $cod->contarRegistrosInfraestructura($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado);
 
+      $FECHA = $cod->c_horaserversql('F');
+      var_dump($FECHA);
 
       if ($repetir == 0) {
         $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION) 
@@ -394,7 +402,8 @@ class m_almacen
 
         $insert = $stm->execute();
 
-        $fechaDHoy = date('Y-m-d');
+        // $fechaDHoy = date('Y-m-d');
+        $fechaDHoy  = $cod->c_horaserversql('F');
 
         if ($VERSION == '01') {
           $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
@@ -429,24 +438,25 @@ class m_almacen
 
 
 
-        $FECHA = date('Y-m-d');
+
         $DIAS_DESCUENTO = 2;
 
-        $fechaTotal = date('Y-m-d', strtotime($FECHA . '+' . $NDIAS . 'days'));
+        $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA);
+        $FECHA_TOTAL = $FECHA_FORMATO->modify("+$NDIAS days")->format('d-m-Y');
 
         // Verificar si la fecha total cae en domingo
-        if (date('N', strtotime($fechaTotal)) == 7) {
-          $fechaTotal = date('Y-m-d', strtotime($fechaTotal . '+1 day'));
+        if (date('N', strtotime($FECHA_TOTAL)) == 7) {
+          $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA_TOTAL . '+1 day'));
         }
-        $FECHA_TOTAL = retunrFechaSqlphp($fechaTotal);
 
         if (!($NDIAS == 1 || $NDIAS == 2)) {
-
-          $FECHA_ACORDAR = retunrFechaSqlphp(date('Y-m-d', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days')));
+          // $FECHA_ACORDAR = restarDias($FECHA_TOTAL, $DIAS_DESCUENTO);
+          $FECHA_ACORDAR = date('d-m-Y', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days'));
           $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) values('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$NDIAS')");
         } else {
           $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) values('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$NDIAS')");
         }
+
 
 
         $stm1->execute();
@@ -606,14 +616,14 @@ class m_almacen
 
   public function actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion)
   {
-    $fecha_actualiza = convFecSistema1($FECHA_ACTUALIZA);
+    // $fecha_actualiza = convFecSistema1($FECHA_ACTUALIZA);
     $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacionTextArea, FECHA_TOTAL = :FECHA_ACTUALIZA, ACCION_CORRECTIVA = :ACCION_CORRECTIVA, VERIFICACION_REALIZADA=:VERIFICACION_REALIZADA WHERE COD_ALERTA = :COD_ALERTA");
 
 
     $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
     $stmt->bindParam(':observacionTextArea', $observacionTextArea, PDO::PARAM_STR);
     $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
-    $stmt->bindParam(':FECHA_ACTUALIZA', $fecha_actualiza);
+    $stmt->bindParam(':FECHA_ACTUALIZA', $FECHA_ACTUALIZA);
     $stmt->bindParam(':ACCION_CORRECTIVA', $accionCorrectiva);
     $stmt->bindParam(':VERIFICACION_REALIZADA', $selectVerificacion);
     $stmt->execute();
@@ -624,7 +634,6 @@ class m_almacen
   public function MostrarInfraestructuraPDF($anioSeleccionado, $mesSeleccionado)
   {
     try {
-
       $stm = $this->bd->prepare("SELECT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
                                   I.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA, A.N_DIAS_POS,
                                   A.ESTADO AS ESTADO, A.FECHA_TOTAL AS FECHA_TOTAL, A.OBSERVACION AS OBSERVACION,
@@ -634,9 +643,9 @@ class m_almacen
                                   INNER JOIN T_ZONA_AREAS AS Z ON Z.COD_ZONA = I.COD_ZONA
                                   WHERE MONTH(A.FECHA_TOTAL) = '$mesSeleccionado' AND YEAR(A.FECHA_TOTAL) = '$anioSeleccionado' AND ESTADO != 'P'");
 
-
       $stm->execute();
       $datos = $stm->fetchAll();
+      var_dump($datos);
       return $datos;
     } catch (Exception $e) {
       die($e->getMessage());
@@ -783,7 +792,9 @@ class m_almacen
   public function insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion)
   {
     try {
-      $fechaDHoy = date('Y-m-d');
+      $cod = new m_almacen();
+      $fechaDHoy = $cod->c_horaserversql('F');
+      // $fechaDHoy = date('Y-m-d');
 
       $stmU = $this->bd->prepare("SELECT * FROM T_UNION WHERE cast(FECHA as DATE) =cast('$fechaDHoy' as date)");
       $stmU->execute();
@@ -876,7 +887,8 @@ class m_almacen
       $codFrecuencia = $codGen->generarCodigoLimpieza();
       $version = $codGen->generarVersion();
 
-      $fechaDHoy = date('Y-m-d');
+      $fechaDHoy = $codGen->c_horaserversql('F');
+      // $fechaDHoy = date('Y-m-d');
 
       $stmFre = $this->bd->prepare("SELECT * FROM T_FRECUENCIA WHERE cast(FECHA as DATE) =cast('$fechaDHoy' as date) AND NOMBRE_FRECUENCIA='$textfrecuencia' AND COD_ZONA='$selectZona'");
 
