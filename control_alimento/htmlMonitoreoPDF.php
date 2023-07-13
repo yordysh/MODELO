@@ -36,6 +36,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
     <title>COVIFARMA</title>
 
 </head>
@@ -164,17 +165,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 
             </tr>
             <tr>
-                <td>Página:01</td>
-                <?php
-                // $totalDatos = count($datos);
-
-                // $datosPorPagina = 20;
-                // $paginaActual = 1;
-                // $totalPaginas = ceil($totalDatos / $datosPorPagina);
-
-                // echo "<td>Página: " . $paginaActual . " de " . $totalPaginas . "</td>";
-
-                ?>
+                <td>Página:</td>
             </tr>
             <tr>
                 <td>Fecha: <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
@@ -427,15 +418,6 @@ $versionMuestra = $mostrar->VersionMostrar();
 
         </tr>
     </table>
-    <?php
-    echo '<pre>';
-    print_r("AÑO: " . $anioSeleccionado . "<br> MES: " . $mesSeleccionado);
-    echo  '</pre>';
-
-    echo '<pre>';
-    print_r($datos);
-    echo  '</pre>';
-    ?>
 </body>
 
 </html>

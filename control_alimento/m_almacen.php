@@ -394,6 +394,7 @@ class m_almacen
       $repetir = $cod->contarRegistrosInfraestructura($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado);
 
       $FECHA = $cod->c_horaserversql('F');
+      // $FECHA = '10/07/2023';
       var_dump($FECHA);
 
       if ($repetir == 0) {
@@ -569,14 +570,7 @@ class m_almacen
 
   public function InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION)
   {
-    $stm = $this->bd->prepare("INSERT INTO T_ALERTA (COD_INFRAESTRUCTURA, FECHA_CREACION, FECHA_TOTAL, FECHA_ACORDAR, N_DIAS_POS,POSTERGACION) VALUES (:COD_INFRAESTRUCTURA, :FECHA_CREACION, :FECHA_TOTAL, :FECHA_ACORDAR, :N_DIAS_POS,:POSTERGACION)");
-
-    $stm->bindParam(':COD_INFRAESTRUCTURA', $codInfraestructura);
-    $stm->bindParam(':FECHA_CREACION', $fechaActual);
-    $stm->bindParam(':FECHA_TOTAL', $fechaPostergacion);
-    $stm->bindParam(':FECHA_ACORDAR', $fechaAcordar);
-    $stm->bindParam(':N_DIAS_POS', $taskNdias);
-    $stm->bindParam(':POSTERGACION', $POSTERGACION);
+    $stm = $this->bd->prepare("INSERT INTO T_ALERTA (COD_INFRAESTRUCTURA, FECHA_CREACION, FECHA_TOTAL,FECHA_ACORDAR, N_DIAS_POS,POSTERGACION) VALUES ( '$codInfraestructura','$fechaActual', '$fechaPostergacion','$fechaAcordar','$taskNdias','$POSTERGACION')");
 
     $insert2 = $stm->execute();
     return $insert2;

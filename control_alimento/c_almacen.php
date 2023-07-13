@@ -578,27 +578,24 @@ class c_almacen
         } elseif ($taskNdias == 7) {
 
             if (isset($_POST['fechaPostergacion'])) {
-                echo "aqui";
-                // $fechaCreacion = $_POST['fechaCreacion'];
+
                 $codInfraestructura = $_POST['codInfraestructura'];
-                $fechaPoster = $_POST['fechaPostergacion'];
-                $fechaPostergacion =  convFecSistema($fechaPoster);
-                // echo '<pre>';
-                // print_r($fechaPostergacion);
-                // echo  '</pre>';
-                // Verify and format the dates
-                // $fechaActual = date('Y-m-d');
+
+                $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
+                // echo "aqui";
+                // echo "FechaPOSTERGACION" . $fechaPostergacion;
+
+
                 $fechaActual = $mostrar->c_horaserversql('F');
-                $fechaPostergacion = date('Y-m-d', strtotime($fechaPostergacion));
-
-                //$FECHA_FORMATO = DateTime::createFromFormat('d/m/Y',  $fechaActual);
-                //$FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
 
 
+                $DIAS_DESCUENTO = 1;
 
-                $DIAS_DESCUENTO = 2;
-                $fechaAcordar = date('Y-m-d', strtotime($fechaPostergacion . '-' . $DIAS_DESCUENTO . ' days'));
+                $fechaPost = DateTime::createFromFormat('d/m/Y', $fechaPostergacion);
+                $formattedDate = $fechaPost->format('d-m-Y');
+                $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
 
+                // echo "FECHASS" . $fechaAcordar;
                 $POSTERGACION = 'SI';
 
                 $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION);
@@ -696,23 +693,23 @@ class c_almacen
             // }
             if (isset($_POST['fechaPostergacion'])) {
 
-                $fechaCreacion = $_POST['fechaCreacion'];
                 $codInfraestructura = $_POST['codInfraestructura'];
-                $fechaPostergacion = $_POST['fechaPostergacion'];
 
-                // Verify and format the dates
-                // $fechaActual = date('Y-m-d');
+                $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
+                // echo "aqui";
+                // echo "FechaPOSTERGACION" . $fechaPostergacion;
+
+
                 $fechaActual = $mostrar->c_horaserversql('F');
-                $fechaPostergacion = date('Y-m-d', strtotime($fechaPostergacion));
-
-                //$FECHA_FORMATO = DateTime::createFromFormat('d/m/Y',  $fechaActual);
-                //$FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
 
 
+                $DIAS_DESCUENTO = 1;
 
-                $DIAS_DESCUENTO = 2;
-                $fechaAcordar = date('Y-m-d', strtotime($fechaPostergacion . '-' . $DIAS_DESCUENTO . ' days'));
+                $fechaPost = DateTime::createFromFormat('d/m/Y', $fechaPostergacion);
+                $formattedDate = $fechaPost->format('d-m-Y');
+                $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
 
+                // echo "FECHASS" . $fechaAcordar;
                 $POSTERGACION = 'SI';
 
                 $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION);
@@ -723,7 +720,7 @@ class c_almacen
                     echo "Error en la inserción: ";
                 }
             } else {
-                $fechaCreacion = $_POST['fechaCreacion'];
+                // $fechaCreacion = $_POST['fechaCreacion'];
                 $codInfraestructura = $_POST['codInfraestructura'];
 
 
@@ -736,7 +733,7 @@ class c_almacen
 
                 // Verificar si la fecha total cae en domingo
                 if (date('N', strtotime($FECHA_TOTAL)) == 7) {
-                    $fechaTotal = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
+                    $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
                 }
 
 
@@ -811,23 +808,23 @@ class c_almacen
 
             if (isset($_POST['fechaPostergacion'])) {
 
-                $fechaCreacion = $_POST['fechaCreacion'];
                 $codInfraestructura = $_POST['codInfraestructura'];
-                $fechaPostergacion = $_POST['fechaPostergacion'];
 
-                // Verify and format the dates
-                // $fechaActual = date('Y-m-d');
+                $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
+                // echo "aqui";
+                // echo "FechaPOSTERGACION" . $fechaPostergacion;
+
+
                 $fechaActual = $mostrar->c_horaserversql('F');
-                $fechaPostergacion = date('Y-m-d', strtotime($fechaPostergacion));
-
-                //$FECHA_FORMATO = DateTime::createFromFormat('d/m/Y',  $fechaActual);
-                //$FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
 
 
+                $DIAS_DESCUENTO = 1;
 
-                $DIAS_DESCUENTO = 2;
-                $fechaAcordar = date('Y-m-d', strtotime($fechaPostergacion . '-' . $DIAS_DESCUENTO . ' days'));
+                $fechaPost = DateTime::createFromFormat('d/m/Y', $fechaPostergacion);
+                $formattedDate = $fechaPost->format('d-m-Y');
+                $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
 
+                // echo "FECHASS" . $fechaAcordar;
                 $POSTERGACION = 'SI';
 
                 $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION);
@@ -838,7 +835,7 @@ class c_almacen
                     echo "Error en la inserción: ";
                 }
             } else {
-                $fechaCreacion = $_POST['fechaCreacion'];
+                // $fechaCreacion = $_POST['fechaCreacion'];
                 $codInfraestructura = $_POST['codInfraestructura'];
 
 
@@ -851,7 +848,7 @@ class c_almacen
 
                 // Verificar si la fecha total cae en domingo
                 if (date('N', strtotime($FECHA_TOTAL)) == 7) {
-                    $fechaTotal = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
+                    $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
                 }
 
 

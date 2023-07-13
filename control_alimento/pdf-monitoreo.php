@@ -36,19 +36,15 @@ $dompdf = new Dompdf();
 
 $options = new Options();
 $options->setIsRemoteEnabled(true);
+
 $dompdf->setOptions($options);
 
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A2', 'landscape');
 
 $dompdf->render();
-
 $canvas = $dompdf->getCanvas();
-
-$pageCount = $dompdf->getCanvas()->get_page_count();
-
-for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
-    $canvas->page_text(10, 10, "Página: " . $pageNumber . " de " . $pageCount, false, 8, array(0, 0, 0));
-}
+$font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
+$canvas->page_text(1442, 69, "0{PAGE_NUM}", $font, 12, array(0, 0, 0));
 
 $dompdf->stream('Monitoreo.pdf', array('Attachment' => 0));
