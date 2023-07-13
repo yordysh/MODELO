@@ -464,8 +464,10 @@ class c_almacen
             $selectVerificacion = $_POST['selectVerificacion'];
 
             // $fechadHoy  = $mostrar->c_horaserversql('F');
-            $fechaActual = new DateTime();
-            $fechadHoy = $fechaActual->format('d/m/Y');
+            $fechadHoy = date('Y-m-d', strtotime($mostrar->c_horaserversql('F')));
+            // $fechadHoy = DateTime::createFromFormat('d/m/Y', $fecha);
+            // $fechaActual = new DateTime();
+            // $fechadHoy = $fechaActual->format('d/m/Y');
 
             if ($FECHA_TOTAL != $fechadHoy) {
                 $FECHA_ACTUALIZA = $fechadHoy;
@@ -578,7 +580,9 @@ class c_almacen
                 $fechaCreacion = $_POST['fechaCreacion'];
                 $codInfraestructura = $_POST['codInfraestructura'];
                 $fechaPostergacion = $_POST['fechaPostergacion'];
-
+                echo '<pre>';
+                print_r($fechaPostergacion);
+                echo  '</pre>';
                 // Verify and format the dates
                 // $fechaActual = date('Y-m-d');
                 $fechaActual = $mostrar->c_horaserversql('F');
