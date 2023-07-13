@@ -407,55 +407,6 @@ $versionMuestra = $mostrar->VersionMostrar();
 
         </tbody>
     </table>
-    <br>
-    <table style="margin-top: 50px; ">
-
-        <tr>
-            <td style="text-align: center; font-weight: 200;">N°</td>
-            <td style="text-align: center; font-weight: 200;">Fecha</td>
-            <td style="text-align: center; font-weight: 200;">Área/ Zona identificada</td>
-            <td style="text-align: center; font-weight: 200;">Hallazgo/ Observación</td>
-            <td style="text-align: center; font-weight: 200;">Acción correctiva</td>
-            <td style="text-align: center; font-weight: 200;">Verificación realizada</td>
-            <td style="text-align: center; font-weight: 200;">V°b°Supervisor</td>
-        </tr>
-
-        <tbody>
-            <?php
-            $contadorN = 0;
-            $nContador = 1;
-
-            $fechas = array_column($datos, 'FECHA_TOTAL');
-            array_multisort($fechas, SORT_ASC, $datos);
-
-
-            foreach ($datos as $fils) {
-                $contadorN++;
-                echo '<tr>';
-
-                echo '<td class="cabecera">' . $nContador . '</td>';
-                $nContador++;
-
-                echo '<td class="cabecera">' . convFecSistema($fils['FECHA_TOTAL']) . '</td>';
-                echo '<td class="cabecera">' . $fils['NOMBRE_T_ZONA_AREAS'] . '</td>';
-                echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
-                echo '<td class="cabecera">' . $fils['ACCION_CORRECTIVA'] . '</td>';
-                echo '<td class="cabecera">' . $fils['VERIFICACION_REALIZADA'] . '</td>';
-                echo '<td></td>';
-
-                echo '</tr>';
-                // if ($contadorN % 15 == 0) {
-                //     echo '<tr>';
-                //     for ($i = 0; $i < 7; $i++) {
-                //         echo '<td style="text-align:center;height:13.5rem; border-left:none; border-right:none;"></td>';
-                //     }
-                //     echo '</tr>';
-                // }
-            }
-            ?>
-
-        </tbody>
-    </table>
 
     <!-- Table firma y fecha-->
     <table style="margin-top: 50px; border:none;">

@@ -599,17 +599,8 @@ class m_almacen
 
   public function actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion)
   {
-    // $fecha_actualiza = convFecSistema1($FECHA_ACTUALIZA);
-    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacion, FECHA_POSTERGACION= :fechaPostergacion, FECHA_TOTAL = :FECHA_ACTUALIZA, ACCION_CORRECTIVA = :ACCION_CORRECTIVA, VERIFICACION_REALIZADA=:VERIFICACION_REALIZADA WHERE COD_ALERTA = :COD_ALERTA");
 
-
-    $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
-    $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
-    $stmt->bindParam(':observacion', $observacion, PDO::PARAM_STR);
-    $stmt->bindParam(':fechaPostergacion',  $FECHA_POSTERGACION);
-    $stmt->bindParam(':FECHA_ACTUALIZA', $FECHA_ACTUALIZA);
-    $stmt->bindParam(':ACCION_CORRECTIVA', $accionCorrectiva);
-    $stmt->bindParam(':VERIFICACION_REALIZADA', $selectVerificacion);
+    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = '$estado', OBSERVACION = '$observacion', FECHA_POSTERGACION= '$FECHA_POSTERGACION', FECHA_TOTAL = '$FECHA_ACTUALIZA', ACCION_CORRECTIVA = '$accionCorrectiva', VERIFICACION_REALIZADA='$selectVerificacion' WHERE COD_ALERTA = '$taskId'");
     $stmt->execute();
     return $stmt;
   }
