@@ -463,8 +463,8 @@ class c_almacen
             $accionCorrectiva = $_POST['accionCorrectiva'];
             $selectVerificacion = $_POST['selectVerificacion'];
 
-            // $fechadHoy  = $mostrar->c_horaserversql('F');
-            $fechadHoy = date('Y-m-d', strtotime($mostrar->c_horaserversql('F')));
+            $fechadHoy  = $mostrar->c_horaserversql('F');
+            //$fechadHoy = date('Y-m-d', strtotime($mostrar->c_horaserversql('F')));
             // $fechadHoy = DateTime::createFromFormat('d/m/Y', $fecha);
             // $fechaActual = new DateTime();
             // $fechadHoy = $fechaActual->format('d/m/Y');
