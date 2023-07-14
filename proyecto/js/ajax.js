@@ -86,8 +86,8 @@ $(function () {
 
         const task = data[index];
 
-        let accionCorrectiva;
-        let selectVerificacion;
+        var accionCorrectiva;
+        var selectVerificacion;
 
         Swal.fire({
           title: "Información",
