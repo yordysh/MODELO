@@ -35,6 +35,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="http://192.168.1.102/SISTEMA/control_alimento/images/icon/covifarma-ico.ico" type="images/png">
     <title>Preparación y soluciones</title>
 </head>
 
@@ -112,7 +113,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         <table>
             <tbody>
                 <tr>
-                    <td rowspan="4" class="cabecera"><img src="./images/logo-covifarmaRecorte.png" alt=""></td>
+                    <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
                     <td rowspan="4" style="text-align: center;">PREPARACIÓN DE SOLUCIÓN DE LIMPIEZA Y DESINFECCIÓN - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                     <td>LBS-PHS-FR-02</td>
 
@@ -243,61 +244,61 @@ $versionMuestra = $mostrar->VersionMostrar();
                 echo '<td style="text-align:center;">' . convFecSistema($filas['FECHA']) . '</td>';
                 for ($i = 0; $i < 28; $i++) {
                     if ($i == 0 && $filas['CANTIDAD_MILILITROS'] == '50ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 1 && $filas['CANTIDAD_MILILITROS'] == '250ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 2 && $filas['CANTIDAD_MILILITROS'] == '500ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 3 && $filas['CANTIDAD_MILILITROS'] == '39ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 4 && $filas['CANTIDAD_MILILITROS'] == '195ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 5 && $filas['CANTIDAD_MILILITROS'] == '390ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 6 && $filas['CANTIDAD_MILILITROS'] == '75g') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 7 && $filas['CANTIDAD_MILILITROS'] == '150g') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 8 && $filas['CANTIDAD_MILILITROS'] == '300g') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 9 && $filas['CANTIDAD_MILILITROS'] == '400g') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 10 && $filas['CANTIDAD_MILILITROS'] == '0.7ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 11 && $filas['CANTIDAD_MILILITROS'] == '3.3ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 12 && $filas['CANTIDAD_MILILITROS'] == '6.7ml' && $filas['CANTIDAD_LITROS'] == '10L') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 13 && $filas['CANTIDAD_MILILITROS'] == '1.3ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 14 && $filas['CANTIDAD_MILILITROS'] == '6.7ml' && $filas['CANTIDAD_LITROS'] == '5L') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 15 && $filas['CANTIDAD_MILILITROS'] == '13.3ml' && $filas['CANTIDAD_LITROS'] == '10L') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 16 && $filas['CANTIDAD_MILILITROS'] == '2.7ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 17 && $filas['CANTIDAD_MILILITROS'] == '13.3ml' && $filas['CANTIDAD_LITROS'] == '5L') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 18 && $filas['CANTIDAD_MILILITROS'] == '26.7ml' && $filas['CANTIDAD_LITROS'] == '10L') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 19 && $filas['CANTIDAD_MILILITROS'] == '4ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 20 && $filas['CANTIDAD_MILILITROS'] == '20ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 21 && $filas['CANTIDAD_MILILITROS'] == '40ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 22 && $filas['CANTIDAD_MILILITROS'] == '5.3ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 23 && $filas['CANTIDAD_MILILITROS'] == '26.7ml' && $filas['CANTIDAD_LITROS'] == '5L') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 24 && $filas['CANTIDAD_MILILITROS'] == '53.3ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 25 && $filas['CANTIDAD_MILILITROS'] == '1.7ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 26 && $filas['CANTIDAD_MILILITROS'] == '8.6ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else if ($i == 27 && $filas['CANTIDAD_MILILITROS'] == '17.2ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt=""></td>';
+                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                     } else {
                         echo '<td style="text-align:center;"></td>';
                     }

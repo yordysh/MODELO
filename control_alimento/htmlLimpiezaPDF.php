@@ -36,6 +36,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="http://192.168.1.102/SISTEMA/control_alimento/images/icon/covifarma-ico.ico" type="images/png">
     <title>Limpieza y desinfección</title>
 </head>
 
@@ -118,7 +119,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         <table>
             <tbody>
                 <tr>
-                    <td rowspan="4" style="text-align: center;"><img src="./images/logo-covifarmaRecorte.png" alt=""></td>
+                    <td rowspan="4" style="text-align: center;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
                     <td rowspan="4" style="text-align: center;">LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS DE LIMPIEZA - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                     <td>LBS-PHS-FR-04</td>
 
@@ -223,7 +224,7 @@ $versionMuestra = $mostrar->VersionMostrar();
                             for ($i = 1; $i <= $numDias; $i++) {
                                 if (in_array($i, $fechasArray)) {
 
-                                    echo '<td style="text-align:center; max-width: 10px;"><img src="./images/check.png" alt="" width="25"></td>';
+                                    echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt="" width="25"></td>';
                                 } else {
                                     echo "<td></td>";
                                 }

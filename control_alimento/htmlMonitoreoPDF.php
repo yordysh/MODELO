@@ -36,7 +36,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
+    <link rel="shortcut icon" href="http://192.168.1.102/SISTEMA/control_alimento/images/icon/covifarma-ico.ico" type="images/png">
     <title>COVIFARMA</title>
 
 </head>
@@ -152,7 +152,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         <table>
 
             <tr>
-                <td rowspan="4" class="cabecera"><img src="./images/logo-covifarmaRecorte.png" alt=""></td>
+                <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
                 <td rowspan="4" style="text-align: center;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS - MES DE <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                 <td>LBS-PHS-FR-01</th>
             </tr>
