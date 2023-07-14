@@ -150,8 +150,12 @@ if ($_POST['accion'] == 'insertarLimpieza') {
     $selectZona = trim($_POST['selectZona']);
     $textfrecuencia = strtoupper(trim($_POST['textfrecuencia']));
 
+    $textAreaObservacion = trim($_POST['textAreaObservacion']);
+    $textAreaAccion = trim($_POST['textAreaAccion']);
+    $selectVerificacion = trim($_POST['selectVerificacion']);
 
-    $respuesta = c_almacen::c_insertar_limpieza($selectZona, $textfrecuencia);
+
+    $respuesta = c_almacen::c_insertar_limpieza($selectZona, $textfrecuencia,  $textAreaObservacion,  $textAreaAccion, $selectVerificacion);
     echo $respuesta;
 }
 if ($_POST['accion'] == 'editarLimpieza') {
@@ -455,21 +459,27 @@ class c_almacen
             $FECHA_POSTERGACION = $_POST['fechaPostergacion'];
             $FECHA_TOTAL = $_POST['taskFecha'];
 
+            $accionCorrectiva = $_POST['accionCorrectiva'];
+            $selectVerificacion = $_POST['selectVerificacion'];
+
             $fechaActual = new DateTime();
             $fechadHoy = $fechaActual->format('d/m/Y');
 
             if ($FECHA_TOTAL != $fechadHoy) {
                 $FECHA_ACTUALIZA = $fechadHoy;
-                $alert = $mostrar->actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA);
+                $alert = $mostrar->actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion);
             } else {
                 $FECHA_ACTUALIZA = $FECHA_TOTAL;
-                $alert = $mostrar->actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA);
+                $alert = $mostrar->actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion);
             }
         } else {
             $estado = $_POST['estado'];
             $taskId = $_POST['taskId'];
             $observacionTextArea = $_POST['observacionTextArea'];
             $FECHA_TOTAL = $_POST['taskFecha'];
+            $accionCorrectiva = $_POST['accionCorrectiva'];
+            $selectVerificacion = $_POST['selectVerificacion'];
+
 
 
 
@@ -479,10 +489,10 @@ class c_almacen
 
             if ($FECHA_TOTAL != $fechadHoy) {
                 $FECHA_ACTUALIZA = $fechadHoy;
-                $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA);
+                $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion);
             } else {
                 $FECHA_ACTUALIZA = $FECHA_TOTAL;
-                $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA);
+                $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion);
             }
         }
         $insert2 = $alert->execute();
@@ -905,12 +915,12 @@ class c_almacen
 
 
 
-    static function c_insertar_limpieza($selectZona, $textfrecuencia)
+    static function c_insertar_limpieza($selectZona, $textfrecuencia,  $textAreaObservacion,  $textAreaAccion, $selectVerificacion)
     {
         $mostrar = new m_almacen();
-        if (isset($selectZona) && isset($textfrecuencia)) {
+        if (isset($selectZona) && isset($textfrecuencia) && isset($textAreaObservacion) && isset($textAreaAccion) && isset($selectVerificacion)) {
 
-            $respuesta = $mostrar->insertarLimpieza($selectZona, $textfrecuencia);
+            $respuesta = $mostrar->insertarLimpieza($selectZona, $textfrecuencia,  $textAreaObservacion,  $textAreaAccion, $selectVerificacion);
             if ($respuesta) {
 
                 return "ok";

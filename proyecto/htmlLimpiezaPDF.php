@@ -24,8 +24,8 @@ $mesesEnLetras = array(
 $mesConvert = $mesesEnLetras[$mesNumerico];
 
 $mostrar = new m_almacen();
-$data = $mostrar->MostrarLimpiezaPDF($anioSeleccionado, $mesSeleccionado);
-$dataLimpieza = $mostrar->MostrarLimpiezaPD();
+$dataLimpieza = $mostrar->MostrarLimpiezaPDF($anioSeleccionado, $mesSeleccionado);
+// $dataLimpieza = $mostrar->MostrarLimpiezaPD();
 $versionMuestra = $mostrar->VersionMostrar();
 
 
@@ -69,9 +69,10 @@ $versionMuestra = $mostrar->VersionMostrar();
             text-align: center;
         }
 
-        .cabecera-fila td,
-        .cabecera {
+
+        .cabeceraOb {
             text-align: center;
+            background-color: #a3a0a0;
         }
 
         .mover-derecha {
@@ -91,12 +92,21 @@ $versionMuestra = $mostrar->VersionMostrar();
             background-color: black;
             margin-top: 18px;
         }
+
+        .tdFecha::after {
+            content: '';
+            position: absolute;
+            width: 220px;
+            height: 0.5px;
+            background-color: black;
+            margin-top: 18px;
+        }
     </style>
     <!-- Table titulo-->
     <table style="margin-bottom: 50px;">
         <tbody>
             <tr>
-                <td rowspan="4" class="cabecera"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/images/logo-covifarmaRecorte.png" alt=""></td>
+                <td rowspan="4" style="text-align: center;"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/images/logo-covifarmaRecorte.png" alt=""></td>
                 <td rowspan="4" style="text-align: center;">LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS DE LIMPIEZA - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                 <td>LBS-PHS-FR-04</td>
 
@@ -135,7 +145,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         </tbody>
     </table>
     <!-- Table solucion y preparaciones-->
-    <table>
+    <table style="margin-bottom: 50px;">
         <tbody>
             <tr>
                 <?php
@@ -223,7 +233,47 @@ $versionMuestra = $mostrar->VersionMostrar();
         </tbody>
     </table>
 
+    <!-- Table observacion-->
+    <table style="margin-bottom: 50px;">
+        <tbody>
+            <tr>
+                <td class="cabeceraOb">FECHA</td>
+                <td class="cabeceraOb">OBSERVACIÓN</td>
+                <td class="cabeceraOb">ACCIÓN CORRECTIVA</td>
+                <td class="cabeceraOb">VERIFICACIÓN</td>
+                <td class="cabeceraOb">V°B°</td>
+            </tr>
+            <tr>
+                <?php
+                foreach ($dataLimpieza as $row) {
+                    echo '<tr>';
+                    echo '<td style="text-align: center;">' . convFecSistema($row['FECHA']) . '</td>';
+                    echo '<td style="text-align: center;">' . $row['OBSERVACION'] . '</td>';
+                    echo '<td style="text-align: center;">' . $row['ACCION_CORRECTIVA'] . '</td>';
+                    echo '<td style="text-align: center;">' . $row['VERIFICACION'] . '</td>';
+                    echo '<td></td>';
+                    echo '</tr>';
+                }
+                ?>
+            </tr>
+        </tbody>
+    </table>
 
+    <!-- Table firma y fecha-->
+    <table style="margin-top: 50px; border:none;">
+        <tr>
+            <td style="padding-left: 500px; border:none;"></td>
+            <td style="padding-left: 200px; border:none;"></td>
+            <td style="padding-left: 100px; border-left: none; border-bottom:none; border-right: none;">JEFE DE ASEGURAMIENTO DE LA CALIDAD</td>
+            <td style="padding-left: 700px; border:none;"></td>
+        </tr>
+        <tr>
+            <td style="padding-left: 500px; border:none;"></td>
+            <td style="padding-left: 200px; border:none;"></td>
+            <td class="tdFecha" style="margin-top:10px; padding-left: 150px; border:0; display:inline-block;">FECHA </td>
+            <td style="padding-left: 700px; border:none;"></td>
+        </tr>
+    </table>
 </body>
 
 </html>

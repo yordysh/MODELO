@@ -70,6 +70,10 @@ $(function () {
     var selectZona = $("#selectZona").val();
     var textfrecuencia = $("#nombreFrecuencia").val();
 
+    var textAreaObservacion = $("#textAreaObservacion").val();
+    var textAreaAccion = $("#textAreaAccion").val();
+    var selectVerificacion = $("#selectVerificacion option:selected").text();
+
     const accion = edit === false ? "insertarLimpieza" : "actualizarLimpieza";
 
     $.ajax({
@@ -78,6 +82,9 @@ $(function () {
         accion: accion,
         selectZona: selectZona,
         textfrecuencia: textfrecuencia,
+        textAreaObservacion: textAreaObservacion,
+        textAreaAccion: textAreaAccion,
+        selectVerificacion: selectVerificacion,
         codfre: $("#taskId").val(),
       },
       type: "POST",

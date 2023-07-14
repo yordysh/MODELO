@@ -588,10 +588,10 @@ class m_almacen
     return $insert2;
   }
 
-  public function actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA)
+  public function actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion)
   {
     $fecha_actualiza = convFecSistema1($FECHA_ACTUALIZA);
-    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacion, FECHA_POSTERGACION= :fechaPostergacion, FECHA_TOTAL = :FECHA_ACTUALIZA WHERE COD_ALERTA = :COD_ALERTA");
+    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacion, FECHA_POSTERGACION= :fechaPostergacion, FECHA_TOTAL = :FECHA_ACTUALIZA, ACCION_CORRECTIVA = :ACCION_CORRECTIVA, VERIFICACION_REALIZADA=:VERIFICACION_REALIZADA WHERE COD_ALERTA = :COD_ALERTA");
 
 
     $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
@@ -599,20 +599,24 @@ class m_almacen
     $stmt->bindParam(':observacion', $observacion, PDO::PARAM_STR);
     $stmt->bindParam(':fechaPostergacion',  $FECHA_POSTERGACION);
     $stmt->bindParam(':FECHA_ACTUALIZA', $fecha_actualiza);
+    $stmt->bindParam(':ACCION_CORRECTIVA', $accionCorrectiva);
+    $stmt->bindParam(':VERIFICACION_REALIZADA', $selectVerificacion);
     $stmt->execute();
     return $stmt;
   }
 
-  public function actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA)
+  public function actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion)
   {
     $fecha_actualiza = convFecSistema1($FECHA_ACTUALIZA);
-    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacionTextArea, FECHA_TOTAL = :FECHA_ACTUALIZA WHERE COD_ALERTA = :COD_ALERTA");
+    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacionTextArea, FECHA_TOTAL = :FECHA_ACTUALIZA, ACCION_CORRECTIVA = :ACCION_CORRECTIVA, VERIFICACION_REALIZADA=:VERIFICACION_REALIZADA WHERE COD_ALERTA = :COD_ALERTA");
 
 
     $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
     $stmt->bindParam(':observacionTextArea', $observacionTextArea, PDO::PARAM_STR);
     $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
     $stmt->bindParam(':FECHA_ACTUALIZA', $fecha_actualiza);
+    $stmt->bindParam(':ACCION_CORRECTIVA', $accionCorrectiva);
+    $stmt->bindParam(':VERIFICACION_REALIZADA', $selectVerificacion);
     $stmt->execute();
     return $stmt;
   }
@@ -863,7 +867,7 @@ class m_almacen
     }
   }
 
-  public function insertarLimpieza($selectZona, $textfrecuencia)
+  public function insertarLimpieza($selectZona, $textfrecuencia,  $textAreaObservacion,  $textAreaAccion, $selectVerificacion)
   {
     try {
 
@@ -873,26 +877,21 @@ class m_almacen
       $codFrecuencia = $codGen->generarCodigoLimpieza();
       $version = $codGen->generarVersion();
 
-      $repetir = $codGen->contarRegistrosLimpieza($textfrecuencia, $selectZona);
-
       $fechaDHoy = date('Y-m-d');
 
-      $stmFre = $this->bd->prepare("SELECT * FROM T_FRECUENCIA WHERE cast(FECHA as DATE) =cast('$fechaDHoy' as date)");
+      $stmFre = $this->bd->prepare("SELECT * FROM T_FRECUENCIA WHERE cast(FECHA as DATE) =cast('$fechaDHoy' as date) AND NOMBRE_FRECUENCIA='$textfrecuencia' AND COD_ZONA='$selectZona'");
+
       $stmFre->execute();
       $valor = $stmFre->fetchAll();
 
       $contador = count($valor);
 
-      if ($repetir == 0 && $contador == 0) {
+      if ($contador == 0) {
 
-
-        $stm = $this->bd->prepare("INSERT INTO T_FRECUENCIA(COD_FRECUENCIA, COD_ZONA, NOMBRE_FRECUENCIA, VERSION) 
-                                  VALUES ('$codFrecuencia','$selectZona', '$textfrecuencia','$version')");
+        $stm = $this->bd->prepare("INSERT INTO T_FRECUENCIA(COD_FRECUENCIA, COD_ZONA, NOMBRE_FRECUENCIA, VERSION,OBSERVACION,ACCION_CORRECTIVA,VERIFICACION) 
+                                  VALUES ('$codFrecuencia','$selectZona', '$textfrecuencia','$version','$textAreaObservacion','$textAreaAccion','$selectVerificacion')");
 
         $insert = $stm->execute();
-
-
-
 
         if ($version == '01') {
 
@@ -929,89 +928,6 @@ class m_almacen
         $insert = $this->bd->commit();
 
         return $insert;
-      } else if ($contador != 0) {
-
-        if ($repetir == 0) {
-          $stm = $this->bd->prepare("INSERT INTO T_FRECUENCIA(COD_FRECUENCIA, COD_ZONA, NOMBRE_FRECUENCIA, VERSION) 
-                                        VALUES ('$codFrecuencia','$selectZona', '$textfrecuencia','$version')");
-          $insert = $stm->execute();
-
-          if ($version == '01') {
-
-            $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
-
-
-            $stmver->execute();
-            $valor = $stmver->fetchAll();
-
-            $valor1 = count($valor);
-
-            if ($valor1 == 0) {
-              $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) VALUES ( :version)");
-              $stm1->bindParam(':version', $version, PDO::PARAM_STR);
-              $stm1->execute();
-            }
-          } else {
-            $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
-
-
-            $stmver->execute();
-            $valor = $stmver->fetchAll();
-
-            $valor1 = count($valor);
-
-            if ($valor1 == 0) {
-              $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
-              $stm1->bindParam(':VERSION', $version, PDO::PARAM_STR);
-              $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
-              $stm1->execute();
-            }
-          }
-
-          $insert = $this->bd->commit();
-
-          return $insert;
-        } elseif ($repetir != 0) {
-          $stm = $this->bd->prepare("INSERT INTO T_FRECUENCIA(COD_FRECUENCIA, COD_ZONA, NOMBRE_FRECUENCIA, VERSION) 
-          VALUES ('$codFrecuencia','$selectZona', '$textfrecuencia','$version')");
-          $insert = $stm->execute();
-
-          if ($version == '01') {
-
-            $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
-
-
-            $stmver->execute();
-            $valor = $stmver->fetchAll();
-
-            $valor1 = count($valor);
-
-            if ($valor1 == 0) {
-              $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) VALUES ( :version)");
-              $stm1->bindParam(':version', $version, PDO::PARAM_STR);
-              $stm1->execute();
-            }
-          } else {
-            $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
-
-
-            $stmver->execute();
-            $valor = $stmver->fetchAll();
-
-            $valor1 = count($valor);
-
-            if ($valor1 == 0) {
-              $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
-              $stm1->bindParam(':VERSION', $version, PDO::PARAM_STR);
-              $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
-              $stm1->execute();
-            }
-          }
-
-          $insert = $this->bd->commit();
-
-          return $insert;
-        }
       }
     } catch (Exception $e) {
       $this->bd->rollBack();
@@ -1057,7 +973,13 @@ class m_almacen
 
 
       $stm = $this->bd->prepare(
-        "SELECT * FROM T_UNION WHERE MONTH(FECHA) = :mesSeleccionado AND YEAR(FECHA) = :anioSeleccionado"
+        "SELECT T_FRECUENCIA.COD_FRECUENCIA AS COD_FRECUENCIA, 
+        T_FRECUENCIA.NOMBRE_FRECUENCIA AS NOMBRE_FRECUENCIA, 
+        T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
+        T_FRECUENCIA.FECHA AS FECHA,T_FRECUENCIA.OBSERVACION AS OBSERVACION,
+        T_FRECUENCIA.ACCION_CORRECTIVA AS ACCION_CORRECTIVA,T_FRECUENCIA.VERIFICACION AS VERIFICACION
+        FROM T_FRECUENCIA INNER JOIN T_ZONA_AREAS ON T_FRECUENCIA.COD_ZONA=T_ZONA_AREAS.COD_ZONA 
+        WHERE MONTH(T_FRECUENCIA.FECHA) = :mesSeleccionado AND YEAR(T_FRECUENCIA.FECHA) = :anioSeleccionado"
       );
       $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
       $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
@@ -1069,25 +991,25 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function MostrarLimpiezaPD()
-  {
-    try {
+  // public function MostrarLimpiezaPD()
+  // {
+  //   try {
 
 
-      $stm = $this->bd->prepare(
-        "SELECT T_FRECUENCIA.COD_FRECUENCIA AS COD_FRECUENCIA, 
-        T_FRECUENCIA.NOMBRE_FRECUENCIA AS NOMBRE_FRECUENCIA, 
-        T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
-        T_FRECUENCIA.FECHA AS FECHA
-        FROM T_FRECUENCIA INNER JOIN T_ZONA_AREAS ON T_FRECUENCIA.COD_ZONA=T_ZONA_AREAS.COD_ZONA "
-      );
+  //     $stm = $this->bd->prepare(
+  //       "SELECT T_FRECUENCIA.COD_FRECUENCIA AS COD_FRECUENCIA, 
+  //       T_FRECUENCIA.NOMBRE_FRECUENCIA AS NOMBRE_FRECUENCIA, 
+  //       T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
+  //       T_FRECUENCIA.FECHA AS FECHA
+  //       FROM T_FRECUENCIA INNER JOIN T_ZONA_AREAS ON T_FRECUENCIA.COD_ZONA=T_ZONA_AREAS.COD_ZONA "
+  //     );
 
-      $stm->execute();
-      $datos = $stm->fetchAll();
+  //     $stm->execute();
+  //     $datos = $stm->fetchAll();
 
-      return $datos;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
+  //     return $datos;
+  //   } catch (Exception $e) {
+  //     die($e->getMessage());
+  //   }
+  // }
 }

@@ -89,6 +89,27 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                             <input type="text" id="nombreFrecuencia" class="form-control" name="nombreFrecuencia" required>
                         </div>
 
+                        <!-- Text input Observacion-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Observaciones</label>
+                            <textarea class="form-control" id="textAreaObservacion" rows="3"></textarea>
+                        </div>
+                        <!-- Text input Acciones-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Acciones correctivas</label>
+                            <textarea class="form-control" id="textAreaAccion" rows="3"></textarea>
+                        </div>
+                        <!-- Text input verificacion-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Verificación</label>
+                            <select id="selectVerificacion" class="form-select" aria-label="Default select example">
+                                <option value="0" selected disabled>Seleccione verificación</option>
+                                <option value="1">Conforme</option>
+                                <option value="2">No conforme</option>
+
+                            </select>
+                        </div>
+
                         <!-- Submit button -->
                         <div class="container">
                             <div class="row">
