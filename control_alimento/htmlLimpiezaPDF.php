@@ -36,7 +36,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preparacion y soluciones</title>
+    <title>Limpieza y desinfección</title>
 </head>
 
 <body>
@@ -101,34 +101,47 @@ $versionMuestra = $mostrar->VersionMostrar();
             background-color: black;
             margin-top: 18px;
         }
+
+        body {
+            margin: 50mm 8mm 2mm 8mm;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
     </style>
     <!-- Table titulo-->
-    <table style="margin-bottom: 50px;">
-        <tbody>
-            <tr>
-                <td rowspan="4" style="text-align: center;"><img src="./images/logo-covifarmaRecorte.png" alt=""></td>
-                <td rowspan="4" style="text-align: center;">LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS DE LIMPIEZA - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
-                <td>LBS-PHS-FR-04</td>
+    <header>
+        <table>
+            <tbody>
+                <tr>
+                    <td rowspan="4" style="text-align: center;"><img src="./images/logo-covifarmaRecorte.png" alt=""></td>
+                    <td rowspan="4" style="text-align: center;">LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS DE LIMPIEZA - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                    <td>LBS-PHS-FR-04</td>
 
-            </tr>
-            <tr>
-                <?php foreach ($versionMuestra as $version) { ?>
-                    <td>Versión: <?php echo $version['VERSION'] ?> </td>
-                <?php
-                }
-                ?>
+                </tr>
+                <tr>
+                    <?php foreach ($versionMuestra as $version) { ?>
+                        <td>Versión: <?php echo $version['VERSION'] ?> </td>
+                    <?php
+                    }
+                    ?>
 
-            </tr>
-            <tr>
-                <td>Página:01</td>
-            </tr>
-            <tr>
-                <td>Fecha: <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
-            </tr>
+                </tr>
+                <tr>
+                    <td>Página:</td>
+                </tr>
+                <tr>
+                    <td>Fecha: <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                </tr>
 
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </header>
     <!-- Table Firma y año-->
     <table style="margin-bottom: 50px;">
         <tbody>

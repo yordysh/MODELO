@@ -18,11 +18,11 @@ $(function () {
             tasks.forEach((task) => {
               template += `<tr taskId="${task.ID_UNION}">
 
-                <td>${task.NOMBRE_INSUMOS}</td>
-                <td>${task.NOMBRE_PREPARACION}</td>
-                <td>${task.CANTIDAD_PORCENTAJE}</td>
-                <td>${task.CANTIDAD_MILILITROS}</td>
-                <td>${task.CANTIDAD_LITROS}</td>
+                <td style="text-align:center;">${task.NOMBRE_INSUMOS}</td>
+                <td style="text-align:center;">${task.NOMBRE_PREPARACION}</td>
+                <td style="text-align:center;">${task.CANTIDAD_PORCENTAJE}</td>
+                <td style="text-align:center;">${task.CANTIDAD_MILILITROS}</td>
+                <td style="text-align:center;">${task.CANTIDAD_LITROS}</td>
                 <td>${task.FECHA}</td>
 
               </tr>`;
@@ -49,11 +49,11 @@ $(function () {
           tasks.forEach((task) => {
             template += `<tr taskId="${task.ID_UNION}">
 
-              <td>${task.NOMBRE_INSUMOS}</td>
-              <td>${task.NOMBRE_PREPARACION}</td>
-              <td>${task.CANTIDAD_PORCENTAJE}</td>
-              <td>${task.CANTIDAD_MILILITROS}</td>
-              <td>${task.CANTIDAD_LITROS}</td>
+              <td style="text-align:center;">${task.NOMBRE_INSUMOS}</td>
+              <td style="text-align:center;">${task.NOMBRE_PREPARACION}</td>
+              <td style="text-align:center;">${task.CANTIDAD_PORCENTAJE}</td>
+              <td style="text-align:center;">${task.CANTIDAD_MILILITROS}</td>
+              <td style="text-align:center;">${task.CANTIDAD_LITROS}</td>
               <td>${task.FECHA}</td>
 
             </tr>`;

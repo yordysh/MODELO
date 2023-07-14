@@ -86,7 +86,7 @@ $data = $mostrar->MostrarAlmacenMuestra();
                                 <tr>
 
                                     <th class="thtitulo" scope="col">CODIGO</th>
-                                    <th class="thtitulo" scope="col">NOMBRE DE AREA</th>
+                                    <th class="thtitulo" scope="col">NOMBRE</th>
                                     <th class="thtitulo" scope="col">FECHA</th>
                                     <th class="thtitulo" scope="col">VERSION</th>
                                     <th></th>
@@ -101,7 +101,6 @@ $data = $mostrar->MostrarAlmacenMuestra();
 
 
                 </div>
-            </div>
             </div>
         </section>
     </main>

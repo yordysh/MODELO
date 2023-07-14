@@ -144,6 +144,13 @@
   width: 100%;
   height: 84%;
 }
+.title{
+  margin-top: 10px;
+  font-weight: 600;
+}
+.thtitulo{
+  text-align: center!important;
+}
 /*-------------- Cambios de estilo nabvar ---------------------*/
 .bar-color  {
   background-color:  #5b8ccc  !important;

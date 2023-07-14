@@ -163,7 +163,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                                 <tr>
                                     <th class="thtitulo" scope="col">COD. FRECUENCIA</th>
                                     <th class="thtitulo" scope="col">ZONA/ÁREA</th>
-                                    <th class="thtitulo" scope="col">ÍTEM(FRECUENCIA)</th>
+                                    <th class="thtitulo" scope="col">FRECUENCIA</th>
                                     <th class="thtitulo" scope="col">FECHA</th>
                                     <th class="thtitulo" scope="col">VERSION</th>
                                     <th></th>
@@ -175,9 +175,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                         </table>
                     </div>
 
-
                 </div>
-            </div>
             </div>
         </section>
     </main>

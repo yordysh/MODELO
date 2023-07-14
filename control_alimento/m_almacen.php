@@ -619,14 +619,7 @@ class m_almacen
   public function MostrarInfraestructuraPDF($anioSeleccionado, $mesSeleccionado)
   {
     try {
-      $stm = $this->bd->prepare("SELECT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
-                                  I.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA, A.N_DIAS_POS,
-                                  A.ESTADO AS ESTADO, A.FECHA_TOTAL AS FECHA_TOTAL, A.OBSERVACION AS OBSERVACION,
-                                  A.ACCION_CORRECTIVA AS ACCION_CORRECTIVA ,A.VERIFICACION_REALIZADA AS VERIFICACION_REALIZADA
-                                  FROM T_ALERTA A
-                                  INNER JOIN T_INFRAESTRUCTURA AS I ON A.COD_INFRAESTRUCTURA = I.COD_INFRAESTRUCTURA
-                                  INNER JOIN T_ZONA_AREAS AS Z ON Z.COD_ZONA = I.COD_ZONA
-                                  WHERE MONTH(A.FECHA_TOTAL) = '$mesSeleccionado' AND YEAR(A.FECHA_TOTAL) = '$anioSeleccionado' AND ESTADO != 'P'");
+      $stm = $this->bd->prepare("SELECT * FROM V_LISTADO_MONITOREOPDF WHERE MONTH(FECHA_TOTAL) = '$mesSeleccionado' AND YEAR(FECHA_TOTAL) = '$anioSeleccionado'");
 
       $stm->execute();
       $datos = $stm->fetchAll();
@@ -969,13 +962,7 @@ class m_almacen
 
 
       $stm = $this->bd->prepare(
-        "SELECT T_FRECUENCIA.COD_FRECUENCIA AS COD_FRECUENCIA, 
-        T_FRECUENCIA.NOMBRE_FRECUENCIA AS NOMBRE_FRECUENCIA, 
-        T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
-        T_FRECUENCIA.FECHA AS FECHA,T_FRECUENCIA.OBSERVACION AS OBSERVACION,
-        T_FRECUENCIA.ACCION_CORRECTIVA AS ACCION_CORRECTIVA,T_FRECUENCIA.VERIFICACION AS VERIFICACION
-        FROM T_FRECUENCIA INNER JOIN T_ZONA_AREAS ON T_FRECUENCIA.COD_ZONA=T_ZONA_AREAS.COD_ZONA 
-        WHERE MONTH(T_FRECUENCIA.FECHA) = :mesSeleccionado AND YEAR(T_FRECUENCIA.FECHA) = :anioSeleccionado"
+        "SELECT * FROM V_LISTADO_LIMPIEZAPDF WHERE MONTH(FECHA) = :mesSeleccionado AND YEAR(FECHA) = :anioSeleccionado"
       );
       $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
       $stm->bindParam(':anioSeleccionado', $anioSeleccionado);

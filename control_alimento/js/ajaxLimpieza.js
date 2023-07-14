@@ -16,11 +16,11 @@ $(function () {
             let template = ``;
             tasks.forEach((task) => {
               template += `<tr taskId="${task.COD_FRECUENCIA}">
-              <td>${task.COD_FRECUENCIA}</td>
+              <td style="text-align:center;">${task.COD_FRECUENCIA}</td>
               <td>${task.NOMBRE_T_ZONA_AREAS}</td>
-              <td>${task.NOMBRE_FRECUENCIA}</td>
+              <td style="text-align:center;">${task.NOMBRE_FRECUENCIA}</td>
               <td>${task.FECHA}</td>
-              <td>${task.VERSION}</td>
+              <td style="text-align:center;">${task.VERSION}</td>
               
               <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_FRECUENCIA="${task.COD_FRECUENCIA}"><i class="icon-edit"></i></button></td>
           </tr>`;
@@ -46,11 +46,11 @@ $(function () {
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_FRECUENCIA}">
-            <td>${task.COD_FRECUENCIA}</td>
+            <td style="text-align:center;">${task.COD_FRECUENCIA}</td>
             <td>${task.NOMBRE_T_ZONA_AREAS}</td>
-            <td>${task.NOMBRE_FRECUENCIA}</td>
+            <td style="text-align:center;">${task.NOMBRE_FRECUENCIA}</td>
             <td>${task.FECHA}</td>
-            <td>${task.VERSION}</td>
+            <td style="text-align:center;">${task.VERSION}</td>
             
             <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_FRECUENCIA="${task.COD_FRECUENCIA}"><i class="icon-edit"></i></button></td>
         </tr>`;

@@ -35,7 +35,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preparacion y soluciones</title>
+    <title>Preparación y soluciones</title>
 </head>
 
 <body>
@@ -95,15 +95,26 @@ $versionMuestra = $mostrar->VersionMostrar();
             background-color: black;
             margin-top: 15px;
         }
+
+        body {
+            margin: 40mm 8mm 2mm 8mm;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
     </style>
     <!-- Table titulo-->
-    <header style="position: fixed;top: 0;left: 0;width: 100%; ">
+    <header>
         <table>
             <tbody>
                 <tr>
                     <td rowspan="4" class="cabecera"><img src="./images/logo-covifarmaRecorte.png" alt=""></td>
                     <td rowspan="4" style="text-align: center;">PREPARACIÓN DE SOLUCIÓN DE LIMPIEZA Y DESINFECCIÓN - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
-                    <td>LBS-PHS-FR-03</td>
+                    <td>LBS-PHS-FR-02</td>
 
                 </tr>
                 <tr>
@@ -115,22 +126,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 
                 </tr>
                 <tr>
-
-                    <td>
-                        <?php
-                        $filasPorPagina = 26;
-                        $totalFilas = count($datos);
-                        $totalPaginas = ceil($totalFilas / $filasPorPagina);
-                        if ($totalFilas % $filasPorPagina == 0) {
-                            $paginaActual = 1;
-                        } else {
-                            $paginaActual = 2;
-                        }
-
-
-                        echo 'Página: ' . $paginaActual . '/' . $totalPaginas;
-                        ?>
-                    </td>
+                    <td>Página:</td>
                 </tr>
 
                 <tr>
@@ -143,7 +139,7 @@ $versionMuestra = $mostrar->VersionMostrar();
     </header>
 
     <!-- Table solucion y preparaciones-->
-    <table style="margin-top: 180px;">
+    <table style="margin-top: 10px;">
         <tbody>
 
             <tr>

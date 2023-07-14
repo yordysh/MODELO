@@ -174,9 +174,9 @@ $dataInsumos = $mostrar->MostrarSoluciones();
 
                                     <th class="thtitulo" scope="col">INSUMOS</th>
                                     <th class="thtitulo" scope="col">PRODUCTOS</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD("%" o "ppm")</th>
-                                    <th class="thtitulo" scope="col">NÚMERO EN ML</th>
-                                    <th class="thtitulo" scope="col">NÚMERO EN L</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD</th>
+                                    <th class="thtitulo" scope="col">ML</th>
+                                    <th class="thtitulo" scope="col">L</th>
                                     <th class="thtitulo" scope="col">FECHA</th>
 
                                 </tr>
@@ -187,9 +187,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                         </table>
                     </div>
 
-
                 </div>
-            </div>
             </div>
         </section>
     </main>
