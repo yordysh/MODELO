@@ -44,6 +44,7 @@ if ($_POST['accion'] == 'insertarinfra') {
     $valorSeleccionado = trim($_POST['valorSeleccionado']);
 
     $respuesta = c_almacen::c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias);
+
     echo $respuesta;
 }
 if ($_POST['accion'] == 'editarinfra') {

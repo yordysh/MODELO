@@ -395,7 +395,7 @@ class m_almacen
 
       $FECHA = $cod->c_horaserversql('F');
       // $FECHA = '10/07/2023';
-      var_dump($FECHA);
+      // var_dump($FECHA);
 
       if ($repetir == 0) {
         $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION) 
