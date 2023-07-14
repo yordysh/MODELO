@@ -1,7 +1,5 @@
 <?php
 require_once "m_almacen.php";
-// include "./funciones/f_funcion.php";
-
 
 
 $mostrar = new m_almacen();
@@ -30,11 +28,11 @@ $data = $mostrar->MostrarAlmacenMuestra();
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
+    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold text-light" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="menu">
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Zona/Areas</a>
@@ -50,15 +48,44 @@ $data = $mostrar->MostrarAlmacenMuestra();
                     </li>
                 </ul>
             </div>
-            <form class="d-flex">
+            <form class="d-flex ">
                 <input type="search" id="search" placeholder="Buscar" data-table="table_id" class="form-control me-2">
                 <button type="submit" class="btn btn-primary">Buscar</button>
             </form>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
-    </nav>
+    </nav> -->
+    <header>
+        <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
+        <div class="group">
+            <ul class="navigation">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Zona/Areas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="infraestructuraAccesorios.php">Infraestructura Accesorios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="preparacionSolucion.php">Preparación de soluciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
+                </li>
+            </ul>
+            <div class="search">
+                <span class="icon">
+                    <div class="icon-magnifying-glass searchBtn"></div>
+                    <div class="icon-cross closeBtn"></div>
+                </span>
+            </div>
+            <div class="icon-menu menuToggle"></div>
+        </div>
+        <div class="searchBox">
+            <input type="search" id="search" placeholder="Buscar . . ." data-table="table_id" class="form-control me-2">
+        </div>
+    </header>
     <main>
         <section>
             <div class="container g-4 mt-100 row">
