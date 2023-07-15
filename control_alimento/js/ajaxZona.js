@@ -1,34 +1,33 @@
 $(function () {
   fetchTasks();
   let edit = false;
+  //------------- MENU BAR JS ---------------//
+  let nav = document.querySelector(".nav"),
+    searchIcon = document.querySelector("#searchIcon"),
+    navOpenBtn = document.querySelector(".navOpenBtn"),
+    navCloseBtn = document.querySelector(".navCloseBtn");
 
-  let searchBtn = document.querySelector(".searchBtn");
-  let closeBtn = document.querySelector(".closeBtn");
-  let searchBox = document.querySelector(".searchBox");
+  searchIcon.addEventListener("click", () => {
+    nav.classList.toggle("openSearch");
+    nav.classList.remove("openNav");
+    if (nav.classList.contains("openSearch")) {
+      return searchIcon.classList.replace(
+        "icon-magnifying-glass",
+        "icon-cross"
+      );
+    }
+    searchIcon.classList.replace("icon-cross", "icon-magnifying-glass");
+  });
 
-  let navigation = document.querySelector(".navigation");
-  let menuToggle = document.querySelector(".menuToggle");
-  let header = document.querySelector("header");
+  navOpenBtn.addEventListener("click", () => {
+    nav.classList.add("openNav");
+    nav.classList.remove("openSearch");
+  });
 
-  searchBtn.onclick = function () {
-    searchBox.classList.add("active");
-    closeBtn.classList.add("active");
-    searchBtn.classList.add("active");
-    menuToggle.classList.add("hide");
-    header.classList.remove("open");
-  };
-  closeBtn.onclick = function () {
-    searchBox.classList.remove("active");
-    closeBtn.classList.remove("active");
-    searchBtn.classList.remove("active");
-    menuToggle.classList.remove("hide");
-  };
-  menuToggle.onclick = function () {
-    header.classList.toggle("open");
-    searchBox.classList.remove("active");
-    closeBtn.classList.remove("active");
-    searchBtn.classList.remove("active");
-  };
+  navCloseBtn.addEventListener("click", () => {
+    nav.classList.remove("openNav");
+  });
+  //----------------------------------------------------------------//
 
   //------------- Busqueda con ajax zonaArea----------------//
 

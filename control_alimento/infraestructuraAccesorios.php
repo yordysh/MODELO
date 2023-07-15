@@ -24,7 +24,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
+    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold text-light" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
 
@@ -51,6 +51,30 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+        </div>
+    </nav> -->
+    <nav class="nav">
+        <i class="icon-menu navOpenBtn"></i>
+        <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
+        <ul class="nav-links">
+            <div class="icon-cross navCloseBtn"></div>
+            <li>
+                <a class="" aria-current="page" href="zonaAreas.php">Zona/Areas</a>
+            </li>
+            <li>
+                <a class="" href="#">Infraestructura Accesorios</a>
+            </li>
+            <li>
+                <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>
+            </li>
+            <li>
+                <a class="" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
+            </li>
+        </ul>
+        <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
+        <div class="search-box">
+            <i class="icon-magnifying-glass search-icon"></i>
+            <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
         </div>
     </nav>
     <main>
@@ -96,7 +120,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         </div>
 
                         <!-- Submit button -->
-                        <div class="container">
+                        <!-- <div class="container">
                             <div class="row">
                                 <div class="col-2">
                                     <input type="hidden" id="taskId">
@@ -138,6 +162,36 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div> -->
+                        <div class="contenedor">
+                            <div class="ctnBtn">
+                                <input type="hidden" id="taskId">
+                                <button id="boton" type="submit" name="insert" class="btn btn-primary ">Guardar </button>
+                            </div>
+                            <div class="ctn">
+                                <label for="mes">Seleccione el año:</label>
+                                <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
+                            </div>
+                            <div class="ctn">
+                                <label for="mes">Seleccione el mes:</label>
+                            </div>
+                            <div class="">
+                                <select id="mes" name="mes">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    <option value="01">Enero</option>
+                                    <option value="02">Febrero</option>
+                                    <option value="03">Marzo</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Mayo</option>
+                                    <option value="06">Junio</option>
+                                    <option value="07">Julio</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
                             </div>
                         </div>
                     </form>

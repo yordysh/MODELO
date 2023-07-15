@@ -24,7 +24,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
+    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold text-light" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
 
@@ -51,6 +51,30 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+        </div>
+    </nav> -->
+    <nav class="nav">
+        <i class="icon-menu navOpenBtn"></i>
+        <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
+        <ul class="nav-links">
+            <div class="icon-cross navCloseBtn"></div>
+            <li>
+                <a class="" aria-current="page" href="zonaAreas.php">Zona/Areas</a>
+            </li>
+            <li>
+                <a class="" href="infraestructuraAccesorios.php">Infraestructura Accesorios</a>
+            </li>
+            <li>
+                <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>
+            </li>
+            <li>
+                <a class="" href="#">Limpieza y desinfección</a>
+            </li>
+        </ul>
+        <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
+        <div class="search-box">
+            <i class="icon-magnifying-glass search-icon"></i>
+            <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
         </div>
     </nav>
     <main>

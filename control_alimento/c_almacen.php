@@ -70,7 +70,6 @@ if ($_POST['accion'] == 'eliminarinfra') {
     echo $respuesta;
 }
 if ($_POST['accion'] == 'buscarinfra') {
-
     $buscarinfra = trim($_POST['buscarinfra']);
 
     $respuesta = c_almacen::c_buscar_infra($buscarinfra);

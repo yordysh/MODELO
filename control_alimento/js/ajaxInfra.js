@@ -2,6 +2,34 @@ $(function () {
   fetchTasks();
   let edit = false;
 
+  //------------- MENU BAR JS ---------------//
+  let nav = document.querySelector(".nav"),
+    searchIcon = document.querySelector("#searchIcon"),
+    navOpenBtn = document.querySelector(".navOpenBtn"),
+    navCloseBtn = document.querySelector(".navCloseBtn");
+
+  searchIcon.addEventListener("click", () => {
+    nav.classList.toggle("openSearch");
+    nav.classList.remove("openNav");
+    if (nav.classList.contains("openSearch")) {
+      return searchIcon.classList.replace(
+        "icon-magnifying-glass",
+        "icon-cross"
+      );
+    }
+    searchIcon.classList.replace("icon-cross", "icon-magnifying-glass");
+  });
+
+  navOpenBtn.addEventListener("click", () => {
+    nav.classList.add("openNav");
+    nav.classList.remove("openSearch");
+  });
+
+  navCloseBtn.addEventListener("click", () => {
+    nav.classList.remove("openNav");
+  });
+  //----------------------------------------------------------------//
+
   //------------- Busqueda con ajax infraestructura Accesorio----------------//
 
   $("#search").keyup(() => {
@@ -14,25 +42,23 @@ $(function () {
         data: { accion: accion, buscarinfra: search },
         type: "POST",
         success: function (response) {
-          console.log(response);
           if (!response.error) {
             let tasks = JSON.parse(response);
-
+            // console.log(tasks);
             let template = ``;
             tasks.forEach((task) => {
               template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
 
-              <td style="text-align:center;">${task.COD_INFRAESTRUCTURA}</td>
-              <td style="text-align:center;">${task.NOMBRE_T_ZONA_AREAS}</td>
-              <td class='NOMBRE_INFRAESTRUCTURA' style="text-align:center;">${task.NOMBRE_INFRAESTRUCTURA}</td>
-              <td style="text-align:center;" style="text-align:center;">${task.NDIAS}</td>
-              <td>${task.FECHA}</td>
-           
+                <td style="text-align:center;">${task.COD_INFRAESTRUCTURA}</td>
+                <td style="text-align:center;">${task.NOMBRE_T_ZONA_AREAS}</td>
+                <td class='NOMBRE_INFRAESTRUCTURA' style="text-align:center;">${task.NOMBRE_INFRAESTRUCTURA}</td>
+                <td style="text-align:center;" style="text-align:center;">${task.NDIAS}</td>
+                <td>${task.FECHA}</td>
 
-              <td><button class="btn btn-danger task-delete" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-trash"></i></button></td>
-              <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
+                <td><button class="btn btn-danger task-delete" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-trash"></i></button></td>
+                <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
 
-          </tr>`;
+            </tr>`;
             });
 
             $("#tablaInfraestructura").html(template);
