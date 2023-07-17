@@ -43,19 +43,22 @@ $(function () {
             let template = ``;
             tasks.forEach((task) => {
               template += `<tr taskId="${task.COD_FRECUENCIA}">
-              <td style="text-align:center;">${task.COD_FRECUENCIA}</td>
-              <td>${task.NOMBRE_T_ZONA_AREAS}</td>
-              <td style="text-align:center;">${task.NOMBRE_FRECUENCIA}</td>
-              <td>${task.FECHA}</td>
-              <td style="text-align:center;">${task.VERSION}</td>
+
+              <td data-titulo="COD. FRECUENCIA">${task.COD_FRECUENCIA}</td>
+              <td data-titulo="ZONA/ÁREA">${task.NOMBRE_T_ZONA_AREAS}</td>
+              <td data-titulo="FRECUENCIA">${task.NOMBRE_FRECUENCIA}</td>
+              <td data-titulo="FECHA">${task.FECHA}</td>
+              <td data-titulo="VERSION">${task.VERSION}</td>
               
-              <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_FRECUENCIA="${task.COD_FRECUENCIA}"><i class="icon-edit"></i></button></td>
+              <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_FRECUENCIA="${task.COD_FRECUENCIA}"><i class="icon-edit"></i></button></td>
           </tr>`;
             });
             $("#tdLimpiezadesinfeccion").html(template);
           }
         },
       });
+    } else {
+      fetchTasks();
     }
   });
 
@@ -73,14 +76,17 @@ $(function () {
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_FRECUENCIA}">
-            <td style="text-align:center;">${task.COD_FRECUENCIA}</td>
-            <td>${task.NOMBRE_T_ZONA_AREAS}</td>
-            <td style="text-align:center;">${task.NOMBRE_FRECUENCIA}</td>
-            <td>${task.FECHA}</td>
-            <td style="text-align:center;">${task.VERSION}</td>
+           
             
-            <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_FRECUENCIA="${task.COD_FRECUENCIA}"><i class="icon-edit"></i></button></td>
-        </tr>`;
+            <td data-titulo="COD. FRECUENCIA">${task.COD_FRECUENCIA}</td>
+            <td data-titulo="ZONA/ÁREA">${task.NOMBRE_T_ZONA_AREAS}</td>
+            <td data-titulo="FRECUENCIA">${task.NOMBRE_FRECUENCIA}</td>
+            <td data-titulo="FECHA">${task.FECHA}</td>
+            <td data-titulo="VERSION">${task.VERSION}</td>
+            
+            <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_FRECUENCIA="${task.COD_FRECUENCIA}"><i class="icon-edit"></i></button></td>
+
+            </tr>`;
           });
           $("#tdLimpiezadesinfeccion").html(template);
         }

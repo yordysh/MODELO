@@ -47,14 +47,14 @@ $(function () {
             tasks.forEach((task) => {
               template += `<tr taskId="${task.COD_ZONA}">
 
-              <td>${task.COD_ZONA}</td>
-              <td class="NOMBRE_T_ZONA_AREAS">${task.NOMBRE_T_ZONA_AREAS}</td>
-              <td>${task.FECHA}</td>
-              <td>${task.VERSION}</td>
-
-              <td><button class="btn btn-danger task-delete" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-trash"></i></button></td>
-              <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-edit"></i></button></td>
-
+              <td data-titulo="CODIGO">${task.COD_ZONA}</td>
+              <td data-titulo="NOMBRE" class="NOMBRE_T_ZONA_AREAS" >${task.NOMBRE_T_ZONA_AREAS}</td>
+              <td data-titulo="FECHA" >${task.FECHA}</td>
+              <td data-titulo="VERSION">${task.VERSION}</td>
+  
+              <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-trash"></i></button></td>
+              <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-edit"></i></button></td>
+  
           </tr>`;
             });
 
@@ -62,6 +62,8 @@ $(function () {
           }
         },
       });
+    } else {
+      fetchTasks();
     }
   });
 
@@ -128,13 +130,13 @@ $(function () {
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_ZONA}">
 
-            <td style="text-align:center;">${task.COD_ZONA}</td>
-            <td class="NOMBRE_T_ZONA_AREAS">${task.NOMBRE_T_ZONA_AREAS}</td>
-            <td>${task.FECHA}</td>
-            <td style="text-align:center;">${task.VERSION}</td>
+            <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_ZONA}</td>
+            <td data-titulo="NOMBRE" class="NOMBRE_T_ZONA_AREAS" style="text-align:rigth;">${task.NOMBRE_T_ZONA_AREAS}</td>
+            <td data-titulo="FECHA" style="text-align:rigth;">${task.FECHA}</td>
+            <td data-titulo="VERSION" style="text-align:rigth;">${task.VERSION}</td>
 
-            <td><button class="btn btn-danger task-delete" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-trash"></i></button></td>
-            <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-edit"></i></button></td>
+            <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-trash"></i></button></td>
+            <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-edit"></i></button></td>
 
         </tr>`;
           });

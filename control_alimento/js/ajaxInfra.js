@@ -48,16 +48,16 @@ $(function () {
             let template = ``;
             tasks.forEach((task) => {
               template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
-
-                <td style="text-align:center;">${task.COD_INFRAESTRUCTURA}</td>
-                <td style="text-align:center;">${task.NOMBRE_T_ZONA_AREAS}</td>
-                <td class='NOMBRE_INFRAESTRUCTURA' style="text-align:center;">${task.NOMBRE_INFRAESTRUCTURA}</td>
-                <td style="text-align:center;" style="text-align:center;">${task.NDIAS}</td>
-                <td>${task.FECHA}</td>
-
-                <td><button class="btn btn-danger task-delete" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-trash"></i></button></td>
-                <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
-
+              
+              <td data-titulo="CODIGO" >${task.COD_INFRAESTRUCTURA}</td>
+              <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
+              <td data-titulo="INFRAESTRUCTURA" class='NOMBRE_INFRAESTRUCTURA' >${task.NOMBRE_INFRAESTRUCTURA}</td>
+              <td data-titulo="N°DIAS">${task.NDIAS}</td>
+              <td data-titulo="FECHA" >${task.FECHA}</td>
+  
+              <td style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-trash"></i></button></td>
+              <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
+  
             </tr>`;
             });
 
@@ -65,6 +65,8 @@ $(function () {
           }
         },
       });
+    } else {
+      fetchTasks();
     }
   });
 
@@ -137,15 +139,14 @@ $(function () {
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
 
-              <td style="text-align:center;">${task.COD_INFRAESTRUCTURA}</td>
-              <td style="text-align:center;">${task.NOMBRE_T_ZONA_AREAS}</td>
-              <td class='NOMBRE_INFRAESTRUCTURA'style="text-align:center;">${task.NOMBRE_INFRAESTRUCTURA}</td>
-              <td style="text-align:center;">${task.NDIAS}</td>
-              <td>${task.FECHA}</td>
-          
+            <td data-titulo="CODIGO" >${task.COD_INFRAESTRUCTURA}</td>
+            <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
+            <td data-titulo="INFRAESTRUCTURA" class='NOMBRE_INFRAESTRUCTURA' >${task.NOMBRE_INFRAESTRUCTURA}</td>
+            <td data-titulo="N°DIAS">${task.NDIAS}</td>
+            <td data-titulo="FECHA" >${task.FECHA}</td>
 
-              <td><button class="btn btn-danger task-delete" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-trash"></i></button></td>
-              <td><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
+            <td style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-trash"></i></button></td>
+            <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
 
           </tr>`;
           });

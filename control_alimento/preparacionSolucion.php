@@ -24,35 +24,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
 </head>
 
 <body>
-    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-light" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="zonaAreas.php">Zona/Areas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="infraestructuraAccesorios.php">Infraestructura Accesorios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Preparación de soluciones</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
-                    </li>
-                </ul>
-            </div>
-            <form class="d-flex">
-                <input type="search" id="search" placeholder="Buscar" class="form-control me-2">
-                <button type="submit" class="btn btn-primary" onclick="calcularDiasRestantes()">Buscar</button>
-            </form>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-    </nav> -->
     <nav class="nav">
         <i class="icon-menu navOpenBtn"></i>
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
@@ -144,48 +116,41 @@ $dataInsumos = $mostrar->MostrarSoluciones();
 
                             </select>
                         </div>
-                        <div class="container">
-                            <div class="row">
-                                <!-- Submit button -->
-                                <div class="col-2">
-                                    <input type="hidden" id="taskId">
-                                    <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
-                                </div>
-                                <div class=" col-10 pdf" style="margin-left: 35%; margin-top:-4%;">
-                                    <div class="row">
-                                        <div class="col-4 anioCol">
-                                            <label for="mes">Seleccione el año:</label>
-                                            <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
 
-                                        </div>
-                                        <div class="col-4 mesCol">
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <label for="mes">Seleccione el mes:</label>
-                                                </div>
-                                                <div class="col-6">
-                                                    <select id="mes" name="mes">
-                                                        <option value="" selected disabled>Seleccione...</option>
-                                                        <option value="01">Enero</option>
-                                                        <option value="02">Febrero</option>
-                                                        <option value="03">Marzo</option>
-                                                        <option value="04">Abril</option>
-                                                        <option value="05">Mayo</option>
-                                                        <option value="06">Junio</option>
-                                                        <option value="07">Julio</option>
-                                                        <option value="08">Agosto</option>
-                                                        <option value="09">Septiembre</option>
-                                                        <option value="10">Octubre</option>
-                                                        <option value="11">Noviembre</option>
-                                                        <option value="12">Diciembre</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <a class="btn btn-primary" href="#" onclick="generarPDF()">Generar PDF</a>
-                                        </div>
+                        <div class="contenedor">
+                            <div class="ctnBtn">
+                                <input type="hidden" id="taskId">
+                                <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+                            </div>
+                            <div class="ctn">
+                                <label for="mes">Seleccione el año:</label>
+                                <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
+                            </div>
+                            <div class="ordenar">
+                                <div class="dMes">
+                                    <div class="ctn">
+                                        <label for="mes">Seleccione el mes:</label>
                                     </div>
+                                    <div class="ctn">
+                                        <select id="mes" name="mes">
+                                            <option value="" selected disabled>Seleccione...</option>
+                                            <option value="01">Enero</option>
+                                            <option value="02">Febrero</option>
+                                            <option value="03">Marzo</option>
+                                            <option value="04">Abril</option>
+                                            <option value="05">Mayo</option>
+                                            <option value="06">Junio</option>
+                                            <option value="07">Julio</option>
+                                            <option value="08">Agosto</option>
+                                            <option value="09">Septiembre</option>
+                                            <option value="10">Octubre</option>
+                                            <option value="11">Noviembre</option>
+                                            <option value="12">Diciembre</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <a class="btn btn-primary btnPdf" href="#" onclick="generarPDF()">Generar PDF</a>
                                 </div>
                             </div>
                         </div>

@@ -282,6 +282,16 @@ margin-right: 400px;
 .ctn{
   margin: 0 3px;
 }
+td{
+  text-align: center;
+}
+.table-responsive table {
+  border-collapse: collapse;
+ }
+
+ .table-responsive th td{
+    padding:5px 10px; 
+ }
 
 /*-------------- Estilo de responsive ---------------------*/
 
@@ -298,12 +308,69 @@ margin-right: 400px;
   display: flex;
 }
 .ctnBtn{
-  margin-right: 240px;
+  margin-right: 110px;
   }
-  .ctn{
-    margin: 0 3px;
+.ctn{
+    margin: 0 5px;
+  }
+  .dMes{
+    display: flex;
   }
 }
+@media screen and (max-width:992px){
+   .contenedor{
+    display: block;
+  }
+  .dMes{
+    display: flex;
+  }
+  .ctn{
+    margin: 0 0 10px;
+  }
+  .ordenar{
+    display: block;
+    margin-top: 10px;
+    margin-left: 0;
+  }
+  .bt-guardar {
+    padding: 10px 80px;
+    font-size: 16px;
+    max-width: 130%;
+    width: 123%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  .btnPdf {
+    padding: 10px 20px; 
+    font-size: 16px;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  [data-titulo]{
+    text-align: left !important;
+ }
+ .table-responsive table tr{ 	  
+   display:flex;
+   flex-direction:column;
+   border:1px solid grey;
+ }
+
+ .table-responsive table td[data-titulo]{
+   display:flex;
+ }
+
+ .table-responsive table td[data-titulo]::before{
+   content: attr(data-titulo);
+   width:150px;
+   font-weight:bold;
+ }
+     
+ .table-responsive table thead{		
+   display:none;	
+ }	
+ }
   /*-------------------------------------------------------------*/
   @media screen and (max-width:950px){
     /*-------------- Estilo de MENUBAR ---------------------*/
@@ -338,7 +405,7 @@ margin-right: 400px;
     padding-top: 100px;
     row-gap: 30px;
     flex-direction: column; 
-    background-color: #11101d;
+    background-color: #5b8ccc;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.4s ease;
   z-index: 100;
@@ -369,14 +436,26 @@ margin-right: 400px;
   .contenedor{
     display: block;
   }
+  .dMes{
+    display: flex;
+  }
   .ctn{
-    margin: 0;
+    margin: 0 0 10px;
   }
   .ordenar{
-    display: flex;
+    display: block;
     margin-top: 10px;
+    margin-left: 0;
   }
-  .bt-guardar {
+  .bt-guardar{
+    padding: 10px 20px; 
+    font-size: 16px;
+    max-width: 122%;
+    width: 122%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  .btnPdf {
  
     padding: 10px 20px; 
     font-size: 16px;
@@ -386,27 +465,50 @@ margin-right: 400px;
     margin-bottom: 10px;
   }
   select#selectVerificacion {
-    margin-left: 40px !important;
+    margin-left: -10px !important;
+  }
+  [data-titulo]{
+     text-align: left !important;
+  }
+  .table-responsive table tr{ 	  
+    display:flex;
+    flex-direction:column;
+    border:1px solid grey;
+  }
+ 
+  .table-responsive table td[data-titulo]{
+    display:flex;
+  }
+ 
+  .table-responsive table td[data-titulo]::before{
+    content: attr(data-titulo);
+    width:150px;
+    font-weight:bold;
+  }
+      
+  .table-responsive table thead{		
+    display:none;	
+  }	
 }
+@media screen and (max-width:480px){
+  .bt-guardar{
+    padding: 10px 20px; 
+    font-size: 16px;
+    max-width: 165%;
+    width: 165%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+}
+@media screen and (max-width:420px){
+  .bt-guardar{
+    padding: 10px 20px; 
+    font-size: 16px;
+    max-width: 155%;
+    width: 155%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
 }
     /*-------------------------------------------------------------*/
 
-@media screen and (max-width:992px){
-   .bt-guardar {
- 
-    padding: 10px 20px; 
-    font-size: 16px;
-    max-width: 100%;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  .ordenar{
-    display: flex;
-  }
-  .ctnBtn{
-    margin-right: 15px;
-    }
-    .ctn{
-      margin: 0;
-    }
-  }

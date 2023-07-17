@@ -46,12 +46,12 @@ $(function () {
             tasks.forEach((task) => {
               template += `<tr taskId="${task.ID_UNION}">
 
-                <td style="text-align:center;">${task.NOMBRE_INSUMOS}</td>
-                <td style="text-align:center;">${task.NOMBRE_PREPARACION}</td>
-                <td style="text-align:center;">${task.CANTIDAD_PORCENTAJE}</td>
-                <td style="text-align:center;">${task.CANTIDAD_MILILITROS}</td>
-                <td style="text-align:center;">${task.CANTIDAD_LITROS}</td>
-                <td>${task.FECHA}</td>
+                <td data-titulo="INSUMOS">${task.NOMBRE_INSUMOS}</td>
+                <td data-titulo="PRODUCTOS">${task.NOMBRE_PREPARACION}</td>
+                <td data-titulo="CANTIDAD">${task.CANTIDAD_PORCENTAJE}</td>
+                <td data-titulo="ML">${task.CANTIDAD_MILILITROS}</td>
+                <td data-titulo="L">${task.CANTIDAD_LITROS}</td>
+                <td data-titulo="FECHA">${task.FECHA}</td>
 
               </tr>`;
             });
@@ -60,6 +60,8 @@ $(function () {
           }
         },
       });
+    } else {
+      fetchTasks();
     }
   });
 
@@ -77,12 +79,12 @@ $(function () {
           tasks.forEach((task) => {
             template += `<tr taskId="${task.ID_UNION}">
 
-              <td style="text-align:center;">${task.NOMBRE_INSUMOS}</td>
-              <td style="text-align:center;">${task.NOMBRE_PREPARACION}</td>
-              <td style="text-align:center;">${task.CANTIDAD_PORCENTAJE}</td>
-              <td style="text-align:center;">${task.CANTIDAD_MILILITROS}</td>
-              <td style="text-align:center;">${task.CANTIDAD_LITROS}</td>
-              <td>${task.FECHA}</td>
+            <td data-titulo="INSUMOS">${task.NOMBRE_INSUMOS}</td>
+            <td data-titulo="PRODUCTOS">${task.NOMBRE_PREPARACION}</td>
+            <td data-titulo="CANTIDAD">${task.CANTIDAD_PORCENTAJE}</td>
+            <td data-titulo="ML">${task.CANTIDAD_MILILITROS}</td>
+            <td data-titulo="L">${task.CANTIDAD_LITROS}</td>
+            <td data-titulo="FECHA">${task.FECHA}</td>
 
             </tr>`;
           });

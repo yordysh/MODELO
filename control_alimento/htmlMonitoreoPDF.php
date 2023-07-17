@@ -152,7 +152,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         <table>
 
             <tr>
-                <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
+                <td rowspan="4" class="cabecera"><img src="http://192.168.1.5/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
                 <td rowspan="4" style="text-align: center;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS - MES DE <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                 <td>LBS-PHS-FR-01</th>
             </tr>
