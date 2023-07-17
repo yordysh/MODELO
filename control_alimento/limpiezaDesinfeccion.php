@@ -30,10 +30,10 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
             <li>
-                <a class="" aria-current="page" href="zonaAreas.php">Zona/Areas</a>
+                <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
             </li>
             <li>
-                <a class="" href="infraestructuraAccesorios.php">Infraestructura Accesorios</a>
+                <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
             </li>
             <li>
                 <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>

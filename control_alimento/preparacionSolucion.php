@@ -31,10 +31,10 @@ $dataInsumos = $mostrar->MostrarSoluciones();
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
             <li>
-                <a class="" aria-current="page" href="zonaAreas.php">Zona/Areas</a>
+                <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
             </li>
             <li>
-                <a class="" href="infraestructuraAccesorios.php">Infraestructura Accesorios</a>
+                <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
             </li>
             <li>
                 <a class="" href="#">Preparación de soluciones</a>

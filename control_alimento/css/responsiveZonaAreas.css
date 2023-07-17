@@ -277,10 +277,7 @@ transition: all 0.2s linear;
   display: flex;
 }
 .ctnBtn{
-margin-right: 280px;
-}
-.dMes{
-  display: flex;
+margin-right: 400px;
 }
 .ctn{
   margin: 0 3px;
@@ -338,8 +335,9 @@ td{
   .bt-guardar {
     padding: 10px 80px;
     font-size: 16px;
-    max-width: 130%;
-    width: 123%;
+    max-width: 120%;
+    width: 114%;
+    margin: 0 0 0 -75px;
     box-sizing: border-box;
     margin-bottom: 10px;
   }
@@ -453,10 +451,11 @@ td{
   .bt-guardar{
     padding: 10px 20px; 
     font-size: 16px;
-    max-width: 122%;
-    width: 122%;
+    max-width: 104%;
+    width: 104%; 
     box-sizing: border-box;
     margin-bottom: 10px;
+    margin: 0 0 0 -15px;
   }
   .btnPdf {
  
@@ -507,42 +506,11 @@ td{
   .bt-guardar{
     padding: 10px 20px; 
     font-size: 16px;
-    max-width: 155%;
-    width: 155%;
+    max-width: 110%;
+    width: 110%;
     box-sizing: border-box;
     margin-bottom: 10px;
   }
-  .btnPdf {
-    padding: 10px 20px;
-    font-size: 16px;
-    max-width: 100%;
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
 }
-}
-@media screen and (max-width:400px){
-
-  .btnPdf {
-    padding: 10px 20px;
-    font-size: 16px;
-    max-width: 120%;
-    width: 96%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-}
-}
-@media screen and (max-width:380px){
-
-  .btnPdf {
-    padding: 10px 20px;
-    font-size: 16px;
-    max-width: 120%;
-    width: 90%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-}
-}
-
     /*-------------------------------------------------------------*/
 

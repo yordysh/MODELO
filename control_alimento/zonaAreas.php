@@ -14,7 +14,7 @@ $data = $mostrar->MostrarAlmacenMuestra();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/responsiveControl.css">
+    <link rel="stylesheet" href="./css/responsiveZonaAreas.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
 
@@ -25,6 +25,7 @@ $data = $mostrar->MostrarAlmacenMuestra();
 
 
     <title>Covifarma</title>
+
 </head>
 
 <body>
@@ -34,10 +35,10 @@ $data = $mostrar->MostrarAlmacenMuestra();
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
             <li>
-                <a class="" aria-current="page" href="#">Zona/Areas</a>
+                <a class="" aria-current="page" href="#">Zona</a>
             </li>
             <li>
-                <a class="" href="infraestructuraAccesorios.php">Infraestructura Accesorios</a>
+                <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
             </li>
             <li>
                 <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>
