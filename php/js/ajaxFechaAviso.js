@@ -81,7 +81,7 @@ $(function () {
           html: `
               <div><h2 class="nombre_area">Nombre del área:</h2> <p>${task.NOMBRE_AREA}</p></div>
               <div><h2 class="nombre_infra">Nombre de la infraestructura:</h2> <p>${task.NOMBRE_INFRAESTRUCTURA}</p></div>
-              <div><h2 class="nombre_infra">COD_ALERTA:</h2> <p>${task.COD_ALERTA}</p></div>
+              <div><h2 class="nombre_infra">COD_ALERTA1:</h2> <p>${task.COD_ALERTA}</p></div>
       
               <label>
                 <input type="radio" name="estado-${task.COD_ALERTA}" value="R"> Realizado
@@ -90,8 +90,8 @@ $(function () {
                 <input type="radio" name="estado-${task.COD_ALERTA}" value="NR"> No Realizado
               </label>
               <label>
-                <input type="radio" name="estado-${task.COD_ALERTA}" value="OB"> Observación
-              </label>
+              <input type="radio" name="estado-${task.COD_ALERTA}" value="OB"> Observación
+            </label>
               <label id="postergacion">
               <input type="radio" name="estado-${task.COD_ALERTA}" value="PO"> Postergación
               </label>
@@ -107,7 +107,7 @@ $(function () {
             const noRealizadoRadio = document.querySelector(
               `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
             );
-            const obRadio = document.querySelector(
+            const observacionButtonRadio = document.querySelector(
               `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
             );
             const postergacionRadio = document.querySelector(
@@ -117,19 +117,19 @@ $(function () {
             if (
               realizadoRadio.checked ||
               noRealizadoRadio.checked ||
-              obRadio.checked ||
+              observacionButtonRadio.checked ||
               postergacionRadio.checked
             ) {
               const estado = realizadoRadio.checked
                 ? "R"
                 : noRealizadoRadio.checked
                 ? "NR"
-                : obRadio.checked
+                : observacionButtonRadio.checked
                 ? "OB"
                 : "PO";
 
-              const observacion = postergacionRadio.checked
-                ? document.querySelector(`#postergacion-${task.COD_ALERTA}`)
+              const postergacion = postergacionRadio.checked
+                ? document.querySelector(`#observacion-${task.COD_ALERTA}`)
                     .value
                 : "";
               const observacionTextArea = observacionTextarea.value;
@@ -212,7 +212,7 @@ $(function () {
                   const fechaPostergacion = document.querySelector(
                     "input[name='fecha_postergacion']"
                   ).value;
-                  // console.log(fechaPostergacion);
+                  console.log(fechaPostergacion);
                   const observacion = observacionTextarea.value;
 
                   // Realizar la actualización del estado con "PO" utilizando una solicitud AJAX
@@ -271,17 +271,17 @@ $(function () {
           observacionTextarea.style.display = this.checked ? "block" : "none";
         });
 
+        const observacionButtonRadio = document.querySelector(
+          `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
+        );
+        observacionButtonRadio.addEventListener("change", function () {
+          observacionTextarea.style.display = this.checked ? "block" : "none";
+        });
+
         const noRealizadoRadio = document.querySelector(
           `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
         );
         noRealizadoRadio.addEventListener("change", function () {
-          observacionTextarea.style.display = this.checked ? "block" : "none";
-        });
-
-        const obRadio = document.querySelector(
-          `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
-        );
-        obRadio.addEventListener("change", function () {
           observacionTextarea.style.display = this.checked ? "block" : "none";
         });
 
@@ -292,6 +292,9 @@ $(function () {
           observacionTextarea.style.display = this.checked ? "block" : "none";
         });
         const obs = document.getElementById("postergacion");
+        // realizadoRadio.addEventListener("change", function () {
+        //   observacionTextarea.style.display = "none";
+        // });
 
         if (task.NDIAS > 6 && task.POSTERGACION == "NO") {
           postergacionRadio.style.display = "block";

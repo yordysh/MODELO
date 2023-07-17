@@ -12,7 +12,7 @@ class c_almacen
         echo json_encode($dato, JSON_FORCE_OBJECT);
     }
 
-    function c_mostrar(){
-        $mfor
+    function c_mostrar()
+    {
     }
 }

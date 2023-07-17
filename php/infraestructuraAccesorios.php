@@ -154,7 +154,6 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <script src="../assets/js/bootstrap.min.js"></script>
     <script src="../assets/js/jquery-3.7.0.min.js"></script>
     <script src="../assets/js/sweetalert2.all.min.js"></script>
-    <!-- <script src="../assets/js/jquery-tabledit/jquery.tabledit.js"></script> -->
     <script src="./js/ajaxInfra.js"></script>
     <!-- <script src="js/ajaxAlerta.js"></script> -->
     <script>
