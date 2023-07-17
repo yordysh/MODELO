@@ -404,6 +404,7 @@ class m_almacen
         $insert = $stm->execute();
 
         // $fechaDHoy = date('Y-m-d');
+        // $fechaDHoy = '10/07/2023';
         $fechaDHoy  = $cod->c_horaserversql('F');
 
         if ($VERSION == '01') {

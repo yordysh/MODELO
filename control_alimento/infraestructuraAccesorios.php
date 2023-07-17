@@ -24,35 +24,6 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
 </head>
 
 <body>
-    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-light" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="zonaAreas.php">Zona/Areas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Infraestructura Accesorios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="preparacionSolucion.php">Preparación de soluciones</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
-                    </li>
-                </ul>
-            </div>
-            <form class="d-flex">
-                <input type="search" id="search" placeholder="Buscar" class="form-control me-2">
-                <button type="submit" class="btn btn-primary" onclick="calcularDiasRestantes()">Buscar</button>
-            </form>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-    </nav> -->
     <nav class="nav">
         <i class="icon-menu navOpenBtn"></i>
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
@@ -167,31 +138,33 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         <div class="contenedor">
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
-                                <button id="boton" type="submit" name="insert" class="btn btn-primary ">Guardar </button>
+                                <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
                             </div>
                             <div class="ctn">
                                 <label for="mes">Seleccione el año:</label>
                                 <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
                             </div>
-                            <div class="ctn">
-                                <label for="mes">Seleccione el mes:</label>
-                            </div>
-                            <div class="">
-                                <select id="mes" name="mes">
-                                    <option value="" selected disabled>Seleccione...</option>
-                                    <option value="01">Enero</option>
-                                    <option value="02">Febrero</option>
-                                    <option value="03">Marzo</option>
-                                    <option value="04">Abril</option>
-                                    <option value="05">Mayo</option>
-                                    <option value="06">Junio</option>
-                                    <option value="07">Julio</option>
-                                    <option value="08">Agosto</option>
-                                    <option value="09">Septiembre</option>
-                                    <option value="10">Octubre</option>
-                                    <option value="11">Noviembre</option>
-                                    <option value="12">Diciembre</option>
-                                </select>
+                            <div class="ordenar">
+                                <div class="ctn">
+                                    <label for="mes">Seleccione el mes:</label>
+                                </div>
+                                <div class="">
+                                    <select id="mes" name="mes">
+                                        <option value="" selected disabled>Seleccione...</option>
+                                        <option value="01">Enero</option>
+                                        <option value="02">Febrero</option>
+                                        <option value="03">Marzo</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Mayo</option>
+                                        <option value="06">Junio</option>
+                                        <option value="07">Julio</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Septiembre</option>
+                                        <option value="10">Octubre</option>
+                                        <option value="11">Noviembre</option>
+                                        <option value="12">Diciembre</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </form>

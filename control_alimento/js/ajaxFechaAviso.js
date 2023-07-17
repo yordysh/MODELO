@@ -92,7 +92,7 @@ $(function () {
               </div>
               <div>
               <h3>Verificacion realizada:</h3> 
-               <select id="selectVerificacion" class="form-select" style="width:250px; margin-left:140px;" aria-label="Default select example">
+               <select id="selectVerificacion" class="form-select selectVerif" style="width:250px; margin-left:140px;" aria-label="Default select example">
                   <option selected>Seleccione una verificacion</option>
                   <option value="1">Conforme</option>
                   <option value="2">No conforme</option>
