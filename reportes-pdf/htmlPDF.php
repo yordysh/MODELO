@@ -327,6 +327,11 @@ $versionMuestra = $mostrar->VersionMostrar();
             <?php
 
             $nContador = 1;
+
+            $fechas = array_column($datos, 'FECHA_TOTAL');
+            array_multisort($fechas, SORT_ASC, $datos);
+
+
             foreach ($datos as $fils) {
                 echo '<tr>';
 
@@ -335,16 +340,13 @@ $versionMuestra = $mostrar->VersionMostrar();
 
                 echo '<td class="cabecera">' . convFecSistema($fils['FECHA_TOTAL']) . '</td>';
                 echo '<td class="cabecera">' . $fils['NOMBRE_T_ZONA_AREAS'] . '</td>';
-
                 echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
                 echo '<td></td>';
                 echo '<td></td>';
                 echo '<td></td>';
+
                 echo '</tr>';
             }
-
-
-
             ?>
 
         </tbody>
