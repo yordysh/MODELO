@@ -12,12 +12,12 @@
 
   <!--==== Estilos de SWEETALERT2 =====-->
   <link rel="stylesheet" href="./css/sweetalert2.min.css">
-
+  <link rel="stylesheet" href="./styleIcons/style.css">
   <title>Covifarma</title>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
+  <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
     <div class="container-fluid">
       <a class="navbar-brand fw-bold text-light" href="index.php"><img src="./images/logo-covifarma.png" alt=""></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,31 @@
         </ul>
       </div>
     </div>
+  </nav> -->
+
+  <nav class="nav">
+    <i class="icon-menu navOpenBtn"></i>
+    <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
+    <ul class="nav-links">
+      <div class="icon-cross navCloseBtn"></div>
+      <li>
+        <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
+      </li>
+      <li>
+        <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
+      </li>
+      <li>
+        <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>
+      </li>
+      <li>
+        <a class="" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
+      </li>
+    </ul>
+    <!-- <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
+    <div class="search-box">
+      <i class="icon-magnifying-glass search-icon"></i>
+      <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
+    </div> -->
   </nav>
   <?php
   require_once "modal.php";
@@ -51,6 +76,7 @@
   <script src="./js/sweetalert2.all.min.js"></script>
 
   <script src="./js/ajaxFechaAviso.js"></script>
+  <script src="./js/ajaxIndex.js"></script>
 </body>
 
 </html>

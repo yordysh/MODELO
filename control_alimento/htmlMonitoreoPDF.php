@@ -62,8 +62,10 @@ $versionMuestra = $mostrar->VersionMostrar();
         }
 
         .cabecera-fila {
-            background-color: #9dcdec;
+            background-color: #c8faf6;
             text-align: center;
+            font-size: 20px;
+            font-weight: 200;
         }
 
         .cabecera-fila td,
@@ -83,30 +85,30 @@ $versionMuestra = $mostrar->VersionMostrar();
         }
 
         td.estado-R {
-            background-color: #0a5e9c;
-            color: #f2f2f2;
+            background-color: #4f79c2;
+            /* color: #f2f2f2; */
             text-align: center;
             height: 30px;
 
         }
 
         td.estado-NR {
-            background-color: #E72b3c;
-            color: #f2f2f2;
+            background-color: #f56b3d;
+            /* color: #f2f2f2; */
             text-align: center;
             height: 30px;
         }
 
         td.estado-OB {
-            background-color: #F39A11;
-            color: #f2f2f2;
+            background-color: #f29d2e;
+            /* color: #f2f2f2; */
             text-align: center;
             height: 30px;
         }
 
         td.estado-PO {
             background-color: #27a121;
-            color: #f2f2f2;
+            /* color: #f2f2f2; */
             text-align: center;
             height: 30px;
         }
@@ -153,7 +155,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 
             <tr>
                 <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
-                <td rowspan="4" style="text-align: center;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS - MES DE <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                <td rowspan="4" style="text-align: center; font-size:25px; font-weigth:200;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS - MES DE <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                 <td>LBS-PHS-FR-01</th>
             </tr>
             <tr>
@@ -303,8 +305,8 @@ $versionMuestra = $mostrar->VersionMostrar();
                     // Imprimir los estados en las columnas correspondientes
                     foreach ($columnas as $columna) {
                         $estadoClass = $columna !== '' ? 'estado-' . $columna : 'estado-vacio';
-                        echo '<td class="' . $estadoClass . '">' . $columna . '</td>';
-                        //echo '<td class="cabecera">' . $columna . '</td>';
+                        echo '<td class="' . $estadoClass . '"></td>';
+                        //echo '<td class="' . $estadoClass . '">' . $columna . '</td>';
                     }
                     //Colocar este td para que rellene de responsable de ejecucion
                     echo '<td></td>';

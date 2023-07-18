@@ -32,8 +32,8 @@ $(function () {
         var diferenciaDias = Math.floor(
           diferenciaMilisegundos / milisegundosEnUnDia + 1
         );
-        console.log("FECHA_TOTAL: " + fecha);
-        console.log("FECHA_ACTUAL: " + fechaTotal);
+        // console.log("FECHA_TOTAL: " + fecha);
+        // console.log("FECHA_ACTUAL: " + fechaTotal);
         Swal.fire({
           title: "Mensaje recordatorio",
           html: `

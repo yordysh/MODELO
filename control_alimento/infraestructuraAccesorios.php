@@ -50,7 +50,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     </nav>
     <main>
         <section>
-            <div class="container g-4 mt-100 row">
+            <div class="container g-4 row">
                 <div class="row g-4 top-div">
                     <center><label class="title">INFRAESTRUCTURA, ACCESORIOS COMPLEMENTARIOS</label></center>
                 </div>

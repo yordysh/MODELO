@@ -51,7 +51,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
     </nav>
     <main>
         <section>
-            <div class="container g-4 mt-100 row">
+            <div class="container g-4 row">
                 <div class="row g-4 top-div">
                     <center><label class="title">PREPARACIÓN DE SOLUCIONES</label></center>
                 </div>
