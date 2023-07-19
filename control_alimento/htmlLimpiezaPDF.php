@@ -62,6 +62,9 @@ $versionMuestra = $mostrar->VersionMostrar();
         .cabecera-fila {
             background-color: #EEB4F5;
             text-align: center;
+            font-weight: 200;
+            font-size: 20px;
+            width: 20px;
 
         }
 
@@ -119,8 +122,9 @@ $versionMuestra = $mostrar->VersionMostrar();
         <table>
             <tbody>
                 <tr>
+                    <!-- <td rowspan="4" style="text-align: center;"><img src="http://localhost:8080/MASTER/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
                     <td rowspan="4" style="text-align: center;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
-                    <td rowspan="4" style="text-align: center;">LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS DE LIMPIEZA - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                    <td rowspan="4" style="text-align: center; font-size:25px; font-weigth:200;">LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS DE LIMPIEZA - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                     <td>LBS-PHS-FR-04</td>
 
                 </tr>
@@ -159,104 +163,108 @@ $versionMuestra = $mostrar->VersionMostrar();
         </tbody>
     </table>
     <!-- Table solucion y preparaciones-->
-    <table style="margin-bottom: 50px;">
-        <tbody>
-            <tr>
-                <?php
+    <table style="margin-bottom: 70px;">
 
-                $grupos = array();
-                $fechasEliminadas = array();
+        <?php
+        $grupos = array();
+        $fechasEliminadas = array();
 
-                foreach ($dataLimpieza as $filas) {
-                    $nombreZona = $filas['NOMBRE_T_ZONA_AREAS'];
-                    $nombreFrecuencia = $filas['NOMBRE_FRECUENCIA'];
-                    $fecha = $filas['FECHA'];
+        foreach ($dataLimpieza as $filas) {
+            $nombreZona = $filas['NOMBRE_T_ZONA_AREAS'];
+            $nombreFrecuencia = $filas['NOMBRE_FRECUENCIA'];
+            $fecha = $filas['FECHA'];
 
-                    if (!isset($grupos[$nombreZona][$nombreFrecuencia])) {
-                        $grupos[$nombreZona][$nombreFrecuencia] = array();
-                    }
+            if (!isset($grupos[$nombreZona][$nombreFrecuencia])) {
+                $grupos[$nombreZona][$nombreFrecuencia] = array();
+            }
 
-                    if (in_array($fecha, $grupos[$nombreZona][$nombreFrecuencia])) {
-                        $fechasEliminadas[] = $fecha;
-                    } else {
-                        $grupos[$nombreZona][$nombreFrecuencia][] = $fecha;
-                    }
+            if (in_array($fecha, $grupos[$nombreZona][$nombreFrecuencia])) {
+                $fechasEliminadas[] = $fecha;
+            } else {
+                $grupos[$nombreZona][$nombreFrecuencia][] = $fecha;
+            }
+        }
+        echo "<thead>";
+        $numeroDiasMes = date('t', strtotime($fecha));
+        echo "<tr>";
+        echo "<th class='cabecera-fila' rowspan='2'>ÁREA</th>";
+        echo "<th class='cabecera-fila' rowspan='2'>ÍTEM(FRECUENCIA)</th>";
+        echo "<th class='cabecera-fila' colspan='$numeroDiasMes'>VERIFICACIÓN DE LA LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS PARA HEGIENIZACIÓN</th>";
+        echo "</tr>";
+
+        echo "<tr>";
+
+        for ($i = 1; $i <= $numeroDiasMes; $i++) {
+            echo "<th style='text-align:center; width: 10px;'>" . $i . "</th>";
+        }
+        echo "</tr>";
+        echo "</thead>";
+        echo "<tbody>";
+        foreach ($grupos as $nombreZona => $frecuencias) {
+            echo "<tr>";
+
+            $numFilas = count($frecuencias);
+            echo '<td rowspan="' . $numFilas . '">' . $nombreZona . '</td>';
+
+            $firstRow = true;
+
+            foreach ($frecuencias as $nombreFrecuencia => $fechas) {
+                if (!$firstRow) {
+                    echo '<tr>';
                 }
 
-                $numeroDiasMes = date('t', strtotime($fecha));
-                echo "<tr>";
-                echo "<td class='cabecera-fila' rowspan='2'>ÁREA</td>";
-                echo "<td class='cabecera-fila' rowspan='2'>ÍTEM(FRECUENCIA)</td>";
-                echo "<td class='cabecera-fila' colspan='$numeroDiasMes'>VERIFICACIÓN DE LA LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS PARA HEGIENIZACIÓN</td>";
-                echo "</tr>";
-                echo "<tr>";
-                for ($i = 1; $i <= $numeroDiasMes; $i++) {
-                    echo "<td style='text-align:center; width: 10px;'>" . $i . "</td>";
-                }
-                echo "</tr>";
-                foreach ($grupos as $nombreZona => $frecuencias) {
-                    echo "<tr>";
-
-                    $numFilas = count($frecuencias);
-                    echo '<td rowspan="' . $numFilas . '">' . $nombreZona . '</td>';
-
-                    $firstRow = true;
-
-                    foreach ($frecuencias as $nombreFrecuencia => $fechas) {
-                        if (!$firstRow) {
-                            echo '<tr>';
-                        }
-
-                        echo "<td>" . $nombreFrecuencia . "</td>";
+                echo "<td>" . $nombreFrecuencia . "</td>";
 
 
-                        if (!empty($fechas)) {
-                            $fecha = reset($fechas);
-                            $numDias = date('t', strtotime($fecha));
-                            $fechasArray = [];
+                if (!empty($fechas)) {
+                    $fecha = reset($fechas);
+                    $numDias = date('t', strtotime($fecha));
+                    $fechasArray = [];
 
-                            foreach ($fechas as $fecha) {
-                                $dias = date('d', strtotime($fecha));
-                                $diasConver = intval($dias);
-                                $fechasArray[] = $diasConver;
-                            }
+                    foreach ($fechas as $fecha) {
+                        $dias = date('d', strtotime($fecha));
+                        $diasConver = intval($dias);
+                        $fechasArray[] = $diasConver;
+                    }
 
-                            for ($i = 1; $i <= $numDias; $i++) {
-                                if (in_array($i, $fechasArray)) {
-
-                                    echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt="" width="25"></td>';
-                                } else {
-                                    echo "<td></td>";
-                                }
-                            }
+                    for ($i = 1; $i <= $numDias; $i++) {
+                        if (in_array($i, $fechasArray)) {
+                            //echo '<td style="text-align:center; max-width: 10px;"><img src="http://localhost:8080/MASTER/control_alimento/images/check.png" alt="" width="25"></td>';
+                            echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt="" width="25"></td>';
                         } else {
-                            echo "<td>No hay fechas</td>";
+                            echo "<td></td>";
                         }
-
-                        $firstRow = false;
                     }
-
-                    echo "</tr>";
+                } else {
+                    echo "<td>No hay fechas</td>";
                 }
 
+                $firstRow = false;
+            }
+
+            echo "</tr>";
+        }
 
 
-                ?>
+        echo "</tbody>";
+        ?>
 
-            </tr>
-        </tbody>
+
+
     </table>
 
     <!-- Table observacion-->
     <table style="margin-bottom: 50px;">
-        <tbody>
+        <thead>
             <tr>
-                <td class="cabeceraOb">FECHA</td>
-                <td class="cabeceraOb">OBSERVACIÓN</td>
-                <td class="cabeceraOb">ACCIÓN CORRECTIVA</td>
-                <td class="cabeceraOb">VERIFICACIÓN</td>
-                <td class="cabeceraOb">V°B°</td>
+                <th class="cabeceraOb">FECHA</th>
+                <th class="cabeceraOb">OBSERVACIÓN</th>
+                <th class="cabeceraOb">ACCIÓN CORRECTIVA</th>
+                <th class="cabeceraOb">VERIFICACIÓN</th>
+                <th class="cabeceraOb">V°B°</td>
             </tr>
+        </thead>
+        <tbody>
             <tr>
                 <?php
                 foreach ($dataLimpieza as $row) {

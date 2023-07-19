@@ -41,6 +41,9 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
             <li>
                 <a class="" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
             </li>
+            <li>
+                <a class="" href="controlMaquinas.php">Control de maquinas</a>
+            </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
         <div class="search-box">

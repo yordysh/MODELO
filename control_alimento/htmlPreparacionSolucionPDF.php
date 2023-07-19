@@ -61,11 +61,15 @@ $versionMuestra = $mostrar->VersionMostrar();
         .cabecera-fila {
             background-color: #EEB4F5;
             text-align: center;
+            font-weight: 200;
+            font-size: 20px;
         }
 
         .cabecera-valores {
             background-color: #cee6ba;
             text-align: center;
+            font-weight: 200;
+            font-size: 20px;
         }
 
         .cabecera-fila td,
@@ -107,14 +111,20 @@ $versionMuestra = $mostrar->VersionMostrar();
             left: 0;
             right: 0;
         }
+
+        .cabeceraPreparacion {
+            text-align: center;
+            max-width: 10px;
+        }
     </style>
     <!-- Table titulo-->
     <header>
         <table>
             <tbody>
                 <tr>
+                    <!-- <td rowspan="4" class="cabecera"><img src="http://localhost:8080/MASTER/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
                     <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
-                    <td rowspan="4" style="text-align: center;">PREPARACIÓN DE SOLUCIÓN DE LIMPIEZA Y DESINFECCIÓN - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                    <td rowspan="4" style="text-align: center; font-size:25px; font-weigth:200;">PREPARACIÓN DE SOLUCIÓN DE LIMPIEZA Y DESINFECCIÓN - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                     <td>LBS-PHS-FR-02</td>
 
                 </tr>
@@ -141,190 +151,191 @@ $versionMuestra = $mostrar->VersionMostrar();
 
     <!-- Table solucion y preparaciones-->
     <table style="margin-top: 10px;">
-        <tbody>
+        <thead>
+            <tr>
+                <th rowspan='4' class="cabecera-fila">FECHA DE PREPARACIÓN</th>
+                <th colspan="10" class="cabecera-fila">Detergente</th>
+                <th colspan="18" class="cabecera-fila">Desinfectante</th>
+                <th rowspan="6" class="cabecera-fila">RESPONSABLE DE LA EJECUCIÓN</th>
+            </tr>
+            <tr>
+                <th colspan="3" class="cabecera-fila">Alcalino</th>
+                <th colspan="3" class="cabecera-fila">Ácido</th>
+                <th colspan="4" class="cabecera-fila">En polvo</th>
+                <th colspan="15" class="cabecera-fila">Hipoclorito de Sodio 7.5%</th>
+                <th colspan="3" class="cabecera-fila">Amonio cuaternario 11.59%</th>
+            </tr>
+            <tr>
+                <th colspan="3" class="cabecera-valores">5%</th>
+                <th colspan="3" class="cabecera-valores">3.90%</th>
+                <th colspan="4" rowspan="2" class="cabecera-valores">N° de preparaciones</th>
+                <th colspan="3" class="cabecera-valores">50 ppm</th>
+                <th colspan="3" class="cabecera-valores">100 ppm</th>
+                <th colspan="3" class="cabecera-valores">200 ppm</th>
+                <th colspan="3" class="cabecera-valores">300 ppm</th>
+                <th colspan="3" class="cabecera-valores">400 ppm</th>
+                <th colspan="3" class="cabecera-valores">200 ppm</th>
+            </tr>
+            <tr>
+                <th colspan="6" class="cabecera-valores">N° de preparaciones</th>
+                <th colspan="15" class="cabecera-valores">N° de preparaciones</th>
+                <th colspan="3" class="cabecera-valores">N° de preparaciones</th>
+            </tr>
+            <tr>
+                <th class="cabecera-fila">Hipoclorito de Sodio/Detergente/Desinfectante</th>
+                <th class="cabecera-valores">50ml</th>
+                <th class="cabecera-valores">250ml</th>
+                <th class="cabecera-valores">500ml</th>
+                <th class="cabecera-valores">39ml</th>
+                <th class="cabecera-valores">195ml</th>
+                <th class="cabecera-valores">390ml</th>
+                <th class="cabecera-valores">75g</th>
+                <th class="cabecera-valores">150g</th>
+                <th class="cabecera-valores">300g</th>
+                <th class="cabecera-valores">400g</th>
+                <th class="cabecera-valores">0.7ml </th>
+                <th class="cabecera-valores">3.3ml</th>
+                <th class="cabecera-valores">6.7ml</th>
+                <th class="cabecera-valores">1.3ml</th>
+                <th class="cabecera-valores">6.7ml</th>
+                <th class="cabecera-valores">13.3ml</th>
+                <th class="cabecera-valores">2.7ml</th>
+                <th class="cabecera-valores">13.3ml</th>
+                <th class="cabecera-valores">26.7ml</th>
+                <th class="cabecera-valores">4ml</th>
+                <th class="cabecera-valores">20ml</th>
+                <th class="cabecera-valores">40ml</th>
+                <th class="cabecera-valores">5.3ml</th>
+                <th class="cabecera-valores">26.7ml</th>
+                <th class="cabecera-valores">53.3ml</th>
+                <th class="cabecera-valores">1.7ml</th>
+                <th class="cabecera-valores">8.6ml</th>
+                <th class="cabecera-valores">17.2ml</th>
+            </tr>
+            <tr>
+                <th class="cabecera-fila">Agua(L)</th>
+                <th class="cabecera-valores">1L</th>
+                <th class="cabecera-valores">5L</th>
+                <th class="cabecera-valores">10L</th>
+                <th class="cabecera-valores">1L</th>
+                <th class="cabecera-valores">5L</th>
+                <th class="cabecera-valores">10L</th>
+                <th class="cabecera-valores">5L</th>
+                <th class="cabecera-valores">10L</th>
+                <th class="cabecera-valores">20L</th>
+                <th class="cabecera-valores">40L</th>
+                <th class="cabecera-valores">1L</th>
+                <th class="cabecera-valores">5L</th>
+                <th class="cabecera-valores">10L</th>
+                <th class="cabecera-valores">1L</th>
+                <th class="cabecera-valores">5L</th>
+                <th class="cabecera-valores">10L</th>
+                <th class="cabecera-valores">1L</th>
+                <th class="cabecera-valores">5L</th>
+                <th class="cabecera-valores">10L</th>
+                <th class="cabecera-valores">1L</th>
+                <th class="cabecera-valores">5L</th>
+                <th class="cabecera-valores">10L</th>
+                <th class="cabecera-valores">1L</th>
+                <th class="cabecera-valores">5L</th>
+                <th class="cabecera-valores">10L</th>
+                <th class="cabecera-valores">1L</th>
+                <th class="cabecera-valores">5L</th>
+                <th class="cabecera-valores">10L</th>
+            </tr>
+        </thead>
+        <?php
+        $contadorN = 0;
 
-            <tr>
-                <td rowspan='4' class="cabecera-fila">FECHA DE PREPARACIÓN</td>
-                <td colspan="10" class="cabecera-fila">Detergente</td>
-                <td colspan="18" class="cabecera-fila">Desinfectante</td>
-                <td rowspan="6" class="cabecera-fila">RESPONSABLE DE LA EJECUCIÓN</td>
-            </tr>
-            <tr>
-                <td colspan="3" class="cabecera-fila">Alcalino</td>
-                <td colspan="3" class="cabecera-fila">Ácido</td>
-                <td colspan="4" class="cabecera-fila">En polvo</td>
-                <td colspan="15" class="cabecera-fila">Hipoclorito de Sodio 7.5%</td>
-                <td colspan="3" class="cabecera-fila">Amonio cuaternario 11.59%</td>
-            </tr>
-            <tr>
-                <td colspan="3" class="cabecera-valores">5%</td>
-                <td colspan="3" class="cabecera-valores">3.90%</td>
-                <td colspan="4" rowspan="2" class="cabecera-valores">N° de preparaciones</td>
-                <td colspan="3" class="cabecera-valores">50 ppm</td>
-                <td colspan="3" class="cabecera-valores">100 ppm</td>
-                <td colspan="3" class="cabecera-valores">200 ppm</td>
-                <td colspan="3" class="cabecera-valores">300 ppm</td>
-                <td colspan="3" class="cabecera-valores">400 ppm</td>
-                <td colspan="3" class="cabecera-valores">200 ppm</td>
-            </tr>
-            <tr>
-                <td colspan="6" class="cabecera-valores">N° de preparaciones</td>
-                <td colspan="15" class="cabecera-valores">N° de preparaciones</td>
-                <td colspan="3" class="cabecera-valores">N° de preparaciones</td>
-            </tr>
-            <tr>
-                <td class="cabecera-fila">Hipoclorito de Sodio/Detergente/Desinfectante</td>
-                <td class="cabecera-valores">50ml</td>
-                <td class="cabecera-valores">250ml</td>
-                <td class="cabecera-valores">500ml</td>
-                <td class="cabecera-valores">39ml</td>
-                <td class="cabecera-valores">195ml</td>
-                <td class="cabecera-valores">390ml</td>
-                <td class="cabecera-valores">75g</td>
-                <td class="cabecera-valores">150g</td>
-                <td class="cabecera-valores">300g</td>
-                <td class="cabecera-valores">400g</td>
-                <td class="cabecera-valores">0.7ml </td>
-                <td class="cabecera-valores">3.3ml</td>
-                <td class="cabecera-valores">6.7ml</td>
-                <td class="cabecera-valores">1.3ml</td>
-                <td class="cabecera-valores">6.7ml</td>
-                <td class="cabecera-valores">13.3ml</td>
-                <td class="cabecera-valores">2.7ml</td>
-                <td class="cabecera-valores">13.3ml</td>
-                <td class="cabecera-valores">26.7ml</td>
-                <td class="cabecera-valores">4ml</td>
-                <td class="cabecera-valores">20ml</td>
-                <td class="cabecera-valores">40ml</td>
-                <td class="cabecera-valores">5.3ml</td>
-                <td class="cabecera-valores">26.7ml</td>
-                <td class="cabecera-valores">53.3ml</td>
-                <td class="cabecera-valores">1.7ml</td>
-                <td class="cabecera-valores">8.6ml</td>
-                <td class="cabecera-valores">17.2ml</td>
-            </tr>
-            <tr>
-                <td class="cabecera-fila">Agua(L)</td>
-                <td class="cabecera-valores">1L</td>
-                <td class="cabecera-valores">5L</td>
-                <td class="cabecera-valores">10L</td>
-                <td class="cabecera-valores">1L</td>
-                <td class="cabecera-valores">5L</td>
-                <td class="cabecera-valores">10L</td>
-                <td class="cabecera-valores">5L</td>
-                <td class="cabecera-valores">10L</td>
-                <td class="cabecera-valores">20L</td>
-                <td class="cabecera-valores">40L</td>
-                <td class="cabecera-valores">1L</td>
-                <td class="cabecera-valores">5L</td>
-                <td class="cabecera-valores">10L</td>
-                <td class="cabecera-valores">1L</td>
-                <td class="cabecera-valores">5L</td>
-                <td class="cabecera-valores">10L</td>
-                <td class="cabecera-valores">1L</td>
-                <td class="cabecera-valores">5L</td>
-                <td class="cabecera-valores">10L</td>
-                <td class="cabecera-valores">1L</td>
-                <td class="cabecera-valores">5L</td>
-                <td class="cabecera-valores">10L</td>
-                <td class="cabecera-valores">1L</td>
-                <td class="cabecera-valores">5L</td>
-                <td class="cabecera-valores">10L</td>
-                <td class="cabecera-valores">1L</td>
-                <td class="cabecera-valores">5L</td>
-                <td class="cabecera-valores">10L</td>
-            </tr>
-            <?php
-            $contadorN = 0;
-
-            foreach ($datos as $filas) {
-                $contadorN++;
-
-                echo '<tr>';
-                echo '<td style="text-align:center;">' . convFecSistema($filas['FECHA']) . '</td>';
-                for ($i = 0; $i < 28; $i++) {
-                    if ($i == 0 && $filas['CANTIDAD_MILILITROS'] == '50ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 1 && $filas['CANTIDAD_MILILITROS'] == '250ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 2 && $filas['CANTIDAD_MILILITROS'] == '500ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 3 && $filas['CANTIDAD_MILILITROS'] == '39ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 4 && $filas['CANTIDAD_MILILITROS'] == '195ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 5 && $filas['CANTIDAD_MILILITROS'] == '390ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 6 && $filas['CANTIDAD_MILILITROS'] == '75g') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 7 && $filas['CANTIDAD_MILILITROS'] == '150g') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 8 && $filas['CANTIDAD_MILILITROS'] == '300g') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 9 && $filas['CANTIDAD_MILILITROS'] == '400g') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 10 && $filas['CANTIDAD_MILILITROS'] == '0.7ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 11 && $filas['CANTIDAD_MILILITROS'] == '3.3ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 12 && $filas['CANTIDAD_MILILITROS'] == '6.7ml' && $filas['CANTIDAD_LITROS'] == '10L') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 13 && $filas['CANTIDAD_MILILITROS'] == '1.3ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 14 && $filas['CANTIDAD_MILILITROS'] == '6.7ml' && $filas['CANTIDAD_LITROS'] == '5L') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 15 && $filas['CANTIDAD_MILILITROS'] == '13.3ml' && $filas['CANTIDAD_LITROS'] == '10L') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 16 && $filas['CANTIDAD_MILILITROS'] == '2.7ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 17 && $filas['CANTIDAD_MILILITROS'] == '13.3ml' && $filas['CANTIDAD_LITROS'] == '5L') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 18 && $filas['CANTIDAD_MILILITROS'] == '26.7ml' && $filas['CANTIDAD_LITROS'] == '10L') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 19 && $filas['CANTIDAD_MILILITROS'] == '4ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 20 && $filas['CANTIDAD_MILILITROS'] == '20ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 21 && $filas['CANTIDAD_MILILITROS'] == '40ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 22 && $filas['CANTIDAD_MILILITROS'] == '5.3ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 23 && $filas['CANTIDAD_MILILITROS'] == '26.7ml' && $filas['CANTIDAD_LITROS'] == '5L') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 24 && $filas['CANTIDAD_MILILITROS'] == '53.3ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 25 && $filas['CANTIDAD_MILILITROS'] == '1.7ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 26 && $filas['CANTIDAD_MILILITROS'] == '8.6ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else if ($i == 27 && $filas['CANTIDAD_MILILITROS'] == '17.2ml') {
-                        echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                    } else {
-                        echo '<td style="text-align:center;"></td>';
-                    }
-                }
-                echo '<td style="text-align:center;">USUARIO</td>';
-                echo '</tr>';
-                if ($contadorN % 26 == 0) {
-                    // if ($contadorN % 15 == 0) {
-                    echo '<tr>';
-                    for ($i = 0; $i < 30; $i++) {
-                        echo '<td style="text-align:center;height:10.5rem;border-left:none; border:rght:none;"></td>';
-                    }
-                    echo '</tr>';
-                }
-                if ($contadorN % count($datos) == 0) {
-                    echo '<tr>';
-                    for ($i = 0; $i < 30; $i++) {
-                        echo '<td style="text-align:center;height:20rem;border-left:none; border:right:none;"></td>';
-                    }
-                    echo '</tr>';
+        foreach ($datos as $filas) {
+            $contadorN++;
+            echo '<tbody>';
+            echo '<tr>';
+            echo '<td style="text-align:center;">' . convFecSistema($filas['FECHA']) . '</td>';
+            for ($i = 0; $i < 28; $i++) {
+                if ($i == 0 && $filas['CANTIDAD_MILILITROS'] == '50ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 1 && $filas['CANTIDAD_MILILITROS'] == '250ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 2 && $filas['CANTIDAD_MILILITROS'] == '500ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 3 && $filas['CANTIDAD_MILILITROS'] == '39ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 4 && $filas['CANTIDAD_MILILITROS'] == '195ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 5 && $filas['CANTIDAD_MILILITROS'] == '390ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 6 && $filas['CANTIDAD_MILILITROS'] == '75g') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 7 && $filas['CANTIDAD_MILILITROS'] == '150g') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 8 && $filas['CANTIDAD_MILILITROS'] == '300g') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 9 && $filas['CANTIDAD_MILILITROS'] == '400g') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 10 && $filas['CANTIDAD_MILILITROS'] == '0.7ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 11 && $filas['CANTIDAD_MILILITROS'] == '3.3ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 12 && $filas['CANTIDAD_MILILITROS'] == '6.7ml' && $filas['CANTIDAD_LITROS'] == '10L') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 13 && $filas['CANTIDAD_MILILITROS'] == '1.3ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 14 && $filas['CANTIDAD_MILILITROS'] == '6.7ml' && $filas['CANTIDAD_LITROS'] == '5L') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 15 && $filas['CANTIDAD_MILILITROS'] == '13.3ml' && $filas['CANTIDAD_LITROS'] == '10L') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 16 && $filas['CANTIDAD_MILILITROS'] == '2.7ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 17 && $filas['CANTIDAD_MILILITROS'] == '13.3ml' && $filas['CANTIDAD_LITROS'] == '5L') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 18 && $filas['CANTIDAD_MILILITROS'] == '26.7ml' && $filas['CANTIDAD_LITROS'] == '10L') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 19 && $filas['CANTIDAD_MILILITROS'] == '4ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 20 && $filas['CANTIDAD_MILILITROS'] == '20ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 21 && $filas['CANTIDAD_MILILITROS'] == '40ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 22 && $filas['CANTIDAD_MILILITROS'] == '5.3ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 23 && $filas['CANTIDAD_MILILITROS'] == '26.7ml' && $filas['CANTIDAD_LITROS'] == '5L') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 24 && $filas['CANTIDAD_MILILITROS'] == '53.3ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 25 && $filas['CANTIDAD_MILILITROS'] == '1.7ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 26 && $filas['CANTIDAD_MILILITROS'] == '8.6ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 27 && $filas['CANTIDAD_MILILITROS'] == '17.2ml') {
+                    echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else {
+                    echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                 }
             }
+            echo '<td style="text-align:center;">USUARIO</td>';
+            echo '</tr>';
+            if ($contadorN % 26 == 0) {
+                // if ($contadorN % 15 == 0) {
+                echo '<tr>';
+                for ($i = 0; $i < 30; $i++) {
+                    echo '<td style="text-align:center;height:10.5rem;border-left:none; border:rght:none;"></td>';
+                }
+                echo '</tr>';
+            }
+            if ($contadorN % count($datos) == 0) {
+                echo '<tr>';
+                for ($i = 0; $i < 30; $i++) {
+                    echo '<td style="text-align:center;height:20rem;border-left:none; border:right:none;"></td>';
+                }
+                echo '</tr>';
+            }
+            echo '</tbody>';
+        }
 
-            // printf('<tr><td>Total de filas: ' . count($datos) . '</td></tr>');
-            ?>
-        </tbody>
+        // printf('<tr><td>Total de filas: ' . count($datos) . '</td></tr>');
+        ?>
+
 
     </table>
     <!-- Table Observacion y otros-->

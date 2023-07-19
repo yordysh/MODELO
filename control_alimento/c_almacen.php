@@ -144,7 +144,6 @@ if ($_POST['accion'] == 'buscarprepararacion') {
 
 
 
-
 if ($_POST['accion'] == 'insertarLimpieza') {
 
 
@@ -179,6 +178,25 @@ if ($_POST['accion'] == 'buscarlimpieza') {
     $buscarLimpieza = trim($_POST['buscarLimpieza']);
 
     $respuesta = c_almacen::c_buscar_limpieza($buscarLimpieza);
+    echo $respuesta;
+}
+
+
+
+if ($_POST['accion'] == 'buscarcontrol') {
+    $buscarcontrol = trim($_POST['buscarcontrol']);
+
+    $respuesta = c_almacen::c_buscar_control($buscarcontrol);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'insertarcontrol') {
+
+    $nombrecontrol = strtoupper(trim($_POST['nombrecontrol']));
+    $ndiascontrol = trim($_POST['ndiascontrol']);
+    $valorSeleccionado = trim($_POST['valorSeleccionado']);
+
+    $respuesta = c_almacen::c_insertar_infra($valorSeleccionado, $nombrecontrol, $ndiascontrol);
+
     echo $respuesta;
 }
 
@@ -297,12 +315,12 @@ class c_almacen
         }
     }
 
-    static function c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias)
+    static function c_insertar_infra($valorSeleccionado, $nombrecontrol, $ndiascontrol)
     {
         $mostrar = new m_almacen();
-        if (isset($nombreinfraestructura) && isset($ndias) && isset($valorSeleccionado)) {
+        if (isset($nombrecontrol) && isset($ndiascontrol) && isset($valorSeleccionado)) {
 
-            $respuesta = $mostrar->insertarInfraestructura($valorSeleccionado, $nombreinfraestructura, $ndias);
+            $respuesta = $mostrar->insertarControl($valorSeleccionado, $nombrecontrol, $ndiascontrol);
             if ($respuesta) {
 
                 return "ok";
@@ -1136,6 +1154,72 @@ class c_almacen
             }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
+        }
+    }
+
+
+
+    static function c_buscar_control($buscarcontrol)
+    {
+        try {
+
+            if (!empty($buscarcontrol)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarControlMaquinasBusqueda($buscarcontrol);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
+                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                        "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
+                        "N_DIAS_CONTROL" => $row->N_DIAS_CONTROL,
+                        "FECHA" =>  convFecSistema($row->FECHA),
+                        "OBSERVACION" => $row->OBSERVACION,
+                        "ACCION_CORRECTIVA" => $row->ACCION_CORRECTIVA,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarControlMaquinasBusqueda($buscarcontrol);
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
+                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                        "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
+                        "N_DIAS_CONTROL" => $row->N_DIAS_CONTROL,
+                        "FECHA" =>  convFecSistema($row->FECHA),
+                        "OBSERVACION" => $row->OBSERVACION,
+                        "ACCION_CORRECTIVA" => $row->ACCION_CORRECTIVA,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+                // $jsonstring = json_encode($datos);
+                // echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_insertar_control($valorSeleccionado, $nombreinfraestructura, $ndias)
+    {
+        $mostrar = new m_almacen();
+        if (isset($nombreinfraestructura) && isset($ndias) && isset($valorSeleccionado)) {
+
+            $respuesta = $mostrar->insertarInfraestructura($valorSeleccionado, $nombreinfraestructura, $ndias);
+            if ($respuesta) {
+
+                return "ok";
+            } else {
+                return "error";
+            };
         }
     }
 }

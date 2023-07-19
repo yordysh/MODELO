@@ -16,7 +16,6 @@ class m_almacen
   {
     try {
 
-
       $stm = $this->bd->prepare("SELECT * FROM T_ZONA_AREAS");
 
       $stm->execute();
@@ -43,7 +42,6 @@ class m_almacen
   public function MostrarAlmacenMuestraBusqueda($search)
   {
     try {
-
 
       $stm = $this->bd->prepare("SELECT * FROM T_ZONA_AREAS WHERE NOMBRE_T_ZONA_AREAS LIKE '$search%' OR COD_ZONA LIKE '$search%'");
 
@@ -75,6 +73,17 @@ class m_almacen
     $stm->execute();
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
     $maxCodigo = intval($resultado['COD_INFRAESTRUCTURA']);
+    $nuevoCodigo = $maxCodigo + 1;
+    $codigoAumento = str_pad($nuevoCodigo, 2, '0', STR_PAD_LEFT);
+    return $codigoAumento;
+  }
+
+  public function generarCodigoControlMaquina()
+  {
+    $stm = $this->bd->prepare("SELECT MAX(COD_CONTROL_MAQUINA) as COD_CONTROL_MAQUINA FROM T_CONTROL_MAQUINA");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $maxCodigo = intval($resultado['COD_CONTROL_MAQUINA']);
     $nuevoCodigo = $maxCodigo + 1;
     $codigoAumento = str_pad($nuevoCodigo, 2, '0', STR_PAD_LEFT);
     return $codigoAumento;
@@ -142,6 +151,18 @@ class m_almacen
 
     return $count;
   }
+  public function contarRegistrosControl($NOMBRE_CONTROL_MAQUINA, $valorSeleccionado)
+  {
+    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_CONTROL_MAQUINA WHERE NOMBRE_CONTROL_MAQUINA = :NOMBRE_CONTROL_MAQUINA AND COD_ZONA= :COD_ZONA");
+    $repetir->bindParam(':NOMBRE_CONTROL_MAQUINA', $NOMBRE_CONTROL_MAQUINA, PDO::PARAM_STR);
+    $repetir->bindParam(':COD_ZONA', $valorSeleccionado, PDO::PARAM_STR);
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['count'];
+
+    return $count;
+  }
+
   public function contarRegistrosLimpieza($textfrecuencia, $selectZona)
   {
     $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_FRECUENCIA WHERE NOMBRE_FRECUENCIA = :NOMBRE_FRECUENCIA AND COD_ZONA=:COD_ZONA");
@@ -165,10 +186,11 @@ class m_almacen
 
       $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
 
-      $FECHA = $cod->c_horaserversql('F');
+      // $FECHA = $cod->c_horaserversql('F');
+      $FECHA = '19/07/2023';
       if ($repetir == 0) {
 
-        $stm = $this->bd->prepare("INSERT INTO T_ZONA_AREAS (COD_ZONA, NOMBRE_T_ZONA_AREAS, FECHA, VERSION) 
+        $stm = $this->bd->prepare("INSERT INTO T_ZONA_AREAS (COD_ZONA, NOMBRE_T_ZONA_AREAS, FECHA, VERSION)
                                   VALUES ( '$COD_ZONA', '$NOMBRE_T_ZONA_AREAS', '$FECHA', '$VERSION')");
 
 
@@ -243,8 +265,8 @@ class m_almacen
         $stmt->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
         $update = $stmt->execute();
 
-        // $fechaDHoy = date('Y-m-d');
-        $fechaDHoy = $cod->c_horaserversql('F');
+        $fechaDHoy = date('Y-m-d');
+        //$fechaDHoy = $cod->c_horaserversql('F');
 
         if ($VERSION == '01') {
           $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
@@ -307,7 +329,7 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare(" SELECT I.COD_INFRAESTRUCTURA, Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS, NOMBRE_INFRAESTRUCTURA, I.NDIAS, I.FECHA,I.VERSION,USUARIO FROM T_INFRAESTRUCTURA AS I 
+      $stm = $this->bd->prepare(" SELECT I.COD_INFRAESTRUCTURA, Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS, NOMBRE_INFRAESTRUCTURA, I.NDIAS, I.FECHA,I.VERSION,USUARIO FROM T_INFRAESTRUCTURA AS I
       INNER JOIN T_ZONA_AREAS AS Z ON I.COD_ZONA=Z.COD_ZONA;");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
@@ -324,8 +346,8 @@ class m_almacen
 
 
       $stm = $this->bd->prepare("SELECT T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
-                                 T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA, T_INFRAESTRUCTURA.NDIAS AS NDIAS ,T_INFRAESTRUCTURA.FECHA AS FECHA, 
-                                 T_INFRAESTRUCTURA.USUARIO AS USUARIO  FROM T_INFRAESTRUCTURA 
+                                 T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA, T_INFRAESTRUCTURA.NDIAS AS NDIAS ,T_INFRAESTRUCTURA.FECHA AS FECHA,
+                                 T_INFRAESTRUCTURA.USUARIO AS USUARIO  FROM T_INFRAESTRUCTURA
                                  INNER JOIN T_ZONA_AREAS ON T_INFRAESTRUCTURA.COD_ZONA = T_ZONA_AREAS.COD_ZONA WHERE T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA LIKE '$search%'");
 
       $stm->execute();
@@ -342,10 +364,10 @@ class m_almacen
     try {
 
       $stm = $this->bd->prepare("SELECT T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,
-                                  T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS, 
+                                  T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
                                   T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,
-                                  T_INFRAESTRUCTURA.NDIAS AS NDIAS,T_INFRAESTRUCTURA.FECHA AS FECHA, 
-                                  T_INFRAESTRUCTURA.USUARIO AS USUARIO  FROM T_INFRAESTRUCTURA 
+                                  T_INFRAESTRUCTURA.NDIAS AS NDIAS,T_INFRAESTRUCTURA.FECHA AS FECHA,
+                                  T_INFRAESTRUCTURA.USUARIO AS USUARIO  FROM T_INFRAESTRUCTURA
                                   INNER JOIN T_ZONA_AREAS ON T_INFRAESTRUCTURA.COD_ZONA = T_ZONA_AREAS.COD_ZONA WHERE COD_INFRAESTRUCTURA = :COD_INFRAESTRUCTURA");
       $stm->bindParam(':COD_INFRAESTRUCTURA', $COD_INFRAESTRUCTURA, PDO::PARAM_STR);
       $stm->execute();
@@ -393,19 +415,20 @@ class m_almacen
       $VERSION = $cod->generarVersion();
       $repetir = $cod->contarRegistrosInfraestructura($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado);
 
-      $FECHA = $cod->c_horaserversql('F');
-      // $FECHA = '10/07/2023';
+      //$FECHA = $cod->c_horaserversql('F');
+
+      $FECHA = date('Y-m-d');
       // var_dump($FECHA);
 
       if ($repetir == 0) {
-        $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION) 
-                                  VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION')");
 
+        $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION)
+                                  VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION')");
         $insert = $stm->execute();
 
-        // $fechaDHoy = date('Y-m-d');
-        // $fechaDHoy = '10/07/2023';
-        $fechaDHoy  = $cod->c_horaserversql('F');
+        $fechaDHoy = date('Y-m-d');
+        //$fechaDHoy = '19/07/2023';
+        //$fechaDHoy  = $cod->c_horaserversql('F');
 
         if ($VERSION == '01') {
           $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
@@ -443,9 +466,9 @@ class m_almacen
 
         $DIAS_DESCUENTO = 2;
 
-        $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA);
-        $FECHA_TOTAL = $FECHA_FORMATO->modify("+$NDIAS days")->format('d-m-Y');
-
+        // $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA);
+        //$FECHA_TOTAL = $FECHA_FORMATO->modify("+$NDIAS days")->format('d-m-Y');
+        $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA . '+ ' . $NDIAS));
         // Verificar si la fecha total cae en domingo
         if (date('N', strtotime($FECHA_TOTAL)) == 7) {
           $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA_TOTAL . '+1 day'));
@@ -522,7 +545,7 @@ class m_almacen
       $stm = $this->bd->prepare("SELECT T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_AREA,T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,
       T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,T_INFRAESTRUCTURA.NDIAS AS NDIAS,T_ALERTA.COD_ALERTA AS COD_ALERTA,
       T_ALERTA.FECHA_CREACION AS FECHA_CREACION,T_ALERTA.FECHA_TOTAL AS FECHA_TOTAL, T_ALERTA.FECHA_ACORDAR AS FECHA_ACORDAR, T_ALERTA.ESTADO AS ESTADO FROM T_ALERTA INNER JOIN T_INFRAESTRUCTURA
-      ON T_ALERTA.COD_INFRAESTRUCTURA= T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA inner join T_ZONA_AREAS ON 
+      ON T_ALERTA.COD_INFRAESTRUCTURA= T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA inner join T_ZONA_AREAS ON
       T_ZONA_AREAS.COD_ZONA= T_INFRAESTRUCTURA.COD_ZONA
       WHERE FECHA_ACORDAR IS NOT NULL AND
     CAST(FECHA_ACORDAR AS DATE) <= CAST(GETDATE() as DATE) AND  CAST(GETDATE() as DATE) < CAST(FECHA_TOTAL AS DATE)");
@@ -543,7 +566,7 @@ class m_almacen
       T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,T_INFRAESTRUCTURA.NDIAS AS NDIAS,T_ALERTA.COD_ALERTA AS COD_ALERTA,
       T_ALERTA.FECHA_CREACION AS FECHA_CREACION,T_ALERTA.FECHA_TOTAL AS FECHA_TOTAL, T_ALERTA.FECHA_ACORDAR AS FECHA_ACORDAR,
       T_ALERTA.ESTADO AS ESTADO, T_ALERTA.N_DIAS_POS AS N_DIAS_POS, T_ALERTA.POSTERGACION AS POSTERGACION FROM T_ALERTA INNER JOIN T_INFRAESTRUCTURA
-      ON T_ALERTA.COD_INFRAESTRUCTURA= T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA inner join T_ZONA_AREAS ON 
+      ON T_ALERTA.COD_INFRAESTRUCTURA= T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA inner join T_ZONA_AREAS ON
       T_ZONA_AREAS.COD_ZONA= T_INFRAESTRUCTURA.COD_ZONA
       WHERE CAST(FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE)   AND ESTADO='P' ");
       $stm->execute();
@@ -750,8 +773,8 @@ class m_almacen
 
 
       $stm = $this->bd->prepare(
-        "SELECT TS.NOMBRE_INSUMOS AS NOMBRE_INSUMOS, TP.NOMBRE_PREPARACION AS NOMBRE_PREPARACION, 
-                                  TC.CANTIDAD_PORCENTAJE AS CANTIDAD_PORCENTAJE,TM.CANTIDAD_MILILITROS AS CANTIDAD_MILILITROS, 
+        "SELECT TS.NOMBRE_INSUMOS AS NOMBRE_INSUMOS, TP.NOMBRE_PREPARACION AS NOMBRE_PREPARACION,
+                                  TC.CANTIDAD_PORCENTAJE AS CANTIDAD_PORCENTAJE,TM.CANTIDAD_MILILITROS AS CANTIDAD_MILILITROS,
                                   TL.CANTIDAD_LITROS AS CANTIDAD_LITROS  FROM T_SOLUCIONES AS TS
                                   INNER JOIN T_PREPARACIONES AS TP ON TP.ID_SOLUCIONES = TS.ID_SOLUCIONES
                                   INNER JOIN T_CANTIDAD AS TC ON TC.ID_PREPARACIONES = TP.ID_PREPARACIONES
@@ -783,7 +806,7 @@ class m_almacen
 
       if ($valor1 == 0) {
         $stm = $this->bd->prepare("INSERT INTO T_UNION(NOMBRE_INSUMOS, NOMBRE_PREPARACION,CANTIDAD_PORCENTAJE,
-                                    CANTIDAD_MILILITROS, CANTIDAD_LITROS, OBSERVACION, ACCION_CORRECTIVA, VERIFICACION) 
+                                    CANTIDAD_MILILITROS, CANTIDAD_LITROS, OBSERVACION, ACCION_CORRECTIVA, VERIFICACION)
                                   VALUES ('$selectSolucion','$selectPreparacion', '$selectCantidad','$selectML', '$selectL','$textAreaObservacion','$textAreaAccion','$selectVerificacion')");
 
         $insert = $stm->execute();
@@ -840,7 +863,7 @@ class m_almacen
 
 
       $stm = $this->bd->prepare(
-        "SELECT T_FRECUENCIA.COD_FRECUENCIA AS COD_FRECUENCIA, 
+        "SELECT T_FRECUENCIA.COD_FRECUENCIA AS COD_FRECUENCIA,
         T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
         T_FRECUENCIA.NOMBRE_FRECUENCIA AS NOMBRE_FRECUENCIA ,T_FRECUENCIA.FECHA AS FECHA,
         T_FRECUENCIA.VERSION AS VERSION  FROM T_FRECUENCIA INNER JOIN T_ZONA_AREAS
@@ -878,7 +901,7 @@ class m_almacen
 
       if ($contador == 0) {
 
-        $stm = $this->bd->prepare("INSERT INTO T_FRECUENCIA(COD_FRECUENCIA, COD_ZONA, NOMBRE_FRECUENCIA, VERSION,OBSERVACION,ACCION_CORRECTIVA,VERIFICACION) 
+        $stm = $this->bd->prepare("INSERT INTO T_FRECUENCIA(COD_FRECUENCIA, COD_ZONA, NOMBRE_FRECUENCIA, VERSION,OBSERVACION,ACCION_CORRECTIVA,VERIFICACION)
                                   VALUES ('$codFrecuencia','$selectZona', '$textfrecuencia','$version','$textAreaObservacion','$textAreaAccion','$selectVerificacion')");
 
         $insert = $stm->execute();
@@ -929,8 +952,8 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT T_FRECUENCIA.COD_FRECUENCIA AS COD_FRECUENCIA, 
-      T_FRECUENCIA.NOMBRE_FRECUENCIA AS NOMBRE_FRECUENCIA, 
+      $stm = $this->bd->prepare("SELECT T_FRECUENCIA.COD_FRECUENCIA AS COD_FRECUENCIA,
+      T_FRECUENCIA.NOMBRE_FRECUENCIA AS NOMBRE_FRECUENCIA,
       T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS
       FROM T_FRECUENCIA INNER JOIN T_ZONA_AREAS ON T_FRECUENCIA.COD_ZONA=T_ZONA_AREAS.COD_ZONA WHERE COD_FRECUENCIA=:COD_FRECUENCIA");
       $stm->bindParam(':COD_FRECUENCIA', $cod_frecuencia, PDO::PARAM_STR);
@@ -972,6 +995,110 @@ class m_almacen
 
       return $datos;
     } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+  public function MostrarControlMaquinasBusqueda($search)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT C.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA, Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
+                                  C.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA, C.N_DIAS_CONTROL AS N_DIAS_CONTROL, C.FECHA AS FECHA,
+                                  C.OBSERVACION AS OBSERVACION, C.ACCION_CORRECTIVA AS ACCION_CORRECTIVA FROM T_CONTROL_MAQUINA AS C
+                                  INNER JOIN T_ZONA_AREAS AS Z ON C.COD_ZONA=Z.COD_ZONA WHERE NOMBRE_CONTROL_MAQUINA LIKE '$search%' OR COD_CONTROL_MAQUINA LIKE '$search%'");
+
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function insertarControl($valorSeleccionado, $NOMBRE_CONTROL_MAQUINA, $N_DIAS_CONTROL)
+  {
+    try {
+
+      $this->bd->beginTransaction();
+      $cod = new m_almacen();
+      $COD_CONTROL_MAQUINA = $cod->generarCodigoControlMaquina();
+      $VERSION = $cod->generarVersion();
+      $repetir = $cod->contarRegistrosControl($NOMBRE_CONTROL_MAQUINA, $valorSeleccionado);
+
+      //$FECHA = $cod->c_horaserversql('F');
+
+      $FECHA = date('Y-m-d');
+      // var_dump($FECHA);
+
+      if ($repetir == 0) {
+
+        $stm = $this->bd->prepare("INSERT INTO T_CONTROL_MAQUINA(COD_CONTROL_MAQUINA, COD_ZONA,NOMBRE_CONTROL_MAQUINA ,N_DIAS_CONTROL, FECHA,VERSION)
+                                  VALUES (' $COD_CONTROL_MAQUINA','$valorSeleccionado', '$NOMBRE_CONTROL_MAQUINA','$N_DIAS_CONTROL', '$FECHA', '$VERSION')");
+        $insert = $stm->execute();
+
+        $fechaDHoy = date('Y-m-d');
+        //$fechaDHoy = '19/07/2023';
+        //$fechaDHoy  = $cod->c_horaserversql('F');
+
+        if ($VERSION == '01') {
+          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+          $stmver->execute();
+          $valor = $stmver->fetchAll();
+
+          $valor1 = count($valor);
+
+          if ($valor1 == 0) {
+            $stmVersion = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
+            $stmVersion->bindParam(':version', $VERSION, PDO::PARAM_STR);
+            $stmVersion->execute();
+          }
+        } else {
+          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+          $stmver->execute();
+          $valor = $stmver->fetchAll();
+
+          $valor1 = count($valor);
+
+          if ($valor1 == 0) {
+            $stmVersion = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
+            $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+            $stmVersion->bindParam(':FECHA_VERSION', $fechaDHoy);
+            $stmVersion->execute();
+          }
+        }
+
+        $DIAS_DESCUENTO = 2;
+
+        // $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA);
+        //$FECHA_TOTAL = $FECHA_FORMATO->modify("+$NDIAS days")->format('d-m-Y');
+        $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA . '+ ' . $N_DIAS_CONTROL));
+        // Verificar si la fecha total cae en domingo
+        if (date('N', strtotime($FECHA_TOTAL)) == 7) {
+          $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA_TOTAL . '+1 day'));
+        }
+
+        // if (!($N_DIAS_CONTROL == 1 || $N_DIAS_CONTROL == 2)) {
+        // $FECHA_ACORDAR = restarDias($FECHA_TOTAL, $DIAS_DESCUENTO);
+        //   $FECHA_ACORDAR = date('d-m-Y', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days'));
+        //   $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) values('$COD_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$N_DIAS_CONTROL')");
+        // // } else {
+        $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) values('$COD_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$N_DIAS_CONTROL')");
+        // }
+
+
+
+        $stm1->execute();
+        $insert = $this->bd->commit();
+        return $insert;
+      }
+    } catch (Exception $e) {
+      $this->bd->rollBack();
       die($e->getMessage());
     }
   }
