@@ -17,6 +17,10 @@ $(function () {
         <h2>Maquina, equipos y utensilios de trabajo:</h2>
         <p>${task.NOMBRE_CONTROL_MAQUINA}</p>
         </div>
+        <div>
+        <p>Accion Correctiva:</p>
+        <textarea class="form-control" rows="3" id="accioncorrectiva-${task.COD_ALERTA_CONTROL_MAQUINA}" rows="3"></textarea>
+        </div>
         <label>
           <input type="radio" name="estado-${task.COD_ALERTA_CONTROL_MAQUINA}" value="R"> Realizado
         </label>
