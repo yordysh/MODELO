@@ -38,7 +38,6 @@ if ($_POST['accion'] == 'buscarzona') {
 
 
 if ($_POST['accion'] == 'insertarinfra') {
-
     $nombreinfraestructura = strtoupper(trim($_POST['nombreinfraestructura']));
     $ndias = trim($_POST['ndias']);
     $valorSeleccionado = trim($_POST['valorSeleccionado']);
@@ -195,8 +194,39 @@ if ($_POST['accion'] == 'insertarcontrol') {
     $ndiascontrol = trim($_POST['ndiascontrol']);
     $valorSeleccionado = trim($_POST['valorSeleccionado']);
 
-    $respuesta = c_almacen::c_insertar_infra($valorSeleccionado, $nombrecontrol, $ndiascontrol);
+    $respuesta = c_almacen::c_insertar_control($valorSeleccionado, $nombrecontrol, $ndiascontrol);
 
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'editarcontrolmaquina') {
+
+    $codcontrolmaquina = trim($_POST['codcontrolmaquina']);
+
+    $respuesta = c_almacen::c_editar_control_maquina($codcontrolmaquina);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'actualizarcontrol') {
+    $codcontrol = trim($_POST["codcontrol"]);
+    $nombrecontrol = trim($_POST['nombrecontrol']);
+    $ndiascontrol = trim($_POST['ndiascontrol']);
+
+    $respuesta = c_almacen::c_actualizar_control_maquina($nombrecontrol, $ndiascontrol,  $codcontrol);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'eliminarcontrolmaquina') {
+
+    $codcontrolmaquina = trim($_POST['codcontrolmaquina']);
+
+    $respuesta = c_almacen::c_eliminar_control_maquina($codcontrolmaquina);
+    echo $respuesta;
+}
+
+if ($_POST['accion'] == 'fechaalertacontrol') {
+    $respuesta = c_almacen::c_fecha_alerta_control();
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'actualizaalertacontrol') {
+    $respuesta = c_almacen::c_checkbox_confirma_control();
     echo $respuesta;
 }
 
@@ -315,12 +345,12 @@ class c_almacen
         }
     }
 
-    static function c_insertar_infra($valorSeleccionado, $nombrecontrol, $ndiascontrol)
+    static function c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias)
     {
         $mostrar = new m_almacen();
-        if (isset($nombrecontrol) && isset($ndiascontrol) && isset($valorSeleccionado)) {
+        if (isset($nombreinfraestructura,) && isset($ndias) && isset($valorSeleccionado)) {
 
-            $respuesta = $mostrar->insertarControl($valorSeleccionado, $nombrecontrol, $ndiascontrol);
+            $respuesta = $mostrar->insertarInfraestructura($valorSeleccionado, $nombreinfraestructura,  $ndias);
             if ($respuesta) {
 
                 return "ok";
@@ -1208,12 +1238,12 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function c_insertar_control($valorSeleccionado, $nombreinfraestructura, $ndias)
+    static function c_insertar_control($valorSeleccionado, $nombrecontrol, $ndiascontrol)
     {
         $mostrar = new m_almacen();
-        if (isset($nombreinfraestructura) && isset($ndias) && isset($valorSeleccionado)) {
+        if (isset($nombrecontrol) && isset($ndiascontrol) && isset($valorSeleccionado)) {
 
-            $respuesta = $mostrar->insertarInfraestructura($valorSeleccionado, $nombreinfraestructura, $ndias);
+            $respuesta = $mostrar->insertarControl($valorSeleccionado, $nombrecontrol, $ndiascontrol);
             if ($respuesta) {
 
                 return "ok";
@@ -1221,5 +1251,130 @@ class c_almacen
                 return "error";
             };
         }
+    }
+    static function c_editar_control_maquina($codcontrolmaquina)
+    {
+        $mostrar = new m_almacen();
+
+
+        if (isset($codcontrolmaquina)) {
+
+
+
+            $select = $mostrar->SelectControlMaquina($codcontrolmaquina);
+
+
+            $json = array();
+
+            foreach ($select as $row) {
+                $json[] = array(
+                    "COD_CONTROL_MAQUINA" => $row['COD_CONTROL_MAQUINA'],
+                    "NOMBRE_T_ZONA_AREAS" => $row['NOMBRE_T_ZONA_AREAS'],
+                    "NOMBRE_CONTROL_MAQUINA" => $row['NOMBRE_CONTROL_MAQUINA'],
+                    "N_DIAS_CONTROL" => $row['N_DIAS_CONTROL']
+
+                );
+            }
+
+            $jsonstring = json_encode($json[0]);
+            echo $jsonstring;
+        }
+    }
+    static function c_actualizar_control_maquina($nombrecontrol, $ndiascontrol,  $codcontrol)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($nombrecontrol) && isset($ndiascontrol) && isset($codcontrol)) {
+            $resultado = $m_formula->editarControlMaquina($nombrecontrol, $ndiascontrol,  $codcontrol);
+
+            if ($resultado) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function c_eliminar_control_maquina($codcontrolmaquina)
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($codcontrolmaquina)) {
+
+            $resultado = $mostrar->eliminarControlMaquina($codcontrolmaquina);
+            if ($resultado) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function c_fecha_alerta_control()
+    {
+        $mostrar = new m_almacen();
+
+
+        $datos = $mostrar->MostrarAlertaControl();
+        try {
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_ALERTA_CONTROL_MAQUINA" => $row->COD_ALERTA_CONTROL_MAQUINA,
+                    "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                    "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
+                    "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                    "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
+                    "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
+                    "N_DIAS_POS" =>  $row->N_DIAS_POS,
+
+
+                );
+            }
+
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: ";
+        }
+    }
+    static function c_checkbox_confirma_control()
+    {
+        $mostrar = new m_almacen();
+
+
+        $estado = $_POST['estado'];
+        $taskId = $_POST['taskId'];
+        $observacionTextArea = $_POST['observacionTextArea'];
+        // $FECHA_TOTAL = $_POST['taskFecha'];
+
+
+
+        $fechadHoy  = $mostrar->c_horaserversql('F');
+        // $fechaActual = new DateTime();
+        // $fechadHoy = $fechaActual->format('d/m/Y');
+
+
+        $alert = $mostrar->actualizarAlertaCheckControl($estado, $taskId, $observacionTextArea);
+
+
+        $alert->execute();
+        return $alert;
+
+        // if ($insert2) {
+        //     $response = array(
+        //         'success' => true,
+        //         'message' => 'Estado actualizado correctamente'
+        //     );
+        // } else {
+        //     $response = array(
+        //         'success' => false,
+        //         // 'message' => 'Error al actualizar el estado: ' . $conn->error
+        //     );
+        // }
+
+        echo json_encode($alert);
     }
 }

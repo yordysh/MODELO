@@ -33,7 +33,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                 <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
             </li>
             <li>
-                <a class="" href="#">Infraestructura</a>
+                <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
             </li>
             <li>
                 <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>
@@ -161,6 +161,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxControlMaquinas.js"></script>
+    <script src="./js/ajaxFechaAvisoControl.js"></script>
     <script>
         function generarPDF() {
             var anioSeleccionado = document.getElementById("anio").value;

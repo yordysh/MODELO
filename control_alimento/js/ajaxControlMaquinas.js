@@ -165,36 +165,32 @@ $(function () {
 
   $(document).on("click", ".task-update", () => {
     var element = $(this)[0].activeElement.parentElement.parentElement;
-
-    // var selectInfra = document.getElementById("selectInfra");
-    // selectInfra.disabled = true;
-
-    var COD_INFRAESTRUCTURA = $(element).attr("taskId");
-    const accion = "editarinfra";
+    var cod_control_maquina = $(element).attr("taskId");
+    const accion = "editarcontrolmaquina";
 
     $.ajax({
       url: "./c_almacen.php",
-      data: { accion: accion, codinfra: COD_INFRAESTRUCTURA },
+      data: { accion: accion, codcontrolmaquina: cod_control_maquina },
       type: "POST",
       success: function (response) {
         if (!response.error) {
           const task = JSON.parse(response);
 
-          var selectInfra = $("#selectInfra");
+          var selectControl = $("#selectControl");
 
-          selectInfra.prop("disabled", true);
+          selectControl.prop("disabled", true);
 
           if (task.NOMBRE_T_ZONA_AREAS) {
-            selectInfra.val(
-              selectInfra
+            selectControl.val(
+              selectControl
                 .find("option:contains('" + task.NOMBRE_T_ZONA_AREAS + "')")
                 .val()
             );
           }
 
-          $("#NOMBRE_INFRAESTRUCTURA").val(task.NOMBRE_INFRAESTRUCTURA);
-          $("#NDIAS").val(task.NDIAS);
-          $("#taskId").val(task.COD_INFRAESTRUCTURA);
+          $("#NOMBRE_CONTROL_MAQUINA").val(task.NOMBRE_CONTROL_MAQUINA);
+          $("#N_DIAS_CONTROL").val(task.N_DIAS_CONTROL);
+          $("#taskId").val(task.COD_CONTROL_MAQUINA);
 
           edit = true;
         }
@@ -206,8 +202,8 @@ $(function () {
 
   $(document).on("click", ".task-delete", function (e) {
     e.preventDefault();
-    var COD_INFRAESTRUCTURA = $(this).attr("data-COD_INFRAESTRUCTURA");
-    const accion = "eliminarinfra";
+    var COD_CONTROL_MAQUINA = $(this).attr("data-COD_CONTROL_MAQUINA");
+    const accion = "eliminarcontrolmaquina";
 
     Swal.fire({
       title: "¿Está seguro de eliminar este registro?",
@@ -223,7 +219,7 @@ $(function () {
         $.ajax({
           url: "./c_almacen.php",
           type: "POST",
-          data: { accion: accion, codinfra: COD_INFRAESTRUCTURA },
+          data: { accion: accion, codcontrolmaquina: COD_CONTROL_MAQUINA },
           success: function (response) {
             fetchTasks();
             Swal.fire({
