@@ -1084,16 +1084,16 @@ class m_almacen
         }
 
         // if (!($N_DIAS_CONTROL == 1 || $N_DIAS_CONTROL == 2)) {
-        // $FECHA_ACORDAR = restarDias($FECHA_TOTAL, $DIAS_DESCUENTO);
+        //   $FECHA_ACORDAR = restarDias($FECHA_TOTAL, $DIAS_DESCUENTO);
         //   $FECHA_ACORDAR = date('d-m-Y', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days'));
         //   $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) values('$COD_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$N_DIAS_CONTROL')");
-        // // } else {
-        $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) values('$COD_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$N_DIAS_CONTROL')");
+        // } else {
+        //$stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) values('$COD_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$N_DIAS_CONTROL')");
         // }
 
 
 
-        $stm1->execute();
+        // $stm1->execute();
         $insert = $this->bd->commit();
         return $insert;
       }
