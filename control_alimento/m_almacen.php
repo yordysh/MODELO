@@ -1149,7 +1149,7 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS, C.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
+      $stm = $this->bd->prepare("  SELECT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS, C.COD_CONTROL_MAQUINA AS  COD_CONTROL_MAQUINA, C.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
       A.COD_ALERTA_CONTROL_MAQUINA AS COD_ALERTA_CONTROL_MAQUINA, A.N_DIAS_POS AS N_DIAS_POS, A.FECHA_TOTAL, 
       A.FECHA_CREACION AS FECHA_CREACION,A.FECHA_ACORDAR AS FECHA_ACORDAR, A.OBSERVACION AS OBSERVACION,
       A.ACCION_CORRECTIVA AS ACCION_CORRECTIVA  FROM T_ALERTA_CONTROL_MAQUINA AS A 
@@ -1169,5 +1169,18 @@ class m_almacen
     $stmt = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET ESTADO = '$estado', OBSERVACION = '$observacion' WHERE COD_ALERTA_CONTROL_MAQUINA = '$taskId'");
     $stmt->execute();
     return $stmt;
+  }
+  public function InsertarAlertaControlMaquina($FECHA_CREACION,  $codControlMaquina, $FECHA_TOTAL, $taskNdias)
+  {
+    $stm = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA, FECHA_CREACION, FECHA_TOTAL,N_DIAS_POS) VALUES (:COD_CONTROL_MAQUINA, :FECHA_CREACION, :FECHA_TOTAL,:N_DIAS_POS)");
+
+
+    $stm->bindParam(':FECHA_CREACION', $FECHA_CREACION);
+    $stm->bindParam(':COD_CONTROL_MAQUINA', $codControlMaquina);
+    $stm->bindParam(':FECHA_TOTAL', $FECHA_TOTAL);
+    $stm->bindParam(':N_DIAS_POS', $taskNdias);
+
+    $insert1 = $stm->execute();
+    return $insert1;
   }
 }

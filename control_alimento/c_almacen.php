@@ -229,6 +229,10 @@ if ($_POST['accion'] == 'actualizaalertacontrol') {
     $respuesta = c_almacen::c_checkbox_confirma_control();
     echo $respuesta;
 }
+if ($_POST['accion'] == 'insertaralertamixcontrolmaquina') {
+    $respuesta = c_almacen::c_insertar_alertamix_control_maquina();
+    echo $respuesta;
+}
 
 
 class c_almacen
@@ -1322,8 +1326,10 @@ class c_almacen
             $json = array();
             foreach ($datos as $row) {
                 $json[] = array(
+
                     "COD_ALERTA_CONTROL_MAQUINA" => $row->COD_ALERTA_CONTROL_MAQUINA,
                     "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                    "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
                     "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
                     "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
                     "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
@@ -1376,5 +1382,242 @@ class c_almacen
         // }
 
         echo json_encode($alert);
+    }
+    static function c_insertar_alertamix_control_maquina()
+    {
+        $mostrar = new m_almacen();
+
+
+        $taskNdias = $_POST['taskNdias'];
+        if ($taskNdias == 1) {
+
+            // $fechaCreacion = $_POST['fechaCreacion'];
+            $codControlMaquina = $_POST['codControlMaquina'];
+            // var_dump($_POST['fechaCreacion']);
+            // $fechaCreacion = new DateTime();
+            // $fechaCrea = $fechaCreacion->format('Y-m-d');
+
+            // $FECHA_CREACION = retunrFechaSqlphp($fechaCrea);
+            $FECHA_CREACION = $mostrar->c_horaserversql('F');
+            $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y',  $FECHA_CREACION);
+            $FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
+
+            //$fechaTotal = date('Y-m-d', strtotime($fechaCrea . '+' . $taskNdias . ' days'));
+
+            // Verificar si la fecha total cae en domingo
+            if (date('N', strtotime($FECHA_TOTAL)) == 7) {
+                $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
+            }
+
+            // $FECHA_TOTAL = retunrFechaSqlphp($fechaTotal);
+
+            $insert = $mostrar->InsertarAlertaControlMaquina($FECHA_CREACION, $codControlMaquina, $FECHA_TOTAL, $taskNdias);
+
+            if ($insert) {
+                echo "Inserción exitosa";
+            } else {
+                echo "Error en la inserción: ";
+            }
+        } else if ($taskNdias == 2) {
+
+
+            $codControlMaquina = $_POST['codControlMaquina'];
+
+            $FECHA_CREACION = $mostrar->c_horaserversql('F');
+            $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y',  $FECHA_CREACION);
+            $FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
+
+
+            // Verificar si la fecha total cae en domingo
+            if (date('N', strtotime($FECHA_TOTAL)) == 7) {
+                $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
+            }
+
+            $insert = $mostrar->InsertarAlerta($FECHA_CREACION, $codControlMaquina, $FECHA_TOTAL, $taskNdias);
+
+            if ($insert) {
+                echo "Inserción exitosa";
+            } else {
+                echo "Error en la inserción: ";
+            }
+        }
+        // elseif ($taskNdias == 7) {
+
+        //     if (isset($_POST['fechaPostergacion'])) {
+
+        //         $codInfraestructura = $_POST['codInfraestructura'];
+
+        //         $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
+        //         // echo "aqui";
+        //         // echo "FechaPOSTERGACION" . $fechaPostergacion;
+
+
+        //         $fechaActual = $mostrar->c_horaserversql('F');
+
+
+        //         $DIAS_DESCUENTO = 1;
+
+        //         $fechaPost = DateTime::createFromFormat('d/m/Y', $fechaPostergacion);
+        //         $formattedDate = $fechaPost->format('d-m-Y');
+        //         $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
+
+        //         // echo "FECHASS" . $fechaAcordar;
+        //         $POSTERGACION = 'SI';
+
+        //         $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION);
+
+        //         if ($insert) {
+        //             echo "Inserción exitosa";
+        //         } else {
+        //             echo "Error en la inserción: ";
+        //         }
+        //     } else {
+        //         // $fechaCreacion = $_POST['fechaCreacion'];
+        //         $codInfraestructura = $_POST['codInfraestructura'];
+
+
+
+        //         $FECHA_CREACION  = $mostrar->c_horaserversql('F');
+        //         $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA_CREACION);
+        //         $FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
+
+
+
+        //         // Verificar si la fecha total cae en domingo
+        //         if (date('N', strtotime($FECHA_TOTAL)) == 7) {
+        //             $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
+        //         }
+
+
+        //         $DIAS_DESCUENTO = 2;
+        //         $FECHA_ACORDAR = retunrFechaSqlphp(date('Y-m-d', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days')));
+
+        //         $insert = $mostrar->InsertarAlertaMayorSinPost($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $FECHA_ACORDAR, $taskNdias);
+
+        //         if ($insert) {
+        //             echo "Inserción exitosa";
+        //         } else {
+        //             echo "Error en la inserción: ";
+        //         }
+        //     }
+        // } elseif ($taskNdias == 15) {
+
+        //     if (isset($_POST['fechaPostergacion'])) {
+
+        //         $codInfraestructura = $_POST['codInfraestructura'];
+
+        //         $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
+        //         // echo "aqui";
+        //         // echo "FechaPOSTERGACION" . $fechaPostergacion;
+
+
+        //         $fechaActual = $mostrar->c_horaserversql('F');
+
+
+        //         $DIAS_DESCUENTO = 1;
+
+        //         $fechaPost = DateTime::createFromFormat('d/m/Y', $fechaPostergacion);
+        //         $formattedDate = $fechaPost->format('d-m-Y');
+        //         $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
+
+        //         // echo "FECHASS" . $fechaAcordar;
+        //         $POSTERGACION = 'SI';
+
+        //         $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION);
+
+        //         if ($insert) {
+        //             echo "Inserción exitosa";
+        //         } else {
+        //             echo "Error en la inserción: ";
+        //         }
+        //     } else {
+        //         // $fechaCreacion = $_POST['fechaCreacion'];
+        //         $codInfraestructura = $_POST['codInfraestructura'];
+
+
+
+        //         $FECHA_CREACION  = $mostrar->c_horaserversql('F');
+        //         $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA_CREACION);
+        //         $FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
+
+
+
+        //         // Verificar si la fecha total cae en domingo
+        //         if (date('N', strtotime($FECHA_TOTAL)) == 7) {
+        //             $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
+        //         }
+
+
+        //         $DIAS_DESCUENTO = 2;
+        //         $FECHA_ACORDAR = retunrFechaSqlphp(date('Y-m-d', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days')));
+
+        //         $insert = $mostrar->InsertarAlertaMayorSinPost($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $FECHA_ACORDAR, $taskNdias);
+
+        //         if ($insert) {
+        //             echo "Inserción exitosa";
+        //         } else {
+        //             echo "Error en la inserción: ";
+        //         }
+        //     }
+        // } elseif ($taskNdias == 30) {
+
+        //     if (isset($_POST['fechaPostergacion'])) {
+
+        //         $codInfraestructura = $_POST['codInfraestructura'];
+
+        //         $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
+        //         // echo "aqui";
+        //         // echo "FechaPOSTERGACION" . $fechaPostergacion;
+
+
+        //         $fechaActual = $mostrar->c_horaserversql('F');
+
+
+        //         $DIAS_DESCUENTO = 1;
+
+        //         $fechaPost = DateTime::createFromFormat('d/m/Y', $fechaPostergacion);
+        //         $formattedDate = $fechaPost->format('d-m-Y');
+        //         $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
+
+        //         // echo "FECHASS" . $fechaAcordar;
+        //         $POSTERGACION = 'SI';
+
+        //         $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION);
+
+        //         if ($insert) {
+        //             echo "Inserción exitosa";
+        //         } else {
+        //             echo "Error en la inserción: ";
+        //         }
+        //     } else {
+        //         // $fechaCreacion = $_POST['fechaCreacion'];
+        //         $codInfraestructura = $_POST['codInfraestructura'];
+
+
+
+        //         $FECHA_CREACION  = $mostrar->c_horaserversql('F');
+        //         $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA_CREACION);
+        //         $FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
+
+
+
+        //         // Verificar si la fecha total cae en domingo
+        //         if (date('N', strtotime($FECHA_TOTAL)) == 7) {
+        //             $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
+        //         }
+
+
+        //         $DIAS_DESCUENTO = 2;
+        //         $FECHA_ACORDAR = retunrFechaSqlphp(date('Y-m-d', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days')));
+
+        //         $insert = $mostrar->InsertarAlertaMayorSinPost($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $FECHA_ACORDAR, $taskNdias);
+
+        //         if ($insert) {
+        //             echo "Inserción exitosa";
+        //         } else {
+        //             echo "Error en la inserción: ";
+        //         }
+        //     }
+        // }
     }
 }

@@ -55,6 +55,25 @@ $(function () {
               observacionTextArea: observacionTextArea,
             },
             dataType: "json",
+          }).done(function (response) {
+            console.log(response);
+            mostrarAlertasControl(data, index + 1);
+
+            // Crea una nueva alerta con la fecha total
+            // const nuevaFechaTotal = new Date();
+            const accion = "insertaralertamixcontrolmaquina";
+            return $.ajax({
+              // url: "./php/insertar-alertamix.php",
+              url: "c_almacen.php",
+              method: "POST",
+              data: {
+                accion: accion,
+                // fechaCreacion: nuevaFechaTotal.toISOString(),
+                codControlMaquina: task.COD_CONTROL_MAQUINA,
+                taskNdias: task.N_DIAS_POS,
+              },
+              dataType: "json",
+            });
           });
         }
       },
