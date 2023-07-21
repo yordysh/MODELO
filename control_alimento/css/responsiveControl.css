@@ -192,6 +192,12 @@ margin-bottom: 10px;
   font-weight: 500;
   font-size: 28px;
 }
+/* .selectZona{
+  padding: 0.375em 0.75em !important;
+} */
+/* #selectInfra{
+  width: 50%;
+} */
 
 /*-------------- Estilo de MENUBAR ---------------------*/
 
@@ -294,6 +300,10 @@ td{
  .table-responsive th td{
     padding:5px 10px; 
  }
+ #selectInfra{
+  width: 100%;
+
+}
 /*-------------- Estilo de responsive ---------------------*/
 
 @media screen and (max-width:1160px){
@@ -382,6 +392,10 @@ td{
  .table-responsive table thead{		
    display:none;	
  }	
+ #selectInfra{
+  width: 100%;
+
+}
  }
   /*-------------------------------------------------------------*/
   @media screen and (max-width:950px){
@@ -525,6 +539,10 @@ td{
   .table-responsive table thead{		
     display:none;	
   }	
+  #selectInfra{
+    width: 100%;
+  
+  }
 }
 @media screen and (max-width:480px){
   .bt-guardar{
@@ -554,6 +572,10 @@ td{
     box-sizing: border-box;
     margin-bottom: 10px;
 }
+#selectInfra{
+  width: 100%;
+
+}
 }
 @media screen and (max-width:400px){
   .container.g-4.row {  
@@ -577,8 +599,7 @@ td{
     width: 117%;
     box-sizing: border-box;
     margin-bottom: 10px;
-}
-
+  }
   .btnPdf {
     padding: 10px 20px;
     font-size: 16px;
@@ -586,7 +607,11 @@ td{
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 10px;
-}
+  }
+  #selectInfra{
+    width: 95%;
+  
+  }
 }
 
     /*-------------------------------------------------------------*/

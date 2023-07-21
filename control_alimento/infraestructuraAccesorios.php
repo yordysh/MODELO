@@ -19,7 +19,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
 
     <!--====== Estilo de ICON ======-->
     <link rel="stylesheet" href="./styleIcons/style.css">
-
+    <link rel="stylesheet" href="./css/select2.min.css">
     <title>Covifarma</title>
 </head>
 
@@ -71,7 +71,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                             <input type="text" id="NOMBRE_INFRAESTRUCTURA" class="form-control" name="NOMBRE_INFRAESTRUCTURA" required>
                         </div>
                         <!-- Text input dias-->
-                        <div class="form-outline mb-4">
+                        <div class="form-outline mb-4 ">
                             <label class="form-label">Dias</label>
                             <input type="text" id="NDIAS" class="form-control" name="NDIAS" required>
                         </div>
@@ -79,7 +79,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         <!--Combo zona areas -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Zona/Areas</label>
-                            <select id="selectInfra" class="form-select" aria-label="Default select example">
+                            <select id="selectInfra" class="form-select selectZona" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione Zona/Areas</option>
                                 <?php foreach ($dataInfra as $lis) {
                                     if ($lis->NOMBRE_T_ZONA_AREAS != "TRANSITO DE PERSONAL" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES Y VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES Y VARONES)") {
@@ -163,6 +163,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
+    <script src="./js/select2.min.js"></script>
     <script src="./js/ajaxInfra.js"></script>
     <script>
         function generarPDF() {

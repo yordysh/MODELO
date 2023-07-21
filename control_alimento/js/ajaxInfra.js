@@ -30,6 +30,8 @@ $(function () {
   });
   //----------------------------------------------------------------//
 
+  $("#selectInfra").select2();
+
   //------------- Busqueda con ajax infraestructura Accesorio----------------//
 
   $("#search").keyup(() => {
