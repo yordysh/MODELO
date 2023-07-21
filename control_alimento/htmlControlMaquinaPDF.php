@@ -24,7 +24,7 @@ $mesesEnLetras = array(
 $mesConvert = $mesesEnLetras[$mesNumerico];
 
 $mostrar = new m_almacen();
-$dataLimpieza = $mostrar->MostrarLimpiezaPDF($anioSeleccionado, $mesSeleccionado);
+$dataControl = $mostrar->MostrarControlMaquinaPDF($anioSeleccionado, $mesSeleccionado);
 // $dataLimpieza = $mostrar->MostrarLimpiezaPD();
 $versionMuestra = $mostrar->VersionMostrar();
 
@@ -37,7 +37,7 @@ $versionMuestra = $mostrar->VersionMostrar();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="http://192.168.1.102/SISTEMA/control_alimento/images/icon/covifarma-ico.ico" type="images/png">
-    <title>Limpieza y desinfección</title>
+    <title>Control de maquinas</title>
 </head>
 
 <body>
@@ -60,7 +60,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         }
 
         .cabecera-fila {
-            background-color: #EEB4F5;
+            background-color: #c8faf6;
             text-align: center;
             font-weight: 200;
             font-size: 20px;
@@ -122,10 +122,10 @@ $versionMuestra = $mostrar->VersionMostrar();
         <table>
             <tbody>
                 <tr>
-                    <!-- <td rowspan="4" style="text-align: center;"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
-                    <td rowspan="4" style="text-align: center;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
+                    <td rowspan="4" style="text-align: center;"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
+                    <!-- <td rowspan="4" style="text-align: center;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
                     <td rowspan="4" style="text-align: center; font-size:25px; font-weigth:200;">LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS DE LIMPIEZA - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
-                    <td>LBS-PHS-FR-04</td>
+                    <td>LBS-PHS-FR-03</td>
 
                 </tr>
                 <tr>
@@ -147,21 +147,7 @@ $versionMuestra = $mostrar->VersionMostrar();
             </tbody>
         </table>
     </header>
-    <!-- Table Firma y año-->
-    <table style="margin-bottom: 50px;">
-        <tbody>
-            <tr>
-                <td style="padding-left: 50px; border:none;"></td>
-                <td style="padding-left: 50px; border:none;"></td>
-                <td class='tdRaya' style="padding-left: 30px; border:none; font-size:23px; display:inline-block; font-weight:200;">Mes/Año:</td>
-                <td style="padding-left: 50px;  border:none"></td>
-                <td style="padding-left: 50px; border:none;"></td>
-                <td style="padding-left: 50px; border:none;"></td>
-                <td class='tdRaya' style="padding-left: 10px; border:none; font-size:23px;  display:inline-block; font-weight:200;">Responsable:</td>
-                <td style="padding-left: 50px; border: none;"></td>
-            </tr>
-        </tbody>
-    </table>
+
     <!-- Table solucion y preparaciones-->
     <table style="margin-bottom: 70px;">
 
@@ -169,27 +155,27 @@ $versionMuestra = $mostrar->VersionMostrar();
         $grupos = array();
         $fechasEliminadas = array();
 
-        foreach ($dataLimpieza as $filas) {
+        foreach ($dataControl  as $filas) {
             $nombreZona = $filas['NOMBRE_T_ZONA_AREAS'];
-            $nombreFrecuencia = $filas['NOMBRE_FRECUENCIA'];
-            $fecha = $filas['FECHA'];
+            $nombreControl = $filas['NOMBRE_CONTROL_MAQUINA'];
+            $fecha = $filas['FECHA_TOTAL'];
 
-            if (!isset($grupos[$nombreZona][$nombreFrecuencia])) {
-                $grupos[$nombreZona][$nombreFrecuencia] = array();
+            if (!isset($grupos[$nombreZona][$nombreControl])) {
+                $grupos[$nombreZona][$nombreControl] = array();
             }
 
-            if (in_array($fecha, $grupos[$nombreZona][$nombreFrecuencia])) {
+            if (in_array($fecha, $grupos[$nombreZona][$nombreControl])) {
                 $fechasEliminadas[] = $fecha;
             } else {
-                $grupos[$nombreZona][$nombreFrecuencia][] = $fecha;
+                $grupos[$nombreZona][$nombreControl][] = $fecha;
             }
         }
         echo "<thead>";
         $numeroDiasMes = date('t', strtotime($fecha));
         echo "<tr>";
-        echo "<th class='cabecera-fila' rowspan='2'>ÁREA</th>";
-        echo "<th class='cabecera-fila' rowspan='2'>ÍTEM(FRECUENCIA)</th>";
-        echo "<th class='cabecera-fila' colspan='$numeroDiasMes'>VERIFICACIÓN DE LA LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS PARA HEGIENIZACIÓN</th>";
+        echo "<th class='cabecera-fila' rowspan='2'>N°</th>";
+        echo "<th class='cabecera-fila' rowspan='2'>Máquinas,equipos y utensilios de trabajo</th>";
+        echo "<th class='cabecera-fila' colspan='$numeroDiasMes'>Días</th>";
         echo "</tr>";
 
         echo "<tr>";
@@ -200,20 +186,24 @@ $versionMuestra = $mostrar->VersionMostrar();
         echo "</tr>";
         echo "</thead>";
         echo "<tbody>";
-        foreach ($grupos as $nombreZona => $frecuencias) {
+        $nContador = 1;
+        foreach ($grupos as $nombreZona => $controles) {
+
             echo "<tr>";
 
-            $numFilas = count($frecuencias);
-            echo '<td rowspan="' . $numFilas . '">' . $nombreZona . '</td>';
+            $numFilas = count($controles);
+            // echo '<td rowspan="' . $numFilas . '">' . $nombreZona . '</td>';
 
             $firstRow = true;
 
-            foreach ($frecuencias as $nombreFrecuencia => $fechas) {
+            foreach ($controles as $nombreControl => $fechas) {
                 if (!$firstRow) {
                     echo '<tr>';
                 }
+                echo '<td style="text-align:center;">' . $nContador . '</td>';
+                $nContador++;
 
-                echo "<td>" . $nombreFrecuencia . "</td>";
+                echo "<td >" . $nombreControl  . "</td>";
 
 
                 if (!empty($fechas)) {
@@ -229,8 +219,8 @@ $versionMuestra = $mostrar->VersionMostrar();
 
                     for ($i = 1; $i <= $numDias; $i++) {
                         if (in_array($i, $fechasArray)) {
-                            //echo '<td style="text-align:center; max-width: 10px;"><img src="http://localhost:8080/MASTER/control_alimento/images/check.png" alt="" width="25"></td>';
-                            echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt="" width="25"></td>';
+                            echo '<td style="text-align:center; max-width: 10px;"><img src="http://localhost:8080/MASTER/control_alimento/images/check.png" alt="" width="25"></td>';
+                            // echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt="" width="25"></td>';
                         } else {
                             echo "<td></td>";
                         }
@@ -257,22 +247,22 @@ $versionMuestra = $mostrar->VersionMostrar();
     <table style="margin-bottom: 50px;">
         <thead>
             <tr>
-                <th class="cabeceraOb">FECHA</th>
-                <th class="cabeceraOb">OBSERVACIÓN</th>
-                <th class="cabeceraOb">ACCIÓN CORRECTIVA</th>
-                <th class="cabeceraOb">VERIFICACIÓN</th>
-                <th class="cabeceraOb">V°B°</td>
+                <th class="cabeceraOb">Fecha</th>
+                <th class="cabeceraOb">Area/Zona identificada</th>
+                <th class="cabeceraOb">Hallazgo/Observacion</th>
+                <th class="cabeceraOb">Acción correctiva</th>
+                <th class="cabeceraOb">V°b° Supervisor</td>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <?php
-                foreach ($dataLimpieza as $row) {
+                foreach ($dataControl as $row) {
                     echo '<tr>';
-                    echo '<td style="text-align: center;">' . convFecSistema($row['FECHA']) . '</td>';
+                    echo '<td style="text-align: center;">' . convFecSistema($row['FECHA_TOTAL']) . '</td>';
+                    echo '<td style="text-align: center;">' . $row['NOMBRE_T_ZONA_AREAS'] . '</td>';
                     echo '<td style="text-align: center;">' . $row['OBSERVACION'] . '</td>';
                     echo '<td style="text-align: center;">' . $row['ACCION_CORRECTIVA'] . '</td>';
-                    echo '<td style="text-align: center;">' . $row['VERIFICACION'] . '</td>';
                     echo '<td></td>';
                     echo '</tr>';
                 }
@@ -282,18 +272,22 @@ $versionMuestra = $mostrar->VersionMostrar();
     </table>
 
     <!-- Table firma y fecha-->
-    <table style="margin-top: 50px; border:none;">
+    <table style="margin-top: 80px; border:none;">
         <tr>
-            <td style="padding-left: 500px; border:none;"></td>
-            <td style="padding-left: 200px; border:none;"></td>
-            <td style="padding-left: 100px; border-left: none; border-bottom:none; border-right: none; font-weight: 300; font-size:17px;">JEFE DE ASEGURAMIENTO DE LA CALIDAD</td>
-            <td style="padding-left: 700px; border:none;"></td>
+            <td style="padding-left: 100px; border:none;"></td>
+            <td style="padding-left: 100px; border-left:none; border-top:none; border-right:none;"></td>
+            <td style="padding-left: 200px; text-align:right; border:none; font-weight: 300; font-size:17px;">Fecha:</td>
+            <td style="padding-left: 200px; border-left:none; border-top:none; border-right:none;"></td>
+            <td style="padding-left: 300px; border:none;"></td>
+
         </tr>
         <tr>
-            <td style="padding-left: 500px; border:none;"></td>
+            <td style="padding-left: 100px; border:none;"></td>
+            <td style="padding-left: 100px; text-align:center; border-left:none; border-bottom:none; border-right:none; font-weight: 300; font-size:17px;">Firma del jefe de Aseguramiento de la calidad</td>
             <td style="padding-left: 200px; border:none;"></td>
-            <td class="tdFecha" style="margin-top:10px; padding-left: 150px; border:0; display:inline-block; font-weight: 300; font-size:17px;">FECHA </td>
-            <td style="padding-left: 700px; border:none;"></td>
+            <td style="padding-left: 200px; border-left:none; border-bottom:none; border-right:none;"></td>
+            <td style="padding-left: 300px; border:none;"></td>
+
         </tr>
     </table>
 </body>

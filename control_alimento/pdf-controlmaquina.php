@@ -1,10 +1,9 @@
 <?php
-ob_start();
 
-include "htmlPreparacionSolucionPDF.php";
+ob_start();
+include "htmlControlMaquinaPDF.php";
 
 $html = ob_get_clean();
-
 
 require_once 'DomPDF/autoload.inc.php';
 
@@ -20,9 +19,10 @@ $dompdf->setOptions($options);
 
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A2', 'landscape');
+
 $dompdf->render();
 $canvas = $dompdf->getCanvas();
 $font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
-$canvas->page_text(1495, 81, " {PAGE_NUM}/{PAGE_COUNT}", $font, 12, array(0, 0, 0));
+$canvas->page_text(1490, 81, "{PAGE_NUM}/{PAGE_COUNT}", $font, 12, array(0, 0, 0));
 
-$dompdf->stream('PreparacionSolucion.pdf', array('Attachment' => 0));
+$dompdf->stream('Control-maquina.pdf', array('Attachment' => 0));

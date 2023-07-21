@@ -168,7 +168,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
             var mesSeleccionado = document.getElementById("mes").value;
 
             // Enviar los valores a tu script de generación de PDF
-            var url = "pdf-monitoreo.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
+            var url = "pdf-controlmaquina.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
             window.open(url, "_blank");
         }
     </script>

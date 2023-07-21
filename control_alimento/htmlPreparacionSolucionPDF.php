@@ -122,7 +122,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         <table>
             <tbody>
                 <tr>
-                    <!-- <td rowspan="4" class="cabecera"><img src="http://localhost:8080/MASTER/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
+                    <!-- <td rowspan="4" style="text-align: center;"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
                     <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
                     <td rowspan="4" style="text-align: center; font-size:25px; font-weigth:200;">PREPARACIÓN DE SOLUCIÓN DE LIMPIEZA Y DESINFECCIÓN - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                     <td>LBS-PHS-FR-02</td>
@@ -371,13 +371,13 @@ $versionMuestra = $mostrar->VersionMostrar();
         <tr>
             <td style="padding-left: 500px; border:none;"></td>
             <td style="padding-left: 200px; border:none;"></td>
-            <td style="padding-left: 200px; border-left: none; border-bottom:none; border-right: none;">JEFE DE ASEGURAMIENTO DE LA CALIDAD</td>
+            <td style="padding-left: 200px; border-left: none; border-bottom:none; border-right: none; font-weight: 300; font-size:17px;">JEFE DE ASEGURAMIENTO DE LA CALIDAD</td>
             <td style="padding-left: 700px; border:none;"></td>
         </tr>
         <tr>
             <td style="padding-left: 500px; border:none;"></td>
             <td style="padding-left: 200px; border:none;"></td>
-            <td class="tdFecha" style="margin-top:10px; padding-left: 300px; border:0; display:inline-block;">Fecha: </td>
+            <td class="tdFecha" style="margin-top:10px; padding-left: 300px; border:0; display:inline-block; font-weight: 300; font-size:17px;">Fecha: </td>
             <td style="padding-left: 700px; border:none;"></td>
         </tr>
     </table>

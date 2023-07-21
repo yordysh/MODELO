@@ -154,7 +154,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         <table>
 
             <tr>
-                <!-- <td rowspan="4" class="cabecera"><img src="http://localhost:8080/MASTER/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
+                <!-- <td rowspan="4" style="text-align: center;"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
                 <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
                 <td rowspan="4" style="text-align: center; font-size:25px; font-weigth:200;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS - MES DE <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                 <td>LBS-PHS-FR-01</th>
@@ -370,7 +370,7 @@ $versionMuestra = $mostrar->VersionMostrar();
         </thead>
         <tbody>
             <?php
-            $contadorN = 0;
+
             $nContador = 1;
 
             $fechas = array_column($datos, 'FECHA_TOTAL');
@@ -378,7 +378,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 
 
             foreach ($datos as $fils) {
-                $contadorN++;
+
                 echo '<tr>';
 
                 echo '<td class="cabecera">' . $nContador . '</td>';
@@ -392,13 +392,6 @@ $versionMuestra = $mostrar->VersionMostrar();
                 echo '<td></td>';
 
                 echo '</tr>';
-                // if ($contadorN % 15 == 0) {
-                //     echo '<tr>';
-                //     for ($i = 0; $i < 7; $i++) {
-                //         echo '<td style="text-align:center;height:13.5rem; border-left:none; border-right:none;"></td>';
-                //     }
-                //     echo '</tr>';
-                // }
             }
             ?>
 
@@ -410,14 +403,14 @@ $versionMuestra = $mostrar->VersionMostrar();
         <tr>
             <td style="padding-left: 200px; border:none;"></td>
             <td style="border: none;"></td>
-            <td style="padding-left: 400px; border:none;">Fecha:</td>
+            <td style="padding-left: 400px; border:none; font-weight: 300; font-size:17px;">Fecha:</td>
             <td style="padding-left: 400px; border:none;"></td>
             <td style="padding-left: 800px; border:none;"></td>
 
         </tr>
         <tr>
             <td style="padding-left: 200px; border:none;"></td>
-            <td style="border-left: none; border-bottom:none; border-right: none;">Firma del jefe de Aseguramiento de la calidad</td>
+            <td style="border-left: none; border-bottom:none; border-right: none; font-weight: 300; font-size:17px;">Firma del jefe de Aseguramiento de la calidad</td>
             <td style="padding-left: 400px; border:none;"></td>
             <td style="padding-left: 400px;border-left: none; border-bottom:none; border-right: none;"></td>
             <td style="padding-left: 800px; border:none;"></td>

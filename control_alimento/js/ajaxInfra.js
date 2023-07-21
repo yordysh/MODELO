@@ -55,7 +55,6 @@ $(function () {
               <td data-titulo="N°DIAS">${task.NDIAS}</td>
               <td data-titulo="FECHA" >${task.FECHA}</td>
   
-              <td style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-trash"></i></button></td>
               <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
   
             </tr>`;
@@ -145,7 +144,7 @@ $(function () {
             <td data-titulo="N°DIAS">${task.NDIAS}</td>
             <td data-titulo="FECHA" >${task.FECHA}</td>
 
-            <td style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-trash"></i></button></td>
+            
             <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
 
           </tr>`;
