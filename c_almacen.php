@@ -12,7 +12,21 @@ class c_almacen
         echo json_encode($dato, JSON_FORCE_OBJECT);
     }
 
-    function c_mostrar()
+    function c_insertar_zona()
     {
+        $m_formula = new m_almacen();
+        if (isset($_POST["NOMBRE_T_ZONA_AREAS"])) {
+            $NOMBRE_T_ZONA_AREAS = trim($_POST['NOMBRE_T_ZONA_AREAS']);
+
+            $m_formula->InsertarAlmacen($NOMBRE_T_ZONA_AREAS);
+
+            if (!$m_formula) {
+                die("Hubo un error en la consulta");
+            }
+
+            echo "Tarea agregada!";
+        }
     }
+
+    // function c_
 }

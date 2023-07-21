@@ -65,7 +65,7 @@ $(function () {
 
   function fetchTasks() {
     $.ajax({
-      url: "./tablaZona.php",
+      // url: "./zonaAreas.php",
       type: "GET",
       success: function (data) {
         $("#tablaAlmacen").html(data);

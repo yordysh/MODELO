@@ -473,30 +473,35 @@ class m_almacen
     return $insert2;
   }
 
-  public function actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION)
+  public function actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA)
   {
-    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacion, FECHA_POSTERGACION= :fechaPostergacion WHERE COD_ALERTA = :COD_ALERTA");
+    $fecha_actualiza = convFecSistema1($FECHA_ACTUALIZA);
+    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacion, FECHA_POSTERGACION= :fechaPostergacion, FECHA_TOTAL = :FECHA_ACTUALIZA WHERE COD_ALERTA = :COD_ALERTA");
 
 
     $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
     $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
     $stmt->bindParam(':observacion', $observacion, PDO::PARAM_STR);
     $stmt->bindParam(':fechaPostergacion',  $FECHA_POSTERGACION);
+    $stmt->bindParam(':FECHA_ACTUALIZA', $fecha_actualiza);
     $stmt->execute();
     return $stmt;
   }
 
-  public function actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea)
+  public function actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA)
   {
-    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacionTextArea WHERE COD_ALERTA = :COD_ALERTA");
+    $fecha_actualiza = convFecSistema1($FECHA_ACTUALIZA);
+    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacionTextArea, FECHA_TOTAL = :FECHA_ACTUALIZA WHERE COD_ALERTA = :COD_ALERTA");
 
 
     $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
     $stmt->bindParam(':observacionTextArea', $observacionTextArea, PDO::PARAM_STR);
     $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
+    $stmt->bindParam(':FECHA_ACTUALIZA', $fecha_actualiza);
     $stmt->execute();
     return $stmt;
   }
+
 
   public function MostrarInfraestructuraPDF($anioSeleccionado, $mesSeleccionado)
   {
@@ -508,7 +513,7 @@ class m_almacen
                                FROM T_ALERTA A
                                INNER JOIN T_INFRAESTRUCTURA AS I ON A.COD_INFRAESTRUCTURA = I.COD_INFRAESTRUCTURA
                                INNER JOIN T_ZONA_AREAS AS Z ON Z.COD_ZONA = I.COD_ZONA
-                               WHERE MONTH(A.FECHA_TOTAL) = :mesSeleccionado AND YEAR(A.FECHA_TOTAL) = :anioSeleccionado AND ESTADO != 'P' AND ESTADO !='PO'");
+                               WHERE MONTH(A.FECHA_TOTAL) = :mesSeleccionado AND YEAR(A.FECHA_TOTAL) = :anioSeleccionado AND ESTADO != 'P'");
       $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
       $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
       $stm->execute();

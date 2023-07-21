@@ -8,14 +8,37 @@ if (isset($_POST['observacion'])) {
     $taskId = $_POST['taskId'];
     $observacion = $_POST['observacion'];
     $FECHA_POSTERGACION = $_POST['fechaPostergacion'];
+    $FECHA_TOTAL = $_POST['taskFecha'];
 
-    $alert = $mostrar->actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION);
+    $fechaActual = new DateTime();
+    $fechadHoy = $fechaActual->format('d/m/Y');
+
+    if ($FECHA_TOTAL != $fechadHoy) {
+        $FECHA_ACTUALIZA = $fechadHoy;
+        $alert = $mostrar->actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA);
+    } else {
+        $FECHA_ACTUALIZA = $FECHA_TOTAL;
+        $alert = $mostrar->actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA);
+    }
 } else {
     $estado = $_POST['estado'];
     $taskId = $_POST['taskId'];
     $observacionTextArea = $_POST['observacionTextArea'];
+    $FECHA_TOTAL = $_POST['taskFecha'];
 
-    $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea);
+
+
+    $fechaActual = new DateTime();
+    $fechadHoy = $fechaActual->format('d/m/Y');
+
+
+    if ($FECHA_TOTAL != $fechadHoy) {
+        $FECHA_ACTUALIZA = $fechadHoy;
+        $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA);
+    } else {
+        $FECHA_ACTUALIZA = $FECHA_TOTAL;
+        $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA);
+    }
 }
 $insert2 = $alert->execute();
 

@@ -26,14 +26,22 @@ $(function () {
         );
 
         var fechaActual = new Date();
-        console.log("fechaTo", fechaTotal);
-        console.log(fechaActual);
+        // var fechaConvertida = new Intl.DateTimeFormat("es").format(fechaActual);
+        // var fechaString = new Date(Date.parse(fecha));
+
+        // var fechaActualMs = fechaActual.getTime();
+        // var fechaMs = fechaString.getTime();
+        // var diferenciaMs = fechaMs - fechaActualMs;
+        // var diferenciaDias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
+        // console.log("DIFERENCIA: " + diferenciaDias);
+
         var diferenciaMilisegundos = fechaTotal - fechaActual;
         var milisegundosEnUnDia = 24 * 60 * 60 * 1000;
         var diferenciaDias = Math.floor(
           diferenciaMilisegundos / milisegundosEnUnDia + 1
         );
-        // console.log(diferenciaDias);
+        console.log("FECHA_TOTAL: " + fecha);
+        console.log("FECHA_ACTUAL: " + fechaTotal);
         Swal.fire({
           title: "Mensaje recordatorio",
           html: `
@@ -146,6 +154,7 @@ $(function () {
                 data: {
                   estado: estado,
                   taskId: task.COD_ALERTA,
+                  taskFecha: task.FECHA_TOTAL,
                   observacionTextArea: observacionTextArea,
                 },
                 dataType: "json",
@@ -222,6 +231,7 @@ $(function () {
                     data: {
                       estado: "PO",
                       taskId: task.COD_ALERTA,
+                      taskFecha: task.FECHA_TOTAL,
                       observacion: observacion,
                       fechaPostergacion: fechaPostergacion,
                     },

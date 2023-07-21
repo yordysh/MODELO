@@ -25,6 +25,7 @@ $mesConvert = $mesesEnLetras[$mesNumerico];
 $mostrar = new m_almacen();
 $datos = $mostrar->MostrarInfraestructuraPDF($anioSeleccionado, $mesSeleccionado);
 $versionMuestra = $mostrar->VersionMostrar();
+
 ?>
 
 <!DOCTYPE html>
@@ -95,6 +96,13 @@ $versionMuestra = $mostrar->VersionMostrar();
 
         td.estado-OB {
             background-color: #F39A11;
+            color: #f2f2f2;
+            text-align: center;
+            height: 30px;
+        }
+
+        td.estado-PO {
+            background-color: #27a121;
             color: #f2f2f2;
             text-align: center;
             height: 30px;
@@ -307,6 +315,8 @@ $versionMuestra = $mostrar->VersionMostrar();
                 <td class="mover-derecha ancho">L&D pendiente</td>
                 <td class="estado-OB ancho"></td>
                 <td class="mover-derecha ancho">L&D observado</td>
+                <td class="estado-PO ancho"></td>
+                <td class="mover-derecha ancho">L&D postergado</td>
             </tr>
         </tbody>
     </table>
