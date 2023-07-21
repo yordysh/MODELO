@@ -81,13 +81,13 @@ $(function () {
           html: `
               <div><h2 class="nombre_area">Nombre del área:</h2> <p>${task.NOMBRE_AREA}</p></div>
               <div><h2 class="nombre_infra">Nombre de la infraestructura:</h2> <p>${task.NOMBRE_INFRAESTRUCTURA}</p></div>
-              <div><h2 class="nombre_infra">COD_ALERTA1:</h2> <p>${task.COD_ALERTA}</p></div>
+              <div><h2 class="nombre_infra">COD_ALERTA:</h2> <p>${task.COD_ALERTA}</p></div>
       
               <label>
                 <input type="radio" name="estado-${task.COD_ALERTA}" value="R"> Realizado
               </label>
               <label>
-                <input type="radio" name="estado-${task.COD_ALERTA}" value="T"> No Realizado
+                <input type="radio" name="estado-${task.COD_ALERTA}" value="NR"> No Realizado
               </label>
               <label id="observacion">
               <input type="radio" name="estado-${task.COD_ALERTA}" value="O"> Postergación
@@ -102,7 +102,7 @@ $(function () {
               `input[name="estado-${task.COD_ALERTA}"][value="R"]`
             );
             const noRealizadoRadio = document.querySelector(
-              `input[name="estado-${task.COD_ALERTA}"][value="T"]`
+              `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
             );
             const observacionRadio = document.querySelector(
               `input[name="estado-${task.COD_ALERTA}"][value="O"]`
@@ -116,7 +116,7 @@ $(function () {
               const estado = realizadoRadio.checked
                 ? "R"
                 : noRealizadoRadio.checked
-                ? "T"
+                ? "NR"
                 : "O";
 
               const observacion = observacionRadio.checked
@@ -189,7 +189,7 @@ $(function () {
                   `input[name="estado-${task.COD_ALERTA}"][value="R"]`
                 );
                 const noRealizadoRadio = document.querySelector(
-                  `input[name="estado-${task.COD_ALERTA}"][value="T"]`
+                  `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
                 );
 
                 realizadoRadio.checked = false;
@@ -263,22 +263,22 @@ $(function () {
         });
 
         const noRealizadoRadio = document.querySelector(
-          `input[name="estado-${task.COD_ALERTA}"][value="T"]`
+          `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
         );
         noRealizadoRadio.addEventListener("change", function () {
-          observacionTextarea.style.display = "none";
+          observacionTextarea.style.display = this.checked ? "block" : "none";
         });
 
         const realizadoRadio = document.querySelector(
           `input[name="estado-${task.COD_ALERTA}"][value="R"]`
         );
         realizadoRadio.addEventListener("change", function () {
-          observacionTextarea.style.display = "none";
+          observacionTextarea.style.display = this.checked ? "block" : "none";
         });
         const obs = document.getElementById("observacion");
-        realizadoRadio.addEventListener("change", function () {
-          observacionTextarea.style.display = "none";
-        });
+        // realizadoRadio.addEventListener("change", function () {
+        //   observacionTextarea.style.display = "none";
+        // });
 
         if (task.NDIAS > 6 && task.POSTERGACION == "NO") {
           observacionRadio.style.display = "block";

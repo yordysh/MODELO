@@ -1,364 +1,388 @@
 <?php
-
-require_once '../assets/DomPDF/autoload.inc.php';
-
+ob_start();
 require_once "../php/m_almacen.php";
-// require_once "../funciones/f_funcion.php";
 
 $anioSeleccionado = $_GET['anio'];
 $mesSeleccionado = $_GET['mes'];
 
 $mostrar = new m_almacen();
 $datos = $mostrar->MostrarInfraestructuraPDF($anioSeleccionado, $mesSeleccionado);
+// $datos = $mostrar->MostrarInfraestructuraPDF();;
+// $countInfra = $mostrar->contarInfraestructuraPDF();
 
-// Generar el contenido HTML
-$html = '<html>';
-$html .= '<head><style>table {border-collapse: collapse;} td, th {border: 1px solid black; padding: 5px;}</style></head>';
-$html .= '<body>';
-$html .= '<table>';
-//$html .= '<thead><tr><th>Columna 1</th></tr></thead>';
-$html .= '<tbody>';
-
-
-
-
-// $grupos = array();
-
-// foreach ($datos as $fila) {
-//     $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
-//     $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
-//     $estado = $fila['ESTADO'];
-//     $fechaTotal = $fila['FECHA_TOTAL'];
-
-//     if (!isset($grupos[$nombreZona])) {
-//         $grupos[$nombreZona] = array(
-//             'infraestructuras' => array(),
-//             'estados' => array()
-//         );
-//     }
-
-//     //Verifica si la infraestructura ya existe en la zona actual
-//     $infraestructuraExistente = -1;
-//     foreach ($grupos[$nombreZona]['infraestructuras'] as $index => $infraestructura) {
-//         if ($infraestructura === $nombreInfraestructura) {
-//             $infraestructuraExistente = $index;
-//             break;
-//         }
-//     }
-
-//     //Agrega la infraestructura solo si no existe en la zona actual
-//     if ($infraestructuraExistente === -1) {
-//         $grupos[$nombreZona]['infraestructuras'][] = $nombreInfraestructura;
-//         $grupos[$nombreZona]['estados'][] = $estado;
-//     } elseif ($infraestructuraExistente !== -1) {
-//         //Actualiza el estado si la infraestructura ya existe en la zona actual
-//         $grupos[$nombreZona]['estados'][$infraestructuraExistente] = $estado;
-//     }
+// var_dump($datos);
+// for ($i = 0; $i < count($datos); $i++) {
+//     var_dump($datos[$i][1]);
 // }
+// $countZona = $mostrar->contarZonaAreasPDF();
 
-// foreach ($grupos as $nombreZona => $valores) {
-//     $fechaEstado = array();
-//     foreach ($valores['infraestructuras'] as $index => $infraestructura) {
-//         $estado = $valores['estados'][$index];
-//         $fechaEstado[$index] = array();
-
-//         foreach ($datos as $fila) {
-//             $nombreZonaFila = $fila['NOMBRE_T_ZONA_AREAS'];
-//             $nombreInfraestructuraFila = $fila['NOMBRE_INFRAESTRUCTURA'];
-//             $estadoFila = $fila['ESTADO'];
-//             $fechaTotalFila = $fila['FECHA_TOTAL'];
-
-//             if ($nombreZona === $nombreZonaFila && $infraestructura === $nombreInfraestructuraFila && $estadoFila != 'P') {
-//                 $fechaEstado[$index][$fechaTotalFila] = $estadoFila;
-//             }
-//         }
-//     }
-
-//     $html .= '<tr>';
-//     $html .= '<td rowspan="' . count($valores['infraestructuras']) . '">' . $nombreZona . '</td>';
-//     $html .= '<td>' . $valores['infraestructuras'][0] . '</td>';
-
-//     foreach ($valores['infraestructuras'] as $index => $infraestructura) {
-//         $fechaEstadoActual = $fechaEstado[$index];
-
-//         foreach ($fechaEstadoActual as $fecha => $estado) {
-//             $html .= '<td>' . $estado . '</td>';
-//         }
-
-//         //Imprimir columnas restantes si no hay estado para todas las fechas
-//         $diasFaltantes = 31 - count($fechaEstadoActual);
-//         for ($i = 0; $i < $diasFaltantes; $i++) {
-//             $html .= '<td></td>';
-//         }
-
-//         if ($index < count($valores['infraestructuras']) - 1) {
-//             $html .= '</tr><tr>';
-//             $html .= '<td>' . $valores['infraestructuras'][$index + 1] . '</td>';
-//         }
-//     }
-
-//     $html .= '</tr>';
-// }
+?>
 
 
-
-
-
-// $grupos = array();
-
-// foreach ($datos as $fila) {
-//     $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
-//     $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
-//     $ndiaspos = $fila['N_DIAS_POS'];
-//     $estado = $fila['ESTADO'];
-//     $fechaTotal = $fila['FECHA_TOTAL'];
-
-//     if (!isset($grupos[$nombreZona])) {
-//         $grupos[$nombreZona] = array();
-//     }
-
-//     $grupos[$nombreZona][] = array(
-//         'nombreInfraestructura' => $nombreInfraestructura,
-//         'estado' => $estado,
-//         'ndiaspos' => $ndiaspos,
-//         'fechaTotal' => $fechaTotal
-//     );
-// }
-
-
-// foreach ($grupos as $nombreZona => $valores) {
-//     $html .= '<tr class="cabecera">';
-//     $html .= '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
-//     $html .= '<td>' . $valores[0]['nombreInfraestructura'] . '</td>';
-//     if ($valores[0]['ndiaspos'] == 1) {
-//         $html .= '<td>Diaria</td>';
-//     } elseif ($valores[0]['ndiaspos'] == 2) {
-//         $html .= '<td>Interdiaria</td>';
-//     } elseif ($valores[0]['ndiaspos'] == 7) {
-//         $html .= '<td>Semanal</td>';
-//     } elseif ($valores[0]['ndiaspos'] == 15) {
-//         $html .= '<td>Quincenal</td>';
-//     } elseif ($valores[0]['ndiaspos'] == 30) {
-//         $html .= '<td>Mensual</td>';
-//     } else {
-//         $html .= '<td>' . $valores[0]['ndiaspos'] . '</td>';
-//     }
-
-//     Añadir las columnas de acuerdo a la FECHA_TOTAL
-//     $fechaTotal = $valores[0]['fechaTotal'];
-//     $numeroDiasMes = date('t', strtotime($fechaTotal));
-//     $columnasFechaTotal = $numeroDiasMes;
-
-//     $dias = date('d', strtotime($fechaTotal));
-
-//     for ($i = 1; $i <= $columnasFechaTotal; $i++) {
-//         if ($i == $dias) {
-//             Aquí defines el estado que deseas imprimir en la columna correspondiente a $dias
-//             $html .= '<td>' . $valores[0]['estado'] . '</td>';
-//         } else {
-//             $html .= '<td></td>';
-//         }
-//     }
-
-//     Agrega columna en blanco si el mes tiene 30 días
-//     if ($columnasFechaTotal == 30) {
-//         $html .= '<td></td>';
-//     }
-
-//     $html .= '</tr>';
-
-//     for ($i = 1; $i < count($valores); $i++) {
-//         $html .= '<tr>';
-//         $html .= '<td class="cabecera">' . $valores[$i]['nombreInfraestructura'] . '</td>';
-//         if ($valores[$i]['ndiaspos'] == 1) {
-//             $html .= '<td>Diaria</td>';
-//         } elseif ($valores[$i]['ndiaspos'] == 2) {
-//             $html .= '<td>Interdiaria</td>';
-//         } elseif ($valores[$i]['ndiaspos'] == 7) {
-//             $html .= '<td>Semanal</td>';
-//         } elseif ($valores[$i]['ndiaspos'] == 15) {
-//             $html .= '<td>Quincenal</td>';
-//         } elseif ($valores[$i]['ndiaspos'] == 30) {
-//             $html .= '<td>Mensual</td>';
-//         } else {
-//             $html .= '<td>' . $valores[$i]['ndiaspos'] . '</td>';
-//         }
-
-//         Añadir las columnas de acuerdo a la FECHA_TOTAL
-//         $fechaTotal = $valores[$i]['fechaTotal'];
-//         $numeroDiasMes = date('t', strtotime($fechaTotal));
-//         $columnasFechaTotal = $numeroDiasMes;
-
-//         $dias = date('d', strtotime($fechaTotal));
-
-
-
-//         for ($j = 1; $j <= $columnasFechaTotal; $j++) {
-//             if ($j == $dias) {
-//                 Aquí defines el estado que deseas imprimir en la columna correspondiente a $dias
-//                 $html .= '<td>' . $valores[$i]['estado'] . '</td>';
-//             } else {
-//                 $html .= '<td></td>';
-//             }
-//         }
-
-//         Agrega columna en blanco si el mes tiene 30 días
-//         if ($columnasFechaTotal == 30) {
-//             $html .= '<td></td>';
-//         }
-
-//         $html .= '</tr>';
-//     }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-$grupos = array();
-
-foreach ($datos as $fila) {
-    $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
-    $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
-    $ndiaspos = $fila['N_DIAS_POS'];
-    $estado = $fila['ESTADO'];
-    $fechaTotal = $fila['FECHA_TOTAL'];
-
-    if (!isset($grupos[$nombreZona])) {
-        $grupos[$nombreZona] = array();
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
     }
 
-    // Check if the combination of 'nombreZona' and 'nombreInfraestructura' already exists
-    $existingIndex = -1;
-    foreach ($grupos[$nombreZona] as $index => $value) {
-        if ($value['nombreInfraestructura'] === $nombreInfraestructura) {
-            $existingIndex = $index;
-            break;
-        }
+    table,
+    th,
+    td {
+        border: 1px solid black;
     }
 
-    if ($existingIndex !== -1) {
-        // Combination already exists, update the corresponding estado value
-        $grupos[$nombreZona][$existingIndex]['estados'][] = $estado;
-    } else {
-        // Combination doesn't exist, add a new entry
-        $grupos[$nombreZona][] = array(
-            'nombreInfraestructura' => $nombreInfraestructura,
-            'estados' => array($estado),
-            'ndiaspos' => $ndiaspos,
-            'fechaTotal' => $fechaTotal
-        );
+    thead {
+        width: 100%;
     }
-}
+
+    thead th {
+        border: 1px solid black;
+    }
+
+    tbody td {
+        border: 1px solid black;
+    }
+
+    .cabecera-fila {
+        background-color: #9dcdec;
+        text-align: center;
+    }
+
+    .cabecera-fila td,
+    .cabecera {
+        text-align: center;
+    }
+
+    .column-1:nth-child(1),
+    .column-2:nth-child(2) {
+        width: 320px;
+
+    }
+
+    td.estado-vacio {
+        background-color: #f2f2f2;
+
+    }
+
+    td.estado-R {
+        background-color: #0a5e9c;
+        color: #f2f2f2;
+        text-align: center;
+
+    }
+
+    td.estado-NR {
+        background-color: #E72b3c;
+        color: #f2f2f2;
+        text-align: center;
+    }
+</style>
+
+<table style="margin-bottom: 50px;">
+    <tbody>
+        <tr>
+            <td rowspan="4"><img src="../assets/images/logo-covifarmaRecorte.png" alt=""></td>
+            <td rowspan="4" style="text-align: center;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS</td>
+            <td>LBS-PHS-FR-01</td>
+
+        </tr>
+        <tr>
+            <td>Versión:04</td>
+        </tr>
+        <tr>
+            <td>Página:01</td>
+        </tr>
+        <tr>
+            <td>Fecha:Enero 2023</td>
+        </tr>
+    </tbody>
+</table>
+<table class="tabla-ajustada">
+    <tbody>
+
+        <?php
+
+        // $grupos = array();
+
+        // foreach ($datos as $fila) {
+        //     $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
+        //     $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
+        //     $ndiaspos = $fila['N_DIAS_POS'];
+        //     $estado = $fila['ESTADO'];
+        //     $fechaTotal = $fila['FECHA_TOTAL'];
+
+        //     if (!isset($grupos[$nombreZona])) {
+        //         $grupos[$nombreZona] = array();
+        //     }
+
+        //     $grupos[$nombreZona][] = array(
+        //         'nombreInfraestructura' => $nombreInfraestructura,
+        //         'estado' => $estado,
+        //         'ndiaspos' => $ndiaspos,
+        //         'fechaTotal' => $fechaTotal
+        //     );
+        // }
+
+        // foreach ($grupos as $nombreZona => $valores) {
+        //     echo '<tr class="cabecera">';
+        //     echo '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
+        //     echo '<td>' . $valores[0]['nombreInfraestructura'] . '</td>';
+        //     if ($valores[0]['ndiaspos'] == 1) {
+        //         echo '<td>Diaria</td>';
+        //     } elseif ($valores[0]['ndiaspos'] == 2) {
+        //         echo '<td>Interdiaria</td>';
+        //     } elseif ($valores[0]['ndiaspos'] == 7) {
+        //         echo '<td>Semanal</td>';
+        //     } elseif ($valores[0]['ndiaspos'] == 15) {
+        //         echo '<td>Quincenal</td>';
+        //     } elseif ($valores[0]['ndiaspos'] == 30) {
+        //         echo '<td>Mensual</td>';
+        //     } else {
+        //         echo '<td>' . $valores[0]['ndiaspos'] . '</td>';
+        //     }
+
+        //     // Añadir las columnas de acuerdo a la FECHA_TOTAL
+        //     $fechaTotal = $valores[0]['fechaTotal'];
+        //     $numeroDiasMes = date('t', strtotime($fechaTotal));
+        //     $columnasFechaTotal = $numeroDiasMes;
+
+        //     $dias = date('d', strtotime($fechaTotal));
+
+        //     for ($i = 1; $i <= $columnasFechaTotal; $i++) {
+        //         if ($i == $dias) {
+        //             // Aquí defines el estado que deseas imprimir en la columna correspondiente a $dias
+        //             echo '<td>' . $valores[0]['estado'] . '</td>';
+        //         } else {
+        //             echo '<td></td>';
+        //         }
+        //     }
+
+        //     // Agrega columna en blanco si el mes tiene 30 días
+        //     if ($columnasFechaTotal == 30) {
+        //         echo '<td></td>';
+        //     }
+
+        //     echo '</tr>';
+
+        //     for ($i = 1; $i < count($valores); $i++) {
+        //         echo '<tr>';
+        //         echo '<td class="cabecera">' . $valores[$i]['nombreInfraestructura'] . '</td>';
+        //         if ($valores[$i]['ndiaspos'] == 1) {
+        //             echo '<td class="cabecera">Diaria</td>';
+        //         } elseif ($valores[$i]['ndiaspos'] == 2) {
+        //             echo '<td class="cabecera">Interdiaria</td>';
+        //         } elseif ($valores[$i]['ndiaspos'] == 7) {
+        //             echo '<td class="cabecera">Semanal</td>';
+        //         } elseif ($valores[$i]['ndiaspos'] == 15) {
+        //             echo '<td class="cabecera">Quincenal</td>';
+        //         } elseif ($valores[$i]['ndiaspos'] == 30) {
+        //             echo '<td class="cabecera">Mensual</td>';
+        //         } else {
+        //             echo '<td>' . $valores[$i]['ndiaspos'] . '</td>';
+        //         }
+
+        //         // Añadir las columnas de acuerdo a la FECHA_TOTAL
+        //         $fechaTotal = $valores[$i]['fechaTotal'];
+        //         $numeroDiasMes = date('t', strtotime($fechaTotal));
+        //         $columnasFechaTotal = $numeroDiasMes;
+
+        //         $dias = date('d', strtotime($fechaTotal));
 
 
-foreach ($grupos as $nombreZona => $valores) {
-    $html .= '<tr class="cabecera">';
-    $html .= '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
 
-    foreach ($valores as $index => $valor) {
-        if ($index !== 0) {
-            $html .= '<tr>';
-        }
+        //         for ($j = 1; $j <= $columnasFechaTotal; $j++) {
+        //             if ($j == $dias) {
+        //                 // Aquí defines el estado que deseas imprimir en la columna correspondiente a $dias
+        //                 echo '<td>' . $valores[$i]['estado'] . '</td>';
+        //             } else {
+        //                 echo '<td></td>';
+        //             }
+        //         }
 
-        $html .= '<td class="cabecera">' . $valor['nombreInfraestructura'] . '</td>';
-        if ($valor['ndiaspos'] == 1) {
-            $html .= '<td>Diaria</td>';
-        } elseif ($valor['ndiaspos'] == 2) {
-            $html .= '<td>Interdiaria</td>';
-        } elseif ($valor['ndiaspos'] == 7) {
-            $html .= '<td>Semanal</td>';
-        } elseif ($valor['ndiaspos'] == 15) {
-            $html .= '<td>Quincenal</td>';
-        } elseif ($valor['ndiaspos'] == 30) {
-            $html .= '<td>Mensual</td>';
-        } else {
-            $html .= '<td>' . $valor['ndiaspos'] . '</td>';
-        }
+        //         // Agrega columna en blanco si el mes tiene 30 días
+        //         if ($columnasFechaTotal == 30) {
+        //             echo '<td></td>';
+        //         }
 
-        // Añadir las columnas de acuerdo a la FECHA_TOTAL
-        $fechaTotal = $valor['fechaTotal'];
-        $numeroDiasMes = date('t', strtotime($fechaTotal));
-        $columnasFechaTotal = $numeroDiasMes;
+        //         echo '</tr>';
+        //     }
+        // }
+        $grupos = array();
 
-        $dias = date('d', strtotime($fechaTotal));
+        foreach ($datos as $fila) {
+            $nombreZona = $fila['NOMBRE_T_ZONA_AREAS'];
+            $nombreInfraestructura = $fila['NOMBRE_INFRAESTRUCTURA'];
+            $ndiaspos = $fila['N_DIAS_POS'];
+            $estado = $fila['ESTADO'];
+            $fechaTotal = $fila['FECHA_TOTAL'];
 
-        for ($i = 1; $i <= $columnasFechaTotal; $i++) {
-            if ($i == $dias) {
-                // Aquí defines el estado que deseas imprimir en la columna correspondiente a $dias
-                if (isset($valor['estados'][$index])) {
-                    $html .= '<td>' . $valor['estados'][$index] . '</td>';
-                } else {
-                    $html .= '<td></td>';
+            if (!isset($grupos[$nombreZona])) {
+                $grupos[$nombreZona] = array();
+            }
+
+            $existingIndex = -1;
+            foreach ($grupos[$nombreZona] as $index => $value) {
+                if ($value['nombreInfraestructura'] === $nombreInfraestructura) {
+                    $existingIndex = $index;
+                    break;
                 }
+            }
+
+            if ($existingIndex !== -1) {
+                $grupos[$nombreZona][$existingIndex]['estados'][$fechaTotal] = $estado;
             } else {
-                $html .= '<td></td>';
+                $grupos[$nombreZona][] = array(
+                    'nombreInfraestructura' => $nombreInfraestructura,
+                    'estados' => array($fechaTotal => $estado),
+                    'ndiaspos' => $ndiaspos,
+                    'fechaTotal' => $fechaTotal
+                );
             }
         }
 
-        // Agrega columna en blanco si el mes tiene 30 días
-        if ($columnasFechaTotal == 30) {
-            $html .= '<td></td>';
+        $numeroDiasMe = date('t', strtotime($fechaTotal));
+        $columnasFechaTotales = $numeroDiasMe;
+
+        echo '<tr>';
+        echo '<td class="cabecera-fila column-1" rowspan="2">Zonas/areas</td>';
+        echo '<td class="cabecera-fila column-2" rowspan="2">Infraestructura, accesorios complementarios</td>';
+        echo '<td class="cabecera-fila" rowspan="2">Frecuencia</td>';
+        echo '<td class="cabecera-fila" colspan="' . $columnasFechaTotales . '">Dias</td>';
+        echo '<td class="cabecera-fila" rowspan="2">Responsable de ejecucion</td>';
+        echo '</tr>';
+
+        echo '<tr>';
+
+        for ($l = 1; $l <= $columnasFechaTotales; $l++) {
+            if ($l == $columnasFechaTotales) {
+                echo '<td class="cabecera-fila borde">' . $l . '</td>';
+            } else {
+                echo '<td class="cabecera-fila">' . $l . '</td>';
+            }
         }
 
-        if ($index !== 0) {
-            $html .= '</tr>';
+        echo '</tr>';
+
+
+        foreach ($grupos as $nombreZona => $valores) {
+            echo '<tr">';
+            echo '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
+
+            foreach ($valores as $index => $valor) {
+                if ($index !== 0) {
+                    echo '<tr>';
+                }
+
+                echo '<td class="cabecera">' . $valor['nombreInfraestructura'] . '</td>';
+                if ($valor['ndiaspos'] == 1) {
+                    echo '<td class="cabecera">Diaria</td>';
+                } elseif ($valor['ndiaspos'] == 2) {
+                    echo '<td class="cabecera">Interdiaria</td>';
+                } elseif ($valor['ndiaspos'] == 7) {
+                    echo '<td class="cabecera">Semanal</td>';
+                } elseif ($valor['ndiaspos'] == 15) {
+                    echo '<td class="cabecera">Quincenal</td>';
+                } elseif ($valor['ndiaspos'] == 30) {
+                    echo '<td class="cabecera">Mensual</td>';
+                } else {
+                    echo '<td class="cabecera">' . $valor['ndiaspos'] . '</td>';
+                }
+
+                // Crear array con columnas de acuerdo a la FECHA_TOTAL
+                $fechaTotal = $valor['fechaTotal'];
+                $numeroDiasMes = date('t', strtotime($fechaTotal));
+                $columnasFechaTotal = $numeroDiasMes;
+                $dias = date('d', strtotime($fechaTotal));
+
+                $columnas = array();
+                for ($i = 1; $i <= $columnasFechaTotal; $i++) {
+                    if ($i == $dias) {
+                        $columnas[$i] = '';
+                    } else {
+                        $columnas[$i] = '';
+                    }
+                }
+
+                // Agregar columna en blanco si el mes tiene 30 días
+                if ($columnasFechaTotal == 30) {
+                    $columnas[31] = '';
+                }
+
+                // Asignar los estados a las columnas correspondientes
+                foreach ($valor['estados'] as $fecha => $estado) {
+                    $dia = date('d', strtotime($fecha));
+                    if (isset($columnas[$dia])) {
+                        if ($columnas[$dia] === '') {
+                            $columnas[$dia] = $estado;
+                        } else {
+                            $columnas[$dia] .= '' . $estado;
+                        }
+                    }
+                }
+
+                // Imprimir los estados en las columnas correspondientes
+                foreach ($columnas as $columna) {
+                    $estadoClass = $columna !== '' ? 'estado-' . $columna : 'estado-vacio';
+                    echo '<td class="' . $estadoClass . '">' . $columna . '</td>';
+                    // echo '<td class="cabecera">' . $columna . '</td>';
+                }
+                //Colocar este td para que rellene de responsable de ejecucion
+                echo '<td></td>';
+                if ($index !== 0) {
+                    echo '</tr>';
+                }
+            }
+
+            echo '</tr>';
         }
-    }
+        ?>
+    </tbody>
+</table>
+<!-- <table style="margin-top: 50px;">
+    <tbody>
+        <?php
+        foreach ($datos as $fila) {
+            echo '<tr>
+            <td>' . $fila['NOMBRE_T_ZONA_AREAS'] .  '</td>
+            <td>' . $fila['NOMBRE_INFRAESTRUCTURA'] .  '</td>
+            </tr>';
+        }
 
-    $html .= '</tr>';
-}
+        ?>
+    </tbody>
+</table> -->
 
+<?php
+$html = ob_get_clean();
 
+require_once '../assets/DomPDF/autoload.inc.php';
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
+$options = new Options();
+$options->set('isRemoteEnabled', TRUE);
+$dompdf = new DOMPDF($options);
 
+// Create an instance of Dompdf
+$dompdf = new Dompdf();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-$html .= '</tbody>';
-$html .= '</table>';
-
-// for ($f = 0; $f < 5; $f++) {
-//     $html .= '<p>' . $fechaTotal . '</p>';
-// }
-
-$html .= '</body>';
-$html .= '
-
-</html>';
-
-
-// Generar el PDF con DOMPDF
-$dompdf = new Dompdf\Dompdf();
+// Load the HTML content into Dompdf
 $dompdf->loadHtml($html);
-
+// $dompdf->loadHtml("<img src='logo-covifarmaRecorte.png'");
 // Set the paper size and orientation
 $dompdf->setPaper('A2', 'landscape');
 
+// Render the HTML content to PDF
 $dompdf->render();
 
-// Guardar el PDF en una ubicación deseada
-$dompdf->stream('tabla.pdf', array('Attachment' => 0));
+// Display the PDF in the browser
+header('Content-Type: application/pdf');
+header('Content-Disposition: inline; filename="profesionales.pdf"');
+header('Cache-Control: private, must-revalidate, post-check=0, pre-check=0');
+header('Expires: 0');
+header('Pragma: public');
+header('Content-Length: ' . $dompdf->output(null, true));
+
+echo $dompdf->output(null, true);
+?>

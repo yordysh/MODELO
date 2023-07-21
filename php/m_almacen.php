@@ -460,42 +460,6 @@ class m_almacen
     return $stmt;
   }
 
-  public function contarInfraestructuraPDF()
-  {
-    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_INFRAESTRUCTURA");
-    $repetir->execute();
-    $result = $repetir->fetch(PDO::FETCH_ASSOC);
-    $count = $result['count'];
-
-    return $count;
-  }
-  public function contarZonaAreasPDF()
-  {
-    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_INFRAESTRUCTURA ");
-
-    $repetir->execute();
-    $result = $repetir->fetch(PDO::FETCH_ASSOC);
-    $count = $result['count'];
-
-    return $count;
-  }
-  public function MostrarZonaConteoPDF()
-  {
-    try {
-
-
-      $stm = $this->bd->prepare("SELECT DISTINCT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS
-      FROM T_INFRAESTRUCTURA AS I
-      INNER JOIN T_ZONA_AREAS AS Z ON I.COD_ZONA = Z.COD_ZONA");
-
-      $stm->execute();
-      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
-
-      return $datos;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
   public function MostrarInfraestructuraPDF($anioSeleccionado, $mesSeleccionado)
   {
     try {
@@ -508,9 +472,25 @@ class m_almacen
       FROM T_ALERTA A
       INNER JOIN T_INFRAESTRUCTURA AS I ON A.COD_INFRAESTRUCTURA = I.COD_INFRAESTRUCTURA
       INNER JOIN T_ZONA_AREAS AS Z ON Z.COD_ZONA = I.COD_ZONA
-      WHERE MONTH(A.FECHA_TOTAL) = :mesSeleccionado AND YEAR(A.FECHA_TOTAL) = :anioSeleccionado ");
+      WHERE MONTH(A.FECHA_TOTAL) = :mesSeleccionado AND YEAR(A.FECHA_TOTAL) = :anioSeleccionado AND ESTADO != 'P'");
       $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
       $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function VersionMostrar()
+  {
+    try {
+
+
+      $stm = $this->bd->prepare("SELECT VERSION FROM T_VERSION");
+
       $stm->execute();
       $datos = $stm->fetchAll();
 
