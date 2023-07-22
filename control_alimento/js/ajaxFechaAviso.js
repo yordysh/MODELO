@@ -1,14 +1,25 @@
 $(function () {
+  // alertaMensaje()
+  //   .then(function () {
+  //     alerta();
+  //   })
+  //   .catch(function (error) {
+  //     console.error(error);
+  //     alerta();
+  //   })
+  // .then(function () {
+  //   alertaControl();
+  // });
+
   alertaMensaje()
     .then(function () {
-      alerta();
-    })
-    .catch(function (error) {
-      // console.error(error);
-      alerta();
+      return alerta();
     })
     .then(function () {
-      alertaControl();
+      return alertaControl();
+    })
+    .catch(function (error) {
+      console.error(error);
     });
 
   function alertaMensaje() {
@@ -377,6 +388,7 @@ $(function () {
     return new Promise(function (resolve, reject) {
       function mostrarAlertasControl(data, index) {
         if (index >= data.length) {
+          resolve();
           return;
         }
 
@@ -423,7 +435,6 @@ $(function () {
               let accionCorrectiva =
                 document.getElementById("accionCorrectiva").value;
 
-              // First AJAX request
               const accion = "actualizaalertacontrol";
               $.ajax({
                 url: "c_almacen.php",
@@ -498,9 +509,14 @@ $(function () {
           const index = 0;
           mostrarAlertasControl(data, index);
         },
-        // error: function (xhr, status, error) {
-        //   console.error(error);
-        // },
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.error(
+            "Error in alertaControl AJAX:",
+            textStatus,
+            errorThrown
+          );
+          reject(errorThrown);
+        },
       });
     });
   }

@@ -161,7 +161,17 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxControlMaquinas.js"></script>
+    <!-- <script>
+        const myElement = document.getElementById("selectControl");
 
+        myElement.addEventListener("click", () => {
+            // Genera un color aleatorio en formato hexadecimal
+            const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+
+            // Cambia el color del borde al color aleatorio generado
+            myElement.style.borderColor = randomColor;
+        });
+    </script> -->
     <script>
         function generarPDF() {
             var anioSeleccionado = document.getElementById("anio").value;

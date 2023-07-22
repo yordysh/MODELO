@@ -17,6 +17,7 @@ $(function () {
         "icon-cross"
       );
     }
+
     searchIcon.classList.replace("icon-cross", "icon-magnifying-glass");
   });
 

@@ -192,12 +192,26 @@ margin-bottom: 10px;
   font-weight: 500;
   font-size: 28px;
 }
-/* .selectZona{
-  padding: 0.375em 0.75em !important;
-} */
-/* #selectInfra{
-  width: 50%;
-} */
+/* ----------------- Diseño de select2------------------------- */
+.select2-container--default .select2-selection--single{
+  padding: 1em;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: #0a0a0a !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  margin-top: -0.75em;
+}
+.select2-container--default .select2-selection--single:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
+.select2-container--default .select2-search--dropdown .select2-search__field:focus {
+  outline: 1px solid #86b7fe;
+  border-radius: 5px;
+}
+/* --------------------------------------------------------------- */
 
 /*-------------- Estilo de MENUBAR ---------------------*/
 
@@ -391,14 +405,15 @@ td{
      
  .table-responsive table thead{		
    display:none;	
- }	
+ }
+ 
  #selectInfra{
   width: 100%;
 
-}
+ }
  }
   /*-------------------------------------------------------------*/
-  @media screen and (max-width:950px){
+  @media screen and (max-width:950px){ 
     /*-------------- Estilo de MENUBAR ---------------------*/
    
   .nav{
@@ -408,6 +423,7 @@ td{
     right: 100px;
     max-width: 400px;
   }
+  
 }
  /*-------------------------------------------------------------*/
   
@@ -543,6 +559,7 @@ td{
     width: 100%;
   
   }
+  
 }
 @media screen and (max-width:480px){
   .bt-guardar{
@@ -553,6 +570,7 @@ td{
     box-sizing: border-box;
     margin-bottom: 10px;
   }
+  
 }
 /*----------------------REDMI----------------------------*/
 @media screen and (max-width:420px){
@@ -571,11 +589,11 @@ td{
     width: 99%;
     box-sizing: border-box;
     margin-bottom: 10px;
-}
-#selectInfra{
-  width: 100%;
-
-}
+  }
+  
+  #selectInfra{
+   width: 100%;
+  }
 }
 @media screen and (max-width:400px){
   .container.g-4.row {  
@@ -588,7 +606,10 @@ td{
     width: 99%;
     box-sizing: border-box;
     margin-bottom: 10px;
-}
+  } 
+  .select2-container {
+    z-index: -1;
+  }
 }
 @media screen and (max-width:380px){
 
@@ -610,7 +631,6 @@ td{
   }
   #selectInfra{
     width: 95%;
-  
   }
 }
 
