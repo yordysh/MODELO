@@ -1028,18 +1028,18 @@ class m_almacen
       $repetir = $cod->contarRegistrosControl($NOMBRE_CONTROL_MAQUINA, $valorSeleccionado);
 
       $FECHA = $cod->c_horaserversql('F');
-      // $FECHA = date('Y-m-d');
-      // $FECHA = '20/07/2023';
+      //$FECHA = date('Y-m-d');
+      // $FECHA = '24/07/2023';
       // var_dump($FECHA);
 
       if ($repetir == 0) {
 
         $stm = $this->bd->prepare("INSERT INTO T_CONTROL_MAQUINA(COD_CONTROL_MAQUINA, COD_ZONA,NOMBRE_CONTROL_MAQUINA ,N_DIAS_CONTROL, FECHA,VERSION)
                                   VALUES ('$COD_CONTROL_MAQUINA','$valorSeleccionado', '$NOMBRE_CONTROL_MAQUINA','$N_DIAS_CONTROL', '$FECHA', '$VERSION')");
-        // print_r($stm);
+        print_r($stm);
         $insert = $stm->execute();
         // $fechaDHoy = date('Y-m-d');
-        // $fechaDHoy = '20/07/2023';
+        // $fechaDHoy = '24/07/2023';
         $fechaDHoy  = $cod->c_horaserversql('F');
 
         if ($VERSION == '01') {
