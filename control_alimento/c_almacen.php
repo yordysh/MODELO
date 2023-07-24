@@ -234,6 +234,12 @@ if ($_POST['accion'] == 'insertaralertamixcontrolmaquina') {
     echo $respuesta;
 }
 
+if ($_POST['accion'] == 'buscarZonaCombo') {
+
+    $respuesta = c_almacen::c_buscar_zona_combo();
+    echo $respuesta;
+}
+
 
 class c_almacen
 {
@@ -1416,5 +1422,24 @@ class c_almacen
                 echo "Error en la inserción: ";
             }
         }
+    }
+
+    static function c_buscar_zona_combo()
+    {
+        $m_formula = new m_almacen();
+
+
+        $respuesta = $m_formula->MostrarZonaCombo();
+        // $json = array();
+        // foreach ($respuesta as $row) {
+        //     $json[] = array(
+        //         "COD_ZONA" => $row['COD_ZONA'],
+        //         "NOMBRE_T_ZONA_AREAS" => $row['NOMBRE_T_ZONA_AREAS'],
+        //     );
+        // }
+        // $jsonstring = json_encode($json);
+        // echo $jsonstring;
+
+        echo json_encode($respuesta);
     }
 }

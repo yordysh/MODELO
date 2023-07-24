@@ -1,9 +1,6 @@
 $(function () {
   fetchTasks();
-  select();
-
   let edit = false;
-
   //------------- MENU BAR JS ---------------//
   let nav = document.querySelector(".nav"),
     searchIcon = document.querySelector("#searchIcon"),
@@ -19,7 +16,6 @@ $(function () {
         "icon-cross"
       );
     }
-
     searchIcon.classList.replace("icon-cross", "icon-magnifying-glass");
   });
 
@@ -33,63 +29,36 @@ $(function () {
   });
   //----------------------------------------------------------------//
 
-  // $("#selectInfra").select2();
-  // var aData = [];
-
-  // $("#selectInfra").autocomplete({
-  // source: function (request, response) {
-  function select() {
-    const accion = "buscarZonaCombo";
-    $.ajax({
-      url: "./c_almacen.php",
-      data: { accion: accion },
-      type: "POST",
-      dataType: "json",
-      success: function (data) {
-        var res = JSON.parse(data);
-        $("#task_zona").autocomplete({
-          source: res,
-          select: function (request, ui) {
-            //const search = $("#selectInfra").val();
-            var nombre = ui.item.COD_ZONA1;
-            console.log(nombre);
-          },
-        });
-      },
-    });
-  }
-
-  //------------- Busqueda con ajax infraestructura Accesorio----------------//
+  //------------- Busqueda con ajax zonaArea----------------//
 
   $("#search").keyup(() => {
     if ($("#search").val()) {
-      let search = $("#search").val();
-      const accion = "buscarinfra";
-
+      var search = $("#search").val();
+      const accion = "buscarzona";
       $.ajax({
         url: "./c_almacen.php",
-        data: { accion: accion, buscarinfra: search },
+        data: { accion: accion, buscarzona: search },
         type: "POST",
         success: function (response) {
           if (!response.error) {
             let tasks = JSON.parse(response);
-            // console.log(tasks);
+
             let template = ``;
             tasks.forEach((task) => {
-              template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
-
-              <td data-titulo="CODIGO" >${task.COD_INFRAESTRUCTURA}</td>
-              <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
-              <td data-titulo="INFRAESTRUCTURA" class='NOMBRE_INFRAESTRUCTURA' >${task.NOMBRE_INFRAESTRUCTURA}</td>
-              <td data-titulo="N°DIAS">${task.NDIAS}</td>
-              <td data-titulo="FECHA" >${task.FECHA}</td>
-
-              <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
-
+              template += `<tr taskId="${task.COD_ZONA}">
+  
+                <td data-titulo="CODIGO">${task.COD_ZONA}</td>
+                <td data-titulo="NOMBRE" class="NOMBRE_T_ZONA_AREAS" >${task.NOMBRE_T_ZONA_AREAS}</td>
+                <td data-titulo="FECHA" >${task.FECHA}</td>
+                <td data-titulo="VERSION">${task.VERSION}</td>
+    
+                <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-trash"></i></button></td>
+                <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-edit"></i></button></td>
+    
             </tr>`;
             });
 
-            $("#tablaInfraestructura").html(template);
+            $("#tablita").html(template);
           }
         },
       });
@@ -98,29 +67,23 @@ $(function () {
     }
   });
 
-  //------------- Añadiendo con ajax InfraestructuraAccesorios----------------//
-  $("#formularioInfra").submit((e) => {
+  //------------- Añadiendo con ajax zonaArea----------------//
+  $("#formularioZona").submit((e) => {
     e.preventDefault();
 
-    var selectInfra = document.getElementById("selectInfra");
-
-    selectInfra.disabled = false;
-
-    const accion = edit === false ? "insertarinfra" : "actualizarinfra";
+    const accion = edit === false ? "insertar" : "actualizar";
 
     $.ajax({
       url: "./c_almacen.php",
       data: {
         accion: accion,
-        nombreinfraestructura: $("#NOMBRE_INFRAESTRUCTURA").val(),
-        ndias: $("#NDIAS").val(),
-        codinfra: $("#taskId").val(),
-        valorSeleccionado: $("#selectInfra").val(),
+        nombrezonaArea: $("#NOMBRE_T_ZONA_AREAS").val(),
+        codzona: $("#taskId").val(),
       },
+
       type: "POST",
       success: function (response) {
-        console.log(response);
-        if (response == "ok") {
+        if (response.toLowerCase() === "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
             text: "Los datos se han guardado correctamente.",
@@ -129,7 +92,7 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
-              $("#formularioInfra").trigger("reset");
+              $("#formularioZona").trigger("reset");
             }
           });
         } else {
@@ -141,47 +104,44 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
-              $("#formularioInfra").trigger("reset");
+              $("#formularioZona").trigger("reset");
             }
           });
         }
-        // console.log(data);
+        // console.log("RESPONSE" + response);
       },
     });
   });
-
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
   // Cargar registros ZONA AREA
 
   function fetchTasks() {
-    const accion = "buscarinfra";
+    const accion = "buscarzona";
     const search = "";
     $.ajax({
-      // url: "./tablaInfraestructura.php",
       url: "./c_almacen.php",
-      data: { accion: accion, buscarinfra: search },
       type: "POST",
+      data: { accion: accion, buscarzona: search },
       success: function (response) {
         if (!response.error) {
           let tasks = JSON.parse(response);
 
           let template = ``;
           tasks.forEach((task) => {
-            template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
-
-            <td data-titulo="CODIGO" >${task.COD_INFRAESTRUCTURA}</td>
-            <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
-            <td data-titulo="INFRAESTRUCTURA" class='NOMBRE_INFRAESTRUCTURA' >${task.NOMBRE_INFRAESTRUCTURA}</td>
-            <td data-titulo="N°DIAS">${task.NDIAS}</td>
-            <td data-titulo="FECHA" >${task.FECHA}</td>
-
-
-            <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
-
+            template += `<tr taskId="${task.COD_ZONA}">
+  
+              <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_ZONA}</td>
+              <td data-titulo="NOMBRE" class="NOMBRE_T_ZONA_AREAS" style="text-align:rigth;">${task.NOMBRE_T_ZONA_AREAS}</td>
+              <td data-titulo="FECHA" style="text-align:rigth;">${task.FECHA}</td>
+              <td data-titulo="VERSION" style="text-align:rigth;">${task.VERSION}</td>
+  
+              <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-trash"></i></button></td>
+              <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_ZONA="${task.COD_ZONA}"><i class="icon-edit"></i></button></td>
+  
           </tr>`;
           });
 
-          $("#tablaInfraestructura").html(template);
+          $("#tablita").html(template);
         }
       },
       error: function (xhr, status, error) {
@@ -195,36 +155,20 @@ $(function () {
   $(document).on("click", ".task-update", () => {
     var element = $(this)[0].activeElement.parentElement.parentElement;
 
-    // var selectInfra = document.getElementById("selectInfra");
-    // selectInfra.disabled = true;
+    var COD_ZONA = $(element).attr("taskId");
 
-    var COD_INFRAESTRUCTURA = $(element).attr("taskId");
-    const accion = "editarinfra";
+    const accion = "editar";
 
     $.ajax({
       url: "./c_almacen.php",
-      data: { accion: accion, codinfra: COD_INFRAESTRUCTURA },
+      data: { accion: accion, cod_zona: COD_ZONA },
       type: "POST",
       success: function (response) {
         if (!response.error) {
           const task = JSON.parse(response);
 
-          var selectInfra = $("#selectInfra");
-
-          selectInfra.prop("disabled", true);
-
-          if (task.NOMBRE_T_ZONA_AREAS) {
-            selectInfra.val(
-              selectInfra
-                .find("option:contains('" + task.NOMBRE_T_ZONA_AREAS + "')")
-                .val()
-            );
-          }
-
-          $("#NOMBRE_INFRAESTRUCTURA").val(task.NOMBRE_INFRAESTRUCTURA);
-          $("#NDIAS").val(task.NDIAS);
-          $("#taskId").val(task.COD_INFRAESTRUCTURA);
-
+          $("#NOMBRE_T_ZONA_AREAS").val(task.NOMBRE_T_ZONA_AREAS);
+          $("#taskId").val(task.COD_ZONA);
           edit = true;
         }
       },
@@ -235,8 +179,11 @@ $(function () {
 
   $(document).on("click", ".task-delete", function (e) {
     e.preventDefault();
-    var COD_INFRAESTRUCTURA = $(this).attr("data-COD_INFRAESTRUCTURA");
-    const accion = "eliminarinfra";
+    // var COD_ZONA = $(this).data("COD_ZONA");
+
+    var COD_ZONA = $(this).attr("data-COD_ZONA");
+    const accion = "eliminarzona";
+    // console.log(COD_ZONA);
 
     Swal.fire({
       title: "¿Está seguro de eliminar este registro?",
@@ -251,8 +198,8 @@ $(function () {
       if (result.isConfirmed) {
         $.ajax({
           url: "./c_almacen.php",
+          data: { accion: accion, codzona: COD_ZONA },
           type: "POST",
-          data: { accion: accion, codinfra: COD_INFRAESTRUCTURA },
           success: function (response) {
             fetchTasks();
             Swal.fire({
@@ -262,7 +209,6 @@ $(function () {
               showConfirmButton: false,
               timer: 1500,
             });
-            console.log(response);
           },
           error: function (xhr, status, error) {
             console.error("Error:", error);

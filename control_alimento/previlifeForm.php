@@ -1,11 +1,3 @@
-<?php
-require_once "m_almacen.php";
-
-
-$mostrar = new m_almacen();
-$data = $mostrar->MostrarAlmacenMuestra();
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,7 +45,7 @@ $data = $mostrar->MostrarAlmacenMuestra();
                 <a class="" href="labsabelForm.php">Labsabell</a>
             </li>
             <li>
-                <a class="" href="previlifeForm.php">Previlife</a>
+                <a class="" href="#">Previlife</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -68,15 +60,21 @@ $data = $mostrar->MostrarAlmacenMuestra();
         <section>
             <div class="container g-4 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">ZONAS/ÁREAS</label></center>
+                    <center><label class="title">PREVILIFE</label></center>
                 </div>
                 <div class="main">
-                    <form method="post" action="" id="formularioZona">
+                    <form method="post" action="" id="formularioPrevilife">
 
-                        <!-- Text input -->
+                        <!-- Text input nombre -->
                         <div class="form-outline mb-4">
-                            <label class="form-label">Nombre de área</label>
-                            <input type="text" id="NOMBRE_T_ZONA_AREAS" class="form-control" name="NOMBRE_T_ZONA_AREAS" required>
+                            <label class="form-label">Codigo</label>
+                            <input type="text" id="codigo_previlife" class="form-control" name="codigo_previlife" required>
+                        </div>
+
+                        <!-- Text input nombre -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" id="nombre_previlife" class="form-control" name="nombre_previlife" required>
                         </div>
 
                         <!-- Submit button -->
@@ -85,8 +83,8 @@ $data = $mostrar->MostrarAlmacenMuestra();
                             <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
                         </div>
                     </form>
-                    <div id="tablaAlmacen" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbalmacen" class="table table-sm mb-3 table-hover table_id">
+                    <div id="tablaPrevilife" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbPrevilife" class="table table-sm mb-3 table-hover table_id">
                             <thead>
                                 <tr>
 
@@ -98,7 +96,7 @@ $data = $mostrar->MostrarAlmacenMuestra();
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="tablita">
+                            <tbody id="tablaLabsabell">
 
                             </tbody>
                         </table>

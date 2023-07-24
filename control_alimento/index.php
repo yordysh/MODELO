@@ -62,6 +62,12 @@
       <li>
         <a class="" href="controlMaquinas.php">Control de maquinas</a>
       </li>
+      <li>
+        <a class="" href="LabsabelForm.php">Labsabell</a>
+      </li>
+      <li>
+        <a class="" href="previlifeForm.php">Previlife</a>
+      </li>
     </ul>
     <!-- <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
     <div class="search-box">

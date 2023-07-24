@@ -1209,4 +1209,29 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
+  public function MostrarZonaCombo()
+  {
+    try {
+
+      // $stm = $this->bd->prepare("SELECT COD_ZONA,NOMBRE_T_ZONA_AREAS FROM T_ZONA_AREAS");
+      // $stm->execute();
+      // $datos = $stm->fetchAll();
+      // return $datos;
+      $stm = $this->bd->prepare("SELECT COD_ZONA, NOMBRE_T_ZONA_AREAS FROM T_ZONA_AREAS");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      // $json = array();
+      foreach ($datos as $dato) {
+        $json[] = array(
+          "COD_ZONA1" => $dato['COD_ZONA'],
+          "NOMBRE_T_ZONA_AREAS1" => $dato['NOMBRE_T_ZONA_AREAS']
+        );
+      }
+      return $json;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 }
