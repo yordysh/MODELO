@@ -4,25 +4,40 @@ $(function () {
   //     alerta();
   //   })
   //   .catch(function (error) {
-  //     console.error(error);
+  //     // console.error(error);
   //     alerta();
   //   })
-  // .then(function () {
-  //   alertaControl();
-  // });
+  //   .then(function () {
+  //     console.log(error);
+  //     alertaControl();
+  //   });
 
-  alertaMensaje()
-    .then(function () {
-      return alerta();
-    })
-    .then(function () {
-      return alertaControl();
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
+  async function executeAlerts() {
+    try {
+      await alertaMensaje();
+    } catch (error) {
+      // console.error("Error executing alertaMensaje():", error);
+      console.error("Error executing alertaMensaje():");
+    }
 
-  function alertaMensaje() {
+    try {
+      await alerta();
+    } catch (error) {
+      // console.error("Error executing alerta():", error);
+      console.error("Error executing alerta():");
+    }
+
+    try {
+      await alertaControl();
+    } catch (error) {
+      // console.error("Error executing alertaControl():", error);
+      console.error("Error executing alertaControl():");
+    }
+
+    console.log("All alert functions executed!");
+  }
+
+  async function alertaMensaje() {
     return new Promise(function (resolve, reject) {
       function mostrarMensaje(data, index) {
         if (index >= data.length) {
@@ -64,12 +79,12 @@ $(function () {
       }
       const accion = "fechaalertamensaje";
       $.ajax({
-        // url: "php/fecha-alerta-mensaje.php",
         url: "c_almacen.php",
         method: "POST",
         dataType: "json",
         data: { accion: accion },
         success: function (data) {
+          console.log(data);
           if (data.length > 0) {
             mostrarMensaje(data, 0);
           } else {
@@ -77,16 +92,22 @@ $(function () {
           }
         },
         error: function (jqXHR, textStatus, errorThrown) {
+          console.error(
+            "Error in alertaMensaje AJAX:",
+            textStatus,
+            errorThrown
+          );
           reject(errorThrown);
         },
       });
     });
   }
 
-  function alerta() {
+  async function alerta() {
     return new Promise(function (resolve, reject) {
       function mostrarAlertas(data, index) {
         if (index >= data.length) {
+          resolve();
           return;
         }
 
@@ -225,7 +246,6 @@ $(function () {
           },
         }).then((result) => {
           if (result.isConfirmed) {
-            // Comprobar si el botón de radio de observación está seleccionado
             const postergacionRadio = document.querySelector(
               `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
             );
@@ -380,11 +400,15 @@ $(function () {
         success: function (data) {
           mostrarAlertas(data, 0);
         },
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.error("Error in alerta AJAX:", textStatus, errorThrown);
+          reject(errorThrown);
+        },
       });
     });
   }
 
-  function alertaControl() {
+  async function alertaControl() {
     return new Promise(function (resolve, reject) {
       function mostrarAlertasControl(data, index) {
         if (index >= data.length) {
@@ -418,6 +442,7 @@ $(function () {
             </label>
             <textarea class="form-control" rows="3" id="observacion-${task.COD_ALERTA_CONTROL_MAQUINA}" rows="3" style="display: none;"></textarea>
           `,
+          allowOutsideClick: false,
           confirmButtonText: '<i class="fa fa-thumbs-up"></i> Aceptar',
           preConfirm: () => {
             const realizadoRadio = document.querySelector(
@@ -520,4 +545,6 @@ $(function () {
       });
     });
   }
+
+  executeAlerts();
 });

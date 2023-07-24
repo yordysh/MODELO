@@ -468,7 +468,7 @@ class m_almacen
 
         $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA);
         $FECHA_TOTAL = $FECHA_FORMATO->modify("+$NDIAS days")->format('d-m-Y');
-        $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA . '+ ' . $NDIAS));
+        // $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA . '+ ' . $NDIAS));
         // Verificar si la fecha total cae en domingo
         if (date('N', strtotime($FECHA_TOTAL)) == 7) {
           $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA_TOTAL . '+1 day'));
@@ -1036,7 +1036,7 @@ class m_almacen
 
         $stm = $this->bd->prepare("INSERT INTO T_CONTROL_MAQUINA(COD_CONTROL_MAQUINA, COD_ZONA,NOMBRE_CONTROL_MAQUINA ,N_DIAS_CONTROL, FECHA,VERSION)
                                   VALUES ('$COD_CONTROL_MAQUINA','$valorSeleccionado', '$NOMBRE_CONTROL_MAQUINA','$N_DIAS_CONTROL', '$FECHA', '$VERSION')");
-        print_r($stm);
+
         $insert = $stm->execute();
         // $fechaDHoy = date('Y-m-d');
         // $fechaDHoy = '24/07/2023';

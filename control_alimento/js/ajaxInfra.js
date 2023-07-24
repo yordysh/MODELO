@@ -77,6 +77,10 @@ $(function () {
     e.preventDefault();
 
     var selectInfra = document.getElementById("selectInfra");
+    var selectInputInfra = document.getElementById(
+      "select2-selectInfra-container"
+    );
+
     selectInfra.disabled = false;
 
     const accion = edit === false ? "insertarinfra" : "actualizarinfra";
@@ -103,6 +107,10 @@ $(function () {
             if (result.isConfirmed) {
               fetchTasks();
               $("#formularioInfra").trigger("reset");
+              $("#selectInfra").val("").trigger("change.select2");
+              $("#selectInfra").append(
+                '<option value="" selected>Seleccione Zona/Areas</option>'
+              );
             }
           });
         } else {
@@ -115,6 +123,7 @@ $(function () {
             if (result.isConfirmed) {
               fetchTasks();
               $("#formularioInfra").trigger("reset");
+              $("#selectInfra").val("").trigger("change.select2");
             }
           });
         }
@@ -122,6 +131,7 @@ $(function () {
       },
     });
   });
+
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
   // Cargar registros ZONA AREA
 
