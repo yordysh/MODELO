@@ -37,6 +37,7 @@ if ($_POST['accion'] == 'buscarzona') {
 
 
 
+
 if ($_POST['accion'] == 'insertarinfra') {
     $nombreinfraestructura = strtoupper(trim($_POST['nombreinfraestructura']));
     $ndias = trim($_POST['ndias']);
@@ -241,6 +242,72 @@ if ($_POST['accion'] == 'buscarZonaCombo') {
 }
 
 
+
+
+if ($_POST['accion'] == 'buscarProductoCombo') {
+    $term = $_POST['term'];
+    $respuesta = c_almacen::c_buscar_producto_combo($term);
+    echo $respuesta;
+}
+// if ($_POST['accion'] == 'buscarProductoAbreviaturaCombo') {
+//     $term = $_POST['term'];
+//     $respuesta = c_almacen::c_buscar_producto_abreviatura_combo($term);
+//     echo $respuesta;
+// }
+if ($_POST['accion'] == 'insertarlabsabell') {
+
+    $codigolabsabell = trim($_POST['codigolabsabell']);
+    $valorSeleccionado = ($_POST['valorSeleccionado']);
+    $respuesta = c_almacen::c_insertar_labsabell($codigolabsabell, $valorSeleccionado);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'buscarlabsabell') {
+
+    $buscarlab = trim($_POST['buscarlab']);
+
+    $respuesta = c_almacen::c_buscar_labsabell($buscarlab);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'editarLabsabell') {
+    $cod_producto_envase = trim($_POST['cod_producto_envase']);
+    $respuesta = c_almacen::c_editar_envases_labsabel($cod_producto_envase);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'actualizarlabsabell') {
+    $codlab = trim($_POST['codlab']);
+    $codigolab = trim($_POST['codigolab']);
+    $respuesta = c_almacen::c_actualizar_envases_labsabell($codlab, $codigolab);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'eliminarproductoenvase') {
+
+    $codenvaselabsabell = trim($_POST['codenvaselabsabell']);
+
+    $respuesta = c_almacen::c_eliminar_envases_labsabell($codenvaselabsabell);
+    echo $respuesta;
+}
+
+
+
+
+if ($_POST['accion'] == 'buscarprevilife') {
+
+    $buscarPrevilife = trim($_POST['buscarPrevilife']);
+
+    $respuesta = c_almacen::c_buscar_previlife($buscarPrevilife);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'insertarprevilife') {
+
+    $codigoPrev = trim($_POST['codigoPrev']);
+    $valorSeleccionado = ($_POST['valorSeleccionado']);
+    $respuesta = c_almacen::c_insertar_previlife($codigoPrev, $valorSeleccionado);
+    echo $respuesta;
+}
+
+
+
+
 class c_almacen
 {
 
@@ -358,7 +425,7 @@ class c_almacen
     static function c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias)
     {
         $mostrar = new m_almacen();
-        if (isset($nombreinfraestructura,) && isset($ndias) && isset($valorSeleccionado)) {
+        if (isset($nombreinfraestructura) && isset($ndias) && isset($valorSeleccionado)) {
 
             $respuesta = $mostrar->insertarInfraestructura($valorSeleccionado, $nombreinfraestructura,  $ndias);
             if ($respuesta) {
@@ -1441,5 +1508,188 @@ class c_almacen
         // echo $jsonstring;
 
         echo json_encode($respuesta);
+    }
+
+    static function c_buscar_producto_combo($term)
+    {
+        $m_formula = new m_almacen();
+
+
+        $respuesta = $m_formula->MostrarProductoCombo($term);
+        echo json_encode($respuesta);
+    }
+    // static function  c_buscar_producto_abreviatura_combo($term)
+    // {
+    //     $m_formula = new m_almacen();
+
+
+    //     $respuesta = $m_formula->MostrarProductoabreviaturaCombo($term);
+    //     echo json_encode($respuesta);
+    // }
+    static function c_insertar_labsabell($codigolabsabell, $valorSeleccionado)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($codigolabsabell) && isset($valorSeleccionado)) {
+            $respuesta = $m_formula->InsertarLabsabell($codigolabsabell, $valorSeleccionado);
+            if ($respuesta) {
+
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function c_buscar_labsabell($buscarlab)
+    {
+        try {
+
+            if (!empty($buscarlab)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarEnvasesLabsabel($buscarlab);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_PRODUCTO_ENVASE" => $row->COD_PRODUCTO_ENVASE,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
+                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                        "VERSION" => $row->VERSION,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarEnvasesLabsabel($buscarlab);
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_PRODUCTO_ENVASE" => $row->COD_PRODUCTO_ENVASE,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
+                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                        "VERSION" => $row->VERSION,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+                // $jsonstring = json_encode($datos);
+                // echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_editar_envases_labsabel($cod_producto_envase)
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($cod_producto_envase)) {
+            $selectZ = $mostrar->SelectEnvasesLabsabell($cod_producto_envase);
+
+            $json = array();
+            foreach ($selectZ as $row) {
+                $json[] = array(
+                    "COD_PRODUCTO_ENVASE" => $row['COD_PRODUCTO_ENVASE'],
+                    "DES_PRODUCTO" => $row['DES_PRODUCTO'],
+                );
+            }
+
+            $jsonstring = json_encode($json[0]);
+            echo $jsonstring;
+        }
+    }
+    static function c_actualizar_envases_labsabell($codlab, $codigolab)
+    {
+
+        $m_formula = new m_almacen();
+
+
+        if (isset($codlab) && isset($codigolab)) {
+
+            $respuesta = $m_formula->editarEnvasesLabsabell($codlab, $codigolab);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function c_eliminar_envases_labsabell($codenvaselabsabell)
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($codenvaselabsabell)) {
+
+            $resultado = $mostrar->eliminarEnvasesLabsabel($codenvaselabsabell);
+            if ($resultado) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+
+    static function   c_buscar_previlife($buscarPrevilife)
+    {
+        try {
+
+            if (!empty($buscarPrevilife)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarEnvasesPrevilife($buscarPrevilife);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_PRODUCTO_PREVILIFE" => $row->COD_PRODUCTO_PREVILIFE,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "ABR_PRODUCTO_PREVILIFE" => $row->ABR_PRODUCTO_PREVILIFE,
+                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                        "VERSION" => $row->VERSION,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarEnvasesPrevilife($buscarPrevilife);
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_PRODUCTO_PREVILIFE" => $row->COD_PRODUCTO_PREVILIFE,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "ABR_PRODUCTO_PREVILIFE" => $row->ABR_PRODUCTO_PREVILIFE,
+                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                        "VERSION" => $row->VERSION,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_insertar_previlife($codigoPrev, $valorSeleccionado)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($$codigoPrev) && isset($valorSeleccionado)) {
+            $respuesta = $m_formula->InsertarLabsabell($codigoPrev, $valorSeleccionado);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
     }
 }

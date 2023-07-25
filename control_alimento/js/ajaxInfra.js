@@ -34,10 +34,7 @@ $(function () {
   //----------------------------------------------------------------//
 
   // $("#selectInfra").select2();
-  // var aData = [];
 
-  // $("#selectInfra").autocomplete({
-  // source: function (request, response) {
   $(document).ready(function () {
     // const accion = "buscarZonaCombo";
     // $.ajax({
@@ -85,7 +82,6 @@ $(function () {
       close: function () {
         const searchTerm = $("#selectInfra").val().trim();
 
-        // Si el término de búsqueda está vacío, borrar el valor del input "task_zona"
         if (searchTerm === "") {
           $("#task_zona").val("");
         }
@@ -149,7 +145,8 @@ $(function () {
         nombreinfraestructura: $("#NOMBRE_INFRAESTRUCTURA").val(),
         ndias: $("#NDIAS").val(),
         codinfra: $("#taskId").val(),
-        valorSeleccionado: $("#selectInfra").val(),
+        // valorSeleccionado: $("#selectInfra").val(),
+        valorSeleccionado: $("#task_zona").val(),
       },
       type: "POST",
       success: function (response) {

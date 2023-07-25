@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/ui_1.12.1_themes_base_jquery-ui.css">
     <link rel="stylesheet" href="./css/responsiveZonaAreas.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
@@ -74,8 +75,16 @@
                         <!-- Text input nombre -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Nombre</label>
-                            <input type="text" id="nombre_labsabell" class="form-control" name="nombre_labsabell" required>
+                            <input type="hidden" id="task_producto">
+                            <input type="text" id="selectLabsabell" class="form-control" name="selectLabsabell" required>
                         </div>
+
+                        <!-- Text input nombre -->
+                        <!-- <div class="form-outline mb-4">
+                            <label class="form-label">Abreviatura</label>
+                            <input type="hidden" id="task_producto">
+                            <input type="text" id="selectAbreviatura" class="form-control" name="selectAbreviatura" required>
+                        </div> -->
 
                         <!-- Submit button -->
                         <div class="d-grid  col-6 mx-auto bt-guardar">
@@ -96,7 +105,7 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="tablaLabsabell">
+                            <tbody id="tablaLabsabells">
 
                             </tbody>
                         </table>
@@ -112,7 +121,8 @@
     </footer>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxZona.js"></script>
+    <script src="./js/ui_1.12.1_jquery-ui.min.js"></script>
+    <script src="./js/ajaxLabsabell.js"></script>
 </body>
 
 </html>

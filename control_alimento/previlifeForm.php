@@ -1,3 +1,10 @@
+<?php
+require_once "m_almacen.php";
+
+$mostrar = new m_almacen();
+$dataProducto = $mostrar->MostrarProducto();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,14 +13,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/responsiveZonaAreas.css">
+    <link rel="stylesheet" href="./css/responsivePrevileLab.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
 
     <!--====== Estilo de ICON ======-->
     <link rel="stylesheet" href="./styleIcons/style.css">
-
-    <script src="./js/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="./css/select2.min.css">
 
 
     <title>Covifarma</title>
@@ -27,7 +33,7 @@
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
             <li>
-                <a class="" aria-current="page" href="#">Zona</a>
+                <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
             </li>
             <li>
                 <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
@@ -65,7 +71,7 @@
                 <div class="main">
                     <form method="post" action="" id="formularioPrevilife">
 
-                        <!-- Text input nombre -->
+                        <!-- Text input codigo -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Codigo</label>
                             <input type="text" id="codigo_previlife" class="form-control" name="codigo_previlife" required>
@@ -74,7 +80,15 @@
                         <!-- Text input nombre -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Nombre</label>
-                            <input type="text" id="nombre_previlife" class="form-control" name="nombre_previlife" required>
+                            <!-- <input type="text" id="nombre_previlife" class="form-control" name="nombre_previlife" required> -->
+                            <select id="selectPrevilife" class="form-select selectPrevilife" aria-label="Default select example">
+                                <option value="none" selected disabled>Seleccione producto</option>
+                                <?php foreach ($dataProducto as $lis) { ?>
+                                    <option value="<?php echo $lis->COD_PRODUCTO; ?>" class="option"> <?php echo $lis->DES_PRODUCTO; ?></option>
+                                <?php
+                                }
+                                ?>
+                            </select>
                         </div>
 
                         <!-- Submit button -->
@@ -83,26 +97,26 @@
                             <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
                         </div>
                     </form>
-                    <div id="tablaPrevilife" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbPrevilife" class="table table-sm mb-3 table-hover table_id">
+
+                    <div class="table-responsive" style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbPrevilife" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
-
                                     <th class="thtitulo" scope="col">CODIGO</th>
                                     <th class="thtitulo" scope="col">NOMBRE</th>
+                                    <th class="thtitulo" scope="col">ABREVIATURA</th>
                                     <th class="thtitulo" scope="col">FECHA</th>
                                     <th class="thtitulo" scope="col">VERSION</th>
+                                    <!-- <th class="thtitulo" scope="col">USUARIO</th> -->
                                     <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="tablaLabsabell">
+                            <tbody id="tablaPrevilife">
 
                             </tbody>
                         </table>
                     </div>
-
-
                 </div>
             </div>
         </section>
@@ -111,8 +125,10 @@
         Covifarma-2023
     </footer>
     <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxZona.js"></script>
+    <script src="./js/select2.min.js"></script>
+    <script src="./js/ajaxPrevilife.js"></script>
 </body>
 
 </html>

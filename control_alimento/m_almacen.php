@@ -103,7 +103,6 @@ class m_almacen
   public function generarVersion()
   {
 
-    //$stm = $this->bd->prepare("SELECT top 1 VERSION as VERSION FROM T_VERSION order by COD_VERSION desc");
     $stm = $this->bd->prepare("SELECT MAX(VERSION) as VERSION FROM T_VERSION");
     $stm->execute();
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
@@ -186,8 +185,8 @@ class m_almacen
 
       $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
 
-      // $FECHA = $cod->c_horaserversql('F');
-      $FECHA = '19/07/2023';
+      $FECHA = $cod->c_horaserversql('F');
+      // $FECHA = '19/07/2023';
       if ($repetir == 0) {
 
         $stm = $this->bd->prepare("INSERT INTO T_ZONA_AREAS (COD_ZONA, NOMBRE_T_ZONA_AREAS, FECHA, VERSION)
@@ -265,8 +264,8 @@ class m_almacen
         $stmt->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
         $update = $stmt->execute();
 
-        $fechaDHoy = date('Y-m-d');
-        //$fechaDHoy = $cod->c_horaserversql('F');
+        // $fechaDHoy = date('Y-m-d');
+        $fechaDHoy = $cod->c_horaserversql('F');
 
         if ($VERSION == '01') {
           $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
@@ -423,7 +422,7 @@ class m_almacen
 
         $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION)
                                   VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION')");
-
+        // var_dump($stm);
         $insert = $stm->execute();
 
         // $fechaDHoy = date('Y-m-d');
@@ -1232,6 +1231,232 @@ class m_almacen
 
       return $json;
     } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+  public function  MostrarProductoCombo($term)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE DES_PRODUCTO LIKE '$term%' ");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      $json = array();
+      foreach ($datos as $dato) {
+        $json[] = array(
+          "id" => $dato['COD_PRODUCTO'],
+          "label" => $dato['DES_PRODUCTO'],
+          "abreviatura" => $dato['ABR_PRODUCTO']
+        );
+      }
+
+      return $json;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  // public function  MostrarProductoabreviaturaCombo($term)
+  // {
+  //   try {
+
+  //     $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE ABR_PRODUCTO LIKE '$term%' ");
+  //     $stm->execute();
+  //     $datos = $stm->fetchAll();
+
+  //     $json = array();
+  //     foreach ($datos as $dato) {
+  //       $json[] = array(
+  //         "id" => $dato['COD_PRODUCTO'],
+  //         "nombre" => $dato['DES_PRODUCTO'],
+  //         "label" => $dato['ABR_PRODUCTO']
+  //       );
+  //     }
+
+  //     return $json;
+  //   } catch (Exception $e) {
+  //     die($e->getMessage());
+  //   }
+  // }
+  public function generarVersionLabsabell()
+  {
+
+    $stm = $this->bd->prepare("SELECT MAX(VERSION) as VERSION FROM T_PRODUCTO_ENVASES");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $maxContadorVersion = intval($resultado['VERSION']);
+    if ($maxContadorVersion == null) {
+      $maxContadorVersion = 0;
+    }
+
+    // $nuevoCodigo =  $maxContadorVersion + 1;
+    // $codigoAumento = str_pad($nuevoCodigo, 2, '0', STR_PAD_LEFT);
+
+    // return $codigoAumento;
+    $fecha = new m_almacen();
+    // $fechaDHoy = date('Y-m-d');
+    $fechaDHoy = $fecha->c_horaserversql('F');
+    $stmver = $this->bd->prepare("SELECT * FROM T_PRODUCTO_ENVASES WHERE cast(FECHA_CREACION as DATE) =cast('$fechaDHoy' as date)");
+    $stmver->execute();
+    $valor = $stmver->fetchAll();
+
+    $valor1 = count($valor);
+    if ($valor1 == 0) {
+      $nuevaversion = $maxContadorVersion + 1;
+      $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
+    } else {
+      $maxContadorVersion;
+
+      $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
+    }
+
+    return $versionAumento;
+  }
+  public function contarRegistrosLabsabell($cod_labsabell, $valorSel)
+  {
+    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_PRODUCTO_ENVASES WHERE COD_PRODUCTO_ENVASE = :COD_PRODUCTO_ENVASE AND COD_PRODUCTO = :COD_PRODUCTO");
+    $repetir->bindParam(':COD_PRODUCTO_ENVASE', $cod_labsabell, PDO::PARAM_STR);
+    $repetir->bindParam(':COD_PRODUCTO', $valorSel, PDO::PARAM_STR);
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['count'];
+
+    return $count;
+  }
+  public function InsertarLabsabell($codigolabsabell, $valorSeleccionado)
+  {
+    try {
+      $fecha = new m_almacen();
+      $VERSION = $fecha->generarVersionLabsabell();
+      $repetir = $fecha->contarRegistrosLabsabell($codigolabsabell, $valorSeleccionado);
+      $FECHA_CREACION = $fecha->c_horaserversql('F');
+
+      if ($repetir == 0) {
+        $stm = $this->bd->prepare("INSERT INTO T_PRODUCTO_ENVASES (COD_PRODUCTO_ENVASE, COD_PRODUCTO, FECHA_CREACION,VERSION)
+                                  VALUES ( '$codigolabsabell', '$valorSeleccionado', '$FECHA_CREACION','$VERSION')");
+
+        $insert = $stm->execute();
+        return $insert;
+      }
+    } catch (Exception $e) {
+
+      die($e->getMessage());
+    }
+  }
+  public function MostrarEnvasesLabsabel($buscarlab)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT E.COD_PRODUCTO_ENVASE AS COD_PRODUCTO_ENVASE, P.DES_PRODUCTO AS DES_PRODUCTO, P.ABR_PRODUCTO AS ABR_PRODUCTO,
+                                 E.FECHA_CREACION AS FECHA_CREACION, E.VERSION AS VERSION FROM T_PRODUCTO_ENVASES AS E 
+                                 INNER JOIN T_PRODUCTO AS P ON E.COD_PRODUCTO=P.COD_PRODUCTO WHERE DES_PRODUCTO LIKE '$buscarlab%'");
+
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function SelectEnvasesLabsabell($cod_producto_envase)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT E.COD_PRODUCTO_ENVASE AS COD_PRODUCTO_ENVASE, P.DES_PRODUCTO AS DES_PRODUCTO, P.ABR_PRODUCTO AS ABR_PRODUCTO,
+      E.FECHA_CREACION AS FECHA_CREACION, E.VERSION AS VERSION FROM T_PRODUCTO_ENVASES AS E 
+      INNER JOIN T_PRODUCTO AS P ON E.COD_PRODUCTO=P.COD_PRODUCTO WHERE COD_PRODUCTO_ENVASE= :COD_PRODUCTO_ENVASE");
+      $stm->bindParam(':COD_PRODUCTO_ENVASE', $cod_producto_envase, PDO::PARAM_STR);
+      $stm->execute();
+
+      return $stm;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function  editarEnvasesLabsabell($codlab, $codigolab)
+  {
+    try {
+
+
+
+      $stmt = $this->bd->prepare("UPDATE T_PRODUCTO_ENVASES SET COD_PRODUCTO_ENVASE  =:COD_PRODUCTO  WHERE COD_PRODUCTO_ENVASE = :COD_PRODUCTO_ENVASE");
+      $stmt->bindParam(':COD_PRODUCTO', $codigolab, PDO::PARAM_STR);
+      $stmt->bindParam(':COD_PRODUCTO_ENVASE', $codlab);
+      $update = $stmt->execute();
+
+
+
+      return $update;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function eliminarEnvasesLabsabel($codenvaselabsabell)
+  {
+    try {
+
+      $stm = $this->bd->prepare("DELETE FROM T_PRODUCTO_ENVASES WHERE COD_PRODUCTO_ENVASE= :COD_PRODUCTO_ENVASE");
+      $stm->bindParam(':COD_PRODUCTO_ENVASE', $codenvaselabsabell, PDO::PARAM_STR);
+
+      $delete = $stm->execute();
+      return $delete;
+    } catch (Exception $e) {
+      die("Error al eliminar los datos: " . $e->getMessage());
+    }
+  }
+
+
+
+  public function MostrarProducto()
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO");
+
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function  MostrarEnvasesPrevilife($buscarPrevilife)
+  {
+    try {
+
+      $stm = $this->bd->prepare("  SELECT PR.COD_PRODUCTO_PREVILIFE AS COD_PRODUCTO_PREVILIFE, P.DES_PRODUCTO AS DES_PRODUCTO,
+      PR.ABR_PRODUCTO_PREVILIFE AS ABR_PRODUCTO_PREVILIFE, PR.FECHA_CREACION AS FECHA_CREACION, PR.VERSION AS VERSION
+      FROM T_PRODUCTO_PREVILIFE AS PR INNER JOIN T_PRODUCTO AS P ON PR.COD_PRODUCTO=P.COD_PRODUCTO WHERE DES_PRODUCTO LIKE '$buscarPrevilife%'");
+
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function c_insertar_previlife($codigoPrev, $valorSeleccionado)
+  {
+    try {
+      $fecha = new m_almacen();
+      // $VERSION = $fecha->generarVersionLabsabell();
+      // $repetir = $fecha->contarRegistrosLabsabell($codigolabsabell, $valorSeleccionado);
+      $FECHA_CREACION = $fecha->c_horaserversql('F');
+
+      // if ($repetir == 0) {
+      $stm = $this->bd->prepare("INSERT INTO T_PRODUCTO_PREVILIFE(COD_PRODUCTO_PREVILIFE, COD_PRODUCTO, FECHA_CREACION)
+                                  VALUES ( '$codigoPrev', '$valorSeleccionado', '$FECHA_CREACION')");
+      // var_dump($stm);
+      $insert = $stm->execute();
+      return $insert;
+      // }
+    } catch (Exception $e) {
+
       die($e->getMessage());
     }
   }

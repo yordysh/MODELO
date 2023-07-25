@@ -13,7 +13,8 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"> -->
+    <link rel="stylesheet" href="./css/ui_1.12.1_themes_base_jquery-ui.css">
     <link rel="stylesheet" href="./css/responsiveControl.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
@@ -98,8 +99,8 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                 }
                                 ?>
                             </select> -->
-                            <input type="text" name="" id="task_zona">
-                            <input id="selectInfra" class="form-control">
+                            <input type="hidden" id="task_zona">
+                            <input id="selectInfra" class="form-control" required>
                         </div>
 
                         <!-- Submit button -->
@@ -173,7 +174,8 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <!-- <script src="./js/select2.min.js"></script> -->
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <!-- <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
+    <script src="./js/ui_1.12.1_jquery-ui.min.js"></script>
     <script src="./js/ajaxInfra.js"></script>
     <script>
         function generarPDF() {
