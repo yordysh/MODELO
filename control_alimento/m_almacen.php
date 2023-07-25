@@ -1210,7 +1210,7 @@ class m_almacen
     }
   }
 
-  public function MostrarZonaCombo()
+  public function MostrarZonaCombo($term)
   {
     try {
 
@@ -1218,17 +1218,18 @@ class m_almacen
       // $stm->execute();
       // $datos = $stm->fetchAll();
       // return $datos;
-      $stm = $this->bd->prepare("SELECT COD_ZONA, NOMBRE_T_ZONA_AREAS FROM T_ZONA_AREAS");
+      $stm = $this->bd->prepare("SELECT COD_ZONA, NOMBRE_T_ZONA_AREAS FROM T_ZONA_AREAS WHERE NOMBRE_T_ZONA_AREAS LIKE '$term%' ");
       $stm->execute();
       $datos = $stm->fetchAll();
 
-      // $json = array();
+      $json = array();
       foreach ($datos as $dato) {
         $json[] = array(
-          "COD_ZONA1" => $dato['COD_ZONA'],
-          "NOMBRE_T_ZONA_AREAS1" => $dato['NOMBRE_T_ZONA_AREAS']
+          "id" => $dato['COD_ZONA'],
+          "label" => $dato['NOMBRE_T_ZONA_AREAS']
         );
       }
+
       return $json;
     } catch (Exception $e) {
       die($e->getMessage());

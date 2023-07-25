@@ -235,8 +235,8 @@ if ($_POST['accion'] == 'insertaralertamixcontrolmaquina') {
 }
 
 if ($_POST['accion'] == 'buscarZonaCombo') {
-
-    $respuesta = c_almacen::c_buscar_zona_combo();
+    $term = $_POST['term'];
+    $respuesta = c_almacen::c_buscar_zona_combo($term);
     echo $respuesta;
 }
 
@@ -1424,12 +1424,12 @@ class c_almacen
         }
     }
 
-    static function c_buscar_zona_combo()
+    static function c_buscar_zona_combo($term)
     {
         $m_formula = new m_almacen();
 
 
-        $respuesta = $m_formula->MostrarZonaCombo();
+        $respuesta = $m_formula->MostrarZonaCombo($term);
         // $json = array();
         // foreach ($respuesta as $row) {
         //     $json[] = array(

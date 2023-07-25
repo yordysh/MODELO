@@ -1,6 +1,6 @@
 $(function () {
   fetchTasks();
-  select();
+  // select();
 
   let edit = false;
 
@@ -38,26 +38,60 @@ $(function () {
 
   // $("#selectInfra").autocomplete({
   // source: function (request, response) {
-  function select() {
-    const accion = "buscarZonaCombo";
-    $.ajax({
-      url: "./c_almacen.php",
-      data: { accion: accion },
-      type: "POST",
-      dataType: "json",
-      success: function (data) {
-        var res = JSON.parse(data);
-        $("#task_zona").autocomplete({
-          source: res,
-          select: function (request, ui) {
-            //const search = $("#selectInfra").val();
-            var nombre = ui.item.COD_ZONA1;
-            console.log(nombre);
+  $(document).ready(function () {
+    // const accion = "buscarZonaCombo";
+    // $.ajax({
+    //   url: "./c_almacen.php",
+    //   data: { accion: accion },
+    //   type: "POST",
+    //   // dataType: "json",
+    //   success: function (data) {
+    //     var res = JSON.parse(data);
+    //     $("#selectInfra").autocomplete({
+    //       source: res,
+    //       select: function (request, ui) {
+    //         //const search = $("#selectInfra").val();
+    //         var nombre = ui.item.COD_ZONA1;
+    //         console.log(nombre);
+    //       },
+    //     });
+    //   },
+    // });
+
+    $("#selectInfra").autocomplete({
+      source: function (request, response) {
+        const accion = "buscarZonaCombo";
+
+        $.ajax({
+          url: "./c_almacen.php",
+          method: "POST",
+          dataType: "json",
+          data: {
+            accion: accion,
+            term: request.term,
+          },
+          success: function (data) {
+            if (!data) {
+              $("#task_zona").val("");
+            }
+            response(data);
           },
         });
       },
+      select: function (event, ui) {
+        console.log(ui.item.id);
+        $("#task_zona").val(ui.item.id);
+      },
+      close: function () {
+        const searchTerm = $("#selectInfra").val().trim();
+
+        // Si el término de búsqueda está vacío, borrar el valor del input "task_zona"
+        if (searchTerm === "") {
+          $("#task_zona").val("");
+        }
+      },
     });
-  }
+  });
 
   //------------- Busqueda con ajax infraestructura Accesorio----------------//
 
