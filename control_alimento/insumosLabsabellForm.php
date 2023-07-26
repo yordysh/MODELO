@@ -66,19 +66,19 @@
                     <center><label class="title">INSUMOS LABSABELL</label></center>
                 </div>
                 <div class="main">
-                    <form method="post" action="" id="formularioPrevilife">
+                    <form method="post" action="" id="formularioInsumosLab">
 
                         <!-- Text input codigo -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Codigo</label>
-                            <input type="text" id="codigo_previlife" class="form-control" name="codigo_previlife" required>
+                            <input type="text" id="codigo_insumos_lab" class="form-control" name="codigo_insumos_lab" required>
                         </div>
 
                         <!-- Text input nombre -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Nombre</label>
-                            <input type="hidden" id="task_previlife">
-                            <input type="text" id="nombre_previlife" class="form-control" name="nombre_previlife" required>
+                            <input type="hidden" id="task_insumos_lab">
+                            <input type="text" id="nombre_insumos_lab" class="form-control" name="nombre_insumos_lab" required>
                             <!-- <select id="selectPrevilife" class="form-select select-Previlife" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
                                 <?php foreach ($dataProducto as $lis) { ?>
@@ -87,12 +87,6 @@
                                 }
                                 ?>
                             </select> -->
-                        </div>
-
-                        <!-- Text input Abreviatura -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Abreviatura</label>
-                            <input type="text" id="abr_previlife" class="form-control" name="abr_previlife" required>
                         </div>
 
                         <!-- Submit button -->
@@ -116,7 +110,7 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="tablaPrevilife">
+                            <tbody id="tablaInsumosLab">
 
                             </tbody>
                         </table>
@@ -133,7 +127,7 @@
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ui_1.12.1_jquery-ui.min.js"></script>
     <!-- <script src="./js/select2.min.js"></script> -->
-    <script src="./js/ajaxPrevilife.js"></script>
+    <script src="./js/ajaxInsumosLab.js"></script>
 </body>
 
 </html>

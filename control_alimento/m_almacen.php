@@ -1410,6 +1410,8 @@ class m_almacen
 
 
 
+
+
   public function  MostrarProductoComboPrevilife($term)
   {
     try {
@@ -1431,7 +1433,6 @@ class m_almacen
       die($e->getMessage());
     }
   }
-
   public function generarVersionPrevilife()
   {
 
@@ -1547,9 +1548,7 @@ class m_almacen
   {
     try {
 
-      $stmt = $this->bd->prepare("UPDATE T_PRODUCTO_PREVILIFE SET COD_PRODUCTO_PREVILIFE  =:COD_PRODUCTO  WHERE COD_PRODUCTO_PREVILIFE = :COD_PRODUCTO_PREVILIFE");
-      $stmt->bindParam(':COD_PRODUCTO', $codigoPrevilife, PDO::PARAM_STR);
-      $stmt->bindParam(':COD_PRODUCTO_PREVILIFE', $codprev);
+      $stmt = $this->bd->prepare("UPDATE T_PRODUCTO_PREVILIFE SET COD_PRODUCTO_PREVILIFE  ='$codigoPrevilife'  WHERE COD_PRODUCTO_PREVILIFE = '$codprev'");
       $update = $stmt->execute();
 
       return $update;
@@ -1563,6 +1562,149 @@ class m_almacen
 
       $stm = $this->bd->prepare("DELETE FROM T_PRODUCTO_PREVILIFE WHERE COD_PRODUCTO_PREVILIFE= :COD_PRODUCTO_PREVILIFE");
       $stm->bindParam(':COD_PRODUCTO_PREVILIFE', $codenvaseprevilife, PDO::PARAM_STR);
+
+      $delete = $stm->execute();
+      return $delete;
+    } catch (Exception $e) {
+      die("Error al eliminar los datos: " . $e->getMessage());
+    }
+  }
+
+
+
+
+  public function generarVersionInsumosLab()
+  {
+
+    $stm = $this->bd->prepare("SELECT MAX(VERSION) as VERSION FROM T_PRODUCTO_INSUMOS");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $maxContadorVersion = intval($resultado['VERSION']);
+    if ($maxContadorVersion == null) {
+      $maxContadorVersion = 0;
+    }
+
+    $fecha = new m_almacen();
+
+    $fechaDHoy = $fecha->c_horaserversql('F');
+    $stmver = $this->bd->prepare("SELECT * FROM T_PRODUCTO_INSUMOS WHERE cast(FECHA_CREACION as DATE) =cast('$fechaDHoy' as date)");
+    $stmver->execute();
+    $valor = $stmver->fetchAll();
+
+    $valor1 = count($valor);
+    if ($valor1 == 0) {
+      $nuevaversion = $maxContadorVersion + 1;
+      $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
+    } else {
+      $maxContadorVersion;
+
+      $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
+    }
+
+    return $versionAumento;
+  }
+  public function contarRegistrosInsumosLab($codigoInsumosLab, $valorSeleccionado)
+  {
+    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_PRODUCTO_INSUMOS WHERE COD_PRODUCTO_INSUMOS = :COD_PRODUCTO_INSUMOS AND COD_PRODUCTO = :COD_PRODUCTO");
+    $repetir->bindParam(':COD_PRODUCTO_INSUMOS', $codigoInsumosLab, PDO::PARAM_STR);
+    $repetir->bindParam(':COD_PRODUCTO', $valorSeleccionado, PDO::PARAM_STR);
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['count'];
+
+    return $count;
+  }
+  public function  MostrarProductoComboInsumosLab($term)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO FROM T_PRODUCTO WHERE DES_PRODUCTO LIKE '$term%' ");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      $json = array();
+      foreach ($datos as $dato) {
+        $json[] = array(
+          "id" => $dato['COD_PRODUCTO'],
+          "label" => $dato['DES_PRODUCTO'],
+        );
+      }
+
+      return $json;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function InsertarInsumoslab($codigoInsumosLab, $valorSeleccionado)
+  {
+    try {
+      $fecha = new m_almacen();
+      $VERSION = $fecha->generarVersionInsumosLab();
+      $repetir = $fecha->contarRegistrosInsumosLab($codigoInsumosLab, $valorSeleccionado);
+      $FECHA_CREACION = $fecha->c_horaserversql('F');
+
+      if ($repetir == 0) {
+        $stm = $this->bd->prepare("INSERT INTO T_PRODUCTO_INSUMOS(COD_PRODUCTO_INSUMOS, COD_PRODUCTO, FECHA_CREACION, VERSION)
+                                  VALUES ( '$codigoInsumosLab', '$valorSeleccionado','$FECHA_CREACION','$VERSION')");
+
+        $insert = $stm->execute();
+        return $insert;
+      }
+    } catch (Exception $e) {
+
+      die($e->getMessage());
+    }
+  }
+  public function MostrarInsumosLab($buscarInsumos)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT I.COD_PRODUCTO_INSUMOS AS COD_PRODUCTO_INSUMOS, P.ABR_PRODUCTO AS ABR_PRODUCTO,
+                                 P.DES_PRODUCTO AS DES_PRODUCTO, I.FECHA_CREACION AS FECHA_CREACION, I.VERSION AS VERSION FROM T_PRODUCTO_INSUMOS AS I 
+                                 INNER JOIN T_PRODUCTO AS P ON I.COD_PRODUCTO=P.COD_PRODUCTO WHERE DES_PRODUCTO LIKE '$buscarInsumos%'");
+
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function SelectInsumosLab($cod_insumos_lab)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT I.COD_PRODUCTO_INSUMOS AS COD_PRODUCTO_INSUMOS, P.ABR_PRODUCTO AS ABR_PRODUCTO,
+                                  P.DES_PRODUCTO AS DES_PRODUCTO, I.FECHA_CREACION, I.VERSION AS VERSION, 
+                                  P.COD_PRODUCTO AS COD_PRODUCTO  FROM T_PRODUCTO_INSUMOS AS I 
+                                  INNER JOIN T_PRODUCTO AS P ON I.COD_PRODUCTO=P.COD_PRODUCTO WHERE COD_PRODUCTO_INSUMOS= :COD_PRODUCTO_INSUMOS");
+      $stm->bindParam(':COD_PRODUCTO_INSUMOS', $cod_insumos_lab, PDO::PARAM_STR);
+      $stm->execute();
+
+      return $stm;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function  editarInsumoLab($codInsu, $codigoInsumo)
+  {
+    try {
+
+      $stmt = $this->bd->prepare("UPDATE T_PRODUCTO_INSUMOS SET COD_PRODUCTO_INSUMOS  ='$codigoInsumo'  WHERE COD_PRODUCTO_INSUMOS = '$codInsu'");
+      $update = $stmt->execute();
+
+      return $update;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function  eliminarInsumosLab($codinsumoslab)
+  {
+    try {
+
+      $stm = $this->bd->prepare("DELETE FROM T_PRODUCTO_INSUMOS WHERE COD_PRODUCTO_INSUMOS= :COD_PRODUCTO_INSUMOS");
+      $stm->bindParam(':COD_PRODUCTO_INSUMOS', $codinsumoslab, PDO::PARAM_STR);
 
       $delete = $stm->execute();
       return $delete;

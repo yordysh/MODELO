@@ -28,69 +28,33 @@ $(function () {
     nav.classList.remove("openNav");
   });
   //----------------------------------------------------------------//
-  // $("#selectPrevilife").select2();
-  //------------- Busqueda con COMBO PRODUCTO PREVILIFE----------------//
-  $(document).ready(function () {
-    $("#nombre_previlife").autocomplete({
-      source: function (request, response) {
-        const accion = "buscarProductoComboPrevilife";
 
-        $.ajax({
-          url: "./c_almacen.php",
-          method: "POST",
-          dataType: "json",
-          data: {
-            accion: accion,
-            term: request.term,
-          },
-          success: function (data) {
-            if (!data) {
-              $("#task_previlife").val("");
-            }
-            response(data);
-          },
-        });
-      },
-      select: function (event, ui) {
-        console.log(ui.item.id);
-        $("#task_previlife").val(ui.item.id);
-      },
-      close: function () {
-        const searchTerm = $("#nombre_previlife").val().trim();
-
-        if (searchTerm === "") {
-          $("#task_previlife").val("");
-        }
-      },
-    });
-  });
   //------------- Busqueda con ajax zonaArea----------------//
 
   $("#search").keyup(() => {
     if ($("#search").val()) {
       var search = $("#search").val();
-      const accion = "buscarprevilife";
+      const accion = "buscarInsumosLab";
       $.ajax({
         url: "./c_almacen.php",
         type: "POST",
-        data: { accion: accion, buscarPrevilife: search },
+        data: { accion: accion, buscarInsumos: search },
         success: function (response) {
-          // console.log(response);
           if (!response.error) {
             let tasks = JSON.parse(response);
             let template = ``;
             tasks.forEach((task) => {
-              template += `<tr taskId="${task.COD_PRODUCTO_PREVILIFE}">
-                  <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_PRODUCTO_PREVILIFE}</td>
+              template += `<tr taskId="${task.COD_PRODUCTO_INSUMOS}">
+                  <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_PRODUCTO_INSUMOS}</td>
                   <td data-titulo="NOMBRE" class="DES_PRODUCTO" style="text-align:rigth;">${task.DES_PRODUCTO}</td>
-                  <td data-titulo="ABREVIATURA" class="ABR_PRODUCTO_PREVILIFE" style="text-align:rigth;">${task.ABR_PRODUCTO_PREVILIFE}</td>
+                  <td data-titulo="ABREVIATURA" class="ABR_PRODUCTO" style="text-align:rigth;">${task.ABR_PRODUCTO}</td>
                   <td data-titulo="FECHA" style="text-align:rigth;">${task.FECHA_CREACION}</td>
                   <td data-titulo="VERSION" style="text-align:rigth;">${task.VERSION}</td>
-                  <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_PRODUCTO_PREVILIFE="${task.COD_PRODUCTO_PREVILIFE}"><i class="icon-trash"></i></button></td>
-                  <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_PRODUCTO_PREVILIFE="${task.COD_PRODUCTO_PREVILIFE}"><i class="icon-edit"></i></button></td>
+                  <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_PRODUCTO_INSUMOS="${task.COD_PRODUCTO_INSUMOS}"><i class="icon-trash"></i></button></td>
+                  <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_PRODUCTO_INSUMOS="${task.COD_PRODUCTO_INSUMOS}"><i class="icon-edit"></i></button></td>
               </tr>`;
             });
-            $("#tablaPrevilife").html(template);
+            $("#tablaInsumosLab").html(template);
           }
         },
         error: function (xhr, status, error) {
@@ -102,21 +66,56 @@ $(function () {
     }
   });
 
-  //------------- Añadiendo Previlife----------------//
-  $("#formularioPrevilife").submit((e) => {
+  //------------- Busqueda con COMBO PRODUCTO----------------//
+  $(document).ready(function () {
+    $("#nombre_insumos_lab").autocomplete({
+      source: function (request, response) {
+        const accion = "buscarProductoComboInsumos";
+
+        $.ajax({
+          url: "./c_almacen.php",
+          method: "POST",
+          dataType: "json",
+          data: {
+            accion: accion,
+            term: request.term,
+          },
+          success: function (data) {
+            if (!data) {
+              $("#task_insumos_lab").val("");
+            }
+            response(data);
+          },
+        });
+      },
+      select: function (event, ui) {
+        console.log(ui.item.id);
+        $("#task_insumos_lab").val(ui.item.id);
+      },
+      close: function () {
+        const searchTerm = $("#nombre_insumos_lab").val().trim();
+
+        if (searchTerm === "") {
+          $("#task_insumos_lab").val("");
+        }
+      },
+    });
+  });
+  //------------- Añadiendo INSUMOS LABSABELL----------------//
+  $("#formularioInsumosLab").submit((e) => {
     e.preventDefault();
 
-    const accion = edit === false ? "insertarprevilife" : "actualizarprevilife";
+    const accion =
+      edit === false ? "insertarinsumoslab" : "actualizarinsumoslab";
 
     $.ajax({
       url: "./c_almacen.php",
       data: {
         accion: accion,
-        codigoPrevilife: $("#codigo_previlife").val(),
-        valorSelec: $("#task_previlife").val(),
-        abrPrevilife: $("#abr_previlife").val(),
-        codigoPrev: $("#codigo_previlife").val(),
-        codprev: $("#taskId").val(),
+        codigoInsumosLab: $("#codigo_insumos_lab").val(),
+        valorSeleccionado: $("#task_insumos_lab").val(),
+        codigoInsumo: $("#codigo_insumos_lab").val(),
+        codInsu: $("#taskId").val(),
       },
 
       type: "POST",
@@ -130,7 +129,7 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
-              $("#formularioPrevilife").trigger("reset");
+              $("#formularioInsumosLab").trigger("reset");
             }
           });
         } else {
@@ -142,39 +141,39 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
-              $("#formularioPrevilife").trigger("reset");
+              $("#formularioInsumosLab").trigger("reset");
             }
           });
         }
       },
     });
   });
-  //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
+
+  //---------------------- Cargar registros INSUMOS LABSABELL-----------//
 
   function fetchTasks() {
-    const accion = "buscarprevilife";
+    const accion = "buscarInsumosLab";
     const search = "";
     $.ajax({
       url: "./c_almacen.php",
       type: "POST",
-      data: { accion: accion, buscarPrevilife: search },
+      data: { accion: accion, buscarInsumos: search },
       success: function (response) {
-        // console.log(response);
         if (!response.error) {
           let tasks = JSON.parse(response);
           let template = ``;
           tasks.forEach((task) => {
-            template += `<tr taskId="${task.COD_PRODUCTO_PREVILIFE}">
-                <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_PRODUCTO_PREVILIFE}</td>
+            template += `<tr taskId="${task.COD_PRODUCTO_INSUMOS}">
+                <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_PRODUCTO_INSUMOS}</td>
                 <td data-titulo="NOMBRE" class="DES_PRODUCTO" style="text-align:rigth;">${task.DES_PRODUCTO}</td>
-                <td data-titulo="ABREVIATURA" class="ABR_PRODUCTO_PREVILIFE" style="text-align:rigth;">${task.ABR_PRODUCTO_PREVILIFE}</td>
+                <td data-titulo="ABREVIATURA" class="ABR_PRODUCTO" style="text-align:rigth;">${task.ABR_PRODUCTO}</td>
                 <td data-titulo="FECHA" style="text-align:rigth;">${task.FECHA_CREACION}</td>
                 <td data-titulo="VERSION" style="text-align:rigth;">${task.VERSION}</td>
-                <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_PRODUCTO_PREVILIFE="${task.COD_PRODUCTO_PREVILIFE}"><i class="icon-trash"></i></button></td>
-                <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_PRODUCTO_PREVILIFE="${task.COD_PRODUCTO_PREVILIFE}"><i class="icon-edit"></i></button></td>
+                <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_PRODUCTO_INSUMOS="${task.COD_PRODUCTO_INSUMOS}"><i class="icon-trash"></i></button></td>
+                <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_PRODUCTO_INSUMOS="${task.COD_PRODUCTO_INSUMOS}"><i class="icon-edit"></i></button></td>
             </tr>`;
           });
-          $("#tablaPrevilife").html(template);
+          $("#tablaInsumosLab").html(template);
         }
       },
       error: function (xhr, status, error) {
@@ -187,24 +186,21 @@ $(function () {
 
   $(document).on("click", ".task-update", () => {
     var element = $(this)[0].activeElement.parentElement.parentElement;
-    var cod_producto_previlife = $(element).attr("taskId");
+    var cod_insumos_lab = $(element).attr("taskId");
 
-    const accion = "editarPrevilife";
+    const accion = "editarInsumosLab";
 
     $.ajax({
       url: "./c_almacen.php",
-      data: { accion: accion, cod_producto_previlife: cod_producto_previlife },
+      data: { accion: accion, cod_insumos_lab: cod_insumos_lab },
       type: "POST",
       success: function (response) {
         console.log(response);
         if (!response.error) {
           const task = JSON.parse(response);
-
-          console.log(task);
-          $("#codigo_previlife").val(task.COD_PRODUCTO_PREVILIFE);
-          $("#nombre_previlife").val(task.DES_PRODUCTO);
-          $("#abr_previlife").val(task.ABR_PRODUCTO_PREVILIFE);
-          $("#taskId").val(task.COD_PRODUCTO_PREVILIFE);
+          $("#codigo_insumos_lab").val(task.COD_PRODUCTO_INSUMOS);
+          $("#nombre_insumos_lab").val(task.DES_PRODUCTO);
+          $("#taskId").val(task.COD_PRODUCTO_INSUMOS);
           edit = true;
         }
       },
@@ -216,10 +212,8 @@ $(function () {
   $(document).on("click", ".task-delete", function (e) {
     e.preventDefault();
 
-    var cod_producto_envase_previlife = $(this).attr(
-      "data-COD_PRODUCTO_PREVILIFE"
-    );
-    const accion = "eliminarproductoenvaseprevilife";
+    var cod_insumos_lab = $(this).attr("data-COD_PRODUCTO_INSUMOS");
+    const accion = "eliminarinsumolab";
 
     Swal.fire({
       title: "¿Está seguro de eliminar este registro?",
@@ -234,10 +228,7 @@ $(function () {
       if (result.isConfirmed) {
         $.ajax({
           url: "./c_almacen.php",
-          data: {
-            accion: accion,
-            codenvaseprevilife: cod_producto_envase_previlife,
-          },
+          data: { accion: accion, codinsumoslab: cod_insumos_lab },
           type: "POST",
           success: function (response) {
             fetchTasks();

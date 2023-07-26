@@ -290,6 +290,12 @@ if ($_POST['accion'] == 'eliminarproductoenvase') {
 
 
 
+
+if ($_POST['accion'] == 'buscarProductoComboPrevilife') {
+    $term = $_POST['term'];
+    $respuesta = c_almacen::c_buscar_producto_combo_previlife($term);
+    echo $respuesta;
+}
 if ($_POST['accion'] == 'buscarprevilife') {
 
     $buscarPrevilife = trim($_POST['buscarPrevilife']);
@@ -313,11 +319,6 @@ if ($_POST['accion'] == 'editarPrevilife') {
     echo $respuesta;
 }
 
-if ($_POST['accion'] == 'buscarProductoComboPrevilife') {
-    $term = $_POST['term'];
-    $respuesta = c_almacen::c_buscar_producto_combo_previlife($term);
-    echo $respuesta;
-}
 if ($_POST['accion'] == 'actualizarprevilife') {
     $codprev = trim($_POST['codprev']);
     $codigoPrevilife = trim($_POST['codigoPrevilife']);
@@ -331,6 +332,55 @@ if ($_POST['accion'] == 'eliminarproductoenvaseprevilife') {
     $respuesta = c_almacen::c_eliminar_envases_previlife($codenvaseprevilife);
     echo $respuesta;
 }
+
+
+
+
+
+if ($_POST['accion'] == 'buscarProductoComboInsumos') {
+    $term = $_POST['term'];
+    $respuesta = c_almacen::c_buscar_producto_combo_insumos_lab($term);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'insertarinsumoslab') {
+
+    $codigoInsumosLab = trim($_POST['codigoInsumosLab']);
+
+    $valorSeleccionado = ($_POST['valorSeleccionado']);
+
+
+    $respuesta = c_almacen::c_insertar_insumos_lab($codigoInsumosLab, $valorSeleccionado);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'buscarInsumosLab') {
+
+    $buscarInsumos = trim($_POST['buscarInsumos']);
+
+    $respuesta = c_almacen::c_buscar_insumos_lab($buscarInsumos);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'editarInsumosLab') {
+    $cod_insumos_lab = trim($_POST['cod_insumos_lab']);
+    $respuesta = c_almacen::c_editar_insumos_lab($cod_insumos_lab);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'actualizarinsumoslab') {
+    $codInsu = trim($_POST['codInsu']);
+    $codigoInsumo = trim($_POST['codigoInsumo']);
+    $respuesta = c_almacen::c_actualizar_insumos_lab($codInsu, $codigoInsumo);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'eliminarinsumolab') {
+
+    $codinsumoslab = trim($_POST['codinsumoslab']);
+
+    $respuesta = c_almacen::c_eliminar_insumos_lab($codinsumoslab);
+    echo $respuesta;
+}
+
+
+
+
 
 
 
@@ -1666,6 +1716,8 @@ class c_almacen
 
 
 
+
+
     static function c_buscar_producto_combo_previlife($term)
     {
         $m_formula = new m_almacen();
@@ -1674,7 +1726,6 @@ class c_almacen
         $respuesta = $m_formula->MostrarProductoComboPrevilife($term);
         echo json_encode($respuesta);
     }
-
     static function   c_buscar_previlife($buscarPrevilife)
     {
         try {
@@ -1774,6 +1825,125 @@ class c_almacen
         if (isset($codenvaseprevilife)) {
 
             $resultado = $mostrar->eliminarEnvasesPrevilife($codenvaseprevilife);
+            if ($resultado) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+
+
+
+
+    static function c_buscar_producto_combo_insumos_lab($term)
+    {
+        $m_formula = new m_almacen();
+
+
+        $respuesta = $m_formula->MostrarProductoComboInsumosLab($term);
+        echo json_encode($respuesta);
+    }
+    static function c_insertar_insumos_lab($codigoInsumosLab, $valorSeleccionado)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($codigoInsumosLab) && isset($valorSeleccionado)) {
+            $respuesta = $m_formula->InsertarInsumoslab($codigoInsumosLab, $valorSeleccionado);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function   c_buscar_insumos_lab($buscarInsumos)
+    {
+        try {
+
+            if (!empty($buscarInsumos)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarInsumosLab($buscarInsumos);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_PRODUCTO_INSUMOS" => $row->COD_PRODUCTO_INSUMOS,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
+                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                        "VERSION" => $row->VERSION,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarInsumosLab($buscarInsumos);
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_PRODUCTO_INSUMOS" => $row->COD_PRODUCTO_INSUMOS,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
+                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                        "VERSION" => $row->VERSION,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_editar_insumos_lab($cod_insumos_lab)
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($cod_insumos_lab)) {
+            $selectZ = $mostrar->SelectInsumosLab($cod_insumos_lab);
+
+            $json = array();
+            foreach ($selectZ as $row) {
+                $json[] = array(
+                    "COD_PRODUCTO_INSUMOS" => $row['COD_PRODUCTO_INSUMOS'],
+                    "DES_PRODUCTO" => $row['DES_PRODUCTO'],
+                    "ABR_PRODUCTO" => $row['ABR_PRODUCTO'],
+                );
+            }
+
+            $jsonstring = json_encode($json[0]);
+            echo $jsonstring;
+        }
+    }
+    static function c_actualizar_insumos_lab($codInsu, $codigoInsumo)
+    {
+
+        $m_formula = new m_almacen();
+
+
+        if (isset($codInsu) && isset($codigoInsumo)) {
+
+            $respuesta = $m_formula->editarInsumoLab($codInsu, $codigoInsumo);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function c_eliminar_insumos_lab($codinsumoslab)
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($codinsumoslab)) {
+
+            $resultado = $mostrar->eliminarInsumosLab($codinsumoslab);
             if ($resultado) {
                 return "ok";
             } else {
