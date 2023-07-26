@@ -29,9 +29,9 @@ $(function () {
   });
   //----------------------------------------------------------------//
   // $("#selectPrevilife").select2();
-
+  //------------- Busqueda con COMBO PRODUCTO PREVILIFE----------------//
   $(document).ready(function () {
-    $("#selectPrevilife").autocomplete({
+    $("#nombre_previlife").autocomplete({
       source: function (request, response) {
         const accion = "buscarProductoComboPrevilife";
 
@@ -56,7 +56,7 @@ $(function () {
         $("#task_previlife").val(ui.item.id);
       },
       close: function () {
-        const searchTerm = $("#selectPrevilife").val().trim();
+        const searchTerm = $("#nombre_previlife").val().trim();
 
         if (searchTerm === "") {
           $("#task_previlife").val("");
@@ -112,7 +112,8 @@ $(function () {
       url: "./c_almacen.php",
       data: {
         accion: accion,
-        valorSelec: $("#selectPrevilife").val(),
+        codigoPrevilife: $("#codigo_previlife").val(),
+        valorSelec: $("#task_previlife").val(),
         abrPrevilife: $("#abr_previlife").val(),
         codigoPrev: $("#codigo_previlife").val(),
         codprev: $("#taskId").val(),
@@ -201,7 +202,7 @@ $(function () {
 
           console.log(task);
           $("#codigo_previlife").val(task.COD_PRODUCTO_PREVILIFE);
-          $("#selectPrevilife").val(task.DES_PRODUCTO).trigger("change");
+          $("#nombre_previlife").val(task.DES_PRODUCTO);
           $("#abr_previlife").val(task.ABR_PRODUCTO_PREVILIFE);
           $("#taskId").val(task.COD_PRODUCTO_PREVILIFE);
           edit = true;
@@ -214,11 +215,11 @@ $(function () {
 
   $(document).on("click", ".task-delete", function (e) {
     e.preventDefault();
-    // var COD_ZONA = $(this).data("COD_ZONA");
 
-    var cod_producto_envase = $(this).attr("data-COD_PRODUCTO_ENVASE");
-    const accion = "eliminarproductoenvase";
-    // console.log(COD_ZONA);
+    var cod_producto_envase_previlife = $(this).attr(
+      "data-COD_PRODUCTO_PREVILIFE"
+    );
+    const accion = "eliminarproductoenvaseprevilife";
 
     Swal.fire({
       title: "¿Está seguro de eliminar este registro?",
@@ -233,7 +234,10 @@ $(function () {
       if (result.isConfirmed) {
         $.ajax({
           url: "./c_almacen.php",
-          data: { accion: accion, codenvaselabsabell: cod_producto_envase },
+          data: {
+            accion: accion,
+            codenvaseprevilife: cod_producto_envase_previlife,
+          },
           type: "POST",
           success: function (response) {
             fetchTasks();

@@ -54,6 +54,9 @@ $dataProducto = $mostrar->MostrarProducto();
             <li>
                 <a class="" href="#">Previlife</a>
             </li>
+            <li>
+                <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
+            </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
         <div class="search-box">
@@ -81,7 +84,7 @@ $dataProducto = $mostrar->MostrarProducto();
                         <!-- Text input nombre -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Nombre</label>
-                            <input id="task_previlife">
+                            <input type="hidden" id="task_previlife">
                             <input type="text" id="nombre_previlife" class="form-control" name="nombre_previlife" required>
                             <!-- <select id="selectPrevilife" class="form-select select-Previlife" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>

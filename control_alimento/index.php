@@ -68,6 +68,9 @@
       <li>
         <a class="" href="previlifeForm.php">Previlife</a>
       </li>
+      <li>
+        <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
+      </li>
     </ul>
     <!-- <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
     <div class="search-box">

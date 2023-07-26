@@ -1410,7 +1410,27 @@ class m_almacen
 
 
 
+  public function  MostrarProductoComboPrevilife($term)
+  {
+    try {
 
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO FROM T_PRODUCTO WHERE DES_PRODUCTO LIKE '$term%' ");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      $json = array();
+      foreach ($datos as $dato) {
+        $json[] = array(
+          "id" => $dato['COD_PRODUCTO'],
+          "label" => $dato['DES_PRODUCTO'],
+        );
+      }
+
+      return $json;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 
   public function generarVersionPrevilife()
   {
@@ -1446,10 +1466,10 @@ class m_almacen
 
     return $versionAumento;
   }
-  public function contarRegistrosPrevilife($codigoPrev, $valorSelec)
+  public function contarRegistrosPrevilife($codigoPrevilife, $valorSelec)
   {
     $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_PRODUCTO_PREVILIFE WHERE COD_PRODUCTO_PREVILIFE = :COD_PRODUCTO_PREVILIFE AND COD_PRODUCTO = :COD_PRODUCTO");
-    $repetir->bindParam(':COD_PRODUCTO_PREVILIFE', $codigoPrev, PDO::PARAM_STR);
+    $repetir->bindParam(':COD_PRODUCTO_PREVILIFE', $codigoPrevilife, PDO::PARAM_STR);
     $repetir->bindParam(':COD_PRODUCTO', $valorSelec, PDO::PARAM_STR);
     $repetir->execute();
     $result = $repetir->fetch(PDO::FETCH_ASSOC);
@@ -1487,17 +1507,17 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function InsertarPrevilife($codigoPrev, $valorSelec, $abrPrevilife)
+  public function InsertarPrevilife($codigoPrevilife, $valorSelec, $abrPrevilife)
   {
     try {
       $fecha = new m_almacen();
-      $VERSION = $fecha->generarVersionLabsabell();
-      $repetir = $fecha->contarRegistrosPrevilife($codigoPrev, $valorSelec);
+      $VERSION = $fecha->generarVersionPrevilife();
+      $repetir = $fecha->contarRegistrosPrevilife($codigoPrevilife, $valorSelec);
       $FECHA_CREACION = $fecha->c_horaserversql('F');
 
       if ($repetir == 0) {
         $stm = $this->bd->prepare("INSERT INTO T_PRODUCTO_PREVILIFE(COD_PRODUCTO_PREVILIFE, COD_PRODUCTO,ABR_PRODUCTO_PREVILIFE, FECHA_CREACION,VERSION)
-                                  VALUES ( '$codigoPrev', '$valorSelec','$abrPrevilife', '$FECHA_CREACION','$VERSION')");
+                                  VALUES ( '$codigoPrevilife', '$valorSelec','$abrPrevilife', '$FECHA_CREACION','$VERSION')");
 
         $insert = $stm->execute();
         return $insert;
@@ -1521,6 +1541,33 @@ class m_almacen
       return $stm;
     } catch (Exception $e) {
       die($e->getMessage());
+    }
+  }
+  public function  editarEnvasesPrevilife($codprev, $codigoPrevilife)
+  {
+    try {
+
+      $stmt = $this->bd->prepare("UPDATE T_PRODUCTO_PREVILIFE SET COD_PRODUCTO_PREVILIFE  =:COD_PRODUCTO  WHERE COD_PRODUCTO_PREVILIFE = :COD_PRODUCTO_PREVILIFE");
+      $stmt->bindParam(':COD_PRODUCTO', $codigoPrevilife, PDO::PARAM_STR);
+      $stmt->bindParam(':COD_PRODUCTO_PREVILIFE', $codprev);
+      $update = $stmt->execute();
+
+      return $update;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function  eliminarEnvasesPrevilife($codenvaseprevilife)
+  {
+    try {
+
+      $stm = $this->bd->prepare("DELETE FROM T_PRODUCTO_PREVILIFE WHERE COD_PRODUCTO_PREVILIFE= :COD_PRODUCTO_PREVILIFE");
+      $stm->bindParam(':COD_PRODUCTO_PREVILIFE', $codenvaseprevilife, PDO::PARAM_STR);
+
+      $delete = $stm->execute();
+      return $delete;
+    } catch (Exception $e) {
+      die("Error al eliminar los datos: " . $e->getMessage());
     }
   }
 }

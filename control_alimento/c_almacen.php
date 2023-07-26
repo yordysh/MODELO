@@ -299,10 +299,12 @@ if ($_POST['accion'] == 'buscarprevilife') {
 }
 if ($_POST['accion'] == 'insertarprevilife') {
 
-    $codigoPrev = trim($_POST['codigoPrev']);
+    $codigoPrevilife = trim($_POST['codigoPrevilife']);
+    $abrPrevilife = trim($_POST['abrPrevilife']);
     $valorSelec = ($_POST['valorSelec']);
-    $abrPrevilife =  ($_POST['abrPrevilife']);
-    $respuesta = c_almacen::c_insertar_previlife($codigoPrev, $valorSelec, $abrPrevilife);
+
+
+    $respuesta = c_almacen::c_insertar_previlife($codigoPrevilife, $valorSelec, $abrPrevilife);
     echo $respuesta;
 }
 if ($_POST['accion'] == 'editarPrevilife') {
@@ -310,6 +312,26 @@ if ($_POST['accion'] == 'editarPrevilife') {
     $respuesta = c_almacen::c_editar_envases_previlife($cod_producto_previlife);
     echo $respuesta;
 }
+
+if ($_POST['accion'] == 'buscarProductoComboPrevilife') {
+    $term = $_POST['term'];
+    $respuesta = c_almacen::c_buscar_producto_combo_previlife($term);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'actualizarprevilife') {
+    $codprev = trim($_POST['codprev']);
+    $codigoPrevilife = trim($_POST['codigoPrevilife']);
+    $respuesta = c_almacen::c_actualizar_envases_previlife($codprev, $codigoPrevilife);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'eliminarproductoenvaseprevilife') {
+
+    $codenvaseprevilife = trim($_POST['codenvaseprevilife']);
+
+    $respuesta = c_almacen::c_eliminar_envases_previlife($codenvaseprevilife);
+    echo $respuesta;
+}
+
 
 
 
@@ -1643,6 +1665,16 @@ class c_almacen
     }
 
 
+
+    static function c_buscar_producto_combo_previlife($term)
+    {
+        $m_formula = new m_almacen();
+
+
+        $respuesta = $m_formula->MostrarProductoComboPrevilife($term);
+        echo json_encode($respuesta);
+    }
+
     static function   c_buscar_previlife($buscarPrevilife)
     {
         try {
@@ -1686,12 +1718,12 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function c_insertar_previlife($codigoPrev, $valorSelec, $abrPrevilife)
+    static function c_insertar_previlife($codigoPrevilife, $valorSelec, $abrPrevilife)
     {
         $m_formula = new m_almacen();
 
-        if (isset($codigoPrev) && isset($valorSelec) && isset($abrPrevilife)) {
-            $respuesta = $m_formula->InsertarPrevilife($codigoPrev, $valorSelec, $abrPrevilife);
+        if (isset($codigoPrevilife) && isset($valorSelec) && isset($abrPrevilife)) {
+            $respuesta = $m_formula->InsertarPrevilife($codigoPrevilife, $valorSelec, $abrPrevilife);
             if ($respuesta) {
                 return "ok";
             } else {
@@ -1717,6 +1749,36 @@ class c_almacen
 
             $jsonstring = json_encode($json[0]);
             echo $jsonstring;
+        }
+    }
+    static function c_actualizar_envases_previlife($codprev, $codigoPrevilife)
+    {
+
+        $m_formula = new m_almacen();
+
+
+        if (isset($codprev) && isset($codigoPrevilife)) {
+
+            $respuesta = $m_formula->editarEnvasesPrevilife($codprev, $codigoPrevilife);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function c_eliminar_envases_previlife($codenvaseprevilife)
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($codenvaseprevilife)) {
+
+            $resultado = $mostrar->eliminarEnvasesPrevilife($codenvaseprevilife);
+            if ($resultado) {
+                return "ok";
+            } else {
+                return "error";
+            };
         }
     }
 }
