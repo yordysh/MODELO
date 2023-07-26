@@ -1410,6 +1410,53 @@ class m_almacen
 
 
 
+
+
+  public function generarVersionPrevilife()
+  {
+
+    $stm = $this->bd->prepare("SELECT MAX(VERSION) as VERSION FROM T_PRODUCTO_PREVILIFE");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $maxContadorVersion = intval($resultado['VERSION']);
+    if ($maxContadorVersion == null) {
+      $maxContadorVersion = 0;
+    }
+
+    // $nuevoCodigo =  $maxContadorVersion + 1;
+    // $codigoAumento = str_pad($nuevoCodigo, 2, '0', STR_PAD_LEFT);
+
+    // return $codigoAumento;
+    $fecha = new m_almacen();
+    // $fechaDHoy = date('Y-m-d');
+    $fechaDHoy = $fecha->c_horaserversql('F');
+    $stmver = $this->bd->prepare("SELECT * FROM T_PRODUCTO_PREVILIFE WHERE cast(FECHA_CREACION as DATE) =cast('$fechaDHoy' as date)");
+    $stmver->execute();
+    $valor = $stmver->fetchAll();
+
+    $valor1 = count($valor);
+    if ($valor1 == 0) {
+      $nuevaversion = $maxContadorVersion + 1;
+      $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
+    } else {
+      $maxContadorVersion;
+
+      $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
+    }
+
+    return $versionAumento;
+  }
+  public function contarRegistrosPrevilife($codigoPrev, $valorSelec)
+  {
+    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_PRODUCTO_PREVILIFE WHERE COD_PRODUCTO_PREVILIFE = :COD_PRODUCTO_PREVILIFE AND COD_PRODUCTO = :COD_PRODUCTO");
+    $repetir->bindParam(':COD_PRODUCTO_PREVILIFE', $codigoPrev, PDO::PARAM_STR);
+    $repetir->bindParam(':COD_PRODUCTO', $valorSelec, PDO::PARAM_STR);
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['count'];
+
+    return $count;
+  }
   public function MostrarProducto()
   {
     try {
@@ -1440,23 +1487,39 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function c_insertar_previlife($codigoPrev, $valorSeleccionado)
+  public function InsertarPrevilife($codigoPrev, $valorSelec, $abrPrevilife)
   {
     try {
       $fecha = new m_almacen();
-      // $VERSION = $fecha->generarVersionLabsabell();
-      // $repetir = $fecha->contarRegistrosLabsabell($codigolabsabell, $valorSeleccionado);
+      $VERSION = $fecha->generarVersionLabsabell();
+      $repetir = $fecha->contarRegistrosPrevilife($codigoPrev, $valorSelec);
       $FECHA_CREACION = $fecha->c_horaserversql('F');
 
-      // if ($repetir == 0) {
-      $stm = $this->bd->prepare("INSERT INTO T_PRODUCTO_PREVILIFE(COD_PRODUCTO_PREVILIFE, COD_PRODUCTO, FECHA_CREACION)
-                                  VALUES ( '$codigoPrev', '$valorSeleccionado', '$FECHA_CREACION')");
-      // var_dump($stm);
-      $insert = $stm->execute();
-      return $insert;
-      // }
+      if ($repetir == 0) {
+        $stm = $this->bd->prepare("INSERT INTO T_PRODUCTO_PREVILIFE(COD_PRODUCTO_PREVILIFE, COD_PRODUCTO,ABR_PRODUCTO_PREVILIFE, FECHA_CREACION,VERSION)
+                                  VALUES ( '$codigoPrev', '$valorSelec','$abrPrevilife', '$FECHA_CREACION','$VERSION')");
+
+        $insert = $stm->execute();
+        return $insert;
+      }
     } catch (Exception $e) {
 
+      die($e->getMessage());
+    }
+  }
+  public function SelectEnvasesPrevilife($cod_producto_previlife)
+  {
+    try {
+
+      $stm = $this->bd->prepare(" SELECT PRE.COD_PRODUCTO_PREVILIFE AS COD_PRODUCTO_PREVILIFE, P.DES_PRODUCTO AS DES_PRODUCTO,
+      PRE.ABR_PRODUCTO_PREVILIFE AS ABR_PRODUCTO_PREVILIFE, P.COD_PRODUCTO AS COD_PRODUCTO, PRE.FECHA_CREACION AS FECHA_CREACION,
+      PRE.VERSION AS VERSION FROM T_PRODUCTO_PREVILIFE AS PRE INNER JOIN T_PRODUCTO AS P 
+      ON PRE.COD_PRODUCTO=P.COD_PRODUCTO WHERE COD_PRODUCTO_PREVILIFE= :COD_PRODUCTO_PREVILIFE");
+      $stm->bindParam(':COD_PRODUCTO_PREVILIFE', $cod_producto_previlife, PDO::PARAM_STR);
+      $stm->execute();
+
+      return $stm;
+    } catch (Exception $e) {
       die($e->getMessage());
     }
   }

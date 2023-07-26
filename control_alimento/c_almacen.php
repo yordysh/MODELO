@@ -300,10 +300,17 @@ if ($_POST['accion'] == 'buscarprevilife') {
 if ($_POST['accion'] == 'insertarprevilife') {
 
     $codigoPrev = trim($_POST['codigoPrev']);
-    $valorSeleccionado = ($_POST['valorSeleccionado']);
-    $respuesta = c_almacen::c_insertar_previlife($codigoPrev, $valorSeleccionado);
+    $valorSelec = ($_POST['valorSelec']);
+    $abrPrevilife =  ($_POST['abrPrevilife']);
+    $respuesta = c_almacen::c_insertar_previlife($codigoPrev, $valorSelec, $abrPrevilife);
     echo $respuesta;
 }
+if ($_POST['accion'] == 'editarPrevilife') {
+    $cod_producto_previlife = trim($_POST['cod_producto_previlife']);
+    $respuesta = c_almacen::c_editar_envases_previlife($cod_producto_previlife);
+    echo $respuesta;
+}
+
 
 
 
@@ -1679,17 +1686,37 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function c_insertar_previlife($codigoPrev, $valorSeleccionado)
+    static function c_insertar_previlife($codigoPrev, $valorSelec, $abrPrevilife)
     {
         $m_formula = new m_almacen();
 
-        if (isset($$codigoPrev) && isset($valorSeleccionado)) {
-            $respuesta = $m_formula->InsertarLabsabell($codigoPrev, $valorSeleccionado);
+        if (isset($codigoPrev) && isset($valorSelec) && isset($abrPrevilife)) {
+            $respuesta = $m_formula->InsertarPrevilife($codigoPrev, $valorSelec, $abrPrevilife);
             if ($respuesta) {
                 return "ok";
             } else {
                 return "error";
             };
+        }
+    }
+    static function c_editar_envases_previlife($cod_producto_previlife)
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($cod_producto_previlife)) {
+            $selectZ = $mostrar->SelectEnvasesPrevilife($cod_producto_previlife);
+
+            $json = array();
+            foreach ($selectZ as $row) {
+                $json[] = array(
+                    "COD_PRODUCTO_PREVILIFE" => $row['COD_PRODUCTO_PREVILIFE'],
+                    "DES_PRODUCTO" => $row['DES_PRODUCTO'],
+                    "ABR_PRODUCTO_PREVILIFE" => $row['ABR_PRODUCTO_PREVILIFE'],
+                );
+            }
+
+            $jsonstring = json_encode($json[0]);
+            echo $jsonstring;
         }
     }
 }

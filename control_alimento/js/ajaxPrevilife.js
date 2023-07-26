@@ -28,7 +28,42 @@ $(function () {
     nav.classList.remove("openNav");
   });
   //----------------------------------------------------------------//
-  $("#selectPrevilife").select2();
+  // $("#selectPrevilife").select2();
+
+  $(document).ready(function () {
+    $("#selectPrevilife").autocomplete({
+      source: function (request, response) {
+        const accion = "buscarProductoComboPrevilife";
+
+        $.ajax({
+          url: "./c_almacen.php",
+          method: "POST",
+          dataType: "json",
+          data: {
+            accion: accion,
+            term: request.term,
+          },
+          success: function (data) {
+            if (!data) {
+              $("#task_previlife").val("");
+            }
+            response(data);
+          },
+        });
+      },
+      select: function (event, ui) {
+        console.log(ui.item.id);
+        $("#task_previlife").val(ui.item.id);
+      },
+      close: function () {
+        const searchTerm = $("#selectPrevilife").val().trim();
+
+        if (searchTerm === "") {
+          $("#task_previlife").val("");
+        }
+      },
+    });
+  });
   //------------- Busqueda con ajax zonaArea----------------//
 
   $("#search").keyup(() => {
@@ -77,7 +112,8 @@ $(function () {
       url: "./c_almacen.php",
       data: {
         accion: accion,
-        valorSeleccionado: $("#selectPrevilife").val(),
+        valorSelec: $("#selectPrevilife").val(),
+        abrPrevilife: $("#abr_previlife").val(),
         codigoPrev: $("#codigo_previlife").val(),
         codprev: $("#taskId").val(),
       },
@@ -109,7 +145,6 @@ $(function () {
             }
           });
         }
-        // console.log("RESPONSE" + response);
       },
     });
   });
@@ -151,22 +186,24 @@ $(function () {
 
   $(document).on("click", ".task-update", () => {
     var element = $(this)[0].activeElement.parentElement.parentElement;
-    var cod_producto_envase = $(element).attr("taskId");
-    // console.log(cod_producto_envase);
+    var cod_producto_previlife = $(element).attr("taskId");
 
-    const accion = "editarLabsabell";
+    const accion = "editarPrevilife";
 
     $.ajax({
       url: "./c_almacen.php",
-      data: { accion: accion, cod_producto_envase: cod_producto_envase },
+      data: { accion: accion, cod_producto_previlife: cod_producto_previlife },
       type: "POST",
       success: function (response) {
         console.log(response);
         if (!response.error) {
           const task = JSON.parse(response);
-          $("#codigo_labsabell").val(task.COD_PRODUCTO_ENVASE);
-          $("#selectLabsabell").val(task.DES_PRODUCTO);
-          $("#taskId").val(task.COD_PRODUCTO_ENVASE);
+
+          console.log(task);
+          $("#codigo_previlife").val(task.COD_PRODUCTO_PREVILIFE);
+          $("#selectPrevilife").val(task.DES_PRODUCTO).trigger("change");
+          $("#abr_previlife").val(task.ABR_PRODUCTO_PREVILIFE);
+          $("#taskId").val(task.COD_PRODUCTO_PREVILIFE);
           edit = true;
         }
       },

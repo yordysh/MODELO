@@ -19,7 +19,8 @@ $dataProducto = $mostrar->MostrarProducto();
 
     <!--====== Estilo de ICON ======-->
     <link rel="stylesheet" href="./styleIcons/style.css">
-    <link rel="stylesheet" href="./css/select2.min.css">
+    <link rel="stylesheet" href="./css/ui_1.12.1_themes_base_jquery-ui.css">
+    <!-- <link rel="stylesheet" href="./css/select2.min.css"> -->
 
 
     <title>Covifarma</title>
@@ -80,15 +81,22 @@ $dataProducto = $mostrar->MostrarProducto();
                         <!-- Text input nombre -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Nombre</label>
-                            <!-- <input type="text" id="nombre_previlife" class="form-control" name="nombre_previlife" required> -->
-                            <select id="selectPrevilife" class="form-select selectPrevilife" aria-label="Default select example">
+                            <input id="task_previlife">
+                            <input type="text" id="nombre_previlife" class="form-control" name="nombre_previlife" required>
+                            <!-- <select id="selectPrevilife" class="form-select select-Previlife" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
                                 <?php foreach ($dataProducto as $lis) { ?>
                                     <option value="<?php echo $lis->COD_PRODUCTO; ?>" class="option"> <?php echo $lis->DES_PRODUCTO; ?></option>
                                 <?php
                                 }
                                 ?>
-                            </select>
+                            </select> -->
+                        </div>
+
+                        <!-- Text input Abreviatura -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Abreviatura</label>
+                            <input type="text" id="abr_previlife" class="form-control" name="abr_previlife" required>
                         </div>
 
                         <!-- Submit button -->
@@ -127,7 +135,8 @@ $dataProducto = $mostrar->MostrarProducto();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/select2.min.js"></script>
+    <script src="./js/ui_1.12.1_jquery-ui.min.js"></script>
+    <!-- <script src="./js/select2.min.js"></script> -->
     <script src="./js/ajaxPrevilife.js"></script>
 </body>
 
