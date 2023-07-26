@@ -106,7 +106,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                             <input id="selectInfra" class="form-control" required>
                         </div>
 
-                        <!-- Submit button -->
+                        <!-- Crear PDF -->
                         <div class="contenedor">
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">

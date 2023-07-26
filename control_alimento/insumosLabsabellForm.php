@@ -96,6 +96,17 @@
                         </div>
                     </form>
 
+                    <!-- Crear PDF -->
+                    <div class="contenedor">
+
+
+                        <div class="ordenar">
+                            <div>
+                                <a class="btn btn-primary btnPdf" href="#" onclick="generarPDF()">Generar PDF</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive" style="overflow: scroll;height: 600px; margin-top:20px;">
                         <table id="tbPrevilife" class="table table-sm mb-3 table-hover">
                             <thead>
@@ -128,6 +139,13 @@
     <script src="./js/ui_1.12.1_jquery-ui.min.js"></script>
     <!-- <script src="./js/select2.min.js"></script> -->
     <script src="./js/ajaxInsumosLab.js"></script>
+    <script>
+        function generarPDF() {
+            // Enviar los valores a tu script de generación de PDF
+            var url = "pdf-insumos-lab.php";
+            window.open(url, "_blank");
+        }
+    </script>
 </body>
 
 </html>
