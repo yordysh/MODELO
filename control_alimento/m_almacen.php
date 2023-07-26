@@ -1407,6 +1407,38 @@ class m_almacen
       die("Error al eliminar los datos: " . $e->getMessage());
     }
   }
+  public function MostrarEnvasesLabPDF()
+  {
+    try {
+      $stm = $this->bd->prepare(
+        "SELECT E.COD_PRODUCTO_ENVASE AS COD_PRODUCTO_ENVASE, P.DES_PRODUCTO AS DES_PRODUCTO, P.ABR_PRODUCTO AS ABR_PRODUCTO,
+        E.FECHA_CREACION AS FECHA_CREACION, E.VERSION AS VERSION FROM T_PRODUCTO_ENVASES AS E 
+        INNER JOIN T_PRODUCTO AS P ON E.COD_PRODUCTO=P.COD_PRODUCTO"
+      );
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function VersionMostrarEnvasesLab()
+  {
+    try {
+      $stm = $this->bd->prepare("SELECT MAX(VERSION) AS VERSION FROM T_PRODUCTO_ENVASES");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+
+
 
 
 
@@ -1496,7 +1528,7 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("  SELECT PR.COD_PRODUCTO_PREVILIFE AS COD_PRODUCTO_PREVILIFE, P.DES_PRODUCTO AS DES_PRODUCTO,
+      $stm = $this->bd->prepare("SELECT PR.COD_PRODUCTO_PREVILIFE AS COD_PRODUCTO_PREVILIFE, P.DES_PRODUCTO AS DES_PRODUCTO,
       PR.ABR_PRODUCTO_PREVILIFE AS ABR_PRODUCTO_PREVILIFE, PR.FECHA_CREACION AS FECHA_CREACION, PR.VERSION AS VERSION
       FROM T_PRODUCTO_PREVILIFE AS PR INNER JOIN T_PRODUCTO AS P ON PR.COD_PRODUCTO=P.COD_PRODUCTO WHERE DES_PRODUCTO LIKE '$buscarPrevilife%'");
 
@@ -1569,6 +1601,39 @@ class m_almacen
       die("Error al eliminar los datos: " . $e->getMessage());
     }
   }
+  public function MostrarEnvasesPrevilifePDF()
+  {
+    try {
+      $stm = $this->bd->prepare(
+        "SELECT PR.COD_PRODUCTO_PREVILIFE AS COD_PRODUCTO_PREVILIFE, P.DES_PRODUCTO AS DES_PRODUCTO,
+        PR.ABR_PRODUCTO_PREVILIFE AS ABR_PRODUCTO_PREVILIFE, PR.FECHA_CREACION AS FECHA_CREACION, PR.VERSION AS VERSION
+        FROM T_PRODUCTO_PREVILIFE AS PR INNER JOIN T_PRODUCTO AS P ON PR.COD_PRODUCTO=P.COD_PRODUCTO"
+      );
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function VersionMostrarEnvasesPrevilife()
+  {
+    try {
+      $stm = $this->bd->prepare("SELECT MAX(VERSION) AS VERSION FROM T_PRODUCTO_PREVILIFE");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+
+
+
 
 
 

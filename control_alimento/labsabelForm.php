@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/ui_1.12.1_themes_base_jquery-ui.css">
-    <link rel="stylesheet" href="./css/responsiveZonaAreas.css">
+    <link rel="stylesheet" href="./css/responsivePrevileLab.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
 
@@ -89,10 +89,16 @@
                             <input type="text" id="selectAbreviatura" class="form-control" name="selectAbreviatura" required>
                         </div> -->
 
-                        <!-- Submit button -->
-                        <div class="d-grid  col-6 mx-auto bt-guardar">
-                            <input type="hidden" id="taskId">
-                            <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+
+                        <div class="contenedor">
+                            <!-- Submit button -->
+                            <div class="d-grid  col-6 mx-auto bt-guardar">
+                                <input type="hidden" id="taskId">
+                                <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+                            </div>
+                            <div class="ordenar">
+                                <a class="btn btn-primary btnPdf" href="#" onclick="generarPDF()">Generar PDF</a>
+                            </div>
                         </div>
                     </form>
                     <div id="tablaLabsabell" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
@@ -126,6 +132,13 @@
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ui_1.12.1_jquery-ui.min.js"></script>
     <script src="./js/ajaxLabsabell.js"></script>
+    <script>
+        function generarPDF() {
+            // Enviar los valores a tu script de generación de PDF
+            var url = "pdf-envases-labsabell.php";
+            window.open(url, "_blank");
+        }
+    </script>
 </body>
 
 </html>

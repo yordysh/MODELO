@@ -103,9 +103,15 @@ $dataProducto = $mostrar->MostrarProducto();
                         </div>
 
                         <!-- Submit button -->
-                        <div class="d-grid  col-6 mx-auto bt-guardar">
-                            <input type="hidden" id="taskId">
-                            <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+                        <div class="contenedor">
+                            <!-- Submit button -->
+                            <div class="d-grid  col-6 mx-auto bt-guardar">
+                                <input type="hidden" id="taskId">
+                                <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+                            </div>
+                            <div class="ordenar">
+                                <a class="btn btn-primary btnPdf" href="#" onclick="generarPDF()">Generar PDF</a>
+                            </div>
                         </div>
                     </form>
 
@@ -141,6 +147,13 @@ $dataProducto = $mostrar->MostrarProducto();
     <script src="./js/ui_1.12.1_jquery-ui.min.js"></script>
     <!-- <script src="./js/select2.min.js"></script> -->
     <script src="./js/ajaxPrevilife.js"></script>
+    <script>
+        function generarPDF() {
+            // Enviar los valores a tu script de generación de PDF
+            var url = "pdf-envases-previlife.php";
+            window.open(url, "_blank");
+        }
+    </script>
 </body>
 
 </html>

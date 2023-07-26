@@ -88,24 +88,21 @@
                                 ?>
                             </select> -->
                         </div>
-
-                        <!-- Submit button -->
-                        <div class="d-grid  col-6 mx-auto bt-guardar">
-                            <input type="hidden" id="taskId">
-                            <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
-                        </div>
-                    </form>
-
-                    <!-- Crear PDF -->
-                    <div class="contenedor">
-
-
-                        <div class="ordenar">
-                            <div>
+                        <!-- Crear PDF -->
+                        <div class="contenedor">
+                            <!-- Submit button -->
+                            <div class="d-grid  col-6 mx-auto bt-guardar">
+                                <input type="hidden" id="taskId">
+                                <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+                            </div>
+                            <div class="ordenar">
                                 <a class="btn btn-primary btnPdf" href="#" onclick="generarPDF()">Generar PDF</a>
                             </div>
                         </div>
-                    </div>
+
+                    </form>
+
+
 
                     <div class="table-responsive" style="overflow: scroll;height: 600px; margin-top:20px;">
                         <table id="tbPrevilife" class="table table-sm mb-3 table-hover">
