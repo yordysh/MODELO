@@ -454,6 +454,7 @@ td{
     }
     .nav{
       padding: 15px 20px;
+      z-index: 1000;
     }
    
   .nav .nav-links{

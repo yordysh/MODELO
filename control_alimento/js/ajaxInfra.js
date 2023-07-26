@@ -33,61 +33,61 @@ $(function () {
   });
   //----------------------------------------------------------------//
 
-  // $("#selectInfra").select2();
+  $("#selectInfra").select2();
 
-  $(document).ready(function () {
-    // const accion = "buscarZonaCombo";
-    // $.ajax({
-    //   url: "./c_almacen.php",
-    //   data: { accion: accion },
-    //   type: "POST",
-    //   // dataType: "json",
-    //   success: function (data) {
-    //     var res = JSON.parse(data);
-    //     $("#selectInfra").autocomplete({
-    //       source: res,
-    //       select: function (request, ui) {
-    //         //const search = $("#selectInfra").val();
-    //         var nombre = ui.item.COD_ZONA1;
-    //         console.log(nombre);
-    //       },
-    //     });
-    //   },
-    // });
+  // $(document).ready(function () {
+  //   // const accion = "buscarZonaCombo";
+  //   // $.ajax({
+  //   //   url: "./c_almacen.php",
+  //   //   data: { accion: accion },
+  //   //   type: "POST",
+  //   //   // dataType: "json",
+  //   //   success: function (data) {
+  //   //     var res = JSON.parse(data);
+  //   //     $("#selectInfra").autocomplete({
+  //   //       source: res,
+  //   //       select: function (request, ui) {
+  //   //         //const search = $("#selectInfra").val();
+  //   //         var nombre = ui.item.COD_ZONA1;
+  //   //         console.log(nombre);
+  //   //       },
+  //   //     });
+  //   //   },
+  //   // });
 
-    $("#selectInfra").autocomplete({
-      source: function (request, response) {
-        const accion = "buscarZonaCombo";
+  //   $("#selectInfra").autocomplete({
+  //     source: function (request, response) {
+  //       const accion = "buscarZonaCombo";
 
-        $.ajax({
-          url: "./c_almacen.php",
-          method: "POST",
-          dataType: "json",
-          data: {
-            accion: accion,
-            term: request.term,
-          },
-          success: function (data) {
-            if (!data) {
-              $("#task_zona").val("");
-            }
-            response(data);
-          },
-        });
-      },
-      select: function (event, ui) {
-        console.log(ui.item.id);
-        $("#task_zona").val(ui.item.id);
-      },
-      close: function () {
-        const searchTerm = $("#selectInfra").val().trim();
+  //       $.ajax({
+  //         url: "./c_almacen.php",
+  //         method: "POST",
+  //         dataType: "json",
+  //         data: {
+  //           accion: accion,
+  //           term: request.term,
+  //         },
+  //         success: function (data) {
+  //           if (!data) {
+  //             $("#task_zona").val("");
+  //           }
+  //           response(data);
+  //         },
+  //       });
+  //     },
+  //     select: function (event, ui) {
+  //       console.log(ui.item.id);
+  //       $("#task_zona").val(ui.item.id);
+  //     },
+  //     close: function () {
+  //       const searchTerm = $("#selectInfra").val().trim();
 
-        if (searchTerm === "") {
-          $("#task_zona").val("");
-        }
-      },
-    });
-  });
+  //       if (searchTerm === "") {
+  //         $("#task_zona").val("");
+  //       }
+  //     },
+  //   });
+  // });
 
   //------------- Busqueda con ajax infraestructura Accesorio----------------//
 
@@ -145,8 +145,8 @@ $(function () {
         nombreinfraestructura: $("#NOMBRE_INFRAESTRUCTURA").val(),
         ndias: $("#NDIAS").val(),
         codinfra: $("#taskId").val(),
-        // valorSeleccionado: $("#selectInfra").val(),
-        valorSeleccionado: $("#task_zona").val(),
+        valorSeleccionado: $("#selectInfra").val(),
+        // valorSeleccionado: $("#task_zona").val(),
       },
       type: "POST",
       success: function (response) {
@@ -161,6 +161,10 @@ $(function () {
             if (result.isConfirmed) {
               fetchTasks();
               $("#formularioInfra").trigger("reset");
+              $("#selectInfra").val(null).trigger("change");
+              $("#selectInfra").append(
+                '<option value="none" selected disabled>Seleccione Zona/Areas</option>'
+              );
             }
           });
         } else {
@@ -173,6 +177,10 @@ $(function () {
             if (result.isConfirmed) {
               fetchTasks();
               $("#formularioInfra").trigger("reset");
+              $("#selectInfra").val(null).trigger("change");
+              $("#selectInfra").append(
+                '<option value="none" selected disabled>Seleccione Zona/Areas</option>'
+              );
             }
           });
         }
@@ -239,19 +247,18 @@ $(function () {
       success: function (response) {
         if (!response.error) {
           const task = JSON.parse(response);
-
-          var selectInfra = $("#selectInfra");
-
-          selectInfra.prop("disabled", true);
-
-          if (task.NOMBRE_T_ZONA_AREAS) {
-            selectInfra.val(
-              selectInfra
-                .find("option:contains('" + task.NOMBRE_T_ZONA_AREAS + "')")
-                .val()
-            );
-          }
-
+          // console.log(task);
+          $("#selectInfra").prop("disabled", true);
+          $("#selectInfra")
+            .append(
+              new Option(
+                task.NOMBRE_T_ZONA_AREAS,
+                task.NOMBRE_T_ZONA_AREAS,
+                true,
+                true
+              )
+            )
+            .trigger("change");
           $("#NOMBRE_INFRAESTRUCTURA").val(task.NOMBRE_INFRAESTRUCTURA);
           $("#NDIAS").val(task.NDIAS);
           $("#taskId").val(task.COD_INFRAESTRUCTURA);

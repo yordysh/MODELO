@@ -13,15 +13,14 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"> -->
-    <link rel="stylesheet" href="./css/ui_1.12.1_themes_base_jquery-ui.css">
+    <!-- <link rel="stylesheet" href="./css/ui_1.12.1_themes_base_jquery-ui.css"> -->
     <link rel="stylesheet" href="./css/responsiveControl.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
 
     <!--====== Estilo de ICON ======-->
     <link rel="stylesheet" href="./styleIcons/style.css">
-    <!-- <link rel="stylesheet" href="./css/select2.min.css"> -->
+    <link rel="stylesheet" href="./css/select2.min.css">
     <title>Covifarma</title>
 
 </head>
@@ -91,7 +90,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         <!--Combo zona areas -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Zona/Areas</label>
-                            <!-- <select id="selectInfra" class="form-select selectZona" aria-label="Default select example">
+                            <select id="selectInfra" class="form-select selectZona" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione Zona/Areas</option>
                                 <?php foreach ($dataInfra as $lis) {
                                     if ($lis->NOMBRE_T_ZONA_AREAS != "TRANSITO DE PERSONAL" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES Y VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES Y VARONES)") {
@@ -101,9 +100,9 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                     }
                                 }
                                 ?>
-                            </select> -->
-                            <input type="hidden" id="task_zona">
-                            <input id="selectInfra" class="form-control" required>
+                            </select>
+                            <!-- <input type="hidden" id="task_zona">
+                            <input id="selectInfra" class="form-control" required> -->
                         </div>
 
                         <!-- Crear PDF -->
@@ -176,10 +175,9 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <!-- <script src="./js/select2.min.js"></script> -->
-    <!-- <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
-    <script src="./js/ui_1.12.1_jquery-ui.min.js"></script>
+    <!-- <script src="./js/ui_1.12.1_jquery-ui.min.js"></script> -->
     <script src="./js/ajaxInfra.js"></script>
+    <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {
             var anioSeleccionado = document.getElementById("anio").value;
