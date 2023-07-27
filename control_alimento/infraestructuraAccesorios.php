@@ -55,6 +55,9 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
             <li>
                 <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
             </li>
+            <li>
+                <a class="" href="registroEnvases.php">Registros envases</a>
+            </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
         <div class="search-box">
@@ -66,7 +69,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
         <section>
             <div class="container g-4 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">INFRAESTRUCTURA, ACCESORIOS COMPLEMENTARIOS</label></center>
+                    <center><label class="title">LBS-PHS-FR-01:<span class="titulo-span">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS</span></label></center>
                 </div>
                 <div class="main">
                     <form method="post" action="" id="formularioInfra">
@@ -83,7 +86,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         </div>
                         <!-- Text input dias-->
                         <div class="form-outline mb-4 ">
-                            <label class="form-label">Dias</label>
+                            <label class="form-label">Frecuencia</label>
                             <input type="text" id="NDIAS" class="form-control" name="NDIAS" required>
                         </div>
 

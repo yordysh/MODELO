@@ -50,6 +50,9 @@
             <li>
                 <a class="" href="#">Insumos labsabell</a>
             </li>
+            <li>
+                <a class="" href="registroEnvases.php">Registros envases</a>
+            </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
         <div class="search-box">

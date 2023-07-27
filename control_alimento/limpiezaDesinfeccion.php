@@ -36,13 +36,13 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                 <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
             </li>
             <li>
-                <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>
+                <a class="" href="preparacionSolucion.php">LBS-PHS-FR-02</a>
             </li>
             <li>
-                <a class="" href="#">Limpieza y desinfección</a>
+                <a class="" href="controlMaquinas.php">LBS-PHS-FR-03</a>
             </li>
             <li>
-                <a class="" href="controlMaquinas.php">Control de maquinas</a>
+                <a class="" href="#">LBS-PHS-FR-04</a>
             </li>
             <li>
                 <a class="" href="labsabelForm.php">Labsabell</a>
@@ -52,6 +52,9 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
             </li>
             <li>
                 <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
+            </li>
+            <li>
+                <a class="" href="registroEnvases.php">Registros envases</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -64,7 +67,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
         <section>
             <div class="container g-4 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS DE LIMPIEZA</label></center>
+                    <center><label class="title">LBS-PHS-FR-04:LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS Y LIMPIEZA</label></center>
                 </div>
                 <div class="main">
                     <form method="post" action="" id="formularioLimpieza">
@@ -92,7 +95,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
 
                         <!-- Text input dias-->
                         <div class="form-outline mb-4">
-                            <label class="form-label">Nombre de frecuencia</label>
+                            <label class="form-label">Materiales</label>
                             <input type="text" id="nombreFrecuencia" class="form-control" name="nombreFrecuencia" required>
                         </div>
 

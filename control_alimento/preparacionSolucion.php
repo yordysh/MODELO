@@ -37,13 +37,13 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                 <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
             </li>
             <li>
-                <a class="" href="#">Preparación de soluciones</a>
+                <a class="" href="#">LBS-PHS-FR-02</a>
             </li>
             <li>
-                <a class="" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
+                <a class="" href="controlMaquinas.php">LBS-PHS-FR-03</a>
             </li>
             <li>
-                <a class="" href="controlMaquinas.php">Control de maquinas</a>
+                <a class="" href="limpiezaDesinfeccion.php">LBS-PHS-FR-04</a>
             </li>
             <li>
                 <a class="" href="labsabelForm.php">Labsabell</a>
@@ -53,6 +53,9 @@ $dataInsumos = $mostrar->MostrarSoluciones();
             </li>
             <li>
                 <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
+            </li>
+            <li>
+                <a class="" href="registroEnvases.php">Registros envases</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -65,16 +68,16 @@ $dataInsumos = $mostrar->MostrarSoluciones();
         <section>
             <div class="container g-4 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">PREPARACIÓN DE SOLUCIONES</label></center>
+                    <center><label class="title">LBS-PHS-FR-02:PREPARACIÓN DE SOLUCIONES DE LIMPIEZA Y DESINFECCIÓN</label></center>
                 </div>
                 <div class="main">
                     <form method="post" action="" id="formularioSoluciones">
 
                         <!-- Text input Insumos -->
                         <div class="form-outline mb-4">
-                            <label class="form-label">Insumos</label>
+                            <label class="form-label">Producto de saneamiento</label>
                             <select id="selectInsumos" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione insumos</option>
+                                <option value="0" selected disabled>Seleccione producto</option>
                                 <?php foreach ($dataInsumos as $lista) { ?>
                                     <option value="<?php echo $lista['ID_SOLUCIONES']; ?>" class="option"><?php echo $lista['NOMBRE_INSUMOS']; ?></option>
                                 <?php } ?>

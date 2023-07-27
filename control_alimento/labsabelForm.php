@@ -51,6 +51,9 @@
             <li>
                 <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
             </li>
+            <li>
+                <a class="" href="registroEnvases.php">Registros envases</a>
+            </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
         <div class="search-box">

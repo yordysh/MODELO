@@ -2,7 +2,7 @@
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataZona = $mostrar->MostrarAlmacenMuestra();
+$dataInfra = $mostrar->MostrarAlmacenMuestra();
 
 ?>
 <!DOCTYPE html>
@@ -13,14 +13,16 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="./css/ui_1.12.1_themes_base_jquery-ui.css"> -->
     <link rel="stylesheet" href="./css/responsiveControl.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
 
     <!--====== Estilo de ICON ======-->
     <link rel="stylesheet" href="./styleIcons/style.css">
-
+    <link rel="stylesheet" href="./css/select2.min.css">
     <title>Covifarma</title>
+
 </head>
 
 <body>
@@ -33,16 +35,16 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                 <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
             </li>
             <li>
-                <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
+                <a class="" href="#">Infraestructura</a>
             </li>
             <li>
-                <a class="" href="preparacionSolucion.php">LBS-PHS-FR-02</a>
+                <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>
             </li>
             <li>
-                <a class="" href="#">LBS-PHS-FR-03</a>
+                <a class="" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
             </li>
             <li>
-                <a class="" href="limpiezaDesinfeccion.php">LBS-PHS-FR-04</a>
+                <a class="" href="controlMaquinas.php">Control de maquinas</a>
             </li>
             <li>
                 <a class="" href="labsabelForm.php">Labsabell</a>
@@ -54,7 +56,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                 <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
             </li>
             <li>
-                <a class="" href="registroEnvases.php">Registros envases</a>
+                <a class="" href="#">Registros envases</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -67,43 +69,46 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
         <section>
             <div class="container g-4 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">LBS-PHS-FR-03:CONTROL DE L & D DE MÁQUINAS, EQUIPOS Y UTENSILIOS DE TRABAJO</label></center>
+                    <center><label class="title">REGISTRO DE ENVASES</label></center>
                 </div>
                 <div class="main">
-                    <form method="post" action="" id="formularioControl">
+                    <form method="post" action="" id="formularioInfra">
 
                         <!-- Text input -->
                         <div class="form-outline mb-4">
                             <input id="id" type="hidden" class="form-control" name="id" />
                         </div>
 
+                        <!-- Text input nombre -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Nombre de infraestructura</label>
+                            <input type="text" id="NOMBRE_INFRAESTRUCTURA" class="form-control" name="NOMBRE_INFRAESTRUCTURA" required>
+                        </div>
+                        <!-- Text input dias-->
+                        <div class="form-outline mb-4 ">
+                            <label class="form-label">Dias</label>
+                            <input type="text" id="NDIAS" class="form-control" name="NDIAS" required>
+                        </div>
+
                         <!--Combo zona areas -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Zona/Areas</label>
-                            <select id="selectControl" class="form-select" aria-label="Default select example">
+                            <select id="selectInfra" class="form-select selectZona" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione Zona/Areas</option>
+                                <?php foreach ($dataInfra as $lis) {
+                                    if ($lis->NOMBRE_T_ZONA_AREAS != "TRANSITO DE PERSONAL" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES Y VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES Y VARONES)") {
+                                ?>
+                                        <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
                                 <?php
-                                foreach ($dataZona as $lis) { ?>
-                                    <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
-                                <?php
+                                    }
                                 }
                                 ?>
                             </select>
-
+                            <!-- <input type="hidden" id="task_zona">
+                            <input id="selectInfra" class="form-control" required> -->
                         </div>
 
-                        <!-- Text input nombre -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Nombre máquina, equipo</label>
-                            <input type="text" id="NOMBRE_CONTROL_MAQUINA" class="form-control" name="NOMBRE_CONTROL_MAQUINA" required>
-                        </div>
-                        <!-- Text input dias-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Frecuencia</label>
-                            <input type="text" id="N_DIAS_CONTROL" class="form-control" name="N_DIAS_CONTROL" required>
-                        </div>
-
-                        <!-- Submit button -->
+                        <!-- Crear PDF -->
                         <div class="contenedor">
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
@@ -143,20 +148,21 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                         </div>
                     </form>
 
-                    <div id="tControl" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbControl" class="table table-sm mb-3 table-hover">
+                    <div id="tablaInfra" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbInfra" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
-                                    <th class="thtitulo" scope="col">CODIGO</th>
+                                    <th class="thtitulo" scope="col">CODIGO </th>
                                     <th class="thtitulo" scope="col">ZONA</th>
-                                    <th class="thtitulo" scope="col">CONTROL DE MAQUINAS</th>
+                                    <th class="thtitulo" scope="col">INFRAESTRUCTURA</th>
                                     <th class="thtitulo" scope="col">N°DIAS</th>
                                     <th class="thtitulo" scope="col">FECHA</th>
+                                    <!-- <th class="thtitulo" scope="col">USUARIO</th> -->
                                     <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="tablaControl">
+                            <tbody id="tablaInfraestructura">
 
                             </tbody>
                         </table>
@@ -172,25 +178,16 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxControlMaquinas.js"></script>
-    <!-- <script>
-        const myElement = document.getElementById("selectControl");
-
-        myElement.addEventListener("click", () => {
-            // Genera un color aleatorio en formato hexadecimal
-            const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-
-            // Cambia el color del borde al color aleatorio generado
-            myElement.style.borderColor = randomColor;
-        });
-    </script> -->
+    <!-- <script src="./js/ui_1.12.1_jquery-ui.min.js"></script> -->
+    <script src="./js/ajaxInfra.js"></script>
+    <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {
             var anioSeleccionado = document.getElementById("anio").value;
             var mesSeleccionado = document.getElementById("mes").value;
 
             // Enviar los valores a tu script de generación de PDF
-            var url = "pdf-controlmaquina.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
+            var url = "pdf-monitoreo.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
             window.open(url, "_blank");
         }
     </script>

@@ -18,8 +18,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary confirm-button">Send message</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CERRAR</button>
+                <button type="button" class="btn btn-primary confirm-button">GUARDAR</button>
             </div>
         </div>
     </div>
