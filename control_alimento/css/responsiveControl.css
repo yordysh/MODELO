@@ -456,7 +456,9 @@ td{
       padding: 15px 20px;
       z-index: 1000;
     }
-   
+    .select2-dropdown {
+      z-index: 1 !important;
+    }
   .nav .nav-links{
     display: block;
     position: fixed;
@@ -608,9 +610,7 @@ td{
     box-sizing: border-box;
     margin-bottom: 10px;
   } 
-  .select2-container {
-    z-index: -1;
-  }
+
 }
 @media screen and (max-width:380px){
 
