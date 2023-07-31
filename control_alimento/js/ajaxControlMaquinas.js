@@ -30,6 +30,7 @@ $(function () {
   });
   //----------------------------------------------------------------//
 
+  $("#selectControl").select2();
   //------------- Busqueda con ajax infraestructura Accesorio----------------//
 
   $("#search").keyup(() => {
@@ -49,10 +50,10 @@ $(function () {
             tasks.forEach((task) => {
               template += `<tr taskId="${task.COD_CONTROL_MAQUINA}">
     
-                <td data-titulo="CODIGO" >${task.COD_CONTROL_MAQUINA}</td>
+               <!-- <td data-titulo="CODIGO" >${task.COD_CONTROL_MAQUINA}</td> -->
                 <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
                 <td data-titulo="CONTROL DE MAQUINAS" class='NOMBRE_CONTROL_MAQUINA' >${task.NOMBRE_CONTROL_MAQUINA}</td>
-                <td data-titulo="N°DIAS">${task.N_DIAS_CONTROL}</td>
+                <td data-titulo="FRECUENCIA">${task.N_DIAS_CONTROL}</td>
                 <td data-titulo="FECHA" >${task.FECHA}</td>
     
                 <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_CONTROL_MAQUINA="${task.COD_CONTROL_MAQUINA}"><i class="icon-edit"></i></button></td>
@@ -86,38 +87,39 @@ $(function () {
       data: {
         accion: accion,
         nombrecontrol: $("#NOMBRE_CONTROL_MAQUINA").val(),
-        ndiascontrol: $("#N_DIAS_CONTROL").val(),
+        // ndiascontrol: $("#N_DIAS_CONTROL").val(),
+        ndiascontrol: $("#selectFrecuencia").val(),
         codcontrol: $("#taskId").val(),
         valorSeleccionado: $("#selectControl").val(),
       },
       type: "POST",
       success: function (response) {
         console.log(response);
-        if (response == "ok") {
-          Swal.fire({
-            title: "¡Guardado exitoso!",
-            text: "Los datos se han guardado correctamente.",
-            icon: "success",
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              fetchTasks();
-              $("#formularioControl").trigger("reset");
-            }
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Duplicado!",
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              fetchTasks();
-              $("#formularioControl").trigger("reset");
-            }
-          });
-        }
+        // if (response == "ok") {
+        //   Swal.fire({
+        //     title: "¡Guardado exitoso!",
+        //     text: "Los datos se han guardado correctamente.",
+        //     icon: "success",
+        //     confirmButtonText: "Aceptar",
+        //   }).then((result) => {
+        //     if (result.isConfirmed) {
+        //       fetchTasks();
+        //       $("#formularioControl").trigger("reset");
+        //     }
+        //   });
+        // } else {
+        //   Swal.fire({
+        //     icon: "error",
+        //     title: "Oops...",
+        //     text: "Duplicado!",
+        //     confirmButtonText: "Aceptar",
+        //   }).then((result) => {
+        //     if (result.isConfirmed) {
+        //       fetchTasks();
+        //       $("#formularioControl").trigger("reset");
+        //     }
+        //   });
+        // }
       },
     });
   });
@@ -139,10 +141,10 @@ $(function () {
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_CONTROL_MAQUINA}">
   
-              <td data-titulo="CODIGO" >${task.COD_CONTROL_MAQUINA}</td>
+              <!-- <td data-titulo="CODIGO" >${task.COD_CONTROL_MAQUINA}</td> -->
               <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
               <td data-titulo="CONTROL DE MAQUINAS" class='NOMBRE_CONTROL_MAQUINA' >${task.NOMBRE_CONTROL_MAQUINA}</td>
-              <td data-titulo="N°DIAS">${task.N_DIAS_CONTROL}</td>
+              <td data-titulo="FRECUENCIA">${task.N_DIAS_CONTROL}</td>
               <td data-titulo="FECHA" >${task.FECHA}</td>
   
               <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_CONTROL_MAQUINA="${task.COD_CONTROL_MAQUINA}"><i class="icon-edit"></i></button></td>

@@ -187,6 +187,7 @@ class m_almacen
 
       $FECHA = $cod->c_horaserversql('F');
       // $FECHA = '19/07/2023';
+      //$FECHA = date('Y-m-d');
       if ($repetir == 0) {
 
         $stm = $this->bd->prepare("INSERT INTO T_ZONA_AREAS (COD_ZONA, NOMBRE_T_ZONA_AREAS, FECHA, VERSION)
@@ -195,7 +196,7 @@ class m_almacen
 
         $insert = $stm->execute();
 
-        // $fechaDHoy = date('Y-m-d');
+        //$fechaDHoy = date('Y-m-d');
         $fechaDHoy = $cod->c_horaserversql('F');
 
 
@@ -1027,7 +1028,7 @@ class m_almacen
       $repetir = $cod->contarRegistrosControl($NOMBRE_CONTROL_MAQUINA, $valorSeleccionado);
 
       $FECHA = $cod->c_horaserversql('F');
-      //$FECHA = date('Y-m-d');
+      // $FECHA = date('Y-m-d');
       // $FECHA = '24/07/2023';
       // var_dump($FECHA);
 

@@ -15,6 +15,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/responsiveControl.css">
     <!--====== Favicon Icon ======-->
+    <link rel="stylesheet" href="./css/select2.min.css">
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
 
     <!--====== Estilo de ICON ======-->
@@ -30,10 +31,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
             <li>
-                <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
-            </li>
-            <li>
-                <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
+                <a class="" href="infraestructuraAccesorios.php">LBS-PHS-FR-01</a>
             </li>
             <li>
                 <a class="" href="preparacionSolucion.php">LBS-PHS-FR-02</a>
@@ -70,6 +68,25 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                     <center><label class="title">LBS-PHS-FR-03:CONTROL DE L & D DE MÁQUINAS, EQUIPOS Y UTENSILIOS DE TRABAJO</label></center>
                 </div>
                 <div class="main">
+                    <div id="tControl" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbControl" class="table table-sm mb-3 table-hover">
+                            <thead>
+                                <tr>
+                                    <!-- <th class="thtitulo" scope="col">CODIGO</th> -->
+                                    <th class="thtitulo" scope="col">ZONA</th>
+                                    <th class="thtitulo" scope="col">CONTROL DE MAQUINAS</th>
+                                    <th class="thtitulo" scope="col">FRECUENCIA</th>
+                                    <th class="thtitulo" scope="col">FECHA</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaControl">
+
+                            </tbody>
+                        </table>
+                    </div>
+
                     <form method="post" action="" id="formularioControl">
 
                         <!-- Text input -->
@@ -100,7 +117,15 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                         <!-- Text input dias-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Frecuencia</label>
-                            <input type="text" id="N_DIAS_CONTROL" class="form-control" name="N_DIAS_CONTROL" required>
+                            <!-- <input type="text" id="N_DIAS_CONTROL" class="form-control" name="N_DIAS_CONTROL" required> -->
+                            <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
+                                <option value="0" selected disabled>Seleccione frecuencia</option>
+                                <option value="1">Diario</option>
+                                <option value="2">Inter-diario</option>
+                                <option value="7">Semanal</option>
+                                <option value="15">Quincenal</option>
+                                <option value="30">Mensual</option>
+                            </select>
                         </div>
 
                         <!-- Submit button -->
@@ -143,25 +168,6 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                         </div>
                     </form>
 
-                    <div id="tControl" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbControl" class="table table-sm mb-3 table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="thtitulo" scope="col">CODIGO</th>
-                                    <th class="thtitulo" scope="col">ZONA</th>
-                                    <th class="thtitulo" scope="col">CONTROL DE MAQUINAS</th>
-                                    <th class="thtitulo" scope="col">N°DIAS</th>
-                                    <th class="thtitulo" scope="col">FECHA</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablaControl">
-
-                            </tbody>
-                        </table>
-                    </div>
-
                 </div>
             </div>
         </section>
@@ -173,17 +179,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxControlMaquinas.js"></script>
-    <!-- <script>
-        const myElement = document.getElementById("selectControl");
-
-        myElement.addEventListener("click", () => {
-            // Genera un color aleatorio en formato hexadecimal
-            const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-
-            // Cambia el color del borde al color aleatorio generado
-            myElement.style.borderColor = randomColor;
-        });
-    </script> -->
+    <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {
             var anioSeleccionado = document.getElementById("anio").value;

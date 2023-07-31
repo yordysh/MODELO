@@ -19,7 +19,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
 
     <!--====== Estilo de ICON ======-->
     <link rel="stylesheet" href="./styleIcons/style.css">
-
+    <link rel="stylesheet" href="./css/select2.min.css">
     <title>Covifarma</title>
 </head>
 
@@ -30,10 +30,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
             <li>
-                <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
-            </li>
-            <li>
-                <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
+                <a class="" href="infraestructuraAccesorios.php">LBS-PHS-FR-01</a>
             </li>
             <li>
                 <a class="" href="preparacionSolucion.php">LBS-PHS-FR-02</a>
@@ -70,6 +67,25 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                     <center><label class="title">LBS-PHS-FR-04:LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS Y LIMPIEZA</label></center>
                 </div>
                 <div class="main">
+
+                    <div id="tablalimpieza" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbLimpieza" class="table table-sm mb-3 table-hover">
+                            <thead>
+                                <tr>
+                                    <!-- <th class="thtitulo" scope="col">COD. FRECUENCIA</th> -->
+                                    <th class="thtitulo" scope="col">ZONA/ÁREA</th>
+                                    <th class="thtitulo" scope="col">FRECUENCIA</th>
+                                    <th class="thtitulo" scope="col">FECHA</th>
+                                    <!-- <th class="thtitulo" scope="col">VERSION</th> -->
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tdLimpiezadesinfeccion">
+
+                            </tbody>
+                        </table>
+                    </div>
+
                     <form method="post" action="" id="formularioLimpieza">
 
                         <!-- Text input -->
@@ -160,24 +176,6 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                         </div>
                     </form>
 
-                    <div id="tablalimpieza" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbLimpieza" class="table table-sm mb-3 table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="thtitulo" scope="col">COD. FRECUENCIA</th>
-                                    <th class="thtitulo" scope="col">ZONA/ÁREA</th>
-                                    <th class="thtitulo" scope="col">FRECUENCIA</th>
-                                    <th class="thtitulo" scope="col">FECHA</th>
-                                    <th class="thtitulo" scope="col">VERSION</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="tdLimpiezadesinfeccion">
-
-                            </tbody>
-                        </table>
-                    </div>
-
                 </div>
             </div>
         </section>
@@ -189,6 +187,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxLimpieza.js"></script>
+    <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {
             var anioSeleccionado = document.getElementById("anio").value;

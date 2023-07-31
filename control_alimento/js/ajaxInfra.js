@@ -108,10 +108,10 @@ $(function () {
             tasks.forEach((task) => {
               template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
 
-              <td data-titulo="CODIGO" >${task.COD_INFRAESTRUCTURA}</td>
+             <!-- <td data-titulo="CODIGO" >${task.COD_INFRAESTRUCTURA}</td> -->
               <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
               <td data-titulo="INFRAESTRUCTURA" class='NOMBRE_INFRAESTRUCTURA' >${task.NOMBRE_INFRAESTRUCTURA}</td>
-              <td data-titulo="N°DIAS">${task.NDIAS}</td>
+              <td data-titulo="FRECUENCIA">${task.NDIAS}</td>
               <td data-titulo="FECHA" >${task.FECHA}</td>
 
               <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
@@ -208,10 +208,10 @@ $(function () {
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
 
-            <td data-titulo="CODIGO" >${task.COD_INFRAESTRUCTURA}</td>
+            <!-- <td data-titulo="CODIGO" >${task.COD_INFRAESTRUCTURA}</td> -->
             <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
             <td data-titulo="INFRAESTRUCTURA" class='NOMBRE_INFRAESTRUCTURA' >${task.NOMBRE_INFRAESTRUCTURA}</td>
-            <td data-titulo="N°DIAS">${task.NDIAS}</td>
+            <td data-titulo="FRECUENCIA">${task.NDIAS}</td>
             <td data-titulo="FECHA" >${task.FECHA}</td>
 
 

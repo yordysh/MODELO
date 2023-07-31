@@ -209,6 +209,12 @@ img {
   outline: 1px solid #86b7fe;
   border-radius: 5px;
 }
+.table-responsive{
+  height: 300px !important;
+}
+section{
+  padding-bottom: 115px !important;
+}
 /* --------------------------------------------------------------- */
 
 /*-------------- Estilo de MENUBAR ---------------------*/
@@ -480,7 +486,7 @@ td {
     height: 57%;
   }
   .container.g-4.row {
-    padding: 0 0 0 1em;
+    padding: 0 0 5em 1em;
   }
   section {
     width: 100%;
@@ -618,6 +624,9 @@ td {
 }
 /*----------------------REDMI----------------------------*/
 @media screen and (max-width: 420px) {
+  .container.g-4.row {
+    padding: 0 0 5em 1em;
+  }
   .bt-guardar {
     padding: 10px 20px;
     font-size: 16px;

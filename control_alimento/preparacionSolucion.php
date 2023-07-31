@@ -31,10 +31,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
             <li>
-                <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
-            </li>
-            <li>
-                <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
+                <a class="" href="infraestructuraAccesorios.php">LBS-PHS-FR-01</a>
             </li>
             <li>
                 <a class="" href="#">LBS-PHS-FR-02</a>
@@ -71,6 +68,27 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                     <center><label class="title">LBS-PHS-FR-02:PREPARACIÓN DE SOLUCIONES DE LIMPIEZA Y DESINFECCIÓN</label></center>
                 </div>
                 <div class="main">
+
+                    <div id="tabla" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px; margin-bottom:50px;">
+                        <table id="tbInsumos" class="table table-sm mb-3 table-hover">
+                            <thead>
+                                <tr>
+
+                                    <th class="thtitulo" scope="col">PRODUCTO SANEAMIENTO</th>
+                                    <th class="thtitulo" scope="col">PRODUCTOS</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD</th>
+                                    <th class="thtitulo" scope="col">ML</th>
+                                    <th class="thtitulo" scope="col">L</th>
+                                    <th class="thtitulo" scope="col">FECHA</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="tbPreparacion">
+
+                            </tbody>
+                        </table>
+                    </div>
+
                     <form method="post" action="" id="formularioSoluciones">
 
                         <!-- Text input Insumos -->
@@ -170,26 +188,6 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                             </div>
                         </div>
                     </form>
-
-                    <div id="tabla" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbInsumos" class="table table-sm mb-3 table-hover">
-                            <thead>
-                                <tr>
-
-                                    <th class="thtitulo" scope="col">INSUMOS</th>
-                                    <th class="thtitulo" scope="col">PRODUCTOS</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD</th>
-                                    <th class="thtitulo" scope="col">ML</th>
-                                    <th class="thtitulo" scope="col">L</th>
-                                    <th class="thtitulo" scope="col">FECHA</th>
-
-                                </tr>
-                            </thead>
-                            <tbody id="tbPreparacion">
-
-                            </tbody>
-                        </table>
-                    </div>
 
                 </div>
             </div>

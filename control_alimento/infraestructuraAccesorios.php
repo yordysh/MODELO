@@ -31,20 +31,23 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
-            <li>
+            <!-- <li>
                 <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
-            </li>
-            <li>
+            </li> -->
+            <!-- <li>
                 <a class="" href="#">Infraestructura</a>
+            </li> -->
+            <li>
+                <a class="" href="#">LBS-PHS-FR-01</a>
             </li>
             <li>
-                <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>
+                <a class="" href="preparacionSolucion.php">LBS-PHS-FR-02</a>
             </li>
             <li>
-                <a class="" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
+                <a class="" href="controlMaquinas.php">LBS-PHS-FR-03</a>
             </li>
             <li>
-                <a class="" href="controlMaquinas.php">Control de maquinas</a>
+                <a class="" href="limpiezaDesinfeccion.php">LBS-PHS-FR-04</a>
             </li>
             <li>
                 <a class="" href="labsabelForm.php">Labsabell</a>
@@ -72,6 +75,26 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                     <center><label class="title">LBS-PHS-FR-01:<span class="titulo-span">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS</span></label></center>
                 </div>
                 <div class="main">
+
+                    <div id="tablaInfra" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbInfra" class="table table-sm mb-3 table-hover">
+                            <thead>
+                                <tr>
+                                    <!-- <th class="thtitulo" scope="col">CODIGO </th> -->
+                                    <th class="thtitulo" scope="col">ZONA</th>
+                                    <th class="thtitulo" scope="col">INFRAESTRUCTURA</th>
+                                    <th class="thtitulo" scope="col">FRECUENCIA</th>
+                                    <th class="thtitulo" scope="col">FECHA</th>
+                                    <!-- <th class="thtitulo" scope="col">USUARIO</th> -->
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaInfraestructura">
+
+                            </tbody>
+                        </table>
+                    </div>
                     <form method="post" action="" id="formularioInfra">
 
                         <!-- Text input -->
@@ -148,24 +171,46 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         </div>
                     </form>
 
-                    <div id="tablaInfra" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbInfra" class="table table-sm mb-3 table-hover">
+                    <div class="container g-4 row">
+                        <div class="row g-4 top-div" style="margin-top: 55px;">
+                            <center><label class="title">ZONAS/ÁREAS</label></center>
+                        </div>
+                        <div class="main">
+                            <form method="post" action="" id="formularioZona">
+
+                                <!-- Text input -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label">Nombre de área</label>
+                                    <input type="text" id="NOMBRE_T_ZONA_AREAS" class="form-control" name="NOMBRE_T_ZONA_AREAS" required>
+                                </div>
+
+                                <!-- Submit button -->
+                                <div class="d-grid  col-6 mx-auto bt-guardar">
+                                    <input type="hidden" id="taskId">
+                                    <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+                                </div>
+                            </form>
+                            <!-- <div id="tablaAlmacen" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbalmacen" class="table table-sm mb-3 table-hover table_id">
                             <thead>
                                 <tr>
-                                    <th class="thtitulo" scope="col">CODIGO </th>
-                                    <th class="thtitulo" scope="col">ZONA</th>
-                                    <th class="thtitulo" scope="col">INFRAESTRUCTURA</th>
-                                    <th class="thtitulo" scope="col">N°DIAS</th>
+
+                                    <th class="thtitulo" scope="col">CODIGO</th>
+                                    <th class="thtitulo" scope="col">NOMBRE</th>
                                     <th class="thtitulo" scope="col">FECHA</th>
-                                    <!-- <th class="thtitulo" scope="col">USUARIO</th> -->
+                                    <th class="thtitulo" scope="col">VERSION</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="tablaInfraestructura">
+                            <tbody id="tablita">
 
                             </tbody>
                         </table>
+                    </div> -->
+
+
+                        </div>
                     </div>
 
                 </div>
@@ -180,6 +225,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/sweetalert2.all.min.js"></script>
     <!-- <script src="./js/ui_1.12.1_jquery-ui.min.js"></script> -->
     <script src="./js/ajaxInfra.js"></script>
+    <script src="./js/ajaxZona.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {

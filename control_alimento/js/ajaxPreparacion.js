@@ -46,7 +46,7 @@ $(function () {
             tasks.forEach((task) => {
               template += `<tr taskId="${task.ID_UNION}">
 
-                <td data-titulo="INSUMOS">${task.NOMBRE_INSUMOS}</td>
+                <td data-titulo="PRODUCTO SANEAMIENTO">${task.NOMBRE_INSUMOS}</td>
                 <td data-titulo="PRODUCTOS">${task.NOMBRE_PREPARACION}</td>
                 <td data-titulo="CANTIDAD">${task.CANTIDAD_PORCENTAJE}</td>
                 <td data-titulo="ML">${task.CANTIDAD_MILILITROS}</td>
@@ -79,7 +79,7 @@ $(function () {
           tasks.forEach((task) => {
             template += `<tr taskId="${task.ID_UNION}">
 
-            <td data-titulo="INSUMOS">${task.NOMBRE_INSUMOS}</td>
+            <td data-titulo="PRODUCTO SANEAMIENTO">${task.NOMBRE_INSUMOS}</td>
             <td data-titulo="PRODUCTOS">${task.NOMBRE_PREPARACION}</td>
             <td data-titulo="CANTIDAD">${task.CANTIDAD_PORCENTAJE}</td>
             <td data-titulo="ML">${task.CANTIDAD_MILILITROS}</td>

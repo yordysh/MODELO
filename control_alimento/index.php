@@ -17,30 +17,6 @@
 </head>
 
 <body>
-  <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary bar-color">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-bold text-light" href="index.php"><img src="./images/logo-covifarma.png" alt=""></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="zonaAreas.php">Zona/Areas</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="infraestructuraAccesorios.php?url=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">Infraestructura Accesorios</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="preparacionSolucion.php">Preparación de soluciones</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav> -->
 
   <nav class="nav">
     <i class="icon-menu navOpenBtn"></i>
@@ -48,31 +24,10 @@
     <ul class="nav-links">
       <div class="icon-cross navCloseBtn"></div>
       <li>
-        <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
+        <a class="" aria-current="page" href="phs.php">PHS</a>
       </li>
       <li>
-        <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
-      </li>
-      <li>
-        <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>
-      </li>
-      <li>
-        <a class="" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
-      </li>
-      <li>
-        <a class="" href="controlMaquinas.php">Control de maquinas</a>
-      </li>
-      <li>
-        <a class="" href="LabsabelForm.php">Labsabell</a>
-      </li>
-      <li>
-        <a class="" href="previlifeForm.php">Previlife</a>
-      </li>
-      <li>
-        <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
-      </li>
-      <li>
-        <a class="" href="registroEnvases.php">Registros envases</a>
+        <a class="" href="vpm.php">VPM</a>
       </li>
     </ul>
   </nav>
