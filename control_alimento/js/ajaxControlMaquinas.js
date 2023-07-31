@@ -95,31 +95,31 @@ $(function () {
       type: "POST",
       success: function (response) {
         console.log(response);
-        // if (response == "ok") {
-        //   Swal.fire({
-        //     title: "¡Guardado exitoso!",
-        //     text: "Los datos se han guardado correctamente.",
-        //     icon: "success",
-        //     confirmButtonText: "Aceptar",
-        //   }).then((result) => {
-        //     if (result.isConfirmed) {
-        //       fetchTasks();
-        //       $("#formularioControl").trigger("reset");
-        //     }
-        //   });
-        // } else {
-        //   Swal.fire({
-        //     icon: "error",
-        //     title: "Oops...",
-        //     text: "Duplicado!",
-        //     confirmButtonText: "Aceptar",
-        //   }).then((result) => {
-        //     if (result.isConfirmed) {
-        //       fetchTasks();
-        //       $("#formularioControl").trigger("reset");
-        //     }
-        //   });
-        // }
+        if (response == "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              fetchTasks();
+              $("#formularioControl").trigger("reset");
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Duplicado!",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              fetchTasks();
+              $("#formularioControl").trigger("reset");
+            }
+          });
+        }
       },
     });
   });

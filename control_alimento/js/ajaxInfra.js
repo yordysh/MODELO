@@ -106,16 +106,29 @@ $(function () {
             // console.log(tasks);
             let template = ``;
             tasks.forEach((task) => {
+              let frecuencia;
+              if (task.NDIAS == 1) {
+                frecuencia = "Diario";
+              } else if (task.NDIAS == 2) {
+                frecuencia = "InterDiario";
+              } else if (task.NDIAS == 7) {
+                frecuencia = "Semanal";
+              } else if (task.NDIAS == 15) {
+                frecuencia = "Quincenal";
+              } else if (task.NDIAS == 30) {
+                frecuencia = "Mensual";
+              }
               template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
-
-             <!-- <td data-titulo="CODIGO" >${task.COD_INFRAESTRUCTURA}</td> -->
+             
+              <!-- <td data-titulo="CODIGO" >${task.COD_INFRAESTRUCTURA}</td> -->
               <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
               <td data-titulo="INFRAESTRUCTURA" class='NOMBRE_INFRAESTRUCTURA' >${task.NOMBRE_INFRAESTRUCTURA}</td>
-              <td data-titulo="FRECUENCIA">${task.NDIAS}</td>
+              <td data-titulo="FRECUENCIA">${frecuencia}</td>
               <td data-titulo="FECHA" >${task.FECHA}</td>
-
+  
+  
               <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
-
+  
             </tr>`;
             });
 
@@ -143,7 +156,8 @@ $(function () {
       data: {
         accion: accion,
         nombreinfraestructura: $("#NOMBRE_INFRAESTRUCTURA").val(),
-        ndias: $("#NDIAS").val(),
+        ndias: $("#selectFrecuencia").val(),
+        // ndias: $("#NDIAS").val(),
         codinfra: $("#taskId").val(),
         valorSeleccionado: $("#selectInfra").val(),
         // valorSeleccionado: $("#task_zona").val(),
@@ -206,12 +220,24 @@ $(function () {
 
           let template = ``;
           tasks.forEach((task) => {
+            let frecuencia;
+            if (task.NDIAS == 1) {
+              frecuencia = "Diario";
+            } else if (task.NDIAS == 2) {
+              frecuencia = "InterDiario";
+            } else if (task.NDIAS == 7) {
+              frecuencia = "Semanal";
+            } else if (task.NDIAS == 15) {
+              frecuencia = "Quincenal";
+            } else if (task.NDIAS == 30) {
+              frecuencia = "Mensual";
+            }
             template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
-
+           
             <!-- <td data-titulo="CODIGO" >${task.COD_INFRAESTRUCTURA}</td> -->
             <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
             <td data-titulo="INFRAESTRUCTURA" class='NOMBRE_INFRAESTRUCTURA' >${task.NOMBRE_INFRAESTRUCTURA}</td>
-            <td data-titulo="FRECUENCIA">${task.NDIAS}</td>
+            <td data-titulo="FRECUENCIA">${frecuencia}</td>
             <td data-titulo="FECHA" >${task.FECHA}</td>
 
 

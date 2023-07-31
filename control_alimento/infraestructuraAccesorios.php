@@ -99,7 +99,15 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         <!-- Text input dias-->
                         <div class="form-outline mb-4 ">
                             <label class="form-label">Frecuencia</label>
-                            <input type="text" id="NDIAS" class="form-control" name="NDIAS" required>
+                            <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
+                            <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
+                                <option value="0" selected disabled>Seleccione frecuencia</option>
+                                <option value="1">Diario</option>
+                                <option value="2">Inter-diario</option>
+                                <option value="7">Semanal</option>
+                                <option value="15">Quincenal</option>
+                                <option value="30">Mensual</option>
+                            </select>
                         </div>
 
                         <!--Combo zona areas -->
@@ -174,29 +182,11 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                 </div>
 
                                 <!-- Submit button -->
-                                <div class="d-grid  col-6 mx-auto bt-guardar">
+                                <div class="d-grid  col-6 mx-auto bt-guardar-zona">
                                     <input type="hidden" id="taskId">
-                                    <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+                                    <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardarzona">Guardar </button>
                                 </div>
                             </form>
-                            <!-- <div id="tablaAlmacen" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbalmacen" class="table table-sm mb-3 table-hover table_id">
-                            <thead>
-                                <tr>
-
-                                    <th class="thtitulo" scope="col">CODIGO</th>
-                                    <th class="thtitulo" scope="col">NOMBRE</th>
-                                    <th class="thtitulo" scope="col">FECHA</th>
-                                    <th class="thtitulo" scope="col">VERSION</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablita">
-
-                            </tbody>
-                        </table>
-                    </div> -->
 
 
                         </div>

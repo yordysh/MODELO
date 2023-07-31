@@ -209,10 +209,10 @@ img {
   outline: 1px solid #86b7fe;
   border-radius: 5px;
 }
-.table-responsive{
+.table-responsive {
   height: 300px !important;
 }
-section{
+section {
   padding-bottom: 115px !important;
 }
 /* --------------------------------------------------------------- */
@@ -634,6 +634,14 @@ td {
     width: 113%;
     box-sizing: border-box;
     margin-bottom: 10px;
+  }
+  .d-grid.col-6.mx-auto.bt-guardar-zona {
+    padding-bottom: 105px !important;
+    max-width: 120%;
+    width: 100%;
+  }
+  .bt-guardarzona {
+    padding: 10px 50px;
   }
   .btnPdf {
     padding: 10px 20px;
