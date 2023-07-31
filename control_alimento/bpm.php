@@ -26,17 +26,15 @@
             <!-- <li>
                 <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
             </li> -->
+
             <li>
-                <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
+                <a class="" href="labsabelForm.php">Envases labsabell</a>
             </li>
             <li>
-                <a class="" href="preparacionSolucion.php">LBS-PHS-FR-02</a>
+                <a class="" href="previlifeForm.php">Envases previlife</a>
             </li>
             <li>
-                <a class="" href="controlMaquinas.php">LBS-PHS-FR-03</a>
-            </li>
-            <li>
-                <a class="" href="limpiezaDesinfeccion.php">LBS-PHS-FR-04</a>
+                <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
             </li>
         </ul>
 

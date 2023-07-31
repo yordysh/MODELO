@@ -19,8 +19,8 @@ $dataProducto = $mostrar->MostrarProducto();
 
     <!--====== Estilo de ICON ======-->
     <link rel="stylesheet" href="./styleIcons/style.css">
-    <link rel="stylesheet" href="./css/ui_1.12.1_themes_base_jquery-ui.css">
-    <!-- <link rel="stylesheet" href="./css/select2.min.css"> -->
+    <!-- <link rel="stylesheet" href="./css/ui_1.12.1_themes_base_jquery-ui.css"> -->
+    <link rel="stylesheet" href="./css/select2.min.css">
 
 
     <title>Covifarma</title>
@@ -34,31 +34,13 @@ $dataProducto = $mostrar->MostrarProducto();
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
             <li>
-                <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
+                <a class="" href="labsabelForm.php">Envases labsabell</a>
             </li>
             <li>
-                <a class="" href="infraestructuraAccesorios.php">Infraestructura</a>
-            </li>
-            <li>
-                <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>
-            </li>
-            <li>
-                <a class="" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
-            </li>
-            <li>
-                <a class="" href="controlMaquinas.php">Control de maquinas</a>
-            </li>
-            <li>
-                <a class="" href="labsabelForm.php">Labsabell</a>
-            </li>
-            <li>
-                <a class="" href="#">Previlife</a>
+                <a class="" href="#">Envases previlife</a>
             </li>
             <li>
                 <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
-            </li>
-            <li>
-                <a class="" href="registroEnvases.php">Registros envases</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -76,7 +58,28 @@ $dataProducto = $mostrar->MostrarProducto();
                     <center><label class="title">PREVILIFE</label></center>
                 </div>
                 <div class="main">
-                    <form method="post" action="" id="formularioPrevilife">
+
+                    <div class="table-responsive" style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbPrevilife" class="table table-sm mb-3 table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="thtitulo" scope="col">CODIGO</th>
+                                    <th class="thtitulo" scope="col">NOMBRE</th>
+                                    <th class="thtitulo" scope="col">ABREVIATURA</th>
+                                    <th class="thtitulo" scope="col">FECHA</th>
+                                    <th class="thtitulo" scope="col">VERSION</th>
+                                    <!-- <th class="thtitulo" scope="col">USUARIO</th> -->
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaPrevilife">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <form method="post" action="" id="formularioPrevilife" style="padding-bottom: 55px;">
 
                         <!-- Text input codigo -->
                         <div class="form-outline mb-4">
@@ -87,16 +90,16 @@ $dataProducto = $mostrar->MostrarProducto();
                         <!-- Text input nombre -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Nombre</label>
-                            <input type="hidden" id="task_previlife">
-                            <input type="text" id="nombre_previlife" class="form-control" name="nombre_previlife" required>
-                            <!-- <select id="selectPrevilife" class="form-select select-Previlife" aria-label="Default select example">
+                            <!-- <input type="hidden" id="task_previlife">
+                            <input type="text" id="nombre_previlife" class="form-control" name="nombre_previlife" required> -->
+                            <select id="selectPrevilife" class="form-select select-Previlife" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
                                 <?php foreach ($dataProducto as $lis) { ?>
                                     <option value="<?php echo $lis->COD_PRODUCTO; ?>" class="option"> <?php echo $lis->DES_PRODUCTO; ?></option>
                                 <?php
                                 }
                                 ?>
-                            </select> -->
+                            </select>
                         </div>
 
                         <!-- Text input Abreviatura -->
@@ -118,25 +121,6 @@ $dataProducto = $mostrar->MostrarProducto();
                         </div>
                     </form>
 
-                    <div class="table-responsive" style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbPrevilife" class="table table-sm mb-3 table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="thtitulo" scope="col">CODIGO</th>
-                                    <th class="thtitulo" scope="col">NOMBRE</th>
-                                    <th class="thtitulo" scope="col">ABREVIATURA</th>
-                                    <th class="thtitulo" scope="col">FECHA</th>
-                                    <th class="thtitulo" scope="col">VERSION</th>
-                                    <!-- <th class="thtitulo" scope="col">USUARIO</th> -->
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablaPrevilife">
-
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
         </section>
@@ -147,8 +131,8 @@ $dataProducto = $mostrar->MostrarProducto();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ui_1.12.1_jquery-ui.min.js"></script>
-    <!-- <script src="./js/select2.min.js"></script> -->
+    <!-- <script src="./js/ui_1.12.1_jquery-ui.min.js"></script> -->
+    <script src="./js/select2.min.js"></script>
     <script src="./js/ajaxPrevilife.js"></script>
     <script>
         function generarPDF() {

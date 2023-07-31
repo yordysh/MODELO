@@ -27,7 +27,7 @@
         <a class="" aria-current="page" href="phs.php">PHS</a>
       </li>
       <li>
-        <a class="" href="vpm.php">VPM</a>
+        <a class="" href="bpm.php">BPM</a>
       </li>
     </ul>
   </nav>

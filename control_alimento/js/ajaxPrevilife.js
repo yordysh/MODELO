@@ -28,42 +28,44 @@ $(function () {
     nav.classList.remove("openNav");
   });
   //----------------------------------------------------------------//
-  // $("#selectPrevilife").select2();
+
+  $("#selectPrevilife").select2();
+
   //------------- Busqueda con COMBO PRODUCTO PREVILIFE----------------//
-  $(document).ready(function () {
-    $("#nombre_previlife").autocomplete({
-      source: function (request, response) {
-        const accion = "buscarProductoComboPrevilife";
+  // $(document).ready(function () {
+  //   $("#nombre_previlife").autocomplete({
+  //     source: function (request, response) {
+  //       const accion = "buscarProductoComboPrevilife";
 
-        $.ajax({
-          url: "./c_almacen.php",
-          method: "POST",
-          dataType: "json",
-          data: {
-            accion: accion,
-            term: request.term,
-          },
-          success: function (data) {
-            if (!data) {
-              $("#task_previlife").val("");
-            }
-            response(data);
-          },
-        });
-      },
-      select: function (event, ui) {
-        console.log(ui.item.id);
-        $("#task_previlife").val(ui.item.id);
-      },
-      close: function () {
-        const searchTerm = $("#nombre_previlife").val().trim();
+  //       $.ajax({
+  //         url: "./c_almacen.php",
+  //         method: "POST",
+  //         dataType: "json",
+  //         data: {
+  //           accion: accion,
+  //           term: request.term,
+  //         },
+  //         success: function (data) {
+  //           if (!data) {
+  //             $("#task_previlife").val("");
+  //           }
+  //           response(data);
+  //         },
+  //       });
+  //     },
+  //     select: function (event, ui) {
+  //       console.log(ui.item.id);
+  //       $("#task_previlife").val(ui.item.id);
+  //     },
+  //     close: function () {
+  //       const searchTerm = $("#nombre_previlife").val().trim();
 
-        if (searchTerm === "") {
-          $("#task_previlife").val("");
-        }
-      },
-    });
-  });
+  //       if (searchTerm === "") {
+  //         $("#task_previlife").val("");
+  //       }
+  //     },
+  //   });
+  // });
   //------------- Busqueda con ajax zonaArea----------------//
 
   $("#search").keyup(() => {
@@ -113,7 +115,8 @@ $(function () {
       data: {
         accion: accion,
         codigoPrevilife: $("#codigo_previlife").val(),
-        valorSelec: $("#task_previlife").val(),
+        // valorSelec: $("#task_previlife").val(),
+        valorSelec: $("#selectPrevilife").val(),
         abrPrevilife: $("#abr_previlife").val(),
         codigoPrev: $("#codigo_previlife").val(),
         codprev: $("#taskId").val(),

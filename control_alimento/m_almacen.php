@@ -1259,6 +1259,19 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function  MostrarProductoSelect()
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO ");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   // public function  MostrarProductoabreviaturaCombo($term)
   // {
   //   try {
@@ -1671,7 +1684,7 @@ class m_almacen
   }
   public function contarRegistrosInsumosLab($codigoInsumosLab, $valorSeleccionado)
   {
-    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_PRODUCTO_INSUMOS WHERE COD_PRODUCTO_INSUMOS = :COD_PRODUCTO_INSUMOS AND COD_PRODUCTO = :COD_PRODUCTO");
+    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_PRODUCTO_INSUMOS WHERE COD_PORDUCTO_INSUMOS = :COD_PRODUCTO_INSUMOS AND COD_PRODUCTO = :COD_PRODUCTO");
     $repetir->bindParam(':COD_PRODUCTO_INSUMOS', $codigoInsumosLab, PDO::PARAM_STR);
     $repetir->bindParam(':COD_PRODUCTO', $valorSeleccionado, PDO::PARAM_STR);
     $repetir->execute();
@@ -1710,7 +1723,7 @@ class m_almacen
       $FECHA_CREACION = $fecha->c_horaserversql('F');
 
       if ($repetir == 0) {
-        $stm = $this->bd->prepare("INSERT INTO T_PRODUCTO_INSUMOS(COD_PRODUCTO_INSUMOS, COD_PRODUCTO, FECHA_CREACION, VERSION)
+        $stm = $this->bd->prepare("INSERT INTO T_PRODUCTO_INSUMOS(COD_PORDUCTO_INSUMOS, COD_PRODUCTO, FECHA_CREACION, VERSION)
                                   VALUES ( '$codigoInsumosLab', '$valorSeleccionado','$FECHA_CREACION','$VERSION')");
 
         $insert = $stm->execute();
@@ -1725,7 +1738,7 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT I.COD_PRODUCTO_INSUMOS AS COD_PRODUCTO_INSUMOS, P.ABR_PRODUCTO AS ABR_PRODUCTO,
+      $stm = $this->bd->prepare("SELECT I.COD_PORDUCTO_INSUMOS AS COD_PRODUCTO_INSUMOS, P.ABR_PRODUCTO AS ABR_PRODUCTO,
                                  P.DES_PRODUCTO AS DES_PRODUCTO, I.FECHA_CREACION AS FECHA_CREACION, I.VERSION AS VERSION FROM T_PRODUCTO_INSUMOS AS I 
                                  INNER JOIN T_PRODUCTO AS P ON I.COD_PRODUCTO=P.COD_PRODUCTO WHERE DES_PRODUCTO LIKE '$buscarInsumos%'");
 
@@ -1811,6 +1824,34 @@ class m_almacen
   {
     try {
       $stm = $this->bd->prepare("SELECT YEAR(MAX(FECHA_CREACION)) AS FECHA_CREACION FROM T_PRODUCTO_INSUMOS");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+  public function  MostrarProductoComboRegistro()
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function  MostrarProduccionComboRegistro()
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT * FROM T_PRODUCCION");
       $stm->execute();
       $datos = $stm->fetchAll();
 

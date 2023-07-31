@@ -2,7 +2,8 @@
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataInfra = $mostrar->MostrarAlmacenMuestra();
+$dataProducto = $mostrar->MostrarProductoComboRegistro();
+$dataProduccion = $mostrar->MostrarProduccionComboRegistro();
 
 ?>
 <!DOCTYPE html>
@@ -79,33 +80,42 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                             <input id="id" type="hidden" class="form-control" name="id" />
                         </div>
 
-                        <!-- Text input nombre -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Nombre de infraestructura</label>
-                            <input type="text" id="NOMBRE_INFRAESTRUCTURA" class="form-control" name="NOMBRE_INFRAESTRUCTURA" required>
-                        </div>
-                        <!-- Text input dias-->
+
+                        <!--Combo Produccion -->
                         <div class="form-outline mb-4 ">
-                            <label class="form-label">Dias</label>
-                            <input type="text" id="NDIAS" class="form-control" name="NDIAS" required>
+                            <label class="form-label">Produccion</label>
+                            <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
+                            <select id="selectProduccion" class="form-select selectProduccion" aria-label="Default select example">
+                                <option value="none" selected disabled>Seleccione produccion</option>
+                                <?php foreach ($dataProduccion as  $lis) { ?>
+                                    <option value="<?php echo $lis['COD_PRODUCCION']; ?>" class="option"> <?php echo $lis['NUM_PRODUCION_LOTE']; ?></option>
+                                <?php
+                                }
+
+                                ?>
+                            </select>
                         </div>
 
-                        <!--Combo zona areas -->
+                        <!--Combo Productos -->
                         <div class="form-outline mb-4">
-                            <label class="form-label">Zona/Areas</label>
-                            <select id="selectInfra" class="form-select selectZona" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione Zona/Areas</option>
-                                <?php foreach ($dataInfra as $lis) {
-                                    if ($lis->NOMBRE_T_ZONA_AREAS != "TRANSITO DE PERSONAL" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES Y VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES Y VARONES)") {
-                                ?>
-                                        <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
+                            <label class="form-label">Producto</label>
+                            <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example">
+                                <option value="none" selected disabled>Seleccione producto</option>
+                                <?php foreach ($dataProducto as  $lis) { ?>
+                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?> <?php echo $lis['DES_PRODUCTO']; ?></option>
                                 <?php
-                                    }
                                 }
+
                                 ?>
                             </select>
                             <!-- <input type="hidden" id="task_zona">
                             <input id="selectInfra" class="form-control" required> -->
+                        </div>
+
+                        <!-- Text input cantidad -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Cantidad</label>
+                            <input type="text" id="NOMBRE_INFRAESTRUCTURA" class="form-control" name="NOMBRE_INFRAESTRUCTURA" required>
                         </div>
 
                         <!-- Crear PDF -->
@@ -179,7 +189,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <!-- <script src="./js/ui_1.12.1_jquery-ui.min.js"></script> -->
-    <script src="./js/ajaxInfra.js"></script>
+    <script src="./js/ajaxRegistroEnvases.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {

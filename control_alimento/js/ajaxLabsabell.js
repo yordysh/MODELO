@@ -29,6 +29,8 @@ $(function () {
   });
   //----------------------------------------------------------------//
 
+  $("#selectProducto").select2();
+
   //------------- Busqueda con ajax zonaArea----------------//
 
   $("#search").keyup(() => {
@@ -46,11 +48,11 @@ $(function () {
             let template = ``;
             tasks.forEach((task) => {
               template += `<tr taskId="${task.COD_PRODUCTO_ENVASE}">
-                <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_PRODUCTO_ENVASE}</td>
+              <!-- <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_PRODUCTO_ENVASE}</td> -->
                 <td data-titulo="NOMBRE" class="DES_PRODUCTO" style="text-align:rigth;">${task.DES_PRODUCTO}</td>
                 <td data-titulo="ABREVIATURA" class="ABR_PRODUCTO" style="text-align:rigth;">${task.ABR_PRODUCTO}</td>
                 <td data-titulo="FECHA" style="text-align:rigth;">${task.FECHA_CREACION}</td>
-                <td data-titulo="VERSION" style="text-align:rigth;">${task.VERSION}</td>
+                <!-- <td data-titulo="VERSION" style="text-align:rigth;">${task.VERSION}</td> -->
                 <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_PRODUCTO_ENVASE="${task.COD_PRODUCTO_ENVASE}"><i class="icon-trash"></i></button></td>
                 <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_PRODUCTO_ENVASE="${task.COD_PRODUCTO_ENVASE}"><i class="icon-edit"></i></button></td>
             </tr>`;
@@ -68,40 +70,40 @@ $(function () {
   });
 
   //------------- Busqueda con COMBO PRODUCTO----------------//
-  $(document).ready(function () {
-    $("#selectLabsabell").autocomplete({
-      source: function (request, response) {
-        const accion = "buscarProductoCombo";
+  // $(document).ready(function () {
+  //   $("#selectLabsabell").autocomplete({
+  //     source: function (request, response) {
+  //       const accion = "buscarProductoCombo";
 
-        $.ajax({
-          url: "./c_almacen.php",
-          method: "POST",
-          dataType: "json",
-          data: {
-            accion: accion,
-            term: request.term,
-          },
-          success: function (data) {
-            if (!data) {
-              $("#task_producto").val("");
-            }
-            response(data);
-          },
-        });
-      },
-      select: function (event, ui) {
-        console.log(ui.item.id);
-        $("#task_producto").val(ui.item.id);
-      },
-      close: function () {
-        const searchTerm = $("#selectLabsabell").val().trim();
+  //       $.ajax({
+  //         url: "./c_almacen.php",
+  //         method: "POST",
+  //         dataType: "json",
+  //         data: {
+  //           accion: accion,
+  //           term: request.term,
+  //         },
+  //         success: function (data) {
+  //           if (!data) {
+  //             $("#task_producto").val("");
+  //           }
+  //           response(data);
+  //         },
+  //       });
+  //     },
+  //     select: function (event, ui) {
+  //       console.log(ui.item.id);
+  //       $("#task_producto").val(ui.item.id);
+  //     },
+  //     close: function () {
+  //       const searchTerm = $("#selectLabsabell").val().trim();
 
-        if (searchTerm === "") {
-          $("#task_producto").val("");
-        }
-      },
-    });
-  });
+  //       if (searchTerm === "") {
+  //         $("#task_producto").val("");
+  //       }
+  //     },
+  //   });
+  // });
 
   //------------- Busqueda con COMBO PRODUCTO ABREVIATURA----------------//
   // $(document).ready(function () {
@@ -150,7 +152,8 @@ $(function () {
       data: {
         accion: accion,
         codigolabsabell: $("#codigo_labsabell").val(),
-        valorSeleccionado: $("#task_producto").val(),
+        // valorSeleccionado: $("#task_producto").val(),
+        valorSeleccionado: $("#selectProducto").val(),
         codigolab: $("#codigo_labsabell").val(),
         codlab: $("#taskId").val(),
       },
@@ -203,11 +206,11 @@ $(function () {
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_PRODUCTO_ENVASE}">
-              <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_PRODUCTO_ENVASE}</td>
+            <!-- <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_PRODUCTO_ENVASE}</td> -->
               <td data-titulo="NOMBRE" class="DES_PRODUCTO" style="text-align:rigth;">${task.DES_PRODUCTO}</td>
               <td data-titulo="ABREVIATURA" class="ABR_PRODUCTO" style="text-align:rigth;">${task.ABR_PRODUCTO}</td>
               <td data-titulo="FECHA" style="text-align:rigth;">${task.FECHA_CREACION}</td>
-              <td data-titulo="VERSION" style="text-align:rigth;">${task.VERSION}</td>
+              <!-- <td data-titulo="VERSION" style="text-align:rigth;">${task.VERSION}</td> -->
               <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_PRODUCTO_ENVASE="${task.COD_PRODUCTO_ENVASE}"><i class="icon-trash"></i></button></td>
               <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_PRODUCTO_ENVASE="${task.COD_PRODUCTO_ENVASE}"><i class="icon-edit"></i></button></td>
           </tr>`;

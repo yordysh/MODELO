@@ -66,41 +66,42 @@ $(function () {
     }
   });
 
+  $("#selectPrevilife").select2();
   //------------- Busqueda con COMBO PRODUCTO----------------//
-  $(document).ready(function () {
-    $("#nombre_insumos_lab").autocomplete({
-      source: function (request, response) {
-        const accion = "buscarProductoComboInsumos";
+  // $(document).ready(function () {
+  //   $("#nombre_insumos_lab").autocomplete({
+  //     source: function (request, response) {
+  //       const accion = "buscarProductoComboInsumos";
 
-        $.ajax({
-          url: "./c_almacen.php",
-          method: "POST",
-          dataType: "json",
-          data: {
-            accion: accion,
-            term: request.term,
-          },
-          success: function (data) {
-            if (!data) {
-              $("#task_insumos_lab").val("");
-            }
-            response(data);
-          },
-        });
-      },
-      select: function (event, ui) {
-        console.log(ui.item.id);
-        $("#task_insumos_lab").val(ui.item.id);
-      },
-      close: function () {
-        const searchTerm = $("#nombre_insumos_lab").val().trim();
+  //       $.ajax({
+  //         url: "./c_almacen.php",
+  //         method: "POST",
+  //         dataType: "json",
+  //         data: {
+  //           accion: accion,
+  //           term: request.term,
+  //         },
+  //         success: function (data) {
+  //           if (!data) {
+  //             $("#task_insumos_lab").val("");
+  //           }
+  //           response(data);
+  //         },
+  //       });
+  //     },
+  //     select: function (event, ui) {
+  //       console.log(ui.item.id);
+  //       $("#task_insumos_lab").val(ui.item.id);
+  //     },
+  //     close: function () {
+  //       const searchTerm = $("#nombre_insumos_lab").val().trim();
 
-        if (searchTerm === "") {
-          $("#task_insumos_lab").val("");
-        }
-      },
-    });
-  });
+  //       if (searchTerm === "") {
+  //         $("#task_insumos_lab").val("");
+  //       }
+  //     },
+  //   });
+  // });
   //------------- Añadiendo INSUMOS LABSABELL----------------//
   $("#formularioInsumosLab").submit((e) => {
     e.preventDefault();
@@ -113,7 +114,8 @@ $(function () {
       data: {
         accion: accion,
         codigoInsumosLab: $("#codigo_insumos_lab").val(),
-        valorSeleccionado: $("#task_insumos_lab").val(),
+        // valorSeleccionado: $("#task_insumos_lab").val(),
+        valorSeleccionado: $("#selectPrevilife").val(),
         codigoInsumo: $("#codigo_insumos_lab").val(),
         codInsu: $("#taskId").val(),
       },
@@ -163,8 +165,8 @@ $(function () {
           let tasks = JSON.parse(response);
           let template = ``;
           tasks.forEach((task) => {
-            template += `<tr taskId="${task.COD_PRODUCTO_INSUMOS}">
-                <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_PRODUCTO_INSUMOS}</td>
+            template += `<tr taskId="${task.COD_PORDUCTO_INSUMOS}">
+                <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_PORDUCTO_INSUMOS}</td>
                 <td data-titulo="NOMBRE" class="DES_PRODUCTO" style="text-align:rigth;">${task.DES_PRODUCTO}</td>
                 <td data-titulo="ABREVIATURA" class="ABR_PRODUCTO" style="text-align:rigth;">${task.ABR_PRODUCTO}</td>
                 <td data-titulo="FECHA" style="text-align:rigth;">${task.FECHA_CREACION}</td>

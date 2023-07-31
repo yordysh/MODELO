@@ -1872,7 +1872,7 @@ class c_almacen
                 $json = array();
                 foreach ($datos as $row) {
                     $json[] = array(
-                        "COD_PRODUCTO_INSUMOS" => $row->COD_PRODUCTO_INSUMOS,
+                        "COD_PORDUCTO_INSUMOS" => $row->COD_PRODUCTO_INSUMOS,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
                         "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
@@ -1887,7 +1887,7 @@ class c_almacen
                 $json = array();
                 foreach ($datos as $row) {
                     $json[] = array(
-                        "COD_PRODUCTO_INSUMOS" => $row->COD_PRODUCTO_INSUMOS,
+                        "COD_PORDUCTO_INSUMOS" => $row->COD_PRODUCTO_INSUMOS,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
                         "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
