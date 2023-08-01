@@ -92,38 +92,38 @@ $(function () {
         selectProduccion: $("#selectProduccion").val(),
         selectProductoCombo: $("#selectProductoCombo").val(),
         cantidad: $("#cantidad").val(),
-        fecha: $("#fecha").val(),
+        // fecha: $("#fecha").val(),
         codRegistro: $("#taskId").val(),
       },
 
       type: "POST",
       success: function (response) {
         console.log(response);
-        if (response.toLowerCase() === "ok") {
-          Swal.fire({
-            title: "¡Guardado exitoso!",
-            text: "Los datos se han guardado correctamente.",
-            icon: "success",
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              fetchTasks();
-              $("#formularioZona").trigger("reset");
-            }
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Duplicado!",
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              fetchTasks();
-              $("#formularioZona").trigger("reset");
-            }
-          });
-        }
+        // if (response.toLowerCase() === "ok") {
+        //   Swal.fire({
+        //     title: "¡Guardado exitoso!",
+        //     text: "Los datos se han guardado correctamente.",
+        //     icon: "success",
+        //     confirmButtonText: "Aceptar",
+        //   }).then((result) => {
+        //     if (result.isConfirmed) {
+        //       fetchTasks();
+        //       $("#formularioZona").trigger("reset");
+        //     }
+        //   });
+        // } else {
+        //   Swal.fire({
+        //     icon: "error",
+        //     title: "Oops...",
+        //     text: "Duplicado!",
+        //     confirmButtonText: "Aceptar",
+        //   }).then((result) => {
+        //     if (result.isConfirmed) {
+        //       fetchTasks();
+        //       $("#formularioZona").trigger("reset");
+        //     }
+        //   });
+        // }
       },
     });
   });

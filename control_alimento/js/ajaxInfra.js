@@ -202,9 +202,10 @@ $(function () {
       },
     });
   });
+  //-----------------------------------------------------------------------------//
 
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
-  // Cargar registros ZONA AREA
+  // Cargar registros INFRAESTRUCTURA
 
   function fetchTasks() {
     const accion = "buscarinfra";

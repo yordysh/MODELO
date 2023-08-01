@@ -120,7 +120,7 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                         <!-- Text input fecha -->
                         <div class="form-outline mb-4">
                             <label class="form-label">fecha</label>
-                            <input type="date" id="fecha" class="form-control" name="fecha" required>
+                            <input type="date" id="fecha" class="form-control" name="fecha">
                         </div>
 
                         <!-- Crear PDF -->

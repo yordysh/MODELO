@@ -387,15 +387,12 @@ if ($_POST['accion'] == 'insertarRegistro') {
 
 
     $selectProduccion = $_POST['selectProduccion'];
-
     $selectProductoCombo = $_POST['selectProductoCombo'];
-
     $cantidad = $_POST['cantidad'];
+    // $fecha = $_POST['fecha'];
 
-    $fecha = $_POST['fecha'];
 
-
-    $respuesta = c_almacen::c_insertar_registro_envases($selectProduccion, $selectProductoCombo, $cantidad,  $fecha);
+    $respuesta = c_almacen::c_insertar_registro_envases($selectProduccion, $selectProductoCombo, $cantidad);
     echo $respuesta;
 }
 
@@ -1973,12 +1970,12 @@ class c_almacen
 
 
 
-    static function c_insertar_registro_envases($selectProduccion, $selectProductoCombo, $cantidad,  $fecha)
+    static function c_insertar_registro_envases($selectProduccion, $selectProductoCombo, $cantidad)
     {
         $m_formula = new m_almacen();
 
-        if (isset($selectProduccion) && isset($selectProductoCombo) && isset($cantidad) && isset($fecha)) {
-            $respuesta = $m_formula->InsertarRegistroEnvases($selectProduccion, $selectProductoCombo, $cantidad,  $fecha);
+        if (isset($selectProduccion) && isset($selectProductoCombo) && isset($cantidad)) {
+            $respuesta = $m_formula->InsertarRegistroEnvases($selectProduccion, $selectProductoCombo, $cantidad);
             if ($respuesta) {
                 return "ok";
             } else {

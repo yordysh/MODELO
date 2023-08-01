@@ -100,6 +100,71 @@ class m_almacen
     return $codigoAumento;
   }
 
+  public function generarVersionGeneral($nombre)
+  {
+
+    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_VERSION_GENERAL");
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['count'];
+
+
+    if ($count == 0) {
+      $stm = $this->bd->prepare("INSERT INTO T_VERSION_GENERAL (NOMBRE)
+                                   VALUES ('$nombre')");
+
+      $stm->execute();
+    } else {
+      $aumento = $this->bd->prepare("SELECT COUNT(*) as count FROM T_VERSION_GENERAL WHERE NOMBRE='$nombre'");
+      $aumento->execute();
+      $result = $aumento->fetch(PDO::FETCH_ASSOC);
+      $contador = $result['count'];
+      if ($contador == 0) {
+        $stmVG = $this->bd->prepare("INSERT INTO T_VERSION_GENERAL (NOMBRE)
+                                   VALUES ('$nombre')");
+
+        $stmVG->execute();
+      }
+    }
+
+    $stm = $this->bd->prepare("SELECT MAX(VERSION) as VERSION FROM T_VERSION_GENERAL WHERE NOMBRE='$nombre'");
+
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $maxContadorVersion = intval($resultado['VERSION']);
+
+    if ($maxContadorVersion == null) {
+      $maxContadorVersion = 0;
+    }
+    $maxContadorVersion = $maxContadorVersion + 1;
+    $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
+    // var_dump($versionAumento);
+
+    // $fecha = new m_almacen();
+    // // $fechaDHoy = date('Y-m-d');
+    // $fechaDHoy = $fecha->c_horaserversql('F');
+    // // $fechaDHoy = '02/09/2023';
+    // // $mesAnioHoy = date('Y-m', strtotime(str_replace('/', '-', $fechaDHoy)));
+
+    // // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
+    // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date) AND NOMBRE='$nombre'");
+    // $stmver->execute();
+    // $valor = $stmver->fetchAll();
+    // $valor1 = count($valor);
+
+
+    // if ($valor1 == 0) {
+    //   $nuevaversion = $maxContadorVersion + 1;
+    //   $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
+    // } else {
+    //   $maxContadorVersion;
+
+    //   $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
+    // }
+
+    return $versionAumento;
+  }
+
   public function generarVersion()
   {
 
@@ -181,60 +246,61 @@ class m_almacen
       $this->bd->beginTransaction();
       $cod = new m_almacen();
       $COD_ZONA = $cod->generarCodigo();
-      $VERSION = $cod->generarVersion();
+      // $VERSION = $cod->generarVersion();
+      $nombre = 'p_zona';
+      $VERSION = $cod->generarVersionGeneral($nombre);
 
       $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
 
       $FECHA = $cod->c_horaserversql('F');
-      // $FECHA = '19/07/2023';
+      // $FECHA = '02/09/2023';
       //$FECHA = date('Y-m-d');
+      $mesAnioHoy = date('Y-m', strtotime(str_replace('/', '-',  $FECHA)));
       if ($repetir == 0) {
 
-        $stm = $this->bd->prepare("INSERT INTO T_ZONA_AREAS (COD_ZONA, NOMBRE_T_ZONA_AREAS, FECHA, VERSION)
-                                  VALUES ( '$COD_ZONA', '$NOMBRE_T_ZONA_AREAS', '$FECHA', '$VERSION')");
+        $stm = $this->bd->prepare("INSERT INTO T_ZONA_AREAS (COD_ZONA, NOMBRE_T_ZONA_AREAS, FECHA)
+                                  VALUES ( '$COD_ZONA', '$NOMBRE_T_ZONA_AREAS', '$FECHA')");
 
 
         $insert = $stm->execute();
 
         //$fechaDHoy = date('Y-m-d');
-        $fechaDHoy = $cod->c_horaserversql('F');
-
+        // $fechaDHoy = $cod->c_horaserversql('F');
 
 
         if ($VERSION == '01') {
+          // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
+          // //$stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$FECHA_CREACION' as date) AND NOMBRE='$nombre'");
+          // $stmver->execute();
+          // $valor = $stmver->fetchAll();
 
-          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+          // $valor1 = count($valor);
 
+          // if ($valor1 == 0) {
+          $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
+          $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+          $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+          $stmVersion->bindParam(':FECHA_VERSION', $FECHA);
 
-          $stmver->execute();
-          $valor = $stmver->fetchAll();
-
-          $valor1 = count($valor);
-
-          if ($valor1 == 0) {
-            $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) VALUES ( :version)");
-            $stm1->bindParam(':version', $VERSION, PDO::PARAM_STR);
-            $stm1->execute();
-          }
+          $stmVersion->execute();
+          // }
         } else {
-          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
 
+          // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
+          // $stmver->execute();
+          // $valor = $stmver->fetchAll();
 
-          $stmver->execute();
-          $valor = $stmver->fetchAll();
+          // $valor1 = count($valor);
 
-          $valor1 = count($valor);
+          // if ($valor1 == 0) {
+          $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
+          $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+          $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+          $stmVersion->bindParam(':FECHA_VERSION', $FECHA);
 
-          if ($valor1 == 0) {
-            $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
-            $stm1->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-            $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
-            $stm1->execute();
-          }
+          $stmVersion->execute();
+          // }
         }
-
-
-
 
         $insert = $this->bd->commit();
 
@@ -646,7 +712,6 @@ class m_almacen
 
       $stm->execute();
       $datos = $stm->fetchAll();
-      var_dump($datos);
       return $datos;
     } catch (Exception $e) {
       die($e->getMessage());
@@ -1294,40 +1359,7 @@ class m_almacen
   //     die($e->getMessage());
   //   }
   // }
-  public function generarVersionLabsabell()
-  {
 
-    $stm = $this->bd->prepare("SELECT MAX(VERSION) as VERSION FROM T_PRODUCTO_ENVASES");
-    $stm->execute();
-    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
-    $maxContadorVersion = intval($resultado['VERSION']);
-    if ($maxContadorVersion == null) {
-      $maxContadorVersion = 0;
-    }
-
-    // $nuevoCodigo =  $maxContadorVersion + 1;
-    // $codigoAumento = str_pad($nuevoCodigo, 2, '0', STR_PAD_LEFT);
-
-    // return $codigoAumento;
-    $fecha = new m_almacen();
-    // $fechaDHoy = date('Y-m-d');
-    $fechaDHoy = $fecha->c_horaserversql('F');
-    $stmver = $this->bd->prepare("SELECT * FROM T_PRODUCTO_ENVASES WHERE cast(FECHA_CREACION as DATE) =cast('$fechaDHoy' as date)");
-    $stmver->execute();
-    $valor = $stmver->fetchAll();
-
-    $valor1 = count($valor);
-    if ($valor1 == 0) {
-      $nuevaversion = $maxContadorVersion + 1;
-      $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
-    } else {
-      $maxContadorVersion;
-
-      $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
-    }
-
-    return $versionAumento;
-  }
   public function contarRegistrosLabsabell($cod_labsabell, $valorSel)
   {
     $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_PRODUCTO_ENVASES WHERE COD_PRODUCTO_ENVASE = :COD_PRODUCTO_ENVASE AND COD_PRODUCTO = :COD_PRODUCTO");
@@ -1342,20 +1374,63 @@ class m_almacen
   public function InsertarLabsabell($codigolabsabell, $valorSeleccionado)
   {
     try {
+      $this->bd->beginTransaction();
+
       $fecha = new m_almacen();
-      $VERSION = $fecha->generarVersionLabsabell();
+      $nombre = 'p_envases';
+
+
+      $VERSION = $fecha->generarVersionGeneral($nombre);
+
       $repetir = $fecha->contarRegistrosLabsabell($codigolabsabell, $valorSeleccionado);
       $FECHA_CREACION = $fecha->c_horaserversql('F');
+      $mesAnioHoy = date('Y-m', strtotime(str_replace('/', '-',  $FECHA_CREACION)));
 
       if ($repetir == 0) {
-        $stm = $this->bd->prepare("INSERT INTO T_PRODUCTO_ENVASES (COD_PRODUCTO_ENVASE, COD_PRODUCTO, FECHA_CREACION,VERSION)
-                                  VALUES ( '$codigolabsabell', '$valorSeleccionado', '$FECHA_CREACION','$VERSION')");
+        $stm = $this->bd->prepare("INSERT INTO T_PRODUCTO_ENVASES (COD_PRODUCTO_ENVASE, COD_PRODUCTO, FECHA_CREACION)
+                                  VALUES ( '$codigolabsabell', '$valorSeleccionado', '$FECHA_CREACION')");
 
         $insert = $stm->execute();
+
+        if ($VERSION == '01') {
+          // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
+          // //$stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$FECHA_CREACION' as date) AND NOMBRE='$nombre'");
+          // $stmver->execute();
+          // $valor = $stmver->fetchAll();
+
+          // $valor1 = count($valor);
+
+          // if ($valor1 == 0) {
+          $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
+          $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+          $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+          $stmVersion->bindParam(':FECHA_VERSION', $FECHA_CREACION);
+
+          $stmVersion->execute();
+          // }
+        } else {
+
+          // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
+          // $stmver->execute();
+          // $valor = $stmver->fetchAll();
+
+          // $valor1 = count($valor);
+
+          // if ($valor1 == 0) {
+          $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
+          $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+          $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+          $stmVersion->bindParam(':FECHA_VERSION', $FECHA_CREACION);
+
+          $stmVersion->execute();
+          // }
+        }
+
+        $insert = $this->bd->commit();
         return $insert;
       }
     } catch (Exception $e) {
-
+      $this->bd->rollBack();
       die($e->getMessage());
     }
   }
@@ -1872,7 +1947,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function InsertarRegistroEnvases($selectProduccion, $selectProductoCombo, $cantidad,  $fecha)
+  public function InsertarRegistroEnvases($selectProduccion, $selectProductoCombo, $cantidad)
   {
     try {
       $registro = new m_almacen();
@@ -1888,7 +1963,7 @@ class m_almacen
       $cantidad_alupol = $cantidad;
       $cantidad_cajas = round(($cantidad * 5) / 100);
       $stm = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS, COD_PRODUCCION, COD_PRODUCTO, CANTIDAD_ENVASES, CANTIDAD_TAPAS, CANTIDAD_SCOOPS, CANTIDAD_ALUPOL, CANTIDAD_CAJAS)
-                                  VALUES ( '$codigo_avance_insumos', '$selectProduccion','$selectProductoCombo','$cantidad_envases','$cantidad_tapas','$cantidad_scoops','$cantidad_alupol','$cantidad_cajas','$fecha')");
+                                  VALUES ( '$codigo_avance_insumos', '$selectProduccion','$selectProductoCombo','$cantidad_envases','$cantidad_tapas','$cantidad_scoops','$cantidad_alupol','$cantidad_cajas')");
 
       $insert = $stm->execute();
       return $insert;

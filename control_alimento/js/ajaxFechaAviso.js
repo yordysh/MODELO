@@ -117,7 +117,7 @@ $(function () {
         let selectVerificacion;
 
         Swal.fire({
-          title: "Información",
+          title: "Información LBS-PHS-FR-01",
           html: `
               <div><h2 class="nombre_area">Nombre del área:</h2> <p>${task.NOMBRE_AREA}</p></div>
               <div><h2 class="nombre_infra">Nombre de la infraestructura:</h2> <p>${task.NOMBRE_INFRAESTRUCTURA}</p></div>
@@ -419,7 +419,7 @@ $(function () {
         const task = data[index];
 
         Swal.fire({
-          title: "Información de control",
+          title: "Información de LBS-PHS-FR-03",
           icon: "info",
           html: `
             <div>

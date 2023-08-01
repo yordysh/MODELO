@@ -170,6 +170,10 @@ $(function () {
             if (result.isConfirmed) {
               fetchTasks();
               $("#formularioLabsabell").trigger("reset");
+              $("#selectProducto").val(null).trigger("change");
+              $("#selectProducto").append(
+                '<option value="none" selected disabled>Seleccione producto</option>'
+              );
             }
           });
         } else {
@@ -182,6 +186,10 @@ $(function () {
             if (result.isConfirmed) {
               fetchTasks();
               $("#formularioLabsabell").trigger("reset");
+              $("#selectProducto").val(null).trigger("change");
+              $("#selectProducto").append(
+                '<option value="none" selected disabled>Seleccione producto</option>'
+              );
             }
           });
         }
