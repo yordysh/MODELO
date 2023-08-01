@@ -71,21 +71,34 @@ $(function () {
   });
 
   //------------- Añadiendo con ajax zonaArea----------------//
-  $("#formularioZona").submit((e) => {
+  $("#formularioRegistroEnvases").submit((e) => {
     e.preventDefault();
 
-    const accion = edit === false ? "insertar" : "actualizar";
+    const accion = edit === false ? "insertarRegistro" : "actualizarRegistro";
+    // var pro = $("#selectProduccion").val();
+    // var p = $("#selectProductoCombo").val();
+    // var can = $("#cantidad").val();
+    // var fecha = $("#fecha").val();
+
+    // console.log("produccion " + pro);
+    // console.log("producto " + p);
+    // console.log("cantidad " + can);
+    // console.log("fecha " + fecha);
 
     $.ajax({
       url: "./c_almacen.php",
       data: {
         accion: accion,
-        nombrezonaArea: $("#NOMBRE_T_ZONA_AREAS").val(),
-        codzona: $("#taskId").val(),
+        selectProduccion: $("#selectProduccion").val(),
+        selectProductoCombo: $("#selectProductoCombo").val(),
+        cantidad: $("#cantidad").val(),
+        fecha: $("#fecha").val(),
+        codRegistro: $("#taskId").val(),
       },
 
       type: "POST",
       success: function (response) {
+        console.log(response);
         if (response.toLowerCase() === "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
@@ -111,7 +124,6 @@ $(function () {
             }
           });
         }
-        // console.log("RESPONSE" + response);
       },
     });
   });

@@ -73,7 +73,7 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                     <center><label class="title">REGISTRO DE ENVASES</label></center>
                 </div>
                 <div class="main">
-                    <form method="post" action="" id="formularioInfra">
+                    <form method="post" action="" id="formularioRegistroEnvases">
 
                         <!-- Text input -->
                         <div class="form-outline mb-4">
@@ -115,7 +115,12 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                         <!-- Text input cantidad -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Cantidad</label>
-                            <input type="text" id="NOMBRE_INFRAESTRUCTURA" class="form-control" name="NOMBRE_INFRAESTRUCTURA" required>
+                            <input type="text" id="cantidad" class="form-control" name="cantidad" required>
+                        </div>
+                        <!-- Text input fecha -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">fecha</label>
+                            <input type="date" id="fecha" class="form-control" name="fecha" required>
                         </div>
 
                         <!-- Crear PDF -->

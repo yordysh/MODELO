@@ -383,6 +383,23 @@ if ($_POST['accion'] == 'eliminarinsumolab') {
 
 
 
+if ($_POST['accion'] == 'insertarRegistro') {
+
+
+    $selectProduccion = $_POST['selectProduccion'];
+
+    $selectProductoCombo = $_POST['selectProductoCombo'];
+
+    $cantidad = $_POST['cantidad'];
+
+    $fecha = $_POST['fecha'];
+
+
+    $respuesta = c_almacen::c_insertar_registro_envases($selectProduccion, $selectProductoCombo, $cantidad,  $fecha);
+    echo $respuesta;
+}
+
+
 
 
 
@@ -1945,6 +1962,24 @@ class c_almacen
 
             $resultado = $mostrar->eliminarInsumosLab($codinsumoslab);
             if ($resultado) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+
+
+
+
+    static function c_insertar_registro_envases($selectProduccion, $selectProductoCombo, $cantidad,  $fecha)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($selectProduccion) && isset($selectProductoCombo) && isset($cantidad) && isset($fecha)) {
+            $respuesta = $m_formula->InsertarRegistroEnvases($selectProduccion, $selectProductoCombo, $cantidad,  $fecha);
+            if ($respuesta) {
                 return "ok";
             } else {
                 return "error";

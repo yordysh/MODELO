@@ -1834,6 +1834,18 @@ class m_almacen
   }
 
 
+
+
+  public function generarCodigoRegistroEnvases()
+  {
+    $stm = $this->bd->prepare("SELECT MAX(COD_AVANCE_INSUMOS) as COD_AVANCE_INSUMOS FROM T_AVANCE_INSUMOS");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $maxCodigo = intval($resultado['COD_AVANCE_INSUMOS']);
+    $nuevoCodigo = $maxCodigo + 1;
+    $codigoAumento = str_pad($nuevoCodigo, 3, '0', STR_PAD_LEFT);
+    return $codigoAumento;
+  }
   public function  MostrarProductoComboRegistro()
   {
     try {
@@ -1857,6 +1869,32 @@ class m_almacen
 
       return $datos;
     } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function InsertarRegistroEnvases($selectProduccion, $selectProductoCombo, $cantidad,  $fecha)
+  {
+    try {
+      $registro = new m_almacen();
+      // $VERSION = $fecha->generarVersionInsumosLab();
+      // $repetir = $fecha->contarRegistrosInsumosLab($codigoInsumosLab, $valorSeleccionado);
+      // $FECHA_CREACION = $fecha->c_horaserversql('F');
+
+      $codigo_avance_insumos = $registro->generarCodigoRegistroEnvases();
+      // if ($repetir == 0) {
+      $cantidad_envases = $cantidad;
+      $cantidad_tapas = $cantidad;
+      $cantidad_scoops = $cantidad;
+      $cantidad_alupol = $cantidad;
+      $cantidad_cajas = round(($cantidad * 5) / 100);
+      $stm = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS, COD_PRODUCCION, COD_PRODUCTO, CANTIDAD_ENVASES, CANTIDAD_TAPAS, CANTIDAD_SCOOPS, CANTIDAD_ALUPOL, CANTIDAD_CAJAS)
+                                  VALUES ( '$codigo_avance_insumos', '$selectProduccion','$selectProductoCombo','$cantidad_envases','$cantidad_tapas','$cantidad_scoops','$cantidad_alupol','$cantidad_cajas','$fecha')");
+
+      $insert = $stm->execute();
+      return $insert;
+      // }
+    } catch (Exception $e) {
+
       die($e->getMessage());
     }
   }
