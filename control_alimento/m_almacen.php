@@ -136,31 +136,32 @@ class m_almacen
     if ($maxContadorVersion == null) {
       $maxContadorVersion = 0;
     }
-    $maxContadorVersion = $maxContadorVersion + 1;
-    $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
-    // var_dump($versionAumento);
-
-    // $fecha = new m_almacen();
-    // // $fechaDHoy = date('Y-m-d');
-    // $fechaDHoy = $fecha->c_horaserversql('F');
-    // // $fechaDHoy = '02/09/2023';
-    // // $mesAnioHoy = date('Y-m', strtotime(str_replace('/', '-', $fechaDHoy)));
-
-    // // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
-    // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date) AND NOMBRE='$nombre'");
-    // $stmver->execute();
-    // $valor = $stmver->fetchAll();
-    // $valor1 = count($valor);
+    // $maxContadorVersion = $maxContadorVersion + 1;
+    // $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
 
 
-    // if ($valor1 == 0) {
-    //   $nuevaversion = $maxContadorVersion + 1;
-    //   $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
-    // } else {
-    //   $maxContadorVersion;
+    $fecha = new m_almacen();
+    // $fechaDHoy = date('Y-m-d');
+    $fechaDHoy = $fecha->c_horaserversql('F');
+    // $fechaDHoy = '03/09/2023';
+    $mesAnioHoy = date('Y-m', strtotime(str_replace('/', '-', $fechaDHoy)));
 
-    //   $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
-    // }
+    $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
+    //$stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date) AND NOMBRE='$nombre'");
+    $stmver->execute();
+    $valor = $stmver->fetchAll();
+    $valor1 = count($valor);
+
+
+    if ($valor1 == 0) {
+
+      $nuevaversion = $maxContadorVersion + 1;
+      $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
+    } else {
+
+      $nuevaversion = $maxContadorVersion + 1;
+      $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
+    }
 
     return $versionAumento;
   }
@@ -1384,6 +1385,7 @@ class m_almacen
 
       $repetir = $fecha->contarRegistrosLabsabell($codigolabsabell, $valorSeleccionado);
       $FECHA_CREACION = $fecha->c_horaserversql('F');
+      // $FECHA_CREACION = '03/09/2023';
       $mesAnioHoy = date('Y-m', strtotime(str_replace('/', '-',  $FECHA_CREACION)));
 
       if ($repetir == 0) {
@@ -1393,37 +1395,37 @@ class m_almacen
         $insert = $stm->execute();
 
         if ($VERSION == '01') {
-          // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
-          // //$stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$FECHA_CREACION' as date) AND NOMBRE='$nombre'");
-          // $stmver->execute();
-          // $valor = $stmver->fetchAll();
+          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
+          //$stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$FECHA_CREACION' as date) AND NOMBRE='$nombre'");
+          $stmver->execute();
+          $valor = $stmver->fetchAll();
 
-          // $valor1 = count($valor);
+          $valor1 = count($valor);
 
-          // if ($valor1 == 0) {
-          $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
-          $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-          $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-          $stmVersion->bindParam(':FECHA_VERSION', $FECHA_CREACION);
+          if ($valor1 == 0) {
+            $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
+            $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+            $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+            $stmVersion->bindParam(':FECHA_VERSION', $FECHA_CREACION);
 
-          $stmVersion->execute();
-          // }
+            $stmVersion->execute();
+          }
         } else {
 
-          // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
-          // $stmver->execute();
-          // $valor = $stmver->fetchAll();
+          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
+          $stmver->execute();
+          $valor = $stmver->fetchAll();
 
-          // $valor1 = count($valor);
+          $valor1 = count($valor);
 
-          // if ($valor1 == 0) {
-          $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
-          $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-          $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-          $stmVersion->bindParam(':FECHA_VERSION', $FECHA_CREACION);
+          if ($valor1 == 0) {
+            $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
+            $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+            $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+            $stmVersion->bindParam(':FECHA_VERSION', $FECHA_CREACION);
 
-          $stmVersion->execute();
-          // }
+            $stmVersion->execute();
+          }
         }
 
         $insert = $this->bd->commit();
