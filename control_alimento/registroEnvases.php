@@ -102,7 +102,7 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                             <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
                                 <?php foreach ($dataProducto as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?> <?php echo $lis['DES_PRODUCTO']; ?></option>
+                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?></option>
                                 <?php
                                 }
 
@@ -119,7 +119,7 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                         </div>
                         <!-- Text input fecha -->
                         <div class="form-outline mb-4">
-                            <label class="form-label">fecha</label>
+                            <label class="form-label" id="labelFecha">fecha</label>
                             <input type="date" id="fecha" class="form-control" name="fecha">
                         </div>
 
@@ -163,21 +163,26 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                         </div>
                     </form>
 
-                    <div id="tablaInfra" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbInfra" class="table table-sm mb-3 table-hover">
+                    <div id="tablaRE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <table id="tbRE" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
-                                    <th class="thtitulo" scope="col">CODIGO </th>
-                                    <th class="thtitulo" scope="col">ZONA</th>
-                                    <th class="thtitulo" scope="col">INFRAESTRUCTURA</th>
-                                    <th class="thtitulo" scope="col">N°DIAS</th>
                                     <th class="thtitulo" scope="col">FECHA</th>
-                                    <!-- <th class="thtitulo" scope="col">USUARIO</th> -->
+                                    <th class="thtitulo" scope="col">N°BACHADA</th>
+                                    <th class="thtitulo" scope="col">PRODUCTO</th>
+                                    <th class="thtitulo" scope="col">PRESENTACION</th>
+
+                                    <th class="thtitulo" scope="col">CANTIDAD FRASCOS</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD TAPAS</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD SCOOPS</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD ALUPOL</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD CAJAS</th>
+                                    <th class="thtitulo" scope="col">LOTE</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="tablaInfraestructura">
+                            <tbody id="tablaRegistroEnvase">
 
                             </tbody>
                         </table>

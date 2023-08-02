@@ -158,7 +158,6 @@ class m_almacen
       $nuevaversion = $maxContadorVersion + 1;
       $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
     } else {
-
       $nuevaversion = $maxContadorVersion + 1;
       $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
     }
@@ -1395,21 +1394,21 @@ class m_almacen
         $insert = $stm->execute();
 
         if ($VERSION == '01') {
-          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
-          //$stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$FECHA_CREACION' as date) AND NOMBRE='$nombre'");
-          $stmver->execute();
-          $valor = $stmver->fetchAll();
+          // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
+          // //$stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$FECHA_CREACION' as date) AND NOMBRE='$nombre'");
+          // $stmver->execute();
+          // $valor = $stmver->fetchAll();
 
-          $valor1 = count($valor);
+          // $valor1 = count($valor);
 
-          if ($valor1 == 0) {
-            $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
-            $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-            $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-            $stmVersion->bindParam(':FECHA_VERSION', $FECHA_CREACION);
+          // if ($valor1 == 0) {
+          $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
+          $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+          $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+          $stmVersion->bindParam(':FECHA_VERSION', $FECHA_CREACION);
 
-            $stmVersion->execute();
-          }
+          $stmVersion->execute();
+          // }
         } else {
 
           $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
@@ -1912,7 +1911,16 @@ class m_almacen
 
 
 
-
+  public function generarBachada()
+  {
+    $stm = $this->bd->prepare("SELECT MAX(N_BACHADA) as N_BACHADA FROM T_AVANCE_INSUMOS");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $maxCodigo = intval($resultado['N_BACHADA']);
+    $nuevoCodigo = $maxCodigo + 1;
+    // $codigoAumento = str_pad($nuevoCodigo, 7, '0', STR_PAD_LEFT);
+    return $nuevoCodigo;
+  }
   public function generarCodigoRegistroEnvases()
   {
     $stm = $this->bd->prepare("SELECT MAX(COD_AVANCE_INSUMOS) as COD_AVANCE_INSUMOS FROM T_AVANCE_INSUMOS");
@@ -1920,7 +1928,7 @@ class m_almacen
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
     $maxCodigo = intval($resultado['COD_AVANCE_INSUMOS']);
     $nuevoCodigo = $maxCodigo + 1;
-    $codigoAumento = str_pad($nuevoCodigo, 3, '0', STR_PAD_LEFT);
+    $codigoAumento = str_pad($nuevoCodigo, 7, '0', STR_PAD_LEFT);
     return $codigoAumento;
   }
   public function  MostrarProductoComboRegistro()
@@ -1949,13 +1957,37 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function  MostrarRegistroEnvase($buscarregistro)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT AI.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS, PRO.FEC_GENERADO AS FEC_GENERADO, AI.N_BACHADA AS N_BACHADA, 
+                                  P.ABR_PRODUCTO AS ABR_PRODUCTO, P.PESO_NETO AS PESO_NETO,P.UNI_MEDIDA AS UNI_MEDIDA, AI.CANTIDAD AS CANTIDAD,
+                                  AI.CANTIDAD_ENVASES AS CANTIDAD_ENVASES,AI.CANTIDAD_TAPAS AS CANTIDAD_TAPAS,AI .CANTIDAD_SCOOPS AS CANTIDAD_SCOOPS,
+                                  AI.CANTIDAD_ALUPOL AS CANTIDAD_ALUPOL, AI.CANTIDAD_CAJAS AS CANTIDAD_CAJAS, AI.FECHA AS FECHA 
+                                  FROM T_AVANCE_INSUMOS AS AI INNER JOIN T_PRODUCTO AS P 
+                                  ON AI.COD_PRODUCTO=P.COD_PRODUCTO INNER JOIN T_PRODUCCION AS PRO ON AI.COD_PRODUCCION=PRO.COD_PRODUCCION  WHERE ABR_PRODUCTO LIKE '$buscarregistro%'");
+
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function InsertarRegistroEnvases($selectProduccion, $selectProductoCombo, $cantidad)
   {
     try {
+      $this->bd->beginTransaction();
       $registro = new m_almacen();
-      // $VERSION = $fecha->generarVersionInsumosLab();
+      $nombre = 'LBS-OP-FR-01';
+      $VERSION = $registro->generarVersionGeneral($nombre);
+      $bachada = $registro->generarBachada();
       // $repetir = $fecha->contarRegistrosInsumosLab($codigoInsumosLab, $valorSeleccionado);
-      // $FECHA_CREACION = $fecha->c_horaserversql('F');
+      //$FECHA = $registro->c_horaserversql('F');
+      $FECHA = '02/09/2023';
+      $mesAnioHoy = date('Y-m', strtotime(str_replace('/', '-',  $FECHA)));
 
       $codigo_avance_insumos = $registro->generarCodigoRegistroEnvases();
       // if ($repetir == 0) {
@@ -1964,15 +1996,99 @@ class m_almacen
       $cantidad_scoops = $cantidad;
       $cantidad_alupol = $cantidad;
       $cantidad_cajas = round(($cantidad * 5) / 100);
-      $stm = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS, COD_PRODUCCION, COD_PRODUCTO, CANTIDAD_ENVASES, CANTIDAD_TAPAS, CANTIDAD_SCOOPS, CANTIDAD_ALUPOL, CANTIDAD_CAJAS)
-                                  VALUES ( '$codigo_avance_insumos', '$selectProduccion','$selectProductoCombo','$cantidad_envases','$cantidad_tapas','$cantidad_scoops','$cantidad_alupol','$cantidad_cajas')");
+      $stm = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS,N_BACHADA, COD_PRODUCCION, COD_PRODUCTO,CANTIDAD, CANTIDAD_ENVASES, CANTIDAD_TAPAS, CANTIDAD_SCOOPS, CANTIDAD_ALUPOL, CANTIDAD_CAJAS, FECHA)
+                                  VALUES ( '$codigo_avance_insumos','$bachada', '$selectProduccion','$selectProductoCombo','$cantidad','$cantidad_envases','$cantidad_tapas','$cantidad_scoops','$cantidad_alupol','$cantidad_cajas','$FECHA')");
 
       $insert = $stm->execute();
+
+      if ($VERSION == '01') {
+        // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
+        // //$stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$FECHA_CREACION' as date) AND NOMBRE='$nombre'");
+        // $stmver->execute();
+        // $valor = $stmver->fetchAll();
+
+        // $valor1 = count($valor);
+
+        // if ($valor1 == 0) {
+        $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
+        $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+        $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+        $stmVersion->bindParam(':FECHA_VERSION', $FECHA_CREACION);
+
+        $stmVersion->execute();
+        // }
+      } else {
+        $stmver = $this->bd->prepare("SELECT MAX(VERSION) AS VERSION FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
+        $stmver->execute();
+        $valor = $stmver->fetchAll();
+
+        $valor1 = count($valor);
+        var_dump($valor1);
+
+        if ($valor1 == 0) {
+          $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
+          $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+          $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+          $stmVersion->bindParam(':FECHA_VERSION', $FECHA_CREACION);
+
+          $stmVersion->execute();
+        }
+      }
+
+      $insert = $this->bd->commit();
+
       return $insert;
       // }
     } catch (Exception $e) {
-
+      $this->bd->rollBack();
       die($e->getMessage());
+    }
+  }
+  public function  SelectRegistroEnvase($cod_registro_envase)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT AI.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS, AI.COD_PRODUCCION AS COD_PRODUCCION, 
+                                  AI.COD_PRODUCTO AS COD_PRODUCTO, PRO.NUM_PRODUCION_LOTE AS NUM_PRODUCION_LOTE, 
+                                  PRO.FEC_GENERADO AS FEC_GENERADO, AI.N_BACHADA AS N_BACHADA, P.ABR_PRODUCTO AS ABR_PRODUCTO, 
+                                  P.PESO_NETO AS PESO_NETO,P.UNI_MEDIDA AS UNI_MEDIDA, AI.CANTIDAD AS CANTIDAD,
+                                  AI.CANTIDAD_ENVASES AS CANTIDAD_ENVASES,AI.CANTIDAD_TAPAS AS CANTIDAD_TAPAS,AI .CANTIDAD_SCOOPS AS CANTIDAD_SCOOPS,
+                                  AI.CANTIDAD_ALUPOL AS CANTIDAD_ALUPOL, AI.CANTIDAD_CAJAS AS CANTIDAD_CAJAS, AI.FECHA AS FECHA 
+                                  FROM T_AVANCE_INSUMOS AS AI INNER JOIN T_PRODUCTO AS P 
+                                  ON AI.COD_PRODUCTO=P.COD_PRODUCTO INNER JOIN T_PRODUCCION AS PRO ON AI.COD_PRODUCCION=PRO.COD_PRODUCCION  WHERE COD_AVANCE_INSUMOS= :COD_AVANCE_INSUMOS");
+      $stm->bindParam(':COD_AVANCE_INSUMOS', $cod_registro_envase, PDO::PARAM_STR);
+      $stm->execute();
+
+      return $stm;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function editarRegistroEnvases($codRegistro, $fecha)
+  {
+    try {
+
+      $stmt = $this->bd->prepare("UPDATE T_AVANCE_INSUMOS SET FECHA = :FECHA  WHERE COD_AVANCE_INSUMOS = :COD_AVANCE_INSUMOS");
+      $stmt->bindParam(':COD_AVANCE_INSUMOS', $codRegistro, PDO::PARAM_STR);
+      $stmt->bindParam(':FECHA', $fecha);
+      $update = $stmt->execute();
+
+      return $update;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function eliminarRegistroEnvases($codregistro)
+  {
+    try {
+
+      $stm = $this->bd->prepare("DELETE FROM T_AVANCE_INSUMOS WHERE COD_AVANCE_INSUMOS= :COD_AVANCE_INSUMOS");
+      $stm->bindParam(':COD_AVANCE_INSUMOS', $codregistro);
+
+      $delete = $stm->execute();
+      return $delete;
+    } catch (Exception $e) {
+      die("Error al eliminar los datos: " . $e->getMessage());
     }
   }
 }
