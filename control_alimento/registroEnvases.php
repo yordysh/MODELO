@@ -32,9 +32,9 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
-            <li>
+            <!-- <li>
                 <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
-            </li>
+            </li> -->
             <li>
                 <a class="" href="#">Infraestructura</a>
             </li>
@@ -80,6 +80,21 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                             <input id="id" type="hidden" class="form-control" name="id" />
                         </div>
 
+                        <!--Combo Productos -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Producto</label>
+                            <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example">
+                                <option value="none" selected disabled>Seleccione producto</option>
+                                <?php foreach ($dataProducto as  $lis) { ?>
+                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                <?php
+                                }
+
+                                ?>
+                            </select>
+                            <!-- <input type="hidden" id="task_zona">
+                            <input id="selectInfra" class="form-control" required> -->
+                        </div>
 
                         <!--Combo Produccion -->
                         <div class="form-outline mb-4 ">
@@ -88,28 +103,12 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                             <select id="selectProduccion" class="form-select selectProduccion" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione produccion</option>
                                 <?php foreach ($dataProduccion as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCCION']; ?>" class="option"> <?php echo $lis['NUM_PRODUCION_LOTE']; ?></option>
+                                    <option value="<?php echo $lis['COD_PRODUCCION']; ?>" class="option"> <?php echo $lis['N_PRODUCCION_G']; ?></option>
                                 <?php
                                 }
 
                                 ?>
                             </select>
-                        </div>
-
-                        <!--Combo Productos -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Producto</label>
-                            <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione producto</option>
-                                <?php foreach ($dataProducto as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?></option>
-                                <?php
-                                }
-
-                                ?>
-                            </select>
-                            <!-- <input type="hidden" id="task_zona">
-                            <input id="selectInfra" class="form-control" required> -->
                         </div>
 
                         <!-- Text input cantidad -->

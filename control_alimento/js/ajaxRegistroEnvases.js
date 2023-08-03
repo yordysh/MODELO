@@ -124,6 +124,8 @@ $(function () {
               $("#selectProduccion").append(
                 '<option value="none" selected disabled>Seleccione produccion</option>'
               );
+              $("#selectProductoCombo").prop("disabled", false);
+              $("#selectProduccion").prop("disabled", false);
             }
           });
         } else {

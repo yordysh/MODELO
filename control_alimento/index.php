@@ -14,6 +14,30 @@
   <link rel="stylesheet" href="./css/sweetalert2.min.css">
   <link rel="stylesheet" href="./styleIcons/style.css">
   <title>Covifarma</title>
+  <style>
+    .menu-vertical {
+      position: absolute;
+      display: none;
+      list-style: none;
+      width: 150px;
+      background-color: #5b8ccc;
+
+    }
+
+    .nav-links li:hover .menu-vertical {
+      display: block;
+    }
+
+    .menu-vertical li:hover {
+      background-color: rgba(0, 0, 0, .5);
+    }
+
+    .menu-vertical li a {
+      display: block;
+      color: #FFFFFF;
+
+    }
+  </style>
 </head>
 
 <body>
@@ -24,10 +48,35 @@
     <ul class="nav-links">
       <div class="icon-cross navCloseBtn"></div>
       <li>
-        <a class="" aria-current="page" href="phs.php">PHS</a>
+        <a class="" aria-current="page">PHS</a>
+        <ul class="menu-vertical">
+          <li>
+            <a class="" href="infraestructuraAccesorios.php">LBS-PHS-FR-01</a>
+          </li>
+          <li>
+            <a class="" href="preparacionSolucion.php">LBS-PHS-FR-02</a>
+          </li>
+          <li>
+            <a class="" href="controlMaquinas.php">LBS-PHS-FR-03</a>
+          </li>
+          <li>
+            <a class="" href="limpiezaDesinfeccion.php">LBS-PHS-FR-04</a>
+          </li>
+        </ul>
       </li>
       <li>
-        <a class="" href="bpm.php">BPM</a>
+        <a class="">BPM</a>
+        <ul class="menu-vertical">
+          <li>
+            <a class="" href="labsabelForm.php">Envases labsabell</a>
+          </li>
+          <li>
+            <a class="" href="previlifeForm.php">Envases previlife</a>
+          </li>
+          <li>
+            <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
+          </li>
+        </ul>
       </li>
     </ul>
   </nav>

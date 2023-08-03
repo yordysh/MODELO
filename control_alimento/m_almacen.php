@@ -1985,8 +1985,8 @@ class m_almacen
       $VERSION = $registro->generarVersionGeneral($nombre);
       $bachada = $registro->generarBachada();
       // $repetir = $fecha->contarRegistrosInsumosLab($codigoInsumosLab, $valorSeleccionado);
-      //$FECHA = $registro->c_horaserversql('F');
-      $FECHA = '02/09/2023';
+      $FECHA = $registro->c_horaserversql('F');
+      // $FECHA = '02/09/2023';
       $mesAnioHoy = date('Y-m', strtotime(str_replace('/', '-',  $FECHA)));
 
       $codigo_avance_insumos = $registro->generarCodigoRegistroEnvases();
@@ -2023,7 +2023,7 @@ class m_almacen
         $valor = $stmver->fetchAll();
 
         $valor1 = count($valor);
-        var_dump($valor1);
+        // var_dump($valor1);
 
         if ($valor1 == 0) {
           $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
@@ -2067,10 +2067,11 @@ class m_almacen
   public function editarRegistroEnvases($codRegistro, $fecha)
   {
     try {
+      $fechaConvertida = date("d-m-Y", strtotime($fecha));
 
       $stmt = $this->bd->prepare("UPDATE T_AVANCE_INSUMOS SET FECHA = :FECHA  WHERE COD_AVANCE_INSUMOS = :COD_AVANCE_INSUMOS");
       $stmt->bindParam(':COD_AVANCE_INSUMOS', $codRegistro, PDO::PARAM_STR);
-      $stmt->bindParam(':FECHA', $fecha);
+      $stmt->bindParam(':FECHA', $fechaConvertida);
       $update = $stmt->execute();
 
       return $update;

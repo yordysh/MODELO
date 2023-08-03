@@ -427,6 +427,10 @@ if ($_POST['accion'] == 'eliminarregistroenvases') {
 
 
 
+
+
+
+
 class c_almacen
 {
 
