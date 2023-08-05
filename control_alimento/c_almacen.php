@@ -75,6 +75,13 @@ if ($_POST['accion'] == 'buscarinfra') {
     $respuesta = c_almacen::c_buscar_infra($buscarinfra);
     echo $respuesta;
 }
+if ($_POST['accion'] == 'actualizarcombozona') {
+
+    $respuesta = c_almacen::c_actualizar_combo();
+    echo $respuesta;
+}
+
+
 
 if ($_POST['accion'] == 'fechaalertamensaje') {
 
@@ -600,6 +607,34 @@ class c_almacen
             } else {
                 return "error";
             };
+        }
+    }
+
+    static function c_actualizar_combo()
+    {
+        try {
+
+
+            $mostrar = new m_almacen();
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarAlmacenMuestra();
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_ZONA" => $row->COD_ZONA,
+                    "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                    // "FECHA" =>  convFecSistema($row->FECHA),
+                    // "VERSION" => $row->VERSION,
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+            // $jsonstring = json_encode($datos);
+            // echo $jsonstring;
+
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 

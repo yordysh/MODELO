@@ -204,6 +204,85 @@ $(function () {
   });
   //-----------------------------------------------------------------------------//
 
+  //------------- Añadiendo con ajax ZonaAreas----------------//
+  $("#formularioZona").submit((e) => {
+    e.preventDefault();
+
+    const accion = edit === false ? "insertar" : "actualizar";
+
+    $.ajax({
+      url: "./c_almacen.php",
+      data: {
+        accion: accion,
+        nombrezonaArea: $("#NOMBRE_T_ZONA_AREAS").val(),
+        codzona: $("#taskId").val(),
+      },
+
+      type: "POST",
+      success: function (response) {
+        if (response.toLowerCase() === "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#formularioZona").trigger("reset");
+              actualizarCombo();
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Duplicado!",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              fetchTasks();
+              $("#formularioZona").trigger("reset");
+            }
+          });
+        }
+      },
+    });
+  });
+
+  function actualizarCombo() {
+    const accion = "actualizarcombozona";
+    $.ajax({
+      url: "./c_almacen.php",
+      data: { accion: accion },
+      type: "POST",
+      success: function (response) {
+        // console.log(JSON.parse(response));
+        let data = JSON.parse(response);
+        $("#selectInfra").empty();
+        $("#selectInfra").append(
+          $("<option>", {
+            value: "none",
+            text: "Seleccione Zona/Areas",
+            disabled: true,
+            selected: true,
+          })
+        );
+        data.forEach((item) => {
+          $("#selectInfra").append(
+            $("<option>", {
+              value: item.COD_ZONA,
+              text: item.NOMBRE_T_ZONA_AREAS,
+            })
+          );
+        });
+      },
+      error: function (error) {
+        console.error("Error fetching data:", error);
+      },
+    });
+  }
+  //-----------------------------------------------------------------------------//
+
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
   // Cargar registros INFRAESTRUCTURA
 
