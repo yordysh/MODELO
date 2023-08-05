@@ -763,6 +763,7 @@ class c_almacen
             }
         } else {
             $estado = $_POST['estado'];
+            // var_dump($estado);
             $taskId = $_POST['taskId'];
             $observacionTextArea = $_POST['observacionTextArea'];
             $FECHA_TOTAL = $_POST['taskFecha'];

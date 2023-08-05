@@ -1231,8 +1231,9 @@ class m_almacen
   }
   public function actualizarAlertaCheckControl($estado, $taskId, $observacion, $accionCorrectiva)
   {
-
+    // var_dump($taskId);
     $stmt = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET ESTADO = '$estado', OBSERVACION = '$observacion', ACCION_CORRECTIVA ='$accionCorrectiva' WHERE COD_ALERTA_CONTROL_MAQUINA = '$taskId'");
+    // var_dump($stmt);
     $stmt->execute();
     return $stmt;
   }

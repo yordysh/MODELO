@@ -42,7 +42,7 @@
 
 <body>
 
-  <nav class="nav">
+  <nav class="nav nav_index">
     <i class="icon-menu navOpenBtn"></i>
     <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
     <ul class="nav-links">

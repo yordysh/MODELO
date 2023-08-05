@@ -530,7 +530,7 @@ $(function () {
         dataType: "json",
         data: { accion: accion },
         success: function (data) {
-          console.log(data);
+          // console.log(data);
           const index = 0;
           mostrarAlertasControl(data, index);
         },
