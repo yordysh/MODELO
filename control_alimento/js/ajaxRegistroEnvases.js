@@ -1,5 +1,6 @@
 $(function () {
   fetchTasks();
+  cargarCombo();
 
   let fechaLabel = document.getElementById("labelFecha");
   fechaLabel.style.display = "none";
@@ -194,6 +195,39 @@ $(function () {
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);
       },
+    });
+  }
+
+  function cargarCombo() {
+    const produccion = $("#selectProduccion");
+    const accion = "seleccionarProduccion";
+
+    console.log(produccion);
+    $("#selectProductoCombo").change(function () {
+      var codProducto = $(this).val();
+      console.log(codProducto);
+      $.ajax({
+        data: {
+          codProducto: codProducto,
+          accion: accion,
+        },
+        dataType: "html",
+        type: "POST",
+        url: "./c_almacen.php",
+      }).done(function (data) {
+        produccion.html(data);
+
+        //   mililitros
+        //     .empty()
+        //     .append(
+        //       '<option value="0" selected disabled>Seleccione cantidad ML</option>'
+        //     );
+        //   litros
+        //     .empty()
+        //     .append(
+        //       '<option value="0" selected disabled>Seleccione cantidad L</option>'
+        //     );
+      });
     });
   }
 

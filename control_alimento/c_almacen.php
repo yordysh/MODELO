@@ -388,11 +388,19 @@ if ($_POST['accion'] == 'eliminarinsumolab') {
 
 
 
+
+
+
 if ($_POST['accion'] == 'buscarregistroenvase') {
 
     $buscarregistro = trim($_POST['buscarregistro']);
 
     $respuesta = c_almacen::c_buscar_registro_envase($buscarregistro);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'seleccionarProduccion') {
+
+    $respuesta = c_almacen::c_selectproduccion();
     echo $respuesta;
 }
 if ($_POST['accion'] == 'insertarRegistro') {
@@ -2091,6 +2099,23 @@ class c_almacen
             }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_selectproduccion()
+    {
+        $consulta = new m_almacen();
+        $COD_PRODUCTO = filter_input(INPUT_POST, 'codProducto');
+        var_dump($COD_PRODUCTO);
+        $datos = $consulta->MostrarProducciones($COD_PRODUCTO);
+        var_dump(count($datos));
+
+        if (count($datos) == 0) {
+            echo '<option value="0">No hay registros en produccion</option>';
+        }
+        echo '<option value="0" selected disabled>Seleccione Producción</option>';
+        for ($i = 0; $i < count($datos); $i++) {
+
+            echo '<option value="' . $datos[$i]["COD_PRODUCTO"] . '">' . $datos[$i]["N_PRODUCCION_G"] . '</option>';
         }
     }
     static function c_insertar_registro_envases($selectProduccion, $selectProductoCombo, $cantidad)

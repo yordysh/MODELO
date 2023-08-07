@@ -101,13 +101,8 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                             <label class="form-label">Produccion</label>
                             <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
                             <select id="selectProduccion" class="form-select selectProduccion" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione produccion</option>
-                                <?php foreach ($dataProduccion as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCCION']; ?>" class="option"> <?php echo $lis['N_PRODUCCION_G']; ?></option>
-                                <?php
-                                }
+                                <option value="0" selected disabled>Seleccione produccion</option>
 
-                                ?>
                             </select>
                         </div>
 

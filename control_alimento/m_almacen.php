@@ -1911,7 +1911,23 @@ class m_almacen
   }
 
 
+  public function MostrarProducciones($COD_PRODUCTO)
+  {
+    try {
 
+
+      $stm = $this->bd->prepare(
+        "SELECT * FROM T_PRODUCCION WHERE COD_PRODUCTO=:COD_PRODUCTO"
+      );
+      $stm->bindParam(':COD_PRODUCTO', $COD_PRODUCTO);
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function generarBachada()
   {
     $stm = $this->bd->prepare("SELECT MAX(N_BACHADA) as N_BACHADA FROM T_AVANCE_INSUMOS");
@@ -1997,10 +2013,15 @@ class m_almacen
       $cantidad_scoops = $cantidad;
       $cantidad_alupol = $cantidad;
       $cantidad_cajas = round(($cantidad * 5) / 100);
-      $stm = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS,N_BACHADA, COD_PRODUCCION, COD_PRODUCTO,CANTIDAD, CANTIDAD_ENVASES, CANTIDAD_TAPAS, CANTIDAD_SCOOPS, CANTIDAD_ALUPOL, CANTIDAD_CAJAS, FECHA)
-                                  VALUES ( '$codigo_avance_insumos','$bachada', '$selectProduccion','$selectProductoCombo','$cantidad','$cantidad_envases','$cantidad_tapas','$cantidad_scoops','$cantidad_alupol','$cantidad_cajas','$FECHA')");
+      $stmCE = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS,N_BACHADA, COD_PRODUCCION, COD_PRODUCTO,CANTIDAD, CANTIDAD_ENVASES, FECHA)
+                                  VALUES ( '$codigo_avance_insumos','$bachada', '$selectProduccion','$selectProductoCombo','$cantidad','$cantidad_envases','$FECHA')");
 
-      $insert = $stm->execute();
+      $insert = $stmCE->execute();
+
+      // $stmCT = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS,N_BACHADA, COD_PRODUCCION, COD_PRODUCTO,CANTIDAD,  CANTIDAD_TAPAS, FECHA)
+      // VALUES ( '$codigo_avance_insumos','$bachada', '$selectProduccion','$selectProductoCombo','$cantidad','$cantidad_tapas','$FECHA')");
+
+      // $stmCT->execute();
 
       if ($VERSION == '01') {
         // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
