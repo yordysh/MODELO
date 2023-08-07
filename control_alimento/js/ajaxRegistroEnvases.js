@@ -84,75 +84,173 @@ $(function () {
   });
 
   //------------- Añadiendo con ajax registro envases----------------//
+  // $("#formularioRegistroEnvases").submit((e) => {
+  //   e.preventDefault();
+
+  //   const accion = edit === false ? "insertarRegistro" : "actualizarRegistro";
+
+  //   // var fecha = $("#fecha").val();
+
+  //   // console.log("fecha " + fecha);
+
+  //   $.ajax({
+  //     url: "./c_almacen.php",
+  //     data: {
+  //       accion: accion,
+  //       selectProduccion: $("#selectProduccion").val(),
+  //       selectProductoCombo: $("#selectProductoCombo").val(),
+  //       cantidad: $("#cantidad").val(),
+  //       fecha: $("#fecha").val(),
+  //       codRegistro: $("#taskId").val(),
+  //     },
+
+  //     type: "POST",
+  //     success: function (response) {
+  //       console.log(response);
+  //       if (response.toLowerCase() === "ok") {
+  //         Swal.fire({
+  //           title: "¡Guardado exitoso!",
+  //           text: "Los datos se han guardado correctamente.",
+  //           icon: "success",
+  //           confirmButtonText: "Aceptar",
+  //         }).then((result) => {
+  //           if (result.isConfirmed) {
+  //             fetchTasks();
+  //             $("#formularioRegistroEnvases").trigger("reset");
+  //             $("#selectProductoCombo").val(null).trigger("change");
+  //             $("#selectProductoCombo").append(
+  //               '<option value="none" selected disabled>Seleccione producto</option>'
+  //             );
+  //             $("#selectProduccion").val(null).trigger("change");
+  //             $("#selectProduccion").append(
+  //               '<option value="none" selected disabled>Seleccione produccion</option>'
+  //             );
+  //             $("#selectProductoCombo").prop("disabled", false);
+  //             $("#selectProduccion").prop("disabled", false);
+  //           }
+  //         });
+  //       } else {
+  //         Swal.fire({
+  //           icon: "error",
+  //           title: "Oops...",
+  //           text: "Duplicado!",
+  //           confirmButtonText: "Aceptar",
+  //         }).then((result) => {
+  //           if (result.isConfirmed) {
+  //             fetchTasks();
+  //             $("#formularioRegistroEnvases").trigger("reset");
+  //             $("#selectProductoCombo").val(null).trigger("change");
+  //             $("#selectProductoCombo").append(
+  //               '<option value="none" selected disabled>Seleccione producto</option>'
+  //             );
+  //             $("#selectProduccion").val(null).trigger("change");
+  //             $("#selectProduccion").append(
+  //               '<option value="none" selected disabled>Seleccione produccion</option>'
+  //             );
+  //           }
+  //         });
+  //       }
+  //     },
+  //   });
+  // });
+
+  //------------- Añadiendo con ajax registro envases----------------//
   $("#formularioRegistroEnvases").submit((e) => {
     e.preventDefault();
+    let selectorProducto = $("#selectProductoCombo").val();
+    let selectorProduccion = $("#selectProduccion").val();
+    let cantidad = $("#cantidad").val();
 
-    const accion = edit === false ? "insertarRegistro" : "actualizarRegistro";
+    let cantidadTapas = cantidad;
+    let cantidadScoops = cantidad;
+    let cantidadAlupol = cantidad;
 
-    // var fecha = $("#fecha").val();
+    //--------- Cantidad de envases ----------------------//
+    let nuevaFilaEnvases = $("<tr>");
+    let celdaProducto = $("<td data-titulo='CODIGO PRODUCTO'>").text(
+      selectorProducto
+    );
+    let celdaProduccion = $("<td data-titulo='CODIGO PRODUCCION'>").text(
+      selectorProduccion
+    );
+    let celdaCantidadEnvases = $("<td data-titulo='CANTIDAD ENVASES'>").text(
+      cantidad
+    );
+    // Agregar las celdas a la fila
+    nuevaFilaEnvases.append(
+      celdaProducto,
+      celdaProduccion,
+      celdaCantidadEnvases
+    );
 
-    // console.log("fecha " + fecha);
+    // Agregar la fila a la tabla
+    $("#tablaRE tbody").append(nuevaFilaEnvases);
+    //-----------------------------------------------------------------//
 
-    $.ajax({
-      url: "./c_almacen.php",
-      data: {
-        accion: accion,
-        selectProduccion: $("#selectProduccion").val(),
-        selectProductoCombo: $("#selectProductoCombo").val(),
-        cantidad: $("#cantidad").val(),
-        fecha: $("#fecha").val(),
-        codRegistro: $("#taskId").val(),
-      },
+    //-------------------- Cantidad de tapas ---------------------------//
+    let nuevaFilaTapas = $("<tr>");
+    let celdaProductoTapas = $("<td data-titulo='CODIGO PRODUCTO'>").text(
+      selectorProducto
+    );
+    let celdaProduccionTapas = $("<td data-titulo='CODIGO PRODUCCION'>").text(
+      selectorProduccion
+    );
+    let celdaCantidadTapas = $("<td data-titulo='CANTIDAD TAPAS'>").text(
+      cantidadTapas
+    );
 
-      type: "POST",
-      success: function (response) {
-        console.log(response);
-        if (response.toLowerCase() === "ok") {
-          Swal.fire({
-            title: "¡Guardado exitoso!",
-            text: "Los datos se han guardado correctamente.",
-            icon: "success",
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              fetchTasks();
-              $("#formularioRegistroEnvases").trigger("reset");
-              $("#selectProductoCombo").val(null).trigger("change");
-              $("#selectProductoCombo").append(
-                '<option value="none" selected disabled>Seleccione producto</option>'
-              );
-              $("#selectProduccion").val(null).trigger("change");
-              $("#selectProduccion").append(
-                '<option value="none" selected disabled>Seleccione produccion</option>'
-              );
-              $("#selectProductoCombo").prop("disabled", false);
-              $("#selectProduccion").prop("disabled", false);
-            }
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Duplicado!",
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              fetchTasks();
-              $("#formularioRegistroEnvases").trigger("reset");
-              $("#selectProductoCombo").val(null).trigger("change");
-              $("#selectProductoCombo").append(
-                '<option value="none" selected disabled>Seleccione producto</option>'
-              );
-              $("#selectProduccion").val(null).trigger("change");
-              $("#selectProduccion").append(
-                '<option value="none" selected disabled>Seleccione produccion</option>'
-              );
-            }
-          });
-        }
-      },
-    });
+    nuevaFilaTapas.append(
+      celdaProductoTapas,
+      celdaProduccionTapas,
+      celdaCantidadTapas
+    );
+
+    $("#tablaRE tbody").append(nuevaFilaTapas);
+
+    //------------------ Cantidad de Scoops --------------------------------//
+    let nuevaFilaScoop = $("<tr>");
+    let celdaProductoScoop = $("<td data-titulo='CODIGO PRODUCTO'>").text(
+      selectorProducto
+    );
+    let celdaProduccionScoop = $("<td data-titulo='CODIGO PRODUCCION'>").text(
+      selectorProduccion
+    );
+
+    let celdaCantidadScoops = $("<td data-titulo='CANTIDAD SCOOPS'>").text(
+      cantidadScoops
+    );
+
+    nuevaFilaScoop.append(
+      celdaProductoScoop,
+      celdaProduccionScoop,
+      celdaCantidadScoops
+    );
+
+    $("#tablaRE tbody").append(nuevaFilaScoop);
+    //------------------------------------------------------------------------//
+    //-------------------- Cantidad Alupol -----------------------------------//
+    let nuevaFilaAlupol = $("<tr>");
+    let celdaProductoAlupol = $("<td data-titulo='CODIGO PRODUCTO'>").text(
+      selectorProducto
+    );
+    let celdaProduccionAlupol = $("<td data-titulo='CODIGO PRODUCCION'>").text(
+      selectorProduccion
+    );
+
+    let celdaCantidadAlupol = $("<td data-titulo='CANTIDAD ALUPOL'>").text(
+      cantidadAlupol
+    );
+
+    nuevaFilaAlupol.append(
+      celdaProductoAlupol,
+      celdaProduccionAlupol,
+      celdaCantidadAlupol
+    );
+
+    $("#tablaRE tbody").append(nuevaFilaAlupol);
+    //------------------------------------------------------------------------//
   });
+  //---------------------------------------------------------------//
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
   // Cargar registros ZONA AREA
 
@@ -216,20 +314,60 @@ $(function () {
         url: "./c_almacen.php",
       }).done(function (data) {
         produccion.html(data);
-
-        //   mililitros
-        //     .empty()
-        //     .append(
-        //       '<option value="0" selected disabled>Seleccione cantidad ML</option>'
-        //     );
-        //   litros
-        //     .empty()
-        //     .append(
-        //       '<option value="0" selected disabled>Seleccione cantidad L</option>'
-        //     );
       });
     });
   }
+
+  // function mandarDatos(selectorProducto, selectorProduccion, cantidad) {
+  //   const accion = "datoscapturadosregistroenvase";
+  //   const selectorProducto = selectorProducto;
+  //   const selectorProduccion = selectorProduccion;
+  //   const cantidad = cantidad;
+  //   // const search = "";
+  //   $.ajax({
+  //     url: "./c_almacen.php",
+  //     type: "POST",
+  //     data: {
+  //       accion: accion,
+  //       selectorProducto: selectorProducto,
+  //       selectorProduccion: selectorProduccion,
+  //       cantidad: cantidad,
+  //     },
+  //     success: function (response) {
+  //       console.log(response);
+  //       // if (!response.error) {
+  //       //   let tasks = JSON.parse(response);
+
+  //       //   let template = ``;
+  //       //   tasks.forEach((task) => {
+  //       //     template += `<tr taskId="${task.COD_AVANCE_INSUMOS}">
+
+  //       //       <!-- <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_AVANCE_INSUMOS}</td> -->
+  //       //       <td data-titulo="FECHA" class="NOMBRE_T_ZONA_AREAS" style="text-align:rigth;">${task.FEC_GENERADO}</td>
+  //       //       <td data-titulo="N°BACHADA" style="text-align:rigth;">${task.N_BACHADA}</td>
+  //       //       <td data-titulo="PRODUCTO" style="text-align:rigth;">${task.ABR_PRODUCTO}</td>
+  //       //       <td data-titulo="PRESENTACION" style="text-align:rigth;">${task.PESO_NETO} ${task.UNI_MEDIDA}</td>
+  //       //       <td data-titulo="CANTIDAD FRASCOS" style="text-align:rigth;">${task.CANTIDAD_ENVASES}</td>
+  //       //       <td data-titulo="CANTIDAD TAPAS" style="text-align:rigth;">${task.CANTIDAD_TAPAS}</td>
+  //       //       <td data-titulo="CANTIDAD SCOOPS" style="text-align:rigth;">${task.CANTIDAD_SCOOPS}</td>
+  //       //       <td data-titulo="CANTIDAD ALUPOL" style="text-align:rigth;">${task.CANTIDAD_ALUPOL}</td>
+  //       //       <td data-titulo="CANTIDAD CAJAS" style="text-align:rigth;">${task.CANTIDAD_CAJAS}</td>
+  //       //       <td data-titulo="LOTE" style="text-align:rigth;">${task.FECHA}</td>
+
+  //       //       <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_AVANCE_INSUMOS="${task.COD_AVANCE_INSUMOS}"><i class="icon-trash"></i></button></td>
+  //       //       <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_AVANCE_INSUMOS="${task.COD_AVANCE_INSUMOS}"><i class="icon-edit"></i></button></td>
+
+  //       //   </tr>`;
+  //       //   });
+
+  //       //   $("#tablaRegistroEnvase").html(template);
+  //       // }
+  //     },
+  //     error: function (xhr, status, error) {
+  //       console.error("Error al cargar los datos de la tabla:", error);
+  //     },
+  //   });
+  // }
 
   //------------------------ Actualiza un dato de mi tabla ----------------- //
 

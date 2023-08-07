@@ -142,25 +142,26 @@ class m_almacen
 
     $fecha = new m_almacen();
     // $fechaDHoy = date('Y-m-d');
-    $fechaDHoy = $fecha->c_horaserversql('F');
-    // $fechaDHoy = '03/09/2023';
+    // $fechaDHoy = $fecha->c_horaserversql('F');
+    $fechaDHoy = '09/09/2023';
     $mesAnioHoy = date('Y-m', strtotime(str_replace('/', '-', $fechaDHoy)));
 
-    $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
+    $stmver = $this->bd->prepare("SELECT MAX(VERSION) AS VERSION FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
     //$stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date) AND NOMBRE='$nombre'");
+
     $stmver->execute();
     $valor = $stmver->fetchAll();
     $valor1 = count($valor);
 
-
-    if ($valor1 == 0) {
-
+    if ($valor1 == null) {
       $nuevaversion = $maxContadorVersion + 1;
       $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
     } else {
+
       $nuevaversion = $maxContadorVersion + 1;
       $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
     }
+
 
     return $versionAumento;
   }
@@ -2013,15 +2014,11 @@ class m_almacen
       $cantidad_scoops = $cantidad;
       $cantidad_alupol = $cantidad;
       $cantidad_cajas = round(($cantidad * 5) / 100);
-      $stmCE = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS,N_BACHADA, COD_PRODUCCION, COD_PRODUCTO,CANTIDAD, CANTIDAD_ENVASES, FECHA)
-                                  VALUES ( '$codigo_avance_insumos','$bachada', '$selectProduccion','$selectProductoCombo','$cantidad','$cantidad_envases','$FECHA')");
+      $stm = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS,N_BACHADA, COD_PRODUCCION, COD_PRODUCTO,CANTIDAD, CANTIDAD_ENVASES, CANTIDAD_TAPAS, CANTIDAD_SCOOPS, CANTIDAD_ALUPOL, CANTIDAD_CAJAS, FECHA)
+                                  VALUES ( '$codigo_avance_insumos','$bachada', '$selectProduccion','$selectProductoCombo','$cantidad','$cantidad_envases','$cantidad_tapas','$cantidad_scoops','$cantidad_alupol','$cantidad_cajas','$FECHA')");
 
-      $insert = $stmCE->execute();
+      $insert = $stm->execute();
 
-      // $stmCT = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS,N_BACHADA, COD_PRODUCCION, COD_PRODUCTO,CANTIDAD,  CANTIDAD_TAPAS, FECHA)
-      // VALUES ( '$codigo_avance_insumos','$bachada', '$selectProduccion','$selectProductoCombo','$cantidad','$cantidad_tapas','$FECHA')");
-
-      // $stmCT->execute();
 
       if ($VERSION == '01') {
         // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");

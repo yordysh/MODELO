@@ -122,6 +122,7 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
                                 <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+                                <button id="botonCalcular" type="submit" name="calcular" class="btn btn-primary bt-guardar">Calcular </button>
                             </div>
                             <div class="ctn">
                                 <label for="mes">Seleccione el año:</label>

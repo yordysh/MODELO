@@ -403,6 +403,7 @@ if ($_POST['accion'] == 'seleccionarProduccion') {
     $respuesta = c_almacen::c_selectproduccion();
     echo $respuesta;
 }
+
 if ($_POST['accion'] == 'insertarRegistro') {
 
     $selectProduccion = $_POST['selectProduccion'];
@@ -2115,7 +2116,7 @@ class c_almacen
         echo '<option value="0" selected disabled>Seleccione Producción</option>';
         for ($i = 0; $i < count($datos); $i++) {
 
-            echo '<option value="' . $datos[$i]["COD_PRODUCTO"] . '">' . $datos[$i]["N_PRODUCCION_G"] . '</option>';
+            echo '<option value="' . $datos[$i]["COD_PRODUCCION"] . '">' . $datos[$i]["N_PRODUCCION_G"] . '</option>';
         }
     }
     static function c_insertar_registro_envases($selectProduccion, $selectProductoCombo, $cantidad)
