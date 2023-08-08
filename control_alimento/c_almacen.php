@@ -435,6 +435,13 @@ if ($_POST['accion'] == 'eliminarregistroenvases') {
     $respuesta = c_almacen::c_eliminar_registro_envase($codregistro);
     echo $respuesta;
 }
+if ($_POST['accion'] == 'guardarcantidadenvases') {
+
+    $union = $_POST['union'];
+
+    $respuesta = c_almacen::c_envio_dataEnvases($union);
+    echo $respuesta;
+}
 
 
 
@@ -2106,9 +2113,9 @@ class c_almacen
     {
         $consulta = new m_almacen();
         $COD_PRODUCTO = filter_input(INPUT_POST, 'codProducto');
-        var_dump($COD_PRODUCTO);
+
         $datos = $consulta->MostrarProducciones($COD_PRODUCTO);
-        var_dump(count($datos));
+
 
         if (count($datos) == 0) {
             echo '<option value="0">No hay registros en produccion</option>';
@@ -2184,6 +2191,49 @@ class c_almacen
             } else {
                 return "error";
             };
+        }
+    }
+    static function c_envio_dataEnvases($union)
+    {
+        try {
+
+            if (!empty($union)) {
+
+                // echo json_encode($datos);
+                $mostrar = new m_almacen();
+                $datos = $mostrar->InsertarDatosEnvase($union);
+                if ($datos) {
+                    return "ok";
+                } else {
+                    return "error";
+                };
+                // var_dump($union);
+                // if (!$datos) {
+                //     throw new Exception("Hubo un error en la consulta");
+                // }
+                // $json = array();
+                // foreach ($datos as $row) {
+                //     $json[] = array(
+                //         "COD_AVANCE_INSUMOS" => $row->COD_AVANCE_INSUMOS,
+                //         "FEC_GENERADO" => convFecSistema($row->FEC_GENERADO),
+                //         "N_BACHADA" => $row->N_BACHADA,
+                //         "PESO_NETO" => $row->PESO_NETO,
+                //         "UNI_MEDIDA" => $row->UNI_MEDIDA,
+                //         "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
+                //         "CANTIDAD" => $row->CANTIDAD,
+                //         "CANTIDAD_ENVASES" => $row->CANTIDAD_ENVASES,
+                //         "CANTIDAD_TAPAS" => $row->CANTIDAD_TAPAS,
+                //         "CANTIDAD_SCOOPS" => $row->CANTIDAD_SCOOPS,
+                //         "CANTIDAD_ALUPOL" => $row->CANTIDAD_ALUPOL,
+                //         "CANTIDAD_CAJAS" => $row->CANTIDAD_CAJAS,
+                //         "FECHA" =>  convFecSistema($row->FECHA),
+                //     );
+                // }
+                // $jsonstring = json_encode($json);
+                // echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 }

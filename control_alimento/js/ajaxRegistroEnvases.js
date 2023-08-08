@@ -155,29 +155,44 @@ $(function () {
   // });
 
   //------------- Añadiendo con ajax registro envases----------------//
-  $("#formularioRegistroEnvases").submit((e) => {
+  $("#botonCalcular").click((e) => {
+    e.preventDefault();
     const datos = [
       {
         codigo: "codEnvase",
-        titulo: "ENVASE",
+        titulo: "ENVASES",
       },
       {
         codigo: "codTapa",
-        titulo: "TAPA",
+        titulo: "TAPAS",
+      },
+      {
+        codigo: "codScoops",
+        titulo: "SCOOPS",
+      },
+      {
+        codigo: "codAlupol",
+        titulo: "ALUPOL",
+      },
+      {
+        codigo: "codCajas",
+        titulo: "CAJAS",
       },
     ];
 
     const selectorProducto = $("#selectProductoCombo").val();
     const selectorProduccion = $("#selectProduccion").val();
+    const valor = $("#cantidad").val();
 
     let cont = 0;
+    // let datosGenerados = [];
     datos.forEach((dato) => {
       cont++;
       let cantidad;
       if (dato.codigo === "codCajas") {
-        cantidad = 123;
+        cantidad = Math.round((valor * 5) / 100);
       } else if (dato.codigo === "codBolsas") {
-        cantidad = 21321;
+        cantidad = "4";
       } else {
         cantidad = $("#cantidad").val();
       }
@@ -188,27 +203,80 @@ $(function () {
       let celdaProduccion = $("<td data-titulo='CODIGO PRODUCCION'>").text(
         selectorProduccion
       );
-      let celdaCantidadEnvases = $(
-        "<td data-titulo='" + dato.titulo + "'>"
-      ).text(cantidad);
+      let celdaCantidad = $("<td data-titulo='" + dato.titulo + "'>").text(
+        cantidad
+      );
+
       let celdaCantidadlote = $("<td data-titulo='LOTE'>").html(
         "<input type='text' class='inputValor' name='lote" +
+          cont +
+          "' id='lote" +
           cont +
           "' />" +
           "<input type='hidden' class='inputValor' name='cant" +
           cont +
           "' />"
       );
-      // Agregar las celdas a la fila
-      nuevaFilaEnvases.append(
+
+      nuevaFila.append(
         celdaProducto,
         celdaProduccion,
-        celdaCantidadEnvases,
+        celdaCantidad,
         celdaCantidadlote
       );
       $("#tablaRE tbody").append(nuevaFila);
     });
+    // let loteValue = $("#lote" + cont).val();
+    // let datosFila = {
+    //   codigoProducto: selectorProducto,
+    //   codigoProduccion: selectorProduccion,
+    //   cantidad: cantidad,
+    //   lote: loteValue,
+    // };
+    // datosGenerados.push(datosFila);
+    // let obtenerDato = document.getElementsByTagName("td");
+    // console.log(obtenerDato[2]);
+    // const accion = "dataenvases";
+    // $.ajax({
+    //   url: "./c_almacen.php",
+    //   method: "POST",
+    //   data: { accion: accion, datosGenerados: JSON.stringify(datosGenerados) },
+    //   contentType: "application/json",
+    //   success: function (response) {
+    //     console.log("Solicitud exitosa:", response);
+    //   },
+    //   error: function (error) {
+    //     console.error("Error en la solicitud:", error);
+    //   },
+    // });
+  });
+  $("#formularioRegistroEnvases").submit((e) => {
     e.preventDefault();
+
+    let obtenerDato = document.getElementsByTagName("td");
+    let dataToSend = [];
+    for (let i = 0; i < obtenerDato.length; i++) {
+      let inputElement = obtenerDato[i].querySelector("input[type='text']");
+      let datos = obtenerDato[i].textContent.trim();
+      let entero = inputElement ? inputElement.value : "";
+      let union = datos + entero;
+      dataToSend.push({ union: union });
+    }
+    // console.log(dataToSend);
+    let accion = "guardarcantidadenvases";
+
+    $.ajax({
+      type: "POST",
+      url: "./c_almacen.php",
+      data: { accion: accion, union: JSON.stringify(dataToSend) },
+      // contentType: "application/json",
+      success: function (response) {
+        // Manejar la respuesta del servidor si es necesario
+      },
+      error: function (error) {
+        // Manejar errores si los hay
+      },
+    });
   });
   //---------------------------------------------------------------//
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
@@ -260,10 +328,10 @@ $(function () {
     const produccion = $("#selectProduccion");
     const accion = "seleccionarProduccion";
 
-    console.log(produccion);
+    // console.log(produccion);
     $("#selectProductoCombo").change(function () {
       var codProducto = $(this).val();
-      console.log(codProducto);
+      // console.log(codProducto);
       $.ajax({
         data: {
           codProducto: codProducto,

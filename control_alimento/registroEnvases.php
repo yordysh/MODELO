@@ -162,7 +162,7 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                         <table id="tbRE" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
-                                    <th class="thtitulo" scope="col">FECHA</th>
+                                    <!-- <th class="thtitulo" scope="col">FECHA</th>
                                     <th class="thtitulo" scope="col">N°BACHADA</th>
                                     <th class="thtitulo" scope="col">PRODUCTO</th>
                                     <th class="thtitulo" scope="col">PRESENTACION</th>
@@ -174,7 +174,10 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                                     <th class="thtitulo" scope="col">CANTIDAD CAJAS</th>
                                     <th class="thtitulo" scope="col">LOTE</th>
                                     <th></th>
-                                    <th></th>
+                                    <th></th> -->
+                                    <th class="thtitulo" scope="col">CODIGO PRODUCTO</th>
+                                    <th class="thtitulo" scope="col">CODIGO PRODUCCION</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD</th>
                                 </tr>
                             </thead>
                             <tbody id="tablaRegistroEnvase">

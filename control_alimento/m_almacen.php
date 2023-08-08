@@ -2102,4 +2102,36 @@ class m_almacen
       die("Error al eliminar los datos: " . $e->getMessage());
     }
   }
+  public function InsertarDatosEnvase($union)
+  {
+    try {
+      $this->bd->beginTransaction();
+      $registro = new m_almacen();
+
+      $bachada = $registro->generarBachada();
+
+      $codigo_avance_insumos = $registro->generarCodigoRegistroEnvases();
+
+      // echo $union;
+      $datos = json_decode($union, true);
+      for ($i = 0; $i < count($datos); $i += 4) {
+        $union1 = $datos[$i]['union'];
+        $union2 = $datos[$i + 1]['union'];
+        $union3 = $datos[$i + 2]['union'];
+        $union4 = $datos[$i + 3]['union'];
+
+        // $stm = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS,N_BACHADA, COD_PRODUCCION, COD_PRODUCTO,CANTIDAD, CANTIDAD_ENVASES, CANTIDAD_TAPAS, CANTIDAD_SCOOPS, CANTIDAD_ALUPOL, CANTIDAD_CAJAS, FECHA)
+        //                           VALUES ( '$codigo_avance_insumos','$bachada', '$selectProduccion','$selectProductoCombo','$cantidad','$cantidad_envases','$cantidad_tapas','$cantidad_scoops','$cantidad_alupol','$cantidad_cajas','$FECHA')");
+
+        // $insert = $stm->execute();
+        echo ($union1 . "<br>" . $union2 . "<br>" .  $union3 . "<br>" . $union4 . "<br>" . "<br>");
+      }
+      $insert = $this->bd->commit();
+
+      return $insert;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
 }
