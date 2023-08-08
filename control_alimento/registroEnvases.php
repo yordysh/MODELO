@@ -37,7 +37,7 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
             </li> -->
             <li>
                 <a class="" href="#">Infraestructura</a>
-            </li>
+                <!-- </li>
             <li>
                 <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>
             </li>
@@ -46,7 +46,7 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
             </li>
             <li>
                 <a class="" href="controlMaquinas.php">Control de maquinas</a>
-            </li>
+            </li> -->
             <li>
                 <a class="" href="labsabelForm.php">Labsabell</a>
             </li>

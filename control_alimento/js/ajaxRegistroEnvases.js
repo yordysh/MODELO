@@ -156,99 +156,59 @@ $(function () {
 
   //------------- Añadiendo con ajax registro envases----------------//
   $("#formularioRegistroEnvases").submit((e) => {
+    const datos = [
+      {
+        codigo: "codEnvase",
+        titulo: "ENVASE",
+      },
+      {
+        codigo: "codTapa",
+        titulo: "TAPA",
+      },
+    ];
+
+    const selectorProducto = $("#selectProductoCombo").val();
+    const selectorProduccion = $("#selectProduccion").val();
+
+    let cont = 0;
+    datos.forEach((dato) => {
+      cont++;
+      let cantidad;
+      if (dato.codigo === "codCajas") {
+        cantidad = 123;
+      } else if (dato.codigo === "codBolsas") {
+        cantidad = 21321;
+      } else {
+        cantidad = $("#cantidad").val();
+      }
+      let nuevaFila = $("<tr>");
+      let celdaProducto = $("<td data-titulo='CODIGO PRODUCTO'>").text(
+        selectorProducto
+      );
+      let celdaProduccion = $("<td data-titulo='CODIGO PRODUCCION'>").text(
+        selectorProduccion
+      );
+      let celdaCantidadEnvases = $(
+        "<td data-titulo='" + dato.titulo + "'>"
+      ).text(cantidad);
+      let celdaCantidadlote = $("<td data-titulo='LOTE'>").html(
+        "<input type='text' class='inputValor' name='lote" +
+          cont +
+          "' />" +
+          "<input type='hidden' class='inputValor' name='cant" +
+          cont +
+          "' />"
+      );
+      // Agregar las celdas a la fila
+      nuevaFilaEnvases.append(
+        celdaProducto,
+        celdaProduccion,
+        celdaCantidadEnvases,
+        celdaCantidadlote
+      );
+      $("#tablaRE tbody").append(nuevaFila);
+    });
     e.preventDefault();
-    let selectorProducto = $("#selectProductoCombo").val();
-    let selectorProduccion = $("#selectProduccion").val();
-    let cantidad = $("#cantidad").val();
-
-    let cantidadTapas = cantidad;
-    let cantidadScoops = cantidad;
-    let cantidadAlupol = cantidad;
-
-    //--------- Cantidad de envases ----------------------//
-    let nuevaFilaEnvases = $("<tr>");
-    let celdaProducto = $("<td data-titulo='CODIGO PRODUCTO'>").text(
-      selectorProducto
-    );
-    let celdaProduccion = $("<td data-titulo='CODIGO PRODUCCION'>").text(
-      selectorProduccion
-    );
-    let celdaCantidadEnvases = $("<td data-titulo='CANTIDAD ENVASES'>").text(
-      cantidad
-    );
-    // Agregar las celdas a la fila
-    nuevaFilaEnvases.append(
-      celdaProducto,
-      celdaProduccion,
-      celdaCantidadEnvases
-    );
-
-    // Agregar la fila a la tabla
-    $("#tablaRE tbody").append(nuevaFilaEnvases);
-    //-----------------------------------------------------------------//
-
-    //-------------------- Cantidad de tapas ---------------------------//
-    let nuevaFilaTapas = $("<tr>");
-    let celdaProductoTapas = $("<td data-titulo='CODIGO PRODUCTO'>").text(
-      selectorProducto
-    );
-    let celdaProduccionTapas = $("<td data-titulo='CODIGO PRODUCCION'>").text(
-      selectorProduccion
-    );
-    let celdaCantidadTapas = $("<td data-titulo='CANTIDAD TAPAS'>").text(
-      cantidadTapas
-    );
-
-    nuevaFilaTapas.append(
-      celdaProductoTapas,
-      celdaProduccionTapas,
-      celdaCantidadTapas
-    );
-
-    $("#tablaRE tbody").append(nuevaFilaTapas);
-
-    //------------------ Cantidad de Scoops --------------------------------//
-    let nuevaFilaScoop = $("<tr>");
-    let celdaProductoScoop = $("<td data-titulo='CODIGO PRODUCTO'>").text(
-      selectorProducto
-    );
-    let celdaProduccionScoop = $("<td data-titulo='CODIGO PRODUCCION'>").text(
-      selectorProduccion
-    );
-
-    let celdaCantidadScoops = $("<td data-titulo='CANTIDAD SCOOPS'>").text(
-      cantidadScoops
-    );
-
-    nuevaFilaScoop.append(
-      celdaProductoScoop,
-      celdaProduccionScoop,
-      celdaCantidadScoops
-    );
-
-    $("#tablaRE tbody").append(nuevaFilaScoop);
-    //------------------------------------------------------------------------//
-    //-------------------- Cantidad Alupol -----------------------------------//
-    let nuevaFilaAlupol = $("<tr>");
-    let celdaProductoAlupol = $("<td data-titulo='CODIGO PRODUCTO'>").text(
-      selectorProducto
-    );
-    let celdaProduccionAlupol = $("<td data-titulo='CODIGO PRODUCCION'>").text(
-      selectorProduccion
-    );
-
-    let celdaCantidadAlupol = $("<td data-titulo='CANTIDAD ALUPOL'>").text(
-      cantidadAlupol
-    );
-
-    nuevaFilaAlupol.append(
-      celdaProductoAlupol,
-      celdaProduccionAlupol,
-      celdaCantidadAlupol
-    );
-
-    $("#tablaRE tbody").append(nuevaFilaAlupol);
-    //------------------------------------------------------------------------//
   });
   //---------------------------------------------------------------//
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
