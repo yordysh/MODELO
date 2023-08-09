@@ -2114,17 +2114,34 @@ class m_almacen
 
       // echo $union;
       $datos = json_decode($union, true);
+      $codCount = 1;  // Inicializamos el contador para el código
+
       for ($i = 0; $i < count($datos); $i += 4) {
-        $union1 = $datos[$i]['union'];
-        $union2 = $datos[$i + 1]['union'];
-        $union3 = $datos[$i + 2]['union'];
-        $union4 = $datos[$i + 3]['union'];
+        $codPrefix = str_pad($codCount, 8, '0', STR_PAD_LEFT);
 
-        // $stm = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS,N_BACHADA, COD_PRODUCCION, COD_PRODUCTO,CANTIDAD, CANTIDAD_ENVASES, CANTIDAD_TAPAS, CANTIDAD_SCOOPS, CANTIDAD_ALUPOL, CANTIDAD_CAJAS, FECHA)
-        //                           VALUES ( '$codigo_avance_insumos','$bachada', '$selectProduccion','$selectProductoCombo','$cantidad','$cantidad_envases','$cantidad_tapas','$cantidad_scoops','$cantidad_alupol','$cantidad_cajas','$FECHA')");
+        $codProducto = $datos[$i]['union'];
+        $codProduccion = $datos[$i + 1]['union'];
+        $cantidad = $datos[$i + 2]['union'];
+        $lote = $datos[$i + 3]['union'];
 
-        // $insert = $stm->execute();
-        echo ($union1 . "<br>" . $union2 . "<br>" .  $union3 . "<br>" . $union4 . "<br>" . "<br>");
+        if ($i == 0) {
+          $campo = 'CANTIDAD_ENVASES';
+        } elseif ($i == 4) {
+          $campo = 'CANTIDAD_TAPAS';
+        } elseif ($i == 8) {
+          $campo = 'CANTIDAD_SCOOPS';
+        } elseif ($i == 12) {
+          $campo = 'CANTIDAD_ALUPOL';
+        } elseif ($i == 16) {
+          $campo = 'CANTIDAD_CAJAS';
+        }
+
+        $stm = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS, N_BACHADA, COD_PRODUCCION, COD_PRODUCTO, $campo)
+                                    VALUES ('$codPrefix','$bachada', '$codProduccion','$codProducto','$cantidad')");
+
+        $insert = $stm->execute();
+
+        $codCount++;
       }
       $insert = $this->bd->commit();
 

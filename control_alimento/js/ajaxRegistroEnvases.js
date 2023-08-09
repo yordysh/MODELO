@@ -271,7 +271,7 @@ $(function () {
       data: { accion: accion, union: JSON.stringify(dataToSend) },
       // contentType: "application/json",
       success: function (response) {
-        // Manejar la respuesta del servidor si es necesario
+        console.log("respuesta" + response);
       },
       error: function (error) {
         // Manejar errores si los hay
