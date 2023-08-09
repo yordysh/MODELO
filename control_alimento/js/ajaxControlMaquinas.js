@@ -48,12 +48,25 @@ $(function () {
 
             let template = ``;
             tasks.forEach((task) => {
+              let frecuencia;
+              if (task.N_DIAS_CONTROL == 1) {
+                frecuencia = "Diario";
+              } else if (task.N_DIAS_CONTROL == 2) {
+                frecuencia = "InterDiario";
+              } else if (task.N_DIAS_CONTROL == 7) {
+                frecuencia = "Semanal";
+              } else if (task.N_DIAS_CONTROL == 15) {
+                frecuencia = "Quincenal";
+              } else if (task.N_DIAS_CONTROL == 30) {
+                frecuencia = "Mensual";
+              }
+
               template += `<tr taskId="${task.COD_CONTROL_MAQUINA}">
     
-               <!-- <td data-titulo="CODIGO" >${task.COD_CONTROL_MAQUINA}</td> -->
+                <!-- <td data-titulo="CODIGO" >${task.COD_CONTROL_MAQUINA}</td> -->
                 <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
                 <td data-titulo="CONTROL DE MAQUINAS" class='NOMBRE_CONTROL_MAQUINA' >${task.NOMBRE_CONTROL_MAQUINA}</td>
-                <td data-titulo="FRECUENCIA">${task.N_DIAS_CONTROL}</td>
+                <td data-titulo="FRECUENCIA">${frecuencia}</td>
                 <td data-titulo="FECHA" >${task.FECHA}</td>
     
                 <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_CONTROL_MAQUINA="${task.COD_CONTROL_MAQUINA}"><i class="icon-edit"></i></button></td>
@@ -139,12 +152,25 @@ $(function () {
 
           let template = ``;
           tasks.forEach((task) => {
+            let frecuencia;
+            if (task.N_DIAS_CONTROL == 1) {
+              frecuencia = "Diario";
+            } else if (task.N_DIAS_CONTROL == 2) {
+              frecuencia = "InterDiario";
+            } else if (task.N_DIAS_CONTROL == 7) {
+              frecuencia = "Semanal";
+            } else if (task.N_DIAS_CONTROL == 15) {
+              frecuencia = "Quincenal";
+            } else if (task.N_DIAS_CONTROL == 30) {
+              frecuencia = "Mensual";
+            }
+
             template += `<tr taskId="${task.COD_CONTROL_MAQUINA}">
   
               <!-- <td data-titulo="CODIGO" >${task.COD_CONTROL_MAQUINA}</td> -->
               <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
               <td data-titulo="CONTROL DE MAQUINAS" class='NOMBRE_CONTROL_MAQUINA' >${task.NOMBRE_CONTROL_MAQUINA}</td>
-              <td data-titulo="FRECUENCIA">${task.N_DIAS_CONTROL}</td>
+              <td data-titulo="FRECUENCIA">${frecuencia}</td>
               <td data-titulo="FECHA" >${task.FECHA}</td>
   
               <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_CONTROL_MAQUINA="${task.COD_CONTROL_MAQUINA}"><i class="icon-edit"></i></button></td>

@@ -49,7 +49,7 @@
     <ul class="nav-links">
       <div class="icon-cross navCloseBtn"></div>
       <li>
-        <a class="" aria-current="page">PHS</a>
+        <a class="phsStyle" aria-current="page">PHS</a>
         <ul class="menu-vertical">
           <li>
             <a class="" href="infraestructuraAccesorios.php">LBS-PHS-FR-01</a>
@@ -66,7 +66,7 @@
         </ul>
       </li>
       <li>
-        <a class="">BPM</a>
+        <a class="bpmStyle">BPM</a>
         <ul class="menu-vertical">
           <li>
             <a class="" href="labsabelForm.php">Envases labsabell</a>

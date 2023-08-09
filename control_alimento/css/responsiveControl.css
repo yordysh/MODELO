@@ -153,6 +153,10 @@ img {
   width: 50px;
   border-radius: 60px;
 }
+.phsStyle,
+.bpmStyle {
+  font-size: 25px !important;
+}
 .menu-vertical {
   position: absolute;
   display: none;

@@ -59,7 +59,7 @@ $dataProducto = $mostrar->MostrarProducto();
                 </div>
                 <div class="main">
 
-                    <div class="table-responsive" style="overflow: scroll;height: 600px; margin-top:20px;">
+                    <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
                         <table id="tbPrevilife" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>

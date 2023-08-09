@@ -26,6 +26,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
 <body>
 
     <nav class="nav">
+        <div class="wave"></div>
         <i class="icon-menu navOpenBtn"></i>
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
         <ul class="nav-links">

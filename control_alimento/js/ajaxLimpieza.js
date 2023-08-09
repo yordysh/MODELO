@@ -46,7 +46,7 @@ $(function () {
 
               <!-- <td data-titulo="COD. FRECUENCIA">${task.COD_FRECUENCIA}</td> -->
               <td data-titulo="ZONA/ÁREA">${task.NOMBRE_T_ZONA_AREAS}</td>
-              <td data-titulo="FRECUENCIA">${task.NOMBRE_FRECUENCIA}</td>
+              <td data-titulo="MATERIALES">${task.NOMBRE_FRECUENCIA}</td>
               <td data-titulo="FECHA">${task.FECHA}</td>
               <! -- <td data-titulo="VERSION">${task.VERSION}</td> -->
               
@@ -80,7 +80,7 @@ $(function () {
             
             <!-- <td data-titulo="COD. FRECUENCIA">${task.COD_FRECUENCIA}</td> -->
             <td data-titulo="ZONA/ÁREA">${task.NOMBRE_T_ZONA_AREAS}</td>
-            <td data-titulo="FRECUENCIA">${task.NOMBRE_FRECUENCIA}</td>
+            <td data-titulo="MATERIALES">${task.NOMBRE_FRECUENCIA}</td>
             <td data-titulo="FECHA">${task.FECHA}</td>
             <!-- <td data-titulo="VERSION">${task.VERSION}</td> -->
             

@@ -1,5 +1,5 @@
 $(function () {
-  fetchTasks();
+  // fetchTasks();
   cargarCombo();
 
   let fechaLabel = document.getElementById("labelFecha");

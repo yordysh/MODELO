@@ -80,13 +80,7 @@ $dataProducto = $mostrar->MostrarProductoSelect();
 
                     <form method="post" action="" id="formularioLabsabell">
 
-                        <!-- Text input nombre -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Codigo</label>
-                            <input type="text" id="codigo_labsabell" class="form-control" name="codigo_labsabell" required>
-                        </div>
-
-                        <!-- Text input nombre -->
+                        <!-- Text input codigo -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Nombre</label>
                             <select id="selectProducto" class="form-select selectProducto" aria-label="Default select example">
@@ -102,6 +96,13 @@ $dataProducto = $mostrar->MostrarProductoSelect();
                             <input type="text" id="selectLabsabell" class="form-control" name="selectLabsabell" required> -->
 
                         </div>
+                        <!-- Text input nombre -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Codigo</label>
+                            <input type="text" id="codigo_labsabell" class="form-control" name="codigo_labsabell" required>
+                        </div>
+
+
 
 
                         <div class="contenedor">

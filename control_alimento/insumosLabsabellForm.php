@@ -59,7 +59,7 @@ $dataProducto = $mostrar->MostrarProducto();
                 </div>
                 <div class="main">
 
-                    <div class="table-responsive" style="overflow: scroll;height: 500px; margin-top:20px;">
+                    <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
                         <table id="tbPrevilife" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
@@ -80,12 +80,6 @@ $dataProducto = $mostrar->MostrarProducto();
                     </div>
                     <form method="post" action="" id="formularioInsumosLab">
 
-                        <!-- Text input codigo -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Codigo</label>
-                            <input type="text" id="codigo_insumos_lab" class="form-control" name="codigo_insumos_lab" required>
-                        </div>
-
                         <!-- Text input nombre -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Nombre</label>
@@ -100,6 +94,13 @@ $dataProducto = $mostrar->MostrarProducto();
                                 ?>
                             </select>
                         </div>
+                        <!-- Text input codigo -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Codigo</label>
+                            <input type="text" id="codigo_insumos_lab" class="form-control" name="codigo_insumos_lab" required>
+                        </div>
+
+
                         <!-- Crear PDF -->
                         <div class="contenedor insumosLab">
                             <!-- Submit button -->

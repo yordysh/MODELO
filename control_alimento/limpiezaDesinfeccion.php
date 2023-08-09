@@ -25,6 +25,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
 
 <body>
     <nav class="nav">
+        <div class="wave"></div>
         <i class="icon-menu navOpenBtn"></i>
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
         <ul class="nav-links">
@@ -63,7 +64,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                                 <tr>
                                     <!-- <th class="thtitulo" scope="col">COD. FRECUENCIA</th> -->
                                     <th class="thtitulo" scope="col">ZONA/ÁREA</th>
-                                    <th class="thtitulo" scope="col">FRECUENCIA</th>
+                                    <th class="thtitulo" scope="col">MATERIALES</th>
                                     <th class="thtitulo" scope="col">FECHA</th>
                                     <!-- <th class="thtitulo" scope="col">VERSION</th> -->
                                     <th></th>

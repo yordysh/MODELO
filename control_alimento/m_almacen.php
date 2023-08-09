@@ -2114,7 +2114,7 @@ class m_almacen
 
       // echo $union;
       $datos = json_decode($union, true);
-      $codCount = 1;  // Inicializamos el contador para el código
+      $codCount = 1;
 
       for ($i = 0; $i < count($datos); $i += 4) {
         $codPrefix = str_pad($codCount, 8, '0', STR_PAD_LEFT);
