@@ -108,8 +108,8 @@ class m_almacen
     $count = $result['count'];
 
     $cod = new m_almacen();
-    // $FECHA_VERSION = $cod->c_horaserversql('F');
-    $FECHA_VERSION = '10/08/2023';
+    $FECHA_VERSION = $cod->c_horaserversql('F');
+    // $FECHA_VERSION = '11/09/2023';
 
     if ($count == 0) {
       $stm = $this->bd->prepare("SELECT MAX(VERSION) AS VERSION FROM T_VERSION_GENERAL WHERE NOMBRE='$nombre'");
@@ -133,20 +133,19 @@ class m_almacen
       $stm->execute();
       $resultado = $stm->fetch(PDO::FETCH_ASSOC);
       $maxContador = intval($resultado['VERSION']);
-      echo "else" . $maxContador;
+      // echo "else" . $maxContador;
       $maxContador =  $maxContador + 1;
 
       $codPrefix = str_pad($maxContador, 2, '0', STR_PAD_LEFT);
-      // echo "codPRefe" . $codPrefix . "CierroPrefe";
+
       $mesAnioHoy = date('Y-m', strtotime(str_replace('/', '-',  $FECHA_VERSION)));
 
       $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
-      // //$stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$FECHA_CREACION' as date) AND NOMBRE='$nombre'");
       $stmver->execute();
       $valor = $stmver->fetchAll();
       $valor1 = count($valor);
       // echo "FECHA" . $valor1;
-      if ($valor1 != 0) {
+      if ($valor1 === 0) {
         $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = '$codPrefix', FECHA_VERSION='$FECHA_VERSION'  WHERE NOMBRE='$nombre'");
         $stmVersion->execute();
       }
@@ -237,7 +236,7 @@ class m_almacen
       $cod = new m_almacen();
       $COD_ZONA = $cod->generarCodigo();
       // $VERSION = $cod->generarVersion();
-      $nombre = 'p_zona';
+      $nombre = 'LBS-PHS-FR-01';
 
 
       $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
@@ -310,6 +309,7 @@ class m_almacen
 
       $cod = new m_almacen();
       $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
+      $nombre = 'LBS-PHS-FR-01';
 
       if ($repetir == 0) {
         $stmt = $this->bd->prepare("UPDATE T_ZONA_AREAS SET NOMBRE_T_ZONA_AREAS = UPPER(:NOMBRE_T_ZONA_AREAS), VERSION =:VERSION WHERE COD_ZONA = :COD_ZONA");
@@ -322,29 +322,30 @@ class m_almacen
         $stmt->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
         $update = $stmt->execute();
 
+        $cod->generarVersionGeneral($nombre);
         // $fechaDHoy = date('Y-m-d');
-        $fechaDHoy = $cod->c_horaserversql('F');
+        // $fechaDHoy = $cod->c_horaserversql('F');
 
-        if ($VERSION == '01') {
-          $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
-          $stm1->bindParam(':version', $VERSION, PDO::PARAM_STR);
-          $stm1->execute();
-        } else {
-          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+        // if ($VERSION == '01') {
+        //   $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
+        //   $stm1->bindParam(':version', $VERSION, PDO::PARAM_STR);
+        //   $stm1->execute();
+        // } else {
+        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
 
 
-          $stmver->execute();
-          $valor = $stmver->fetchAll();
+        //   $stmver->execute();
+        //   $valor = $stmver->fetchAll();
 
-          $valor1 = count($valor);
+        //   $valor1 = count($valor);
 
-          if ($valor1 == 0) {
-            $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
-            $stm1->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-            $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
-            $stm1->execute();
-          }
-        }
+        //   if ($valor1 == 0) {
+        //     $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
+        //     $stm1->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+        //     $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
+        //     $stm1->execute();
+        //   }
+        // }
 
         $update = $this->bd->commit();
 
@@ -850,6 +851,7 @@ class m_almacen
   {
     try {
       $cod = new m_almacen();
+      $nombre = 'LBS-PHS-FR-02';
       $fechaDHoy = $cod->c_horaserversql('F');
       // $fechaDHoy = date('Y-m-d');
 
@@ -865,6 +867,7 @@ class m_almacen
                                   VALUES ('$selectSolucion','$selectPreparacion', '$selectCantidad','$selectML', '$selectL','$textAreaObservacion','$textAreaAccion','$selectVerificacion')");
 
         $insert = $stm->execute();
+        $cod->generarVersionGeneral($nombre);
       }
 
       return $insert;
@@ -940,6 +943,7 @@ class m_almacen
 
       $this->bd->beginTransaction();
       $codGen = new m_almacen();
+      $nombre = 'LBS-PHS-FR-04';
 
       $codFrecuencia = $codGen->generarCodigoLimpieza();
       $version = $codGen->generarVersion();
@@ -960,38 +964,38 @@ class m_almacen
                                   VALUES ('$codFrecuencia','$selectZona', '$textfrecuencia','$version','$textAreaObservacion','$textAreaAccion','$selectVerificacion')");
 
         $insert = $stm->execute();
+        $codGen->generarVersionGeneral($nombre);
+        // if ($version == '01') {
 
-        if ($version == '01') {
-
-          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
-
-
-          $stmver->execute();
-          $valor = $stmver->fetchAll();
-
-          $valor1 = count($valor);
-
-          if ($valor1 == 0) {
-            $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) VALUES ( :version)");
-            $stm1->bindParam(':version', $version, PDO::PARAM_STR);
-            $stm1->execute();
-          }
-        } else {
-          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
 
 
-          $stmver->execute();
-          $valor = $stmver->fetchAll();
+        //   $stmver->execute();
+        //   $valor = $stmver->fetchAll();
 
-          $valor1 = count($valor);
+        //   $valor1 = count($valor);
 
-          if ($valor1 == 0) {
-            $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
-            $stm1->bindParam(':VERSION', $version, PDO::PARAM_STR);
-            $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
-            $stm1->execute();
-          }
-        }
+        //   if ($valor1 == 0) {
+        //     $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) VALUES ( :version)");
+        //     $stm1->bindParam(':version', $version, PDO::PARAM_STR);
+        //     $stm1->execute();
+        //   }
+        // } else {
+        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+        //   $stmver->execute();
+        //   $valor = $stmver->fetchAll();
+
+        //   $valor1 = count($valor);
+
+        //   if ($valor1 == 0) {
+        //     $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
+        //     $stm1->bindParam(':VERSION', $version, PDO::PARAM_STR);
+        //     $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
+        //     $stm1->execute();
+        //   }
+        // }
 
         $insert = $this->bd->commit();
 
@@ -1024,11 +1028,14 @@ class m_almacen
   {
     try {
 
+      $codGen = new m_almacen();
+      $nombre = 'LBS-PHS-FR-04';
+
       $stmt = $this->bd->prepare("UPDATE T_FRECUENCIA SET NOMBRE_FRECUENCIA = UPPER(:NOMBRE_FRECUENCIA)  WHERE COD_FRECUENCIA = :COD_FRECUENCIA");
       $stmt->bindParam(':COD_FRECUENCIA', $codfre, PDO::PARAM_STR);
       $stmt->bindParam(':NOMBRE_FRECUENCIA', $textfrecuencia, PDO::PARAM_STR);
       $update = $stmt->execute();
-
+      $codGen->generarVersionGeneral($nombre);
       return $update;
     } catch (Exception $e) {
       die($e->getMessage());
@@ -1079,6 +1086,7 @@ class m_almacen
       $this->bd->beginTransaction();
       $cod = new m_almacen();
       $COD_CONTROL_MAQUINA = $cod->generarCodigoControlMaquina();
+      $nombre = 'LBS-PHS-FR-03';
       //var_dump("codio" . $COD_CONTROL_MAQUINA);
       $VERSION = $cod->generarVersion();
       $repetir = $cod->contarRegistrosControl($NOMBRE_CONTROL_MAQUINA, $valorSeleccionado);
@@ -1097,37 +1105,37 @@ class m_almacen
         // $fechaDHoy = date('Y-m-d');
         // $fechaDHoy = '24/07/2023';
         $fechaDHoy  = $cod->c_horaserversql('F');
-
-        if ($VERSION == '01') {
-          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
-
-
-          $stmver->execute();
-          $valor = $stmver->fetchAll();
-
-          $valor1 = count($valor);
-
-          if ($valor1 == 0) {
-            $stmVersion = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
-            $stmVersion->bindParam(':version', $VERSION, PDO::PARAM_STR);
-            $stmVersion->execute();
-          }
-        } else {
-          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+        $cod->generarVersionGeneral($nombre);
+        // if ($VERSION == '01') {
+        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
 
 
-          $stmver->execute();
-          $valor = $stmver->fetchAll();
+        //   $stmver->execute();
+        //   $valor = $stmver->fetchAll();
 
-          $valor1 = count($valor);
+        //   $valor1 = count($valor);
 
-          if ($valor1 == 0) {
-            $stmVersion = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
-            $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-            $stmVersion->bindParam(':FECHA_VERSION', $fechaDHoy);
-            $stmVersion->execute();
-          }
-        }
+        //   if ($valor1 == 0) {
+        //     $stmVersion = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
+        //     $stmVersion->bindParam(':version', $VERSION, PDO::PARAM_STR);
+        //     $stmVersion->execute();
+        //   }
+        // } else {
+        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+        //   $stmver->execute();
+        //   $valor = $stmver->fetchAll();
+
+        //   $valor1 = count($valor);
+
+        //   if ($valor1 == 0) {
+        //     $stmVersion = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
+        //     $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+        //     $stmVersion->bindParam(':FECHA_VERSION', $fechaDHoy);
+        //     $stmVersion->execute();
+        //   }
+        // }
 
         $DIAS_DESCUENTO = 2;
 
@@ -1176,12 +1184,17 @@ class m_almacen
   public function   editarControlMaquina($NOMBRE_CONTROL, $N_DIAS_CONTROL, $task_id)
   {
     try {
+
+      $cod = new m_almacen();
+      $nombre = 'LBS-PHS-FR-03';
+
       $stmt = $this->bd->prepare("UPDATE T_CONTROL_MAQUINA SET NOMBRE_CONTROL_MAQUINA= UPPER(:NOMBRE_CONTROL_MAQUINA), N_DIAS_CONTROL = :N_DIAS_CONTROL  WHERE COD_CONTROL_MAQUINA = :COD_CONTROL_MAQUINA");
       $stmt->bindParam(':COD_CONTROL_MAQUINA', $task_id, PDO::PARAM_STR);
       $stmt->bindParam(':NOMBRE_CONTROL_MAQUINA', $NOMBRE_CONTROL, PDO::PARAM_STR);
       $stmt->bindParam(':N_DIAS_CONTROL', $N_DIAS_CONTROL, PDO::PARAM_STR);
       $update = $stmt->execute();
 
+      $cod->generarVersionGeneral($nombre);
       return $update;
     } catch (Exception $e) {
       die($e->getMessage());
