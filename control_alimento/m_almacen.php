@@ -1431,9 +1431,8 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT E.COD_PRODUCTO_ENVASE AS COD_PRODUCTO_ENVASE, P.DES_PRODUCTO AS DES_PRODUCTO, P.ABR_PRODUCTO AS ABR_PRODUCTO,
-                                 E.FECHA_CREACION AS FECHA_CREACION, E.VERSION AS VERSION FROM T_PRODUCTO_ENVASES AS E 
-                                 INNER JOIN T_PRODUCTO AS P ON E.COD_PRODUCTO=P.COD_PRODUCTO WHERE DES_PRODUCTO LIKE '$buscarlab%'");
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, COD_CATEGORIA,DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO
+                                 WHERE DES_PRODUCTO LIKE '$buscarlab%'");
 
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
@@ -1523,194 +1522,6 @@ class m_almacen
 
 
 
-
-
-
-  public function  MostrarProductoComboPrevilife($term)
-  {
-    try {
-
-      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO FROM T_PRODUCTO WHERE DES_PRODUCTO LIKE '$term%' ");
-      $stm->execute();
-      $datos = $stm->fetchAll();
-
-      $json = array();
-      foreach ($datos as $dato) {
-        $json[] = array(
-          "id" => $dato['COD_PRODUCTO'],
-          "label" => $dato['DES_PRODUCTO'],
-        );
-      }
-
-      return $json;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-  public function generarVersionPrevilife()
-  {
-
-    $stm = $this->bd->prepare("SELECT MAX(VERSION) as VERSION FROM T_PRODUCTO_PREVILIFE");
-    $stm->execute();
-    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
-    $maxContadorVersion = intval($resultado['VERSION']);
-    if ($maxContadorVersion == null) {
-      $maxContadorVersion = 0;
-    }
-
-    // $nuevoCodigo =  $maxContadorVersion + 1;
-    // $codigoAumento = str_pad($nuevoCodigo, 2, '0', STR_PAD_LEFT);
-
-    // return $codigoAumento;
-    $fecha = new m_almacen();
-    // $fechaDHoy = date('Y-m-d');
-    $fechaDHoy = $fecha->c_horaserversql('F');
-    $stmver = $this->bd->prepare("SELECT * FROM T_PRODUCTO_PREVILIFE WHERE cast(FECHA_CREACION as DATE) =cast('$fechaDHoy' as date)");
-    $stmver->execute();
-    $valor = $stmver->fetchAll();
-
-    $valor1 = count($valor);
-    if ($valor1 == 0) {
-      $nuevaversion = $maxContadorVersion + 1;
-      $versionAumento = str_pad($nuevaversion, 2, '0', STR_PAD_LEFT);
-    } else {
-      $maxContadorVersion;
-
-      $versionAumento = str_pad($maxContadorVersion, 2, '0', STR_PAD_LEFT);
-    }
-
-    return $versionAumento;
-  }
-  public function contarRegistrosPrevilife($codigoPrevilife, $valorSelec)
-  {
-    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_PRODUCTO_PREVILIFE WHERE COD_PRODUCTO_PREVILIFE = :COD_PRODUCTO_PREVILIFE AND COD_PRODUCTO = :COD_PRODUCTO");
-    $repetir->bindParam(':COD_PRODUCTO_PREVILIFE', $codigoPrevilife, PDO::PARAM_STR);
-    $repetir->bindParam(':COD_PRODUCTO', $valorSelec, PDO::PARAM_STR);
-    $repetir->execute();
-    $result = $repetir->fetch(PDO::FETCH_ASSOC);
-    $count = $result['count'];
-
-    return $count;
-  }
-  public function MostrarProducto()
-  {
-    try {
-
-      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO");
-
-      $stm->execute();
-      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
-
-      return $datos;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-  public function  MostrarEnvasesPrevilife($buscarPrevilife)
-  {
-    try {
-
-      $stm = $this->bd->prepare("SELECT PR.COD_PRODUCTO_PREVILIFE AS COD_PRODUCTO_PREVILIFE, P.DES_PRODUCTO AS DES_PRODUCTO,
-      PR.ABR_PRODUCTO_PREVILIFE AS ABR_PRODUCTO_PREVILIFE, PR.FECHA_CREACION AS FECHA_CREACION, PR.VERSION AS VERSION
-      FROM T_PRODUCTO_PREVILIFE AS PR INNER JOIN T_PRODUCTO AS P ON PR.COD_PRODUCTO=P.COD_PRODUCTO WHERE DES_PRODUCTO LIKE '$buscarPrevilife%'");
-
-      $stm->execute();
-      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
-
-      return $datos;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-  public function InsertarPrevilife($codigoPrevilife, $valorSelec, $abrPrevilife)
-  {
-    try {
-      $fecha = new m_almacen();
-      $VERSION = $fecha->generarVersionPrevilife();
-      $repetir = $fecha->contarRegistrosPrevilife($codigoPrevilife, $valorSelec);
-      $FECHA_CREACION = $fecha->c_horaserversql('F');
-
-      if ($repetir == 0) {
-        $stm = $this->bd->prepare("INSERT INTO T_PRODUCTO_PREVILIFE(COD_PRODUCTO_PREVILIFE, COD_PRODUCTO,ABR_PRODUCTO_PREVILIFE, FECHA_CREACION,VERSION)
-                                  VALUES ( '$codigoPrevilife', '$valorSelec','$abrPrevilife', '$FECHA_CREACION','$VERSION')");
-
-        $insert = $stm->execute();
-        return $insert;
-      }
-    } catch (Exception $e) {
-
-      die($e->getMessage());
-    }
-  }
-  public function SelectEnvasesPrevilife($cod_producto_previlife)
-  {
-    try {
-
-      $stm = $this->bd->prepare(" SELECT PRE.COD_PRODUCTO_PREVILIFE AS COD_PRODUCTO_PREVILIFE, P.DES_PRODUCTO AS DES_PRODUCTO,
-      PRE.ABR_PRODUCTO_PREVILIFE AS ABR_PRODUCTO_PREVILIFE, P.COD_PRODUCTO AS COD_PRODUCTO, PRE.FECHA_CREACION AS FECHA_CREACION,
-      PRE.VERSION AS VERSION FROM T_PRODUCTO_PREVILIFE AS PRE INNER JOIN T_PRODUCTO AS P 
-      ON PRE.COD_PRODUCTO=P.COD_PRODUCTO WHERE COD_PRODUCTO_PREVILIFE= :COD_PRODUCTO_PREVILIFE");
-      $stm->bindParam(':COD_PRODUCTO_PREVILIFE', $cod_producto_previlife, PDO::PARAM_STR);
-      $stm->execute();
-
-      return $stm;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-  public function  editarEnvasesPrevilife($codprev, $codigoPrevilife)
-  {
-    try {
-
-      $stmt = $this->bd->prepare("UPDATE T_PRODUCTO_PREVILIFE SET COD_PRODUCTO_PREVILIFE  ='$codigoPrevilife'  WHERE COD_PRODUCTO_PREVILIFE = '$codprev'");
-      $update = $stmt->execute();
-
-      return $update;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-  public function  eliminarEnvasesPrevilife($codenvaseprevilife)
-  {
-    try {
-
-      $stm = $this->bd->prepare("DELETE FROM T_PRODUCTO_PREVILIFE WHERE COD_PRODUCTO_PREVILIFE= :COD_PRODUCTO_PREVILIFE");
-      $stm->bindParam(':COD_PRODUCTO_PREVILIFE', $codenvaseprevilife, PDO::PARAM_STR);
-
-      $delete = $stm->execute();
-      return $delete;
-    } catch (Exception $e) {
-      die("Error al eliminar los datos: " . $e->getMessage());
-    }
-  }
-  public function MostrarEnvasesPrevilifePDF()
-  {
-    try {
-      $stm = $this->bd->prepare(
-        "SELECT PR.COD_PRODUCTO_PREVILIFE AS COD_PRODUCTO_PREVILIFE, P.DES_PRODUCTO AS DES_PRODUCTO,
-        PR.ABR_PRODUCTO_PREVILIFE AS ABR_PRODUCTO_PREVILIFE, PR.FECHA_CREACION AS FECHA_CREACION, PR.VERSION AS VERSION
-        FROM T_PRODUCTO_PREVILIFE AS PR INNER JOIN T_PRODUCTO AS P ON PR.COD_PRODUCTO=P.COD_PRODUCTO"
-      );
-      $stm->execute();
-      $datos = $stm->fetchAll();
-
-      return $datos;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-  public function VersionMostrarEnvasesPrevilife()
-  {
-    try {
-      $stm = $this->bd->prepare("SELECT MAX(VERSION) AS VERSION FROM T_PRODUCTO_PREVILIFE");
-      $stm->execute();
-      $datos = $stm->fetchAll();
-
-      return $datos;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
 
 
 
@@ -1902,6 +1713,15 @@ class m_almacen
   }
 
 
+
+
+
+
+
+
+
+
+
   public function MostrarProducciones($COD_PRODUCTO)
   {
     try {
@@ -1943,7 +1763,7 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO");
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00004'");
       $stm->execute();
       $datos = $stm->fetchAll();
 

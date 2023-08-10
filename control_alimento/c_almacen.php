@@ -251,16 +251,7 @@ if ($_POST['accion'] == 'buscarZonaCombo') {
 
 
 
-if ($_POST['accion'] == 'buscarProductoCombo') {
-    $term = $_POST['term'];
-    $respuesta = c_almacen::c_buscar_producto_combo($term);
-    echo $respuesta;
-}
-// if ($_POST['accion'] == 'buscarProductoAbreviaturaCombo') {
-//     $term = $_POST['term'];
-//     $respuesta = c_almacen::c_buscar_producto_abreviatura_combo($term);
-//     echo $respuesta;
-// }
+
 if ($_POST['accion'] == 'insertarlabsabell') {
 
     $codigolabsabell = trim($_POST['codigolabsabell']);
@@ -298,47 +289,7 @@ if ($_POST['accion'] == 'eliminarproductoenvase') {
 
 
 
-if ($_POST['accion'] == 'buscarProductoComboPrevilife') {
-    $term = $_POST['term'];
-    $respuesta = c_almacen::c_buscar_producto_combo_previlife($term);
-    echo $respuesta;
-}
-if ($_POST['accion'] == 'buscarprevilife') {
 
-    $buscarPrevilife = trim($_POST['buscarPrevilife']);
-
-    $respuesta = c_almacen::c_buscar_previlife($buscarPrevilife);
-    echo $respuesta;
-}
-if ($_POST['accion'] == 'insertarprevilife') {
-
-    $codigoPrevilife = trim($_POST['codigoPrevilife']);
-    $abrPrevilife = trim($_POST['abrPrevilife']);
-    $valorSelec = ($_POST['valorSelec']);
-
-
-    $respuesta = c_almacen::c_insertar_previlife($codigoPrevilife, $valorSelec, $abrPrevilife);
-    echo $respuesta;
-}
-if ($_POST['accion'] == 'editarPrevilife') {
-    $cod_producto_previlife = trim($_POST['cod_producto_previlife']);
-    $respuesta = c_almacen::c_editar_envases_previlife($cod_producto_previlife);
-    echo $respuesta;
-}
-
-if ($_POST['accion'] == 'actualizarprevilife') {
-    $codprev = trim($_POST['codprev']);
-    $codigoPrevilife = trim($_POST['codigoPrevilife']);
-    $respuesta = c_almacen::c_actualizar_envases_previlife($codprev, $codigoPrevilife);
-    echo $respuesta;
-}
-if ($_POST['accion'] == 'eliminarproductoenvaseprevilife') {
-
-    $codenvaseprevilife = trim($_POST['codenvaseprevilife']);
-
-    $respuesta = c_almacen::c_eliminar_envases_previlife($codenvaseprevilife);
-    echo $respuesta;
-}
 
 
 
@@ -1685,22 +1636,7 @@ class c_almacen
         echo json_encode($respuesta);
     }
 
-    static function c_buscar_producto_combo($term)
-    {
-        $m_formula = new m_almacen();
 
-
-        $respuesta = $m_formula->MostrarProductoCombo($term);
-        echo json_encode($respuesta);
-    }
-    // static function  c_buscar_producto_abreviatura_combo($term)
-    // {
-    //     $m_formula = new m_almacen();
-
-
-    //     $respuesta = $m_formula->MostrarProductoabreviaturaCombo($term);
-    //     echo json_encode($respuesta);
-    // }
     static function c_insertar_labsabell($codigolabsabell, $valorSeleccionado)
     {
         $m_formula = new m_almacen();
@@ -1729,11 +1665,9 @@ class c_almacen
                 $json = array();
                 foreach ($datos as $row) {
                     $json[] = array(
-                        "COD_PRODUCTO_ENVASE" => $row->COD_PRODUCTO_ENVASE,
+                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
-                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
-                        "VERSION" => $row->VERSION,
                     );
                 }
                 $jsonstring = json_encode($json);
@@ -1744,11 +1678,9 @@ class c_almacen
                 $json = array();
                 foreach ($datos as $row) {
                     $json[] = array(
-                        "COD_PRODUCTO_ENVASE" => $row->COD_PRODUCTO_ENVASE,
+                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
-                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
-                        "VERSION" => $row->VERSION,
                     );
                 }
                 $jsonstring = json_encode($json);
@@ -1813,121 +1745,6 @@ class c_almacen
 
 
 
-
-    static function c_buscar_producto_combo_previlife($term)
-    {
-        $m_formula = new m_almacen();
-
-
-        $respuesta = $m_formula->MostrarProductoComboPrevilife($term);
-        echo json_encode($respuesta);
-    }
-    static function   c_buscar_previlife($buscarPrevilife)
-    {
-        try {
-
-            if (!empty($buscarPrevilife)) {
-                $mostrar = new m_almacen();
-                $datos = $mostrar->MostrarEnvasesPrevilife($buscarPrevilife);
-
-                if (!$datos) {
-                    throw new Exception("Hubo un error en la consulta");
-                }
-                $json = array();
-                foreach ($datos as $row) {
-                    $json[] = array(
-                        "COD_PRODUCTO_PREVILIFE" => $row->COD_PRODUCTO_PREVILIFE,
-                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                        "ABR_PRODUCTO_PREVILIFE" => $row->ABR_PRODUCTO_PREVILIFE,
-                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
-                        "VERSION" => $row->VERSION,
-                    );
-                }
-                $jsonstring = json_encode($json);
-                echo $jsonstring;
-            } else {
-                $mostrar = new m_almacen();
-                $datos = $mostrar->MostrarEnvasesPrevilife($buscarPrevilife);
-                $json = array();
-                foreach ($datos as $row) {
-                    $json[] = array(
-                        "COD_PRODUCTO_PREVILIFE" => $row->COD_PRODUCTO_PREVILIFE,
-                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                        "ABR_PRODUCTO_PREVILIFE" => $row->ABR_PRODUCTO_PREVILIFE,
-                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
-                        "VERSION" => $row->VERSION,
-                    );
-                }
-                $jsonstring = json_encode($json);
-                echo $jsonstring;
-            }
-        } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
-        }
-    }
-    static function c_insertar_previlife($codigoPrevilife, $valorSelec, $abrPrevilife)
-    {
-        $m_formula = new m_almacen();
-
-        if (isset($codigoPrevilife) && isset($valorSelec) && isset($abrPrevilife)) {
-            $respuesta = $m_formula->InsertarPrevilife($codigoPrevilife, $valorSelec, $abrPrevilife);
-            if ($respuesta) {
-                return "ok";
-            } else {
-                return "error";
-            };
-        }
-    }
-    static function c_editar_envases_previlife($cod_producto_previlife)
-    {
-        $mostrar = new m_almacen();
-
-        if (isset($cod_producto_previlife)) {
-            $selectZ = $mostrar->SelectEnvasesPrevilife($cod_producto_previlife);
-
-            $json = array();
-            foreach ($selectZ as $row) {
-                $json[] = array(
-                    "COD_PRODUCTO_PREVILIFE" => $row['COD_PRODUCTO_PREVILIFE'],
-                    "DES_PRODUCTO" => $row['DES_PRODUCTO'],
-                    "ABR_PRODUCTO_PREVILIFE" => $row['ABR_PRODUCTO_PREVILIFE'],
-                );
-            }
-
-            $jsonstring = json_encode($json[0]);
-            echo $jsonstring;
-        }
-    }
-    static function c_actualizar_envases_previlife($codprev, $codigoPrevilife)
-    {
-
-        $m_formula = new m_almacen();
-
-
-        if (isset($codprev) && isset($codigoPrevilife)) {
-
-            $respuesta = $m_formula->editarEnvasesPrevilife($codprev, $codigoPrevilife);
-            if ($respuesta) {
-                return "ok";
-            } else {
-                return "error";
-            };
-        }
-    }
-    static function c_eliminar_envases_previlife($codenvaseprevilife)
-    {
-        $mostrar = new m_almacen();
-
-        if (isset($codenvaseprevilife)) {
-
-            $resultado = $mostrar->eliminarEnvasesPrevilife($codenvaseprevilife);
-            if ($resultado) {
-                return "ok";
-            } else {
-                return "error";
-            };
-        }
-    }
 
 
 

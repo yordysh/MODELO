@@ -221,6 +221,16 @@ img {
   background: #5b8ccc;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+.wave {
+  position: absolute;
+  /* top: 60px; */
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background-image: linear-gradient(to bottom, #814092, #ffffff);
+  opacity: 0.5;
+  z-index: -1;
+}
 .nav,
 .nav .nav-links {
   display: flex;

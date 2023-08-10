@@ -47,14 +47,14 @@ $(function () {
             let tasks = JSON.parse(response);
             let template = ``;
             tasks.forEach((task) => {
-              template += `<tr taskId="${task.COD_PRODUCTO_ENVASE}">
-              <!-- <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_PRODUCTO_ENVASE}</td> -->
+              template += `<tr taskId="${task.COD_PRODUCTO}">
+             
                 <td data-titulo="NOMBRE" class="DES_PRODUCTO" style="text-align:rigth;">${task.DES_PRODUCTO}</td>
-                <td data-titulo="ABREVIATURA" class="ABR_PRODUCTO" style="text-align:rigth;">${task.ABR_PRODUCTO}</td>
-                <td data-titulo="FECHA" style="text-align:rigth;">${task.FECHA_CREACION}</td>
-                <!-- <td data-titulo="VERSION" style="text-align:rigth;">${task.VERSION}</td> -->
-                <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_PRODUCTO_ENVASE="${task.COD_PRODUCTO_ENVASE}"><i class="icon-trash"></i></button></td>
-                <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_PRODUCTO_ENVASE="${task.COD_PRODUCTO_ENVASE}"><i class="icon-edit"></i></button></td>
+                <td data-titulo="CODIGO" class="ABR_PRODUCTO" style="text-align:rigth;">${task.ABR_PRODUCTO}</td>
+              
+           
+                <!--<td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_PRODUCTO_ENVASE="${task.COD_PRODUCTO_ENVASE}"><i class="icon-trash"></i></button></td>
+                <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_PRODUCTO_ENVASE="${task.COD_PRODUCTO_ENVASE}"><i class="icon-edit"></i></button></td> -->
             </tr>`;
             });
             $("#tablaLabsabells").html(template);
@@ -198,7 +198,6 @@ $(function () {
     });
   });
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
-  // Cargar registros ZONA AREA
 
   function fetchTasks() {
     const accion = "buscarlabsabell";
@@ -217,10 +216,10 @@ $(function () {
             <!-- <td data-titulo="CODIGO" style="text-align:rigth;">${task.COD_PRODUCTO_ENVASE}</td> -->
               <td data-titulo="NOMBRE" class="DES_PRODUCTO" style="text-align:rigth;">${task.DES_PRODUCTO}</td>
               <td data-titulo="ABREVIATURA" class="ABR_PRODUCTO" style="text-align:rigth;">${task.ABR_PRODUCTO}</td>
-              <td data-titulo="FECHA" style="text-align:rigth;">${task.FECHA_CREACION}</td>
-              <!-- <td data-titulo="VERSION" style="text-align:rigth;">${task.VERSION}</td> -->
-              <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_PRODUCTO_ENVASE="${task.COD_PRODUCTO_ENVASE}"><i class="icon-trash"></i></button></td>
-              <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_PRODUCTO_ENVASE="${task.COD_PRODUCTO_ENVASE}"><i class="icon-edit"></i></button></td>
+            
+             
+              <!-- <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_PRODUCTO_ENVASE="${task.COD_PRODUCTO_ENVASE}"><i class="icon-trash"></i></button></td>
+              <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_PRODUCTO_ENVASE="${task.COD_PRODUCTO_ENVASE}"><i class="icon-edit"></i></button></td> -->
           </tr>`;
           });
           $("#tablaLabsabells").html(template);

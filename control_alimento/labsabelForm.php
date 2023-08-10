@@ -29,6 +29,7 @@ $dataProducto = $mostrar->MostrarProductoSelect();
 
 <body>
     <nav class="nav">
+        <div class="wave"></div>
         <i class="icon-menu navOpenBtn"></i>
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
         <ul class="nav-links">
@@ -36,9 +37,9 @@ $dataProducto = $mostrar->MostrarProductoSelect();
             <li>
                 <a class="" href="#">Envases labsabell</a>
             </li>
-            <li>
+            <!-- <li>
                 <a class="" href="previlifeForm.php">Envases previlife</a>
-            </li>
+            </li> -->
             <li>
                 <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
             </li>
@@ -55,7 +56,7 @@ $dataProducto = $mostrar->MostrarProductoSelect();
         <section>
             <div class="container g-4 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">LABSABELL</label></center>
+                    <center><label class="title">LISTA MAESTRA DE ENVASES Y EMBALAJES LABSABELL</label></center>
                 </div>
                 <div class="main">
                     <div id="tablaLabsabell" class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;">
@@ -65,11 +66,11 @@ $dataProducto = $mostrar->MostrarProductoSelect();
 
                                     <!-- <th class="thtitulo" scope="col">CODIGO</th> -->
                                     <th class="thtitulo" scope="col">NOMBRE</th>
-                                    <th class="thtitulo" scope="col">ABREVIATURA</th>
-                                    <th class="thtitulo" scope="col">FECHA</th>
+                                    <th class="thtitulo" scope="col">CODIGO</th>
+                                    <!-- <th class="thtitulo" scope="col">FECHA</th> -->
                                     <!-- <th class="thtitulo" scope="col">VERSION</th> -->
-                                    <th></th>
-                                    <th></th>
+                                    <!-- <th></th>
+                                    <th></th> -->
                                 </tr>
                             </thead>
                             <tbody id="tablaLabsabells">
@@ -81,7 +82,7 @@ $dataProducto = $mostrar->MostrarProductoSelect();
                     <form method="post" action="" id="formularioLabsabell">
 
                         <!-- Text input codigo -->
-                        <div class="form-outline mb-4">
+                        <!-- <div class="form-outline mb-4">
                             <label class="form-label">Nombre</label>
                             <select id="selectProducto" class="form-select selectProducto" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
@@ -92,21 +93,17 @@ $dataProducto = $mostrar->MostrarProductoSelect();
 
                                 ?>
                             </select>
-                            <!-- <input type="hidden" id="task_producto">
-                            <input type="text" id="selectLabsabell" class="form-control" name="selectLabsabell" required> -->
-
-                        </div>
+                        </div> -->
                         <!-- Text input nombre -->
-                        <div class="form-outline mb-4">
+                        <!-- <div class="form-outline mb-4">
                             <label class="form-label">Codigo</label>
                             <input type="text" id="codigo_labsabell" class="form-control" name="codigo_labsabell" required>
-                        </div>
+                        </div> -->
 
 
 
 
-                        <div class="contenedor">
-                            <!-- Submit button -->
+                        <!-- <div class="contenedor">
                             <div class="d-grid  col-6 mx-auto bt-guardar">
                                 <input type="hidden" id="taskId">
                                 <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
@@ -114,7 +111,7 @@ $dataProducto = $mostrar->MostrarProductoSelect();
                             <div class="ordenar">
                                 <a class="btn btn-primary btnPdf" href="#" onclick="generarPDF()">Generar PDF</a>
                             </div>
-                        </div>
+                        </div> -->
                     </form>
                 </div>
             </div>

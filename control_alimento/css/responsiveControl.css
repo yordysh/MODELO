@@ -368,6 +368,7 @@ td {
   }
   .ctnBtn {
     margin-right: 100px;
+    display: flex;
   }
   .ctn {
     margin: 0 5px;
@@ -387,6 +388,9 @@ td {
     margin: 0 auto;
     padding-top: 6em;
     height: 57%;
+  }
+  .ctnBtn {
+    display: block;
   }
   .contenedor {
     display: block;

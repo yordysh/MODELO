@@ -3,7 +3,6 @@ require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
 $dataProducto = $mostrar->MostrarProductoComboRegistro();
-$dataProduccion = $mostrar->MostrarProduccionComboRegistro();
 
 ?>
 <!DOCTYPE html>
@@ -121,8 +120,8 @@ $dataProduccion = $mostrar->MostrarProduccionComboRegistro();
                         <div class="contenedor">
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
-                                <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
                                 <button id="botonCalcular" type="submit" name="calcular" class="btn btn-primary bt-guardar">Calcular </button>
+                                <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
                             </div>
                             <div class="ctn">
                                 <label for="mes">Seleccione el año:</label>
