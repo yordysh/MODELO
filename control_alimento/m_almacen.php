@@ -1734,49 +1734,11 @@ class m_almacen
 
 
 
-
-  public function MostrarProducciones($COD_PRODUCTO)
-  {
-    try {
-
-
-      $stm = $this->bd->prepare(
-        "SELECT * FROM T_PRODUCCION WHERE COD_PRODUCTO=:COD_PRODUCTO"
-      );
-      $stm->bindParam(':COD_PRODUCTO', $COD_PRODUCTO);
-      $stm->execute();
-      $datos = $stm->fetchAll();
-
-      return $datos;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-  public function generarBachada()
-  {
-    $stm = $this->bd->prepare("SELECT MAX(N_BACHADA) as N_BACHADA FROM T_AVANCE_INSUMOS");
-    $stm->execute();
-    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
-    $maxCodigo = intval($resultado['N_BACHADA']);
-    $nuevoCodigo = $maxCodigo + 1;
-    // $codigoAumento = str_pad($nuevoCodigo, 7, '0', STR_PAD_LEFT);
-    return $nuevoCodigo;
-  }
-  public function generarCodigoRegistroEnvases()
-  {
-    $stm = $this->bd->prepare("SELECT MAX(COD_AVANCE_INSUMOS) as COD_AVANCE_INSUMOS FROM T_AVANCE_INSUMOS");
-    $stm->execute();
-    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
-    $maxCodigo = intval($resultado['COD_AVANCE_INSUMOS']);
-    $nuevoCodigo = $maxCodigo + 1;
-    $codigoAumento = str_pad($nuevoCodigo, 7, '0', STR_PAD_LEFT);
-    return $codigoAumento;
-  }
   public function  MostrarProductoComboRegistro()
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00004'");
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -1785,29 +1747,72 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function  MostrarProduccionComboRegistro()
+  public function generarCodigoFormulacion()
+  {
+    $stm = $this->bd->prepare("SELECT MAX(COD_FORMULACION) as COD_FORMULACION FROM T_TMPFORMULACION");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $maxCodigo = intval($resultado['COD_FORMULACION']);
+    $nuevoCodigo = $maxCodigo + 1;
+    $codigoAumento = str_pad($nuevoCodigo, 5, '0', STR_PAD_LEFT);
+    return $codigoAumento;
+  }
+  public function generarCodigoCategoriaProducto($codigoproducto)
+  {
+    $stm = $this->bd->prepare("SELECT COD_CATEGORIA FROM T_PRODUCTO WHERE COD_PRODUCTO='$codigoproducto'");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $codigo_generado_categoria = $resultado['COD_CATEGORIA'];
+
+    return $codigo_generado_categoria;
+  }
+  public function generarCodigoUnidadMedida($codigoProducto)
+  {
+    $stm = $this->bd->prepare("SELECT UNI_MEDIDA FROM T_PRODUCTO WHERE COD_PRODUCTO='$codigoProducto'");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $codigo_generado_unidadMedida = $resultado['UNI_MEDIDA'];
+
+    return $codigo_generado_unidadMedida;
+  }
+  public function generarCodigoFormulacionProducto($codigoFormulacionEnvase)
+  {
+    $stm = $this->bd->prepare("SELECT COD_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codigoFormulacionEnvase'");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $codigo_generado_formulacionEnvase = $resultado['COD_FORMULACION'];
+
+    return $codigo_generado_formulacionEnvase;
+  }
+  public function InsertarProductoCombo($selectProductoCombo, $cantidadTotal)
   {
     try {
+      $codigoform = new m_almacen();
+      // $VERSION = $fecha->generarVersionInsumosLab();
+      // $repetir = $fecha->contarRegistrosInsumosLab($codigoInsumosLab, $valorSeleccionado);
+      // $FECHA_CREACION = $fecha->c_horaserversql('F');
+      $fecha_generado = '11/08/2023';
+      $codigo_formulacion = $codigoform->generarCodigoFormulacion();
+      $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);
+      $unidad_medida = $codigoform->generarCodigoUnidadMedida($selectProductoCombo);
+      // if ($repetir == 0) {
+      $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION(COD_FORMULACION, COD_CATEGORIA, COD_PRODUCTO, FEC_GENERADO, CAN_FORMULACION, UNI_MEDIDA)
+                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_generado','$cantidadTotal','$unidad_medida')");
 
-      $stm = $this->bd->prepare("SELECT * FROM T_PRODUCCION");
-      $stm->execute();
-      $datos = $stm->fetchAll();
-
-      return $datos;
+      $insert = $stm->execute();
+      return $insert;
+      // }
     } catch (Exception $e) {
+
       die($e->getMessage());
     }
   }
-  public function  MostrarRegistroEnvase($buscarregistro)
+  public function MostrarProductoEnvase($selectProductoCombo)
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT AI.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS, PRO.FEC_GENERADO AS FEC_GENERADO, AI.N_BACHADA AS N_BACHADA, 
-                                  P.ABR_PRODUCTO AS ABR_PRODUCTO, P.PESO_NETO AS PESO_NETO,P.UNI_MEDIDA AS UNI_MEDIDA, AI.CANTIDAD AS CANTIDAD,
-                                  AI.CANTIDAD_ENVASES AS CANTIDAD_ENVASES,AI.CANTIDAD_TAPAS AS CANTIDAD_TAPAS,AI .CANTIDAD_SCOOPS AS CANTIDAD_SCOOPS,
-                                  AI.CANTIDAD_ALUPOL AS CANTIDAD_ALUPOL, AI.CANTIDAD_CAJAS AS CANTIDAD_CAJAS, AI.FECHA AS FECHA 
-                                  FROM T_AVANCE_INSUMOS AS AI INNER JOIN T_PRODUCTO AS P 
-                                  ON AI.COD_PRODUCTO=P.COD_PRODUCTO INNER JOIN T_PRODUCCION AS PRO ON AI.COD_PRODUCCION=PRO.COD_PRODUCCION  WHERE ABR_PRODUCTO LIKE '$buscarregistro%'");
+      $stm = $this->bd->prepare("SELECT P.DES_PRODUCTO AS DES_PRODUCTO, F.CAN_FORMULACION AS CAN_FORMULACION
+                                 FROM T_PRODUCTO AS P INNER JOIN T_TMPFORMULACION AS F ON P.COD_PRODUCTO=F.COD_PRODUCTO WHERE F.COD_PRODUCTO='$selectProductoCombo'");
 
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
@@ -1817,68 +1822,28 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function InsertarRegistroEnvases($selectProduccion, $selectProductoCombo, $cantidad)
+  public function InsertarInsumosProducto($selectProductoCombo, $selectInsumosCombo, $cantidadInsumos)
   {
     try {
       $this->bd->beginTransaction();
-      $registro = new m_almacen();
-      $nombre = 'LBS-OP-FR-01';
-      $VERSION = $registro->generarVersionGeneral($nombre);
-      $bachada = $registro->generarBachada();
+      $codigo = new m_almacen();
+      // $VERSION = $fecha->generarVersionInsumosLab();
       // $repetir = $fecha->contarRegistrosInsumosLab($codigoInsumosLab, $valorSeleccionado);
-      $FECHA = $registro->c_horaserversql('F');
-      // $FECHA = '02/09/2023';
-      $mesAnioHoy = date('Y-m', strtotime(str_replace('/', '-',  $FECHA)));
-
-      $codigo_avance_insumos = $registro->generarCodigoRegistroEnvases();
+      // $FECHA_CREACION = $fecha->c_horaserversql('F');
+      $fecha_generado = '11/08/2023';
+      // $codigo_formulacion = $codigo->generarCodigoFormulacion();
       // if ($repetir == 0) {
-      $cantidad_envases = $cantidad;
-      $cantidad_tapas = $cantidad;
-      $cantidad_scoops = $cantidad;
-      $cantidad_alupol = $cantidad;
-      $cantidad_cajas = round(($cantidad * 5) / 100);
-      $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION(COD_FORMULACION,COD_PRODUCTO,FEC_GENERADO, HOR_GENERADO,CAN_FORMULACION, MER_FORMULACION)
-                                  VALUES ( '$codigo_avance_insumos','$bachada', '$selectProduccion','$selectProductoCombo','$cantidad','$cantidad_envases','$cantidad_tapas','$cantidad_scoops','$cantidad_alupol','$cantidad_cajas','$FECHA')");
+      $codigo_formulacion = $codigo->generarCodigoFormulacionProducto($selectProductoCombo);
+      // $unidadmedida = $codigo->generarCodigoUnidadMedida($selectProductoCombo);
 
+
+      $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION_ITEM(COD_FORMULACION, COD_PRODUCTO, CAN_FORMULACION)
+                                  VALUES ('$codigo_formulacion','$selectInsumosCombo','$cantidadInsumos')");
       $insert = $stm->execute();
 
 
-      if ($VERSION == '01') {
-        // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
-        // //$stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$FECHA_CREACION' as date) AND NOMBRE='$nombre'");
-        // $stmver->execute();
-        // $valor = $stmver->fetchAll();
-
-        // $valor1 = count($valor);
-
-        // if ($valor1 == 0) {
-        $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
-        $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-        $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-        $stmVersion->bindParam(':FECHA_VERSION', $FECHA_CREACION);
-
-        $stmVersion->execute();
-        // }
-      } else {
-        $stmver = $this->bd->prepare("SELECT MAX(VERSION) AS VERSION FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
-        $stmver->execute();
-        $valor = $stmver->fetchAll();
-
-        $valor1 = count($valor);
-        // var_dump($valor1);
-
-        if ($valor1 == 0) {
-          $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
-          $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-          $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-          $stmVersion->bindParam(':FECHA_VERSION', $FECHA_CREACION);
-
-          $stmVersion->execute();
-        }
-      }
 
       $insert = $this->bd->commit();
-
       return $insert;
       // }
     } catch (Exception $e) {
@@ -1886,111 +1851,21 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function  SelectRegistroEnvase($cod_registro_envase)
+  public function MostrarInsumoEnvase($selectProductoCombo)
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT AI.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS, AI.COD_PRODUCCION AS COD_PRODUCCION, 
-                                  AI.COD_PRODUCTO AS COD_PRODUCTO, PRO.NUM_PRODUCION_LOTE AS NUM_PRODUCION_LOTE, 
-                                  PRO.FEC_GENERADO AS FEC_GENERADO, AI.N_BACHADA AS N_BACHADA, P.ABR_PRODUCTO AS ABR_PRODUCTO, 
-                                  P.PESO_NETO AS PESO_NETO,P.UNI_MEDIDA AS UNI_MEDIDA, AI.CANTIDAD AS CANTIDAD,
-                                  AI.CANTIDAD_ENVASES AS CANTIDAD_ENVASES,AI.CANTIDAD_TAPAS AS CANTIDAD_TAPAS,AI .CANTIDAD_SCOOPS AS CANTIDAD_SCOOPS,
-                                  AI.CANTIDAD_ALUPOL AS CANTIDAD_ALUPOL, AI.CANTIDAD_CAJAS AS CANTIDAD_CAJAS, AI.FECHA AS FECHA 
-                                  FROM T_AVANCE_INSUMOS AS AI INNER JOIN T_PRODUCTO AS P 
-                                  ON AI.COD_PRODUCTO=P.COD_PRODUCTO INNER JOIN T_PRODUCCION AS PRO ON AI.COD_PRODUCCION=PRO.COD_PRODUCCION  WHERE COD_AVANCE_INSUMOS= :COD_AVANCE_INSUMOS");
-      $stm->bindParam(':COD_AVANCE_INSUMOS', $cod_registro_envase, PDO::PARAM_STR);
+      $codigo = new m_almacen();
+      $codigo_formulacion = $codigo->generarCodigoFormulacionProducto($selectProductoCombo);
+
+      $stm = $this->bd->prepare("SELECT P.DES_PRODUCTO AS DES_PRODUCTO, F.CAN_FORMULACION AS CAN_FORMULACION
+                                 FROM T_PRODUCTO AS P INNER JOIN T_TMPFORMULACION AS F ON P.COD_PRODUCTO=F.COD_PRODUCTO WHERE F.COD_PRODUCTO='$selectProductoCombo'");
+
       $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
-      return $stm;
+      return $datos;
     } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-  public function editarRegistroEnvases($codRegistro, $fecha)
-  {
-    try {
-      $fechaConvertida = date("d-m-Y", strtotime($fecha));
-
-      $stmt = $this->bd->prepare("UPDATE T_AVANCE_INSUMOS SET FECHA = :FECHA  WHERE COD_AVANCE_INSUMOS = :COD_AVANCE_INSUMOS");
-      $stmt->bindParam(':COD_AVANCE_INSUMOS', $codRegistro, PDO::PARAM_STR);
-      $stmt->bindParam(':FECHA', $fechaConvertida);
-      $update = $stmt->execute();
-
-      return $update;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-  public function eliminarRegistroEnvases($codregistro)
-  {
-    try {
-
-      $stm = $this->bd->prepare("DELETE FROM T_AVANCE_INSUMOS WHERE COD_AVANCE_INSUMOS= :COD_AVANCE_INSUMOS");
-      $stm->bindParam(':COD_AVANCE_INSUMOS', $codregistro);
-
-      $delete = $stm->execute();
-      return $delete;
-    } catch (Exception $e) {
-      die("Error al eliminar los datos: " . $e->getMessage());
-    }
-  }
-  public function InsertarDatosEnvase($union)
-  {
-    try {
-      $this->bd->beginTransaction();
-      $registro = new m_almacen();
-
-      $bachada = $registro->generarBachada();
-
-
-
-      $datos = json_decode($union, true);
-
-      $stm = $this->bd->prepare("SELECT MAX(COD_AVANCE_INSUMOS) AS COD_AVANCE_INSUMOS FROM T_AVANCE_INSUMOS");
-      $stm->execute();
-      $resultado = $stm->fetch(PDO::FETCH_ASSOC);
-      $codCount = intval($resultado['COD_AVANCE_INSUMOS']);
-
-      if ($codCount == null) {
-        $codCount = 1;
-      } else {
-        $codCount = intval($resultado['COD_AVANCE_INSUMOS']) + 1;
-      }
-      // $codCount = 1;
-
-      for ($i = 0; $i < count($datos); $i += 4) {
-
-        $codPrefix = str_pad($codCount, 8, '0', STR_PAD_LEFT);
-
-        $codProducto = $datos[$i]['union'];
-        $codProduccion = $datos[$i + 1]['union'];
-        $cantidad = $datos[$i + 2]['union'];
-        $lote = $datos[$i + 3]['union'];
-
-        if ($i == 0) {
-          $campo = 'CANTIDAD_ENVASES';
-        } elseif ($i == 4) {
-          $campo = 'CANTIDAD_TAPAS';
-        } elseif ($i == 8) {
-          $campo = 'CANTIDAD_SCOOPS';
-        } elseif ($i == 12) {
-          $campo = 'CANTIDAD_ALUPOL';
-        } elseif ($i == 16) {
-          $campo = 'CANTIDAD_CAJAS';
-        }
-
-        $stm = $this->bd->prepare("INSERT INTO T_AVANCE_INSUMOS(COD_AVANCE_INSUMOS, N_BACHADA, COD_PRODUCCION, COD_PRODUCTO, $campo)
-                                    VALUES ('$codPrefix','$bachada', '$codProduccion','$codProducto','$cantidad')");
-
-        $insert = $stm->execute();
-
-        $codCount++;
-      }
-      $insert = $this->bd->commit();
-
-      return $insert;
-    } catch (Exception $e) {
-      $this->bd->rollBack();
       die($e->getMessage());
     }
   }

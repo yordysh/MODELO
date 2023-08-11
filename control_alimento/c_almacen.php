@@ -342,55 +342,37 @@ if ($_POST['accion'] == 'eliminarinsumolab') {
 
 
 
-if ($_POST['accion'] == 'buscarregistroenvase') {
 
-    $buscarregistro = trim($_POST['buscarregistro']);
+if ($_POST['accion'] == 'insertarProductoEnvase') {
 
-    $respuesta = c_almacen::c_buscar_registro_envase($buscarregistro);
+    $selectProductoCombo = trim($_POST['selectProductoCombo']);
+    $cantidadTotal = trim($_POST['cantidadTotal']);
+
+
+
+
+    $respuesta = c_almacen::c_insertar_producto_combo($selectProductoCombo, $cantidadTotal);
     echo $respuesta;
 }
-if ($_POST['accion'] == 'seleccionarProduccion') {
-
-    $respuesta = c_almacen::c_selectproduccion();
-    echo $respuesta;
-}
-
-if ($_POST['accion'] == 'insertarRegistro') {
-
-    $selectProduccion = $_POST['selectProduccion'];
+if ($_POST['accion'] == 'buscarenvaseproducto') {
     $selectProductoCombo = $_POST['selectProductoCombo'];
-    $cantidad = $_POST['cantidad'];
-    // $fecha = $_POST['fecha'];
-
-
-    $respuesta = c_almacen::c_insertar_registro_envases($selectProduccion, $selectProductoCombo, $cantidad);
+    $respuesta = c_almacen::c_buscar_producto_envase($selectProductoCombo);
     echo $respuesta;
 }
-if ($_POST['accion'] == 'editarRegistroEnvase') {
-    $cod_registro_envase = trim($_POST['cod_registro_envase']);
-    $respuesta = c_almacen::c_editar_registro_envases($cod_registro_envase);
+if ($_POST['accion'] == 'insertarInsumosProducto') {
+
+    $selectProductoCombo = trim($_POST['selectProductoCombo']);
+    $selectInsumosCombo = trim($_POST['selectInsumosCombo']);
+    $cantidadInsumos = trim($_POST['cantidadInsumos']);
+
+
+
+    $respuesta = c_almacen::c_insertar_insumos_producto($selectProductoCombo,  $selectInsumosCombo, $cantidadInsumos);
     echo $respuesta;
 }
-if ($_POST['accion'] == 'actualizarRegistro') {
-
-    $fecha = $_POST['fecha'];
-    $codRegistro = $_POST['codRegistro'];
-
-    $respuesta = c_almacen::c_actualizar_registro_envases($codRegistro, $fecha);
-    echo $respuesta;
-}
-if ($_POST['accion'] == 'eliminarregistroenvases') {
-
-    $codregistro = trim($_POST['codregistro']);
-
-    $respuesta = c_almacen::c_eliminar_registro_envase($codregistro);
-    echo $respuesta;
-}
-if ($_POST['accion'] == 'guardarcantidadenvases') {
-
-    $union = $_POST['union'];
-
-    $respuesta = c_almacen::c_envio_dataEnvases($union);
+if ($_POST['accion'] == 'buscarinsumoenvase') {
+    $selectProductoCombo = $_POST['selectProductoCombo'];
+    $respuesta = c_almacen::c_buscar_insumo_envase($selectProductoCombo);
     echo $respuesta;
 }
 
@@ -1867,13 +1849,32 @@ class c_almacen
 
 
 
-    static function  c_buscar_registro_envase($buscarregistro)
+
+
+
+
+
+
+    static function c_insertar_producto_combo($selectProductoCombo, $cantidadTotal)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($selectProductoCombo) && isset($cantidadTotal)) {
+            $respuesta = $m_formula->InsertarProductoCombo($selectProductoCombo, $cantidadTotal);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function c_buscar_producto_envase($selectProductoCombo)
     {
         try {
 
-            if (!empty($buscarregistro)) {
+            if (!empty($selectProductoCombo)) {
                 $mostrar = new m_almacen();
-                $datos = $mostrar->MostrarRegistroEnvase($buscarregistro);
+                $datos = $mostrar->MostrarProductoEnvase($selectProductoCombo);
 
                 if (!$datos) {
                     throw new Exception("Hubo un error en la consulta");
@@ -1881,42 +1882,8 @@ class c_almacen
                 $json = array();
                 foreach ($datos as $row) {
                     $json[] = array(
-                        "COD_AVANCE_INSUMOS" => $row->COD_AVANCE_INSUMOS,
-                        "FEC_GENERADO" => convFecSistema($row->FEC_GENERADO),
-                        "N_BACHADA" => $row->N_BACHADA,
-                        "PESO_NETO" => $row->PESO_NETO,
-                        "UNI_MEDIDA" => $row->UNI_MEDIDA,
-                        "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
-                        "CANTIDAD" => $row->CANTIDAD,
-                        "CANTIDAD_ENVASES" => $row->CANTIDAD_ENVASES,
-                        "CANTIDAD_TAPAS" => $row->CANTIDAD_TAPAS,
-                        "CANTIDAD_SCOOPS" => $row->CANTIDAD_SCOOPS,
-                        "CANTIDAD_ALUPOL" => $row->CANTIDAD_ALUPOL,
-                        "CANTIDAD_CAJAS" => $row->CANTIDAD_CAJAS,
-                        "FECHA" =>  convFecSistema($row->FECHA),
-                    );
-                }
-                $jsonstring = json_encode($json);
-                echo $jsonstring;
-            } else {
-                $mostrar = new m_almacen();
-                $datos = $mostrar->MostrarRegistroEnvase($buscarregistro);
-                $json = array();
-                foreach ($datos as $row) {
-                    $json[] = array(
-                        "COD_AVANCE_INSUMOS" => $row->COD_AVANCE_INSUMOS,
-                        "FEC_GENERADO" => convFecSistema($row->FEC_GENERADO),
-                        "N_BACHADA" => $row->N_BACHADA,
-                        "PESO_NETO" => $row->PESO_NETO,
-                        "UNI_MEDIDA" => $row->UNI_MEDIDA,
-                        "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
-                        "CANTIDAD" => $row->CANTIDAD,
-                        "CANTIDAD_ENVASES" => $row->CANTIDAD_ENVASES,
-                        "CANTIDAD_TAPAS" => $row->CANTIDAD_TAPAS,
-                        "CANTIDAD_SCOOPS" => $row->CANTIDAD_SCOOPS,
-                        "CANTIDAD_ALUPOL" => $row->CANTIDAD_ALUPOL,
-                        "CANTIDAD_CAJAS" => $row->CANTIDAD_CAJAS,
-                        "FECHA" =>  convFecSistema($row->FECHA),
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CAN_FORMULACION" => $row->CAN_FORMULACION,
                     );
                 }
                 $jsonstring = json_encode($json);
@@ -1926,29 +1893,12 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function c_selectproduccion()
-    {
-        $consulta = new m_almacen();
-        $COD_PRODUCTO = filter_input(INPUT_POST, 'codProducto');
-
-        $datos = $consulta->MostrarProducciones($COD_PRODUCTO);
-
-
-        if (count($datos) == 0) {
-            echo '<option value="0">No hay registros en produccion</option>';
-        }
-        echo '<option value="0" selected disabled>Seleccione Producción</option>';
-        for ($i = 0; $i < count($datos); $i++) {
-
-            echo '<option value="' . $datos[$i]["COD_PRODUCCION"] . '">' . $datos[$i]["N_PRODUCCION_G"] . '</option>';
-        }
-    }
-    static function c_insertar_registro_envases($selectProduccion, $selectProductoCombo, $cantidad)
+    static function c_insertar_insumos_producto($selectProductoCombo, $selectInsumosCombo, $cantidadInsumos)
     {
         $m_formula = new m_almacen();
 
-        if (isset($selectProduccion) && isset($selectProductoCombo) && isset($cantidad)) {
-            $respuesta = $m_formula->InsertarRegistroEnvases($selectProduccion, $selectProductoCombo, $cantidad);
+        if (isset($selectProductoCombo) && isset($selectInsumosCombo) && isset($cantidadInsumos)) {
+            $respuesta = $m_formula->InsertarInsumosProducto($selectProductoCombo, $selectInsumosCombo, $cantidadInsumos);
             if ($respuesta) {
                 return "ok";
             } else {
@@ -1956,98 +1906,26 @@ class c_almacen
             };
         }
     }
-    static function c_editar_registro_envases($cod_registro_envase)
-    {
-        $mostrar = new m_almacen();
-
-        if (isset($cod_registro_envase)) {
-            $selectZ = $mostrar->SelectRegistroEnvase($cod_registro_envase);
-
-            $json = array();
-            foreach ($selectZ as $row) {
-                $json[] = array(
-                    "COD_AVANCE_INSUMOS" => $row['COD_AVANCE_INSUMOS'],
-                    "COD_PRODUCCION" => $row['COD_PRODUCCION'],
-                    "COD_PRODUCTO" => $row['COD_PRODUCTO'],
-                    "NUM_PRODUCION_LOTE" => $row['NUM_PRODUCION_LOTE'],
-                    "ABR_PRODUCTO" => $row['ABR_PRODUCTO'],
-                    "CANTIDAD" => $row['CANTIDAD'],
-                    "FECHA" => convFecSistema($row['FECHA']),
-                );
-            }
-
-            $jsonstring = json_encode($json[0]);
-            echo $jsonstring;
-        }
-    }
-    static function c_actualizar_registro_envases($codRegistro, $fecha)
-    {
-
-        $m_formula = new m_almacen();
-
-
-        if (isset($codRegistro) && isset($fecha)) {
-
-            $respuesta = $m_formula->editarRegistroEnvases($codRegistro, $fecha);
-            if ($respuesta) {
-                return "ok";
-            } else {
-                return "error";
-            };
-        }
-    }
-    static function  c_eliminar_registro_envase($codregistro)
-    {
-        $mostrar = new m_almacen();
-
-        if (isset($codregistro)) {
-
-            $resultado = $mostrar->eliminarRegistroEnvases($codregistro);
-            if ($resultado) {
-                return "ok";
-            } else {
-                return "error";
-            };
-        }
-    }
-    static function c_envio_dataEnvases($union)
+    static function c_buscar_insumo_envase($selectProductoCombo)
     {
         try {
 
-            if (!empty($union)) {
-
-                // echo json_encode($datos);
+            if (!empty($selectProductoCombo)) {
                 $mostrar = new m_almacen();
-                $datos = $mostrar->InsertarDatosEnvase($union);
-                if ($datos) {
-                    return "ok";
-                } else {
-                    return "error";
-                };
-                // var_dump($union);
-                // if (!$datos) {
-                //     throw new Exception("Hubo un error en la consulta");
-                // }
-                // $json = array();
-                // foreach ($datos as $row) {
-                //     $json[] = array(
-                //         "COD_AVANCE_INSUMOS" => $row->COD_AVANCE_INSUMOS,
-                //         "FEC_GENERADO" => convFecSistema($row->FEC_GENERADO),
-                //         "N_BACHADA" => $row->N_BACHADA,
-                //         "PESO_NETO" => $row->PESO_NETO,
-                //         "UNI_MEDIDA" => $row->UNI_MEDIDA,
-                //         "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
-                //         "CANTIDAD" => $row->CANTIDAD,
-                //         "CANTIDAD_ENVASES" => $row->CANTIDAD_ENVASES,
-                //         "CANTIDAD_TAPAS" => $row->CANTIDAD_TAPAS,
-                //         "CANTIDAD_SCOOPS" => $row->CANTIDAD_SCOOPS,
-                //         "CANTIDAD_ALUPOL" => $row->CANTIDAD_ALUPOL,
-                //         "CANTIDAD_CAJAS" => $row->CANTIDAD_CAJAS,
-                //         "FECHA" =>  convFecSistema($row->FECHA),
-                //     );
-                // }
-                // $jsonstring = json_encode($json);
-                // echo $jsonstring;
+                $datos = $mostrar->MostrarInsumoEnvase($selectProductoCombo);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CAN_FORMULACION" => $row->CAN_FORMULACION,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
             }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();

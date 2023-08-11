@@ -67,76 +67,75 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
 
                                 ?>
                             </select>
-                            <!-- <input type="hidden" id="task_zona">
-                            <input id="selectInfra" class="form-control" required> -->
                         </div>
+                        <!-- Text input cantidad -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Cantidad producto</label>
+                            <input type="text" id="cantidadTotal" class="form-control" name="cantidadTotal" required>
+                        </div>
+                        <button id="botonCalcularProductosEnvases" type="submit" name="insert" class="btn btn-primary bt-guardar">Total de productos</button>
+                        <div class="table-responsive " style="overflow: scroll;height: 180px !important; margin-top:20px;margin-bottom:100px;">
+                            <table id="tbProEnVa" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">CODIGO PRODUCTO</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD PRODUCTO</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaProductoEnvases">
 
-                        <!--Combo Produccion -->
-                        <div class="form-outline mb-4 ">
-                            <label class="form-label">Produccion</label>
-                            <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
-                            <select id="selectProduccion" class="form-select selectProduccion" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione produccion</option>
-
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--Combo Insumos -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Insumos</label>
+                            <select id="selectInsumosCombo" class="form-select selectInsumos" aria-label="Default select example">
+                                <option value="none" selected disabled>Seleccione insumos</option>
+                                <?php foreach ($dataProducto as  $lis) { ?>
+                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                <?php
+                                }
+                                ?>
                             </select>
                         </div>
 
-                        <!-- Text input cantidad -->
+                        <!-- Text input cantidad insumos-->
                         <div class="form-outline mb-4">
-                            <label class="form-label">Cantidad</label>
-                            <input type="text" id="cantidad" class="form-control" name="cantidad" required>
+                            <label class="form-label">Cantidad insumos</label>
+                            <input type="text" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
                         </div>
+                        <button id="botonCalcularInsumos" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar insumos </button>
+                        <div id="tablaInsumos" class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;">
+                            <table id="tbInsum" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
 
+                                        <th class="thtitulo" scope="col">CODIGO INSUMOS</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD INSUMOS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                        <!-- Crear PDF -->
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="contenedor">
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
-                                <!-- <button id="botonCalcular" type="submit" name="calcular" class="btn btn-primary bt-guardar">Calcular </button> -->
+
                                 <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
-                            </div>
-                            <div class="ctn">
-                                <label for="mes">Seleccione el año:</label>
-                                <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
-                            </div>
-                            <div class="ordenar">
-                                <div class="dMes">
-                                    <div class="ctn">
-                                        <label for="mes">Seleccione el mes:</label>
-                                    </div>
-                                    <div class="ctn">
-                                        <select id="mes" name="mes">
-                                            <option value="" selected disabled>Seleccione...</option>
-                                            <option value="01">Enero</option>
-                                            <option value="02">Febrero</option>
-                                            <option value="03">Marzo</option>
-                                            <option value="04">Abril</option>
-                                            <option value="05">Mayo</option>
-                                            <option value="06">Junio</option>
-                                            <option value="07">Julio</option>
-                                            <option value="08">Agosto</option>
-                                            <option value="09">Septiembre</option>
-                                            <option value="10">Octubre</option>
-                                            <option value="11">Noviembre</option>
-                                            <option value="12">Diciembre</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <a class="btn btn-primary btnPdf" href="#" onclick="generarPDF()">Generar PDF</a>
-                                </div>
                             </div>
                         </div>
                     </form>
 
-                    <div id="tablaEF" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                    <div id="tablaEF" class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;">
                         <table id="tbEF" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
 
                                     <th class="thtitulo" scope="col">CODIGO PRODUCTO</th>
-                                    <th class="thtitulo" scope="col">CODIGO PRODUCCION</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD TOTAL</th>
                                 </tr>
                             </thead>
                             <tbody id="tablaEnvaseFormulacion">
