@@ -1,7 +1,4 @@
 $(function () {
-  // fetchTasks();
-  // cargarCombo();
-
   let edit = false;
   //------------- MENU BAR JS ---------------//
   let nav = document.querySelector(".nav"),
@@ -33,6 +30,7 @@ $(function () {
 
   $("#selectProductoCombo").select2();
   $("#selectInsumosCombo").select2();
+  $("#selectEnvasesProductoCombo").select2();
 
   //------------- Busqueda con ajax registro envases----------------//
 
@@ -148,6 +146,9 @@ $(function () {
   $("#botonCalcularProductosEnvases").click((e) => {
     e.preventDefault();
 
+    const selectedValue = $("#selectProductoCombo").val();
+    $("#taskIdProducto").val(selectedValue);
+
     const accion = "insertarProductoEnvase";
     $.ajax({
       url: "./c_almacen.php",
@@ -161,6 +162,14 @@ $(function () {
       success: function (response) {
         // console.log(response);
         mostrarProductoEnvase();
+        $("#selectProductoCombo").append(
+          $("<option>", {
+            value: "none",
+            text: "Seleccione producto",
+            disabled: true,
+            selected: true,
+          })
+        );
         $("#cantidadTotal").val("");
       },
     });
@@ -174,7 +183,7 @@ $(function () {
       url: "./c_almacen.php",
       data: {
         accion: accion,
-        selectProductoCombo: $("#selectProductoCombo").val(),
+        selectProductoCombo: $("#taskIdProducto").val(),
         selectInsumosCombo: $("#selectInsumosCombo").val(),
         cantidadInsumos: $("#cantidadInsumos").val(),
 
@@ -184,6 +193,53 @@ $(function () {
       type: "POST",
       success: function (response) {
         console.log(response);
+        mostrarInsumosEnvases();
+        // Clear and re-add the default option without removing existing options
+        $("#selectInsumosCombo").val("none"); // Set the value to "none"
+        $("#selectInsumosCombo option:selected").prop("selected", false); // Deselect the option
+        $("#cantidadInsumos").val("");
+
+        // Optionally, trigger a change event to update the select box appearance
+        $("#selectInsumosCombo").trigger("change");
+        $("#selectInsumosCombo").empty();
+        $("#selectInsumosCombo").append(
+          $("<option>", {
+            value: "none",
+            text: "Seleccione insumos",
+            disabled: true,
+            selected: true,
+          })
+        );
+      },
+    });
+  });
+
+  $("#botonCalcularEnvasesProducto").click((e) => {
+    e.preventDefault();
+
+    const accion = "insertarenvasesporproducto";
+    $.ajax({
+      url: "./c_almacen.php",
+      data: {
+        accion: accion,
+        selectProductoCombo: $("#taskIdProducto").val(),
+        selectEnvasesProductoCombo: $("#selectEnvasesProductoCombo").val(),
+        cantidadEnvaseProducto: $("#cantidadEnvaseProducto").val(),
+      },
+
+      type: "POST",
+      success: function (response) {
+        console.log(response);
+        mostrarEnvases();
+        $("#selectEnvasesProductoCombo").append(
+          $("<option>", {
+            value: "none",
+            text: "Seleccione envase",
+            disabled: true,
+            selected: true,
+          })
+        );
+        $("#cantidadEnvaseProducto").val("");
       },
     });
   });
@@ -230,7 +286,7 @@ $(function () {
       type: "POST",
       data: {
         accion: accion,
-        selectProductoCombo: $("#selectProductoCombo").val(),
+        selectProductoCombo: $("#taskIdProducto").val(),
       },
       success: function (response) {
         console.log(response);
@@ -247,7 +303,40 @@ $(function () {
             </tr>`;
           });
 
-          $("#tablaProductoEnvases").html(template);
+          $("#tablaInsumos").html(template);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+  }
+  function mostrarEnvases() {
+    const accion = "buscarenvases";
+
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        accion: accion,
+        selectProductoCombo: $("#taskIdProducto").val(),
+      },
+      success: function (response) {
+        console.log(response);
+        if (!response.error) {
+          let tasks = JSON.parse(response);
+
+          let template = ``;
+          tasks.forEach((task) => {
+            template += `<tr taskId="">
+
+                <td data-titulo="CODIGO" style="text-align:rigth;">${task.DES_PRODUCTO}</td>
+                <td data-titulo="CANTIDAD ENVASE" style="text-align:rigth;">${task.CANTIDA}</td>
+    
+            </tr>`;
+          });
+
+          $("#tablaEnvasesCadaProducto").html(template);
         }
       },
       error: function (xhr, status, error) {

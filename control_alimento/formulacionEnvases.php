@@ -52,7 +52,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
 
                         <!-- Text input -->
                         <div class="form-outline mb-4">
-                            <input id="id" type="hidden" class="form-control" name="id" />
+                            <input id="taskIdProducto" type="text" class="form-control" name="taskIdProducto" />
                         </div>
 
                         <!--Combo Productos -->
@@ -73,7 +73,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <label class="form-label">Cantidad producto</label>
                             <input type="text" id="cantidadTotal" class="form-control" name="cantidadTotal" required>
                         </div>
-                        <button id="botonCalcularProductosEnvases" type="submit" name="insert" class="btn btn-primary bt-guardar">Total de productos</button>
+                        <button id="botonCalcularProductosEnvases" type="submit" name="insert" class="btn btn-primary bt-Total">Total de productos</button>
                         <div class="table-responsive " style="overflow: scroll;height: 180px !important; margin-top:20px;margin-bottom:100px;">
                             <table id="tbProEnVa" class="table table-sm mb-3 table-hover">
                                 <thead>
@@ -105,8 +105,8 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <label class="form-label">Cantidad insumos</label>
                             <input type="text" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
                         </div>
-                        <button id="botonCalcularInsumos" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar insumos </button>
-                        <div id="tablaInsumos" class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;">
+                        <button id="botonCalcularInsumos" type="submit" name="insert" class="btn btn-primary bt-Total">Insertar insumos </button>
+                        <div class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;">
                             <table id="tbInsum" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
@@ -115,21 +115,55 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                                         <th class="thtitulo" scope="col">CANTIDAD INSUMOS</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tablaInsumos">
 
                                 </tbody>
                             </table>
                         </div>
-                        <div class="contenedor">
+
+                        <!--Combo Envases por producto -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Envases</label>
+                            <select id="selectEnvasesProductoCombo" class="form-select selectEnvasesProducto" aria-label="Default select example">
+                                <option value="none" selected disabled>Seleccione envases</option>
+                                <?php foreach ($dataProducto as  $lis) { ?>
+                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <!-- Text input cantidad insumos-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Cantidad envases</label>
+                            <input type="text" id="cantidadEnvaseProducto" class="form-control" name="cantidadEnvaseProductos" required>
+                        </div>
+                        <button id="botonCalcularEnvasesProducto" type="submit" name="insert" class="btn btn-primary bt-Total">Insertar envases </button>
+                        <div class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;">
+                            <table id="tbEnvaseProducto" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+
+                                        <th class="thtitulo" scope="col">CODIGO ENVASES</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD ENVASES</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaEnvasesCadaProducto">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- <div class="contenedor">
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
 
                                 <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
                             </div>
-                        </div>
+                        </div> -->
                     </form>
 
-                    <div id="tablaEF" class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;">
+                    <!-- <div id="tablaEF" class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;">
                         <table id="tbEF" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
@@ -142,7 +176,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
 
                             </tbody>
                         </table>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>

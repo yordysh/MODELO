@@ -359,6 +359,9 @@ td {
 #selectInfra {
   width: 100%;
 }
+.bt-Total {
+  width: 50%;
+}
 /*-------------- Estilo de responsive ---------------------*/
 
 @media screen and (max-width: 1370px) {
@@ -422,7 +425,7 @@ td {
     box-sizing: border-box;
     margin-bottom: 10px;
   }
-  /* [data-titulo] {
+  [data-titulo] {
     text-align: left !important;
   }
   .table-responsive table tr {
@@ -443,7 +446,7 @@ td {
 
   .table-responsive table thead {
     display: none;
-  } */
+  }
 
   #selectInfra {
     width: 100%;

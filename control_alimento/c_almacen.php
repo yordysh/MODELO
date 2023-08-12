@@ -375,6 +375,18 @@ if ($_POST['accion'] == 'buscarinsumoenvase') {
     $respuesta = c_almacen::c_buscar_insumo_envase($selectProductoCombo);
     echo $respuesta;
 }
+if ($_POST['accion'] == 'insertarenvasesporproducto') {
+    $selectProductoCombo = $_POST['selectProductoCombo'];
+    $selectEnvasesProductoCombo = $_POST['selectEnvasesProductoCombo'];
+    $cantidadEnvaseProducto = $_POST['cantidadEnvaseProducto'];
+    $respuesta = c_almacen::c_insertar_porducto_por_envase($selectProductoCombo, $selectEnvasesProductoCombo, $cantidadEnvaseProducto);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'buscarenvases') {
+    $selectProductoCombo = $_POST['selectProductoCombo'];
+    $respuesta = c_almacen::c_buscar_envases($selectProductoCombo);
+    echo $respuesta;
+}
 
 
 
@@ -1925,6 +1937,48 @@ class c_almacen
                         "COD_PRODUCTO" => $row->COD_PRODUCTO,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "CAN_FORMULACION" => $row->CAN_FORMULACION,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_insertar_porducto_por_envase($selectProductoCombo, $selectEnvasesProductoCombo, $cantidadEnvaseProducto)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($selectProductoCombo) && isset($selectEnvasesProductoCombo) && isset($cantidadEnvaseProducto)) {
+            $respuesta = $m_formula->InsertarEnvasePorProducto($selectProductoCombo, $selectEnvasesProductoCombo, $cantidadEnvaseProducto);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function c_buscar_envases($selectProductoCombo)
+    {
+        try {
+
+            if (!empty($selectProductoCombo)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarEnvases($selectProductoCombo);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+
+                        "COD_FORMULACION" => $row->COD_FORMULACION,
+                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CANTIDA" => $row->CANTIDA,
                     );
                 }
                 $jsonstring = json_encode($json);
