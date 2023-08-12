@@ -1858,8 +1858,9 @@ class m_almacen
       $codigo = new m_almacen();
       $codigo_formulacion = $codigo->generarCodigoFormulacionProducto($selectProductoCombo);
 
-      $stm = $this->bd->prepare("SELECT P.DES_PRODUCTO AS DES_PRODUCTO, F.CAN_FORMULACION AS CAN_FORMULACION
-                                 FROM T_PRODUCTO AS P INNER JOIN T_TMPFORMULACION AS F ON P.COD_PRODUCTO=F.COD_PRODUCTO WHERE F.COD_PRODUCTO='$selectProductoCombo'");
+      $stm = $this->bd->prepare("SELECT FI.COD_FORMULACION AS COD_FORMULACION, FI.COD_PRODUCTO AS COD_PRODUCTO, P.DES_PRODUCTO AS DES_PRODUCTO 
+                                  FROM T_TMPFORMULACION_ITEM FI JOIN T_PRODUCTO P ON FI.COD_PRODUCTO = P.COD_PRODUCTO
+                                  WHERE FI.COD_FORMULACION = '$codigo_formulacion'");
 
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
