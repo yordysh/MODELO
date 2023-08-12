@@ -194,14 +194,6 @@ $(function () {
       success: function (response) {
         console.log(response);
         mostrarInsumosEnvases();
-        // Clear and re-add the default option without removing existing options
-        $("#selectInsumosCombo").val("none"); // Set the value to "none"
-        $("#selectInsumosCombo option:selected").prop("selected", false); // Deselect the option
-        $("#cantidadInsumos").val("");
-
-        // Optionally, trigger a change event to update the select box appearance
-        $("#selectInsumosCombo").trigger("change");
-        $("#selectInsumosCombo").empty();
         $("#selectInsumosCombo").append(
           $("<option>", {
             value: "none",
@@ -210,6 +202,7 @@ $(function () {
             selected: true,
           })
         );
+        $("#cantidadInsumos").val("");
       },
     });
   });
@@ -234,7 +227,7 @@ $(function () {
         $("#selectEnvasesProductoCombo").append(
           $("<option>", {
             value: "none",
-            text: "Seleccione envase",
+            text: "Seleccione envases",
             disabled: true,
             selected: true,
           })
