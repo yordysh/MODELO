@@ -73,7 +73,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <label class="form-label">Cantidad producto</label>
                             <input type="text" id="cantidadTotal" class="form-control" name="cantidadTotal" required>
                         </div>
-                        <div class="table-responsive " style="overflow: scroll;height: 180px !important; margin-top:20px;margin-bottom:100px;">
+                        <!-- <div class="table-responsive " style="overflow: scroll;height: 180px !important; margin-top:20px;margin-bottom:100px;">
                             <table id="tbProEnVa" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
@@ -85,7 +85,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
 
                                 </tbody>
                             </table>
-                        </div>
+                        </div> -->
                         <!--Combo Insumos -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Insumos</label>
@@ -154,6 +154,20 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             </table>
                         </div>
                         <button id="botonCalcularProductosEnvases" type="submit" name="insert" class="btn btn-primary bt-Total">Total de productos</button>
+                        <div class="table-responsive " style="overflow: scroll;height: 200px !important; margin-top:20px;margin-bottom:100px;">
+                            <table id="tbProEnVa" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">PRODUCTO</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaProductoEnvases">
+
+                                </tbody>
+                            </table>
+                        </div>
+
                         <!-- <div class="contenedor">
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">

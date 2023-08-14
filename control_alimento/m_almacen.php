@@ -1784,6 +1784,15 @@ class m_almacen
 
     return $codigo_generado_formulacionEnvase;
   }
+  public function contarCodigoFormulacion($selectProductoCombo)
+  {
+    $stm = $this->bd->prepare("SELECT COUNT(*) AS count FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$selectProductoCombo'");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $count = $resultado['count'];
+
+    return $count;
+  }
   public function InsertarProductoCombo($selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase)
   {
     try {
@@ -1792,56 +1801,53 @@ class m_almacen
 
 
 
-      var_dump($dataEnvase);
-
-
       $fecha_generado = '14/08/2023';
-      $fecha_formateada = date('Y-m-d', strtotime($fecha_generado));
+      $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
 
       $codigo_formulacion = $codigoform->generarCodigoFormulacion();
       $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);
       $unidad_medida = $codigoform->generarCodigoUnidadMedida($selectProductoCombo);
+      $contar_tmpformulacion = $codigoform->contarCodigoFormulacion($selectProductoCombo);
 
-      $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION(COD_FORMULACION, COD_CATEGORIA, COD_PRODUCTO, FEC_GENERADO, CAN_FORMULACION, UNI_MEDIDA)
+      if ($contar_tmpformulacion == 0) {
+
+        $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION(COD_FORMULACION, COD_CATEGORIA, COD_PRODUCTO, FEC_GENERADO, CAN_FORMULACION, UNI_MEDIDA)
                                   VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_formateada','$cantidadTotal','$unidad_medida')");
 
-      $insert = $stm->execute();
-      // var_dump($dataInsumo);
-      foreach ($dataInsumo as $item) {
-        $insumo = $item['insumo'];
-        $cantidadInsumo = $item['cantidad'];
-        $stmInsumo = $this->bd->prepare("INSERT INTO T_TMPFORMULACION_ITEM(COD_FORMULACION, COD_PRODUCTO, CAN_FORMULACION)
+        $insert = $stm->execute();
+
+        foreach ($dataInsumo as $item) {
+          $insumo = $item['insumo'];
+          $cantidadInsumo = $item['cantidad'];
+          $stmInsumo = $this->bd->prepare("INSERT INTO T_TMPFORMULACION_ITEM(COD_FORMULACION, COD_PRODUCTO, CAN_FORMULACION)
                                         VALUES ('$codigo_formulacion','$insumo','$cantidadInsumo')");
 
-        $stmInsumo->execute();
-        echo "Insumo: $insumo, Cantidad: $cantidadInsumo<br>";
-      }
+          $stmInsumo->execute();
+        }
 
-      foreach ($dataEnvase as $item) {
-        $envase = $item['envase'];
-        $cantidadEnvase = $item['cantidadEnvase'];
-        $stmEnvase = $this->bd->prepare("INSERT INTO T_TMPFORMULACION_ENVASE(COD_FORMULACION, COD_PRODUCTO, CANTIDA)
+        foreach ($dataEnvase as $item) {
+          $envase = $item['envase'];
+          $cantidadEnvase = $item['cantidadEnvase'];
+          $stmEnvase = $this->bd->prepare("INSERT INTO T_TMPFORMULACION_ENVASE(COD_FORMULACION, COD_PRODUCTO, CANTIDA)
                                  VALUES ('$codigo_formulacion','$envase','$cantidadEnvase')");
 
-        $stmEnvase->execute();
-        echo "Envase: $envase, Cantidadenvase: $cantidadEnvase<br>";
-      }
+          $stmEnvase->execute();
+        }
 
-      $insert = $this->bd->commit();
-      return $insert;
-      // }
+        $insert = $this->bd->commit();
+        return $insert;
+      }
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());
     }
   }
-  public function MostrarProductoEnvase($selectProductoCombo)
+  public function MostrarProductoEnvase()
   {
     try {
 
       $stm = $this->bd->prepare("SELECT P.DES_PRODUCTO AS DES_PRODUCTO, F.CAN_FORMULACION AS CAN_FORMULACION
-                                 FROM T_PRODUCTO AS P INNER JOIN T_TMPFORMULACION AS F ON P.COD_PRODUCTO=F.COD_PRODUCTO WHERE F.COD_PRODUCTO='$selectProductoCombo'");
-
+                                 FROM T_PRODUCTO AS P INNER JOIN T_TMPFORMULACION AS F ON P.COD_PRODUCTO=F.COD_PRODUCTO");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
