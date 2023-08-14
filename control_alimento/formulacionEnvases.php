@@ -52,7 +52,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
 
                         <!-- Text input -->
                         <div class="form-outline mb-4">
-                            <input id="taskIdProducto" type="text" class="form-control" name="taskIdProducto" />
+                            <input id="taskIdProducto" type="hidden" class="form-control" name="taskIdProducto" />
                         </div>
 
                         <!--Combo Productos -->

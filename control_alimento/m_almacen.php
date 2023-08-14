@@ -1825,15 +1825,9 @@ class m_almacen
     try {
       $this->bd->beginTransaction();
       $codigo = new m_almacen();
-      // $VERSION = $fecha->generarVersionInsumosLab();
-      // $repetir = $fecha->contarRegistrosInsumosLab($codigoInsumosLab, $valorSeleccionado);
-      // $FECHA_CREACION = $fecha->c_horaserversql('F');
-      $fecha_generado = '11/08/2023';
-      // $codigo_formulacion = $codigo->generarCodigoFormulacion();
-      // if ($repetir == 0) {
-      $codigo_formulacion = $codigo->generarCodigoFormulacionProducto($selectProductoCombo);
-      // $unidadmedida = $codigo->generarCodigoUnidadMedida($selectProductoCombo);
 
+
+      $codigo_formulacion = $codigo->generarCodigoFormulacionProducto($selectProductoCombo);
 
       $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION_ITEM(COD_FORMULACION, COD_PRODUCTO, CAN_FORMULACION)
                                   VALUES ('$codigo_formulacion','$selectInsumosCombo','$cantidadInsumos')");
