@@ -73,13 +73,12 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <label class="form-label">Cantidad producto</label>
                             <input type="text" id="cantidadTotal" class="form-control" name="cantidadTotal" required>
                         </div>
-                        <button id="botonCalcularProductosEnvases" type="submit" name="insert" class="btn btn-primary bt-Total">Total de productos</button>
                         <div class="table-responsive " style="overflow: scroll;height: 180px !important; margin-top:20px;margin-bottom:100px;">
                             <table id="tbProEnVa" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="thtitulo" scope="col">CODIGO PRODUCTO</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD PRODUCTO</th>
+                                        <th class="thtitulo" scope="col">PRODUCTO</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaProductoEnvases">
@@ -111,8 +110,8 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                                 <thead>
                                     <tr>
 
-                                        <th class="thtitulo" scope="col">CODIGO INSUMOS</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD INSUMOS</th>
+                                        <th class="thtitulo" scope="col">INSUMOS</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaInsumos">
@@ -134,19 +133,19 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             </select>
                         </div>
 
-                        <!-- Text input cantidad insumos-->
+                        <!-- Text input cantidad envases-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Cantidad envases</label>
                             <input type="text" id="cantidadEnvaseProducto" class="form-control" name="cantidadEnvaseProductos" required>
                         </div>
                         <button id="botonCalcularEnvasesProducto" type="submit" name="insert" class="btn btn-primary bt-Total">Insertar envases </button>
-                        <div class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;">
+                        <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
                             <table id="tbEnvaseProducto" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
 
-                                        <th class="thtitulo" scope="col">CODIGO ENVASES</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD ENVASES</th>
+                                        <th class="thtitulo" scope="col">ENVASES</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaEnvasesCadaProducto">
@@ -154,6 +153,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                                 </tbody>
                             </table>
                         </div>
+                        <button id="botonCalcularProductosEnvases" type="submit" name="insert" class="btn btn-primary bt-Total">Total de productos</button>
                         <!-- <div class="contenedor">
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
@@ -162,22 +162,6 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             </div>
                         </div> -->
                     </form>
-
-                    <!-- <div id="tablaEF" class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;">
-                        <table id="tbEF" class="table table-sm mb-3 table-hover">
-                            <thead>
-                                <tr>
-
-                                    <th class="thtitulo" scope="col">CODIGO PRODUCTO</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD TOTAL</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablaEnvaseFormulacion">
-
-                            </tbody>
-                        </table>
-                    </div> -->
-
                 </div>
             </div>
         </section>

@@ -145,96 +145,143 @@ $(function () {
 
   $("#botonCalcularProductosEnvases").click((e) => {
     e.preventDefault();
+    let tbInsumos = $("#tablaInsumos tr");
+    let dataInsumo = [];
 
-    const selectedValue = $("#selectProductoCombo").val();
-    $("#taskIdProducto").val(selectedValue);
+    for (let i = 0; i < tbInsumos.length; i++) {
+      let row = tbInsumos[i];
+      let columns = $(row).find("td");
+      let insumo = $(columns[0]).text();
+      let cantidad = $(columns[1]).text();
 
+      dataInsumo.push({ insumo, cantidad });
+    }
+
+    // console.log(data);
+
+    let tbEnvases = $("#tablaEnvasesCadaProducto tr");
+    let dataEnvase = [];
+
+    for (let i = 0; i < tbEnvases.length; i++) {
+      let rowenvase = tbEnvases[i];
+      let columns = $(rowenvase).find("td");
+      let envase = $(columns[0]).text();
+      let cantidadEnvase = $(columns[1]).text();
+
+      dataEnvase.push({ envase, cantidadEnvase });
+    }
+
+    // console.log(dataEnvase);
     const accion = "insertarProductoEnvase";
     $.ajax({
       url: "./c_almacen.php",
+      dataType: "json",
       data: {
         accion: accion,
         selectProductoCombo: $("#selectProductoCombo").val(),
         cantidadTotal: $("#cantidadTotal").val(),
+        dataInsumo: dataInsumo,
+        dataEnvase: dataEnvase,
+        // selectInsumosCombo: $("#selectInsumosCombo").val(),
+        // cantidadInsumos: $("#cantidadInsumos").val(),
+        // selectEnvasesProductoCombo: $("#selectEnvasesProductoCombo").val(),
+        // cantidadEnvaseProducto: $("#cantidadEnvaseProducto").val(),
       },
 
       type: "POST",
       success: function (response) {
-        // console.log(response);
-        mostrarProductoEnvase();
-        $("#selectProductoCombo").append(
-          $("<option>", {
-            value: "none",
-            text: "Seleccione producto",
-            disabled: true,
-            selected: true,
-          })
-        );
-        $("#cantidadTotal").val("");
+        console.log(response);
+        // mostrarProductoEnvase();
+        // $("#selectProductoCombo").append(
+        //   $("<option>", {
+        //     value: "none",
+        //     text: "Seleccione producto",
+        //     disabled: true,
+        //     selected: true,
+        //   })
+        // );
+        // $("#cantidadTotal").val("");
       },
     });
   });
 
   $("#botonCalcularInsumos").click((e) => {
     e.preventDefault();
+    let selectInsumosCombo = $("#selectInsumosCombo").val();
+    let cantidadInsumos = $("#cantidadInsumos").val();
 
-    const accion = "insertarInsumosProducto";
-    $.ajax({
-      url: "./c_almacen.php",
-      data: {
-        accion: accion,
-        selectProductoCombo: $("#taskIdProducto").val(),
-        selectInsumosCombo: $("#selectInsumosCombo").val(),
-        cantidadInsumos: $("#cantidadInsumos").val(),
+    let newRow = `<tr>
+                    <td  data-titulo='Insumos'>${selectInsumosCombo}</td>
+                    <td  data-titulo='Cantidad'>${cantidadInsumos}</td>
+                  </tr>`;
+    $("#tablaInsumos").append(newRow);
 
-        // codRegistro: $("#taskId").val(),
-      },
+    // const accion = "insertarInsumosProducto";
+    // $.ajax({
+    //   url: "./c_almacen.php",
+    //   data: {
+    //     accion: accion,
+    //     selectProductoCombo: $("#taskIdProducto").val(),
+    //     selectInsumosCombo: $("#selectInsumosCombo").val(),
+    //     cantidadInsumos: $("#cantidadInsumos").val(),
 
-      type: "POST",
-      success: function (response) {
-        console.log(response);
-        mostrarInsumosEnvases();
-        $("#selectInsumosCombo").append(
-          $("<option>", {
-            value: "none",
-            text: "Seleccione insumos",
-            disabled: true,
-            selected: true,
-          })
-        );
-        $("#cantidadInsumos").val("");
-      },
-    });
+    //     // codRegistro: $("#taskId").val(),
+    //   },
+
+    //   type: "POST",
+    //   success: function (response) {
+    //     console.log(response);
+    //     mostrarInsumosEnvases();
+    //     $("#selectInsumosCombo").append(
+    //       $("<option>", {
+    //         value: "none",
+    //         text: "Seleccione insumos",
+    //         disabled: true,
+    //         selected: true,
+    //       })
+    //     );
+    //     $("#cantidadInsumos").val("");
+    //   },
+    // });
   });
 
   $("#botonCalcularEnvasesProducto").click((e) => {
     e.preventDefault();
 
-    const accion = "insertarenvasesporproducto";
-    $.ajax({
-      url: "./c_almacen.php",
-      data: {
-        accion: accion,
-        selectProductoCombo: $("#taskIdProducto").val(),
-        selectEnvasesProductoCombo: $("#selectEnvasesProductoCombo").val(),
-        cantidadEnvaseProducto: $("#cantidadEnvaseProducto").val(),
-      },
+    let selectEnvasesProductoCombo = $("#selectEnvasesProductoCombo").val();
+    let cantidadEnvaseProducto = $("#cantidadEnvaseProducto").val();
 
-      type: "POST",
-      success: function (response) {
-        console.log(response);
-        mostrarEnvases();
-        $("#selectEnvasesProductoCombo").append(
-          $("<option>", {
-            value: "none",
-            text: "Seleccione envases",
-            disabled: true,
-            selected: true,
-          })
-        );
-        $("#cantidadEnvaseProducto").val("");
-      },
-    });
+    let newRow = `<tr>
+                    <td  data-titulo='Envases'>${selectEnvasesProductoCombo}</td>
+                    <td  data-titulo='Cantidad'>${cantidadEnvaseProducto}</td>
+                  </tr>`;
+    $("#tablaEnvasesCadaProducto").append(newRow);
+
+    // const accion = "insertarenvasesporproducto";
+    // $.ajax({
+    //   url: "./c_almacen.php",
+    //   data: {
+    //     accion: accion,
+    //     selectProductoCombo: $("#taskIdProducto").val(),
+    //     selectEnvasesProductoCombo: $("#selectEnvasesProductoCombo").val(),
+    //     cantidadEnvaseProducto: $("#cantidadEnvaseProducto").val(),
+    //   },
+
+    //   type: "POST",
+    //   success: function (response) {
+    //     console.log(response);
+    //     mostrarEnvases();
+    //     $("#selectEnvasesProductoCombo").append(
+    //       $("<option>", {
+    //         value: "none",
+    //         text: "Seleccione envases",
+    //         disabled: true,
+    //         selected: true,
+    //       })
+    //     );
+    //     $("#cantidadEnvaseProducto").val("");
+    //   },
+    // });
   });
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
 

@@ -1784,24 +1784,54 @@ class m_almacen
 
     return $codigo_generado_formulacionEnvase;
   }
-  public function InsertarProductoCombo($selectProductoCombo, $cantidadTotal)
+  public function InsertarProductoCombo($selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase)
   {
     try {
+      $this->bd->beginTransaction();
       $codigoform = new m_almacen();
 
-      $fecha_generado = '11/08/2023';
+
+
+      var_dump($dataEnvase);
+
+
+      $fecha_generado = '14/08/2023';
+      $fecha_formateada = date('Y-m-d', strtotime($fecha_generado));
+
       $codigo_formulacion = $codigoform->generarCodigoFormulacion();
       $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);
       $unidad_medida = $codigoform->generarCodigoUnidadMedida($selectProductoCombo);
-      // if ($repetir == 0) {
+
       $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION(COD_FORMULACION, COD_CATEGORIA, COD_PRODUCTO, FEC_GENERADO, CAN_FORMULACION, UNI_MEDIDA)
-                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_generado','$cantidadTotal','$unidad_medida')");
+                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_formateada','$cantidadTotal','$unidad_medida')");
 
       $insert = $stm->execute();
+      // var_dump($dataInsumo);
+      foreach ($dataInsumo as $item) {
+        $insumo = $item['insumo'];
+        $cantidadInsumo = $item['cantidad'];
+        $stmInsumo = $this->bd->prepare("INSERT INTO T_TMPFORMULACION_ITEM(COD_FORMULACION, COD_PRODUCTO, CAN_FORMULACION)
+                                        VALUES ('$codigo_formulacion','$insumo','$cantidadInsumo')");
+
+        $stmInsumo->execute();
+        echo "Insumo: $insumo, Cantidad: $cantidadInsumo<br>";
+      }
+
+      foreach ($dataEnvase as $item) {
+        $envase = $item['envase'];
+        $cantidadEnvase = $item['cantidadEnvase'];
+        $stmEnvase = $this->bd->prepare("INSERT INTO T_TMPFORMULACION_ENVASE(COD_FORMULACION, COD_PRODUCTO, CANTIDA)
+                                 VALUES ('$codigo_formulacion','$envase','$cantidadEnvase')");
+
+        $stmEnvase->execute();
+        echo "Envase: $envase, Cantidadenvase: $cantidadEnvase<br>";
+      }
+
+      $insert = $this->bd->commit();
       return $insert;
       // }
     } catch (Exception $e) {
-
+      $this->bd->rollBack();
       die($e->getMessage());
     }
   }
@@ -1811,90 +1841,6 @@ class m_almacen
 
       $stm = $this->bd->prepare("SELECT P.DES_PRODUCTO AS DES_PRODUCTO, F.CAN_FORMULACION AS CAN_FORMULACION
                                  FROM T_PRODUCTO AS P INNER JOIN T_TMPFORMULACION AS F ON P.COD_PRODUCTO=F.COD_PRODUCTO WHERE F.COD_PRODUCTO='$selectProductoCombo'");
-
-      $stm->execute();
-      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
-
-      return $datos;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-  public function InsertarInsumosProducto($selectProductoCombo, $selectInsumosCombo, $cantidadInsumos)
-  {
-    try {
-      $this->bd->beginTransaction();
-      $codigo = new m_almacen();
-
-
-      $codigo_formulacion = $codigo->generarCodigoFormulacionProducto($selectProductoCombo);
-
-      $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION_ITEM(COD_FORMULACION, COD_PRODUCTO, CAN_FORMULACION)
-                                  VALUES ('$codigo_formulacion','$selectInsumosCombo','$cantidadInsumos')");
-      $insert = $stm->execute();
-
-
-
-      $insert = $this->bd->commit();
-      return $insert;
-      // }
-    } catch (Exception $e) {
-      $this->bd->rollBack();
-      die($e->getMessage());
-    }
-  }
-  public function MostrarInsumoEnvase($selectProductoCombo)
-  {
-    try {
-
-      $codigo = new m_almacen();
-      $codigo_formulacion = $codigo->generarCodigoFormulacionProducto($selectProductoCombo);
-
-      $stm = $this->bd->prepare("SELECT FI.COD_FORMULACION AS COD_FORMULACION, FI.COD_PRODUCTO AS COD_PRODUCTO, P.DES_PRODUCTO AS DES_PRODUCTO, 
-                                  FI.CAN_FORMULACION AS CAN_FORMULACION FROM T_TMPFORMULACION_ITEM FI JOIN T_PRODUCTO P 
-                                  ON FI.COD_PRODUCTO = P.COD_PRODUCTO WHERE FI.COD_FORMULACION = '$codigo_formulacion'");
-
-      $stm->execute();
-      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
-
-      return $datos;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-  public function InsertarEnvasePorProducto($selectProductoCombo, $selectEnvasesProductoCombo, $cantidadEnvaseProducto)
-  {
-    try {
-      $this->bd->beginTransaction();
-      $codigo = new m_almacen();
-
-
-      $codigo_formulacion = $codigo->generarCodigoFormulacionProducto($selectProductoCombo);
-
-      $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION_ENVASE(COD_FORMULACION, COD_PRODUCTO, CANTIDA)
-                                  VALUES ('$codigo_formulacion','$selectEnvasesProductoCombo','$cantidadEnvaseProducto')");
-      $insert = $stm->execute();
-
-
-
-      $insert = $this->bd->commit();
-      return $insert;
-      // }
-    } catch (Exception $e) {
-      $this->bd->rollBack();
-      die($e->getMessage());
-    }
-  }
-  public function MostrarEnvases($selectProductoCombo)
-  {
-    try {
-
-      $codigo = new m_almacen();
-      $codigo_formulacion = $codigo->generarCodigoFormulacionProducto($selectProductoCombo);
-
-      $stm = $this->bd->prepare("SELECT FE.COD_FORMULACION AS COD_FORMULACION, FE.COD_PRODUCTO AS COD_PRODUCTO, P.DES_PRODUCTO AS DES_PRODUCTO, 
-                                  FE.CANTIDA AS CANTIDA FROM T_TMPFORMULACION_ENVASE FE JOIN T_PRODUCTO P 
-                                  ON FE.COD_PRODUCTO = P.COD_PRODUCTO WHERE FE.COD_FORMULACION = '$codigo_formulacion'");
 
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
