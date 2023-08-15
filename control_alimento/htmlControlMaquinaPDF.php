@@ -25,9 +25,9 @@ $mesConvert = $mesesEnLetras[$mesNumerico];
 
 $mostrar = new m_almacen();
 $dataControl = $mostrar->MostrarControlMaquinaPDF($anioSeleccionado, $mesSeleccionado);
-// $dataLimpieza = $mostrar->MostrarLimpiezaPD();
-$versionMuestra = $mostrar->VersionMostrar();
 
+// $versionMuestra = $mostrar->VersionMostrar();
+$versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
 ?>
 <!DOCTYPE html>
@@ -129,12 +129,7 @@ $versionMuestra = $mostrar->VersionMostrar();
 
                 </tr>
                 <tr>
-                    <?php foreach ($versionMuestra as $version) { ?>
-                        <td>Versión: <?php echo $version['VERSION'] ?> </td>
-                    <?php
-                    }
-                    ?>
-
+                    <td>Versión: <?php echo $versionMuestra ?> </td>
                 </tr>
                 <tr>
                     <td>Página:</td>

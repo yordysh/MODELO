@@ -26,7 +26,10 @@ $mesConvert = $mesesEnLetras[$mesNumerico];
 
 $mostrar = new m_almacen();
 $datos = $mostrar->MostrarInfraestructuraPDF($anioSeleccionado, $mesSeleccionado);
-$versionMuestra = $mostrar->VersionMostrar();
+// $versionMuestra = $mostrar->VersionMostrar();
+$nombre = 'LBS-PHS-FR-01';
+$versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
+
 
 ?>
 
@@ -160,12 +163,7 @@ $versionMuestra = $mostrar->VersionMostrar();
                 <td>LBS-PHS-FR-01</th>
             </tr>
             <tr>
-                <?php foreach ($versionMuestra as $version) { ?>
-                    <td>Versión: <?php echo $version['VERSION'] ?> </td>
-                <?php
-                }
-                ?>
-
+                <td>Versión: <?php echo $versionMuestra ?> </td>
             </tr>
             <tr>
                 <td>Página:</td>

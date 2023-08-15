@@ -90,7 +90,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         <div class="form-outline mb-4">
                             <label class="form-label">Insumos</label>
                             <select id="selectInsumosCombo" class="form-select selectInsumos" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione insumos</option>
+                                <option value="0" selected disabled>Seleccione insumos</option>
                                 <?php foreach ($dataProducto as  $lis) { ?>
                                     <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
                                 <?php
@@ -102,9 +102,9 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         <!-- Text input cantidad insumos-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Cantidad insumos</label>
-                            <input type="text" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
+                            <input type="number" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
                         </div>
-                        <button id="botonCalcularInsumos" type="submit" name="insert" class="btn btn-primary bt-Total">Insertar insumos </button>
+                        <button id="botonCalcularInsumos" name="insert" class="btn btn-primary bt-Total">Insertar insumos </button>
                         <div class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;">
                             <table id="tbInsum" class="table table-sm mb-3 table-hover">
                                 <thead>
@@ -136,9 +136,9 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         <!-- Text input cantidad envases-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Cantidad envases</label>
-                            <input type="text" id="cantidadEnvaseProducto" class="form-control" name="cantidadEnvaseProductos" required>
+                            <input type="number" id="cantidadEnvaseProducto" class="form-control" name="cantidadEnvaseProductos" required>
                         </div>
-                        <button id="botonCalcularEnvasesProducto" type="submit" name="insert" class="btn btn-primary bt-Total">Insertar envases </button>
+                        <button id="botonCalcularEnvasesProducto" name="insert" class="btn btn-primary bt-Total">Insertar envases </button>
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
                             <table id="tbEnvaseProducto" class="table table-sm mb-3 table-hover">
                                 <thead>

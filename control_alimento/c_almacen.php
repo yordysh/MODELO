@@ -350,12 +350,6 @@ if ($_POST['accion'] == 'insertarProductoEnvase') {
     $dataInsumo = ($_POST['dataInsumo']);
     $dataEnvase = ($_POST['dataEnvase']);
 
-    // $selectInsumosCombo = trim($_POST['selectInsumosCombo']);
-    // $cantidadInsumos = trim($_POST['cantidadInsumos']);
-    // $selectEnvasesProductoCombo = trim($_POST['selectEnvasesProductoCombo']);
-    // $cantidadEnvaseProducto = trim($_POST['cantidadEnvaseProducto']);
-
-
     $respuesta = c_almacen::c_insertar_producto_combo($selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
     echo $respuesta;
 }
@@ -1868,21 +1862,21 @@ class c_almacen
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarProductoEnvase();
 
-            if (!$datos) {
-                throw new Exception("Hubo un error en la consulta");
+            if ($datos) {
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CAN_FORMULACION" => $row->CAN_FORMULACION,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                echo "No hay datos";
             }
-            $json = array();
-            foreach ($datos as $row) {
-                $json[] = array(
-                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                    "CAN_FORMULACION" => $row->CAN_FORMULACION,
-                );
-            }
-            $jsonstring = json_encode($json);
-            echo $jsonstring;
-            // echo $json;
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
+            echo "[]";
         }
     }
 }

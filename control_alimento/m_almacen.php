@@ -99,7 +99,21 @@ class m_almacen
     $codigoAumento = str_pad($nuevoCodigo, 2, '0', STR_PAD_LEFT);
     return $codigoAumento;
   }
+  public function MostrarVersionGeneral($nombre)
+  {
+    try {
 
+      $stm = $this->bd->prepare("SELECT MAX(VERSION) AS VERSION FROM T_VERSION_GENERAL WHERE NOMBRE ='$nombre'");
+
+      $stm->execute();
+      $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+      $versionGeneral = $resultado['VERSION'];
+
+      return $versionGeneral;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function generarVersionGeneral($nombre)
   {
     $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_VERSION_GENERAL WHERE NOMBRE = '$nombre'");
@@ -474,7 +488,7 @@ class m_almacen
       $repetir = $cod->contarRegistrosInfraestructura($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado);
 
       $FECHA = $cod->c_horaserversql('F');
-
+      $nombre = 'LBS-PHS-FR-01';
       // $FECHA = date('Y-m-d');
 
       if ($repetir == 0) {
@@ -487,37 +501,37 @@ class m_almacen
         // $fechaDHoy = date('Y-m-d');
         //$fechaDHoy = '19/07/2023';
         $fechaDHoy  = $cod->c_horaserversql('F');
-
-        if ($VERSION == '01') {
-          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
-
-
-          $stmver->execute();
-          $valor = $stmver->fetchAll();
-
-          $valor1 = count($valor);
-
-          if ($valor1 == 0) {
-            $stmVersion = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
-            $stmVersion->bindParam(':version', $VERSION, PDO::PARAM_STR);
-            $stmVersion->execute();
-          }
-        } else {
-          $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+        $cod->generarVersionGeneral($nombre);
+        // if ($VERSION == '01') {
+        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
 
 
-          $stmver->execute();
-          $valor = $stmver->fetchAll();
+        //   $stmver->execute();
+        //   $valor = $stmver->fetchAll();
 
-          $valor1 = count($valor);
+        //   $valor1 = count($valor);
 
-          if ($valor1 == 0) {
-            $stmVersion = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
-            $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-            $stmVersion->bindParam(':FECHA_VERSION', $fechaDHoy);
-            $stmVersion->execute();
-          }
-        }
+        //   if ($valor1 == 0) {
+        //     $stmVersion = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
+        //     $stmVersion->bindParam(':version', $VERSION, PDO::PARAM_STR);
+        //     $stmVersion->execute();
+        //   }
+        // } else {
+        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
+
+
+        //   $stmver->execute();
+        //   $valor = $stmver->fetchAll();
+
+        //   $valor1 = count($valor);
+
+        //   if ($valor1 == 0) {
+        //     $stmVersion = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
+        //     $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
+        //     $stmVersion->bindParam(':FECHA_VERSION', $fechaDHoy);
+        //     $stmVersion->execute();
+        //   }
+        // }
 
 
 
@@ -1801,8 +1815,10 @@ class m_almacen
 
 
 
-      $fecha_generado = '14/08/2023';
-      $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+      // $fecha_generado = '14/08/2023';
+      $fecha_generado = $codigoform->c_horaserversql('F');
+      // echo $fecha_generado;
+      // $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
 
       $codigo_formulacion = $codigoform->generarCodigoFormulacion();
       $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);
@@ -1812,7 +1828,7 @@ class m_almacen
       if ($contar_tmpformulacion == 0) {
 
         $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION(COD_FORMULACION, COD_CATEGORIA, COD_PRODUCTO, FEC_GENERADO, CAN_FORMULACION, UNI_MEDIDA)
-                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_formateada','$cantidadTotal','$unidad_medida')");
+                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_generado','$cantidadTotal','$unidad_medida')");
 
         $insert = $stm->execute();
 

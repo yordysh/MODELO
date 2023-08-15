@@ -80,6 +80,9 @@ $(function () {
 
   $("#botonCalcularProductosEnvases").click((e) => {
     e.preventDefault();
+    let tablaEnvase = $("#tablaEnvasesCadaProducto");
+    let tablaInsumo = $("#tablaInsumos");
+
     let tbInsumos = $("#tablaInsumos tr");
     let dataInsumo = [];
 
@@ -88,11 +91,10 @@ $(function () {
       let columns = $(row).find("td");
       let insumo = $(columns[0]).text();
       let cantidad = $(columns[2]).text();
-      // console.log(cantidad);
 
       dataInsumo.push({ insumo, cantidad });
     }
-    // console.log(dataInsumo);
+
     let tbEnvases = $("#tablaEnvasesCadaProducto tr");
     let dataEnvase = [];
 
@@ -104,11 +106,11 @@ $(function () {
 
       dataEnvase.push({ envase, cantidadEnvase });
     }
-    // console.log(dataEnvase);
+
     const accion = "insertarProductoEnvase";
     $.ajax({
       url: "./c_almacen.php",
-      dataType: "json",
+      dataType: "text",
       data: {
         accion: accion,
         selectProductoCombo: $("#selectProductoCombo").val(),
@@ -118,7 +120,53 @@ $(function () {
       },
       type: "POST",
       success: function (response) {
-        console.log("Response :", response);
+        if (response === "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              mostrarProductoEnvase();
+              $("#selectProductoCombo").append(
+                $("<option>", {
+                  value: "none",
+                  text: "Seleccione producto",
+                  disabled: true,
+                  selected: true,
+                })
+              );
+
+              tablaInsumo.empty();
+              tablaEnvase.empty();
+
+              $("#cantidadTotal").val("");
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Formulacion producto",
+            text: "Por favor, elige otro producto.",
+          }).then((resultado) => {
+            if (resultado.isConfirmed || resultado.isDismissed) {
+              $("#selectProductoCombo").append(
+                $("<option>", {
+                  value: "none",
+                  text: "Seleccione insumo",
+                  disabled: true,
+                  selected: true,
+                })
+              );
+
+              tablaInsumo.empty();
+              tablaEnvase.empty();
+
+              $("#cantidadTotal").val("");
+            }
+          });
+        }
       },
     });
   });
@@ -139,6 +187,18 @@ $(function () {
         icon: "error",
         title: "Insumo duplicado",
         text: "Por favor, elige otro insumo.",
+      }).then((resultado) => {
+        if (resultado.isConfirmed || resultado.isDismissed) {
+          $("#selectInsumosCombo").append(
+            $("<option>", {
+              value: "none",
+              text: "Seleccione insumo",
+              disabled: true,
+              selected: true,
+            })
+          );
+          $("#cantidadInsumos").val("");
+        }
       });
     } else {
       let newRow = `<tr>
@@ -147,42 +207,16 @@ $(function () {
                       <td data-titulo='Cantidad'>${cantidadInsumos}</td>
                     </tr>`;
       $("#tablaInsumos").append(newRow);
+      $("#selectInsumosCombo").append(
+        $("<option>", {
+          value: "none",
+          text: "Seleccione insumos",
+          disabled: true,
+          selected: true,
+        })
+      );
+      $("#cantidadInsumos").val("");
     }
-
-    // let newRow = `<tr>
-    //                 <td  data-titulo='Insumos' style='display:none;'>${selectInsumosCombo}</td>
-    //                 <td  data-titulo='Insumo'>${selectInsumosTexto}</td>
-    //                 <td  data-titulo='Cantidad'>${cantidadInsumos}</td>
-    //               </tr>`;
-    // $("#tablaInsumos").append(newRow);
-
-    // const accion = "insertarInsumosProducto";
-    // $.ajax({
-    //   url: "./c_almacen.php",
-    //   data: {
-    //     accion: accion,
-    //     selectProductoCombo: $("#taskIdProducto").val(),
-    //     selectInsumosCombo: $("#selectInsumosCombo").val(),
-    //     cantidadInsumos: $("#cantidadInsumos").val(),
-
-    //     // codRegistro: $("#taskId").val(),
-    //   },
-
-    //   type: "POST",
-    //   success: function (response) {
-    //     console.log(response);
-    //     mostrarInsumosEnvases();
-    //     $("#selectInsumosCombo").append(
-    //       $("<option>", {
-    //         value: "none",
-    //         text: "Seleccione insumos",
-    //         disabled: true,
-    //         selected: true,
-    //       })
-    //     );
-    //     $("#cantidadInsumos").val("");
-    //   },
-    // });
   });
 
   $("#botonCalcularEnvasesProducto").click((e) => {
@@ -206,6 +240,18 @@ $(function () {
         icon: "error",
         title: "Envase duplicado",
         text: "Por favor, elige otro envase.",
+      }).then((resultado) => {
+        if (resultado.isConfirmed || resultado.isDismissed) {
+          $("#selectEnvasesProductoCombo").append(
+            $("<option>", {
+              value: "none",
+              text: "Seleccione envases",
+              disabled: true,
+              selected: true,
+            })
+          );
+          $("#cantidadEnvaseProducto").val("");
+        }
       });
     } else {
       let newRow = `<tr>
@@ -214,6 +260,15 @@ $(function () {
                     <td  data-titulo='Cantidad'>${cantidadEnvaseProducto}</td>
                   </tr>`;
       $("#tablaEnvasesCadaProducto").append(newRow);
+      $("#selectEnvasesProductoCombo").append(
+        $("<option>", {
+          value: "none",
+          text: "Seleccione envases",
+          disabled: true,
+          selected: true,
+        })
+      );
+      $("#cantidadEnvaseProducto").val("");
     }
     // const accion = "insertarenvasesporproducto";
     // $.ajax({
@@ -254,24 +309,28 @@ $(function () {
         // selectProductoCombo: $("#selectProductoCombo").val(),
       },
       success: function (response) {
-        // console.log(JSON.parse(response));
-        if (!response.error) {
+        try {
           let tasks = JSON.parse(response);
-          let template = ``;
-          tasks.forEach((task) => {
-            template += `<tr taskId="">
 
-                <td data-titulo="CODIGO" style="text-align:rigth;">${task.DES_PRODUCTO}</td>
-                <td data-titulo="CANTIDAD PRODUCTO" style="text-align:rigth;">${task.CAN_FORMULACION}</td>
-
-            </tr>`;
-          });
-
-          $("#tablaProductoEnvases").html(template);
+          if (tasks.length === 0) {
+            let template = `<tr>
+                  <td colspan="2" style="text-align: center;">No data available</td>
+              </tr>`;
+            $("#tablaProductoEnvases").html(template);
+          } else {
+            let template = ``;
+            tasks.forEach((task) => {
+              template += `<tr taskId="">
+                      <td data-titulo="CODIGO" style="text-align:right;">${task.DES_PRODUCTO}</td>
+                      <td data-titulo="CANTIDAD PRODUCTO" style="text-align:right;">${task.CAN_FORMULACION}</td>
+                  </tr>`;
+            });
+            $("#tablaProductoEnvases").html(template);
+          }
+        } catch (e) {
+          console.log("No hay lista []:");
+          // Handle error condition here if needed
         }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error al cargar los datos de la tabla:", error);
       },
     });
   }
