@@ -27,36 +27,17 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
 
 <body>
     <nav class="nav">
+        <div class="wave"></div>
         <i class="icon-menu navOpenBtn"></i>
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
-            <!-- <li>
-                <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
-            </li> -->
+
             <li>
-                <a class="" href="#">Infraestructura</a>
-                <!-- </li>
-            <li>
-                <a class="" href="preparacionSolucion.php">Preparación de soluciones</a>
+                <a class="" href="#">Formulacion envases</a>
             </li>
             <li>
-                <a class="" href="limpiezaDesinfeccion.php">Limpieza y desinfección</a>
-            </li>
-            <li>
-                <a class="" href="controlMaquinas.php">Control de maquinas</a>
-            </li> -->
-            <li>
-                <a class="" href="labsabelForm.php">Labsabell</a>
-            </li>
-            <li>
-                <a class="" href="previlifeForm.php">Previlife</a>
-            </li>
-            <li>
-                <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
-            </li>
-            <li>
-                <a class="" href="#">Registros envases</a>
+                <a class="" href="registroEnvases.php">Registros envases</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -91,14 +72,11 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
 
                                 ?>
                             </select>
-                            <!-- <input type="hidden" id="task_zona">
-                            <input id="selectInfra" class="form-control" required> -->
                         </div>
 
                         <!--Combo Produccion -->
                         <div class="form-outline mb-4 ">
                             <label class="form-label">Produccion</label>
-                            <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
                             <select id="selectProduccion" class="form-select selectProduccion" aria-label="Default select example">
                                 <option value="0" selected disabled>Seleccione produccion</option>
 
@@ -113,7 +91,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         <!-- Text input fecha -->
                         <div class="form-outline mb-4">
                             <label class="form-label" id="labelFecha">fecha</label>
-                            <input type="date" id="fecha" class="form-control" name="fecha">
+                            <input type="text" id="fecha" class="form-control" name="fecha">
                         </div>
 
                         <!-- Crear PDF -->

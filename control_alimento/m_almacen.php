@@ -1872,4 +1872,27 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
+
+
+
+
+
+  public function MostrarProduccion($COD_PRODUCTO)
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT * FROM T_TMPPRODUCCION WHERE COD_PRODUCTO=:COD_PRODUCTO"
+      );
+      $stm->bindParam(':COD_PRODUCTO', $COD_PRODUCTO);
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 }

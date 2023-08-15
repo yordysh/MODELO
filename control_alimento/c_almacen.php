@@ -367,6 +367,20 @@ if ($_POST['accion'] == 'buscarenvaseproducto') {
 
 
 
+if ($_POST['accion'] == 'seleccionarProduccion') {
+
+    $respuesta = c_almacen::c_select_productos_produccion();
+    echo $respuesta;
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1877,6 +1891,29 @@ class c_almacen
             }
         } catch (Exception $e) {
             echo "[]";
+        }
+    }
+
+
+
+
+
+
+
+    static function c_select_productos_produccion()
+    {
+        $consulta = new m_almacen();
+        $COD_PRODUCTO = filter_input(INPUT_POST, 'codProducto');
+
+        $datos = $consulta->MostrarProduccion($COD_PRODUCTO);
+        // var_dump($datos);
+        if (count($datos) == 0) {
+            echo '<option value="0">No hay registros en soluciones</option>';
+        }
+        echo '<option value="0" selected disabled>Seleccione produccion</option>';
+        for ($i = 0; $i < count($datos); $i++) {
+
+            echo '<option value="' . $datos[$i]["COD_PRODUCCION"] . '">' . $datos[$i]["N_PRODUCCION_G"] . '</option>';
         }
     }
 }

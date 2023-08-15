@@ -26,13 +26,17 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
 
 <body>
     <nav class="nav">
+        <div class="wave"></div>
         <i class="icon-menu navOpenBtn"></i>
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
 
             <li>
-                <a class="" href="#">Registros envases</a>
+                <a class="" href="#">Formulacion envases</a>
+            </li>
+            <li>
+                <a class="" href="registroEnvases.php">Registros envases</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>

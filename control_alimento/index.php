@@ -79,6 +79,17 @@
           </li>
         </ul>
       </li>
+      <li>
+        <a class="bpmStyle">OP</a>
+        <ul class="menu-vertical">
+          <li>
+            <a class="" href="formulacionEnvases.php">Envases formulacion</a>
+          </li>
+          <li>
+            <a class="" href="insumosLabsabellForm.php">Registro envases</a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </nav>
   <?php
