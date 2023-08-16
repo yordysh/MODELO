@@ -382,6 +382,30 @@ if ($_POST['accion'] == 'seleccionarProduccion') {
 
 
 
+if ($_POST['accion'] == 'insertarrequerimientoproducto') {
+
+    $selectProductoCombo = trim($_POST['selectProductoCombo']);
+    $cantidadProducto = trim($_POST['cantidadProducto']);
+
+    $respuesta = c_almacen::c_insertar_requerimiento_producto($selectProductoCombo, $cantidadProducto);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'buscarrequerimientoproducto') {
+
+    $buscarrequerimiento = trim($_POST['buscarrequerimiento']);
+
+    $respuesta = c_almacen::c_buscar_requerimiento_producto($buscarrequerimiento);
+    echo $respuesta;
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1914,6 +1938,71 @@ class c_almacen
         for ($i = 0; $i < count($datos); $i++) {
 
             echo '<option value="' . $datos[$i]["COD_PRODUCCION"] . '">' . $datos[$i]["N_PRODUCCION_G"] . '</option>';
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    static function c_insertar_requerimiento_producto($selectProductoCombo, $cantidadProducto)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($selectProductoCombo) && isset($cantidadProducto)) {
+            $respuesta = $m_formula->InsertarRequerimientoProducto($selectProductoCombo, $cantidadProducto);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+    static function c_buscar_requerimiento_producto($buscarrequerimiento)
+    {
+        try {
+
+            if (!empty($buscarrequerimiento)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarRequermientoProducto($buscarrequerimiento);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CANTIDAD" => $row->CANTIDAD,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarRequermientoProducto($buscarrequerimiento);
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CANTIDAD" => $row->CANTIDAD,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 }

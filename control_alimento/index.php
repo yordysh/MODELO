@@ -88,6 +88,9 @@
           <li>
             <a class="" href="insumosLabsabellForm.php">Registro envases</a>
           </li>
+          <li>
+            <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
+          </li>
         </ul>
       </li>
     </ul>

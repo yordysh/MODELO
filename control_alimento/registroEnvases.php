@@ -37,7 +37,10 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                 <a class="" href="formulacionEnvases.php">Formulacion envases</a>
             </li>
             <li>
-                <a class="" href="registroEnvases.php">Registros envases</a>
+                <a class="" href="#">Registros envases</a>
+            </li>
+            <li>
+                <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>

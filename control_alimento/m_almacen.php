@@ -1815,10 +1815,11 @@ class m_almacen
 
 
 
+
+      //$fecha_generado = $codigoform->c_horaserversql('F');
       $fecha_generado = '16/08/2023';
-      $fecha_generado = $codigoform->c_horaserversql('F');
-      // echo $fecha_generado;
-      //$fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+      //echo $fecha_generado;
+      $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
 
       $codigo_formulacion = $codigoform->generarCodigoFormulacion();
       $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);
@@ -1828,7 +1829,7 @@ class m_almacen
       if ($contar_tmpformulacion == 0) {
 
         $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION(COD_FORMULACION, COD_CATEGORIA, COD_PRODUCTO, FEC_GENERADO, CAN_FORMULACION, UNI_MEDIDA)
-                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_generado','$cantidadTotal','$unidad_medida')");
+                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_formateada','$cantidadTotal','$unidad_medida')");
 
         $insert = $stm->execute();
 
@@ -1889,6 +1890,106 @@ class m_almacen
       $stm->bindParam(':COD_PRODUCTO', $COD_PRODUCTO);
       $stm->execute();
       $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+
+
+
+
+
+
+  public function generarCodigoRequerimientoProducto()
+  {
+    $stm = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) as COD_REQUERIMIENTO FROM T_TMPREQUERIMIENTO_ITEM");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $maxCodigo = intval($resultado['COD_REQUERIMIENTO']);
+    $nuevoCodigo = $maxCodigo + 1;
+    $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
+    return $codigoAumento;
+  }
+  public function valorFormulacion($selectProductoCombo)
+  {
+    $stm = $this->bd->prepare("SELECT MAX(CAN_FORMULACION) as CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$selectProductoCombo'");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $maxCodigo = intval($resultado['CAN_FORMULACION']);
+
+    return $maxCodigo;
+  }
+  public function InsertarRequerimientoProducto($selectProductoCombo, $cantidadProducto)
+  {
+    try {
+      $this->bd->beginTransaction();
+      $requerimientoProd = new m_almacen();
+
+      // $fecha_generado = '16/08/2023';
+      // $fecha_generado = $requerimientoProd->c_horaserversql('F');
+      // echo $fecha_generado;
+      //$fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+
+      $codigo_requerimiento_producto = $requerimientoProd->generarCodigoRequerimientoProducto();
+      $cantidad_formulacion = $requerimientoProd->valorFormulacion($selectProductoCombo);
+
+      $cantidad_requerimiento_InsEnv = ceil($cantidadProducto / $cantidad_formulacion);
+
+      // $valorCajas = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_PRODUCTO WHERE DES_PRODUCTO LIKE '%CAJAS DE CARTON 50x40x20%'");
+      // $valorCajas->execute();
+      // $resultado =  $valorCajas->fetch(PDO::FETCH_ASSOC);
+      // $count = $resultado['COUNT'];
+
+
+
+      // exit();
+
+      $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ITEM(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+                                          VALUES ('$codigo_requerimiento_producto','$selectProductoCombo','$cantidadProducto')");
+
+      $insert = $stmRequeItem->execute();
+
+
+      $stmRequeIns = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+                                         VALUES ('$codigo_requerimiento_producto','$selectProductoCombo','$cantidad_requerimiento_InsEnv')");
+
+      $stmRequeIns->execute();
+
+      $stmRequeEnv = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+                                         VALUES ('$codigo_requerimiento_producto','$selectProductoCombo','$cantidad_requerimiento_InsEnv')");
+
+      $stmRequeEnv->execute();
+
+
+      // $stmRequerimiento = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+      //                                         VALUES ('$codigo_requerimiento_producto','$selectProductoCombo','$cantidad_requerimiento_InsEnv')");
+
+      // $stmRequerimiento->execute();
+
+
+      $insert = $this->bd->commit();
+      return $insert;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarRequermientoProducto($buscarrequerimiento)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD
+                                  FROM T_TMPREQUERIMIENTO_ITEM AS TRI
+                                  JOIN T_PRODUCTO AS TP ON TRI.COD_PRODUCTO = TP.COD_PRODUCTO
+                                  WHERE TP.DES_PRODUCTO LIKE '$buscarrequerimiento%'");
+
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
       return $datos;
     } catch (Exception $e) {

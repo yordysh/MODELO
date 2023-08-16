@@ -38,6 +38,9 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
             <li>
                 <a class="" href="registroEnvases.php">Registros envases</a>
             </li>
+            <li>
+                <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
+            </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
         <div class="search-box">
@@ -172,13 +175,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             </table>
                         </div>
 
-                        <!-- <div class="contenedor">
-                            <div class="ctnBtn">
-                                <input type="hidden" id="taskId">
 
-                                <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
-                            </div>
-                        </div> -->
                     </form>
                 </div>
             </div>
@@ -192,16 +189,6 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxEnvaseFormulacion.js"></script>
     <script src="./js/select2.min.js"></script>
-    <script>
-        function generarPDF() {
-            var anioSeleccionado = document.getElementById("anio").value;
-            var mesSeleccionado = document.getElementById("mes").value;
-
-            // Enviar los valores a tu script de generación de PDF
-            var url = "pdf-monitoreo.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
-            window.open(url, "_blank");
-        }
-    </script>
 </body>
 
 </html>
