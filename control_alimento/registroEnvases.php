@@ -34,7 +34,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
             <div class="icon-cross navCloseBtn"></div>
 
             <li>
-                <a class="" href="#">Formulacion envases</a>
+                <a class="" href="formulacionEnvases.php">Formulacion envases</a>
             </li>
             <li>
                 <a class="" href="registroEnvases.php">Registros envases</a>

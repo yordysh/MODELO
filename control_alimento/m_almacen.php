@@ -1815,10 +1815,10 @@ class m_almacen
 
 
 
-      // $fecha_generado = '14/08/2023';
+      $fecha_generado = '16/08/2023';
       $fecha_generado = $codigoform->c_horaserversql('F');
       // echo $fecha_generado;
-      // $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+      //$fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
 
       $codigo_formulacion = $codigoform->generarCodigoFormulacion();
       $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);

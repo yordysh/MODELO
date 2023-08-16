@@ -262,21 +262,21 @@ $(function () {
       let union = datos + entero;
       dataToSend.push({ union: union });
     }
-    // console.log(dataToSend);
+    console.log(dataToSend);
     let accion = "guardarcantidadenvases";
 
-    $.ajax({
-      type: "POST",
-      url: "./c_almacen.php",
-      data: { accion: accion, union: JSON.stringify(dataToSend) },
-      // contentType: "application/json",
-      success: function (response) {
-        console.log("respuesta" + response);
-      },
-      error: function (error) {
-        // Manejar errores si los hay
-      },
-    });
+    // $.ajax({
+    //   type: "POST",
+    //   url: "./c_almacen.php",
+    //   data: { accion: accion, union: JSON.stringify(dataToSend) },
+    //   // contentType: "application/json",
+    //   success: function (response) {
+    //     console.log("respuesta" + response);
+    //   },
+    //   error: function (error) {
+    //     console.log("ERROR " + error);
+    //   },
+    // });
   });
   //---------------------------------------------------------------//
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //

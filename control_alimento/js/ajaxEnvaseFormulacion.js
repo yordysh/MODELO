@@ -83,6 +83,32 @@ $(function () {
     let tablaEnvase = $("#tablaEnvasesCadaProducto");
     let tablaInsumo = $("#tablaInsumos");
 
+    let productoSeleccionado = $("#selectProductoCombo").val();
+    let cantidadTotal = $("#cantidadTotal").val();
+
+    // Validar si los campos están vacíos
+    if (!productoSeleccionado || !cantidadTotal) {
+      Swal.fire({
+        icon: "error",
+        title: "Campos vacíos",
+        text: "Por favor, seleccione un producto y complete la cantidad total.",
+      });
+      return;
+    }
+
+    if (parseFloat(cantidadTotal) <= 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Valores negativos",
+        text: "Por favor, ingresa solo valores positivos en Cantidad producto",
+      }).then((resultado) => {
+        if (resultado.isConfirmed || resultado.isDismissed) {
+          $("#cantidadTotal").val("");
+        }
+      });
+      return;
+    }
+
     let tbInsumos = $("#tablaInsumos tr");
     let dataInsumo = [];
 
@@ -106,15 +132,22 @@ $(function () {
 
       dataEnvase.push({ envase, cantidadEnvase });
     }
-
+    if (dataInsumo.length === 0 || dataEnvase.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Campos vacíos",
+        text: "Por favor, inserte insumos y envases.",
+      });
+      return;
+    }
     const accion = "insertarProductoEnvase";
     $.ajax({
       url: "./c_almacen.php",
       dataType: "text",
       data: {
         accion: accion,
-        selectProductoCombo: $("#selectProductoCombo").val(),
-        cantidadTotal: $("#cantidadTotal").val(),
+        selectProductoCombo: productoSeleccionado,
+        cantidadTotal: cantidadTotal,
         dataInsumo: dataInsumo,
         dataEnvase: dataEnvase,
       },
@@ -154,7 +187,7 @@ $(function () {
               $("#selectProductoCombo").append(
                 $("<option>", {
                   value: "none",
-                  text: "Seleccione insumo",
+                  text: "Seleccione producto",
                   disabled: true,
                   selected: true,
                 })
@@ -175,6 +208,40 @@ $(function () {
     e.preventDefault();
     let selectInsumosCombo = $("#selectInsumosCombo").val();
     let cantidadInsumos = $("#cantidadInsumos").val();
+
+    if (!selectInsumosCombo || !cantidadInsumos) {
+      Swal.fire({
+        icon: "error",
+        title: "Campos vacíos",
+        text: "Por favor, seleccione un insumo  y complete la cantidad insumos.",
+      }).then((resultado) => {
+        if (resultado.isConfirmed || resultado.isDismissed) {
+          $("#selectInsumosCombo").append(
+            $("<option>", {
+              value: "none",
+              text: "Seleccione insumo",
+              disabled: true,
+              selected: true,
+            })
+          );
+          $("#cantidadInsumos").val("");
+        }
+      });
+      return;
+    }
+
+    if (parseFloat(cantidadInsumos) <= 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Valores negativos",
+        text: "Por favor, ingresa solo valores positivos en Cantidad insumos",
+      }).then((resultado) => {
+        if (resultado.isConfirmed || resultado.isDismissed) {
+          $("#cantidadInsumos").val("");
+        }
+      });
+      return;
+    }
 
     let selectInsumosTexto = $("#selectInsumosCombo option:selected").text();
 
@@ -224,6 +291,40 @@ $(function () {
 
     let selectEnvasesProductoCombo = $("#selectEnvasesProductoCombo").val();
     let cantidadEnvaseProducto = $("#cantidadEnvaseProducto").val();
+
+    if (!selectEnvasesProductoCombo || !cantidadEnvaseProducto) {
+      Swal.fire({
+        icon: "error",
+        title: "Campos vacíos",
+        text: "Por favor, seleccione un envase  y complete la cantidad envases.",
+      }).then((resultado) => {
+        if (resultado.isConfirmed || resultado.isDismissed) {
+          $("#selectEnvasesProductoCombo").append(
+            $("<option>", {
+              value: "none",
+              text: "Seleccione envases",
+              disabled: true,
+              selected: true,
+            })
+          );
+          $("#cantidadEnvaseProducto").val("");
+        }
+      });
+      return;
+    }
+
+    if (parseFloat(cantidadEnvaseProducto) <= 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Valores negativos",
+        text: "Por favor, ingresa solo valores positivos en Cantidad envases",
+      }).then((resultado) => {
+        if (resultado.isConfirmed || resultado.isDismissed) {
+          $("#cantidadEnvaseProducto").val("");
+        }
+      });
+      return;
+    }
 
     let selectEnvasesTexto = $(
       "#selectEnvasesProductoCombo option:selected"

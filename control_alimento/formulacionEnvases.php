@@ -33,7 +33,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
             <div class="icon-cross navCloseBtn"></div>
 
             <li>
-                <a class="" href="#">Formulacion envases</a>
+                <a class="" href="#">Formulacion</a>
             </li>
             <li>
                 <a class="" href="registroEnvases.php">Registros envases</a>
@@ -62,7 +62,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         <!--Combo Productos -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Producto</label>
-                            <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example">
+                            <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example" required>
                                 <option value="none" selected disabled>Seleccione producto</option>
                                 <?php foreach ($dataProducto as  $lis) { ?>
                                     <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
@@ -75,7 +75,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         <!-- Text input cantidad -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Cantidad producto</label>
-                            <input type="text" id="cantidadTotal" class="form-control" name="cantidadTotal" required>
+                            <input type="number" id="cantidadTotal" class="form-control" name="cantidadTotal" required>
                         </div>
                         <!-- <div class="table-responsive " style="overflow: scroll;height: 180px !important; margin-top:20px;margin-bottom:100px;">
                             <table id="tbProEnVa" class="table table-sm mb-3 table-hover">
