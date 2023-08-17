@@ -175,10 +175,7 @@ $(function () {
             if (result.isConfirmed) {
               fetchTasks();
               $("#formularioInfra").trigger("reset");
-              $("#selectInfra").val(null).trigger("change");
-              $("#selectInfra").append(
-                '<option value="none" selected disabled>Seleccione Zona/Areas</option>'
-              );
+              $("#selectInfra").val("none").trigger("change");
             }
           });
         } else {
@@ -191,10 +188,7 @@ $(function () {
             if (result.isConfirmed) {
               fetchTasks();
               $("#formularioInfra").trigger("reset");
-              $("#selectInfra").val(null).trigger("change");
-              $("#selectInfra").append(
-                '<option value="none" selected disabled>Seleccione Zona/Areas</option>'
-              );
+              $("#selectInfra").val("none").trigger("change");
             }
           });
         }

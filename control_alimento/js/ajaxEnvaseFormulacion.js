@@ -162,14 +162,7 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               mostrarProductoEnvase();
-              $("#selectProductoCombo").append(
-                $("<option>", {
-                  value: "none",
-                  text: "Seleccione producto",
-                  disabled: true,
-                  selected: true,
-                })
-              );
+              $("#selectProductoCombo").val("none").trigger("change");
 
               tablaInsumo.empty();
               tablaEnvase.empty();
@@ -184,14 +177,7 @@ $(function () {
             text: "Por favor, elige otro producto.",
           }).then((resultado) => {
             if (resultado.isConfirmed || resultado.isDismissed) {
-              $("#selectProductoCombo").append(
-                $("<option>", {
-                  value: "none",
-                  text: "Seleccione producto",
-                  disabled: true,
-                  selected: true,
-                })
-              );
+              $("#selectProductoCombo").val("none").trigger("change");
 
               tablaInsumo.empty();
               tablaEnvase.empty();
@@ -256,14 +242,7 @@ $(function () {
         text: "Por favor, elige otro insumo.",
       }).then((resultado) => {
         if (resultado.isConfirmed || resultado.isDismissed) {
-          $("#selectInsumosCombo").append(
-            $("<option>", {
-              value: "none",
-              text: "Seleccione insumo",
-              disabled: true,
-              selected: true,
-            })
-          );
+          $("#selectInsumosCombo").val("none").trigger("change");
           $("#cantidadInsumos").val("");
         }
       });
@@ -299,14 +278,7 @@ $(function () {
         text: "Por favor, seleccione un envase  y complete la cantidad envases.",
       }).then((resultado) => {
         if (resultado.isConfirmed || resultado.isDismissed) {
-          $("#selectEnvasesProductoCombo").append(
-            $("<option>", {
-              value: "none",
-              text: "Seleccione envases",
-              disabled: true,
-              selected: true,
-            })
-          );
+          $("#selectEnvasesProductoCombo").val("none").trigger("change");
           $("#cantidadEnvaseProducto").val("");
         }
       });
