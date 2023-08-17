@@ -394,8 +394,8 @@ $(function () {
             let template = ``;
             tasks.forEach((task) => {
               template += `<tr taskId="">
-                      <td data-titulo="CODIGO" style="text-align:right;">${task.DES_PRODUCTO}</td>
-                      <td data-titulo="CANTIDAD PRODUCTO" style="text-align:right;">${task.CAN_FORMULACION}</td>
+                      <td data-titulo="CODIGO" >${task.DES_PRODUCTO}</td>
+                      <td data-titulo="CANTIDAD PRODUCTO">${task.CAN_FORMULACION}</td>
                   </tr>`;
             });
             $("#tablaProductoEnvases").html(template);

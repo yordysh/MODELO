@@ -1798,9 +1798,9 @@ class m_almacen
 
     return $codigo_generado_formulacionEnvase;
   }
-  public function contarCodigoFormulacion($selectProductoCombo)
+  public function contarCodigoFormulacion($selectProductoCombo, $cantidadTotal)
   {
-    $stm = $this->bd->prepare("SELECT COUNT(*) AS count FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$selectProductoCombo'");
+    $stm = $this->bd->prepare("SELECT COUNT(*) AS count FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$selectProductoCombo' AND CAN_FORMULACION='$cantidadTotal'");
     $stm->execute();
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
     $count = $resultado['count'];
@@ -1816,20 +1816,20 @@ class m_almacen
 
 
 
-      //$fecha_generado = $codigoform->c_horaserversql('F');
-      $fecha_generado = '16/08/2023';
+      $fecha_generado = $codigoform->c_horaserversql('F');
+      // $fecha_generado = '16/08/2023';
       //echo $fecha_generado;
-      $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+      // $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
 
       $codigo_formulacion = $codigoform->generarCodigoFormulacion();
       $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);
       $unidad_medida = $codigoform->generarCodigoUnidadMedida($selectProductoCombo);
-      $contar_tmpformulacion = $codigoform->contarCodigoFormulacion($selectProductoCombo);
+      $contar_tmpformulacion = $codigoform->contarCodigoFormulacion($selectProductoCombo, $cantidadTotal);
 
       if ($contar_tmpformulacion == 0) {
 
         $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION(COD_FORMULACION, COD_CATEGORIA, COD_PRODUCTO, FEC_GENERADO, CAN_FORMULACION, UNI_MEDIDA)
-                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_formateada','$cantidadTotal','$unidad_medida')");
+                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_generado','$cantidadTotal','$unidad_medida')");
 
         $insert = $stm->execute();
 
@@ -1903,7 +1903,15 @@ class m_almacen
 
 
 
+  public function CodigoFormulacionProducto($codigoFormulacionProducto)
+  {
+    $stm = $this->bd->prepare("SELECT COD_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codigoFormulacionProducto'");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $codigo_generado_formulacionIn = $resultado['COD_FORMULACION'];
 
+    return $codigo_generado_formulacionIn;
+  }
   public function generarCodigoRequerimientoProducto()
   {
     $stm = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) as COD_REQUERIMIENTO FROM T_TMPREQUERIMIENTO_ITEM");
@@ -1937,39 +1945,48 @@ class m_almacen
       $codigo_requerimiento_producto = $requerimientoProd->generarCodigoRequerimientoProducto();
       $cantidad_formulacion = $requerimientoProd->valorFormulacion($selectProductoCombo);
 
-      $cantidad_requerimiento_InsEnv = ceil($cantidadProducto / $cantidad_formulacion);
+      $codigo_formulacion_ins = $requerimientoProd->CodigoFormulacionProducto($selectProductoCombo);
 
-      // $valorCajas = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_PRODUCTO WHERE DES_PRODUCTO LIKE '%CAJAS DE CARTON 50x40x20%'");
-      // $valorCajas->execute();
-      // $resultado =  $valorCajas->fetch(PDO::FETCH_ASSOC);
-      // $count = $resultado['COUNT'];
+      $cantidad_requerimiento_Ins = ceil($cantidadProducto / $cantidad_formulacion);
 
 
 
-      // exit();
+
+
+
 
       $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ITEM(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
                                           VALUES ('$codigo_requerimiento_producto','$selectProductoCombo','$cantidadProducto')");
 
       $insert = $stmRequeItem->execute();
 
+      $formulacionItem = $this->bd->prepare("SELECT COD_PRODUCTO FROM T_TMPFORMULACION_ITEM WHERE COD_FORMULACION='$codigo_formulacion_ins'");
+      $formulacionItem->execute();
+      $resultados = $formulacionItem->fetchAll(PDO::FETCH_ASSOC);
+      foreach ($resultados as $resultado) {
+        $codigo_producto_forIt = $resultado['COD_PRODUCTO'];
+        $stmRequeIns = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+                                            VALUES ('$codigo_requerimiento_producto','$codigo_producto_forIt','$cantidad_requerimiento_Ins')");
+        $stmRequeIns->execute();
+      }
 
-      $stmRequeIns = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
-                                         VALUES ('$codigo_requerimiento_producto','$selectProductoCombo','$cantidad_requerimiento_InsEnv')");
+      $formulacionEnv = $this->bd->prepare("SELECT COD_PRODUCTO, CANTIDA FROM T_TMPFORMULACION_ENVASE WHERE COD_FORMULACION='$codigo_formulacion_ins'");
+      $formulacionEnv->execute();
+      $resultados = $formulacionEnv->fetchAll(PDO::FETCH_ASSOC);
 
-      $stmRequeIns->execute();
+      $formulacion = $this->bd->prepare("SELECT CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$selectProductoCombo'");
+      $formulacion->execute();
+      $resultado = $formulacion->fetch(PDO::FETCH_ASSOC);
+      $cantidad_formula = $resultado['CAN_FORMULACION'];
 
-      $stmRequeEnv = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
-                                         VALUES ('$codigo_requerimiento_producto','$selectProductoCombo','$cantidad_requerimiento_InsEnv')");
-
-      $stmRequeEnv->execute();
-
-
-      // $stmRequerimiento = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
-      //                                         VALUES ('$codigo_requerimiento_producto','$selectProductoCombo','$cantidad_requerimiento_InsEnv')");
-
-      // $stmRequerimiento->execute();
-
+      foreach ($resultados as $resultado) {
+        $codigo_producto_forEnv = $resultado['COD_PRODUCTO'];
+        $cantida_forEnv = $resultado['CANTIDA'];
+        $totalCantienv = ceil(($cantidadProducto * $cantida_forEnv) / $cantidad_formula);
+        $stmRequeEnv = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+                                            VALUES ('$codigo_requerimiento_producto','$codigo_producto_forEnv','$totalCantienv')");
+        $stmRequeEnv->execute();
+      }
 
       $insert = $this->bd->commit();
       return $insert;

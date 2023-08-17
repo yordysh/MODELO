@@ -36,11 +36,11 @@ $(function () {
   $("#search").keyup(() => {
     if ($("#search").val()) {
       let search = $("#search").val();
-      const accion = "buscarcontrol";
+      const accion = "buscarrequerimientoproducto";
 
       $.ajax({
         url: "./c_almacen.php",
-        data: { accion: accion, buscarcontrol: search },
+        data: { accion: accion, buscarrequerimiento: search },
         type: "POST",
         success: function (response) {
           if (!response.error) {
@@ -48,33 +48,15 @@ $(function () {
 
             let template = ``;
             tasks.forEach((task) => {
-              let frecuencia;
-              if (task.N_DIAS_CONTROL == 1) {
-                frecuencia = "Diario";
-              } else if (task.N_DIAS_CONTROL == 2) {
-                frecuencia = "InterDiario";
-              } else if (task.N_DIAS_CONTROL == 7) {
-                frecuencia = "Semanal";
-              } else if (task.N_DIAS_CONTROL == 15) {
-                frecuencia = "Quincenal";
-              } else if (task.N_DIAS_CONTROL == 30) {
-                frecuencia = "Mensual";
-              }
-
-              template += `<tr taskId="${task.COD_CONTROL_MAQUINA}">
+              template += `<tr taskId="${task.COD_REQUERIMIENTO}">
       
-                  <!-- <td data-titulo="CODIGO" >${task.COD_CONTROL_MAQUINA}</td> -->
-                  <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
-                  <td data-titulo="CONTROL DE MAQUINAS" class='NOMBRE_CONTROL_MAQUINA' >${task.NOMBRE_CONTROL_MAQUINA}</td>
-                  <td data-titulo="FRECUENCIA">${frecuencia}</td>
-                  <td data-titulo="FECHA" >${task.FECHA}</td>
-      
-                  <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_CONTROL_MAQUINA="${task.COD_CONTROL_MAQUINA}"><i class="icon-edit"></i></button></td>
-      
-                </tr>`;
+                              <td data-titulo="CODIGO PRODUCTO" >${task.DES_PRODUCTO}</td>      
+                              <td data-titulo="CANTIDAD" >${task.CANTIDAD}</td>
+  
+                          </tr>`;
             });
 
-            $("#tablaControl").html(template);
+            $("#tablaRequerimientoProducto").html(template);
           }
         },
         error: function (xhr, status, error) {
@@ -82,7 +64,7 @@ $(function () {
         },
       });
     } else {
-      fetchTasks();
+      mostarRequerimientoProducto();
     }
   });
 
