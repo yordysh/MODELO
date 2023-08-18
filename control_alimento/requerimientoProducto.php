@@ -36,11 +36,11 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
             <li>
                 <a class="" href="formulacionEnvases.php">Formulacion envases</a>
             </li>
-            <li>
+            <!-- <li>
                 <a class="" href="registroEnvases.php">Registros envases</a>
-            </li>
+            </li> -->
             <li>
-                <a class="" href="#">Requerimiento producto</a>
+                <a class="" href="#">Requerimiento produccion</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -89,7 +89,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
                                 <!-- <button id="botonCalcular" type="submit" name="calcular" class="btn btn-primary bt-guardar">Calcular </button> -->
-                                <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+                                <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button>
                             </div>
                         </div>
                     </form>

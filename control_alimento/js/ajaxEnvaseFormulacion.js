@@ -253,14 +253,7 @@ $(function () {
                       <td data-titulo='Cantidad'>${cantidadInsumos}</td>
                     </tr>`;
       $("#tablaInsumos").append(newRow);
-      $("#selectInsumosCombo").append(
-        $("<option>", {
-          value: "none",
-          text: "Seleccione insumos",
-          disabled: true,
-          selected: true,
-        })
-      );
+      $("#selectInsumosCombo").val("none").trigger("change");
       $("#cantidadInsumos").val("");
     }
   });
@@ -333,14 +326,7 @@ $(function () {
                     <td  data-titulo='Cantidad'>${cantidadEnvaseProducto}</td>
                   </tr>`;
       $("#tablaEnvasesCadaProducto").append(newRow);
-      $("#selectEnvasesProductoCombo").append(
-        $("<option>", {
-          value: "none",
-          text: "Seleccione envases",
-          disabled: true,
-          selected: true,
-        })
-      );
+      $("#selectEnvasesProductoCombo").val("none").trigger("change");
       $("#cantidadEnvaseProducto").val("");
     }
     // const accion = "insertarenvasesporproducto";

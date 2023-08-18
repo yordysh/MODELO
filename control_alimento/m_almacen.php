@@ -1752,7 +1752,7 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO");
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00004'");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -1798,9 +1798,9 @@ class m_almacen
 
     return $codigo_generado_formulacionEnvase;
   }
-  public function contarCodigoFormulacion($selectProductoCombo, $cantidadTotal)
+  public function contarCodigoFormulacion($selectProductoCombo)
   {
-    $stm = $this->bd->prepare("SELECT COUNT(*) AS count FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$selectProductoCombo' AND CAN_FORMULACION='$cantidadTotal'");
+    $stm = $this->bd->prepare("SELECT COUNT(*) AS count FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$selectProductoCombo'");
     $stm->execute();
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
     $count = $resultado['count'];
@@ -1817,14 +1817,14 @@ class m_almacen
 
 
       $fecha_generado = $codigoform->c_horaserversql('F');
-      // $fecha_generado = '16/08/2023';
+      // $fecha_generado = '18/08/2023';
       //echo $fecha_generado;
       // $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
 
       $codigo_formulacion = $codigoform->generarCodigoFormulacion();
       $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);
       $unidad_medida = $codigoform->generarCodigoUnidadMedida($selectProductoCombo);
-      $contar_tmpformulacion = $codigoform->contarCodigoFormulacion($selectProductoCombo, $cantidadTotal);
+      $contar_tmpformulacion = $codigoform->contarCodigoFormulacion($selectProductoCombo);
 
       if ($contar_tmpformulacion == 0) {
 
@@ -1947,11 +1947,7 @@ class m_almacen
 
       $codigo_formulacion_ins = $requerimientoProd->CodigoFormulacionProducto($selectProductoCombo);
 
-      $cantidad_requerimiento_Ins = ceil($cantidadProducto / $cantidad_formulacion);
-
-
-
-
+      // $cantidad_requerimiento_Ins = ceil($cantidadProducto / $cantidad_formulacion);
 
 
 
@@ -1960,13 +1956,25 @@ class m_almacen
 
       $insert = $stmRequeItem->execute();
 
-      $formulacionItem = $this->bd->prepare("SELECT COD_PRODUCTO FROM T_TMPFORMULACION_ITEM WHERE COD_FORMULACION='$codigo_formulacion_ins'");
+
+      $formulacion = $this->bd->prepare("SELECT CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$selectProductoCombo'");
+      $formulacion->execute();
+      $resultado = $formulacion->fetch(PDO::FETCH_ASSOC);
+      $cantidad_formula = $resultado['CAN_FORMULACION'];
+
+
+      $formulacionItem = $this->bd->prepare("SELECT COD_PRODUCTO, CAN_FORMULACION FROM T_TMPFORMULACION_ITEM WHERE COD_FORMULACION='$codigo_formulacion_ins'");
       $formulacionItem->execute();
       $resultados = $formulacionItem->fetchAll(PDO::FETCH_ASSOC);
       foreach ($resultados as $resultado) {
         $codigo_producto_forIt = $resultado['COD_PRODUCTO'];
+        $cantida_forIns = $resultado['CAN_FORMULACION'];
+
+        $totalCanti = (($cantidadProducto *  $cantida_forIns) / $cantidad_formula);
+        $totalCantiInsum = number_format($totalCanti, 4);
+
         $stmRequeIns = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
-                                            VALUES ('$codigo_requerimiento_producto','$codigo_producto_forIt','$cantidad_requerimiento_Ins')");
+                                            VALUES ('$codigo_requerimiento_producto','$codigo_producto_forIt',' $totalCantiInsum')");
         $stmRequeIns->execute();
       }
 
@@ -1974,10 +1982,7 @@ class m_almacen
       $formulacionEnv->execute();
       $resultados = $formulacionEnv->fetchAll(PDO::FETCH_ASSOC);
 
-      $formulacion = $this->bd->prepare("SELECT CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$selectProductoCombo'");
-      $formulacion->execute();
-      $resultado = $formulacion->fetch(PDO::FETCH_ASSOC);
-      $cantidad_formula = $resultado['CAN_FORMULACION'];
+
 
       foreach ($resultados as $resultado) {
         $codigo_producto_forEnv = $resultado['COD_PRODUCTO'];

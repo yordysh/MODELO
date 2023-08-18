@@ -35,11 +35,11 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
             <li>
                 <a class="" href="#">Formulacion</a>
             </li>
-            <li>
+            <!-- <li>
                 <a class="" href="registroEnvases.php">Registros envases</a>
-            </li>
+            </li> -->
             <li>
-                <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
+                <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -97,7 +97,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         <div class="form-outline mb-4">
                             <label class="form-label">Insumos</label>
                             <select id="selectInsumosCombo" class="form-select selectInsumos" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione insumos</option>
+                                <option value="none" selected disabled>Seleccione insumos</option>
                                 <?php foreach ($dataProducto as  $lis) { ?>
                                     <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
                                 <?php
