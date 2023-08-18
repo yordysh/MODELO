@@ -401,6 +401,17 @@ if ($_POST['accion'] == 'buscarrequerimientoproducto') {
 
 
 
+if ($_POST['accion'] == 'mostrardatosinsumos') {
+
+    $selectInsumoEnvase = trim($_POST['selectInsumoEnvase']);
+
+    $respuesta = c_almacen::c_mostrar_insumo($selectInsumoEnvase);
+    echo $respuesta;
+}
+
+
+
+
 
 
 
@@ -2001,6 +2012,39 @@ class c_almacen
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
             }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+
+
+
+
+    static function c_mostrar_insumo($selectInsumoEnvase)
+    {
+        try {
+
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarDatosInsumos($selectInsumoEnvase);
+
+
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CAN_FORMULACION_INSUMOS" => $row->CAN_FORMULACION_INSUMOS,
+                    "CAN_FORMULACION" => $row->CAN_FORMULACION,
+                );
+            }
+
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }

@@ -1752,7 +1752,7 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00004'");
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -1816,10 +1816,10 @@ class m_almacen
 
 
 
-      $fecha_generado = $codigoform->c_horaserversql('F');
-      // $fecha_generado = '18/08/2023';
+      // $fecha_generado = $codigoform->c_horaserversql('F');
+      $fecha_generado = '18/08/2023';
       //echo $fecha_generado;
-      // $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+      $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
 
       $codigo_formulacion = $codigoform->generarCodigoFormulacion();
       $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);
@@ -1829,7 +1829,7 @@ class m_almacen
       if ($contar_tmpformulacion == 0) {
 
         $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION(COD_FORMULACION, COD_CATEGORIA, COD_PRODUCTO, FEC_GENERADO, CAN_FORMULACION, UNI_MEDIDA)
-                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_generado','$cantidadTotal','$unidad_medida')");
+                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_formateada','$cantidadTotal','$unidad_medida')");
 
         $insert = $stm->execute();
 
@@ -1873,6 +1873,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
 
 
 
@@ -2010,6 +2011,35 @@ class m_almacen
                                   JOIN T_PRODUCTO AS TP ON TRI.COD_PRODUCTO = TP.COD_PRODUCTO
                                   WHERE TP.DES_PRODUCTO LIKE '$buscarrequerimiento%'");
 
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+  public function   MostrarDatosInsumos($selectInsumoEnvase)
+  {
+    try {
+
+      $codigoFormulacionInsumoEnvase = new m_almacen();
+      $codigo_corresponde_formulacion = $codigoFormulacionInsumoEnvase->CodigoFormulacionProducto($selectInsumoEnvase);
+
+      $stm = $this->bd->prepare("SELECT  TP.DES_PRODUCTO AS DES_PRODUCTO, TF.CAN_FORMULACION AS CAN_FORMULACION_INSUMOS,TMP.CAN_FORMULACION AS CAN_FORMULACION
+                                  FROM T_TMPFORMULACION_ITEM AS TF INNER JOIN T_PRODUCTO AS TP ON TF.COD_PRODUCTO=TP.COD_PRODUCTO 
+                                  INNER JOIN T_TMPFORMULACION AS TMP ON TMP.COD_FORMULACION=TF.COD_FORMULACION
+                                  WHERE TF.COD_FORMULACION='$codigo_corresponde_formulacion'");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 

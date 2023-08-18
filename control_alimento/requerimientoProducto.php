@@ -13,7 +13,6 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" href="./css/ui_1.12.1_themes_base_jquery-ui.css"> -->
     <link rel="stylesheet" href="./css/responsiveControl.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
@@ -66,7 +65,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         <!--Combo Productos -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Producto</label>
-                            <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example">
+                            <select id="selectInsumoEnvase" class="form-select selectProducto" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
                                 <?php foreach ($dataProducto as  $lis) { ?>
                                     <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
@@ -80,18 +79,34 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         <!-- Text input cantidad -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Cantidad</label>
-                            <input type="text" id="cantidadProducto" class="form-control" name="cantidadProducto" required>
+                            <input type="text" id="cantidadInsumoEnvase" class="form-control" name="cantidadProducto" required>
                         </div>
 
-
-                        <!-- Crear PDF -->
+                        <!-- Insertar nuevas cantidades -->
                         <div class="contenedor">
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
-                                <!-- <button id="botonCalcular" type="submit" name="calcular" class="btn btn-primary bt-guardar">Calcular </button> -->
-                                <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button>
+                                <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-primary bt-guardar">Insertar</button>
+                                <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
                             </div>
                         </div>
+
+                        <!-- Tabla de insumos-->
+                        <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                            <table id="" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+
+                                        <th class="thtitulo" scope="col">INSUMOS</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaInsumosDatos">
+
+                                </tbody>
+                            </table>
+                        </div>
+
                     </form>
 
                     <div id="tablaRE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
