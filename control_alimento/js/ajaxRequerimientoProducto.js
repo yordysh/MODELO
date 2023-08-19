@@ -80,22 +80,45 @@ $(function () {
     const accion = "mostrardatosinsumos";
     $.ajax({
       url: "./c_almacen.php",
-      data: { accion: accion, selectInsumoEnvase: selectInsumoEnvase },
+      data: {
+        accion: accion,
+        selectInsumoEnvase: selectInsumoEnvase,
+      },
       type: "POST",
       success: function (response) {
         if (!response.error) {
           var insumos = JSON.parse(response);
+          // console.log(insumos);
 
-          let template = ``;
+          let template = $("#tablaInsumosDatos").html();
+          let valoresCapturados = [];
           insumos.forEach((insumo) => {
-            const cantidadNumerica = parseFloat(insumo.CAN_FORMULACION);
-            const cantidadFormateada = cantidadNumerica.toFixed(3);
-            template += `<tr taskId="${insumo.COD_FORMULACION}">
-                            <td data-titulo="CODIGO PRODUCTO" >${insumo.DES_PRODUCTO}</td>
-                            <td data-titulo="CANTIDAD" >${cantidadFormateada}</td>
-                        </tr>`;
+            const existingRow = $(`tr[taskId="${insumo.COD_FORMULACION}"]`);
+
+            if (existingRow.length > 0) {
+              existingRow.each(function () {
+                const existingCantidadCell = $(this).find("td:eq(2)").text();
+                const existingCantidad = parseFloat(existingCantidadCell);
+                valoresCapturados.push(existingCantidad);
+                //console.log("captura " + existingCantidad + "total " + total);
+              });
+              console.log(valoresCapturados);
+            } else {
+              const total =
+                (insumo.CAN_FORMULACION_INSUMOS * cantidadInsumoEnvase) /
+                insumo.CAN_FORMULACION;
+
+              template += `<tr taskId="${insumo.COD_FORMULACION}">
+                              <td data-titulo="NOMBRE PRODUCTO">${insumo.DES_PRODUCTO_FORMULACION}</td>
+                              <td data-titulo="CODIGO PRODUCTO">${insumo.DES_PRODUCTO}</td>
+                              <td data-titulo="CANTIDAD">${total}</td>
+                           </tr>`;
+            }
           });
+
           $("#tablaInsumosDatos").html(template);
+
+          $("#cantidadInsumoEnvase").val("");
         }
       },
       error: function (xhr, status, error) {
@@ -105,6 +128,21 @@ $(function () {
   });
   //-------------------------------------------------------------------------//
 
+  //--------------------- Insertar cantidades ------------//
+  $("#botonInsertValor").click((e) => {
+    e.preventDefault();
+    let cantidadInsert = $("#cantidadInsumoEnvase").val();
+
+    let valoresCapturados = [];
+
+    $("#tablaInsumosDatos tr").each(function () {
+      let valorCelda = $(this).find("td:eq(2)").text();
+      valoresCapturados.push(valorCelda);
+    });
+
+    console.log("Valores capturados:", valoresCapturados);
+  });
+  //-------------------------------------------------------------------------//
   //------------- Añadiendo datos--------------------------------------------//
   // $("#formularioRequerimientoProducto").submit((e) => {
   //   e.preventDefault();

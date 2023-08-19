@@ -2036,10 +2036,12 @@ class m_almacen
       $codigoFormulacionInsumoEnvase = new m_almacen();
       $codigo_corresponde_formulacion = $codigoFormulacionInsumoEnvase->CodigoFormulacionProducto($selectInsumoEnvase);
 
-      $stm = $this->bd->prepare("SELECT  TP.DES_PRODUCTO AS DES_PRODUCTO, TF.CAN_FORMULACION AS CAN_FORMULACION_INSUMOS,TMP.CAN_FORMULACION AS CAN_FORMULACION
-                                  FROM T_TMPFORMULACION_ITEM AS TF INNER JOIN T_PRODUCTO AS TP ON TF.COD_PRODUCTO=TP.COD_PRODUCTO 
-                                  INNER JOIN T_TMPFORMULACION AS TMP ON TMP.COD_FORMULACION=TF.COD_FORMULACION
-                                  WHERE TF.COD_FORMULACION='$codigo_corresponde_formulacion'");
+      $stm = $this->bd->prepare("SELECT TMP.COD_FORMULACION AS COD_FORMULACION, (SELECT TPR.DES_PRODUCTO FROM T_PRODUCTO TPR INNER JOIN T_TMPFORMULACION TFOR 
+                                  ON TPR.COD_PRODUCTO=TFOR.COD_PRODUCTO WHERE TFOR.COD_FORMULACION='$codigo_corresponde_formulacion') AS DES_PRODUCTO_FORMULACION,
+                                  TP.DES_PRODUCTO AS DES_PRODUCTO, TFI.CAN_FORMULACION AS CAN_FORMULACION_INSUMOS,TMP.CAN_FORMULACION AS CAN_FORMULACION
+                                  FROM T_TMPFORMULACION_ITEM AS TFI INNER JOIN T_PRODUCTO AS TP ON TFI.COD_PRODUCTO=TP.COD_PRODUCTO 
+                                  INNER JOIN T_TMPFORMULACION AS TMP ON TMP.COD_FORMULACION=TFI.COD_FORMULACION
+                                  WHERE TFI.COD_FORMULACION='$codigo_corresponde_formulacion'");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 

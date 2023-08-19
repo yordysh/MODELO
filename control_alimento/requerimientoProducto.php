@@ -87,6 +87,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
                                 <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-primary bt-guardar">Insertar</button>
+                                <button id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary bt-guardar">Añadir</button>
                                 <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
                             </div>
                         </div>
@@ -96,7 +97,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <table id="" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-
+                                        <th class="thtitulo" scope="col">NOMBRE PRODUCTO</th>
                                         <th class="thtitulo" scope="col">INSUMOS</th>
                                         <th class="thtitulo" scope="col">CANTIDAD</th>
                                     </tr>
