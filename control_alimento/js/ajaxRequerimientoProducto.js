@@ -100,13 +100,10 @@ $(function () {
 
             if (existingRow.length > 0) {
               const capturaValoresTabla = existingRow.find("td:eq(2)");
-              let totalShown = false;
+
               capturaValoresTabla.each(function () {
                 const valorCelda = parseFloat($(this).text());
-                if (!totalShown) {
-                  console.log("total  " + total);
-                  totalShown = true; // Set the flag to true after displaying total
-                }
+                console.log("captura " + valorCelda);
               });
               console.log("total  " + total);
             } else {
