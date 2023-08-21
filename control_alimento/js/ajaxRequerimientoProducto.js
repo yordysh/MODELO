@@ -91,18 +91,24 @@ $(function () {
           // console.log(insumos);
 
           let template = $("#tablaInsumosDatos").html();
-          let valoresCapturados = [];
+
           insumos.forEach((insumo) => {
             const existingRow = $(`tr[taskId="${insumo.COD_FORMULACION}"]`);
+            const total =
+              (insumo.CAN_FORMULACION_INSUMOS * cantidadInsumoEnvase) /
+              insumo.CAN_FORMULACION;
 
             if (existingRow.length > 0) {
-              existingRow.each(function () {
-                const existingCantidadCell = $(this).find("td:eq(2)").text();
-                const existingCantidad = parseFloat(existingCantidadCell);
-                valoresCapturados.push(existingCantidad);
-                //console.log("captura " + existingCantidad + "total " + total);
+              const capturaValoresTabla = existingRow.find("td:eq(2)");
+              let totalShown = false;
+              capturaValoresTabla.each(function () {
+                const valorCelda = parseFloat($(this).text());
+                if (!totalShown) {
+                  console.log("total  " + total);
+                  totalShown = true; // Set the flag to true after displaying total
+                }
               });
-              console.log(valoresCapturados);
+              console.log("total  " + total);
             } else {
               const total =
                 (insumo.CAN_FORMULACION_INSUMOS * cantidadInsumoEnvase) /
@@ -115,7 +121,6 @@ $(function () {
                            </tr>`;
             }
           });
-
           $("#tablaInsumosDatos").html(template);
 
           $("#cantidadInsumoEnvase").val("");
