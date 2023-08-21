@@ -70,58 +70,127 @@ $(function () {
   //-------------------------------------------------------------------------//
 
   //--------------------- Insertar los valores insumos y envases ------------//
+  var conteo = 0;
+  $("#selectInsumoEnvase").change((e) => {
+    conteo = 0;
+  });
   $("#botonCalcularInsumoEnvase").click((e) => {
     e.preventDefault();
     let selectInsumoEnvase = $("#selectInsumoEnvase").val();
 
     let cantidadInsumoEnvase = $("#cantidadInsumoEnvase").val();
-
+    conteo = conteo + cantidadInsumoEnvase;
     // console.log(selectInsumoEnvase);
+
     const accion = "mostrardatosinsumos";
     $.ajax({
       url: "./c_almacen.php",
       data: {
         accion: accion,
         selectInsumoEnvase: selectInsumoEnvase,
+        cantidadInsumoEnvase: cantidadInsumoEnvase,
       },
       type: "POST",
       success: function (response) {
+        var insumos;
         if (!response.error) {
           var insumos = JSON.parse(response);
           // console.log(insumos);
 
           let template = $("#tablaInsumosDatos").html();
+          let array = [];
 
-          insumos.forEach((insumo) => {
-            const existingRow = $(`tr[taskId="${insumo.COD_FORMULACION}"]`);
-            const total =
-              (insumo.CAN_FORMULACION_INSUMOS * cantidadInsumoEnvase) /
-              insumo.CAN_FORMULACION;
+          const existingRow = $(
+            `tr[taskId="${insumos[0]["COD_FORMULACION"]}"]`
+          );
+          console.log(existingRow);
+          if (existingRow.length > 0) {
+            // existingRow.each(function () {
 
-            if (existingRow.length > 0) {
-              const capturaValoresTabla = existingRow.find("td:eq(2)");
-
-              capturaValoresTabla.each(function () {
-                const valorCelda = parseFloat($(this).text());
-                console.log("captura " + valorCelda);
-              });
-              console.log("total  " + total);
-            } else {
-              const total =
-                (insumo.CAN_FORMULACION_INSUMOS * cantidadInsumoEnvase) /
-                insumo.CAN_FORMULACION;
-
-              template += `<tr taskId="${insumo.COD_FORMULACION}">
-                              <td data-titulo="NOMBRE PRODUCTO">${insumo.DES_PRODUCTO_FORMULACION}</td>
-                              <td data-titulo="CODIGO PRODUCTO">${insumo.DES_PRODUCTO}</td>
-                              <td data-titulo="CANTIDAD">${total}</td>
-                           </tr>`;
+            const capturaValoresTabla = existingRow.find("td:eq(1)");
+            console.log(capturaValoresTabla);
+            for (let i = 0; i < capturaValoresTabla.length; i++) {
+              console.log(insumos[i].COD_FORMULACION);
+              // const valor =
+              //   (insumos.CAN_FORMULACION_INSUMOS * cantidadInsumoEnvase) /
+              //   insumos.CAN_FORMULACION;
+              // console.log(valor);
+              console.log(capturaValoresTabla[i]);
+              const valorCelda = capturaValoresTabla[i];
+              const cambio = parseFloat($(valorCelda).html());
+              const suma = cambio + parseFloat(cantidadInsumoEnvase);
+              $(valorCelda).html(suma);
+              // console.log(suma);
             }
-          });
-          $("#tablaInsumosDatos").html(template);
 
-          $("#cantidadInsumoEnvase").val("");
+            // });
+          } else {
+            insumos.forEach((insumo) => {
+              const existingRow = $(`tr[taskId="${insumo.COD_FORMULACION}"]`);
+
+              // if (existingRow.length > 0) {
+              // console.log(insumo);
+              // existingRow.each(function () {
+              //   const capturaValoresTabla = existingRow.find("td:eq(1)");
+              //   const valorCelda = capturaValoresTabla.text();
+              //   const cambio = parseFloat(valorCelda);
+              //   const suma = cambio + cantidadInsumoEnvase;
+              //   console.log(cambio);
+              //   // capturaValoresTabla.text(suma);
+              // });
+              // const capturaValoresTabla = existingRow.find("td:eq(1)").text();
+              // console.log(capturaValoresTabla);
+              // } else {
+              template += `<tr taskId="${insumo.COD_FORMULACION}">
+                                <td data-titulo="INSUMOS">${insumo.DES_PRODUCTO}</td>
+                                <td data-titulo="CANTIDAD">${insumo.TOTAL}</td>
+                             </tr>`;
+              // }
+            });
+            $("#tablaInsumosDatos").html(template);
+
+            $("#cantidadInsumoEnvase").val("");
+          }
         }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+
+    const accionEnvase = "mostrardatosenvases";
+    $.ajax({
+      url: "./c_almacen.php",
+      data: {
+        accion: accionEnvase,
+        selectInsumoEnvase: selectInsumoEnvase,
+        cantidadInsumoEnvase: cantidadInsumoEnvase,
+      },
+      type: "POST",
+      success: function (response) {
+        // if (!response.error) {
+        //   var envases = JSON.parse(response);
+        //   console.log(envases);
+        //   let template = $("#tablaenvase").html();
+        //   envases.forEach((envase) => {
+        //     const existingRow = $(`tr[taskId="${envase.COD_FORMULACION}"]`);
+        //     if (existingRow.length > 0) {
+        //       // console.log(insumo);
+        //       // const capturaValoresTabla = existingRow.find("td:eq(2)");
+        //       // capturaValoresTabla.each(function () {
+        //       //   console.log($(this).text());
+        //       // });
+        //       const capturaValoresTabla = existingRow.find("td:eq(1)").text();
+        //       console.log(capturaValoresTabla);
+        //     } else {
+        //       template += `<tr taskId="${envase.COD_FORMULACION}">
+        //                       <td data-titulo="ENVASES">${envase.DES_PRODUCTO}</td>
+        //                       <td data-titulo="CANTIDAD">${envase.TOTAL}</td>
+        //                    </tr>`;
+        //     }
+        //   });
+        //   $("#tablaenvase").html(template);
+        // }
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);

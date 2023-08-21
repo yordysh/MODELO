@@ -405,7 +405,19 @@ if ($_POST['accion'] == 'mostrardatosinsumos') {
 
     $selectInsumoEnvase = trim($_POST['selectInsumoEnvase']);
 
-    $respuesta = c_almacen::c_mostrar_insumo($selectInsumoEnvase);
+    $cantidadInsumoEnvase = trim($_POST['cantidadInsumoEnvase']);
+
+    $respuesta = c_almacen::c_mostrar_insumo($selectInsumoEnvase, $cantidadInsumoEnvase);
+    echo $respuesta;
+}
+
+if ($_POST['accion'] == 'mostrardatosenvases') {
+
+    $selectInsumoEnvase = trim($_POST['selectInsumoEnvase']);
+
+    $cantidadInsumoEnvase = trim($_POST['cantidadInsumoEnvase']);
+
+    $respuesta = c_almacen::c_mostrar_envase($selectInsumoEnvase, $cantidadInsumoEnvase);
     echo $respuesta;
 }
 
@@ -2021,7 +2033,7 @@ class c_almacen
 
 
 
-    static function c_mostrar_insumo($selectInsumoEnvase)
+    static function c_mostrar_insumo($selectInsumoEnvase, $cantidadInsumoEnvase)
     {
         try {
 
@@ -2036,12 +2048,45 @@ class c_almacen
             }
             $json = array();
             foreach ($datos as $row) {
+                $total = ($row->CAN_FORMULACION_INSUMOS * $cantidadInsumoEnvase) / $row->CAN_FORMULACION;
+
                 $json[] = array(
                     "COD_FORMULACION" => $row->COD_FORMULACION,
                     "DES_PRODUCTO_FORMULACION" => $row->DES_PRODUCTO_FORMULACION,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "CAN_FORMULACION_INSUMOS" => $row->CAN_FORMULACION_INSUMOS,
-                    "CAN_FORMULACION" => $row->CAN_FORMULACION,
+                    "TOTAL" => $total,
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_mostrar_envase($selectInsumoEnvase, $cantidadInsumoEnvase)
+    {
+        try {
+
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarDatosEnvases($selectInsumoEnvase);
+
+
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $total = ($row->CANTIDA * $cantidadInsumoEnvase) / $row->CAN_FORMULACION;
+                $json[] = array(
+                    "COD_FORMULACION" => $row->COD_FORMULACION,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "TOTAL" => $total,
                 );
             }
 

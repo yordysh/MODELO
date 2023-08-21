@@ -88,6 +88,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                                 <input type="hidden" id="taskId">
                                 <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-primary bt-guardar">Insertar</button>
                                 <button id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary bt-guardar">Añadir</button>
+
                                 <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
                             </div>
                         </div>
@@ -97,7 +98,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <table id="" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="thtitulo" scope="col">NOMBRE PRODUCTO</th>
+                                        <!-- <th class="thtitulo" scope="col">NOMBRE PRODUCTO</th> -->
                                         <th class="thtitulo" scope="col">INSUMOS</th>
                                         <th class="thtitulo" scope="col">CANTIDAD</th>
                                     </tr>
@@ -107,23 +108,23 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                                 </tbody>
                             </table>
                         </div>
+                        <div id="tablaE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                            <table class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">ENVASES</th>
+                                        <!-- <th class="thtitulo" scope="col">CODIGO PRODUCCION</th> -->
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaenvase">
 
+                                </tbody>
+                            </table>
+                        </div>
                     </form>
 
-                    <div id="tablaRE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbRE" class="table table-sm mb-3 table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="thtitulo" scope="col">CODIGO PRODUCTO</th>
-                                    <!-- <th class="thtitulo" scope="col">CODIGO PRODUCCION</th> -->
-                                    <th class="thtitulo" scope="col">CANTIDAD</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablaRequerimientoProducto">
 
-                            </tbody>
-                        </table>
-                    </div>
 
                 </div>
             </div>

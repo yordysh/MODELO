@@ -2029,7 +2029,7 @@ class m_almacen
 
 
 
-  public function   MostrarDatosInsumos($selectInsumoEnvase)
+  public function  MostrarDatosInsumos($selectInsumoEnvase)
   {
     try {
 
@@ -2038,10 +2038,30 @@ class m_almacen
 
       $stm = $this->bd->prepare("SELECT TMP.COD_FORMULACION AS COD_FORMULACION, (SELECT TPR.DES_PRODUCTO FROM T_PRODUCTO TPR INNER JOIN T_TMPFORMULACION TFOR 
                                   ON TPR.COD_PRODUCTO=TFOR.COD_PRODUCTO WHERE TFOR.COD_FORMULACION='$codigo_corresponde_formulacion') AS DES_PRODUCTO_FORMULACION,
-                                  TP.DES_PRODUCTO AS DES_PRODUCTO, TFI.CAN_FORMULACION AS CAN_FORMULACION_INSUMOS,TMP.CAN_FORMULACION AS CAN_FORMULACION
+                                  TFI.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TFI.CAN_FORMULACION AS CAN_FORMULACION_INSUMOS,TMP.CAN_FORMULACION AS CAN_FORMULACION
                                   FROM T_TMPFORMULACION_ITEM AS TFI INNER JOIN T_PRODUCTO AS TP ON TFI.COD_PRODUCTO=TP.COD_PRODUCTO 
                                   INNER JOIN T_TMPFORMULACION AS TMP ON TMP.COD_FORMULACION=TFI.COD_FORMULACION
                                   WHERE TFI.COD_FORMULACION='$codigo_corresponde_formulacion'");
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarDatosEnvases($selectInsumoEnvase)
+  {
+    try {
+
+      $codigoFormulacionInsumoEnvase = new m_almacen();
+      $codigo_corresponde_formulacion = $codigoFormulacionInsumoEnvase->CodigoFormulacionProducto($selectInsumoEnvase);
+
+      $stm = $this->bd->prepare("SELECT TE.COD_FORMULACION AS COD_FORMULACION, TE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TE.CANTIDA AS CANTIDA, 
+                                (SELECT CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_FORMULACION='$codigo_corresponde_formulacion') AS CAN_FORMULACION
+                                FROM T_TMPFORMULACION_ENVASE TE 
+                                INNER JOIN T_PRODUCTO AS TP ON TE.COD_PRODUCTO= TP.COD_PRODUCTO  WHERE TE.COD_FORMULACION='$codigo_corresponde_formulacion'");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
