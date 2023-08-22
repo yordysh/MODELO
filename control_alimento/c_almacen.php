@@ -413,11 +413,24 @@ if ($_POST['accion'] == 'mostrardatosinsumos') {
 
 if ($_POST['accion'] == 'mostrardatosenvases') {
 
-    $selectInsumoEnvase = trim($_POST['selectInsumoEnvase']);
+    $selectInsEnvase = trim($_POST['selectInsEnvase']);
 
-    $cantidadInsumoEnvase = trim($_POST['cantidadInsumoEnvase']);
+    $cantidInsumoEnvase = trim($_POST['cantidInsumoEnvase']);
 
-    $respuesta = c_almacen::c_mostrar_envase($selectInsumoEnvase, $cantidadInsumoEnvase);
+    $respuesta = c_almacen::c_mostrar_envase($selectInsEnvase, $cantidInsumoEnvase);
+    echo $respuesta;
+}
+
+
+
+
+if ($_POST['accion'] == 'guardarvalorescapturadosinsumos') {
+
+    $union = ($_POST['union']);
+
+
+
+    $respuesta = c_almacen::c_guardar_InsumoEnvase($union);
     echo $respuesta;
 }
 
@@ -2066,13 +2079,13 @@ class c_almacen
         }
     }
 
-    static function c_mostrar_envase($selectInsumoEnvase, $cantidadInsumoEnvase)
+    static function c_mostrar_envase($selectInsEnvase, $cantidInsumoEnvase)
     {
         try {
 
 
             $mostrar = new m_almacen();
-            $datos = $mostrar->MostrarDatosEnvases($selectInsumoEnvase);
+            $datos = $mostrar->MostrarDatosEnvases($selectInsEnvase);
 
 
 
@@ -2081,7 +2094,7 @@ class c_almacen
             }
             $json = array();
             foreach ($datos as $row) {
-                $total = ($row->CANTIDA * $cantidadInsumoEnvase) / $row->CAN_FORMULACION;
+                $total = ($row->CANTIDA * $cantidInsumoEnvase) / $row->CAN_FORMULACION;
                 $json[] = array(
                     "COD_FORMULACIONES" => $row->COD_FORMULACIONES,
                     "COD_PRODUCTO" => $row->COD_PRODUCTO,
@@ -2094,6 +2107,22 @@ class c_almacen
             echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
+        }
+    }
+
+
+
+    static function c_guardar_InsumoEnvase($union)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($union)) {
+            $respuesta = $m_formula->InsertarInsumEnvas($union);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
         }
     }
 }

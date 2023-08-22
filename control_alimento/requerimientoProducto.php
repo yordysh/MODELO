@@ -87,11 +87,27 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
                                 <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-primary bt-guardar">Insertar</button>
-                                <button id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary bt-guardar">Añadir</button>
+                                <button id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary bt-guardar">Guardar</button>
 
                                 <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
                             </div>
                         </div>
+
+                        <!-- Tabla de total de productos-->
+                        <!-- <div class="table-responsive" style="overflow: scroll;height: 200px !important; margin-top:20px;">
+                            <table id="" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+
+                                        <th class="thtitulo" scope="col">PRODUCTO</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaTotalInsEnva">
+
+                                </tbody>
+                            </table>
+                        </div> -->
 
                         <!-- Tabla de insumos-->
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
@@ -108,6 +124,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                                 </tbody>
                             </table>
                         </div>
+                        <!-- Tabla de envases-->
                         <div id="tablaE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
                             <table class="table table-sm mb-3 table-hover">
                                 <thead>

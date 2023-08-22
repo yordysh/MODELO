@@ -2051,22 +2051,64 @@ class m_almacen
     }
   }
 
-  public function MostrarDatosEnvases($selectInsumoEnvase)
+  public function MostrarDatosEnvases($selectInsEnvase)
   {
     try {
 
       $codigoFormulacionInsumoEnvase = new m_almacen();
-      $codigo_corresponde_formulacion = $codigoFormulacionInsumoEnvase->CodigoFormulacionProducto($selectInsumoEnvase);
+      $codigo_corresponde_formulacion = $codigoFormulacionInsumoEnvase->CodigoFormulacionProducto($selectInsEnvase);
 
       $stm = $this->bd->prepare("SELECT TE.COD_FORMULACION AS COD_FORMULACIONES, TE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TE.CANTIDA AS CANTIDA, 
                                 (SELECT CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_FORMULACION='$codigo_corresponde_formulacion') AS CAN_FORMULACION
                                 FROM T_TMPFORMULACION_ENVASE TE 
                                 INNER JOIN T_PRODUCTO AS TP ON TE.COD_PRODUCTO= TP.COD_PRODUCTO  WHERE TE.COD_FORMULACION='$codigo_corresponde_formulacion'");
+
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
       return $datos;
     } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+
+  public function InsertarInsumEnvas($union)
+  {
+    try {
+
+      $this->bd->beginTransaction();
+      $cod = new m_almacen();
+
+      for ($i = 0; $i < count($union); $i += 3) {
+        $codFormulacion = $union[$i];
+        $codProducto = $union[$i + 1];
+        $canInsu = $union[$i + 2];
+        $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ITEM(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+        VALUES ('$codFormulacion', '$codProducto', '$canInsu')");
+        $insert = $stmRequeItem->execute();
+
+        // echo "Cod Formulacion: $codFormulacion, Cod Producto: $codProducto, Cantidad:  $canInsu<br>";
+      }
+
+
+      // exit();
+
+
+
+
+
+      // $stmRequerEnv = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+      //                             VALUES ( '$codFormulacion', '$codProducto', '$canInsu')");
+      // $stmRequerEnv->execute();
+
+
+      $insert = $this->bd->commit();
+
+      return $insert;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
       die($e->getMessage());
     }
   }
