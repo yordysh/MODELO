@@ -2083,10 +2083,10 @@ class c_almacen
             foreach ($datos as $row) {
                 $total = ($row->CANTIDA * $cantidadInsumoEnvase) / $row->CAN_FORMULACION;
                 $json[] = array(
-                    "COD_FORMULACION" => $row->COD_FORMULACION,
+                    "COD_FORMULACIONES" => $row->COD_FORMULACIONES,
                     "COD_PRODUCTO" => $row->COD_PRODUCTO,
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                    "TOTAL" => $total,
+                    "TOTAL_ENVASE" => $total,
                 );
             }
 

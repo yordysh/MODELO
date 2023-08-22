@@ -70,17 +70,12 @@ $(function () {
   //-------------------------------------------------------------------------//
 
   //--------------------- Insertar los valores insumos y envases ------------//
-  var conteo = 0;
-  $("#selectInsumoEnvase").change((e) => {
-    conteo = 0;
-  });
+
   $("#botonCalcularInsumoEnvase").click((e) => {
     e.preventDefault();
     let selectInsumoEnvase = $("#selectInsumoEnvase").val();
 
     let cantidadInsumoEnvase = $("#cantidadInsumoEnvase").val();
-    conteo = conteo + cantidadInsumoEnvase;
-    // console.log(selectInsumoEnvase);
 
     const accion = "mostrardatosinsumos";
     $.ajax({
@@ -92,42 +87,36 @@ $(function () {
       },
       type: "POST",
       success: function (response) {
-        var insumos;
         if (!response.error) {
           var insumos = JSON.parse(response);
           // console.log(insumos);
-
           let template = $("#tablaInsumosDatos").html();
-          let array = [];
-
           const existingRow = $(
             `tr[taskId="${insumos[0]["COD_FORMULACION"]}"]`
           );
-          console.log(existingRow);
+          // console.log(existingRow);
           if (existingRow.length > 0) {
             // existingRow.each(function () {
-
             const capturaValoresTabla = existingRow.find("td:eq(1)");
-            console.log(capturaValoresTabla);
+            // console.log(capturaValoresTabla);
             for (let i = 0; i < capturaValoresTabla.length; i++) {
-              console.log(insumos[i].COD_FORMULACION);
+              // console.log(insumos[i].TOTAL);
+              const valorFormula = insumos[i].TOTAL;
               // const valor =
               //   (insumos.CAN_FORMULACION_INSUMOS * cantidadInsumoEnvase) /
               //   insumos.CAN_FORMULACION;
               // console.log(valor);
-              console.log(capturaValoresTabla[i]);
+              // console.log(capturaValoresTabla[i]);
               const valorCelda = capturaValoresTabla[i];
               const cambio = parseFloat($(valorCelda).html());
-              const suma = cambio + parseFloat(cantidadInsumoEnvase);
+              const suma = cambio + parseFloat(valorFormula);
               $(valorCelda).html(suma);
               // console.log(suma);
             }
-
             // });
           } else {
             insumos.forEach((insumo) => {
-              const existingRow = $(`tr[taskId="${insumo.COD_FORMULACION}"]`);
-
+              // const existingRow = $(`tr[taskId="${insumo.COD_FORMULACION}"]`);
               // if (existingRow.length > 0) {
               // console.log(insumo);
               // existingRow.each(function () {
@@ -148,7 +137,6 @@ $(function () {
               // }
             });
             $("#tablaInsumosDatos").html(template);
-
             $("#cantidadInsumoEnvase").val("");
           }
         }
@@ -172,24 +160,27 @@ $(function () {
         //   var envases = JSON.parse(response);
         //   console.log(envases);
         //   let template = $("#tablaenvase").html();
-        //   envases.forEach((envase) => {
-        //     const existingRow = $(`tr[taskId="${envase.COD_FORMULACION}"]`);
-        //     if (existingRow.length > 0) {
-        //       // console.log(insumo);
-        //       // const capturaValoresTabla = existingRow.find("td:eq(2)");
-        //       // capturaValoresTabla.each(function () {
-        //       //   console.log($(this).text());
-        //       // });
-        //       const capturaValoresTabla = existingRow.find("td:eq(1)").text();
-        //       console.log(capturaValoresTabla);
-        //     } else {
-        //       template += `<tr taskId="${envase.COD_FORMULACION}">
-        //                       <td data-titulo="ENVASES">${envase.DES_PRODUCTO}</td>
-        //                       <td data-titulo="CANTIDAD">${envase.TOTAL}</td>
-        //                    </tr>`;
+        //   const existeFila = $(`tr[taskid="selectInsumoEnvase"]`);
+        //   console.log(existeFila);
+        //   if (existeFila.length > 0) {
+        //     const capturaTabla = existeFila.find("td:eq(1)");
+        //     for (let i = 0; i < capturaTabla.length; i++) {
+        //       const valor = envases[i].TOTAL_ENVASE;
+        //       const valorCeldas = capturaTabla[i];
+        //       const cambios = parseFloat($(valorCeldas).html());
+        //       const sumar = cambios + parseFloat(valor);
+        //       $(valorCeldas).html(sumar);
         //     }
-        //   });
-        //   $("#tablaenvase").html(template);
+        //   } else {
+        //     envases.forEach((envase) => {
+        //       template += `<tr taskid="selectInsumoEnvase">
+        //                         <td data-titulo="ENVASES">${envase.DES_PRODUCTO}</td>
+        //                         <td data-titulo="CANTIDAD">${envase.TOTAL_ENVASE}</td>
+        //                      </tr>`;
+        //     });
+        //     $("#tablaenvase").html(template);
+        //     $("#cantidadInsumoEnvase").val("");
+        //   }
         // }
       },
       error: function (xhr, status, error) {

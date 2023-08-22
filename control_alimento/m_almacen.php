@@ -2058,7 +2058,7 @@ class m_almacen
       $codigoFormulacionInsumoEnvase = new m_almacen();
       $codigo_corresponde_formulacion = $codigoFormulacionInsumoEnvase->CodigoFormulacionProducto($selectInsumoEnvase);
 
-      $stm = $this->bd->prepare("SELECT TE.COD_FORMULACION AS COD_FORMULACION, TE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TE.CANTIDA AS CANTIDA, 
+      $stm = $this->bd->prepare("SELECT TE.COD_FORMULACION AS COD_FORMULACIONES, TE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TE.CANTIDA AS CANTIDA, 
                                 (SELECT CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_FORMULACION='$codigo_corresponde_formulacion') AS CAN_FORMULACION
                                 FROM T_TMPFORMULACION_ENVASE TE 
                                 INNER JOIN T_PRODUCTO AS TP ON TE.COD_PRODUCTO= TP.COD_PRODUCTO  WHERE TE.COD_FORMULACION='$codigo_corresponde_formulacion'");
