@@ -78,16 +78,38 @@ $(function () {
 
     let cantidadInsumoEnvase = $("#cantidadInsumoEnvase").val();
 
-    const datos = [
-      {
-        codigo: "codProducto",
-        titulo: "PRODUCTO",
-      },
-      {
-        codigo: "codCantidad",
-        titulo: "CANTIDAD TOTAL",
-      },
-    ];
+    if (!selectInsumoEnvase || !cantidadInsumoEnvase) {
+      Swal.fire({
+        icon: "error",
+        title: "Campos vacíos",
+        text: "Por favor, seleccione un producto y complete la cantidad.",
+      });
+      return;
+    }
+    if (parseFloat(cantidadInsumoEnvase) <= 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Campo negativo",
+        text: "Por favor, ingrese valor positivo en cantidad",
+      }).then((resultado) => {
+        if (resultado.isConfirmed || resultado.isDismissed) {
+          $("#cantidadInsumoEnvase").val("");
+        }
+      });
+      return;
+    }
+    // if (!Number.isInteger(cantidadInsumoEnvase)) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "No se aceptan decimales",
+    //     text: "Por favor, escriba un valor entero y no decimal",
+    //   }).then((resultado) => {
+    //     if (resultado.isConfirmed || resultado.isDismissed) {
+    //       $("#cantidadInsumoEnvase").val("");
+    //     }
+    //   });
+    //   return;
+    // }
 
     /*---------------  Añade tabla de total de cada producto-------------------*/
     // datos.forEach((dato) => {
@@ -155,6 +177,7 @@ $(function () {
               const suma = cambio + parseFloat(valorFormula);
               const sumatotalinsumo = suma.toFixed(3);
               $(valorCelda).html(sumatotalinsumo);
+              $("#cantidadInsumoEnvase").val("");
             }
           } else {
             insumos.forEach((insumo) => {
@@ -211,6 +234,7 @@ $(function () {
               const sumar = cambios + parseFloat(valor);
               const totalsumar = sumar.toFixed(3);
               $(valorCeldas).html(totalsumar);
+              $("#cantidadInsumoEnvase").val("");
             }
           } else {
             envases.forEach((envase) => {
@@ -242,11 +266,13 @@ $(function () {
   $("#botonInsertValor").click((e) => {
     e.preventDefault();
     let cantidadInsert = $("#cantidadInsumoEnvase").val();
+    let tablaReqInsumo = $("#tablaInsumosDatos");
+    let tablaReqEnv = $("#tablaenvase");
+    let tablatotalInEn = $("#tablainsumoenvasetotal");
 
     let valoresCapturados = [];
     let valoresCapturadosEnvase = [];
     let valoresCapturadosTotalEnvase = [];
-    let valoresSumaCantidad = [];
 
     $("#tablaInsumosDatos tr").each(function () {
       // let valorCelda = $(this).find("td:eq(1)").text();
@@ -296,6 +322,10 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#selectInsumoEnvase").val("none").trigger("change");
+              $("#cantidadInsumoEnvase").val("");
+              tablaReqInsumo.empty();
+              tablaReqEnv.empty();
+              tablatotalInEn.empty();
             }
           });
         }

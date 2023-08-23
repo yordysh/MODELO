@@ -379,6 +379,9 @@ td {
   .dMes {
     display: flex;
   }
+  .bt-insert {
+    margin: 5px;
+  }
 }
 @media screen and (max-width: 1120px) {
   .ctnBtn {
@@ -414,6 +417,14 @@ td {
     font-size: 16px;
     max-width: 130%;
     width: 108%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  .bt-insert {
+    padding: 10px 80px;
+    font-size: 16px;
+    max-width: 140%;
+    width: 110%;
     box-sizing: border-box;
     margin-bottom: 10px;
   }

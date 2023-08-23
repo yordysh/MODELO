@@ -79,15 +79,15 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         <!-- Text input cantidad -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Cantidad</label>
-                            <input type="text" id="cantidadInsumoEnvase" class="form-control" name="cantidadProducto" required>
+                            <input pattern="[0-9]{1,}\.[0-9]{1,}" type="number" id="cantidadInsumoEnvase" class="form-control" name="cantidadProducto" required>
                         </div>
 
                         <!-- Insertar nuevas cantidades -->
                         <div class="contenedor">
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
-                                <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-primary bt-guardar">Insertar</button>
-                                <button id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary bt-guardar">Guardar</button>
+                                <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-primary bt-insert">Insertar</button>
+                                <button id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary bt-insert">Guardar</button>
 
                                 <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
                             </div>
