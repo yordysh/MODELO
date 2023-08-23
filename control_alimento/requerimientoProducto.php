@@ -94,8 +94,8 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         </div>
 
                         <!-- Tabla de total de productos-->
-                        <!-- <div class="table-responsive" style="overflow: scroll;height: 200px !important; margin-top:20px;">
-                            <table id="" class="table table-sm mb-3 table-hover">
+                        <div id="tablaTotal" class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:20px;">
+                            <table class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
 
@@ -103,11 +103,11 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                                         <th class="thtitulo" scope="col">CANTIDAD TOTAL</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tablaTotalInsEnva">
+                                <tbody id="tablainsumoenvasetotal">
 
                                 </tbody>
                             </table>
-                        </div> -->
+                        </div>
 
                         <!-- Tabla de insumos-->
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">

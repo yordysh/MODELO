@@ -428,11 +428,10 @@ if ($_POST['accion'] == 'guardarvalorescapturadosinsumos') {
 
     $union = ($_POST['union']);
     $unionEnvase = ($_POST['unionEnvase']);
+    $unionItem = ($_POST['unionItem']);
 
 
-
-
-    $respuesta = c_almacen::c_guardar_InsumoEnvase($union, $unionEnvase);
+    $respuesta = c_almacen::c_guardar_InsumoEnvase($union, $unionEnvase, $unionItem);
     echo $respuesta;
 }
 
@@ -2063,8 +2062,8 @@ class c_almacen
             }
             $json = array();
             foreach ($datos as $row) {
-                $total = ($row->CAN_FORMULACION_INSUMOS * $cantidadInsumoEnvase) / $row->CAN_FORMULACION;
-
+                $calculoInsumo = ($row->CAN_FORMULACION_INSUMOS * $cantidadInsumoEnvase) / $row->CAN_FORMULACION;
+                $total = round($calculoInsumo, 3);
                 $json[] = array(
                     "COD_FORMULACION" => $row->COD_FORMULACION,
                     "DES_PRODUCTO_FORMULACION" => $row->DES_PRODUCTO_FORMULACION,
@@ -2096,7 +2095,8 @@ class c_almacen
             }
             $json = array();
             foreach ($datos as $row) {
-                $total = ($row->CANTIDA * $cantidInsumoEnvase) / $row->CAN_FORMULACION;
+                $calculo = ($row->CANTIDA * $cantidInsumoEnvase) / $row->CAN_FORMULACION;
+                $total = round($calculo, 3);
                 $json[] = array(
                     "COD_FORMULACIONES" => $row->COD_FORMULACIONES,
                     "COD_PRODUCTO" => $row->COD_PRODUCTO,
@@ -2114,12 +2114,12 @@ class c_almacen
 
 
 
-    static function c_guardar_InsumoEnvase($union, $unionEnvase)
+    static function c_guardar_InsumoEnvase($union, $unionEnvase, $unionItem)
     {
         $m_formula = new m_almacen();
 
-        if (isset($union) && isset($unionEnvase)) {
-            $respuesta = $m_formula->InsertarInsumEnvas($union, $unionEnvase);
+        if (isset($union) && isset($unionEnvase) && isset($unionItem)) {
+            $respuesta = $m_formula->InsertarInsumEnvas($union, $unionEnvase, $unionItem);
             if ($respuesta) {
                 return "ok";
             } else {

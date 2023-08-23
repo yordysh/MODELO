@@ -2074,36 +2074,48 @@ class m_almacen
 
 
 
-  public function InsertarInsumEnvas($union, $unionEnvase)
+  public function InsertarInsumEnvas($union, $unionEnvase, $unionItem)
   {
     try {
 
       $this->bd->beginTransaction();
       $cod = new m_almacen();
+      $codRequerimiento = $cod->generarCodigoRequerimientoProducto();
 
-      for ($i = 0; $i < count($union); $i += 3) {
-        $codFormulacion = $union[$i];
-        $codProducto = $union[$i + 1];
-        $canInsu = $union[$i + 2];
+
+      for ($i = 0; $i < count($union); $i += 2) {
+
+        $codProducto = $union[$i];
+        $canInsu = $union[$i + 1];
+
+        $stmRequeInsumo = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+        VALUES ('$codRequerimiento', '$codProducto', '$canInsu')");
+        $insert = $stmRequeInsumo->execute();
+      }
+
+      for ($i = 0; $i < count($unionEnvase); $i += 2) {
+        // $codFormulacion = $unionEnvase[$i];
+        $codProductoEnvase = $unionEnvase[$i];
+        $canEnvase = $unionEnvase[$i + 1];
+        $stmRequeEnvase = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+        VALUES ('$codRequerimiento', '$codProductoEnvase', '$canEnvase')");
+        $stmRequeEnvase->execute();
+      }
+
+      $sumaTotal = 0;
+      for ($i = 0; $i < count($unionItem); $i += 2) {
+
+        $codProductoTotal = $unionItem[$i];
+        $canInsuTotal = $unionItem[$i + 1];
+        $sumaTotal = $sumaTotal + $canInsuTotal;
+
         $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ITEM(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
-        VALUES ('$codFormulacion', '$codProducto', '$canInsu')");
-        $insert = $stmRequeItem->execute();
+        VALUES ('$codRequerimiento', '$codProductoTotal', '$canInsuTotal')");
+        $stmRequeItem->execute();
       }
-
-      for ($i = 0; $i < count($unionEnvase); $i += 3) {
-        $codFormulacion = $unionEnvase[$i];
-        $codProducto = $union[$i + 1];
-        $canInsu = $union[$i + 2];
-        $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
-        VALUES ('$codFormulacion', '$codProducto', '$canInsu')");
-        $insert = $stmRequeItem->execute();
-      }
-
-      // exit();
-
-
-
-
+      $stmRequerimiento = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO(COD_REQUERIMIENTO,  CANTIDAD)
+      VALUES ('$codRequerimiento', '$sumaTotal')");
+      $stmRequerimiento->execute();
 
 
 
