@@ -2074,7 +2074,7 @@ class m_almacen
 
 
 
-  public function InsertarInsumEnvas($union)
+  public function InsertarInsumEnvas($union, $unionEnvase)
   {
     try {
 
@@ -2088,10 +2088,16 @@ class m_almacen
         $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ITEM(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
         VALUES ('$codFormulacion', '$codProducto', '$canInsu')");
         $insert = $stmRequeItem->execute();
-
-        // echo "Cod Formulacion: $codFormulacion, Cod Producto: $codProducto, Cantidad:  $canInsu<br>";
       }
 
+      for ($i = 0; $i < count($unionEnvase); $i += 3) {
+        $codFormulacion = $unionEnvase[$i];
+        $codProducto = $union[$i + 1];
+        $canInsu = $union[$i + 2];
+        $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+        VALUES ('$codFormulacion', '$codProducto', '$canInsu')");
+        $insert = $stmRequeItem->execute();
+      }
 
       // exit();
 
@@ -2099,9 +2105,7 @@ class m_almacen
 
 
 
-      // $stmRequerEnv = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
-      //                             VALUES ( '$codFormulacion', '$codProducto', '$canInsu')");
-      // $stmRequerEnv->execute();
+
 
 
       $insert = $this->bd->commit();

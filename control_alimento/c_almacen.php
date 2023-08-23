@@ -427,10 +427,12 @@ if ($_POST['accion'] == 'mostrardatosenvases') {
 if ($_POST['accion'] == 'guardarvalorescapturadosinsumos') {
 
     $union = ($_POST['union']);
+    $unionEnvase = ($_POST['unionEnvase']);
 
 
 
-    $respuesta = c_almacen::c_guardar_InsumoEnvase($union);
+
+    $respuesta = c_almacen::c_guardar_InsumoEnvase($union, $unionEnvase);
     echo $respuesta;
 }
 
@@ -2112,12 +2114,12 @@ class c_almacen
 
 
 
-    static function c_guardar_InsumoEnvase($union)
+    static function c_guardar_InsumoEnvase($union, $unionEnvase)
     {
         $m_formula = new m_almacen();
 
-        if (isset($union)) {
-            $respuesta = $m_formula->InsertarInsumEnvas($union);
+        if (isset($union) && isset($unionEnvase)) {
+            $respuesta = $m_formula->InsertarInsumEnvas($union, $unionEnvase);
             if ($respuesta) {
                 return "ok";
             } else {
