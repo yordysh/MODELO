@@ -180,6 +180,7 @@ $(function () {
               $("#cantidadInsumoEnvase").val("");
             }
           } else {
+            let sumaguardado = [];
             insumos.forEach((insumo) => {
               template += `<tr taskId="${insumo.COD_FORMULACION}">
                                 <td data-titulo="INSUMOS" id='${insumo.COD_PRODUCTO}'>${insumo.DES_PRODUCTO}</td>
@@ -192,24 +193,35 @@ $(function () {
               `tr[taskId="${insumos[0]["COD_FORMULACION"]}"]`
             );
             const capturavalorcantidad = codigoForm.find("td:eq(1)");
+
             let sumitatotalinsumo = 0;
             for (let n = 0; n < capturavalorcantidad.length; n++) {
               const valorceldita = capturavalorcantidad[n];
               const cambiofloat = parseFloat($(valorceldita).html());
               sumitatotalinsumo = sumitatotalinsumo + cambiofloat;
-              console.log(cambiofloat);
             }
-            console.log("sumaTotal" + sumitatotalinsumo);
-            console.log("rd");
-            // $("#tinsumo tr").each(function () {
-            //   var segundaCelda = $(this).find("td:eq(1)");
-
-            //   // Obtener el contenido de la celda
-            //   var valorSegundaColumna = segundaCelda.text();
-
-            //   // Realizar la acción que necesites con el valor (por ejemplo, imprimirlo en la consola)
+            sumaguardado.push(sumitatotalinsumo);
+            console.log(sumaguardado);
+            // console.log("SumaTotal " + sumitatotalinsumo);
+            // console.log("otro insumo");
+            // let contador = 0;
+            // $("#tinsumo tr:not(:first)").each(function () {
+            //   var valorSegundaColumna = $(this).find("td:eq(1)").text();
+            //   contador++;
             //   console.log(valorSegundaColumna);
             // });
+            // console.log("toal " + contador);
+
+            // let nuevaFila = $("<tr>");
+            // let celdaProducto = $("<td>").html(
+            //   "<strong>CANTIDAD TOTAL INSUMOS</strong>"
+            // );
+            // let celdaProduccion = $("<td>").text(sumitatotalinsumo.toFixed(2));
+            // nuevaFila.append(celdaProducto, celdaProduccion);
+            // $("#tinsumo tbody tr:nth-child(" + contador + ")").after(nuevaFila);
+            // $("#tinsumo tbody").append(nuevaFila);
+            // console.log("final");
+
             $("#cantidadInsumoEnvase").val("");
           }
           //resolve();

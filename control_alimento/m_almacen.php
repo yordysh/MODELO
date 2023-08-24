@@ -2124,18 +2124,16 @@ class m_almacen
       $cod = new m_almacen();
       $codRequerimiento = $cod->generarCodigoRequerimientoProducto();
 
-      $sumaInsumo = 0;
-      for ($i = 0; $i < count($union); $i += 2) {
 
+      for ($i = 0; $i < count($union); $i += 2) {
         $codProducto = $union[$i];
         $canInsu = $union[$i + 1];
-        $sumaInsumo = $sumaInsumo + $canInsu;
 
         $stmRequeInsumo = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
         VALUES ('$codRequerimiento', '$codProducto', '$canInsu')");
         $insert = $stmRequeInsumo->execute();
       }
-      echo "sumaTtoal" . $sumaInsumo;
+
       for ($i = 0; $i < count($unionEnvase); $i += 2) {
         // $codFormulacion = $unionEnvase[$i];
         $codProductoEnvase = $unionEnvase[$i];
