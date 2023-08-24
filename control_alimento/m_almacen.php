@@ -1748,6 +1748,48 @@ class m_almacen
 
 
 
+  public function  MostrarProductoTerminado()
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00004'");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function  MostrarProductoInsumos()
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00002'");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function  MostrarProductoEnvases()
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00008'");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+
   public function  MostrarProductoComboRegistro()
   {
     try {
@@ -2082,17 +2124,18 @@ class m_almacen
       $cod = new m_almacen();
       $codRequerimiento = $cod->generarCodigoRequerimientoProducto();
 
-
+      $sumaInsumo = 0;
       for ($i = 0; $i < count($union); $i += 2) {
 
         $codProducto = $union[$i];
         $canInsu = $union[$i + 1];
+        $sumaInsumo = $sumaInsumo + $canInsu;
 
         $stmRequeInsumo = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
         VALUES ('$codRequerimiento', '$codProducto', '$canInsu')");
         $insert = $stmRequeInsumo->execute();
       }
-
+      echo "sumaTtoal" . $sumaInsumo;
       for ($i = 0; $i < count($unionEnvase); $i += 2) {
         // $codFormulacion = $unionEnvase[$i];
         $codProductoEnvase = $unionEnvase[$i];

@@ -2063,7 +2063,9 @@ class c_almacen
             $json = array();
             foreach ($datos as $row) {
                 $calculoInsumo = ($row->CAN_FORMULACION_INSUMOS * $cantidadInsumoEnvase) / $row->CAN_FORMULACION;
-                $total = round($calculoInsumo, 3);
+                // var_dump($calculoInsumo);
+                // $total = round($calculoInsumo, 3);
+                $total =  bcdiv($calculoInsumo, '1', 3);
                 $json[] = array(
                     "COD_FORMULACION" => $row->COD_FORMULACION,
                     "DES_PRODUCTO_FORMULACION" => $row->DES_PRODUCTO_FORMULACION,
@@ -2096,7 +2098,9 @@ class c_almacen
             $json = array();
             foreach ($datos as $row) {
                 $calculo = ($row->CANTIDA * $cantidInsumoEnvase) / $row->CAN_FORMULACION;
-                $total = round($calculo, 3);
+                // $total = round($calculo, 3);
+                $total =  bcdiv($calculo, '1', 3);
+
                 $json[] = array(
                     "COD_FORMULACIONES" => $row->COD_FORMULACIONES,
                     "COD_PRODUCTO" => $row->COD_PRODUCTO,

@@ -2,8 +2,10 @@
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataProducto = $mostrar->MostrarProductoComboRegistro();
-
+// $dataProducto = $mostrar->MostrarProductoComboRegistro();
+$dataProductoTerminado = $mostrar->MostrarProductoTerminado();
+$dataProductoInsumos = $mostrar->MostrarProductoInsumos();
+$dataProductoEnvases = $mostrar->MostrarProductoEnvases();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,8 +69,8 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <label class="form-label">Producto</label>
                             <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example" required>
                                 <option value="none" selected disabled>Seleccione producto</option>
-                                <?php foreach ($dataProducto as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                <?php foreach ($dataProductoTerminado as  $lis) { ?>
+                                    <option value="<?php echo ($lis['COD_PRODUCTO']); ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
                                 <?php
                                 }
 
@@ -98,8 +100,8 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <label class="form-label">Insumos</label>
                             <select id="selectInsumosCombo" class="form-select selectInsumos" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione insumos</option>
-                                <?php foreach ($dataProducto as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                <?php foreach ($dataProductoInsumos as  $lis) { ?>
+                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
                                 <?php
                                 }
                                 ?>
@@ -132,8 +134,8 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <label class="form-label">Envases</label>
                             <select id="selectEnvasesProductoCombo" class="form-select selectEnvasesProducto" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione envases</option>
-                                <?php foreach ($dataProducto as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                <?php foreach ($dataProductoEnvases as  $lis) { ?>
+                                    <option value="<?php echo ($lis['COD_PRODUCTO']); ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
                                 <?php
                                 }
                                 ?>

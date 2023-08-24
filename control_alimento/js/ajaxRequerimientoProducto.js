@@ -187,6 +187,29 @@ $(function () {
                              </tr>`;
             });
             $("#tablaInsumosDatos").html(template);
+
+            const codigoForm = $(
+              `tr[taskId="${insumos[0]["COD_FORMULACION"]}"]`
+            );
+            const capturavalorcantidad = codigoForm.find("td:eq(1)");
+            let sumitatotalinsumo = 0;
+            for (let n = 0; n < capturavalorcantidad.length; n++) {
+              const valorceldita = capturavalorcantidad[n];
+              const cambiofloat = parseFloat($(valorceldita).html());
+              sumitatotalinsumo = sumitatotalinsumo + cambiofloat;
+              console.log(cambiofloat);
+            }
+            console.log("sumaTotal" + sumitatotalinsumo);
+            console.log("rd");
+            // $("#tinsumo tr").each(function () {
+            //   var segundaCelda = $(this).find("td:eq(1)");
+
+            //   // Obtener el contenido de la celda
+            //   var valorSegundaColumna = segundaCelda.text();
+
+            //   // Realizar la acción que necesites con el valor (por ejemplo, imprimirlo en la consola)
+            //   console.log(valorSegundaColumna);
+            // });
             $("#cantidadInsumoEnvase").val("");
           }
           //resolve();

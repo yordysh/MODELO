@@ -2,7 +2,8 @@
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataProducto = $mostrar->MostrarProductoComboRegistro();
+// $dataProducto = $mostrar->MostrarProductoComboRegistro();
+$dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
 ?>
 <!DOCTYPE html>
@@ -67,8 +68,8 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                             <label class="form-label">Producto</label>
                             <select id="selectInsumoEnvase" class="form-select selectProducto" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
-                                <?php foreach ($dataProducto as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                <?php foreach ($dataProductoTerminado as  $lis) { ?>
+                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
                                 <?php
                                 }
 
@@ -79,7 +80,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         <!-- Text input cantidad -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Cantidad</label>
-                            <input pattern="[0-9]{1,}\.[0-9]{1,}" type="number" id="cantidadInsumoEnvase" class="form-control" name="cantidadProducto" required>
+                            <input type="number" id="cantidadInsumoEnvase" class="form-control" name="cantidadProducto" required>
                         </div>
 
                         <!-- Insertar nuevas cantidades -->
@@ -111,7 +112,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
 
                         <!-- Tabla de insumos-->
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
-                            <table id="" class="table table-sm mb-3 table-hover">
+                            <table id="tinsumo" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
                                         <!-- <th class="thtitulo" scope="col">NOMBRE PRODUCTO</th> -->
