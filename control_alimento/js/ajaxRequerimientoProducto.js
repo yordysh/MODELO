@@ -181,6 +181,7 @@ $(function () {
             }
           } else {
             let sumaguardado = [];
+
             insumos.forEach((insumo) => {
               template += `<tr taskId="${insumo.COD_FORMULACION}">
                                 <td data-titulo="INSUMOS" id='${insumo.COD_PRODUCTO}'>${insumo.DES_PRODUCTO}</td>
@@ -202,15 +203,14 @@ $(function () {
             }
             sumaguardado.push(sumitatotalinsumo);
             console.log(sumaguardado);
-            // console.log("SumaTotal " + sumitatotalinsumo);
-            // console.log("otro insumo");
+
             // let contador = 0;
             // $("#tinsumo tr:not(:first)").each(function () {
             //   var valorSegundaColumna = $(this).find("td:eq(1)").text();
             //   contador++;
             //   console.log(valorSegundaColumna);
             // });
-            // console.log("toal " + contador);
+            // // console.log("toal " + contador);
 
             // let nuevaFila = $("<tr>");
             // let celdaProducto = $("<td>").html(
