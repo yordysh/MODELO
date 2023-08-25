@@ -164,6 +164,7 @@ $(function () {
           );
           if (existingRow.length > 0) {
             const capturaValoresTabla = existingRow.find("td:eq(1)");
+
             for (let i = 0; i < capturaValoresTabla.length; i++) {
               // console.log(insumos[i].TOTAL);
               const valorFormula = insumos[i].TOTAL;
@@ -177,11 +178,27 @@ $(function () {
               const suma = cambio + parseFloat(valorFormula);
               const sumatotalinsumo = suma.toFixed(3);
               $(valorCelda).html(sumatotalinsumo);
+
               $("#cantidadInsumoEnvase").val("");
             }
-          } else {
-            let sumaguardado = [];
 
+            const codigoForm = $("#tinsumo tr:not(:first)");
+            const capturavalorcantidad = codigoForm.find("td:eq(1)");
+            let sumatotalinsumos = 0;
+            for (let n = 0; n < capturavalorcantidad.length; n++) {
+              const valorceldita = capturavalorcantidad[n];
+              const cambiofloat = parseFloat($(valorceldita).html());
+              sumatotalinsumos = sumatotalinsumos + cambiofloat;
+            }
+            const tablasuma = $("#tsumatotal tr:not(:first)");
+            const capturadelvalor = tablasuma.find("td:eq(0)");
+
+            // console.log(sumatotalinsumos);
+            if (tablasuma.length > 0) {
+              const parse = sumatotalinsumos.toFixed(1);
+              $(capturadelvalor).html(parse);
+            }
+          } else {
             insumos.forEach((insumo) => {
               template += `<tr taskId="${insumo.COD_FORMULACION}">
                                 <td data-titulo="INSUMOS" id='${insumo.COD_PRODUCTO}'>${insumo.DES_PRODUCTO}</td>
@@ -190,37 +207,55 @@ $(function () {
             });
             $("#tablaInsumosDatos").html(template);
 
-            const codigoForm = $(
-              `tr[taskId="${insumos[0]["COD_FORMULACION"]}"]`
-            );
-            const capturavalorcantidad = codigoForm.find("td:eq(1)");
+            // const codigoForm = $(
+            //   `tr[taskId="${insumos[0]["COD_FORMULACION"]}"]`
+            // );
+            // const capturavalorcantidad = codigoForm.find("td:eq(1)");
 
-            let sumitatotalinsumo = 0;
+            // let sumitatotalinsumo = 0;
+            // for (let n = 0; n < capturavalorcantidad.length; n++) {
+            //   const valorceldita = capturavalorcantidad[n];
+            //   const cambiofloat = parseFloat($(valorceldita).html());
+            //   sumitatotalinsumo = sumitatotalinsumo + cambiofloat;
+            // }
+            // sumaguardado.push(sumitatotalinsumo);
+            // console.log(sumaguardado);
+
+            // let sumatotalinsumos = 0;
+            // $("#tinsumo tr:not(:first)").each(function () {
+            //   var valorSegundaColumna = $(this).find("td:eq(1)").text();
+            //   contador += sumatotalinsumos;
+            //   console.log(valorSegundaColumna);
+            // });
+
+            const codigoForm = $("#tinsumo tr:not(:first)");
+            const capturavalorcantidad = codigoForm.find("td:eq(1)");
+            let sumatotalinsumos = 0;
             for (let n = 0; n < capturavalorcantidad.length; n++) {
               const valorceldita = capturavalorcantidad[n];
               const cambiofloat = parseFloat($(valorceldita).html());
-              sumitatotalinsumo = sumitatotalinsumo + cambiofloat;
+              sumatotalinsumos = sumatotalinsumos + cambiofloat;
             }
-            sumaguardado.push(sumitatotalinsumo);
-            console.log(sumaguardado);
+            const tablasuma = $("#tsumatotal tr:not(:first)");
+            const capturadelvalor = tablasuma.find("td:eq(0)");
 
-            // let contador = 0;
-            // $("#tinsumo tr:not(:first)").each(function () {
-            //   var valorSegundaColumna = $(this).find("td:eq(1)").text();
-            //   contador++;
-            //   console.log(valorSegundaColumna);
-            // });
-            // // console.log("toal " + contador);
-
-            // let nuevaFila = $("<tr>");
-            // let celdaProducto = $("<td>").html(
-            //   "<strong>CANTIDAD TOTAL INSUMOS</strong>"
-            // );
-            // let celdaProduccion = $("<td>").text(sumitatotalinsumo.toFixed(2));
-            // nuevaFila.append(celdaProducto, celdaProduccion);
-            // $("#tinsumo tbody tr:nth-child(" + contador + ")").after(nuevaFila);
-            // $("#tinsumo tbody").append(nuevaFila);
-            // console.log("final");
+            // console.log(sumatotalinsumos);
+            if (tablasuma.length > 0) {
+              const parse = sumatotalinsumos.toFixed(1);
+              $(capturadelvalor).html(parse);
+            } else {
+              let nuevaFila = $("<tr>");
+              // let celdaProductoSumaInsumo = $(
+              //   "<td data-titulo='PRODUCTO'>"
+              // ).text(textoInsumoEnvase);
+              let celdasumatotalinsumo = $(
+                "<td data-titulo='TOTAL INSUMOS'>"
+              ).text(sumatotalinsumos.toFixed(1));
+              nuevaFila.append(celdasumatotalinsumo);
+              // $("#tinsumo tbody tr:nth-child(" + contador + ")").after(nuevaFila);
+              $("#tsumatotal tbody").append(nuevaFila);
+              // console.log("final");
+            }
 
             $("#cantidadInsumoEnvase").val("");
           }

@@ -114,7 +114,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                             <input type="number" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
                         </div>
                         <button id="botonCalcularInsumos" name="insert" class="btn btn-primary bt-Total">Insertar insumos </button>
-                        <div class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;">
+                        <div class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;margin-bottom:50px!important;">
                             <table id="tbInsum" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>

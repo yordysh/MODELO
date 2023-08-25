@@ -40,7 +40,10 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <a class="" href="registroEnvases.php">Registros envases</a>
             </li> -->
             <li>
-                <a class="" href="#">Requerimiento produccion</a>
+                <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
+            </li>
+            <li>
+                <a class="" href="#">Pedido requerimiento</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -53,10 +56,10 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
         <section>
             <div class="container g-4 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">REQUERIMIENTO DE PRODUCTOS</label></center>
+                    <center><label class="title">PEDIDO DE REQUERIMIENTOS</label></center>
                 </div>
                 <div class="main">
-                    <form method="post" action="" id="formularioRequerimientoProducto">
+                    <form method="post" action="" id="formularioPedidoRequerimiento">
 
                         <!-- Text input -->
                         <div class="form-outline mb-4">
@@ -64,7 +67,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
 
                         <!--Combo Productos -->
-                        <div class="form-outline mb-4">
+                        <!-- <div class="form-outline mb-4">
                             <label class="form-label">Producto</label>
                             <select id="selectInsumoEnvase" class="form-select selectProducto" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
@@ -75,85 +78,48 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                                 ?>
                             </select>
-                        </div>
+                        </div> -->
 
                         <!-- Text input cantidad -->
-                        <div class="form-outline mb-4">
+                        <!-- <div class="form-outline mb-4">
                             <label class="form-label">Cantidad</label>
                             <input type="number" id="cantidadInsumoEnvase" class="form-control" name="cantidadProducto" required>
+                        </div> -->
+
+                        <!-- Button de estados pendiente o no pendiente -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="pendiente">
+                            <label class="form-check-label" for="pendiente">
+                                Pendientes
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="nopendiente" checked>
+                            <label class="form-check-label" for="nopendiente">
+                                No pendientes
+                            </label>
                         </div>
 
                         <!-- Insertar nuevas cantidades -->
                         <div class="contenedor">
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
-                                <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-primary bt-insert">Insertar</button>
                                 <button id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary bt-insert">Guardar</button>
 
                                 <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
                             </div>
                         </div>
 
-                        <!-- Tabla de total de productos-->
-                        <div id="tablaTotal" class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:20px;">
-                            <table class="table table-sm mb-3 table-hover">
-                                <thead>
-                                    <tr>
-
-                                        <th class="thtitulo" scope="col">PRODUCTO</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD TOTAL</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablainsumoenvasetotal">
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Tabla de insumos-->
+                        <!-- Tabla de requerimiento-->
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
-                            <table id="tinsumo" class="table table-sm mb-3 table-hover">
+                            <table id="trequerimiento" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <!-- <th class="thtitulo" scope="col">NOMBRE PRODUCTO</th> -->
-                                        <th class="thtitulo" scope="col">INSUMOS</th>
+                                        <th class="thtitulo" scope="col">PRODUCTO</th>
                                         <th class="thtitulo" scope="col">CANTIDAD</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tablaInsumosDatos">
-
-                                </tbody>
-                            </table>
-                        </div>
-
-
-                        <!-- Tabla de insumos-->
-                        <div class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:50px;">
-                            <table id="tsumatotal" class="table table-sm mb-3 table-hover">
-                                <thead>
-                                    <tr>
-                                        <!-- <th class="thtitulo" scope="col">NOMBRE PRODUCTO</th> -->
-                                        <!-- <th class="thtitulo" scope="col">PRODUCTO</th> -->
-                                        <th class="thtitulo" scope="col">TOTAL INSUMOS</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablasumatotalinsumo">
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Tabla de envases-->
-                        <div id="tablaE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                            <table class="table table-sm mb-3 table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="thtitulo" scope="col">ENVASES</th>
-                                        <!-- <th class="thtitulo" scope="col">CODIGO PRODUCCION</th> -->
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaenvase">
+                                <tbody id="tablaPedidoRequerimiento">
 
                                 </tbody>
                             </table>
@@ -172,7 +138,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxRequerimientoProducto.js"></script>
+    <script src="./js/ajaxPedidoRequerimiento.js"></script>
     <script src="./js/select2.min.js"></script>
 </body>
 
