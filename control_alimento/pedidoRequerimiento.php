@@ -66,19 +66,6 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <input id="id" type="hidden" class="form-control" name="id" />
                         </div>
 
-                        <!-- Button de estados pendiente o no pendiente -->
-                        <!-- <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="pendiente">
-                            <label class="form-check-label" for="pendiente">
-                                Pendientes
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="nopendiente" checked>
-                            <label class="form-check-label" for="nopendiente">
-                                No pendientes
-                            </label>
-                        </div> -->
 
                         <!-- Insertar nuevas cantidades -->
                         <div class="contenedor">
@@ -92,7 +79,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <!-- Tabla de requerimiento-->
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
-                            <table id="trequerimiento" class="table table-sm mb-3 table-hover">
+                            <table id="tpedidorequerimiento" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
                                         <th class="thtitulo" scope="col">PRODUCTO</th>
@@ -101,6 +88,22 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                     </tr>
                                 </thead>
                                 <tbody id="tablaPedidoRequerimiento">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Tabla de insumos que se requiere-->
+                        <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                            <table id="tinsumorequerido" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">INSUMOS</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablainsumorequerido">
 
                                 </tbody>
                             </table>
