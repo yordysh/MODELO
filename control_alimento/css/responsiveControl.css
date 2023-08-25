@@ -239,6 +239,13 @@ img {
 section {
   padding-bottom: 115px !important;
 }
+.custom-icon {
+  background-color: #007bff;
+  color: white;
+  padding: 5px;
+  border-radius: 40%;
+}
+
 /* --------------------------------------------------------------- */
 
 /*-------------- Estilo de MENUBAR ---------------------*/

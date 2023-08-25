@@ -2143,19 +2143,19 @@ class m_almacen
         $stmRequeEnvase->execute();
       }
 
-      $sumaTotal = 0;
+      $sumaTotalInEn = 0;
       for ($i = 0; $i < count($unionItem); $i += 2) {
 
         $codProductoTotal = $unionItem[$i];
         $canInsuTotal = $unionItem[$i + 1];
-        $sumaTotal = $sumaTotal + $canInsuTotal;
+        $sumaTotalInEn =  $sumaTotalInEn + $canInsuTotal;
 
         $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ITEM(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
         VALUES ('$codRequerimiento', '$codProductoTotal', '$canInsuTotal')");
         $stmRequeItem->execute();
       }
       $stmRequerimiento = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO(COD_REQUERIMIENTO,  CANTIDAD)
-      VALUES ('$codRequerimiento', '$sumaTotal')");
+      VALUES ('$codRequerimiento', '$sumaTotalInEn')");
       $stmRequerimiento->execute();
 
 
@@ -2166,6 +2166,35 @@ class m_almacen
       return $insert;
     } catch (Exception $e) {
       $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+
+
+
+
+
+
+
+
+
+  public function MostrarPendientesRequerimientos($buscarpendiente)
+  {
+    try {
+
+      // $codigoFormulacionInsumoEnvase = new m_almacen();
+      // $codigo_corresponde_formulacion = $codigoFormulacionInsumoEnvase->CodigoFormulacionProducto($selectInsEnvase);
+
+      $stm = $this->bd->prepare("SELECT TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TR.CANTIDAD AS CANTIDAD, TRI.COD_PRODUCTO AS COD_PRODUCTO,
+                                  TP.DES_PRODUCTO AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD_ITEM FROM T_TMPREQUERIMIENTO TR 
+                                  INNER JOIN T_TMPREQUERIMIENTO_ITEM TRI ON TR.COD_REQUERIMIENTO=TRI.COD_REQUERIMIENTO INNER JOIN T_PRODUCTO TP
+                                  ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO WHERE TR.ESTADO='P'");
+
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
       die($e->getMessage());
     }
   }

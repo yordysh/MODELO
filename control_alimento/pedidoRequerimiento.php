@@ -66,28 +66,8 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <input id="id" type="hidden" class="form-control" name="id" />
                         </div>
 
-                        <!--Combo Productos -->
-                        <!-- <div class="form-outline mb-4">
-                            <label class="form-label">Producto</label>
-                            <select id="selectInsumoEnvase" class="form-select selectProducto" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione producto</option>
-                                <?php foreach ($dataProductoTerminado as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
-                                <?php
-                                }
-
-                                ?>
-                            </select>
-                        </div> -->
-
-                        <!-- Text input cantidad -->
-                        <!-- <div class="form-outline mb-4">
-                            <label class="form-label">Cantidad</label>
-                            <input type="number" id="cantidadInsumoEnvase" class="form-control" name="cantidadProducto" required>
-                        </div> -->
-
                         <!-- Button de estados pendiente o no pendiente -->
-                        <div class="form-check">
+                        <!-- <div class="form-check">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="pendiente">
                             <label class="form-check-label" for="pendiente">
                                 Pendientes
@@ -98,7 +78,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <label class="form-check-label" for="nopendiente">
                                 No pendientes
                             </label>
-                        </div>
+                        </div> -->
 
                         <!-- Insertar nuevas cantidades -->
                         <div class="contenedor">
@@ -117,6 +97,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                     <tr>
                                         <th class="thtitulo" scope="col">PRODUCTO</th>
                                         <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaPedidoRequerimiento">

@@ -42,6 +42,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             <li>
                 <a class="" href="#">Requerimiento produccion</a>
             </li>
+            <li>
+                <a class="" href="pedidoRequerimiento.php">Pedido requerimiento</a>
+            </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
         <div class="search-box">
