@@ -447,6 +447,13 @@ if ($_POST['accion'] == 'buscarpendientestotal') {
     $respuesta = c_almacen::c_buscar_pendientes_requerimiento($buscarpendiente);
     echo $respuesta;
 }
+if ($_POST['accion'] == 'mostrarinsumopendientes') {
+
+    $cod_formulacion = trim($_POST['cod_formulacion']);
+
+    $respuesta = c_almacen::c_mostrar_insumos_pendientes($cod_formulacion);
+    echo $respuesta;
+}
 
 
 
@@ -2170,10 +2177,6 @@ class c_almacen
                     $json[] = array(
                         "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
                         "CANTIDAD" => $row->CANTIDAD,
-                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
-                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                        "CANTIDAD_ITEM" => $row->CANTIDAD_ITEM,
-
                     );
                 }
                 $jsonstring = json_encode($json);
@@ -2190,15 +2193,39 @@ class c_almacen
                     $json[] = array(
                         "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
                         "CANTIDAD" => $row->CANTIDAD,
-                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
-                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                        "CANTIDAD_ITEM" => $row->CANTIDAD_ITEM,
-
                     );
                 }
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
             }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_mostrar_insumos_pendientes($cod_formulacion)
+    {
+        try {
+
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarInsumosPendientes($cod_formulacion);
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CANTIDAD_TOTAL" => $row->CANTIDAD_TOTAL,
+                );
+            }
+
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }

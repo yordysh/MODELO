@@ -1957,7 +1957,7 @@ class m_almacen
   }
   public function generarCodigoRequerimientoProducto()
   {
-    $stm = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) as COD_REQUERIMIENTO FROM T_TMPREQUERIMIENTO_ITEM");
+    $stm = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) as COD_REQUERIMIENTO FROM T_TMPREQUERIMIENTO");
     $stm->execute();
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
     $maxCodigo = intval($resultado['COD_REQUERIMIENTO']);
@@ -2145,10 +2145,12 @@ class m_almacen
 
       $sumaTotalInEn = 0;
       for ($i = 0; $i < count($unionItem); $i += 2) {
+        // $codRequerimiento1 = $cod->generarCodigoRequerimientoProducto();
 
         $codProductoTotal = $unionItem[$i];
         $canInsuTotal = $unionItem[$i + 1];
         $sumaTotalInEn =  $sumaTotalInEn + $canInsuTotal;
+
 
         $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ITEM(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
         VALUES ('$codRequerimiento', '$codProductoTotal', '$canInsuTotal')");
@@ -2178,17 +2180,30 @@ class m_almacen
 
 
 
-  public function MostrarPendientesRequerimientos($buscarpendiente)
+  public function MostrarPendientesRequerimientos()
   {
     try {
 
-      // $codigoFormulacionInsumoEnvase = new m_almacen();
-      // $codigo_corresponde_formulacion = $codigoFormulacionInsumoEnvase->CodigoFormulacionProducto($selectInsEnvase);
+      $stm = $this->bd->prepare("SELECT * FROM T_TMPREQUERIMIENTO WHERE ESTADO='P'");
 
-      $stm = $this->bd->prepare("SELECT TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TR.CANTIDAD AS CANTIDAD, TRI.COD_PRODUCTO AS COD_PRODUCTO,
-                                  TP.DES_PRODUCTO AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD_ITEM FROM T_TMPREQUERIMIENTO TR 
-                                  INNER JOIN T_TMPREQUERIMIENTO_ITEM TRI ON TR.COD_REQUERIMIENTO=TRI.COD_REQUERIMIENTO INNER JOIN T_PRODUCTO TP
-                                  ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO WHERE DES_PRODUCTO LIKE '$buscarpendiente%' AND TR.ESTADO='P'");
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function   MostrarInsumosPendientes($cod_formulacion)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,
+                                TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(TRI.CANTIDAD) AS CANTIDAD_TOTAL, MAX(TAI.STOCK_ACTUAL) - SUM(TRI.CANTIDAD) AS STOCK_RESULTANTE
+                                FROM T_TMPREQUERIMIENTO TR INNER JOIN T_TMPREQUERIMIENTO_INSUMO TRI ON TR.COD_REQUERIMIENTO = TRI.COD_REQUERIMIENTO
+                                INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO = TP.COD_PRODUCTO INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TRI.COD_PRODUCTO = TAI.COD_PRODUCTO
+                                WHERE TR.COD_REQUERIMIENTO = '$cod_formulacion'
+                                GROUP BY TR.COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO, TAI.STOCK_ACTUAL");
 
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);

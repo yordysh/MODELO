@@ -82,8 +82,8 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <table id="tpedidorequerimiento" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="thtitulo" scope="col">PRODUCTO</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th class="thtitulo" scope="col">PENDIENTE</th>
+
                                         <th></th>
                                     </tr>
                                 </thead>
