@@ -91,6 +91,9 @@
           <li>
             <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
           </li>
+          <li>
+            <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
+          </li>
         </ul>
       </li>
     </ul>

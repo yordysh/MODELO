@@ -36,14 +36,14 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             <li>
                 <a class="" href="formulacionEnvases.php">Formulacion</a>
             </li>
-            <!-- <li>
-                <a class="" href="registroEnvases.php">Registros envases</a>
-            </li> -->
             <li>
                 <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
             </li>
             <li>
                 <a class="" href="#">Pedido requerimiento</a>
+            </li>
+            <li>
+                <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -69,10 +69,13 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <!-- Insertar nuevas cantidades -->
                         <div class="contenedor">
+                            <div class="mb-3">
+                                <label for="observacioncompra" class="form-label">Observacion</label>
+                                <textarea class="form-control" id="observacionCompra" rows="3" required></textarea>
+                            </div>
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
-                                <button id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary bt-insert">Guardar</button>
-
+                                <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-primary bt-insert">Guardar</button>
                                 <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
                             </div>
                         </div>

@@ -380,6 +380,9 @@ td {
     margin-right: 100px;
     display: flex;
   }
+  .contenedor {
+    display: block;
+  }
   .ctn {
     margin: 0 5px;
   }
@@ -393,6 +396,7 @@ td {
 @media screen and (max-width: 1120px) {
   .ctnBtn {
     margin-right: 45px;
+    display: block;
   }
 }
 @media screen and (max-width: 992px) {

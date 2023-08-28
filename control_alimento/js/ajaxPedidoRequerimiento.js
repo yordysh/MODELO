@@ -99,21 +99,84 @@ $(function () {
       type: "POST",
       data: { accion: accion, cod_formulacion: cod_formulacion },
       success: function (response) {
-        console.log(response);
         if (!response.error) {
           let tasks = JSON.parse(response);
+          console.log(tasks);
+
           let template = ``;
           tasks.forEach((task) => {
-            template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
-                            <td data-titulo="PRODUCTO"  style="text-align:center;">${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CANTIDAD"  style="text-align:center;">${task.CANTIDAD_TOTAL}</td>
-                        </tr>`;
+            const insumo_pedir = task.CANTIDAD_TOTAL - task.STOCK_ACTUAL;
+
+            if (insumo_pedir > 0) {
+              template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
+                            <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
+                            <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
+                          </tr>`;
+            }
           });
           $("#tablainsumorequerido").html(template);
         }
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+  });
+
+  $("#insertarCompraInsumos").click((e) => {
+    e.preventDefault();
+    let observacioncompra = $("#observacionCompra").val();
+    let valoresCapturadosVenta = [];
+    let idRequerimiento = $("#tablainsumorequerido tr").attr(
+      "codigorequerimiento"
+    );
+    let tablainsumorequerido = $("#tablainsumorequerido");
+
+    $("#tablainsumorequerido tr").each(function () {
+      let id_producto_insumo = $(this).find("td:eq(0)").attr("id_producto");
+      let cantidad_producto_insumo = $(this).find("td:eq(1)").text();
+
+      valoresCapturadosVenta.push(id_producto_insumo, cantidad_producto_insumo);
+    });
+
+    if (valoresCapturadosVenta == "" || observacioncompra == "") {
+      Swal.fire({
+        title: "¡Error!",
+        text: "Añadir los pendientes para guardar.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
+    }
+    const accion = "insertarordencompraitem";
+
+    $.ajax({
+      type: "POST",
+      url: "./c_almacen.php",
+      data: {
+        accion: accion,
+        union: valoresCapturadosVenta,
+        idRequerimiento: idRequerimiento,
+        observacioncompra: observacioncompra,
+      },
+      success: function (response) {
+        console.log("respuesta" + response);
+        if (response == "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#observacionCompra").val("");
+              tablainsumorequerido.empty();
+              mostrarPendientes();
+            }
+          });
+        }
+      },
+      error: function (error) {
+        console.log("ERROR " + error);
       },
     });
   });

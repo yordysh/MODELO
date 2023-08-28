@@ -455,6 +455,50 @@ if ($_POST['accion'] == 'mostrarinsumopendientes') {
     echo $respuesta;
 }
 
+if ($_POST['accion'] == 'insertarordencompraitem') {
+
+    $union = $_POST['union'];
+    $observacioncompra = $_POST['observacioncompra'];
+    $idRequerimiento = $_POST['idRequerimiento'];
+
+
+    $respuesta = c_almacen::c_insertar_orden_compra_item($union, $idRequerimiento, $observacioncompra);
+    echo $respuesta;
+}
+
+if ($_POST['accion'] == 'insertarcantidadminima') {
+
+    $selectCantidadminima = trim($_POST['selectCantidadminima']);
+    $cantidadMinima = trim($_POST['cantidadMinima']);
+
+    $respuesta = c_almacen::c_insertar_cantidad_minima($selectCantidadminima, $cantidadMinima);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'buscarCantidadminima') {
+    $buscarcantidadminimasearch = $_POST['buscarcantidadminimasearch'];
+    $respuesta = c_almacen::c_buscar_cantidad_minima($buscarcantidadminimasearch);
+    echo $respuesta;
+}
+
+if ($_POST['accion'] == 'editarcantidadminima') {
+    $cod_mini = trim($_POST['cod_mini']);
+    $respuesta = c_almacen::c_editar_cantidad_minima($cod_mini);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'actualizarcantidadminima') {
+    $codminimo = trim($_POST['codminimo']);
+    $selectCantidadminima = trim($_POST['selectCantidadminima']);
+    $cantidadMinima = trim($_POST['cantidadMinima']);
+    $respuesta = c_almacen::c_actualizar_cantidades_minima($codminimo, $selectCantidadminima, $cantidadMinima);
+    echo $respuesta;
+}
+if ($_POST['accion'] == 'eliminarcantidadminima') {
+
+    $cod_cantidad_min = trim($_POST['cod_cantidad_min']);
+
+    $respuesta = c_almacen::c_eliminar_cantidad_minima($cod_cantidad_min);
+    echo $respuesta;
+}
 
 
 
@@ -2218,9 +2262,10 @@ class c_almacen
             foreach ($datos as $row) {
                 $json[] = array(
                     "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "CANTIDAD_TOTAL" => $row->CANTIDAD_TOTAL,
+                    "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
                 );
             }
 
@@ -2228,6 +2273,130 @@ class c_almacen
             echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_insertar_orden_compra_item($union, $idRequerimiento, $observacioncompra)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($union)) {
+            $respuesta = $m_formula->InsertarOrdenCompraItem($union, $idRequerimiento, $observacioncompra);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+    static function c_insertar_cantidad_minima($selectCantidadminima, $cantidadMinima)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($selectCantidadminima) && isset($cantidadMinima)) {
+            $respuesta = $m_formula->InsertarCantidadMinima($selectCantidadminima, $cantidadMinima);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+    static function  c_buscar_cantidad_minima($buscarcantidadminimasearch)
+    {
+        try {
+
+            if (!empty($buscarcantidadminimasearch)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarCantidadMinima($buscarcantidadminimasearch);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_CANTIDAD_MINIMA" => $row->COD_CANTIDAD_MINIMA,
+                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarCantidadMinima($buscarcantidadminimasearch);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_CANTIDAD_MINIMA" => $row->COD_CANTIDAD_MINIMA,
+                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_editar_cantidad_minima($cod_mini)
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($cod_mini)) {
+            $selectZ = $mostrar->SelectCantidadMinima($cod_mini);
+
+            $json = array();
+            foreach ($selectZ as $row) {
+                $json[] = array(
+                    "COD_CANTIDAD_MINIMA" => $row['COD_CANTIDAD_MINIMA'],
+                    "DES_PRODUCTO" => $row['DES_PRODUCTO'],
+                    "COD_PRODUCTO" => $row['COD_PRODUCTO'],
+                    "CANTIDAD_MINIMA" => $row['CANTIDAD_MINIMA'],
+                );
+            }
+
+            $jsonstring = json_encode($json[0]);
+            echo $jsonstring;
+        }
+    }
+    static function c_actualizar_cantidades_minima($codminimo, $selectCantidadminima, $cantidadMinima)
+    {
+
+        $m_formula = new m_almacen();
+
+
+        if (isset($codminimo) && isset($selectCantidadminima) && isset($cantidadMinima)) {
+
+            $respuesta = $m_formula->EditarCantidadMinima($codminimo, $selectCantidadminima, $cantidadMinima);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function c_eliminar_cantidad_minima($cod_cantidad_min)
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($cod_cantidad_min)) {
+            $respuesta = $mostrar->eliminarCantidadMinima($cod_cantidad_min);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
         }
     }
 }

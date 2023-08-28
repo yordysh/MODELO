@@ -2199,11 +2199,11 @@ class m_almacen
     try {
 
       $stm = $this->bd->prepare("SELECT TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,
-                                TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(TRI.CANTIDAD) AS CANTIDAD_TOTAL, MAX(TAI.STOCK_ACTUAL) - SUM(TRI.CANTIDAD) AS STOCK_RESULTANTE
-                                FROM T_TMPREQUERIMIENTO TR INNER JOIN T_TMPREQUERIMIENTO_INSUMO TRI ON TR.COD_REQUERIMIENTO = TRI.COD_REQUERIMIENTO
-                                INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO = TP.COD_PRODUCTO INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TRI.COD_PRODUCTO = TAI.COD_PRODUCTO
-                                WHERE TR.COD_REQUERIMIENTO = '$cod_formulacion'
-                                GROUP BY TR.COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO, TAI.STOCK_ACTUAL");
+                                  TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(TRI.CANTIDAD) AS CANTIDAD_TOTAL, TAI.STOCK_ACTUAL AS STOCK_ACTUAL, MAX(TAI.STOCK_ACTUAL) - SUM(TRI.CANTIDAD) AS STOCK_RESULTANTE
+                                  FROM T_TMPREQUERIMIENTO TR INNER JOIN T_TMPREQUERIMIENTO_INSUMO TRI ON TR.COD_REQUERIMIENTO = TRI.COD_REQUERIMIENTO
+                                  INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO = TP.COD_PRODUCTO INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TRI.COD_PRODUCTO = TAI.COD_PRODUCTO
+                                  WHERE TR.COD_REQUERIMIENTO = '$cod_formulacion'
+                                  GROUP BY TR.COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO, TAI.STOCK_ACTUAL");
 
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
@@ -2211,6 +2211,161 @@ class m_almacen
       return $datos;
     } catch (Exception $e) {
       die($e->getMessage());
+    }
+  }
+  public function generarCodigoOrdenCompra()
+  {
+    $stm = $this->bd->prepare("SELECT MAX(COD_ORDEN_COMPRA) as COD_ORDEN_COMPRA FROM T_TMPORDEN_COMPRA");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+
+
+    $maxCodigo = intval($resultado['COD_ORDEN_COMPRA']);
+
+    $nuevoCodigo = $maxCodigo + 1;
+    $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
+    return $codigoAumento;
+  }
+  public function InsertarOrdenCompraItem($union, $idRequerimiento, $observacioncompra)
+  {
+    try {
+
+      $this->bd->beginTransaction();
+      $cod = new m_almacen();
+
+      $codigo_orden_compra = $cod->generarCodigoOrdenCompra();
+
+      $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,COD_REQUERIMIENTO, OBSERVACION)
+      VALUES ('$codigo_orden_compra','$idRequerimiento', '$observacioncompra')");
+      $insert = $stmPedidoCompras->execute();
+
+      for ($i = 0; $i < count($union); $i += 2) {
+        $codProducto = $union[$i];
+        $canInsu = $union[$i + 1];
+
+
+
+        $stmCantidadMinima = $this->bd->prepare("SELECT MAX(CANTIDAD_MINIMA) AS CANTIDAD_MINIMA FROM T_TMPCANTIDAD_MINIMA WHERE COD_PRODUCTO='$codProducto'");
+        $stmCantidadMinima->execute();
+        $resultado = $stmCantidadMinima->fetch(PDO::FETCH_OBJ);
+        $cantidad_min = intval($resultado->CANTIDAD_MINIMA);
+
+        $totalPedir = ceil($canInsu / $cantidad_min);
+        $multiplicacionTotal = $totalPedir * $cantidad_min;
+
+
+        $stmPedidoOrden = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA_ITEM(COD_ORDEN_COMPRA,COD_PRODUCTO, CANTIDAD_INSUMO_ENVASE)
+        VALUES ('$codigo_orden_compra','$codProducto', '$multiplicacionTotal')");
+        $insert = $stmPedidoOrden->execute();
+      }
+
+      $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
+      $stmActualizar->execute();
+
+
+
+      $insert = $this->bd->commit();
+
+      return $insert;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+
+  public function generarCodigoCantidadMinima()
+  {
+    $stm = $this->bd->prepare("SELECT MAX(COD_CANTIDAD_MINIMA) as COD_CANTIDAD_MINIMA FROM T_TMPCANTIDAD_MINIMA");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+    $maxCodigo = intval($resultado['COD_CANTIDAD_MINIMA']);
+    $nuevoCodigo = $maxCodigo + 1;
+    $codigoAumento = str_pad($nuevoCodigo, 7, '0', STR_PAD_LEFT);
+    return $codigoAumento;
+  }
+  public function InsertarCantidadMinima($selectCantidadminima, $cantidadMinima)
+  {
+    try {
+
+      $this->bd->beginTransaction();
+      $cod = new m_almacen();
+
+      $codigo_cantidad_minima = $cod->generarCodigoCantidadMinima();
+
+      $stmMinimoCantidad = $this->bd->prepare("INSERT INTO T_TMPCANTIDAD_MINIMA(COD_CANTIDAD_MINIMA,COD_PRODUCTO, CANTIDAD_MINIMA)
+      VALUES ('$codigo_cantidad_minima','$selectCantidadminima', '$cantidadMinima')");
+      $insert = $stmMinimoCantidad->execute();
+
+
+
+      $insert = $this->bd->commit();
+
+      return $insert;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarCantidadMinima($buscarcantidadminimasearch)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT TCM.COD_CANTIDAD_MINIMA AS COD_CANTIDAD_MINIMA, TCM.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO,
+      TCM.CANTIDAD_MINIMA AS CANTIDAD_MINIMA FROM T_TMPCANTIDAD_MINIMA TCM INNER JOIN T_PRODUCTO TP ON TCM.COD_PRODUCTO=TP.COD_PRODUCTO WHERE TP.DES_PRODUCTO LIKE '$buscarcantidadminimasearch%'");
+
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function SelectCantidadMinima($cod_mini)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT TCM.COD_CANTIDAD_MINIMA AS COD_CANTIDAD_MINIMA, TCM.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO,
+      TCM.CANTIDAD_MINIMA AS CANTIDAD_MINIMA FROM T_TMPCANTIDAD_MINIMA TCM INNER JOIN T_PRODUCTO TP ON TCM.COD_PRODUCTO=TP.COD_PRODUCTO WHERE TCM.COD_CANTIDAD_MINIMA = :COD_CANTIDAD_MINIMA");
+      $stm->bindParam(':COD_CANTIDAD_MINIMA', $cod_mini, PDO::PARAM_STR);
+      $stm->execute();
+
+      return $stm;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function EditarCantidadMinima($codminimo, $selectCantidadminima, $cantidadMinima)
+  {
+    try {
+      $this->bd->beginTransaction();
+
+      $cod = new m_almacen();
+      // $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
+      // $nombre = 'LBS-PHS-FR-01';
+
+      // if ($repetir == 0) {
+      $stmt = $this->bd->prepare("UPDATE T_TMPCANTIDAD_MINIMA SET CANTIDAD_MINIMA ='$cantidadMinima' WHERE COD_CANTIDAD_MINIMA = '$codminimo'");
+
+      $update = $stmt->execute();
+
+      $update = $this->bd->commit();
+
+      return $update;
+      // }
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function eliminarCantidadMinima($cod_cantidad_min)
+  {
+    try {
+      $stm = $this->bd->prepare("DELETE FROM T_TMPCANTIDAD_MINIMA WHERE COD_CANTIDAD_MINIMA='$cod_cantidad_min'");
+      $delete = $stm->execute();
+      return $delete;
+    } catch (Exception $e) {
+      die("Error al eliminar los datos: " . $e->getMessage());
     }
   }
 }

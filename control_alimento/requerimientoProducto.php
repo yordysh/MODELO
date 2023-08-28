@@ -45,6 +45,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             <li>
                 <a class="" href="pedidoRequerimiento.php">Pedido requerimiento</a>
             </li>
+            <li>
+                <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
+            </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
         <div class="search-box">
@@ -162,9 +165,6 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             </table>
                         </div>
                     </form>
-
-
-
                 </div>
             </div>
         </section>
