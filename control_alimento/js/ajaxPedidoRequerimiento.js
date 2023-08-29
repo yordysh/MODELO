@@ -61,7 +61,6 @@ $(function () {
 
   function mostrarPendientes() {
     const accion = "buscarpendientestotal";
-    let tablainsumorequerido = $("#tablaPedidoRequerimiento");
     const search = "";
     $.ajax({
       url: "./c_almacen.php",
@@ -80,6 +79,7 @@ $(function () {
           });
           $("#tablaPedidoRequerimiento").html(template);
         } else {
+          console.log("object");
           $("#tablaPedidoRequerimiento").empty();
         }
       },
@@ -144,7 +144,7 @@ $(function () {
       valoresCapturadosVenta.push(id_producto_insumo, cantidad_producto_insumo);
     });
 
-    if (valoresCapturadosVenta == "" || observacioncompra == "") {
+    if (valoresCapturadosVenta == "" && observacioncompra == "") {
       Swal.fire({
         title: "¡Error!",
         text: "Añadir los pendientes para guardar.",
