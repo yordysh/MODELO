@@ -113,6 +113,22 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
                     </form>
 
+                    <!-- Tabla total-->
+                    <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                        <table id="tTotalinsumos" class="table table-sm mb-3 table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="thtitulo" scope="col">INSUMOS</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD COMPRA</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="tablatotalinsumosrequeridos">
+
+                            </tbody>
+                        </table>
+                    </div>
 
 
                 </div>

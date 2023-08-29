@@ -1858,10 +1858,10 @@ class m_almacen
 
 
 
-      // $fecha_generado = $codigoform->c_horaserversql('F');
-      $fecha_generado = '18/08/2023';
+      $fecha_generado = $codigoform->c_horaserversql('F');
+      // $fecha_generado = '18/08/2023';
       //echo $fecha_generado;
-      $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+      //$fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
 
       $codigo_formulacion = $codigoform->generarCodigoFormulacion();
       $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);
@@ -1871,7 +1871,7 @@ class m_almacen
       if ($contar_tmpformulacion == 0) {
 
         $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION(COD_FORMULACION, COD_CATEGORIA, COD_PRODUCTO, FEC_GENERADO, CAN_FORMULACION, UNI_MEDIDA)
-                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_formateada','$cantidadTotal','$unidad_medida')");
+                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_generado','$cantidadTotal','$unidad_medida')");
 
         $insert = $stm->execute();
 
@@ -2071,12 +2071,12 @@ class m_almacen
 
 
 
-  public function  MostrarDatosInsumos($selectInsumoEnvase)
+  public function  MostrarDatosInsumos($selectinsumoenvase)
   {
     try {
 
       $codigoFormulacionInsumoEnvase = new m_almacen();
-      $codigo_corresponde_formulacion = $codigoFormulacionInsumoEnvase->CodigoFormulacionProducto($selectInsumoEnvase);
+      $codigo_corresponde_formulacion = $codigoFormulacionInsumoEnvase->CodigoFormulacionProducto($selectinsumoenvase);
 
       $stm = $this->bd->prepare("SELECT TMP.COD_FORMULACION AS COD_FORMULACION, (SELECT TPR.DES_PRODUCTO FROM T_PRODUCTO TPR INNER JOIN T_TMPFORMULACION TFOR 
                                   ON TPR.COD_PRODUCTO=TFOR.COD_PRODUCTO WHERE TFOR.COD_FORMULACION='$codigo_corresponde_formulacion') AS DES_PRODUCTO_FORMULACION,
@@ -2084,26 +2084,26 @@ class m_almacen
                                   FROM T_TMPFORMULACION_ITEM AS TFI INNER JOIN T_PRODUCTO AS TP ON TFI.COD_PRODUCTO=TP.COD_PRODUCTO 
                                   INNER JOIN T_TMPFORMULACION AS TMP ON TMP.COD_FORMULACION=TFI.COD_FORMULACION
                                   WHERE TFI.COD_FORMULACION='$codigo_corresponde_formulacion'");
+
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
-
       return $datos;
     } catch (Exception $e) {
       die($e->getMessage());
     }
   }
 
-  public function MostrarDatosEnvases($selectInsEnvase)
+  public function MostrarDatosEnvases($seleccionadoinsumoenvases)
   {
     try {
 
       $codigoFormulacionInsumoEnvase = new m_almacen();
-      $codigo_corresponde_formulacion = $codigoFormulacionInsumoEnvase->CodigoFormulacionProducto($selectInsEnvase);
+      $codigo_genera_formulacion = $codigoFormulacionInsumoEnvase->CodigoFormulacionProducto($seleccionadoinsumoenvases);
 
       $stm = $this->bd->prepare("SELECT TE.COD_FORMULACION AS COD_FORMULACIONES, TE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TE.CANTIDA AS CANTIDA, 
-                                (SELECT CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_FORMULACION='$codigo_corresponde_formulacion') AS CAN_FORMULACION
+                                (SELECT CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_FORMULACION='$codigo_genera_formulacion') AS CAN_FORMULACION
                                 FROM T_TMPFORMULACION_ENVASE TE 
-                                INNER JOIN T_PRODUCTO AS TP ON TE.COD_PRODUCTO= TP.COD_PRODUCTO  WHERE TE.COD_FORMULACION='$codigo_corresponde_formulacion'");
+                                INNER JOIN T_PRODUCTO AS TP ON TE.COD_PRODUCTO= TP.COD_PRODUCTO  WHERE TE.COD_FORMULACION='$codigo_genera_formulacion'");
 
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
@@ -2259,7 +2259,11 @@ class m_almacen
         $insert = $stmPedidoOrden->execute();
       }
 
-      $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
+      // $fecha_generado = $cod->c_horaserversql('F');
+      $fecha_generado = '29/08/2023';
+      //echo $fecha_generado;
+      $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+      $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_formateada' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $stmActualizar->execute();
 
 
@@ -2366,6 +2370,35 @@ class m_almacen
       return $delete;
     } catch (Exception $e) {
       die("Error al eliminar los datos: " . $e->getMessage());
+    }
+  }
+
+
+
+
+
+  public function MostrarRequerimientoTotal($buscartotal)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,
+                                  TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(TRI.CANTIDAD) AS CANTIDAD_TOTAL,
+                                  TAI.STOCK_ACTUAL AS STOCK_ACTUAL, SUM(TRI.CANTIDAD) - MAX(TAI.STOCK_ACTUAL) AS STOCK_RESULTANTE,
+                                  CM.CANTIDAD_MINIMA AS CANTIDAD_MINIMA
+                                  FROM T_TMPREQUERIMIENTO TR INNER JOIN T_TMPREQUERIMIENTO_INSUMO TRI ON TR.COD_REQUERIMIENTO = TRI.COD_REQUERIMIENTO
+                                  INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO = TP.COD_PRODUCTO
+                                  INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TRI.COD_PRODUCTO = TAI.COD_PRODUCTO
+                                  INNER JOIN T_TMPCANTIDAD_MINIMA CM ON TRI.COD_PRODUCTO = CM.COD_PRODUCTO
+                                 WHERE TP.DES_PRODUCTO LIKE '$buscartotal%'
+                                  GROUP BY TR.COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO, TAI.STOCK_ACTUAL, CM.CANTIDAD_MINIMA
+                                  HAVING SUM(TRI.CANTIDAD) - MAX(TAI.STOCK_ACTUAL) > 0");
+
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
     }
   }
 }

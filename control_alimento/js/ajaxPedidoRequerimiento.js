@@ -1,5 +1,6 @@
 $(function () {
   mostrarPendientes();
+  mostrarRequerimientoTotal();
 
   //------------- MENU BAR JS ---------------//
   let nav = document.querySelector(".nav"),
@@ -60,6 +61,7 @@ $(function () {
 
   function mostrarPendientes() {
     const accion = "buscarpendientestotal";
+    let tablainsumorequerido = $("#tablaPedidoRequerimiento");
     const search = "";
     $.ajax({
       url: "./c_almacen.php",
@@ -68,6 +70,7 @@ $(function () {
       success: function (response) {
         if (!response.error) {
           let tasks = JSON.parse(response);
+
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_REQUERIMIENTO}">
@@ -76,6 +79,8 @@ $(function () {
                         </tr>`;
           });
           $("#tablaPedidoRequerimiento").html(template);
+        } else {
+          $("#tablaPedidoRequerimiento").empty();
         }
       },
       error: function (xhr, status, error) {
@@ -170,6 +175,7 @@ $(function () {
             if (result.isConfirmed) {
               $("#observacionCompra").val("");
               tablainsumorequerido.empty();
+              mostrarRequerimientoTotal();
               mostrarPendientes();
             }
           });
@@ -180,4 +186,36 @@ $(function () {
       },
     });
   });
+
+  function mostrarRequerimientoTotal() {
+    const accion = "mostrarRquerimientoTotal";
+    const search = "";
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: { accion: accion, buscartotal: search },
+      success: function (response) {
+        if (!response.error) {
+          let tasks = JSON.parse(response);
+
+          let template = ``;
+          tasks.forEach((task) => {
+            $resultado = Math.ceil(
+              task.STOCK_RESULTANTE / task.CANTIDAD_MINIMA
+            );
+            $resultadototalinsu = task.CANTIDAD_MINIMA * $resultado;
+            template += `<tr taskId="${task.COD_REQUERIMIENTO}">
+                            <td data-titulo="INSUMOS">${task.DES_PRODUCTO}</td>
+                            <td data-titulo="CANTIDAD">${task.STOCK_RESULTANTE}</td>
+                            <td data-titulo="CANTIDAD COMPRA">${$resultadototalinsu}</td>                    
+                         </tr>`;
+          });
+          $("#tablatotalinsumosrequeridos").html(template);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+  }
 });

@@ -1,44 +1,41 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once("./m_almacen.php");
 include("../funciones/f_funcion.php");
 
-if ($_POST['accion'] == 'insertar') {
+
+$accion = $_POST['accion'];
+
+if ($accion == 'insertar') {
 
     $nombrezonaArea = strtoupper(trim($_POST['nombrezonaArea']));
     $respuesta = c_almacen::c_insertar_zona($nombrezonaArea);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'editar') {
+} elseif ($accion == 'editar') {
     $cod_zona = trim($_POST['cod_zona']);
     $respuesta = c_almacen::c_editar_zona($cod_zona);
     echo $respuesta;
-}
-
-if ($_POST['accion'] == 'actualizar') {
+} elseif ($accion == 'actualizar') {
     $codzona = trim($_POST['codzona']);
     $nombrezonaArea = trim($_POST['nombrezonaArea']);
     $respuesta = c_almacen::c_actualizar_zona($codzona, $nombrezonaArea);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'eliminarzona') {
+} elseif ($accion == 'eliminarzona') {
 
     $codzona = trim($_POST['codzona']);
 
     $respuesta = c_almacen::c_eliminar_zona($codzona);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'buscarzona') {
+} elseif ($accion == 'buscarzona') {
 
     $buscarzona = trim($_POST['buscarzona']);
 
     $respuesta = c_almacen::c_buscar_zona($buscarzona);
     echo $respuesta;
-}
-
-
-
-
-if ($_POST['accion'] == 'insertarinfra') {
+} elseif ($accion == 'insertarinfra') {
     $nombreinfraestructura = strtoupper(trim($_POST['nombreinfraestructura']));
     $ndias = trim($_POST['ndias']);
     $valorSeleccionado = trim($_POST['valorSeleccionado']);
@@ -46,87 +43,64 @@ if ($_POST['accion'] == 'insertarinfra') {
     $respuesta = c_almacen::c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias);
 
     echo $respuesta;
-}
-if ($_POST['accion'] == 'editarinfra') {
+} elseif ($accion == 'editarinfra') {
 
     $codinfra = trim($_POST['codinfra']);
 
     $respuesta = c_almacen::c_editar_infra($codinfra);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'actualizarinfra') {
+} elseif ($accion == 'actualizarinfra') {
     $codinfra = trim($_POST["codinfra"]);
     $nombreinfraestructura = trim($_POST['nombreinfraestructura']);
     $ndias = trim($_POST['ndias']);
 
     $respuesta = c_almacen::c_actualizar_infra($nombreinfraestructura, $ndias, $codinfra);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'eliminarinfra') {
+} elseif ($accion == 'eliminarinfra') {
 
     $codinfra = trim($_POST['codinfra']);
 
     $respuesta = c_almacen::c_eliminar_infra($codinfra);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'buscarinfra') {
+} elseif ($accion == 'buscarinfra') {
     $buscarinfra = trim($_POST['buscarinfra']);
 
     $respuesta = c_almacen::c_buscar_infra($buscarinfra);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'actualizarcombozona') {
+} elseif ($accion == 'actualizarcombozona') {
 
     $respuesta = c_almacen::c_actualizar_combo();
     echo $respuesta;
-}
-
-
-
-if ($_POST['accion'] == 'fechaalertamensaje') {
+} elseif ($accion == 'fechaalertamensaje') {
 
     $respuesta = c_almacen::c_fecha_alerta_mensaje();
     echo $respuesta;
-}
-if ($_POST['accion'] == 'actualizaalerta') {
+} elseif ($accion == 'actualizaalerta') {
     $respuesta = c_almacen::c_checkbox_confirma();
     echo $respuesta;
-}
-if ($_POST['accion'] == 'insertaralertamix') {
+} elseif ($accion == 'insertaralertamix') {
     $respuesta = c_almacen::c_insertar_alertamix();
     echo $respuesta;
-}
-if ($_POST['accion'] == 'fechaalerta') {
+} elseif ($accion == 'fechaalerta') {
     $respuesta = c_almacen::c_fecha_alerta();
     echo $respuesta;
-}
-
-
-if ($_POST['accion'] == 'seleccionarPreparacion') {
+} elseif ($accion == 'seleccionarPreparacion') {
 
     $respuesta = c_almacen::c_selectproductos();
     echo $respuesta;
-}
-
-if ($_POST['accion'] == 'seleccionarCantidad') {
+} elseif ($accion == 'seleccionarCantidad') {
 
     $respuesta = c_almacen::c_selectcantidad();
     echo $respuesta;
-}
-
-if ($_POST['accion'] == 'seleccionarML') {
+} elseif ($accion == 'seleccionarML') {
 
     $respuesta = c_almacen::c_selectML();
     echo $respuesta;
-}
-
-if ($_POST['accion'] == 'seleccionarL') {
+} elseif ($accion == 'seleccionarL') {
 
     $respuesta = c_almacen::c_selectL();
     echo $respuesta;
-}
-
-if ($_POST['accion'] == 'enviarSelectCombo') {
+} elseif ($accion == 'enviarSelectCombo') {
     $selectSolucion = trim($_POST['selectSolucion']);
     $selectPreparacion = trim($_POST['selectPreparacion']);
     $selectCantidad = trim($_POST['selectCantidad']);
@@ -138,20 +112,13 @@ if ($_POST['accion'] == 'enviarSelectCombo') {
 
     $respuesta = c_almacen::c_selectCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion);
     echo $respuesta;
-}
-
-if ($_POST['accion'] == 'buscarprepararacion') {
+} elseif ($accion == 'buscarprepararacion') {
 
     $buscarPrepa = trim($_POST['buscarPrepa']);
 
     $respuesta = c_almacen::c_buscar_preparacion($buscarPrepa);
     echo $respuesta;
-}
-
-
-
-
-if ($_POST['accion'] == 'insertarLimpieza') {
+} elseif ($accion == 'insertarLimpieza') {
 
 
     $selectZona = trim($_POST['selectZona']);
@@ -164,39 +131,31 @@ if ($_POST['accion'] == 'insertarLimpieza') {
 
     $respuesta = c_almacen::c_insertar_limpieza($selectZona, $textfrecuencia,  $textAreaObservacion,  $textAreaAccion, $selectVerificacion);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'editarLimpieza') {
+} elseif ($accion == 'editarLimpieza') {
 
     $cod_frecuencia = trim($_POST['cod_frecuencia']);
 
     $respuesta = c_almacen::c_editar_limpieza($cod_frecuencia);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'actualizarLimpieza') {
+} elseif ($accion == 'actualizarLimpieza') {
     $codfre = trim($_POST["codfre"]);
     $textfrecuencia = trim($_POST['textfrecuencia']);
 
 
     $respuesta = c_almacen::c_actualizar_limpieza($codfre, $textfrecuencia);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'buscarlimpieza') {
+} elseif ($accion == 'buscarlimpieza') {
 
     $buscarLimpieza = trim($_POST['buscarLimpieza']);
 
     $respuesta = c_almacen::c_buscar_limpieza($buscarLimpieza);
     echo $respuesta;
-}
-
-
-
-if ($_POST['accion'] == 'buscarcontrol') {
+} elseif ($accion == 'buscarcontrol') {
     $buscarcontrol = trim($_POST['buscarcontrol']);
 
     $respuesta = c_almacen::c_buscar_control($buscarcontrol);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'insertarcontrol') {
+} elseif ($accion == 'insertarcontrol') {
 
     $nombrecontrol = strtoupper(trim($_POST['nombrecontrol']));
     $ndiascontrol = trim($_POST['ndiascontrol']);
@@ -205,102 +164,70 @@ if ($_POST['accion'] == 'insertarcontrol') {
     $respuesta = c_almacen::c_insertar_control($valorSeleccionado, $nombrecontrol, $ndiascontrol);
 
     echo $respuesta;
-}
-if ($_POST['accion'] == 'editarcontrolmaquina') {
+} elseif ($accion == 'editarcontrolmaquina') {
 
     $codcontrolmaquina = trim($_POST['codcontrolmaquina']);
 
     $respuesta = c_almacen::c_editar_control_maquina($codcontrolmaquina);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'actualizarcontrol') {
+} elseif ($accion == 'actualizarcontrol') {
     $codcontrol = trim($_POST["codcontrol"]);
     $nombrecontrol = trim($_POST['nombrecontrol']);
     $ndiascontrol = trim($_POST['ndiascontrol']);
 
     $respuesta = c_almacen::c_actualizar_control_maquina($nombrecontrol, $ndiascontrol,  $codcontrol);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'eliminarcontrolmaquina') {
+} elseif ($accion == 'eliminarcontrolmaquina') {
 
     $codcontrolmaquina = trim($_POST['codcontrolmaquina']);
 
     $respuesta = c_almacen::c_eliminar_control_maquina($codcontrolmaquina);
     echo $respuesta;
-}
-
-if ($_POST['accion'] == 'fechaalertacontrol') {
+} elseif ($accion == 'fechaalertacontrol') {
     $respuesta = c_almacen::c_fecha_alerta_control();
     echo $respuesta;
-}
-if ($_POST['accion'] == 'actualizaalertacontrol') {
+} elseif ($accion == 'actualizaalertacontrol') {
     $respuesta = c_almacen::c_checkbox_confirma_control();
     echo $respuesta;
-}
-if ($_POST['accion'] == 'insertaralertamixcontrolmaquina') {
+} elseif ($accion == 'insertaralertamixcontrolmaquina') {
     $respuesta = c_almacen::c_insertar_alertamix_control_maquina();
     echo $respuesta;
-}
-
-if ($_POST['accion'] == 'buscarZonaCombo') {
+} elseif ($accion == 'buscarZonaCombo') {
     $term = $_POST['term'];
     $respuesta = c_almacen::c_buscar_zona_combo($term);
     echo $respuesta;
-}
-
-
-
-
-
-if ($_POST['accion'] == 'insertarlabsabell') {
+} elseif ($accion == 'insertarlabsabell') {
 
     $codigolabsabell = trim($_POST['codigolabsabell']);
     $valorSeleccionado = ($_POST['valorSeleccionado']);
     $respuesta = c_almacen::c_insertar_labsabell($codigolabsabell, $valorSeleccionado);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'buscarlabsabell') {
+} elseif ($accion == 'buscarlabsabell') {
 
     $buscarlab = trim($_POST['buscarlab']);
 
     $respuesta = c_almacen::c_buscar_labsabell($buscarlab);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'editarLabsabell') {
+} elseif ($accion == 'editarLabsabell') {
     $cod_producto_envase = trim($_POST['cod_producto_envase']);
     $respuesta = c_almacen::c_editar_envases_labsabel($cod_producto_envase);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'actualizarlabsabell') {
+} elseif ($accion == 'actualizarlabsabell') {
     $codlab = trim($_POST['codlab']);
     $codigolab = trim($_POST['codigolab']);
     $respuesta = c_almacen::c_actualizar_envases_labsabell($codlab, $codigolab);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'eliminarproductoenvase') {
+} elseif ($accion == 'eliminarproductoenvase') {
 
     $codenvaselabsabell = trim($_POST['codenvaselabsabell']);
 
     $respuesta = c_almacen::c_eliminar_envases_labsabell($codenvaselabsabell);
     echo $respuesta;
-}
-
-
-
-
-
-
-
-
-
-
-
-if ($_POST['accion'] == 'buscarProductoComboInsumos') {
+} elseif ($accion == 'buscarProductoComboInsumos') {
     $term = $_POST['term'];
     $respuesta = c_almacen::c_buscar_producto_combo_insumos_lab($term);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'insertarinsumoslab') {
+} elseif ($accion == 'insertarinsumoslab') {
 
     $codigoInsumosLab = trim($_POST['codigoInsumosLab']);
 
@@ -309,41 +236,28 @@ if ($_POST['accion'] == 'insertarinsumoslab') {
 
     $respuesta = c_almacen::c_insertar_insumos_lab($codigoInsumosLab, $valorSeleccionado);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'buscarInsumosLab') {
+} elseif ($accion == 'buscarInsumosLab') {
 
     $buscarInsumos = trim($_POST['buscarInsumos']);
 
     $respuesta = c_almacen::c_buscar_insumos_lab($buscarInsumos);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'editarInsumosLab') {
+} elseif ($accion == 'editarInsumosLab') {
     $cod_insumos_lab = trim($_POST['cod_insumos_lab']);
     $respuesta = c_almacen::c_editar_insumos_lab($cod_insumos_lab);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'actualizarinsumoslab') {
+} elseif ($accion == 'actualizarinsumoslab') {
     $codInsu = trim($_POST['codInsu']);
     $codigoInsumo = trim($_POST['codigoInsumo']);
     $respuesta = c_almacen::c_actualizar_insumos_lab($codInsu, $codigoInsumo);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'eliminarinsumolab') {
+} elseif ($accion == 'eliminarinsumolab') {
 
     $codinsumoslab = trim($_POST['codinsumoslab']);
 
     $respuesta = c_almacen::c_eliminar_insumos_lab($codinsumoslab);
     echo $respuesta;
-}
-
-
-
-
-
-
-
-
-if ($_POST['accion'] == 'insertarProductoEnvase') {
+} elseif ($accion == 'insertarProductoEnvase') {
 
     $selectProductoCombo = trim($_POST['selectProductoCombo']);
     $cantidadTotal = trim($_POST['cantidadTotal']);
@@ -352,79 +266,44 @@ if ($_POST['accion'] == 'insertarProductoEnvase') {
 
     $respuesta = c_almacen::c_insertar_producto_combo($selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'buscarenvaseproducto') {
+} elseif ($accion == 'buscarenvaseproducto') {
     // $selectProductoCombo = $_POST['selectProductoCombo'];
     $respuesta = c_almacen::c_buscar_producto_envase();
     echo $respuesta;
-}
-
-
-
-
-
-
-
-
-
-if ($_POST['accion'] == 'seleccionarProduccion') {
+} elseif ($accion == 'seleccionarProduccion') {
 
     $respuesta = c_almacen::c_select_productos_produccion();
     echo $respuesta;
-}
-
-
-
-
-
-
-
-
-
-
-if ($_POST['accion'] == 'insertarrequerimientoproducto') {
+} elseif ($accion == 'insertarrequerimientoproducto') {
 
     $selectProductoCombo = trim($_POST['selectProductoCombo']);
     $cantidadProducto = trim($_POST['cantidadProducto']);
 
     $respuesta = c_almacen::c_insertar_requerimiento_producto($selectProductoCombo, $cantidadProducto);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'buscarrequerimientoproducto') {
+} elseif ($accion == 'buscarrequerimientoproducto') {
 
     $buscarrequerimiento = trim($_POST['buscarrequerimiento']);
 
     $respuesta = c_almacen::c_buscar_requerimiento_producto($buscarrequerimiento);
     echo $respuesta;
-}
+} elseif ($accion == 'mostrardatosinsumos') {
 
+    $selectinsumoenvase = trim($_POST['selectinsumoenvase']);
 
+    $cantidadinsumoenvase = trim($_POST['cantidadinsumoenvase']);
 
-
-if ($_POST['accion'] == 'mostrardatosinsumos') {
-
-    $selectInsumoEnvase = trim($_POST['selectInsumoEnvase']);
-
-    $cantidadInsumoEnvase = trim($_POST['cantidadInsumoEnvase']);
-
-    $respuesta = c_almacen::c_mostrar_insumo($selectInsumoEnvase, $cantidadInsumoEnvase);
+    $respuesta = c_almacen::c_mostrar_insumo($selectinsumoenvase, $cantidadinsumoenvase);
     echo $respuesta;
-}
+} elseif ($accion == 'mostrardatosenvases') {
 
-if ($_POST['accion'] == 'mostrardatosenvases') {
+    $seleccionadoinsumoenvases = trim($_POST['seleccionadoinsumoenvases']);
 
-    $selectInsEnvase = trim($_POST['selectInsEnvase']);
+    $cantidadesinsumoenvases = trim($_POST['cantidadesinsumoenvases']);
 
-    $cantidInsumoEnvase = trim($_POST['cantidInsumoEnvase']);
-
-    $respuesta = c_almacen::c_mostrar_envase($selectInsEnvase, $cantidInsumoEnvase);
+    $respuesta = c_almacen::c_mostrar_envase($seleccionadoinsumoenvases, $cantidadesinsumoenvases);
     echo $respuesta;
-}
-
-
-
-
-if ($_POST['accion'] == 'guardarvalorescapturadosinsumos') {
+} elseif ($accion == 'guardarvalorescapturadosinsumos') {
 
     $union = ($_POST['union']);
     $unionEnvase = ($_POST['unionEnvase']);
@@ -433,29 +312,19 @@ if ($_POST['accion'] == 'guardarvalorescapturadosinsumos') {
 
     $respuesta = c_almacen::c_guardar_InsumoEnvase($union, $unionEnvase, $unionItem);
     echo $respuesta;
-}
-
-
-
-
-
-
-if ($_POST['accion'] == 'buscarpendientestotal') {
+} elseif ($accion == 'buscarpendientestotal') {
 
     $buscarpendiente = trim($_POST['buscarpendiente']);
 
     $respuesta = c_almacen::c_buscar_pendientes_requerimiento($buscarpendiente);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'mostrarinsumopendientes') {
+} elseif ($accion == 'mostrarinsumopendientes') {
 
     $cod_formulacion = trim($_POST['cod_formulacion']);
 
     $respuesta = c_almacen::c_mostrar_insumos_pendientes($cod_formulacion);
     echo $respuesta;
-}
-
-if ($_POST['accion'] == 'insertarordencompraitem') {
+} elseif ($accion == 'insertarordencompraitem') {
 
     $union = $_POST['union'];
     $observacioncompra = $_POST['observacioncompra'];
@@ -464,39 +333,38 @@ if ($_POST['accion'] == 'insertarordencompraitem') {
 
     $respuesta = c_almacen::c_insertar_orden_compra_item($union, $idRequerimiento, $observacioncompra);
     echo $respuesta;
-}
-
-if ($_POST['accion'] == 'insertarcantidadminima') {
+} elseif ($accion == 'insertarcantidadminima') {
 
     $selectCantidadminima = trim($_POST['selectCantidadminima']);
     $cantidadMinima = trim($_POST['cantidadMinima']);
 
     $respuesta = c_almacen::c_insertar_cantidad_minima($selectCantidadminima, $cantidadMinima);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'buscarCantidadminima') {
+} elseif ($accion == 'buscarCantidadminima') {
     $buscarcantidadminimasearch = $_POST['buscarcantidadminimasearch'];
     $respuesta = c_almacen::c_buscar_cantidad_minima($buscarcantidadminimasearch);
     echo $respuesta;
-}
-
-if ($_POST['accion'] == 'editarcantidadminima') {
+} elseif ($accion == 'editarcantidadminima') {
     $cod_mini = trim($_POST['cod_mini']);
     $respuesta = c_almacen::c_editar_cantidad_minima($cod_mini);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'actualizarcantidadminima') {
+} elseif ($accion == 'actualizarcantidadminima') {
     $codminimo = trim($_POST['codminimo']);
     $selectCantidadminima = trim($_POST['selectCantidadminima']);
     $cantidadMinima = trim($_POST['cantidadMinima']);
     $respuesta = c_almacen::c_actualizar_cantidades_minima($codminimo, $selectCantidadminima, $cantidadMinima);
     echo $respuesta;
-}
-if ($_POST['accion'] == 'eliminarcantidadminima') {
+} elseif ($accion == 'eliminarcantidadminima') {
 
     $cod_cantidad_min = trim($_POST['cod_cantidad_min']);
 
     $respuesta = c_almacen::c_eliminar_cantidad_minima($cod_cantidad_min);
+    echo $respuesta;
+} elseif ($accion == 'mostrarRquerimientoTotal') {
+
+    $buscartotal = trim($_POST['buscartotal']);
+
+    $respuesta = c_almacen::c_buscar_total_requerimiento($buscartotal);
     echo $respuesta;
 }
 
@@ -2111,13 +1979,13 @@ class c_almacen
 
 
 
-    static function c_mostrar_insumo($selectInsumoEnvase, $cantidadInsumoEnvase)
+    static function c_mostrar_insumo($selectinsumoenvase, $cantidadinsumoenvase)
     {
         try {
 
 
             $mostrar = new m_almacen();
-            $datos = $mostrar->MostrarDatosInsumos($selectInsumoEnvase);
+            $datos = $mostrar->MostrarDatosInsumos($selectinsumoenvase);
 
 
 
@@ -2126,7 +1994,7 @@ class c_almacen
             }
             $json = array();
             foreach ($datos as $row) {
-                $calculoInsumo = ($row->CAN_FORMULACION_INSUMOS * $cantidadInsumoEnvase) / $row->CAN_FORMULACION;
+                $calculoInsumo = ($row->CAN_FORMULACION_INSUMOS * $cantidadinsumoenvase) / $row->CAN_FORMULACION;
                 // var_dump($calculoInsumo);
                 // $total = round($calculoInsumo, 3);
                 $total =  bcdiv($calculoInsumo, '1', 3);
@@ -2146,13 +2014,13 @@ class c_almacen
         }
     }
 
-    static function c_mostrar_envase($selectInsEnvase, $cantidInsumoEnvase)
+    static function c_mostrar_envase($seleccionadoinsumoenvases, $cantidadesinsumoenvases)
     {
         try {
 
 
             $mostrar = new m_almacen();
-            $datos = $mostrar->MostrarDatosEnvases($selectInsEnvase);
+            $datos = $mostrar->MostrarDatosEnvases($seleccionadoinsumoenvases);
 
 
 
@@ -2161,7 +2029,7 @@ class c_almacen
             }
             $json = array();
             foreach ($datos as $row) {
-                $calculo = ($row->CANTIDA * $cantidInsumoEnvase) / $row->CAN_FORMULACION;
+                $calculo = ($row->CANTIDA * $cantidadesinsumoenvases) / $row->CAN_FORMULACION;
                 // $total = round($calculo, 3);
                 $total =  bcdiv($calculo, '1', 3);
 
@@ -2214,7 +2082,7 @@ class c_almacen
                 $datos = $mostrar->MostrarPendientesRequerimientos($buscarpendiente);
 
                 if (!$datos) {
-                    throw new Exception("Hubo un error en la consulta");
+                    throw new Exception("Error");
                 }
                 $json = array();
                 foreach ($datos as $row) {
@@ -2230,7 +2098,7 @@ class c_almacen
                 $datos = $mostrar->MostrarPendientesRequerimientos($buscarpendiente);
 
                 if (!$datos) {
-                    throw new Exception("Hubo un error en la consulta");
+                    return "error";
                 }
                 $json = array();
                 foreach ($datos as $row) {
@@ -2397,6 +2265,63 @@ class c_almacen
             } else {
                 return "error";
             };
+        }
+    }
+
+
+
+
+
+
+    static function c_buscar_total_requerimiento($buscartotal)
+    {
+        try {
+
+            if (!empty($buscartotal)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarRequerimientoTotal($buscartotal);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CANTIDAD_TOTAL" => $row->CANTIDAD_TOTAL,
+                        "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
+                        "STOCK_RESULTANTE" => $row->STOCK_RESULTANTE,
+                        "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarRequerimientoTotal($buscartotal);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CANTIDAD_TOTAL" => $row->CANTIDAD_TOTAL,
+                        "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
+                        "STOCK_RESULTANTE" => $row->STOCK_RESULTANTE,
+                        "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 }

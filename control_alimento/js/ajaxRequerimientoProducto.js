@@ -73,12 +73,12 @@ $(function () {
 
   $("#botonCalcularInsumoEnvase").click((e) => {
     e.preventDefault();
-    let selectInsumoEnvase = $("#selectInsumoEnvase").val();
+    let selectinsumoenvase = $("#selectInsumoEnvase").val();
     let textoInsumoEnvase = $("#selectInsumoEnvase option:selected").text();
 
-    let cantidadInsumoEnvase = $("#cantidadInsumoEnvase").val();
+    let cantidadinsumoenvase = $("#cantidadInsumoEnvase").val();
 
-    if (!selectInsumoEnvase || !cantidadInsumoEnvase) {
+    if (!selectinsumoenvase || !cantidadinsumoenvase) {
       Swal.fire({
         icon: "error",
         title: "Campos vacíos",
@@ -86,7 +86,7 @@ $(function () {
       });
       return;
     }
-    if (parseFloat(cantidadInsumoEnvase) <= 0) {
+    if (parseFloat(cantidadinsumoenvase) <= 0) {
       Swal.fire({
         icon: "error",
         title: "Campo negativo",
@@ -112,27 +112,26 @@ $(function () {
     // }
 
     /*---------------  Añade tabla de total de cada producto-------------------*/
-    // datos.forEach((dato) => {
 
-    const filaExistente = $(`tr[id="${selectInsumoEnvase}"]`);
+    const filaExistente = $(`tr[id="${selectinsumoenvase}"]`);
 
     if (filaExistente.length > 0) {
       const celdaCantidadPro = filaExistente.find(
         "td[data-titulo='CANTIDAD TOTAL']"
       );
       const cantidadActual = parseFloat(celdaCantidadPro.text());
-      const nuevaCantidad = cantidadActual + parseFloat(cantidadInsumoEnvase);
+      const nuevaCantidad = cantidadActual + parseFloat(cantidadinsumoenvase);
 
       celdaCantidadPro.text(nuevaCantidad);
     } else {
       let nuevaFila = $("<tr>");
-      nuevaFila.attr("id", selectInsumoEnvase);
+      nuevaFila.attr("id", selectinsumoenvase);
       let celdaProducto = $("<td data-titulo='PRODUCTO'>").text(
         textoInsumoEnvase
       );
-      celdaProducto.attr("id_item", selectInsumoEnvase);
+      celdaProducto.attr("id_item", selectinsumoenvase);
       let celdaCantidadPro = $("<td data-titulo='CANTIDAD TOTAL'>").text(
-        cantidadInsumoEnvase
+        cantidadinsumoenvase
       );
       nuevaFila.append(celdaProducto, celdaCantidadPro);
 
@@ -142,22 +141,19 @@ $(function () {
     // });
 
     /*-------------------------------------------------------------------------*/
-    // async function ajaxInsumo() {
-    //   console.log("insumo");
-    //   return new Promise(function (resolve, reject) {
+
     const accion = "mostrardatosinsumos";
     $.ajax({
       url: "./c_almacen.php",
       data: {
         accion: accion,
-        selectInsumoEnvase: selectInsumoEnvase,
-        cantidadInsumoEnvase: cantidadInsumoEnvase,
+        selectinsumoenvase: selectinsumoenvase,
+        cantidadinsumoenvase: cantidadinsumoenvase,
       },
       type: "POST",
       success: function (responseData) {
         if (!responseData.error) {
           const insumos = JSON.parse(responseData);
-          // console.log(insumos);
           let template = $("#tablaInsumosDatos").html();
           const existingRow = $(
             `tr[taskId="${insumos[0]["COD_FORMULACION"]}"]`
@@ -166,13 +162,8 @@ $(function () {
             const capturaValoresTabla = existingRow.find("td:eq(1)");
 
             for (let i = 0; i < capturaValoresTabla.length; i++) {
-              // console.log(insumos[i].TOTAL);
               const valorFormula = insumos[i].TOTAL;
-              // const valor =
-              //   (insumos.CAN_FORMULACION_INSUMOS * cantidadInsumoEnvase) /
-              //   insumos.CAN_FORMULACION;
-              // console.log(valor);
-              // console.log(capturaValoresTabla[i]);
+
               const valorCelda = capturaValoresTabla[i];
               const cambio = parseFloat($(valorCelda).html());
               const suma = cambio + parseFloat(valorFormula);
@@ -193,7 +184,6 @@ $(function () {
             const tablasuma = $("#tsumatotal tr:not(:first)");
             const capturadelvalor = tablasuma.find("td:eq(0)");
 
-            // console.log(sumatotalinsumos);
             if (tablasuma.length > 0) {
               const parse = sumatotalinsumos.toFixed(1);
               $(capturadelvalor).html(parse);
@@ -207,27 +197,6 @@ $(function () {
             });
             $("#tablaInsumosDatos").html(template);
 
-            // const codigoForm = $(
-            //   `tr[taskId="${insumos[0]["COD_FORMULACION"]}"]`
-            // );
-            // const capturavalorcantidad = codigoForm.find("td:eq(1)");
-
-            // let sumitatotalinsumo = 0;
-            // for (let n = 0; n < capturavalorcantidad.length; n++) {
-            //   const valorceldita = capturavalorcantidad[n];
-            //   const cambiofloat = parseFloat($(valorceldita).html());
-            //   sumitatotalinsumo = sumitatotalinsumo + cambiofloat;
-            // }
-            // sumaguardado.push(sumitatotalinsumo);
-            // console.log(sumaguardado);
-
-            // let sumatotalinsumos = 0;
-            // $("#tinsumo tr:not(:first)").each(function () {
-            //   var valorSegundaColumna = $(this).find("td:eq(1)").text();
-            //   contador += sumatotalinsumos;
-            //   console.log(valorSegundaColumna);
-            // });
-
             const codigoForm = $("#tinsumo tr:not(:first)");
             const capturavalorcantidad = codigoForm.find("td:eq(1)");
             let sumatotalinsumos = 0;
@@ -239,66 +208,51 @@ $(function () {
             const tablasuma = $("#tsumatotal tr:not(:first)");
             const capturadelvalor = tablasuma.find("td:eq(0)");
 
-            // console.log(sumatotalinsumos);
             if (tablasuma.length > 0) {
               const parse = sumatotalinsumos.toFixed(1);
               $(capturadelvalor).html(parse);
             } else {
               let nuevaFila = $("<tr>");
-              // let celdaProductoSumaInsumo = $(
-              //   "<td data-titulo='PRODUCTO'>"
-              // ).text(textoInsumoEnvase);
               let celdasumatotalinsumo = $(
                 "<td data-titulo='TOTAL INSUMOS'>"
               ).text(sumatotalinsumos.toFixed(1));
               nuevaFila.append(celdasumatotalinsumo);
-              // $("#tinsumo tbody tr:nth-child(" + contador + ")").after(nuevaFila);
+
               $("#tsumatotal tbody").append(nuevaFila);
-              // console.log("final");
             }
 
             $("#cantidadInsumoEnvase").val("");
           }
-          //resolve();
-        } else {
-          reject("Error in response data");
         }
       },
       error: function (jqXHR, textStatus, errorThrown) {
         console.error("Error in ajaxInsumo AJAX:", textStatus, errorThrown);
-        reject(errorThrown);
       },
     });
-    //   });
-    // }
 
-    // async function ajaxEnvase() {
-    //   console.log("envasesss");
-    //   return new Promise(function (resolve, reject) {
     const accionEnvase = "mostrardatosenvases";
     $.ajax({
       url: "./c_almacen.php",
       data: {
         accion: accionEnvase,
-        selectInsEnvase: selectInsumoEnvase,
-        cantidInsumoEnvase: cantidadInsumoEnvase,
+        seleccionadoinsumoenvases: selectinsumoenvase,
+        cantidadesinsumoenvases: cantidadinsumoenvase,
       },
       type: "POST",
       success: function (response) {
         if (!response.error) {
           let envases = JSON.parse(response);
-          // console.log(envases);
+
           let templateEnvase = $("#tablaenvase").html();
 
           const existeFila = $(
             `tr[idenvase="${envases[0]["COD_FORMULACIONES"]}"]`
           );
-          // console.log(existeFila);
+
           if (existeFila.length > 0) {
             const capturaTabla = existeFila.find("td:eq(1)");
             for (let i = 0; i < capturaTabla.length; i++) {
               const valor = envases[i].TOTAL_ENVASE;
-              // console.log(valor);
               const valorCeldas = capturaTabla[i];
               const cambios = parseFloat($(valorCeldas).html());
               const sumar = cambios + parseFloat(valor);
@@ -314,17 +268,11 @@ $(function () {
                              </tr>`;
             });
             $("#tablaenvase").html(templateEnvase);
-            // // $("#cantidadInsumoEnvase").val("");
           }
-          // resolve(envases);
-        } else {
-          reject("Error in response data");
         }
       },
       error: function (xhr, status, error) {
         console.error("Error in ajaxEnvase:", error);
-
-        reject(error);
       },
     });
     //   });
