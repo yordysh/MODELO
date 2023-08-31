@@ -83,16 +83,19 @@
         <a class="bpmStyle">OP</a>
         <ul class="menu-vertical">
           <li>
-            <a class="" href="formulacionEnvases.php">Envases formulacion</a>
+            <a class="" href="formulacionEnvases.php">Formulacion</a>
           </li>
           <li>
-            <a class="" href="insumosLabsabellForm.php">Registro envases</a>
+            <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
           </li>
           <li>
-            <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
+            <a class="" href="pedidoRequerimiento.php">Pedido requerimiento</a>
           </li>
           <li>
             <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
+          </li>
+          <li>
+            <a class="" href="registroEnvases.php">Registros envases</a>
           </li>
         </ul>
       </li>

@@ -32,15 +32,20 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
-
             <li>
-                <a class="" href="formulacionEnvases.php">Formulacion envases</a>
+                <a class="" href="formulacionEnvases.php">Formulacion</a>
+            </li>
+            <li>
+                <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
+            </li>
+            <li>
+                <a class="" href="pedidoRequerimiento.php">Pedido requerimiento</a>
+            </li>
+            <li>
+                <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
             </li>
             <li>
                 <a class="" href="#">Registros envases</a>
-            </li>
-            <li>
-                <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>

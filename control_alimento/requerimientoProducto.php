@@ -36,9 +36,6 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             <li>
                 <a class="" href="formulacionEnvases.php">Formulacion</a>
             </li>
-            <!-- <li>
-                <a class="" href="registroEnvases.php">Registros envases</a>
-            </li> -->
             <li>
                 <a class="" href="#">Requerimiento produccion</a>
             </li>
@@ -47,6 +44,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             </li>
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
+            </li>
+            <li>
+                <a class="" href="registroEnvases.php">Registros envases</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
