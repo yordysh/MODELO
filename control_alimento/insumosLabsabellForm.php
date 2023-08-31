@@ -2,7 +2,7 @@
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataProducto = $mostrar->MostrarProducto();
+$dataProducto = $mostrar->MostrarProductoInsumos();
 
 ?>
 <!DOCTYPE html>

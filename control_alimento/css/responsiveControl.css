@@ -265,7 +265,7 @@ section {
   /* top: 60px; */
   left: 0;
   width: 100%;
-  height: 100px;
+  height: 100%;
   background-image: linear-gradient(to bottom, #814092, #ffffff);
   opacity: 0.5;
   z-index: -1;
@@ -338,22 +338,7 @@ a {
   display: none;
 }
 /*-------------------------------------------------------*/
-.contenedor {
-  display: flex;
-}
-.ordenar {
-  display: flex;
-}
-.ctnBtn {
-  margin-right: 280px;
-}
-.dMes {
-  display: flex;
-}
-.ctn {
-  margin: 0 3px;
-  display: flex;
-}
+
 td {
   text-align: center;
 }
@@ -370,34 +355,33 @@ td {
 .bt-Total {
   width: 50%;
 }
+
 /*-------------- Estilo de responsive ---------------------*/
 
 @media screen and (max-width: 1370px) {
   /* ------------------------------------------------- */
-  .ordenar {
+  .contenedorgeneral {
     display: flex;
   }
-  .ctnBtn {
-    margin-right: 100px;
+  .btonguardar {
+    margin-right: 220px;
+  }
+  .aniomes {
     display: flex;
   }
-  .contenedor {
-    display: block;
+  .estilocalcular {
+    margin-right: 15px;
   }
-  .ctn {
-    margin: 0 5px;
-  }
-  .dMes {
-    display: flex;
-  }
-  .bt-insert {
-    margin: 5px;
+  .estiloguardar {
+    margin-right: 170px;
   }
 }
 @media screen and (max-width: 1120px) {
-  .ctnBtn {
-    margin-right: 45px;
-    display: block;
+  .btonguardar {
+    margin-right: 70px !important;
+  }
+  .estiloguardar {
+    margin-right: 80px;
   }
 }
 @media screen and (max-width: 992px) {
@@ -407,28 +391,30 @@ td {
     padding-top: 6em;
     height: 57%;
   }
-  .ctnBtn {
+  .contenedorgeneral {
     display: block;
   }
-  .contenedor {
+  .aniomes {
     display: block;
-  }
-  .dMes {
-    display: flex;
-  }
-  .ctn {
-    margin: 0 0 10px;
   }
   .ordenar {
     display: block;
     margin-top: 10px;
     margin-left: 0;
   }
-  .bt-guardar {
-    padding: 10px 80px;
+  .estiloboton {
+    padding: 4px 50px;
     font-size: 16px;
     max-width: 130%;
-    width: 108%;
+    width: 117%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  .estilopdf {
+    padding: 4px 50px;
+    font-size: 16px;
+    max-width: 130%;
+    width: 100%;
     box-sizing: border-box;
     margin-bottom: 10px;
   }
@@ -440,11 +426,19 @@ td {
     box-sizing: border-box;
     margin-bottom: 10px;
   }
-  .btnPdf {
-    padding: 10px 20px;
+  .estilobotoncalcular {
+    padding: 10px 80px;
     font-size: 16px;
-    max-width: 100%;
-    width: 100%;
+    max-width: 120%;
+    width: 103%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  .estilobotonguardar {
+    padding: 10px 80px;
+    font-size: 16px;
+    max-width: 120%;
+    width: 118%;
     box-sizing: border-box;
     margin-bottom: 10px;
   }
@@ -507,6 +501,9 @@ td {
   .main {
     width: 100%;
     padding: 0;
+  }
+  .styleanmes {
+    margin-bottom: 8px;
   }
 
   /*-------------- Estilo de MENUBAR ---------------------*/
@@ -632,6 +629,20 @@ td {
     width: 107%;
     box-sizing: border-box;
     margin-bottom: 10px;
+  }
+  .estilopdf {
+    padding: 4px 50px;
+    font-size: 16px;
+    max-width: 130%;
+    width: 96%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  .aniomes {
+    display: block;
+  }
+  .styleanmes {
+    margin-bottom: 8px;
   }
 }
 /*----------------------REDMI----------------------------*/

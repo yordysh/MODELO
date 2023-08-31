@@ -39,7 +39,6 @@ $(function () {
 
     const accion =
       edit === false ? "insertarcantidadminima" : "actualizarcantidadminima";
-    console.log(selectCantidadminima);
     $.ajax({
       url: "./c_almacen.php",
       data: {
@@ -150,7 +149,7 @@ $(function () {
       type: "POST",
       data: { accion: accion, buscarcantidadminimasearch: search },
       success: function (response) {
-        if (!response.error) {
+        if (isJSON(response)) {
           let tasks = JSON.parse(response);
 
           let template = ``;
@@ -167,6 +166,8 @@ $(function () {
           });
 
           $("#tablacantidadminima").html(template);
+        } else {
+          $("#tablacantidadminima").empty();
         }
       },
       error: function (xhr, status, error) {
@@ -175,3 +176,11 @@ $(function () {
     });
   }
 });
+function isJSON(str) {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}

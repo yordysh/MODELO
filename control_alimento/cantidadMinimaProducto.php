@@ -31,13 +31,9 @@ $dataCantidadMinima = $mostrar->MostrarProductoInsumos();
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
-
             <li>
                 <a class="" href="formulacionEnvases.php">Formulacion</a>
             </li>
-            <!-- <li>
-                <a class="" href="registroEnvases.php">Registros envases</a>
-            </li> -->
             <li>
                 <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
             </li>
@@ -47,7 +43,11 @@ $dataCantidadMinima = $mostrar->MostrarProductoInsumos();
             <li>
                 <a class="" href="#">Cantidad minima</a>
             </li>
+            <li>
+                <a class="" href="registroEnvases.php">Registros envases</a>
+            </li>
         </ul>
+
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
         <div class="search-box">
             <i class="icon-magnifying-glass search-icon"></i>

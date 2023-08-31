@@ -83,95 +83,77 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                         </div>
 
                         <!--Combo Produccion -->
-                        <div class="form-outline mb-4 ">
+                        <!-- <div class="form-outline mb-4 ">
                             <label class="form-label">Produccion</label>
                             <select id="selectProduccion" class="form-select selectProduccion" aria-label="Default select example">
                                 <option value="0" selected disabled>Seleccione produccion</option>
 
                             </select>
-                        </div>
+                        </div> -->
 
                         <!-- Text input cantidad -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Cantidad</label>
                             <input type="text" id="cantidad" class="form-control" name="cantidad" required>
                         </div>
-                        <!-- Text input fecha -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label" id="labelFecha">fecha</label>
-                            <input type="text" id="fecha" class="form-control" name="fecha">
-                        </div>
-
                         <!-- Crear PDF -->
-                        <div class="contenedor">
-                            <div class="ctnBtn">
-                                <input type="hidden" id="taskId">
-                                <button id="botonCalcular" type="submit" name="calcular" class="btn btn-primary bt-guardar">Calcular </button>
-                                <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+                        <div class="contenedorgeneral">
+                            <!-- <div class="ctnBtn"> -->
+                            <!-- <input type="hidden" id="taskId"> -->
+                            <div class="estilocalcular">
+                                <!-- <button id="botonCalcular" type="submit" name="calcular" class="btn btn-primary estilobotoncalcular">Calcular </button> -->
+                                <button id="botonCalcularregistros" type="submit" name="calcular" class="btn btn-primary estilobotoncalcular">Calcular </button>
                             </div>
-                            <div class="ctn">
-                                <label for="mes">Seleccione el año:</label>
-                                <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
+                            <div class="estiloguardar">
+                                <button id="botonguardarregistro" type="submit" name="insert" class="btn btn-primary estilobotonguardar">Guardar </button>
                             </div>
-                            <div class="ordenar">
-                                <div class="dMes">
-                                    <div class="ctn">
-                                        <label for="mes">Seleccione el mes:</label>
-                                    </div>
-                                    <div class="ctn">
-                                        <select id="mes" name="mes">
-                                            <option value="" selected disabled>Seleccione...</option>
-                                            <option value="01">Enero</option>
-                                            <option value="02">Febrero</option>
-                                            <option value="03">Marzo</option>
-                                            <option value="04">Abril</option>
-                                            <option value="05">Mayo</option>
-                                            <option value="06">Junio</option>
-                                            <option value="07">Julio</option>
-                                            <option value="08">Agosto</option>
-                                            <option value="09">Septiembre</option>
-                                            <option value="10">Octubre</option>
-                                            <option value="11">Noviembre</option>
-                                            <option value="12">Diciembre</option>
-                                        </select>
-                                    </div>
+
+                            <div class="aniomes">
+                                <div class="styleanmes">
+                                    <label for="mes">Seleccione el año:</label>
+                                    <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
                                 </div>
-                                <div>
-                                    <a class="btn btn-primary btnPdf" href="#" onclick="generarPDF()">Generar PDF</a>
+                                <div class="styleanmes">
+                                    <label for="mes">Seleccione el mes:</label>
+                                    <select id="mes" name="mes">
+                                        <option value="" selected disabled>Seleccione...</option>
+                                        <option value="01">Enero</option>
+                                        <option value="02">Febrero</option>
+                                        <option value="03">Marzo</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Mayo</option>
+                                        <option value="06">Junio</option>
+                                        <option value="07">Julio</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Septiembre</option>
+                                        <option value="10">Octubre</option>
+                                        <option value="11">Noviembre</option>
+                                        <option value="12">Diciembre</option>
+                                    </select>
                                 </div>
+                                <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()">Generar PDF</a>
                             </div>
+
                         </div>
-                    </form>
-
-                    <div id="tablaRE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                        <table id="tbRE" class="table table-sm mb-3 table-hover">
-                            <thead>
-                                <tr>
-                                    <!-- <th class="thtitulo" scope="col">FECHA</th>
-                                    <th class="thtitulo" scope="col">N°BACHADA</th>
-                                    <th class="thtitulo" scope="col">PRODUCTO</th>
-                                    <th class="thtitulo" scope="col">PRESENTACION</th>
-
-                                    <th class="thtitulo" scope="col">CANTIDAD FRASCOS</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD TAPAS</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD SCOOPS</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD ALUPOL</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD CAJAS</th>
-                                    <th class="thtitulo" scope="col">LOTE</th>
-                                    <th></th>
-                                    <th></th> -->
-                                    <th class="thtitulo" scope="col">CODIGO PRODUCTO</th>
-                                    <th class="thtitulo" scope="col">CODIGO PRODUCCION</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablaRegistroEnvase">
-
-                            </tbody>
-                        </table>
-                    </div>
-
                 </div>
+                </form>
+
+                <div id="tablaRE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                    <table id="tbRE" class="table table-sm mb-3 table-hover">
+                        <thead>
+                            <tr>
+                                <th class="thtitulo" scope="col">ENVASES</th>
+                                <th class="thtitulo" scope="col">CANTIDAD</th>
+                                <th class="thtitulo" scope="col">LOTE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablacalculoregistroenvase">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
             </div>
         </section>
     </main>
@@ -181,7 +163,7 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxRegistroEnvases.js"></script>
+    <script src="./js/ajaxRegistrosEnvasess.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {

@@ -2194,7 +2194,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function   MostrarInsumosPendientes($cod_formulacion)
+  public function  MostrarInsumosPendientes($cod_formulacion)
   {
     try {
 
@@ -2409,6 +2409,32 @@ class m_almacen
                                   HAVING SUM(TRI.CANTIDAD) - MAX(TAI.STOCK_ACTUAL) > 0");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+
+
+
+
+
+
+  public function MostrarCalculoRegistroEnvase($seleccionarproductoregistro)
+  {
+    try {
+      $codigoformula = new m_almacen();
+      $codigo_de_formulacion = $codigoformula->CodigoFormulacionProducto($seleccionarproductoregistro);
+      $stmCalculo = $this->bd->prepare("SELECT TE.COD_FORMULACION AS COD_FORMULACIONES, TE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TE.CANTIDA AS CANTIDA, 
+                                        (SELECT CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_FORMULACION='$codigo_de_formulacion') AS CAN_FORMULACION
+                                        FROM T_TMPFORMULACION_ENVASE TE 
+                                        INNER JOIN T_PRODUCTO AS TP ON TE.COD_PRODUCTO= TP.COD_PRODUCTO  WHERE TE.COD_FORMULACION='$codigo_de_formulacion'");
+
+      $stmCalculo->execute();
+      $datos = $stmCalculo->fetchAll(PDO::FETCH_OBJ);
 
       return $datos;
     } catch (Exception $e) {

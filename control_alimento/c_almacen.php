@@ -373,6 +373,12 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_buscar_total_requerimiento($buscartotal);
     echo $respuesta;
+} elseif ($accion == 'mostrarcalculoderegistro') {
+    $seleccionarproductoregistro = trim($_POST['seleccionarproductoregistro']);
+    $cantidad = intval(trim($_POST['cantidad']));
+
+    $respuesta = c_almacen::c_mostrar_calculo_registro_envases($seleccionarproductoregistro, $cantidad);
+    echo $respuesta;
 }
 
 
@@ -2344,6 +2350,46 @@ class c_almacen
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
             }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+
+
+
+
+
+
+
+
+    static function c_mostrar_calculo_registro_envases($seleccionarproductoregistro, $cantidad)
+    {
+        try {
+
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarCalculoRegistroEnvase($seleccionarproductoregistro);
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+
+            $json = array();
+            foreach ($datos as $row) {
+                $calculo = ($row->CANTIDA * $cantidad) / $row->CAN_FORMULACION;
+                // $total = round($calculo, 3);
+                $total =  bcdiv($calculo, '1', 3);
+
+                $json[] = array(
+                    "COD_FORMULACIONES" => $row->COD_FORMULACIONES,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "TOTAL_ENVASE" => $total,
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
