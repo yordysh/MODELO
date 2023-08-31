@@ -67,20 +67,6 @@ $(function () {
             }
           });
         }
-        //else {
-        //   Swal.fire({
-        //     icon: "error",
-        //     title: "Oops...",
-        //     text: "Duplicado!",
-        //     confirmButtonText: "Aceptar",
-        //   }).then((result) => {
-        //     if (result.isConfirmed) {
-        //       fetchTasks();
-        //       $("#formularioZona").trigger("reset");
-        //     }
-        //   });
-        // }
-        // console.log("RESPONSE" + response);
       },
     });
   });

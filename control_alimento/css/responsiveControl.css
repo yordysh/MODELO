@@ -242,8 +242,9 @@ section {
 .custom-icon {
   background-color: #007bff;
   color: white;
-  padding: 5px;
+  padding: 8px;
   border-radius: 40%;
+  border: none;
 }
 
 /* --------------------------------------------------------------- */

@@ -74,7 +74,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 <textarea class="form-control" id="observacionCompra" rows="3" required></textarea>
                             </div>
                             <div class="ctnBtn">
-                                <input type="hidden" id="taskId">
+                                <input type="hidden" id="taskcodrequerimiento">
                                 <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-primary bt-insert">Guardar</button>
                                 <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
                             </div>

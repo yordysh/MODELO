@@ -2226,7 +2226,7 @@ class m_almacen
     $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
     return $codigoAumento;
   }
-  public function InsertarOrdenCompraItem($union, $idRequerimiento, $observacioncompra)
+  public function InsertarOrdenCompraItem($union, $idRequerimiento, $observacioncompra, $taskcodrequerimiento)
   {
     try {
 
@@ -2235,13 +2235,16 @@ class m_almacen
 
       $codigo_orden_compra = $cod->generarCodigoOrdenCompra();
 
+
+
+
       $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,COD_REQUERIMIENTO, OBSERVACION)
-      VALUES ('$codigo_orden_compra','$idRequerimiento', '$observacioncompra')");
+                                                VALUES ('$codigo_orden_compra','$idRequerimiento', '$observacioncompra')");
       $insert = $stmPedidoCompras->execute();
 
       for ($i = 0; $i < count($union); $i += 2) {
         $codProducto = $union[$i];
-        $canInsu = $union[$i + 1];
+        $canInsu = intval($union[$i + 1]);
 
 
 
@@ -2255,16 +2258,16 @@ class m_almacen
 
 
         $stmPedidoOrden = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA_ITEM(COD_ORDEN_COMPRA,COD_PRODUCTO, CANTIDAD_INSUMO_ENVASE)
-        VALUES ('$codigo_orden_compra','$codProducto', '$multiplicacionTotal')");
+                                                  VALUES ('$codigo_orden_compra','$codProducto', '$multiplicacionTotal')");
         $insert = $stmPedidoOrden->execute();
       }
-
       // $fecha_generado = $cod->c_horaserversql('F');
       $fecha_generado = '29/08/2023';
       //echo $fecha_generado;
       $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
       $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_formateada' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $stmActualizar->execute();
+
 
 
 
@@ -2275,6 +2278,18 @@ class m_almacen
       $this->bd->rollBack();
       die($e->getMessage());
     }
+  }
+  public function ActualizarOrdenCompraItem($taskcodrequerimiento)
+  {
+    // $fecha_generado = $cod->c_horaserversql('F');
+    $fecha_generado = '29/08/2023';
+    //echo $fecha_generado;
+    $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+    $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_formateada' WHERE COD_REQUERIMIENTO='$taskcodrequerimiento'");
+    $stmActualizarOrden->execute();
+
+
+    return $stmActualizarOrden;
   }
 
   public function generarCodigoCantidadMinima()

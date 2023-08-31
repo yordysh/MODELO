@@ -326,13 +326,20 @@ if ($accion == 'insertar') {
     echo $respuesta;
 } elseif ($accion == 'insertarordencompraitem') {
     // var_dump($_POST);
-    $union = $_POST['union'];
+    // $union = $_POST['union'];
     $observacioncompra = $_POST['observacioncompra'];
-    $idRequerimiento = $_POST['idRequerimiento'];
-
-
-    $respuesta = c_almacen::c_insertar_orden_compra_item($union, $idRequerimiento, $observacioncompra);
-    echo $respuesta;
+    //$idRequerimiento = trim($_POST['idRequerimiento']);
+    $taskcodrequerimiento = trim($_POST['taskcodrequerimiento']);
+    if (isset($_POST['union']) && isset($_POST['idRequerimiento'])) {
+        $union = $_POST['union'];
+        $idRequerimiento = $_POST['idRequerimiento'];
+        $respuesta = c_almacen::c_insertar_orden_compra_item($union, $idRequerimiento, $observacioncompra, $taskcodrequerimiento);
+        echo $respuesta;
+    } else {
+        // echo "else";
+        $respuesta = c_almacen::c_actualizar_orden_compra_item($taskcodrequerimiento);
+        echo $respuesta;
+    }
 } elseif ($accion == 'insertarcantidadminima') {
 
     $selectCantidadminima = trim($_POST['selectCantidadminima']);
@@ -2144,12 +2151,29 @@ class c_almacen
         }
     }
 
-    static function c_insertar_orden_compra_item($union, $idRequerimiento, $observacioncompra)
+    static function c_insertar_orden_compra_item($union, $idRequerimiento, $observacioncompra, $taskcodrequerimiento)
     {
         $m_formula = new m_almacen();
-
-        if (isset($union)) {
-            $respuesta = $m_formula->InsertarOrdenCompraItem($union, $idRequerimiento, $observacioncompra);
+        // var_dump($union);
+        // var_dump($taskcodrequerimiento);
+        // exit();
+        if (isset($idRequerimiento)) {
+            $respuesta = $m_formula->InsertarOrdenCompraItem($union, $idRequerimiento, $observacioncompra, $taskcodrequerimiento);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function c_actualizar_orden_compra_item($taskcodrequerimiento)
+    {
+        $m_formula = new m_almacen();
+        // var_dump($union);
+        // var_dump($taskcodrequerimiento);
+        // exit();
+        if (isset($taskcodrequerimiento)) {
+            $respuesta = $m_formula->ActualizarOrdenCompraItem($taskcodrequerimiento);
             if ($respuesta) {
                 return "ok";
             } else {

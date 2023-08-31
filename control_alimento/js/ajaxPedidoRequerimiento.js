@@ -94,6 +94,8 @@ $(function () {
 
     let cod_formulacion = capturaTr.attr("taskId");
 
+    $("#taskcodrequerimiento").val(cod_formulacion);
+
     // console.log("Task ID:", cod_formulacion);
 
     const accion = "mostrarinsumopendientes";
@@ -101,7 +103,10 @@ $(function () {
     $.ajax({
       url: "./c_almacen.php",
       type: "POST",
-      data: { accion: accion, cod_formulacion: cod_formulacion },
+      data: {
+        accion: accion,
+        cod_formulacion: cod_formulacion,
+      },
       success: function (response) {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
@@ -110,7 +115,6 @@ $(function () {
           let template = ``;
           tasks.forEach((task) => {
             const insumo_pedir = task.CANTIDAD_TOTAL - task.STOCK_ACTUAL;
-
             if (insumo_pedir > 0) {
               template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
                             <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
@@ -133,10 +137,13 @@ $(function () {
     e.preventDefault();
     let observacioncompra = $("#observacionCompra").val();
     let valoresCapturadosVenta = [];
+    let taskcodvalor = $("#taskcodrequerimiento").val().trim();
+
     let idRequerimiento = $("#tablainsumorequerido tr").attr(
       "codigorequerimiento"
     );
     let tablainsumorequerido = $("#tablainsumorequerido");
+    let taskcodrequerimiento = $("#taskcodrequerimiento").val();
 
     $("#tablainsumorequerido tr").each(function () {
       let id_producto_insumo = $(this).find("td:eq(0)").attr("id_producto");
@@ -145,13 +152,14 @@ $(function () {
       valoresCapturadosVenta.push(id_producto_insumo, cantidad_producto_insumo);
     });
 
-    if (valoresCapturadosVenta == "" && observacioncompra == "") {
+    if (taskcodvalor === "" && observacioncompra == "") {
       Swal.fire({
         title: "¡Error!",
         text: "Añadir los pendientes para guardar.",
         icon: "error",
         confirmButtonText: "Aceptar",
       });
+      return;
     }
     const accion = "insertarordencompraitem";
 
@@ -163,6 +171,7 @@ $(function () {
         union: valoresCapturadosVenta,
         idRequerimiento: idRequerimiento,
         observacioncompra: observacioncompra,
+        taskcodrequerimiento: taskcodrequerimiento,
       },
       success: function (response) {
         console.log("respuesta" + response);
@@ -175,6 +184,7 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#observacionCompra").val("");
+              $("#taskcodrequerimiento").val("");
               tablainsumorequerido.empty();
               mostrarRequerimientoTotal();
               mostrarPendientes();
