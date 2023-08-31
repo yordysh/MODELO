@@ -67,7 +67,7 @@ $(function () {
       type: "POST",
       data: { accion: accion, buscarpendiente: search },
       success: function (response) {
-        if (!response.error) {
+        if (isJSON(response)) {
           let tasks = JSON.parse(response);
 
           let template = ``;
@@ -79,7 +79,6 @@ $(function () {
           });
           $("#tablaPedidoRequerimiento").html(template);
         } else {
-          console.log("object");
           $("#tablaPedidoRequerimiento").empty();
         }
       },
@@ -104,7 +103,7 @@ $(function () {
       type: "POST",
       data: { accion: accion, cod_formulacion: cod_formulacion },
       success: function (response) {
-        if (!response.error) {
+        if (isJSON(response)) {
           let tasks = JSON.parse(response);
           console.log(tasks);
 
@@ -119,6 +118,8 @@ $(function () {
                           </tr>`;
             }
           });
+          $("#tablainsumorequerido").html(template);
+        } else {
           $("#tablainsumorequerido").html(template);
         }
       },
@@ -195,7 +196,7 @@ $(function () {
       type: "POST",
       data: { accion: accion, buscartotal: search },
       success: function (response) {
-        if (!response.error) {
+        if (isJSON(response)) {
           let tasks = JSON.parse(response);
 
           let template = ``;
@@ -205,12 +206,14 @@ $(function () {
             );
             $resultadototalinsu = task.CANTIDAD_MINIMA * $resultado;
             template += `<tr taskId="${task.COD_REQUERIMIENTO}">
-                            <td data-titulo="INSUMOS">${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CANTIDAD">${task.STOCK_RESULTANTE}</td>
-                            <td data-titulo="CANTIDAD COMPRA">${$resultadototalinsu}</td>                    
-                         </tr>`;
+                  <td data-titulo="INSUMOS">${task.DES_PRODUCTO}</td>
+                  <td data-titulo="CANTIDAD">${task.STOCK_RESULTANTE}</td>
+                  <td data-titulo="CANTIDAD COMPRA">${$resultadototalinsu}</td>                    
+               </tr>`;
           });
           $("#tablatotalinsumosrequeridos").html(template);
+        } else {
+          $("#tablatotalinsumosrequeridos").empty();
         }
       },
       error: function (xhr, status, error) {
@@ -219,3 +222,11 @@ $(function () {
     });
   }
 });
+function isJSON(str) {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}

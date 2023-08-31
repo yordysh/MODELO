@@ -2392,7 +2392,6 @@ class m_almacen
                                  WHERE TP.DES_PRODUCTO LIKE '$buscartotal%'
                                   GROUP BY TR.COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO, TAI.STOCK_ACTUAL, CM.CANTIDAD_MINIMA
                                   HAVING SUM(TRI.CANTIDAD) - MAX(TAI.STOCK_ACTUAL) > 0");
-
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 

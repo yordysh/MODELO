@@ -291,7 +291,7 @@ if ($accion == 'insertar') {
 
     $selectinsumoenvase = trim($_POST['selectinsumoenvase']);
 
-    $cantidadinsumoenvase = trim($_POST['cantidadinsumoenvase']);
+    $cantidadinsumoenvase = intval(trim($_POST['cantidadinsumoenvase']));
 
     $respuesta = c_almacen::c_mostrar_insumo($selectinsumoenvase, $cantidadinsumoenvase);
     echo $respuesta;
@@ -299,7 +299,7 @@ if ($accion == 'insertar') {
 
     $seleccionadoinsumoenvases = trim($_POST['seleccionadoinsumoenvases']);
 
-    $cantidadesinsumoenvases = trim($_POST['cantidadesinsumoenvases']);
+    $cantidadesinsumoenvases = intval(trim($_POST['cantidadesinsumoenvases']));
 
     $respuesta = c_almacen::c_mostrar_envase($seleccionadoinsumoenvases, $cantidadesinsumoenvases);
     echo $respuesta;
@@ -325,7 +325,7 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_insumos_pendientes($cod_formulacion);
     echo $respuesta;
 } elseif ($accion == 'insertarordencompraitem') {
-
+    // var_dump($_POST);
     $union = $_POST['union'];
     $observacioncompra = $_POST['observacioncompra'];
     $idRequerimiento = $_POST['idRequerimiento'];

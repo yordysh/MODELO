@@ -176,7 +176,6 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <!-- <script src="./js/ui_1.12.1_jquery-ui.min.js"></script> -->
     <script src="./js/ajaxRegistroEnvases.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>
