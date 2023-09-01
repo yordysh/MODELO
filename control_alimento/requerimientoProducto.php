@@ -93,7 +93,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <div class="contenedor">
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskId">
-                                <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-primary bt-insert">Insertar</button>
+                                <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-success bt-insert">Insertar</button>
                                 <button id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary bt-insert">Guardar</button>
 
                                 <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
@@ -106,7 +106,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 <thead>
                                     <tr>
 
-                                        <th class="thtitulo" scope="col">PRODUCTO</th>
+                                        <th class="thtitulo" scope="col">PRODUCTOS</th>
                                         <th class="thtitulo" scope="col">CANTIDAD TOTAL</th>
                                     </tr>
                                 </thead>

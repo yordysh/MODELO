@@ -82,9 +82,9 @@ $dataCantidadMinima = $mostrar->MostrarProductoInsumos();
                                 <input class="form-control" id="cantidadMinima" required></input>
                             </div>
                         </div>
-                        <div class="d-grid  col-6 mx-auto bt-guardar">
+                        <div class="">
                             <input type="hidden" id="taskId">
-                            <button id="botonminimo" type="submit" name="insert" class="btn btn-primary bt-guardar">Guardar </button>
+                            <button id="botonminimo" type="submit" name="insert" class="btn btn-primary bt-insert">Guardar </button>
                         </div>
                     </form>
                     <!-- Tabla de insumos que se requiere-->

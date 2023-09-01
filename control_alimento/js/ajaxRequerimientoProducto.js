@@ -78,6 +78,21 @@ $(function () {
 
     let cantidadinsumoenvase = $("#cantidadInsumoEnvase").val();
 
+    let cantidadInsumoEnvaseEntero = parseInt(cantidadinsumoenvase);
+
+    if (cantidadinsumoenvase != cantidadInsumoEnvaseEntero) {
+      Swal.fire({
+        icon: "error",
+        title: "Valor decimal",
+        text: "Por favor, ingrese un valor entero en cantidad",
+      }).then((resultado) => {
+        if (resultado.isConfirmed || resultado.isDismissed) {
+          $("#cantidadInsumoEnvase").val("");
+        }
+      });
+      return;
+    }
+
     if (!selectinsumoenvase || !cantidadinsumoenvase) {
       Swal.fire({
         icon: "error",

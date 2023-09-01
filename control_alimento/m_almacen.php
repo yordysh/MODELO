@@ -1871,7 +1871,7 @@ class m_almacen
       if ($contar_tmpformulacion == 0) {
 
         $stm = $this->bd->prepare("INSERT INTO T_TMPFORMULACION(COD_FORMULACION, COD_CATEGORIA, COD_PRODUCTO, FEC_GENERADO, CAN_FORMULACION, UNI_MEDIDA)
-                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_generado','$cantidadTotal','$unidad_medida')");
+                                  VALUES ('$codigo_formulacion','$codigo_categoria','$selectProductoCombo','$fecha_generado','$cantidadTotal','UNIDAD')");
 
         $insert = $stm->execute();
 
@@ -2261,11 +2261,11 @@ class m_almacen
                                                   VALUES ('$codigo_orden_compra','$codProducto', '$multiplicacionTotal')");
         $insert = $stmPedidoOrden->execute();
       }
-      // $fecha_generado = $cod->c_horaserversql('F');
-      $fecha_generado = '29/08/2023';
+      $fecha_generado = $cod->c_horaserversql('F');
+      // $fecha_generado = '29/08/2023';
       //echo $fecha_generado;
-      $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
-      $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_formateada' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
+      // $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+      $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $stmActualizar->execute();
 
 
@@ -2281,11 +2281,12 @@ class m_almacen
   }
   public function ActualizarOrdenCompraItem($taskcodrequerimiento)
   {
-    // $fecha_generado = $cod->c_horaserversql('F');
-    $fecha_generado = '29/08/2023';
+    $cod = new m_almacen();
+    $fecha_generado = $cod->c_horaserversql('F');
+    // $fecha_generado = '29/08/2023';
     //echo $fecha_generado;
-    $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
-    $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_formateada' WHERE COD_REQUERIMIENTO='$taskcodrequerimiento'");
+    // $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+    $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$taskcodrequerimiento'");
     $stmActualizarOrden->execute();
 
 

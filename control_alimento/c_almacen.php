@@ -290,7 +290,6 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'mostrardatosinsumos') {
 
     $selectinsumoenvase = trim($_POST['selectinsumoenvase']);
-
     $cantidadinsumoenvase = intval(trim($_POST['cantidadinsumoenvase']));
 
     $respuesta = c_almacen::c_mostrar_insumo($selectinsumoenvase, $cantidadinsumoenvase);
@@ -2000,8 +1999,6 @@ class c_almacen
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarDatosInsumos($selectinsumoenvase);
 
-
-
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
             }
@@ -2009,8 +2006,8 @@ class c_almacen
             foreach ($datos as $row) {
                 $calculoInsumo = ($row->CAN_FORMULACION_INSUMOS * $cantidadinsumoenvase) / $row->CAN_FORMULACION;
                 // var_dump($calculoInsumo);
-                // $total = round($calculoInsumo, 3);
-                $total =  bcdiv($calculoInsumo, '1', 3);
+                $total = round($calculoInsumo, 3);
+                // $total =  custom_bcdiv($calculoInsumo, '1', 3);
                 $json[] = array(
                     "COD_FORMULACION" => $row->COD_FORMULACION,
                     "DES_PRODUCTO_FORMULACION" => $row->DES_PRODUCTO_FORMULACION,
@@ -2043,8 +2040,8 @@ class c_almacen
             $json = array();
             foreach ($datos as $row) {
                 $calculo = ($row->CANTIDA * $cantidadesinsumoenvases) / $row->CAN_FORMULACION;
-                // $total = round($calculo, 3);
-                $total =  bcdiv($calculo, '1', 3);
+                $total = round($calculo, 3);
+                // $total =  bcdiv($calculo, '1', 3);
 
                 $json[] = array(
                     "COD_FORMULACIONES" => $row->COD_FORMULACIONES,
@@ -2053,6 +2050,7 @@ class c_almacen
                     "TOTAL_ENVASE" => $total,
                 );
             }
+
 
             $jsonstring = json_encode($json);
             echo $jsonstring;

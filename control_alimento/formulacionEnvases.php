@@ -119,7 +119,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                             <label class="form-label">Cantidad insumos</label>
                             <input type="number" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
                         </div>
-                        <button id="botonCalcularInsumos" name="insert" class="btn btn-primary bt-Total">Insertar insumos </button>
+                        <button id="botonCalcularInsumos" name="insert" class="btn btn-success bt-Total">Insertar insumos </button>
                         <div class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;margin-bottom:50px!important;">
                             <table id="tbInsum" class="table table-sm mb-3 table-hover">
                                 <thead>
@@ -153,7 +153,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                             <label class="form-label">Cantidad envases</label>
                             <input type="number" id="cantidadEnvaseProducto" class="form-control" name="cantidadEnvaseProductos" required>
                         </div>
-                        <button id="botonCalcularEnvasesProducto" name="insert" class="btn btn-primary bt-Total">Insertar envases </button>
+                        <button id="botonCalcularEnvasesProducto" name="insert" class="btn btn-success bt-Total">Insertar envases </button>
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
                             <table id="tbEnvaseProducto" class="table table-sm mb-3 table-hover">
                                 <thead>

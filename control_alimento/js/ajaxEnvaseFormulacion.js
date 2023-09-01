@@ -78,6 +78,44 @@ $(function () {
     }
   });
 
+  $("#cantidadTotal").keyup((e) => {
+    e.preventDefault();
+    let cantidadescrita = $("#cantidadTotal").val();
+    const regex = /\d+\./;
+
+    if (regex.test(cantidadescrita)) {
+      Swal.fire({
+        icon: "error",
+        title: "Valor decimal",
+        text: "Por favor, ingresa valores enteros en cantidad producto",
+      }).then((resultado) => {
+        if (resultado.isConfirmed || resultado.isDismissed) {
+          $("#cantidadTotal").val("");
+        }
+      });
+      return;
+    }
+  });
+
+  $("#cantidadEnvaseProducto").keyup((e) => {
+    e.preventDefault();
+    let cantidadescrita = $("#cantidadEnvaseProducto").val();
+    const regex = /\d+\./;
+
+    if (regex.test(cantidadescrita)) {
+      Swal.fire({
+        icon: "error",
+        title: "Valor decimal",
+        text: "Por favor, ingresa valores enteros en cantidad envases",
+      }).then((resultado) => {
+        if (resultado.isConfirmed || resultado.isDismissed) {
+          $("#cantidadEnvaseProducto").val("");
+        }
+      });
+      return;
+    }
+  });
+
   $("#botonCalcularProductosEnvases").click((e) => {
     e.preventDefault();
     let tablaEnvase = $("#tablaEnvasesCadaProducto");
