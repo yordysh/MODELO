@@ -68,6 +68,24 @@ $(function () {
     }
   });
   //-------------------------------------------------------------------------//
+  $("#cantidadInsumoEnvase").keyup((e) => {
+    e.preventDefault();
+    let cantidadescrita = $("#cantidadInsumoEnvase").val();
+    const regex = /\d+\./;
+
+    if (regex.test(cantidadescrita)) {
+      Swal.fire({
+        icon: "error",
+        title: "Valor decimal",
+        text: "Por favor, ingresa valores enteros en cantidad",
+      }).then((resultado) => {
+        if (resultado.isConfirmed || resultado.isDismissed) {
+          $("#cantidadInsumoEnvase").val("");
+        }
+      });
+      return;
+    }
+  });
 
   //--------------------- Insertar los valores insumos y envases ------------//
 
@@ -77,21 +95,6 @@ $(function () {
     let textoInsumoEnvase = $("#selectInsumoEnvase option:selected").text();
 
     let cantidadinsumoenvase = $("#cantidadInsumoEnvase").val();
-
-    let cantidadInsumoEnvaseEntero = parseInt(cantidadinsumoenvase);
-
-    if (cantidadinsumoenvase != cantidadInsumoEnvaseEntero) {
-      Swal.fire({
-        icon: "error",
-        title: "Valor decimal",
-        text: "Por favor, ingrese un valor entero en cantidad",
-      }).then((resultado) => {
-        if (resultado.isConfirmed || resultado.isDismissed) {
-          $("#cantidadInsumoEnvase").val("");
-        }
-      });
-      return;
-    }
 
     if (!selectinsumoenvase || !cantidadinsumoenvase) {
       Swal.fire({
@@ -125,33 +128,63 @@ $(function () {
     //   });
     //   return;
     // }
+    /*-------------------- Verifica si hay formulacion ---------------------------- */
+
+    const accionverifica = "verificaproductoformulacion";
+    $.ajax({
+      url: "./c_almacen.php",
+      data: {
+        accion: accionverifica,
+        selectinsumoenvase: selectinsumoenvase,
+      },
+      type: "POST",
+      success: function (dataverificacion) {
+        // let data = JSON.parse(dataverificacion);
+
+        console.log(dataverificacion);
+        if (dataverificacion == "ok") {
+          const filaExistente = $(`tr[id="${selectinsumoenvase}"]`);
+
+          if (filaExistente.length > 0) {
+            const celdaCantidadPro = filaExistente.find(
+              "td[data-titulo='CANTIDAD TOTAL']"
+            );
+            const cantidadActual = parseFloat(celdaCantidadPro.text());
+            const nuevaCantidad =
+              cantidadActual + parseFloat(cantidadinsumoenvase);
+
+            celdaCantidadPro.text(nuevaCantidad);
+          } else {
+            let nuevaFila = $("<tr>");
+            nuevaFila.attr("id", selectinsumoenvase);
+            let celdaProducto = $("<td data-titulo='PRODUCTO'>").text(
+              textoInsumoEnvase
+            );
+            celdaProducto.attr("id_item", selectinsumoenvase);
+            let celdaCantidadPro = $("<td data-titulo='CANTIDAD TOTAL'>").text(
+              cantidadinsumoenvase
+            );
+            nuevaFila.append(celdaProducto, celdaCantidadPro);
+
+            $("#tablaTotal tbody").append(nuevaFila);
+          }
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Formulacion no encontrada",
+            text: "Por favor, seleccione un producto que tengue formulación.",
+          }).then((resultado) => {
+            if (resultado.isConfirmed || resultado.isDismissed) {
+              $("#cantidadInsumoEnvase").val("");
+            }
+          });
+          return;
+        }
+      },
+    });
+    /*_---------------------------------------------------------------------------- */
 
     /*---------------  Añade tabla de total de cada producto-------------------*/
-
-    const filaExistente = $(`tr[id="${selectinsumoenvase}"]`);
-
-    if (filaExistente.length > 0) {
-      const celdaCantidadPro = filaExistente.find(
-        "td[data-titulo='CANTIDAD TOTAL']"
-      );
-      const cantidadActual = parseFloat(celdaCantidadPro.text());
-      const nuevaCantidad = cantidadActual + parseFloat(cantidadinsumoenvase);
-
-      celdaCantidadPro.text(nuevaCantidad);
-    } else {
-      let nuevaFila = $("<tr>");
-      nuevaFila.attr("id", selectinsumoenvase);
-      let celdaProducto = $("<td data-titulo='PRODUCTO'>").text(
-        textoInsumoEnvase
-      );
-      celdaProducto.attr("id_item", selectinsumoenvase);
-      let celdaCantidadPro = $("<td data-titulo='CANTIDAD TOTAL'>").text(
-        cantidadinsumoenvase
-      );
-      nuevaFila.append(celdaProducto, celdaCantidadPro);
-
-      $("#tablaTotal tbody").append(nuevaFila);
-    }
 
     // });
 

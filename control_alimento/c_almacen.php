@@ -287,6 +287,11 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_buscar_requerimiento_producto($buscarrequerimiento);
     echo $respuesta;
+} elseif ($accion == 'verificaproductoformulacion') {
+
+    $selectinsumoenvase = trim($_POST['selectinsumoenvase']);
+    $respuesta = c_almacen::c_vista_producto_formulacion($selectinsumoenvase);
+    echo $respuesta;
 } elseif ($accion == 'mostrardatosinsumos') {
 
     $selectinsumoenvase = trim($_POST['selectinsumoenvase']);
@@ -1991,6 +1996,29 @@ class c_almacen
 
 
 
+    static function c_vista_producto_formulacion($selectinsumoenvase)
+    {
+        try {
+
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->VerificarProductoFormula($selectinsumoenvase);
+            if ($datos) {
+                echo 'ok';
+            } else {
+                echo "error";
+            }
+            // if (!$datos) {
+            //     throw new Exception("error en la consulta");
+            // }
+
+            // // $jsonstring = json_encode($datos);
+
+            // echo $datos;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
     static function c_mostrar_insumo($selectinsumoenvase, $cantidadinsumoenvase)
     {
         try {

@@ -1858,10 +1858,10 @@ class m_almacen
 
 
 
-      $fecha_generado = $codigoform->c_horaserversql('F');
-      // $fecha_generado = '18/08/2023';
+      // $fecha_generado = $codigoform->c_horaserversql('F');
+      $fecha_actual = '01/09/2023';
       //echo $fecha_generado;
-      //$fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $codigo_formulacion = $codigoform->generarCodigoFormulacion();
       $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);
@@ -2116,6 +2116,20 @@ class m_almacen
 
 
 
+  public function VerificarProductoFormula($selectinsumoenvase)
+  {
+    try {
+
+      $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$selectinsumoenvase'");
+
+      $repetir->execute();
+      $result = $repetir->fetch(PDO::FETCH_ASSOC);
+      $count = $result['count'];
+      return $count;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function InsertarInsumEnvas($union, $unionEnvase, $unionItem)
   {
     try {

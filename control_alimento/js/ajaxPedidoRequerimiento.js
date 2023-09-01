@@ -69,7 +69,7 @@ $(function () {
       success: function (response) {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
-
+          console.log(tasks);
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_REQUERIMIENTO}">
