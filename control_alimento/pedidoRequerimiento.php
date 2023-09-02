@@ -68,13 +68,25 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <input id="id" type="hidden" class="form-control" name="id" />
                         </div>
 
+                        <!-- Tabla total requerimiento pedido-->
+                        <div class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:20px;margin-bottom:20px;">
+                            <table id="tmostrartotalpendientes" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">CODIGO</th>
+                                        <th class="thtitulo" scope="col">PRODUCTO</th>
 
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablamostartotalpendientes">
+
+                                </tbody>
+                            </table>
+                        </div>
                         <!-- Insertar nuevas cantidades -->
                         <div class="contenedor">
-                            <div class="mb-3">
-                                <label for="observacioncompra" class="form-label">Observacion</label>
-                                <textarea class="form-control" id="observacionCompra" rows="3" required></textarea>
-                            </div>
+
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskcodrequerimiento">
                                 <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-primary bt-insert">Guardar</button>
@@ -82,41 +94,25 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             </div>
                         </div>
 
-                        <!-- Tabla de requerimiento-->
-                        <div class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:20px;margin-bottom:20px;">
-                            <table id="tpedidorequerimiento" class="table table-sm mb-3 table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="thtitulo" scope="col">PENDIENTE</th>
-
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaPedidoRequerimiento">
-
-                                </tbody>
-                            </table>
-                        </div>
-
                         <!-- Tabla de insumos que se requiere-->
-                        <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
-                            <table id="tinsumorequerido" class="table table-sm mb-3 table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="thtitulo" scope="col">INSUMOS</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablainsumorequerido">
+                        <!-- <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;display:none;"> -->
+                        <table id="tinsumorequerido" class="table table-sm mb-3 table-responsive table-hover" style="display:none;">
+                            <thead>
+                                <tr>
+                                    <th class="thtitulo" scope="col">INSUMOS</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablainsumorequerido">
 
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
+                        <!-- </div> -->
                     </form>
 
                     <!-- Tabla total-->
-                    <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                    <!-- <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
                         <table id="tTotalinsumos" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
@@ -130,7 +126,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                             </tbody>
                         </table>
-                    </div>
+                    </div> -->
 
 
                 </div>

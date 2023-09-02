@@ -2208,7 +2208,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function  MostrarInsumosPendientes($cod_formulacion)
+  public function  MostrarSiCompra($cod_formulacion)
   {
     try {
 
@@ -2407,29 +2407,7 @@ class m_almacen
 
 
 
-  public function MostrarRequerimientoTotal($buscartotal)
-  {
-    try {
 
-      $stm = $this->bd->prepare("SELECT TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,
-                                  TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(TRI.CANTIDAD) AS CANTIDAD_TOTAL,
-                                  TAI.STOCK_ACTUAL AS STOCK_ACTUAL, SUM(TRI.CANTIDAD) - MAX(TAI.STOCK_ACTUAL) AS STOCK_RESULTANTE,
-                                  CM.CANTIDAD_MINIMA AS CANTIDAD_MINIMA
-                                  FROM T_TMPREQUERIMIENTO TR INNER JOIN T_TMPREQUERIMIENTO_INSUMO TRI ON TR.COD_REQUERIMIENTO = TRI.COD_REQUERIMIENTO
-                                  INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO = TP.COD_PRODUCTO
-                                  INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TRI.COD_PRODUCTO = TAI.COD_PRODUCTO
-                                  INNER JOIN T_TMPCANTIDAD_MINIMA CM ON TRI.COD_PRODUCTO = CM.COD_PRODUCTO
-                                 WHERE TP.DES_PRODUCTO LIKE '$buscartotal%'
-                                  GROUP BY TR.COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO, TAI.STOCK_ACTUAL, CM.CANTIDAD_MINIMA
-                                  HAVING SUM(TRI.CANTIDAD) - MAX(TAI.STOCK_ACTUAL) > 0");
-      $stm->execute();
-      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
-
-      return $datos;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
 
 
 
@@ -2447,6 +2425,39 @@ class m_almacen
                                         (SELECT CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_FORMULACION='$codigo_de_formulacion') AS CAN_FORMULACION
                                         FROM T_TMPFORMULACION_ENVASE TE 
                                         INNER JOIN T_PRODUCTO AS TP ON TE.COD_PRODUCTO= TP.COD_PRODUCTO  WHERE TE.COD_FORMULACION='$codigo_de_formulacion'");
+
+      $stmCalculo->execute();
+      $datos = $stmCalculo->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarTotalPendientesRequeridos($buscarpendiente)
+  {
+    try {
+
+      $stmCalculo = $this->bd->prepare(" SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO, 
+                                          TP.DES_PRODUCTO AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD, TRI.ESTADO AS ESTADO
+                                         FROM T_TMPREQUERIMIENTO_ITEM TRI INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
+                                         WHERE TRI.ESTADO='P' AND TP.DES_PRODUCTO LIKE '$buscarpendiente%'");
+
+      $stmCalculo->execute();
+      $datos = $stmCalculo->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarSegunCodFormulacion($cod_formulacion)
+  {
+    try {
+
+      $stmCalculo = $this->bd->prepare("");
 
       $stmCalculo->execute();
       $datos = $stmCalculo->fetchAll(PDO::FETCH_OBJ);
