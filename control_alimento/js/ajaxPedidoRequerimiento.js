@@ -60,7 +60,7 @@ $(function () {
       },
     });
   }
-
+  var tabla = "";
   $(document).on("click", "#mostrarInsumosRequerimiento", (e) => {
     e.preventDefault();
     let capturaTr = $(e.currentTarget).closest("tr");
@@ -86,23 +86,28 @@ $(function () {
       },
       success: function (response) {
         console.log(JSON.parse(response));
-        // if (isJSON(response)) {
-        //   let tasks = JSON.parse(response);
-        //   console.log(tasks);
-        //   let template = ``;
-        //   tasks.forEach((task) => {
-        //     const insumo_pedir = task.CANTIDAD_TOTAL - task.STOCK_ACTUAL;
-        //     if (insumo_pedir > 0) {
-        //       template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
-        //                     <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
-        //                     <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
-        //                   </tr>`;
-        //     }
-        //   });
-        //   $("#tablainsumorequerido").html(template);
-        // } else {
-        //   $("#tablainsumorequerido").html(template);
-        // }
+        if (isJSON(response)) {
+          let tasks = JSON.parse(response);
+          console.log(tasks);
+          let template = ``;
+          tasks.forEach((task) => {
+            const insumo_pedir = task.CANTIDAD_TOTAL - task.STOCK_ACTUAL;
+            if (insumo_pedir > 0) {
+              template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
+                            <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
+                            <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
+                          </tr>`;
+            }
+          });
+          if (template != "") {
+            $("#tablainsumorequerido").html(template);
+            tabla = "guardarproductoscompras";
+          } else {
+            tabla = "guardarrequerimiento";
+          }
+        } else {
+          $("#tablainsumorequerido").html(template);
+        }
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);

@@ -96,7 +96,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <!-- Tabla de insumos que se requiere-->
                         <!-- <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;display:none;"> -->
-                        <table id="tinsumorequerido" class="table table-sm mb-3 table-responsive table-hover" style="display:none;">
+                        <table id="tinsumorequerido" class="table table-sm mb-3 table-responsive table-hover">
                             <thead>
                                 <tr>
                                     <th class="thtitulo" scope="col">INSUMOS</th>
