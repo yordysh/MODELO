@@ -346,15 +346,21 @@ $(function () {
       // find(":input");
       let valorProducto = $(this).find("td:eq(0)").attr("id");
       let valorCan = $(this).find("td:eq(1)").html();
+      let taskid = $(this).attr("taskid");
       // let cod_formula = $(this).attr("taskId");
-      valoresCapturados.push(valorProducto, valorCan);
+      valoresCapturados.push(valorProducto, valorCan, taskid);
       // console.log(valorProducto + "hola" + valorCan + " cod " + cod_formula);
     });
 
     $("#tablaenvase tr").each(function () {
       let valorProductoEnvase = $(this).find("td:eq(0)").attr("id_envase");
       let valorCanEnvase = $(this).find("td:eq(1)").html();
-      valoresCapturadosEnvase.push(valorProductoEnvase, valorCanEnvase);
+      let id_envase = $(this).attr("idenvase");
+      valoresCapturadosEnvase.push(
+        valorProductoEnvase,
+        valorCanEnvase,
+        id_envase
+      );
     });
 
     $("#tablainsumoenvasetotal tr").each(function () {

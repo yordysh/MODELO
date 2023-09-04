@@ -74,9 +74,8 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 <thead>
                                     <tr>
                                         <th class="thtitulo" scope="col">CODIGO</th>
-                                        <th class="thtitulo" scope="col">PRODUCTO</th>
-
-                                        <th></th>
+                                        <th class="thtitulo" scope="col">FECHA</th>
+                                        <th class="thtitulo" scope="col">PENDIENTE</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablamostartotalpendientes">
@@ -94,26 +93,42 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             </div>
                         </div>
 
-                        <!-- Tabla de insumos que se requiere-->
-                        <!-- <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;display:none;"> -->
-                        <table id="tinsumorequerido" class="table table-sm mb-3 table-responsive table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="thtitulo" scope="col">INSUMOS</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablainsumorequerido">
+                        <!-- Tabla de producto por reuqerimiento que se requiere-->
+                        <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                            <table id="tproductorequerido" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">PRODUCTO</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaproductorequerido">
 
-                            </tbody>
-                        </table>
-                        <!-- </div> -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Tabla de insumos por requerimiento que se requiere-->
+                        <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                            <table id="tinsumorequerido" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">INSUMOS</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablainsumorequerido">
+
+                                </tbody>
+                            </table>
+                        </div>
                     </form>
 
-                    <!-- Tabla total-->
-                    <!-- <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
-                        <table id="tTotalinsumos" class="table table-sm mb-3 table-hover">
+                    <!-- Tabla total a comprar insumos-->
+                    <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                        <table id="tTotalinsumoscomprar" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
                                     <th class="thtitulo" scope="col">INSUMOS</th>
@@ -122,11 +137,11 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                                 </tr>
                             </thead>
-                            <tbody id="tablatotalinsumosrequeridos">
+                            <tbody id="tablatotalinsumosrequeridoscomprar">
 
                             </tbody>
                         </table>
-                    </div> -->
+                    </div>
 
 
                 </div>

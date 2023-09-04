@@ -322,28 +322,6 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_buscar_pendientes_requerimiento($buscarpendiente);
     echo $respuesta;
-} elseif ($accion == 'mostrarsihaycompra') {
-
-    $cod_formulacion = trim($_POST['cod_formulacion']);
-
-    $respuesta = c_almacen::c_mostrar_si_hay_compra($cod_formulacion);
-    echo $respuesta;
-} elseif ($accion == 'insertarordencompraitem') {
-    // var_dump($_POST);
-    // $union = $_POST['union'];
-    $observacioncompra = $_POST['observacioncompra'];
-    //$idRequerimiento = trim($_POST['idRequerimiento']);
-    $taskcodrequerimiento = trim($_POST['taskcodrequerimiento']);
-    if (isset($_POST['union']) && isset($_POST['idRequerimiento'])) {
-        $union = $_POST['union'];
-        $idRequerimiento = $_POST['idRequerimiento'];
-        $respuesta = c_almacen::c_insertar_orden_compra_item($union, $idRequerimiento, $observacioncompra, $taskcodrequerimiento);
-        echo $respuesta;
-    } else {
-        // echo "else";
-        $respuesta = c_almacen::c_actualizar_orden_compra_item($taskcodrequerimiento);
-        echo $respuesta;
-    }
 } elseif ($accion == 'insertarcantidadminima') {
 
     $selectCantidadminima = trim($_POST['selectCantidadminima']);
@@ -378,15 +356,47 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_calculo_registro_envases($seleccionarproductoregistro, $cantidad);
     echo $respuesta;
 } elseif ($accion == 'buscarpendientesrequeridostotal') {
-    $buscarpendiente = trim($_POST['buscarpendiente']);
 
-    $respuesta = c_almacen::c_mostrar_total_pendientes_requeridos($buscarpendiente);
+    $respuesta = c_almacen::c_mostrar_total_pendientes_requeridos();
     echo $respuesta;
 } elseif ($accion == 'mostrarseguncodformulacion') {
     $cod_formulacion = trim($_POST['cod_formulacion']);
 
     $respuesta = c_almacen::c_mostrar_segun_codformulacion($cod_formulacion);
     echo $respuesta;
+} elseif ($accion == 'mostrarproductoporrequerimiento') {
+    $cod_formulacion = trim($_POST['cod_formulacion']);
+
+    $respuesta = c_almacen::c_mostrar_producto_por_requerimiento($cod_formulacion);
+    echo $respuesta;
+} elseif ($accion == 'mostrarproductoinsumorequerimiento') {
+    $cod_formulacion = trim($_POST['cod_formulacion']);
+
+    $respuesta = c_almacen::c_mostrar_producto_por_insumo_requerimiento($cod_formulacion);
+    echo $respuesta;
+} elseif ($accion == 'mostrarsihaycompra') {
+
+    $cod_formulacion = trim($_POST['cod_formulacion']);
+
+    $respuesta = c_almacen::c_mostrar_si_hay_compra($cod_formulacion);
+    echo $respuesta;
+} elseif ($accion == 'insertarordencompraitem') {
+    // var_dump($_POST);
+    // $union = $_POST['union'];
+
+    $idRequerimiento = trim($_POST['idRequerimiento']);
+    // $taskcodrequerimiento = trim($_POST['taskcodrequerimiento']);
+    // if (isset($_POST['union']) && isset($_POST['idRequerimiento'])) {
+    if (isset($_POST['union'])) {
+        $union = $_POST['union'];
+        $idRequerimiento = $_POST['idRequerimiento'];
+        $respuesta = c_almacen::c_insertar_orden_compra_item($union, $idRequerimiento);
+        echo $respuesta;
+    } else {
+        // echo "else";
+        $respuesta = c_almacen::c_actualizar_orden_compra_item($taskcodrequerimiento);
+        echo $respuesta;
+    }
 }
 
 
@@ -2174,7 +2184,7 @@ class c_almacen
                     "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
                     "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                    "CANTIDAD_TOTAL" => $row->CANTIDAD_TOTAL,
+                    "SUMA_CANTIDADES" => $row->SUMA_CANTIDADES,
                     "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
                 );
             }
@@ -2186,14 +2196,14 @@ class c_almacen
         }
     }
 
-    static function c_insertar_orden_compra_item($union, $idRequerimiento, $observacioncompra, $taskcodrequerimiento)
+    static function c_insertar_orden_compra_item($union, $idRequerimiento)
     {
         $m_formula = new m_almacen();
         // var_dump($union);
         // var_dump($taskcodrequerimiento);
         // exit();
         if (isset($idRequerimiento)) {
-            $respuesta = $m_formula->InsertarOrdenCompraItem($union, $idRequerimiento, $observacioncompra, $taskcodrequerimiento);
+            $respuesta = $m_formula->InsertarOrdenCompraItem($union, $idRequerimiento);
             if ($respuesta) {
                 return "ok";
             } else {
@@ -2373,48 +2383,27 @@ class c_almacen
         }
     }
 
-    static function  c_mostrar_total_pendientes_requeridos($buscarpendiente)
+    static function  c_mostrar_total_pendientes_requeridos()
     {
         try {
 
-            if (!empty($buscarpendiente)) {
-                $mostrar = new m_almacen();
-                $datos = $mostrar->MostrarTotalPendientesRequeridos($buscarpendiente);
 
-                if (!$datos) {
-                    throw new Exception("Hubo un error en la consulta");
-                }
-                $json = array();
-                foreach ($datos as $row) {
-                    $json[] = array(
-                        "COD_CANTIDAD_MINIMA" => $row->COD_CANTIDAD_MINIMA,
-                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
-                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                        "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
-                    );
-                }
-                $jsonstring = json_encode($json);
-                echo $jsonstring;
-            } else {
-                $mostrar = new m_almacen();
-                $datos = $mostrar->MostrarTotalPendientesRequeridos($buscarpendiente);
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarTotalPendientesRequeridos();
 
-                if (!$datos) {
-                    throw new Exception("Hubo un error en la consulta");
-                }
-                $json = array();
-                foreach ($datos as $row) {
-                    $json[] = array(
-                        "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
-                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                        "CANTIDAD" => $row->CANTIDAD,
-                        "ESTADO" => $row->ESTADO,
-                    );
-                }
-                $jsonstring = json_encode($json);
-                echo $jsonstring;
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
             }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    "CANTIDAD" => $row->CANTIDAD,
+                    "FECHA" => convFecSistema($row->FECHA),
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -2439,6 +2428,62 @@ class c_almacen
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "CANTIDAD" => $row->CANTIDAD,
                     "ESTADO" => $row->ESTADO,
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_mostrar_producto_por_requerimiento($cod_formulacion)
+    {
+        try {
+
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarProductoPorRequerimiento($cod_formulacion);
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CANTIDAD" => $row->CANTIDAD,
+
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_mostrar_producto_por_insumo_requerimiento($cod_formulacion)
+    {
+        try {
+
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarProductoInsumoPorRequerimiento($cod_formulacion);
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CANTIDAD" => $row->CANTIDAD,
+
                 );
             }
             $jsonstring = json_encode($json);

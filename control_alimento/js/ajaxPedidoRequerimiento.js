@@ -32,11 +32,11 @@ $(function () {
 
   function mostrarPendientes() {
     const accion = "buscarpendientesrequeridostotal";
-    const search = "";
+
     $.ajax({
       url: "./c_almacen.php",
       type: "POST",
-      data: { accion: accion, buscarpendiente: search },
+      data: { accion: accion },
       success: function (response) {
         // console.log(response);
         if (isJSON(response)) {
@@ -45,10 +45,10 @@ $(function () {
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_REQUERIMIENTO}">
-                            <td data-titulo="CODIGO" >${task.COD_REQUERIMIENTO}</td>
-                            <td data-titulo="PRODUCTO" >${task.DES_PRODUCTO}</td>
-                            <td style="text-align:center;"><button class="custom-icon" name="mostrarinsumos" id="mostrarInsumosRequerimiento"><i class="icon-circle-with-plus"></i></button></td>
-                        </tr>`;
+                            <td data-titulo='CODIGO' style="text-align:center;">${task.COD_REQUERIMIENTO}</td>
+                            <td data-titulo='CODIGO' style="text-align:center;">${task.FECHA}</td>
+                            <td data-titulo='PENDIENTE' style="text-align:center;"><button class="custom-icon" name="mostrarinsumos" id="mostrarInsumosRequerimiento"><i class="icon-circle-with-plus"></i></button></td>
+                          </tr>`;
           });
           $("#tablamostartotalpendientes").html(template);
         } else {
@@ -60,20 +60,76 @@ $(function () {
       },
     });
   }
-  var tabla = "";
+
   $(document).on("click", "#mostrarInsumosRequerimiento", (e) => {
     e.preventDefault();
     let capturaTr = $(e.currentTarget).closest("tr");
 
     let cod_formulacion = capturaTr.attr("taskId");
-    console.log(cod_formulacion);
 
-    var tabla = document.getElementById("tinsumorequerido");
-    if (tabla.style.display === "none") {
-      tabla.style.display = "table";
-    } else {
-      tabla.style.display = "none";
-    }
+    const accionproductorequerimiento = "mostrarproductoporrequerimiento";
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        accion: accionproductorequerimiento,
+        cod_formulacion: cod_formulacion,
+      },
+      success: function (response) {
+        // console.log(JSON.parse(response));
+        if (isJSON(response)) {
+          let tasks = JSON.parse(response);
+          // console.log(tasks);
+          let template = ``;
+          tasks.forEach((task) => {
+            template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
+                            <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
+                            <td data-titulo="CANTIDAD"  style="text-align:center;">${task.CANTIDAD}</td>
+                            </tr>`;
+          });
+          $("#tablaproductorequerido").html(template);
+        } else {
+          $("#tablaproductorequerido").html(template);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+
+    const accionproductoinsumo = "mostrarproductoinsumorequerimiento";
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        accion: accionproductoinsumo,
+        cod_formulacion: cod_formulacion,
+      },
+      success: function (response) {
+        if (isJSON(response)) {
+          let tasks = JSON.parse(response);
+          // console.log(tasks);
+          let template = ``;
+
+          tasks.forEach((task) => {
+            template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
+                            <td data-titulo="INSUMOS"  style="text-align:center;" id_producto='${
+                              task.COD_PRODUCTO
+                            }'>${task.DES_PRODUCTO}</td>
+                            <td data-titulo="CANTIDAD"  style="text-align:center;">${parseFloat(
+                              task.CANTIDAD
+                            ).toFixed(2)}</td>
+                            </tr>`;
+          });
+          $("#tablainsumorequerido").html(template);
+        } else {
+          $("#tablainsumorequerido").html(template);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
 
     // $("#taskcodrequerimiento").val(cod_formulacion);
     const accionsihaycompra = "mostrarsihaycompra";
@@ -88,25 +144,32 @@ $(function () {
         console.log(JSON.parse(response));
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
-          console.log(tasks);
+
           let template = ``;
+
           tasks.forEach((task) => {
-            const insumo_pedir = task.CANTIDAD_TOTAL - task.STOCK_ACTUAL;
+            let insumo_pedir = task.SUMA_CANTIDADES - task.STOCK_ACTUAL;
             if (insumo_pedir > 0) {
-              template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
+              template += `<tr codigorequerimientototal="${task.COD_REQUERIMIENTO}">
                             <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
                             <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
                           </tr>`;
             }
           });
-          if (template != "") {
-            $("#tablainsumorequerido").html(template);
-            tabla = "guardarproductoscompras";
+
+          if (template === "") {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Insumos completos en el almacen",
+              showConfirmButton: false,
+              timer: 2500,
+            });
           } else {
-            tabla = "guardarrequerimiento";
+            $("#tablatotalinsumosrequeridoscomprar").html(template);
           }
         } else {
-          $("#tablainsumorequerido").html(template);
+          $("#tablatotalinsumosrequeridoscomprar").html(template);
         }
       },
       error: function (xhr, status, error) {
@@ -114,69 +177,70 @@ $(function () {
       },
     });
 
-    const accion = "mostrarseguncodformulacion";
-    $.ajax({
-      url: "./c_almacen.php",
-      type: "POST",
-      data: {
-        accion: accion,
-        cod_formulacion: cod_formulacion,
-      },
-      success: function (response) {
-        console.log(response);
-        // if (isJSON(response)) {
-        //   let tasks = JSON.parse(response);
-        //   console.log(tasks);
+    // const accion = "mostrarseguncodformulacion";
+    // $.ajax({
+    //   url: "./c_almacen.php",
+    //   type: "POST",
+    //   data: {
+    //     accion: accion,
+    //     cod_formulacion: cod_formulacion,
+    //   },
+    //   success: function (response) {
+    //     console.log(response);
+    //     // if (isJSON(response)) {
+    //     //   let tasks = JSON.parse(response);
+    //     //   console.log(tasks);
 
-        //   let template = ``;
-        //   tasks.forEach((task) => {
-        //     const insumo_pedir = task.CANTIDAD_TOTAL - task.STOCK_ACTUAL;
-        //     if (insumo_pedir > 0) {
-        //       template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
-        //                     <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
-        //                     <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
-        //                   </tr>`;
-        //     }
-        //   });
-        //   $("#tablainsumorequerido").html(template);
-        // } else {
-        //   $("#tablainsumorequerido").html(template);
-        // }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error al cargar los datos de la tabla:", error);
-      },
-    });
+    //     //   let template = ``;
+    //     //   tasks.forEach((task) => {
+    //     //     const insumo_pedir = task.CANTIDAD_TOTAL - task.STOCK_ACTUAL;
+    //     //     if (insumo_pedir > 0) {
+    //     //       template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
+    //     //                     <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
+    //     //                     <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
+    //     //                   </tr>`;
+    //     //     }
+    //     //   });
+    //     //   $("#tablainsumorequerido").html(template);
+    //     // } else {
+    //     //   $("#tablainsumorequerido").html(template);
+    //     // }
+    //   },
+    //   error: function (xhr, status, error) {
+    //     console.error("Error al cargar los datos de la tabla:", error);
+    //   },
+    // });
   });
 
   $("#insertarCompraInsumos").click((e) => {
     e.preventDefault();
-    let observacioncompra = $("#observacionCompra").val();
-    let valoresCapturadosVenta = [];
-    let taskcodvalor = $("#taskcodrequerimiento").val().trim();
 
-    let idRequerimiento = $("#tablainsumorequerido tr").attr(
+    let valoresCapturadosVenta = [];
+    // let taskcodvalor = $("#taskcodrequerimiento").val().trim();
+
+    let idRequerimiento = $("#tablaproductorequerido tr").attr(
       "codigorequerimiento"
     );
-    let tablainsumorequerido = $("#tablainsumorequerido");
-    let taskcodrequerimiento = $("#taskcodrequerimiento").val();
+    console.log(idRequerimiento);
+    // let tablainsumorequerido = $("#tablainsumorequerido");
+    // let taskcodrequerimiento = $("#taskcodrequerimiento").val();
 
-    $("#tablainsumorequerido tr").each(function () {
+    $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let id_producto_insumo = $(this).find("td:eq(0)").attr("id_producto");
       let cantidad_producto_insumo = $(this).find("td:eq(1)").text();
 
       valoresCapturadosVenta.push(id_producto_insumo, cantidad_producto_insumo);
     });
 
-    if (taskcodvalor === "" && observacioncompra == "") {
-      Swal.fire({
-        title: "¡Error!",
-        text: "Añadir los pendientes para guardar.",
-        icon: "error",
-        confirmButtonText: "Aceptar",
-      });
-      return;
-    }
+    // if (taskcodvalor === "" && observacioncompra == "") {
+    //   Swal.fire({
+    //     title: "¡Error!",
+    //     text: "Añadir los pendientes para guardar.",
+    //     icon: "error",
+    //     confirmButtonText: "Aceptar",
+    //   });
+    //   return;
+    // }
     const accion = "insertarordencompraitem";
 
     $.ajax({
@@ -186,8 +250,6 @@ $(function () {
         accion: accion,
         union: valoresCapturadosVenta,
         idRequerimiento: idRequerimiento,
-        observacioncompra: observacioncompra,
-        taskcodrequerimiento: taskcodrequerimiento,
       },
       success: function (response) {
         console.log("respuesta" + response);
