@@ -1,6 +1,5 @@
 $(function () {
-  mostrarPendientes();
-  mostrarRequerimientoTotal();
+  mostrarProduccionRequerimiento();
 
   //------------- MENU BAR JS ---------------//
   let nav = document.querySelector(".nav"),
@@ -30,8 +29,8 @@ $(function () {
   });
   //----------------------------------------------------------------//
 
-  function mostrarPendientes() {
-    const accion = "buscarpendientesrequeridostotal";
+  function mostrarProduccionRequerimiento() {
+    const accion = "mostrarproduccionrequerimiento";
 
     $.ajax({
       url: "./c_almacen.php",
@@ -41,18 +40,18 @@ $(function () {
         // console.log(response);
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
-
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_REQUERIMIENTO}">
-                            <td data-titulo='CODIGO' style="text-align:center;">${task.COD_REQUERIMIENTO}</td>
-                            <td data-titulo='CODIGO' style="text-align:center;">${task.FECHA}</td>
-                            <td data-titulo='PENDIENTE' style="text-align:center;"><button class="custom-icon" name="mostrarinsumos" id="mostrarInsumosRequerimiento"><i class="icon-circle-with-plus"></i></button></td>
-                          </tr>`;
+                              <td data-titulo='CODIGO' style="text-align:center;">${task.COD_REQUERIMIENTO}</td>
+                              <td data-titulo='PRODUCTO' style="text-align:center;">${task.DES_PRODUCTO}</td>
+                              <td data-titulo='CANTIDAD' style="text-align:center;">${task.CANTIDAD}</td>
+                              <td  style="text-align:center;"><button class="custom-icon" name="mostrarinsumos" id="mostrarInsumosRequerimiento"><i class="icon-circle-with-plus"></i></button></td>
+                            </tr>`;
           });
-          $("#tablamostartotalpendientes").html(template);
+          $("#tablaproduccionrequerimiento").html(template);
         } else {
-          $("#tablamostartotalpendientes").empty();
+          $("#tablaproduccionrequerimiento").empty();
         }
       },
       error: function (xhr, status, error) {
@@ -83,9 +82,9 @@ $(function () {
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
-                            <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CANTIDAD"  style="text-align:center;">${task.CANTIDAD}</td>
-                            </tr>`;
+                              <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
+                              <td data-titulo="CANTIDAD"  style="text-align:center;">${task.CANTIDAD}</td>
+                              </tr>`;
           });
           $("#tablaproductorequerido").html(template);
         } else {
@@ -113,13 +112,13 @@ $(function () {
 
           tasks.forEach((task) => {
             template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
-                            <td data-titulo="INSUMOS"  style="text-align:center;" id_producto='${
-                              task.COD_PRODUCTO
-                            }'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CANTIDAD"  style="text-align:center;">${parseFloat(
-                              task.CANTIDAD
-                            ).toFixed(2)}</td>
-                            </tr>`;
+                              <td data-titulo="INSUMOS"  style="text-align:center;" id_producto='${
+                                task.COD_PRODUCTO
+                              }'>${task.DES_PRODUCTO}</td>
+                              <td data-titulo="CANTIDAD"  style="text-align:center;">${parseFloat(
+                                task.CANTIDAD
+                              ).toFixed(2)}</td>
+                              </tr>`;
           });
           $("#tablainsumorequerido").html(template);
         } else {
@@ -155,9 +154,9 @@ $(function () {
 
             if (insumo_pedir > 0) {
               template += `<tr codigorequerimientototal="${task.COD_REQUERIMIENTO}">
-                            <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
-                          </tr>`;
+                              <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
+                              <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
+                            </tr>`;
             }
           });
 
@@ -194,26 +193,6 @@ $(function () {
     //     // if (isJSON(response)) {
     //     //   let tasks = JSON.parse(response);
     //     //   console.log(tasks);
-
-    //     //   let template = ``;
-    //     //   tasks.forEach((task) => {
-    //     //     const insumo_pedir = task.CANTIDAD_TOTAL - task.STOCK_ACTUAL;
-    //     //     if (insumo_pedir > 0) {
-    //     //       template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
-    //     //                     <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
-    //     //                     <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
-    //     //                   </tr>`;
-    //     //     }
-    //     //   });
-    //     //   $("#tablainsumorequerido").html(template);
-    //     // } else {
-    //     //   $("#tablainsumorequerido").html(template);
-    //     // }
-    //   },
-    //   error: function (xhr, status, error) {
-    //     console.error("Error al cargar los datos de la tabla:", error);
-    //   },
-    // });
   });
 
   $("#insertarCompraInsumos").click((e) => {
@@ -302,10 +281,10 @@ $(function () {
             );
             $resultadototalinsu = task.CANTIDAD_MINIMA * $resultado;
             template += `<tr taskId="${task.COD_REQUERIMIENTO}">
-                  <td data-titulo="INSUMOS">${task.DES_PRODUCTO}</td>
-                  <td data-titulo="CANTIDAD">${task.STOCK_RESULTANTE}</td>
-                  <td data-titulo="CANTIDAD COMPRA">${$resultadototalinsu}</td>                    
-               </tr>`;
+                    <td data-titulo="INSUMOS">${task.DES_PRODUCTO}</td>
+                    <td data-titulo="CANTIDAD">${task.STOCK_RESULTANTE}</td>
+                    <td data-titulo="CANTIDAD COMPRA">${$resultadototalinsu}</td>                    
+                 </tr>`;
           });
           $("#tablatotalinsumosrequeridos").html(template);
         } else {

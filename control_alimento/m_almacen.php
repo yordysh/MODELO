@@ -2254,6 +2254,9 @@ class m_almacen
       $this->bd->beginTransaction();
       $cod = new m_almacen();
 
+      // var_dump($union);
+      // exit();
+
       $codigo_orden_compra = $cod->generarCodigoOrdenCompra();
 
 
@@ -2281,14 +2284,14 @@ class m_almacen
         $multiplicacionTotal = $totalPedir * $cantidad_min;
 
 
-        $stmPedidoOrden = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA_ITEM(COD_ORDEN_COMPRA,COD_PRODUCTO, CANTIDAD_INSUMO_ENVASE)
-                                                  VALUES ('$codigo_orden_compra','$codProducto', '$multiplicacionTotal')");
+        $stmPedidoOrden = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA_ITEM(COD_ORDEN_COMPRA,COD_PRODUCTO,CANTIDAD_MINIMA,CANTIDAD_INSUMO_ENVASE)
+                                                  VALUES ('$codigo_orden_compra','$codProducto', '$canInsu','$multiplicacionTotal')");
         $insert = $stmPedidoOrden->execute();
       }
-      $fecha_generado = $cod->c_horaserversql('F');
-      // $fecha_generado = '29/08/2023';
+      // $fecha_generado = $cod->c_horaserversql('F');
+      $fecha_actual = '02/09/2023';
       //echo $fecha_generado;
-      // $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
+      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
       $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $stmActualizar->execute();
 
@@ -2303,14 +2306,15 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function ActualizarOrdenCompraItem($taskcodrequerimiento)
+  public function ActualizarOrdenCompraItem($idRequerimiento)
   {
     $cod = new m_almacen();
-    $fecha_generado = $cod->c_horaserversql('F');
-    // $fecha_generado = '29/08/2023';
+    // $fecha_generado = $cod->c_horaserversql('F');
+    $fecha_actual = '04/09/2023';
     //echo $fecha_generado;
-    // $fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
-    $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$taskcodrequerimiento'");
+    $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+    $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
+
     $stmActualizarOrden->execute();
 
 
@@ -2499,6 +2503,25 @@ class m_almacen
                                         TP.DES_PRODUCTO AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD
                                         FROM T_TMPREQUERIMIENTO_INSUMO TRI INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
                                         WHERE TRI.COD_REQUERIMIENTO='$cod_formulacion'");
+
+      $stmCalculo->execute();
+      $datos = $stmCalculo->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+
+  public function MostrarProduccionRequerimiento()
+  {
+    try {
+
+      $stmCalculo = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO, 
+                                          TP.DES_PRODUCTO AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD FROM T_TMPREQUERIMIENTO_ITEM TRI 
+                                          INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO WHERE TRI.ESTADO='P'");
 
       $stmCalculo->execute();
       $datos = $stmCalculo->fetchAll(PDO::FETCH_OBJ);

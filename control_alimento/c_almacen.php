@@ -394,9 +394,15 @@ if ($accion == 'insertar') {
         echo $respuesta;
     } else {
         // echo "else";
-        $respuesta = c_almacen::c_actualizar_orden_compra_item($taskcodrequerimiento);
+        $respuesta = c_almacen::c_actualizar_orden_compra_item($idRequerimiento);
         echo $respuesta;
     }
+} elseif ($accion == 'mostrarproduccionrequerimiento') {
+
+    // $cod_formulacion = trim($_POST['cod_formulacion']);
+
+    $respuesta = c_almacen::c_mostrar_producccion_por_requerimiento();
+    echo $respuesta;
 }
 
 
@@ -2202,6 +2208,7 @@ class c_almacen
         // var_dump($union);
         // var_dump($taskcodrequerimiento);
         // exit();
+
         if (isset($idRequerimiento)) {
             $respuesta = $m_formula->InsertarOrdenCompraItem($union, $idRequerimiento);
             if ($respuesta) {
@@ -2211,14 +2218,16 @@ class c_almacen
             };
         }
     }
-    static function c_actualizar_orden_compra_item($taskcodrequerimiento)
+    static function c_actualizar_orden_compra_item($idRequerimiento)
     {
         $m_formula = new m_almacen();
         // var_dump($union);
         // var_dump($taskcodrequerimiento);
         // exit();
-        if (isset($taskcodrequerimiento)) {
-            $respuesta = $m_formula->ActualizarOrdenCompraItem($taskcodrequerimiento);
+        // echo 'aqui';
+        if (isset($idRequerimiento)) {
+            $respuesta = $m_formula->ActualizarOrdenCompraItem($idRequerimiento);
+            // var_dump($respuesta);
             if ($respuesta) {
                 return "ok";
             } else {
@@ -2472,6 +2481,34 @@ class c_almacen
 
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarProductoInsumoPorRequerimiento($cod_formulacion);
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CANTIDAD" => $row->CANTIDAD,
+
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_mostrar_producccion_por_requerimiento()
+    {
+        try {
+
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarProduccionRequerimiento();
 
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
