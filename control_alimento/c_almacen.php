@@ -403,6 +403,18 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_mostrar_producccion_por_requerimiento();
     echo $respuesta;
+} elseif ($accion == 'insertarproducciontotal') {
+    $codrequerimientoproduccion = trim($_POST['codrequerimientoproduccion']);
+    $codproductoproduccion = trim($_POST['codproductoproduccion']);
+    $numeroproduccion = trim($_POST['numeroproduccion']);
+    $cantidadtotalproduccion = trim($_POST['cantidadtotalproduccion']);
+    $fechainicio = trim($_POST['fechainicio']);
+    $fechavencimiento = trim($_POST['fechavencimiento']);
+    $textAreaObservacion = trim($_POST['textAreaObservacion']);
+    $cantidadcaja = trim($_POST['cantidadcaja']);
+
+    $respuesta = c_almacen::c_insertar_produccion_total($codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja);
+    echo $respuesta;
 }
 
 
@@ -2087,7 +2099,7 @@ class c_almacen
             $json = array();
             foreach ($datos as $row) {
                 $calculo = ($row->CANTIDA * $cantidadesinsumoenvases) / $row->CAN_FORMULACION;
-                $total = round($calculo, 3);
+                $total = ceil($calculo);
                 // $total =  bcdiv($calculo, '1', 3);
 
                 $json[] = array(
@@ -2527,6 +2539,20 @@ class c_almacen
             echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_insertar_produccion_total($codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($codrequerimientoproduccion) && isset($codproductoproduccion) && isset($numeroproduccion) && isset($cantidadtotalproduccion) && isset($fechainicio) && isset($cantidadcaja)) {
+            $respuesta = $m_formula->InsertarProduccionTotalRequerimiento($codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja);
+
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
         }
     }
 }

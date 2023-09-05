@@ -2104,7 +2104,6 @@ class m_almacen
                                 (SELECT CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_FORMULACION='$codigo_genera_formulacion') AS CAN_FORMULACION
                                 FROM T_TMPFORMULACION_ENVASE TE 
                                 INNER JOIN T_PRODUCTO AS TP ON TE.COD_PRODUCTO= TP.COD_PRODUCTO  WHERE TE.COD_FORMULACION='$codigo_genera_formulacion'");
-
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
@@ -2151,13 +2150,13 @@ class m_almacen
       }
 
       for ($i = 0; $i < count($unionEnvase); $i += 3) {
-        // $codFormulacion = $unionEnvase[$i];
+
         $codProductoEnvase = $unionEnvase[$i];
         $canEnvase = $unionEnvase[$i + 1];
-        $cod_producto_envase = $union[$i + 2];
+        $cod_producto_item_envase = $unionEnvase[$i + 2];
 
         $stmRequeEnvase = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO,COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
-        VALUES ('$codRequerimiento','$cod_producto_envase', '$codProductoEnvase', '$canEnvase')");
+        VALUES ('$codRequerimiento','$cod_producto_item_envase', '$codProductoEnvase', '$canEnvase')");
         $stmRequeEnvase->execute();
       }
 
@@ -2515,6 +2514,29 @@ class m_almacen
 
 
 
+  public function CodigoProduccionGenerado()
+  {
+    $stm = $this->bd->prepare("SELECT MAX(COD_PRODUCCION) as COD_PRODUCCION FROM T_TMPPRODUCCION");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+
+
+    $maxCodigo = intval($resultado['COD_PRODUCCION']);
+
+    $nuevoCodigo = $maxCodigo + 1;
+    $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
+    return $codigoAumento;
+  }
+
+  public function CodigoCategoriaProducto($codproductoproduccion)
+  {
+    $stm = $this->bd->prepare("SELECT MAX(COD_CATEGORIA) as COD_CATEGORIA FROM T_PRODUCTO WHERE COD_PRODUCTO='$codproductoproduccion'");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+
+    $maxCodigo = $resultado['COD_CATEGORIA'];
+    return $maxCodigo;
+  }
   public function MostrarProduccionRequerimiento()
   {
     try {
@@ -2528,6 +2550,72 @@ class m_almacen
 
       return $datos;
     } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function InsertarProduccionTotalRequerimiento($codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja)
+  {
+    try {
+      $this->bd->beginTransaction();
+
+      $codigoformula = new m_almacen();
+      $codigo_de_produccion_generado = $codigoformula->CodigoProduccionGenerado();
+      $codigo_categoria = $codigoformula->CodigoCategoriaProducto($codproductoproduccion);
+
+      $stmProducciontototal = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION(COD_PRODUCCION, COD_REQUERIMIENTO, COD_CATEGORIA, COD_PRODUCTO, NUM_PRODUCION_LOTE, CAN_PRODUCCION, FEC_GENERADO,FEC_VENCIMIENTO, OBSERVACION, COD_ALMACEN,CAN_CAJA)
+      VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$fechainicio','$fechavencimiento','$textAreaObservacion','00017','$cantidadcaja')");
+
+      $insert = $stmProducciontototal->execute();
+
+
+      $stmConsulta = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,TRI.CANTIDAD AS CANTIDAD_ITEM,
+                                          TI.COD_PRODUCTO AS COD_PRODUCTO, TI.CANTIDAD AS CANTIDAD_INSUMOS FROM T_TMPREQUERIMIENTO_ITEM TRI 
+                                          INNER JOIN T_TMPREQUERIMIENTO_INSUMO TI ON TRI.COD_REQUERIMIENTO=TI.COD_REQUERIMIENTO
+                                          WHERE TRI.COD_REQUERIMIENTO='$codrequerimientoproduccion' AND TRI.COD_PRODUCTO='$codproductoproduccion'");
+
+      $stmConsulta->execute();
+      $consulta = $stmConsulta->fetchAll(PDO::FETCH_OBJ);
+
+
+      $stmConsultaEnvase = $this->bd->prepare("SELECT TI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TI.COD_PRODUCTO AS COD_PRODUCTO, 
+                                                TE.COD_PRODUCTO AS COD_PRODUCTO, TE.CANTIDAD AS CANTIDAD_ENVASE  FROM T_TMPREQUERIMIENTO_ITEM TI 
+                                                INNER JOIN T_TMPREQUERIMIENTO_ENVASE TE ON TI.COD_REQUERIMIENTO=TE.COD_REQUERIMIENTO
+                                                WHERE TI.COD_REQUERIMIENTO='$codrequerimientoproduccion' AND TI.COD_PRODUCTO='$codproductoproduccion'");
+
+      $stmConsultaEnvase->execute();
+      $consultaenvase =  $stmConsultaEnvase->fetchAll(PDO::FETCH_OBJ);
+
+      foreach ($consulta as $row) {
+
+        $codProductoitem = $row->COD_PRODUCTO;
+        $cantidadInsumos = $row->CANTIDAD_INSUMOS;
+        $codigo_categoria = $codigoformula->CodigoCategoriaProducto($codProductoitem);
+        $stmProduccionitem = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_ITEM(COD_PRODUCCION, COD_CATEGORIA, COD_PRODUCTO,  CAN_PRODUCCION)
+                                                  VALUES ('$codigo_de_produccion_generado','$codigo_categoria','$codProductoitem','$cantidadInsumos')");
+
+        $stmProduccionitem->execute();
+      }
+
+      foreach ($consultaenvase as $rowEnvase) {
+
+        $codProductoenvase = $rowEnvase->COD_PRODUCTO;
+        $cantidadEnvases = $rowEnvase->CANTIDAD_ENVASE;
+        $codigo_categoria_envase = $codigoformula->CodigoCategoriaProducto($codProductoenvase);
+        $stmProduccionenvases = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_ENVASE(COD_PRODUCCION, COD_CATEGORIA_ENVASE, COD_PRODUCTO,  CAN_PRODUCCION_ENVASE)
+                                                  VALUES ('$codigo_de_produccion_generado','$codigo_categoria_envase','$codProductoenvase','$cantidadEnvases')");
+
+        $stmProduccionenvases->execute();
+      }
+
+      $stmActualiza = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='A' WHERE COD_REQUERIMIENTO='$codrequerimientoproduccion' AND COD_PRODUCTO='$codproductoproduccion'");
+      $stmActualiza->execute();
+
+
+
+      $insert = $this->bd->commit();
+      return $insert;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
       die($e->getMessage());
     }
   }

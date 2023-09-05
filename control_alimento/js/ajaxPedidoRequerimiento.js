@@ -157,6 +157,7 @@ $(function () {
               template += `<tr codigorequerimientototal="${task.COD_REQUERIMIENTO}">
                             <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
                             <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
+                            <td data-titulo="CANTIDAD COMPRA"  style="text-align:center;">${insumo_pedir}</td>
                           </tr>`;
             }
           });
@@ -301,10 +302,12 @@ $(function () {
               task.STOCK_RESULTANTE / task.CANTIDAD_MINIMA
             );
             $resultadototalinsu = task.CANTIDAD_MINIMA * $resultado;
+            // console.log("object");
+            // console.log($resultadototalinsu);
             template += `<tr taskId="${task.COD_REQUERIMIENTO}">
                   <td data-titulo="INSUMOS">${task.DES_PRODUCTO}</td>
                   <td data-titulo="CANTIDAD">${task.STOCK_RESULTANTE}</td>
-                  <td data-titulo="CANTIDAD COMPRA">${$resultadototalinsu}</td>                    
+                  <td data-titulo="CANTIDAD COMPRA">${resultadototalinsu}</td>                    
                </tr>`;
           });
           $("#tablatotalinsumosrequeridos").html(template);

@@ -39,13 +39,16 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
             </li>
             <li>
-                <a class="" href="#">Pedido requerimiento</a>
+                <a class="" href="pedidoRequerimiento.php">Pedido requerimiento</a>
             </li>
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
             </li>
-            <li>
+            <!-- <li>
                 <a class="" href="registroEnvases.php">Registros envases</a>
+            </li> -->
+            <li>
+                <a class="" href="#">Produccion requerimiento</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -69,7 +72,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
 
                         <!-- Tabla total requerimiento pedido-->
-                        <div class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:20px;margin-bottom:20px;">
+                        <div class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:20px;margin-bottom:50px;">
                             <table id="tmostrarproduccionrequerimiento" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
@@ -83,47 +86,53 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 </tbody>
                             </table>
                         </div>
-                        <!-- Insertar nuevas cantidades -->
+
+                        <!-- Text input producto seleccionado-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Producto</label>
+                            <input type="hidden" id="idhiddencodrequerimiento">
+                            <input type="hidden" id="idhiddenproducto">
+                            <input type="text" id="productorequerimientoitem" class="form-control" name="" disabled>
+                        </div>
+                        <!-- Text input numero de produccion-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">N° produccion</label>
+                            <input type="text" id="numeroproduccion" class="form-control" name="" required>
+                        </div>
+
+                        <!-- Text input cantidad produccion-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Cantidad produccion</label>
+                            <input type="text" id="cantidadhiddentotalrequerimiento" class="form-control" name="" disabled>
+                        </div>
+                        <!-- Text input fecha inicio-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Fecha inicio</label>
+                            <input type="date" id="fechainicio" class="form-control" name="">
+                        </div>
+                        <!-- Text input fecha inicio-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Fecha vencimiento</label>
+                            <input type="date" id="fechavencimiento" class="form-control" name="">
+                        </div>
+                        <!-- Text input cantidad por caja-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Cantidad por caja</label>
+                            <input type="number" id="cantidadcaja" class="form-control" name="" value="20">
+                        </div>
+                        <!-- Text input Observacion-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Observaciones</label>
+                            <textarea class="form-control" id="textAreaObservacion" rows="3"></textarea>
+                        </div>
+                        <!-- Insertar produccion por requerimiento -->
                         <div class="contenedor">
 
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskcodrequerimiento">
                                 <button id="insertarProduccionRequerimiento" name="produccionrequerimiento" class="btn btn-primary bt-insert">Guardar</button>
-                                <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
                             </div>
                         </div>
-
-                        <!-- Tabla de producto por reuqerimiento que se requiere-->
-                        <!-- <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
-                            <table id="tproductorequerido" class="table table-sm mb-3 table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="thtitulo" scope="col">PRODUCTO</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaproductorequerido">
-
-                                </tbody>
-                            </table>
-                        </div> -->
-
-                        <!-- Tabla de insumos por requerimiento que se requiere-->
-                        <!-- <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
-                            <table id="tinsumorequerido" class="table table-sm mb-3 table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="thtitulo" scope="col">INSUMOS</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablainsumorequerido">
-
-                                </tbody>
-                            </table>
-                        </div> -->
                     </form>
 
                     <!-- Tabla total a comprar insumos-->

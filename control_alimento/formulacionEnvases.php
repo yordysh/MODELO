@@ -45,8 +45,11 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
             </li>
-            <li>
+            <!-- <li>
                 <a class="" href="registroEnvases.php">Registros envases</a>
+            </li> -->
+            <li>
+                <a class="" href="produccionRequerimiento.php">Produccion requerimiento</a>
             </li>
         </ul>
 

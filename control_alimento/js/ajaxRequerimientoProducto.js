@@ -310,7 +310,7 @@ $(function () {
             }
           } else {
             envases.forEach((envase) => {
-              templateEnvase += `<tr idenvase="${envase.COD_FORMULACIONES}">
+              templateEnvase += `<tr idenvasecodigo="${envase.COD_FORMULACIONES}">
                                 <td data-titulo="ENVASES" id_envase='${envase.COD_PRODUCTO}'>${envase.DES_PRODUCTO}</td>
                                 <td data-titulo="CANTIDAD">${envase.TOTAL_ENVASE}</td>
                              </tr>`;
@@ -355,11 +355,11 @@ $(function () {
     $("#tablaenvase tr").each(function () {
       let valorProductoEnvase = $(this).find("td:eq(0)").attr("id_envase");
       let valorCanEnvase = $(this).find("td:eq(1)").html();
-      let id_envase = $(this).attr("idenvase");
+      let idenvasecodigo = $(this).attr("idenvasecodigo");
       valoresCapturadosEnvase.push(
         valorProductoEnvase,
         valorCanEnvase,
-        id_envase
+        idenvasecodigo
       );
     });
 
