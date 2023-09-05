@@ -63,6 +63,7 @@ $(function () {
 
   $(document).on("click", "#mostrarInsumosRequerimiento", (e) => {
     e.preventDefault();
+
     let capturaTr = $(e.currentTarget).closest("tr");
 
     let cod_formulacion = capturaTr.attr("taskId");
@@ -170,7 +171,9 @@ $(function () {
               showConfirmButton: false,
               timer: 2500,
             });
+            $("#mensajecompleto").css("display", "block");
           } else {
+            $("#mensajecompleto").css("display", "none");
             $("#tablatotalinsumosrequeridoscomprar").html(template);
           }
         } else {
@@ -269,6 +272,7 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#taskcodrequerimiento").val("");
+              $("#mensajecompleto").css("display", "none");
               tablainsumorequerido.empty();
               tablainsumos.empty();
               tablatotal.empty();

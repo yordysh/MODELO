@@ -44,9 +44,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
             </li>
-            <li>
+            <!-- <li>
                 <a class="" href="registroEnvases.php">Registros envases</a>
-            </li>
+            </li> -->
             <li>
                 <a class="" href="produccionRequerimiento.php">Produccion requerimiento</a>
             </li>
@@ -92,6 +92,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <div class="ctnBtn">
                                 <input type="hidden" id="taskcodrequerimiento">
                                 <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-primary bt-insert">Guardar</button>
+                                <input type="text" id="mensajecompleto" style="width: 270px; font-weight:bold; display:none;" value="Insumos completos en el almacen" disabled>
                                 <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
                             </div>
                         </div>
