@@ -36,10 +36,10 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <a class="" href="formulacionEnvases.php">Formulacion</a>
             </li>
             <li>
-                <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
+                <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
             </li>
             <li>
-                <a class="" href="pedidoRequerimiento.php">Pedido requerimiento</a>
+                <a class="" href="pedidoRequerimiento.php">Confirmacion de requerimiento</a>
             </li>
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
@@ -107,7 +107,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
                         <!-- Text input fecha inicio-->
                         <div class="form-outline mb-4">
-                            <label class="form-label">Fecha inicio</label>
+                            <label class="form-label">Fecha produccion</label>
                             <input type="date" id="fechainicio" class="form-control" name="">
                         </div>
                         <!-- Text input fecha inicio-->

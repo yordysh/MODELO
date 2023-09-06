@@ -48,6 +48,7 @@ $(function () {
                             <td data-titulo='CODIGO' style="text-align:center;">${task.COD_REQUERIMIENTO}</td>
                             <td data-titulo='CODIGO' style="text-align:center;">${task.FECHA}</td>
                             <td data-titulo='PENDIENTE' style="text-align:center;"><button class="custom-icon" name="mostrarinsumos" id="mostrarInsumosRequerimiento"><i class="icon-circle-with-plus"></i></button></td>
+                            <td data-titulo='RECHAZAR' style="text-align:center;"><button class="btn btn-danger" name="rechazarpedido" id="eliminarinsumorequerimiento"><i class="icon-trash"></i></button></td>
                           </tr>`;
           });
           $("#tablamostartotalpendientes").html(template);
@@ -132,7 +133,7 @@ $(function () {
       },
     });
 
-    // $("#taskcodrequerimiento").val(cod_formulacion);
+    $("#taskcodrequhiddenvalidar").val(cod_formulacion);
     const accionsihaycompra = "mostrarsihaycompra";
     $.ajax({
       url: "./c_almacen.php",
@@ -149,16 +150,23 @@ $(function () {
           let template = ``;
 
           tasks.forEach((task) => {
-            // let insumo_pedir = task.SUMA_CANTIDADES - task.STOCK_ACTUAL;
             let insumo_pedir = (
               task.SUMA_CANTIDADES - task.STOCK_ACTUAL
             ).toFixed(3);
-
+            let total_comprar = Math.ceil(insumo_pedir / task.CANTIDAD_MINIMA);
+            let cantidadtotalminima = total_comprar * task.CANTIDAD_MINIMA;
             if (insumo_pedir > 0) {
+              if (task.CANTIDAD_MINIMA == 0) {
+                Swal.fire({
+                  icon: "error",
+                  title: "Añadir cantidad minima",
+                  text: "Producto no tiene cantidad minima a comprar.",
+                });
+              }
               template += `<tr codigorequerimientototal="${task.COD_REQUERIMIENTO}">
                             <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
                             <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
-                            <td data-titulo="CANTIDAD COMPRA"  style="text-align:center;">${insumo_pedir}</td>
+                            <td data-titulo="CANTIDAD COMPRA"  style="text-align:center;">${cantidadtotalminima}</td>
                           </tr>`;
             }
           });
@@ -184,40 +192,6 @@ $(function () {
         console.error("Error al cargar los datos de la tabla:", error);
       },
     });
-
-    // const accion = "mostrarseguncodformulacion";
-    // $.ajax({
-    //   url: "./c_almacen.php",
-    //   type: "POST",
-    //   data: {
-    //     accion: accion,
-    //     cod_formulacion: cod_formulacion,
-    //   },
-    //   success: function (response) {
-    //     console.log(response);
-    //     // if (isJSON(response)) {
-    //     //   let tasks = JSON.parse(response);
-    //     //   console.log(tasks);
-
-    //     //   let template = ``;
-    //     //   tasks.forEach((task) => {
-    //     //     const insumo_pedir = task.CANTIDAD_TOTAL - task.STOCK_ACTUAL;
-    //     //     if (insumo_pedir > 0) {
-    //     //       template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
-    //     //                     <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
-    //     //                     <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
-    //     //                   </tr>`;
-    //     //     }
-    //     //   });
-    //     //   $("#tablainsumorequerido").html(template);
-    //     // } else {
-    //     //   $("#tablainsumorequerido").html(template);
-    //     // }
-    //   },
-    //   error: function (xhr, status, error) {
-    //     console.error("Error al cargar los datos de la tabla:", error);
-    //   },
-    // });
   });
 
   $("#insertarCompraInsumos").click((e) => {
@@ -229,11 +203,11 @@ $(function () {
     let idRequerimiento = $("#tablaproductorequerido tr").attr(
       "codigorequerimiento"
     );
-    console.log(idRequerimiento);
+    // console.log(idRequerimiento);
     let tablainsumorequerido = $("#tablaproductorequerido");
     let tablainsumos = $("#tablainsumorequerido");
     let tablatotal = $("#tablatotalinsumosrequeridoscomprar");
-    // let taskcodrequerimiento = $("#taskcodrequerimiento").val();
+    let taskcodrequhiddenvalidar = $("#taskcodrequhiddenvalidar").val();
 
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let id_producto_insumo = $(this).find("td:eq(0)").attr("id_producto");
@@ -242,15 +216,15 @@ $(function () {
       valoresCapturadosVenta.push(id_producto_insumo, cantidad_producto_insumo);
     });
 
-    // if (taskcodvalor === "" && observacioncompra == "") {
-    //   Swal.fire({
-    //     title: "¡Error!",
-    //     text: "Añadir los pendientes para guardar.",
-    //     icon: "error",
-    //     confirmButtonText: "Aceptar",
-    //   });
-    //   return;
-    // }
+    if (taskcodrequhiddenvalidar === "") {
+      Swal.fire({
+        title: "¡Error!",
+        text: "Añadir los pendientes para guardar.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    }
     const accion = "insertarordencompraitem";
 
     $.ajax({
@@ -272,6 +246,7 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#taskcodrequerimiento").val("");
+              $("#taskcodrequhiddenvalidar").val("");
               $("#mensajecompleto").css("display", "none");
               tablainsumorequerido.empty();
               tablainsumos.empty();
@@ -288,6 +263,50 @@ $(function () {
     });
   });
 
+  $(document).on("click", "#eliminarinsumorequerimiento", (e) => {
+    e.preventDefault();
+
+    let capturaTrEliminar = $(e.currentTarget).closest("tr");
+
+    let cod_requerimiento_pedido = capturaTrEliminar.attr("taskId");
+    // console.log(cod_requerimiento);
+    const accioneliminar = "rechazarpendienterequerimiento";
+
+    Swal.fire({
+      title: "¿Está seguro de rechazar este registro?",
+      text: "Este pediente contiene varios productos.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "./c_almacen.php",
+          type: "POST",
+          data: {
+            accion: accioneliminar,
+            cod_requerimiento_pedido: cod_requerimiento_pedido,
+          },
+          success: function (response) {
+            mostrarPendientes();
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Registro rechazado correctamente.",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          },
+          error: function (xhr, status, error) {
+            console.error("Error al cargar los datos de la tabla:", error);
+          },
+        });
+      }
+    });
+  });
   function mostrarRequerimientoTotal() {
     const accion = "mostrarRquerimientoTotal";
     const search = "";

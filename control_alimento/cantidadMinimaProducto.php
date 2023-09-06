@@ -35,16 +35,19 @@ $dataCantidadMinima = $mostrar->MostrarProductoInsumos();
                 <a class="" href="formulacionEnvases.php">Formulacion</a>
             </li>
             <li>
-                <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
+                <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
             </li>
             <li>
-                <a class="" href="pedidoRequerimiento.php">Pedido requerimiento</a>
+                <a class="" href="pedidoRequerimiento.php">Confirmacion de requerimiento</a>
             </li>
             <li>
                 <a class="" href="#">Cantidad minima</a>
             </li>
-            <li>
+            <!-- <li>
                 <a class="" href="registroEnvases.php">Registros envases</a>
+            </li> -->
+            <li>
+                <a class="" href="produccionRequerimiento.php">Produccion requerimiento</a>
             </li>
         </ul>
 

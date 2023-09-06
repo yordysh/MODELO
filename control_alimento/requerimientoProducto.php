@@ -37,10 +37,10 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <a class="" href="formulacionEnvases.php">Formulacion</a>
             </li>
             <li>
-                <a class="" href="#">Requerimiento produccion</a>
+                <a class="" href="#">Requerimiento producto</a>
             </li>
             <li>
-                <a class="" href="pedidoRequerimiento.php">Pedido requerimiento</a>
+                <a class="" href="pedidoRequerimiento.php">Confirmacion de requerimiento</a>
             </li>
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
@@ -105,6 +105,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <!-- Tabla de total de productos-->
                         <div id="tablaTotal" class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:20px;">
+                            <div class="row g-4 top-div">
+                                <center><label class="title_table">TOTAL DE PRODUCTOS</label></center>
+                            </div>
                             <table class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
@@ -121,6 +124,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <!-- Tabla de insumos-->
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                            <div class="row g-4 top-div">
+                                <center><label class="title_table">TOTAL DE INSUMOS POR PRODUCTO</label></center>
+                            </div>
                             <table id="tinsumo" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
@@ -154,6 +160,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <!-- Tabla de envases-->
                         <div id="tablaE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                            <div class="row g-4 top-div">
+                                <center><label class="title_table">TOTAL DE ENVASES POR PRODUCTO</label></center>
+                            </div>
                             <table class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>

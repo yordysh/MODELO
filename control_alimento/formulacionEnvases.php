@@ -37,10 +37,10 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                 <a class="" href="#">Formulacion</a>
             </li>
             <li>
-                <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
+                <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
             </li>
             <li>
-                <a class="" href="pedidoRequerimiento.php">Pedido requerimiento</a>
+                <a class="" href="pedidoRequerimiento.php">Confirmacion de requerimiento</a>
             </li>
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>

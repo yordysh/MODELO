@@ -1858,10 +1858,10 @@ class m_almacen
 
 
 
-      // $fecha_generado = $codigoform->c_horaserversql('F');
-      $fecha_actual = '01/09/2023';
+      $fecha_generado = $codigoform->c_horaserversql('F');
+      // $fecha_actual = '01/09/2023';
       //echo $fecha_generado;
-      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $codigo_formulacion = $codigoform->generarCodigoFormulacion();
       $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);
@@ -1980,18 +1980,12 @@ class m_almacen
       $this->bd->beginTransaction();
       $requerimientoProd = new m_almacen();
 
-      // $fecha_generado = '16/08/2023';
       // $fecha_generado = $requerimientoProd->c_horaserversql('F');
-      // echo $fecha_generado;
-      //$fecha_formateada = date_create_from_format('d/m/Y', $fecha_generado)->format('Y-m-d');
 
       $codigo_requerimiento_producto = $requerimientoProd->generarCodigoRequerimientoProducto();
       $cantidad_formulacion = $requerimientoProd->valorFormulacion($selectProductoCombo);
 
       $codigo_formulacion_ins = $requerimientoProd->CodigoFormulacionProducto($selectProductoCombo);
-
-      // $cantidad_requerimiento_Ins = ceil($cantidadProducto / $cantidad_formulacion);
-
 
 
       $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ITEM(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
@@ -2215,24 +2209,30 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,
-      TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(CANTIDAD) AS SUMA_CANTIDADES, TAI.STOCK_ACTUAL AS STOCK_ACTUAL
-      FROM T_TMPREQUERIMIENTO_INSUMO TRI
-      INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
-      INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO
-      WHERE COD_REQUERIMIENTO='$cod_formulacion'
-      GROUP BY COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO,TAI.STOCK_ACTUAL");
-      // $stm = $this->bd->prepare("SELECT TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,
-      //                             TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(TRI.CANTIDAD) AS CANTIDAD_TOTAL,
-      //                             TAI.STOCK_ACTUAL AS STOCK_ACTUAL, SUM(TRI.CANTIDAD) - MAX(TAI.STOCK_ACTUAL) AS STOCK_RESULTANTE,
-      //                             CM.CANTIDAD_MINIMA AS CANTIDAD_MINIMA
-      //                             FROM T_TMPREQUERIMIENTO TR INNER JOIN T_TMPREQUERIMIENTO_INSUMO TRI ON TR.COD_REQUERIMIENTO = TRI.COD_REQUERIMIENTO
-      //                             INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO = TP.COD_PRODUCTO
-      //                             INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TRI.COD_PRODUCTO = TAI.COD_PRODUCTO
-      //                             INNER JOIN T_TMPCANTIDAD_MINIMA CM ON TRI.COD_PRODUCTO = CM.COD_PRODUCTO
-      //                             WHERE TR.COD_REQUERIMIENTO='$cod_formulacion'                            
-      //                             GROUP BY TR.COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO, TAI.STOCK_ACTUAL, CM.CANTIDAD_MINIMA
-      //                             HAVING SUM(TRI.CANTIDAD) - MAX(TAI.STOCK_ACTUAL) > 0");
+
+      // $stm = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,
+      // TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(CANTIDAD) AS SUMA_CANTIDADES, TAI.STOCK_ACTUAL AS STOCK_ACTUAL
+      // FROM T_TMPREQUERIMIENTO_INSUMO TRI
+      // INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
+      // INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO
+      // WHERE COD_REQUERIMIENTO='$cod_formulacion'
+      // GROUP BY COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO,TAI.STOCK_ACTUAL");
+      // $stm = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO, 
+      //                             TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(CANTIDAD) AS SUMA_CANTIDADES, TAI.STOCK_ACTUAL AS STOCK_ACTUAL,
+      //                             TC.CANTIDAD_MINIMA AS CANTIDAD_MINIMA
+      //                             FROM T_TMPREQUERIMIENTO_INSUMO TRI INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
+      //                             INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO 
+      //                             INNER JOIN T_TMPCANTIDAD_MINIMA TC ON TRI.COD_PRODUCTO = TC.COD_PRODUCTO
+      //                             WHERE COD_REQUERIMIENTO='$cod_formulacion' 
+      //                             GROUP BY COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO,TAI.STOCK_ACTUAL,TC.CANTIDAD_MINIMA");
+      $stm = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO, 
+                                  TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(CANTIDAD) AS SUMA_CANTIDADES, TAI.STOCK_ACTUAL AS STOCK_ACTUAL,
+                                  COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA FROM T_TMPREQUERIMIENTO_INSUMO TRI 
+                                  INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
+                                  INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO 
+                                  LEFT JOIN T_TMPCANTIDAD_MINIMA TC ON TRI.COD_PRODUCTO = TC.COD_PRODUCTO
+                                  WHERE COD_REQUERIMIENTO='$cod_formulacion' 
+                                  GROUP BY COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO,TAI.STOCK_ACTUAL,TC.CANTIDAD_MINIMA");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
@@ -2269,13 +2269,13 @@ class m_almacen
       $codigo_orden_compra = $cod->generarCodigoOrdenCompra();
 
 
-      // $fecha_generado = $cod->c_horaserversql('F');
-      $fecha_actual = '04/09/2023';
+      $fecha_generado_orden_compra = $cod->c_horaserversql('F');
+      // $fecha_actual = '04/09/2023';
       //echo $fecha_generado;
-      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,COD_REQUERIMIENTO,FECHA)
-                                                VALUES ('$codigo_orden_compra','$idRequerimiento','$fecha_generado')");
+                                                VALUES ('$codigo_orden_compra','$idRequerimiento','$fecha_generado_orden_compra')");
       $insert = $stmPedidoCompras->execute();
 
       for ($i = 0; $i < count($union); $i += 2) {
@@ -2297,12 +2297,15 @@ class m_almacen
                                                   VALUES ('$codigo_orden_compra','$codProducto', '$canInsu','$multiplicacionTotal')");
         $insert = $stmPedidoOrden->execute();
       }
-      // $fecha_generado = $cod->c_horaserversql('F');
-      $fecha_actual = '02/09/2023';
+      $fecha_generado = $cod->c_horaserversql('F');
+      // $fecha_actual = '02/09/2023';
       //echo $fecha_generado;
-      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
       $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $stmActualizar->execute();
+
+      $stmupdate = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='A' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
+      $stmupdate->execute();
 
 
 
@@ -2627,6 +2630,19 @@ class m_almacen
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());
+    }
+  }
+  public function RechazarPendienteRequerimiento($cod_requerimiento_pedido)
+  {
+    try {
+
+      $stm = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='R' WHERE COD_REQUERIMIENTO = '$cod_requerimiento_pedido'");
+
+
+      $delete = $stm->execute();
+      return $delete;
+    } catch (Exception $e) {
+      die("Error al eliminar los datos: " . $e->getMessage());
     }
   }
 }

@@ -140,6 +140,10 @@ body {
 .title {
   font-weight: 600;
 }
+.title_table {
+  font-weight: 500;
+  margin-bottom: 10px;
+}
 .thtitulo {
   text-align: center !important;
 }

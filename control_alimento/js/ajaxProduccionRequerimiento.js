@@ -70,14 +70,13 @@ $(function () {
     let cod_produccion_requerimiento = capturaTr.attr(
       "taskproduccionrequerimiento"
     );
-    // console.log(codigoproducto);
-    // console.log(nombreproducto);
+
     $("#idhiddencodrequerimiento").val(cod_produccion_requerimiento);
     $("#idhiddenproducto").val(codigoproducto);
     $("#productorequerimientoitem").val(nombreproducto);
     $("#cantidadhiddentotalrequerimiento").val(cantidadrequerimientototal);
   });
-
+  /* -------------------- Cuando escribe en cantidad de caja con decimal lanza alerta --------------- */
   $("#cantidadcaja").keyup((e) => {
     e.preventDefault();
     let cantidadescrita = $("#cantidadcaja").val();
@@ -96,7 +95,7 @@ $(function () {
       return;
     }
   });
-
+  /* ------------------------------  Inserta los datos de produccion---------------------------- */
   $("#insertarProduccionRequerimiento").click((e) => {
     e.preventDefault();
     let codrequerimientoproduccion = $("#idhiddencodrequerimiento").val();
@@ -206,40 +205,40 @@ $(function () {
     });
   });
 
-  function mostrarRequerimientoTotal() {
-    const accion = "mostrarRquerimientoTotal";
-    const search = "";
-    $.ajax({
-      url: "./c_almacen.php",
-      type: "POST",
-      data: { accion: accion, buscartotal: search },
-      success: function (response) {
-        if (isJSON(response)) {
-          let tasks = JSON.parse(response);
-          console.log(tasks);
+  // function mostrarRequerimientoTotal() {
+  //   const accion = "mostrarRquerimientoTotal";
+  //   const search = "";
+  //   $.ajax({
+  //     url: "./c_almacen.php",
+  //     type: "POST",
+  //     data: { accion: accion, buscartotal: search },
+  //     success: function (response) {
+  //       if (isJSON(response)) {
+  //         let tasks = JSON.parse(response);
+  //         console.log(tasks);
 
-          let template = ``;
-          tasks.forEach((task) => {
-            $resultado = Math.ceil(
-              task.STOCK_RESULTANTE / task.CANTIDAD_MINIMA
-            );
-            $resultadototalinsu = task.CANTIDAD_MINIMA * $resultado;
-            template += `<tr taskId="${task.COD_REQUERIMIENTO}">
-                    <td data-titulo="INSUMOS">${task.DES_PRODUCTO}</td>
-                    <td data-titulo="CANTIDAD">${task.STOCK_RESULTANTE}</td>
-                    <td data-titulo="CANTIDAD COMPRA">${$resultadototalinsu}</td>                    
-                 </tr>`;
-          });
-          $("#tablatotalinsumosrequeridos").html(template);
-        } else {
-          $("#tablatotalinsumosrequeridos").empty();
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error al cargar los datos de la tabla:", error);
-      },
-    });
-  }
+  //         let template = ``;
+  //         tasks.forEach((task) => {
+  //           $resultado = Math.ceil(
+  //             task.STOCK_RESULTANTE / task.CANTIDAD_MINIMA
+  //           );
+  //           $resultadototalinsu = task.CANTIDAD_MINIMA * $resultado;
+  //           template += `<tr taskId="${task.COD_REQUERIMIENTO}">
+  //                   <td data-titulo="INSUMOS">${task.DES_PRODUCTO}</td>
+  //                   <td data-titulo="CANTIDAD">${task.STOCK_RESULTANTE}</td>
+  //                   <td data-titulo="CANTIDAD COMPRA">${$resultadototalinsu}</td>
+  //                </tr>`;
+  //         });
+  //         $("#tablatotalinsumosrequeridos").html(template);
+  //       } else {
+  //         $("#tablatotalinsumosrequeridos").empty();
+  //       }
+  //     },
+  //     error: function (xhr, status, error) {
+  //       console.error("Error al cargar los datos de la tabla:", error);
+  //     },
+  //   });
+  // }
 });
 function isJSON(str) {
   try {

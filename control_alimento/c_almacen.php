@@ -415,6 +415,10 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_insertar_produccion_total($codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja);
     echo $respuesta;
+} elseif ($accion == 'rechazarpendienterequerimiento') {
+    $cod_requerimiento_pedido = trim($_POST['cod_requerimiento_pedido']);
+    $respuesta = c_almacen::c_rechazar_pendiente_requerimiento($cod_requerimiento_pedido);
+    echo $respuesta;
 }
 
 
@@ -2204,6 +2208,7 @@ class c_almacen
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "SUMA_CANTIDADES" => $row->SUMA_CANTIDADES,
                     "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
+                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
                 );
             }
 
@@ -2548,6 +2553,20 @@ class c_almacen
         if (isset($codrequerimientoproduccion) && isset($codproductoproduccion) && isset($numeroproduccion) && isset($cantidadtotalproduccion) && isset($fechainicio) && isset($cantidadcaja)) {
             $respuesta = $m_formula->InsertarProduccionTotalRequerimiento($codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja);
 
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+    static function  c_rechazar_pendiente_requerimiento($cod_requerimiento_pedido)
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($cod_requerimiento_pedido)) {
+            $respuesta = $mostrar->RechazarPendienteRequerimiento($cod_requerimiento_pedido);
             if ($respuesta) {
                 return "ok";
             } else {

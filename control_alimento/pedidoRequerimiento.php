@@ -36,10 +36,10 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <a class="" href="formulacionEnvases.php">Formulacion</a>
             </li>
             <li>
-                <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
+                <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
             </li>
             <li>
-                <a class="" href="#">Pedido requerimiento</a>
+                <a class="" href="#">Confirmacion de requerimiento</a>
             </li>
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
@@ -72,13 +72,17 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
 
                         <!-- Tabla total requerimiento pedido-->
-                        <div class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:20px;margin-bottom:20px;">
+                        <div class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:30px;margin-bottom:20px;">
+                            <div class="row g-4 top-div">
+                                <center><label class="title_table">REQUERIMIENTOS PENDIENTES</label></center>
+                            </div>
                             <table id="tmostrartotalpendientes" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
                                         <th class="thtitulo" scope="col">CODIGO</th>
                                         <th class="thtitulo" scope="col">FECHA</th>
                                         <th class="thtitulo" scope="col">PENDIENTE</th>
+                                        <th class="thtitulo" scope="col">RECHAZAR</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablamostartotalpendientes">
@@ -90,7 +94,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <div class="contenedor">
 
                             <div class="ctnBtn">
-                                <input type="hidden" id="taskcodrequerimiento">
+                                <input type="hidden" id="taskcodrequhiddenvalidar">
                                 <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-primary bt-insert">Guardar</button>
                                 <input type="text" id="mensajecompleto" style="width: 270px; font-weight:bold; display:none;" value="Insumos completos en el almacen" disabled>
                                 <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
@@ -99,6 +103,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <!-- Tabla de producto por reuqerimiento que se requiere-->
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                            <div class="row g-4 top-div">
+                                <center><label class="title_table">PRODUCTOS TOTALES DEL PENDIENTE</label></center>
+                            </div>
                             <table id="tproductorequerido" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
@@ -115,6 +122,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <!-- Tabla de insumos por requerimiento que se requiere-->
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                            <div class="row g-4 top-div">
+                                <center><label class="title_table">INSUMOS DE LOS PRODUCTOS</label></center>
+                            </div>
                             <table id="tinsumorequerido" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
@@ -132,6 +142,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                     <!-- Tabla total a comprar insumos-->
                     <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                        <div class="row g-4 top-div">
+                            <center><label class="title_table">CANTIDADES A COMPRAR</label></center>
+                        </div>
                         <table id="tTotalinsumoscomprar" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
