@@ -2166,29 +2166,41 @@ class m_almacen
         // $stmRequeInsumo->execute();
 
 
-        $checkQuery = $this->bd->prepare("SELECT COUNT(*) AS count FROM T_TMPREQUERIMIENTO_INSUMO WHERE COD_REQUERIMIENTO = '$codRequerimiento' AND COD_PRODUCTO = '$codProducto'");
-        $checkQuery->execute();
-        $result = $checkQuery->fetch(PDO::FETCH_ASSOC);
+        $contarRequeInsumo = $this->bd->prepare("SELECT COUNT(*) AS count FROM T_TMPREQUERIMIENTO_INSUMO WHERE COD_REQUERIMIENTO = '$codRequerimiento' AND COD_PRODUCTO = '$codProducto'");
+        $contarRequeInsumo->execute();
+        $result = $contarRequeInsumo->fetch(PDO::FETCH_ASSOC);
 
         if ($result['count'] > 0) {
-          $updateQuery = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_INSUMO SET CANTIDAD = CANTIDAD + '$canInsu' WHERE COD_REQUERIMIENTO = '$codRequerimiento' AND COD_PRODUCTO_ITEM = '$cod_producto_item' AND COD_PRODUCTO = '$codProducto'");
-          $updateQuery->execute();
+          $actualizaRequeInsumo = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_INSUMO SET CANTIDAD = CANTIDAD + '$canInsu' WHERE COD_REQUERIMIENTO = '$codRequerimiento' AND COD_PRODUCTO_ITEM = '$cod_producto_item' AND COD_PRODUCTO = '$codProducto'");
+          $actualizaRequeInsumo->execute();
         } else {
-          $insertQuery = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD) VALUES ('$codRequerimiento', '$cod_producto_item', '$codProducto', '$canInsu')");
-          $insertQuery->execute();
+          $insertarRequeInsumo = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD) VALUES ('$codRequerimiento', '$cod_producto_item', '$codProducto', '$canInsu')");
+          $insertarRequeInsumo->execute();
         }
       }
 
-      // for ($i = 0; $i < count($unionEnvase); $i += 3) {
+      for ($i = 0; $i < count($unionEnvase); $i += 3) {
 
-      //   $codProductoEnvase = $unionEnvase[$i];
-      //   $canEnvase = $unionEnvase[$i + 1];
-      //   $cod_producto_item_envase = $unionEnvase[$i + 2];
+        $codProductoEnvase = $unionEnvase[$i];
+        $canEnvase = $unionEnvase[$i + 1];
+        $cod_producto_item_envase = $unionEnvase[$i + 2];
 
-      //   $stmRequeEnvase = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO,COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
-      //   VALUES ('$codRequerimiento','$cod_producto_item_envase', '$codProductoEnvase', '$canEnvase')");
-      //   $stmRequeEnvase->execute();
-      // }
+        // $stmRequeEnvase = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO,COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
+        // VALUES ('$codRequerimiento','$cod_producto_item_envase', '$codProductoEnvase', '$canEnvase')");
+        // $stmRequeEnvase->execute();
+
+        $contarRequeEnvase = $this->bd->prepare("SELECT COUNT(*) AS count FROM T_TMPREQUERIMIENTO_ENVASE WHERE COD_REQUERIMIENTO = '$codRequerimiento' AND COD_PRODUCTO = '$codProductoEnvase'");
+        $contarRequeEnvase->execute();
+        $resultado = $contarRequeEnvase->fetch(PDO::FETCH_ASSOC);
+
+        if ($resultado['count'] > 0) {
+          $actualizaRequeEnvase = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ENVASE SET CANTIDAD = CANTIDAD + '$canEnvase' WHERE COD_REQUERIMIENTO = '$codRequerimiento' AND COD_PRODUCTO_ITEM = '$cod_producto_item_envase' AND COD_PRODUCTO = '$codProductoEnvase'");
+          $actualizaRequeEnvase->execute();
+        } else {
+          $insertarRequeEnvase = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO,COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD) VALUES ('$codRequerimiento','$cod_producto_item_envase', '$codProductoEnvase', '$canEnvase')");
+          $insertarRequeEnvase->execute();
+        }
+      }
 
 
 
