@@ -206,6 +206,9 @@ $(function () {
           const existingRow = $(
             `tr[taskId="${insumos[0]["COD_FORMULACION"]}"]`
           );
+          // const existingRow = $(
+          //   `tr td[id="${insumos[0].COD_PRODUCTO}"]`
+          // ).closest("tr");
           if (existingRow.length > 0) {
             const capturaValoresTabla = existingRow.find("td:eq(1)");
 
@@ -290,9 +293,21 @@ $(function () {
       success: function (response) {
         if (!response.error) {
           let envases = JSON.parse(response);
-
+          console.log(envases);
           let templateEnvase = $("#tablaenvase").html();
 
+          // const existeFila = $(
+          //   `tr[idenvasecodigo="${envases[0]["COD_FORMULACIONES"]}"]`
+          // );
+          // let existeFila;
+          // for (let c = 0; c < envases.length; c++) {
+          //   existeFila = $(
+          //     `tr td[id_envase="${envases[c].COD_PRODUCTO}"]`
+          //   ).closest("tr");
+          // }
+          // const existeFila = $(
+          //   `tr[ id_cod_producto_envase="${envases[0]["COD_PRODUCTO"]}"]`
+          // );
           const existeFila = $(
             `tr[idenvase="${envases[0]["COD_FORMULACIONES"]}"]`
           );
@@ -310,13 +325,36 @@ $(function () {
             }
           } else {
             envases.forEach((envase) => {
-              templateEnvase += `<tr idenvasecodigo="${envase.COD_FORMULACIONES}">
-                                <td data-titulo="ENVASES" id_envase='${envase.COD_PRODUCTO}'>${envase.DES_PRODUCTO}</td>
-                                <td data-titulo="CANTIDAD">${envase.TOTAL_ENVASE}</td>
-                             </tr>`;
+              // const existeFila = $(`tr[idenvasecodigo='${envase.COD_PRODUCTO}']`);
+
+              // if (existeFila.length > 0) {
+              //   const capturaTabla = existeFila.find("td:eq(1)");
+
+              //   const valor = envase.TOTAL_ENVASE;
+              //   const valorCeldas = capturaTabla[0];
+              //   // console.log(valorCeldas);
+              //   const cambios = parseFloat($(valorCeldas).html());
+              //   // const cambios = parseFloat(valorCeldas.textContent);
+              //   const sumar = cambios + parseFloat(valor);
+              //   const totalsumar = sumar.toFixed(3);
+              //   $(valorCeldas).html(totalsumar);
+
+              //   $("#cantidadInsumoEnvase").val("");
+              // }
+              // else {
+              // templateEnvase += `<tr idenvasecodigo="${envase.COD_PRODUCTO}>
+              templateEnvase += `<tr idenvasecodigo="${envase.COD_PRODUCTO} idenvase="${envase.COD_FORMULACIONES}">
+                                      <td data-titulo="ENVASES" id_envase='${envase.COD_PRODUCTO}'>${envase.DES_PRODUCTO}</td>
+                                      <td data-titulo="CANTIDAD">${envase.TOTAL_ENVASE}</td>
+                                    </tr>`;
+              // }
             });
+
             $("#tablaenvase").html(templateEnvase);
           }
+          // const existeFila = $(
+          //   `#tablaenvase tr td[id_envase="${envases.COD_PRODUCTO}"]`
+          // ).closest("tr");
         }
       },
       error: function (xhr, status, error) {

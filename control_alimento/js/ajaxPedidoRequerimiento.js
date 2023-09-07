@@ -160,13 +160,22 @@ $(function () {
                 Swal.fire({
                   icon: "error",
                   title: "Añadir cantidad minima",
-                  text: "Producto no tiene cantidad minima a comprar.",
+                  text: "Producto no tiene cantidad minima a comprar, verificar en la tabla cantidades a comprar.",
                 });
               }
-              template += `<tr codigorequerimientototal="${task.COD_REQUERIMIENTO}">
-                            <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
+
+              template += `<tr codigorequerimientototal="${
+                task.COD_REQUERIMIENTO
+              }">
+                            <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${
+                              task.COD_PRODUCTO
+                            }'>${task.DES_PRODUCTO}</td>
                             <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
-                            <td data-titulo="CANTIDAD COMPRA"  style="text-align:center;">${cantidadtotalminima}</td>
+                            <td data-titulo="CANTIDAD COMPRA"  style="text-align:center;">${
+                              isNaN(cantidadtotalminima)
+                                ? "Falta añadir cantidad"
+                                : cantidadtotalminima
+                            }</td>
                           </tr>`;
             }
           });
@@ -208,10 +217,11 @@ $(function () {
     let tablainsumos = $("#tablainsumorequerido");
     let tablatotal = $("#tablatotalinsumosrequeridoscomprar");
     let taskcodrequhiddenvalidar = $("#taskcodrequhiddenvalidar").val();
-
+    let cantidad_total_minima;
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let id_producto_insumo = $(this).find("td:eq(0)").attr("id_producto");
       let cantidad_producto_insumo = $(this).find("td:eq(1)").text();
+      cantidad_total_minima = $(this).find("td:eq(2)").text();
 
       valoresCapturadosVenta.push(id_producto_insumo, cantidad_producto_insumo);
     });
@@ -220,6 +230,15 @@ $(function () {
       Swal.fire({
         title: "¡Error!",
         text: "Añadir los pendientes para guardar.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    }
+    if (cantidad_total_minima.trim() === "Falta añadir cantidad") {
+      Swal.fire({
+        title: "¡Error!",
+        text: "Añadir un valor de cantidad minima del producto",
         icon: "error",
         confirmButtonText: "Aceptar",
       });
