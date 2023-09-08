@@ -2108,7 +2108,7 @@ class c_almacen
 
                 $json[] = array(
                     "COD_FORMULACIONES" => $row->COD_FORMULACIONES,
-                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "TOTAL_ENVASE" => $total,
                 );

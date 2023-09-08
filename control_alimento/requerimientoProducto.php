@@ -89,7 +89,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Text input cantidad -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Cantidad</label>
-                            <input type="number" id="cantidadInsumoEnvase" class="form-control" name="cantidadProducto" required>
+                            <input type="number" id="cantidadInsumoEnvase" class="form-control" name="cantidadProducto" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
                         </div>
 
                         <!-- Insertar nuevas cantidades -->

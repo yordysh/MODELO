@@ -305,53 +305,50 @@ $(function () {
           //     `tr td[id_envase="${envases[c].COD_PRODUCTO}"]`
           //   ).closest("tr");
           // }
+
           // const existeFila = $(
-          //   `tr[ id_cod_producto_envase="${envases[0]["COD_PRODUCTO"]}"]`
+          //   `tr[idenvase="${envases[0]["COD_FORMULACIONES"]}"]`
           // );
-          const existeFila = $(
-            `tr[idenvase="${envases[0]["COD_FORMULACIONES"]}"]`
-          );
 
-          if (existeFila.length > 0) {
-            const capturaTabla = existeFila.find("td:eq(1)");
-            for (let i = 0; i < capturaTabla.length; i++) {
-              const valor = envases[i].TOTAL_ENVASE;
-              const valorCeldas = capturaTabla[i];
-              const cambios = parseFloat($(valorCeldas).html());
-              const sumar = cambios + parseFloat(valor);
-              const totalsumar = sumar.toFixed(3);
+          // if (existeFila.length > 0) {
+          //   const capturaTabla = existeFila.find("td:eq(1)");
+          //   for (let i = 0; i < capturaTabla.length; i++) {
+          //     const valor = envases[i].TOTAL_ENVASE;
+          //     const valorCeldas = capturaTabla[i];
+          //     const cambios = parseFloat($(valorCeldas).html());
+          //     const sumar = cambios + parseFloat(valor);
+          //     const totalsumar = sumar.toFixed(3);
+          //     $(valorCeldas).html(totalsumar);
+          //     $("#cantidadInsumoEnvase").val("");
+          //   }
+          // } else {
+          // envases.forEach((envase) => {
+          for (let i = 0; i < envases.length; i++) {
+            let existeFila = $(`tr[id_envase='${envases[i]["COD_PRODUCTO"]}']`);
+
+            if (existeFila.length > 0) {
+              let capturaTabla = existeFila.find("td:eq(1)");
+
+              let valor = envases[i]["TOTAL_ENVASE"];
+              let valorCeldas = capturaTabla[0];
+              let cambios = parseFloat($(valorCeldas).html());
+              let sumar = cambios + parseFloat(valor);
+              let totalsumar = sumar.toFixed(3);
               $(valorCeldas).html(totalsumar);
+
               $("#cantidadInsumoEnvase").val("");
-            }
-          } else {
-            envases.forEach((envase) => {
-              // const existeFila = $(`tr[idenvasecodigo='${envase.COD_PRODUCTO}']`);
-
-              // if (existeFila.length > 0) {
-              //   const capturaTabla = existeFila.find("td:eq(1)");
-
-              //   const valor = envase.TOTAL_ENVASE;
-              //   const valorCeldas = capturaTabla[0];
-              //   // console.log(valorCeldas);
-              //   const cambios = parseFloat($(valorCeldas).html());
-              //   // const cambios = parseFloat(valorCeldas.textContent);
-              //   const sumar = cambios + parseFloat(valor);
-              //   const totalsumar = sumar.toFixed(3);
-              //   $(valorCeldas).html(totalsumar);
-
-              //   $("#cantidadInsumoEnvase").val("");
-              // }
-              // else {
+            } else {
               // templateEnvase += `<tr idenvasecodigo="${envase.COD_PRODUCTO}>
-              templateEnvase += `<tr idenvasecodigo="${envase.COD_PRODUCTO} idenvase="${envase.COD_FORMULACIONES}">
-                                      <td data-titulo="ENVASES" id_envase='${envase.COD_PRODUCTO}'>${envase.DES_PRODUCTO}</td>
-                                      <td data-titulo="CANTIDAD">${envase.TOTAL_ENVASE}</td>
+              templateEnvase += `<tr id_envase='${envases[i]["COD_PRODUCTO"]}'>
+                                      <td data-titulo="ENVASES" >${envases[i]["DES_PRODUCTO"]}</td>
+                                      <td data-titulo="CANTIDAD" >${envases[i]["TOTAL_ENVASE"]}</td>
                                     </tr>`;
-              // }
-            });
-
-            $("#tablaenvase").html(templateEnvase);
+              $("#tablaenvase").html(templateEnvase);
+            }
           }
+          // });
+
+          // }
           // const existeFila = $(
           //   `#tablaenvase tr td[id_envase="${envases.COD_PRODUCTO}"]`
           // ).closest("tr");
