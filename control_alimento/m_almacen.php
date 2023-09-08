@@ -2154,16 +2154,16 @@ class m_almacen
 
 
 
-      // var_dump($union);
-      for ($i = 0; $i < count($union); $i += 3) {
+
+      for ($i = 0; $i < count($union); $i += 2) {
         $codProducto = ($union[$i]);
         $canInsu = $union[$i + 1];
-        $cod_producto_item = $union[$i + 2];
+        // $cod_producto_item = $union[$i + 2];
 
-        // $stmRequeInsumo = $this->bd->prepare("INSERT  INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO,COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
-        // VALUES ('$codRequerimiento','$cod_producto_item','$codProducto', '$canInsu')");
+        $stmRequeInsumo = $this->bd->prepare("INSERT  INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+        VALUES ('$codRequerimiento','$codProducto', '$canInsu')");
 
-        // $stmRequeInsumo->execute();
+        $stmRequeInsumo->execute();
 
 
         // $contarRequeInsumo = $this->bd->prepare("SELECT COUNT(*) AS count FROM T_TMPREQUERIMIENTO_INSUMO WHERE COD_REQUERIMIENTO = '$codRequerimiento' AND COD_PRODUCTO = '$codProducto'");
@@ -2177,53 +2177,28 @@ class m_almacen
         //   $insertarRequeInsumo = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD) VALUES ('$codRequerimiento', '$cod_producto_item', '$codProducto', '$canInsu')");
         //   $insertarRequeInsumo->execute();
         // }
-        $sqlinsumo = "MERGE INTO T_TMPREQUERIMIENTO_INSUMO AS target
-        USING (VALUES ('$codRequerimiento', '$cod_producto_item', '$codProducto', '$canInsu')) AS source (COD_REQUERIMIENTO, COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
-        ON target.COD_REQUERIMIENTO = source.COD_REQUERIMIENTO AND target.COD_PRODUCTO = source.COD_PRODUCTO
-        WHEN MATCHED THEN
-            UPDATE SET target.CANTIDAD = target.CANTIDAD + source.CANTIDAD
-        WHEN NOT MATCHED THEN
-            INSERT (COD_REQUERIMIENTO, COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
-            VALUES (source.COD_REQUERIMIENTO, source.COD_PRODUCTO_ITEM, source.COD_PRODUCTO, source.CANTIDAD);";
+        // $sqlinsumo = "MERGE INTO T_TMPREQUERIMIENTO_INSUMO AS target
+        // USING (VALUES ('$codRequerimiento', '$cod_producto_item', '$codProducto', '$canInsu')) AS source (COD_REQUERIMIENTO, COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
+        // ON target.COD_REQUERIMIENTO = source.COD_REQUERIMIENTO AND target.COD_PRODUCTO = source.COD_PRODUCTO
+        // WHEN MATCHED THEN
+        //     UPDATE SET target.CANTIDAD = target.CANTIDAD + source.CANTIDAD
+        // WHEN NOT MATCHED THEN
+        //     INSERT (COD_REQUERIMIENTO, COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
+        //     VALUES (source.COD_REQUERIMIENTO, source.COD_PRODUCTO_ITEM, source.COD_PRODUCTO, source.CANTIDAD);";
 
-        $stmtinsumo = $this->bd->prepare($sqlinsumo);
-        $stmtinsumo->execute();
+        // $stmtinsumo = $this->bd->prepare($sqlinsumo);
+        // $stmtinsumo->execute();
       }
 
-      for ($j = 0; $j < count($unionEnvase); $j += 3) {
+      for ($j = 0; $j < count($unionEnvase); $j += 2) {
 
         $codProductoEnvase = trim($unionEnvase[$j]);
         $canEnvase = $unionEnvase[$j + 1];
-        $cod_producto_item_envase = $unionEnvase[$j + 2];
+        // $cod_producto_item_envase = $unionEnvase[$j + 2];
 
-        // $stmRequeEnvase = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO,COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
-        // VALUES ('$codRequerimiento','$cod_producto_item_envase', '$codProductoEnvase', '$canEnvase')");
-        // $stmRequeEnvase->execute();
-
-        // $contarRequeEnvase = $this->bd->prepare("SELECT COUNT(*) AS count FROM T_TMPREQUERIMIENTO_ENVASE WHERE COD_REQUERIMIENTO = '$codRequerimiento' AND COD_PRODUCTO = '$codProductoEnvase'");
-        // $contarRequeEnvase->execute();
-        // $resultado = $contarRequeEnvase->fetch(PDO::FETCH_ASSOC);
-
-        // // exit();
-        // if ($resultado['count'] > 0) {
-        //   $actualizaRequeEnvase = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ENVASE SET CANTIDAD = CANTIDAD + '$canEnvase' WHERE COD_REQUERIMIENTO = '$codRequerimiento' AND COD_PRODUCTO_ITEM = '$cod_producto_item_envase' AND COD_PRODUCTO = '$codProductoEnvase'");
-        //   var_dump($actualizaRequeEnvase);
-        //   $actualizaRequeEnvase->execute();
-        // } else {
-        //   $insertarRequeEnvase = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO,COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD) VALUES ('$codRequerimiento','$cod_producto_item_envase', '$codProductoEnvase', '$canEnvase')");
-        //   $insertarRequeEnvase->execute();
-        // }
-        $sql = "MERGE INTO T_TMPREQUERIMIENTO_ENVASE AS target
-        USING (VALUES ('$codRequerimiento', '$cod_producto_item_envase', '$codProductoEnvase', '$canEnvase')) AS source (COD_REQUERIMIENTO, COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
-        ON target.COD_REQUERIMIENTO = source.COD_REQUERIMIENTO AND target.COD_PRODUCTO = source.COD_PRODUCTO
-        WHEN MATCHED THEN
-            UPDATE SET target.CANTIDAD = target.CANTIDAD + source.CANTIDAD
-        WHEN NOT MATCHED THEN
-            INSERT (COD_REQUERIMIENTO, COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
-            VALUES (source.COD_REQUERIMIENTO, source.COD_PRODUCTO_ITEM, source.COD_PRODUCTO, source.CANTIDAD);";
-
-        $stmt = $this->bd->prepare($sql);
-        $stmt->execute();
+        $stmRequeEnvase = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+        VALUES ('$codRequerimiento', '$codProductoEnvase', '$canEnvase')");
+        $stmRequeEnvase->execute();
       }
 
 
@@ -2265,31 +2240,29 @@ class m_almacen
   public function  MostrarSiCompra($cod_formulacion)
   {
     try {
-
-
-      // $stm = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,
-      // TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(CANTIDAD) AS SUMA_CANTIDADES, TAI.STOCK_ACTUAL AS STOCK_ACTUAL
-      // FROM T_TMPREQUERIMIENTO_INSUMO TRI
-      // INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
-      // INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO
-      // WHERE COD_REQUERIMIENTO='$cod_formulacion'
-      // GROUP BY COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO,TAI.STOCK_ACTUAL");
-      // $stm = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO, 
-      //                             TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(CANTIDAD) AS SUMA_CANTIDADES, TAI.STOCK_ACTUAL AS STOCK_ACTUAL,
-      //                             TC.CANTIDAD_MINIMA AS CANTIDAD_MINIMA
-      //                             FROM T_TMPREQUERIMIENTO_INSUMO TRI INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
-      //                             INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO 
-      //                             INNER JOIN T_TMPCANTIDAD_MINIMA TC ON TRI.COD_PRODUCTO = TC.COD_PRODUCTO
-      //                             WHERE COD_REQUERIMIENTO='$cod_formulacion' 
-      //                             GROUP BY COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO,TAI.STOCK_ACTUAL,TC.CANTIDAD_MINIMA");
-      $stm = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO, 
-                                  TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(CANTIDAD) AS SUMA_CANTIDADES, TAI.STOCK_ACTUAL AS STOCK_ACTUAL,
-                                  COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA FROM T_TMPREQUERIMIENTO_INSUMO TRI 
-                                  INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
-                                  INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO 
-                                  LEFT JOIN T_TMPCANTIDAD_MINIMA TC ON TRI.COD_PRODUCTO = TC.COD_PRODUCTO
-                                  WHERE COD_REQUERIMIENTO='$cod_formulacion' 
-                                  GROUP BY COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO,TAI.STOCK_ACTUAL,TC.CANTIDAD_MINIMA");
+      //  $stm = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO, 
+      //                                 TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(CANTIDAD) AS SUMA_CANTIDADES, TAI.STOCK_ACTUAL AS STOCK_ACTUAL,
+      //                                 COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA FROM T_TMPREQUERIMIENTO_INSUMO TRI 
+      //                                 INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
+      //                                 INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO 
+      //                                 LEFT JOIN T_TMPCANTIDAD_MINIMA TC ON TRI.COD_PRODUCTO = TC.COD_PRODUCTO
+      //                                 WHERE COD_REQUERIMIENTO='$cod_formulacion' 
+      //                                 GROUP BY COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO,TAI.STOCK_ACTUAL,TC.CANTIDAD_MINIMA");
+      //     $stm->execute();
+      $stm = $this->bd->prepare("SELECT TI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
+                                  TI.CANTIDAD AS CANTIDAD, TA.STOCK_ACTUAL AS STOCK_ACTUAL, COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA 
+                                  FROM T_TMPREQUERIMIENTO_INSUMO TI INNER JOIN T_PRODUCTO TP ON TI.COD_PRODUCTO = TP.COD_PRODUCTO 
+                                  LEFT JOIN T_TMPCANTIDAD_MINIMA TC ON TI.COD_PRODUCTO = TC.COD_PRODUCTO
+                                  LEFT JOIN T_TMPALMACEN_INSUMOS TA ON TA.COD_PRODUCTO=TP.COD_PRODUCTO
+                                  WHERE TI.COD_REQUERIMIENTO = '$cod_formulacion'
+                                  UNION ALL
+                                  SELECT TE.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TE.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
+                                  TE.CANTIDAD AS CANTIDAD, TA.STOCK_ACTUAL AS STOCK_ACTUAL, COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA 
+                                  FROM T_TMPREQUERIMIENTO_ENVASE TE INNER JOIN T_PRODUCTO TP ON TE.COD_PRODUCTO = TP.COD_PRODUCTO 
+                                  LEFT JOIN T_TMPCANTIDAD_MINIMA TC ON TE.COD_PRODUCTO = TC.COD_PRODUCTO
+                                  LEFT JOIN T_TMPALMACEN_INSUMOS TA ON TA.COD_PRODUCTO=TP.COD_PRODUCTO
+                                  WHERE TE.COD_REQUERIMIENTO = '$cod_formulacion'
+                                  ");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
@@ -2552,7 +2525,7 @@ class m_almacen
   {
     try {
 
-      $stmCalculo = $this->bd->prepare(" SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD
+      $stmCalculo = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD
       FROM T_TMPREQUERIMIENTO_ITEM TRI INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO WHERE COD_REQUERIMIENTO='$cod_formulacion'");
 
       $stmCalculo->execute();
@@ -2568,11 +2541,18 @@ class m_almacen
   {
     try {
 
-      $stmCalculo = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,
-                                        TP.DES_PRODUCTO AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD
-                                        FROM T_TMPREQUERIMIENTO_INSUMO TRI INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
-                                        WHERE TRI.COD_REQUERIMIENTO='$cod_formulacion'");
-
+      // $stmCalculo = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,
+      //                                   TP.DES_PRODUCTO AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD
+      //                                   FROM T_TMPREQUERIMIENTO_INSUMO TRI INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
+      //                                   WHERE TRI.COD_REQUERIMIENTO='$cod_formulacion'");
+      $stmCalculo = $this->bd->prepare("SELECT TI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,TI.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TI.CANTIDAD AS CANTIDAD   
+                                        FROM T_TMPREQUERIMIENTO_INSUMO TI INNER JOIN T_PRODUCTO TP ON TI.COD_PRODUCTO=TP.COD_PRODUCTO
+                                        WHERE TI.COD_REQUERIMIENTO = '$cod_formulacion'
+                                        UNION ALL
+                                        SELECT TE.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TE.CANTIDAD AS CANTIDAD 
+                                        FROM T_TMPREQUERIMIENTO_ENVASE TE INNER JOIN T_PRODUCTO TP ON TE.COD_PRODUCTO=TP.COD_PRODUCTO
+                                        WHERE TE.COD_REQUERIMIENTO = '$cod_formulacion'
+                                        ");
       $stmCalculo->execute();
       $datos = $stmCalculo->fetchAll(PDO::FETCH_OBJ);
 

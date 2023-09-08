@@ -2,7 +2,7 @@
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataCantidadMinima = $mostrar->MostrarProductoInsumos();
+$dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
 
 ?>
 <!DOCTYPE html>

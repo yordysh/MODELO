@@ -123,7 +123,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Tabla de insumos por requerimiento que se requiere-->
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
                             <div class="row g-4 top-div">
-                                <center><label class="title_table">INSUMOS DE LOS PRODUCTOS</label></center>
+                                <center><label class="title_table">INSUMOS Y ENVASES DE LOS PRODUCTOS</label></center>
                             </div>
                             <table id="tinsumorequerido" class="table table-sm mb-3 table-hover">
                                 <thead>

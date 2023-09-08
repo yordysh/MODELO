@@ -115,13 +115,13 @@ $(function () {
 
           tasks.forEach((task) => {
             template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
-                            <td data-titulo="INSUMOS"  style="text-align:center;" id_producto='${
-                              task.COD_PRODUCTO
-                            }'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CANTIDAD"  style="text-align:center;">${parseFloat(
-                              task.CANTIDAD
-                            ).toFixed(2)}</td>
-                            </tr>`;
+                          <td data-titulo="INSUMOS"  style="text-align:center;" id_producto='${
+                            task.COD_PRODUCTO
+                          }'>${task.DES_PRODUCTO}</td>
+                          <td data-titulo="CANTIDAD"  style="text-align:center;">${parseFloat(
+                            task.CANTIDAD
+                          ).toFixed(2)}</td>
+                          </tr>`;
           });
           $("#tablainsumorequerido").html(template);
         } else {
@@ -143,17 +143,15 @@ $(function () {
         cod_formulacion: cod_formulacion,
       },
       success: function (response) {
-        console.log(JSON.parse(response));
+        // console.log(JSON.parse(response));
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
 
           let template = ``;
 
           tasks.forEach((task) => {
-            let insumo_pedir = (
-              task.SUMA_CANTIDADES - task.STOCK_ACTUAL
-            ).toFixed(3);
-            let total_comprar = Math.ceil(insumo_pedir / task.CANTIDAD_MINIMA);
+            let insumo_pedir = (task.CANTIDAD - task.STOCK_ACTUAL).toFixed(3);
+            let total_comprar = Math.ceil(task.CANTIDAD / task.CANTIDAD_MINIMA);
             let cantidadtotalminima = total_comprar * task.CANTIDAD_MINIMA;
             if (insumo_pedir > 0) {
               if (task.CANTIDAD_MINIMA == 0) {
@@ -170,7 +168,9 @@ $(function () {
                             <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${
                               task.COD_PRODUCTO
                             }'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
+                            <td data-titulo="CANTIDAD"  style="text-align:center;">${
+                              task.CANTIDAD
+                            }</td>
                             <td data-titulo="CANTIDAD COMPRA"  style="text-align:center;">${
                               isNaN(cantidadtotalminima)
                                 ? "Falta añadir cantidad"
@@ -188,6 +188,7 @@ $(function () {
               showConfirmButton: false,
               timer: 2500,
             });
+            $("#tablainsumorequerido").empty();
             $("#mensajecompleto").css("display", "block");
           } else {
             $("#mensajecompleto").css("display", "none");

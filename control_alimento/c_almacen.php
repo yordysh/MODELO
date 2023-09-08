@@ -2074,7 +2074,7 @@ class c_almacen
                 $json[] = array(
                     "COD_FORMULACION" => $row->COD_FORMULACION,
                     "DES_PRODUCTO_FORMULACION" => $row->DES_PRODUCTO_FORMULACION,
-                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "CAN_FORMULACION_INSUMOS" => $row->CAN_FORMULACION_INSUMOS,
                     "TOTAL" => $total,
@@ -2206,7 +2206,7 @@ class c_almacen
                     "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
                     "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                    "SUMA_CANTIDADES" => $row->SUMA_CANTIDADES,
+                    "CANTIDAD" => $row->CANTIDAD,
                     "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
                     "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
                 );
@@ -2498,7 +2498,7 @@ class c_almacen
 
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarProductoInsumoPorRequerimiento($cod_formulacion);
-
+            // var_dump($datos);
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
             }
