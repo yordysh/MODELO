@@ -82,7 +82,7 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Cantidad minima</label>
-                                <input class="form-control" id="cantidadMinima" required></input>
+                                <input class="form-control" type="number" id="cantidadMinima" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required></input>
                             </div>
                         </div>
                         <div class="">

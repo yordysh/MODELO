@@ -65,6 +65,20 @@ $(function () {
               $("#formulariocantidadminima").trigger("reset");
             }
           });
+        } else {
+          Swal.fire({
+            title: "Duplicado",
+            text: "Los datos del producto son duplicados.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              fetchTasks();
+              $("#selectCantidadminima").val("none").trigger("change");
+              $("#selectCantidadminima").prop("disabled", false);
+              $("#formulariocantidadminima").trigger("reset");
+            }
+          });
         }
       },
     });

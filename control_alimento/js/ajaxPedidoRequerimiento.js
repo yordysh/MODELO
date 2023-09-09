@@ -202,6 +202,7 @@ $(function () {
         console.error("Error al cargar los datos de la tabla:", error);
       },
     });
+    $("#tablatotalinsumosrequeridoscomprar").empty();
   });
 
   $("#insertarCompraInsumos").click((e) => {
@@ -236,7 +237,7 @@ $(function () {
       });
       return;
     }
-    if (cantidad_total_minima.trim() === "Falta añadir cantidad") {
+    if (cantidad_total_minima === "Falta añadir cantidad") {
       Swal.fire({
         title: "¡Error!",
         text: "Añadir un valor de cantidad minima del producto",

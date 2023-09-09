@@ -2300,7 +2300,7 @@ class m_almacen
 
 
       // $fecha_generado_orden_compra = $cod->c_horaserversql('F');
-      $fecha_actual = '04/09/2023';
+      $fecha_actual = '09/09/2023';
       //echo $fecha_generado;
       $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
@@ -2327,17 +2327,15 @@ class m_almacen
                                                   VALUES ('$codigo_orden_compra','$codProducto', '$canInsu','$multiplicacionTotal')");
         $insert = $stmPedidoOrden->execute();
       }
-      $fecha_generado = $cod->c_horaserversql('F');
-      // $fecha_actual = '02/09/2023';
+      // $fecha_generado = $cod->c_horaserversql('F');
+      $fecha_actual = '09/09/2023';
       //echo $fecha_generado;
-      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
       $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $stmActualizar->execute();
 
-      $stmupdate = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='A' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
+      $stmupdate = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='C' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $stmupdate->execute();
-
-
 
 
       $insert = $this->bd->commit();
@@ -2350,17 +2348,27 @@ class m_almacen
   }
   public function ActualizarOrdenCompraItem($idRequerimiento)
   {
-    $cod = new m_almacen();
-    $fecha_generado = $cod->c_horaserversql('F');
-    // $fecha_actual = '04/09/2023';
-    //echo $fecha_generado;
-    // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
-    $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
+    try {
 
-    $stmActualizarOrden->execute();
+      $this->bd->beginTransaction();
+      $cod = new m_almacen();
+      // $fecha_generado = $cod->c_horaserversql('F');
+      $fecha_actual = '09/09/2023';
+      //echo $fecha_generado;
+      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
+      $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
+      $insertar = $stmActualizarOrden->execute();
 
-    return $stmActualizarOrden;
+      $stmupdate = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='A' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
+      $stmupdate->execute();
+
+      $insertar = $this->bd->commit();
+      return $insertar;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
   }
 
   public function generarCodigoCantidadMinima()
@@ -2373,26 +2381,42 @@ class m_almacen
     $codigoAumento = str_pad($nuevoCodigo, 7, '0', STR_PAD_LEFT);
     return $codigoAumento;
   }
+  public function contarCantidadMinima($idproducto)
+  {
+    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_TMPCANTIDAD_MINIMA WHERE  COD_PRODUCTO='$idproducto' ");
+
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['count'];
+
+    return $count;
+  }
   public function InsertarCantidadMinima($selectCantidadminima, $cantidadMinima)
   {
     try {
 
-      $this->bd->beginTransaction();
+      // $this->bd->beginTransaction();
       $cod = new m_almacen();
 
       $codigo_cantidad_minima = $cod->generarCodigoCantidadMinima();
-
-      $stmMinimoCantidad = $this->bd->prepare("INSERT INTO T_TMPCANTIDAD_MINIMA(COD_CANTIDAD_MINIMA,COD_PRODUCTO, CANTIDAD_MINIMA)
-      VALUES ('$codigo_cantidad_minima','$selectCantidadminima', '$cantidadMinima')");
-      $insert = $stmMinimoCantidad->execute();
+      $repetir = $cod->contarCantidadMinima($selectCantidadminima);
 
 
+      if ($repetir == 0) {
+        $stmMinimoCantidad = $this->bd->prepare("INSERT INTO T_TMPCANTIDAD_MINIMA(COD_CANTIDAD_MINIMA,COD_PRODUCTO, CANTIDAD_MINIMA)
+        VALUES ('$codigo_cantidad_minima','$selectCantidadminima', '$cantidadMinima')");
+        $insert = $stmMinimoCantidad->execute();
+        return $insert;
+      }
 
-      $insert = $this->bd->commit();
 
-      return $insert;
+
+
+      // $insert = $this->bd->commit();
+
+
     } catch (Exception $e) {
-      $this->bd->rollBack();
+      // $this->bd->rollBack();
       die($e->getMessage());
     }
   }
@@ -2608,6 +2632,24 @@ class m_almacen
     try {
       $this->bd->beginTransaction();
 
+      $stmCodProducto = $this->bd->prepare("SELECT MAX(COD_FORMULACION) AS COD_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codproductoproduccion'");
+      $stmCodProducto->execute();
+      $consultacodigo = $stmCodProducto->fetch(PDO::FETCH_ASSOC);
+      $resultado = $consultacodigo['COD_FORMULACION'];
+
+
+      $stmCantidad = $this->bd->prepare("SELECT MAX(CAN_FORMULACION) AS CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codproductoproduccion'");
+      $stmCantidad->execute();
+      $consultacantidad = $stmCantidad->fetch(PDO::FETCH_ASSOC);
+      $resultadoCantidad = intval($consultacantidad['CAN_FORMULACION']);
+      var_dump($resultado);
+      var_dump($resultadoCantidad);
+      exit();
+
+
+
+
+
       $codigoformula = new m_almacen();
       $codigo_de_produccion_generado = $codigoformula->CodigoProduccionGenerado();
       $codigo_categoria = $codigoformula->CodigoCategoriaProducto($codproductoproduccion);
@@ -2616,6 +2658,9 @@ class m_almacen
       VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$fechainicio','$fechavencimiento','$textAreaObservacion','00017','$cantidadcaja')");
 
       $insert = $stmProducciontototal->execute();
+
+
+
 
 
       $stmConsulta = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,TRI.CANTIDAD AS CANTIDAD_ITEM,
@@ -2657,7 +2702,7 @@ class m_almacen
         $stmProduccionenvases->execute();
       }
 
-      $stmActualiza = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='A' WHERE COD_REQUERIMIENTO='$codrequerimientoproduccion' AND COD_PRODUCTO='$codproductoproduccion'");
+      $stmActualiza = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='T' WHERE COD_REQUERIMIENTO='$codrequerimientoproduccion' AND COD_PRODUCTO='$codproductoproduccion'");
       $stmActualiza->execute();
 
 
@@ -2672,12 +2717,18 @@ class m_almacen
   public function RechazarPendienteRequerimiento($cod_requerimiento_pedido)
   {
     try {
-
+      $this->bd->beginTransaction();
       $stm = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='R' WHERE COD_REQUERIMIENTO = '$cod_requerimiento_pedido'");
-      $delete = $stm->execute();
-      return $delete;
+      $actualizarRequerimiento = $stm->execute();
+
+      $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='R' WHERE COD_REQUERIMIENTO = '$cod_requerimiento_pedido'");
+      $stmActualizar->execute();
+
+      $actualizarRequerimiento = $this->bd->commit();
+      return $actualizarRequerimiento;
     } catch (Exception $e) {
-      die("Error al eliminar los datos: " . $e->getMessage());
+      $this->bd->rollBack();
+      die($e->getMessage());
     }
   }
 }

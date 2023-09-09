@@ -107,7 +107,7 @@ $(function () {
     let fechavencimiento = $("#fechavencimiento").val();
     let textAreaObservacion = $("#textAreaObservacion").val();
     let cantidadcaja = $("#cantidadcaja").val();
-    // console.log(fechainicio);
+    // console.log(codproductoproduccion);
     if (productorequerimientoitem === "") {
       Swal.fire({
         title: "¡Error!",

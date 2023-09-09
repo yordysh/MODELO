@@ -118,7 +118,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Text input cantidad por caja-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Cantidad por caja</label>
-                            <input type="number" id="cantidadcaja" class="form-control" name="" value="20">
+                            <input type="number" id="cantidadcaja" class="form-control" name="" value="20" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
                         </div>
                         <!-- Text input Observacion-->
                         <div class="form-outline mb-4">
