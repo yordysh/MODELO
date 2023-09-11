@@ -429,7 +429,7 @@ if ($accion == 'insertar') {
     $valoresCapturadosProduccion = trim($_POST['valoresCapturadosProduccion']);
     $codigoproducto = trim($_POST['codigoproducto']);
     $codigoproduccion = trim($_POST['codigoproduccion']);
-    $respuesta = c_almacen::c_mostrar_envases_por_produccion($codigoproducto, $cantidad);
+    $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion);
     echo $respuesta;
 }
 
@@ -2617,6 +2617,22 @@ class c_almacen
             echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
+        }
+    }
+
+
+    static function c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($valoresCapturadosProduccion) && isset($codigoproducto) && isset($codigoproduccion)) {
+            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion);
+
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
         }
     }
 }

@@ -2794,4 +2794,30 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
+  public function  InsertarValorInsumoRegistro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion)
+  {
+    try {
+      $this->bd->beginTransaction();
+
+      $stmCodigoFormula = $this->bd->prepare("SELECT MAX(COD_FORMULACION) AS COD_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codigoproducto'");
+      $stmCodigoFormula->execute();
+      $consultacodigoformula = $stmCodigoFormula->fetch(PDO::FETCH_ASSOC);
+      $resultadoformula = $consultacodigoformula['COD_FORMULACION'];
+
+      // $stmformulacionenvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, 
+      //   TFE.CANTIDA AS CANTIDA, TF.CAN_FORMULACION AS CANTIDAD_FORMULACION FROM T_TMPFORMULACION_ENVASE TFE 
+      //   INNER JOIN T_PRODUCTO TP ON TFE.COD_PRODUCTO=TP.COD_PRODUCTO
+      //   INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFE.COD_FORMULACION
+      //   WHERE TFE.COD_FORMULACION='$resultadoformula'");
+      // $stmformulacionenvase->execute();
+      // $datosEnvases = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+
+      $insert = $this->bd->commit();
+      return $insert;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
 }
