@@ -2642,11 +2642,28 @@ class m_almacen
       $stmCantidad->execute();
       $consultacantidad = $stmCantidad->fetch(PDO::FETCH_ASSOC);
       $resultadoCantidad = intval($consultacantidad['CAN_FORMULACION']);
-      var_dump($resultado);
-      var_dump($resultadoCantidad);
-      exit();
+      // var_dump($resultado);
+      // var_dump($resultadoCantidad);
+      // exit();
+
+      $resultadofinal = ($cantidadtotalproduccion / $resultadoCantidad);
+
+      $stmConsulta = $this->bd->prepare("SELECT COD_FORMULACION AS COD_FORMULACION, COD_PRODUCTO AS COD_PRODUCTO, 
+                                         CAST((CAN_FORMULACION*'$resultadofinal') AS DECIMAL(10, 2)) AS CANTIDAD_INSUMOS
+                                          FROM T_TMPFORMULACION_ITEM WHERE COD_FORMULACION='$resultado'");
+
+      $stmConsulta->execute();
+      $consulta = $stmConsulta->fetchAll(PDO::FETCH_OBJ);
 
 
+
+
+      $stmConsultaEnvase = $this->bd->prepare("SELECT COD_FORMULACION AS COD_FORMULACION, COD_PRODUCTO AS COD_PRODUCTO,
+                                                CAST((CANTIDA*'$resultadofinal') AS DECIMAL(10, 2)) AS CANTIDAD_ENVASE
+                                              FROM T_TMPFORMULACION_ENVASE WHERE COD_FORMULACION='$resultado'");
+
+      $stmConsultaEnvase->execute();
+      $consultaEnvase = $stmConsultaEnvase->fetchAll(PDO::FETCH_OBJ);
 
 
 
@@ -2662,24 +2679,6 @@ class m_almacen
 
 
 
-
-      $stmConsulta = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO,TRI.CANTIDAD AS CANTIDAD_ITEM,
-                                          TI.COD_PRODUCTO AS COD_PRODUCTO, TI.CANTIDAD AS CANTIDAD_INSUMOS FROM T_TMPREQUERIMIENTO_ITEM TRI 
-                                          INNER JOIN T_TMPREQUERIMIENTO_INSUMO TI ON TRI.COD_REQUERIMIENTO=TI.COD_REQUERIMIENTO
-                                          WHERE TRI.COD_REQUERIMIENTO='$codrequerimientoproduccion' AND TRI.COD_PRODUCTO='$codproductoproduccion'");
-
-      $stmConsulta->execute();
-      $consulta = $stmConsulta->fetchAll(PDO::FETCH_OBJ);
-
-
-      $stmConsultaEnvase = $this->bd->prepare("SELECT TI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TI.COD_PRODUCTO AS COD_PRODUCTO, 
-                                                TE.COD_PRODUCTO AS COD_PRODUCTO, TE.CANTIDAD AS CANTIDAD_ENVASE  FROM T_TMPREQUERIMIENTO_ITEM TI 
-                                                INNER JOIN T_TMPREQUERIMIENTO_ENVASE TE ON TI.COD_REQUERIMIENTO=TE.COD_REQUERIMIENTO
-                                                WHERE TI.COD_REQUERIMIENTO='$codrequerimientoproduccion' AND TI.COD_PRODUCTO='$codproductoproduccion'");
-
-      $stmConsultaEnvase->execute();
-      $consultaenvase =  $stmConsultaEnvase->fetchAll(PDO::FETCH_OBJ);
-
       foreach ($consulta as $row) {
 
         $codProductoitem = $row->COD_PRODUCTO;
@@ -2691,7 +2690,7 @@ class m_almacen
         $stmProduccionitem->execute();
       }
 
-      foreach ($consultaenvase as $rowEnvase) {
+      foreach ($consultaEnvase as $rowEnvase) {
 
         $codProductoenvase = $rowEnvase->COD_PRODUCTO;
         $cantidadEnvases = $rowEnvase->CANTIDAD_ENVASE;
@@ -2726,6 +2725,70 @@ class m_almacen
 
       $actualizarRequerimiento = $this->bd->commit();
       return $actualizarRequerimiento;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+
+
+
+
+
+
+  public function  MostrarProductoRegistroEnvase()
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT TRI.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TP.ABR_PRODUCTO AS ABR_PRODUCTO, 
+                                  TRI.ESTADO AS ESTADO FROM T_TMPREQUERIMIENTO_ITEM TRI INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO WHERE TRI.ESTADO='T'");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function  MostrarProduccionEnvase()
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT COD_PRODUCCION,NUM_PRODUCION_LOTE FROM T_TMPPRODUCCION");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+
+
+
+  public function  MostrarEnvasesPorProduccion($codigoproducto)
+  {
+    try {
+      $this->bd->beginTransaction();
+
+      $stmCodigoFormula = $this->bd->prepare("SELECT MAX(COD_FORMULACION) AS COD_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codigoproducto'");
+      $stmCodigoFormula->execute();
+      $consultacodigoformula = $stmCodigoFormula->fetch(PDO::FETCH_ASSOC);
+      $resultadoformula = $consultacodigoformula['COD_FORMULACION'];
+
+      $stmformulacionenvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, 
+        TFE.CANTIDA AS CANTIDA, TF.CAN_FORMULACION AS CANTIDAD_FORMULACION FROM T_TMPFORMULACION_ENVASE TFE 
+        INNER JOIN T_PRODUCTO TP ON TFE.COD_PRODUCTO=TP.COD_PRODUCTO
+        INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFE.COD_FORMULACION
+        WHERE TFE.COD_FORMULACION='$resultadoformula'");
+      $stmformulacionenvase->execute();
+      $datosEnvases = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+
+      $this->bd->commit();
+      return $datosEnvases;
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());

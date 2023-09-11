@@ -2,7 +2,8 @@
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataProducto = $mostrar->MostrarProductoTerminado();
+$dataProducto = $mostrar->MostrarProductoRegistroEnvase();
+$dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
 
 ?>
 <!DOCTYPE html>
@@ -79,19 +80,22 @@ $dataProducto = $mostrar->MostrarProductoTerminado();
                                     <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
                                 <?php
                                 }
-
                                 ?>
                             </select>
                         </div>
 
                         <!--Combo Produccion -->
-                        <!-- <div class="form-outline mb-4 ">
-                            <label class="form-label">Produccion</label>
-                            <select id="selectProduccion" class="form-select selectProduccion" aria-label="Default select example">
+                        <div class="form-outline mb-4 ">
+                            <label class="form-label">N° produccion</label>
+                            <select id="selectNumProduccion" class="form-select selectNumProduccion" aria-label="Default select example">
                                 <option value="0" selected disabled>Seleccione produccion</option>
-
+                                <?php foreach ($dataNumeroProduccion as  $listaProduccion) { ?>
+                                    <option value="<?php echo $listaProduccion['COD_PRODUCCION']; ?>" class="option"><?php echo $listaProduccion['NUM_PRODUCION_LOTE']; ?></option>
+                                <?php
+                                }
+                                ?>
                             </select>
-                        </div> -->
+                        </div>
 
                         <!-- Text input cantidad -->
                         <div class="form-outline mb-4">
@@ -144,7 +148,7 @@ $dataProducto = $mostrar->MostrarProductoTerminado();
                     <table id="tbRE" class="table table-sm mb-3 table-hover">
                         <thead>
                             <tr>
-                                <th class="thtitulo" scope="col">ENVASES</th>
+                                <th class="thtitulo" scope="col">MATERIALES</th>
                                 <th class="thtitulo" scope="col">CANTIDAD</th>
                                 <th class="thtitulo" scope="col">LOTE</th>
                             </tr>

@@ -419,6 +419,18 @@ if ($accion == 'insertar') {
     $cod_requerimiento_pedido = trim($_POST['cod_requerimiento_pedido']);
     $respuesta = c_almacen::c_rechazar_pendiente_requerimiento($cod_requerimiento_pedido);
     echo $respuesta;
+} elseif ($accion == 'mostrarregistrosporenvases') {
+    // $codigoproduccion = trim($_POST['codigoproduccion']);
+    $codigoproducto = trim($_POST['codigoproducto']);
+    $cantidad = trim($_POST['cantidad']);
+    $respuesta = c_almacen::c_mostrar_envases_por_produccion($codigoproducto, $cantidad);
+    echo $respuesta;
+} elseif ($accion == 'guardarvalordeinsumosporregistro') {
+    $valoresCapturadosProduccion = trim($_POST['valoresCapturadosProduccion']);
+    $codigoproducto = trim($_POST['codigoproducto']);
+    $codigoproduccion = trim($_POST['codigoproduccion']);
+    $respuesta = c_almacen::c_mostrar_envases_por_produccion($codigoproducto, $cantidad);
+    echo $respuesta;
 }
 
 
@@ -2572,6 +2584,39 @@ class c_almacen
             } else {
                 return "error";
             };
+        }
+    }
+
+
+
+
+    static function c_mostrar_envases_por_produccion($codigoproducto, $cantidad)
+    {
+        try {
+
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarEnvasesPorProduccion($codigoproducto);
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_REQUERIMIENTO" => $row->COD_FORMULACION,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+
+                    $CANTIDAD_TOTAL = ceil(($row->CANTIDA * $cantidad) / $row->CANTIDAD_FORMULACION),
+                    "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
+
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 }
