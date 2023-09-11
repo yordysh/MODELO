@@ -420,16 +420,17 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_rechazar_pendiente_requerimiento($cod_requerimiento_pedido);
     echo $respuesta;
 } elseif ($accion == 'mostrarregistrosporenvases') {
-    // $codigoproduccion = trim($_POST['codigoproduccion']);
+    $codigoproduccion = trim($_POST['codigoproduccion']);
     $codigoproducto = trim($_POST['codigoproducto']);
     $cantidad = trim($_POST['cantidad']);
-    $respuesta = c_almacen::c_mostrar_envases_por_produccion($codigoproducto, $cantidad);
+    $respuesta = c_almacen::c_mostrar_envases_por_produccion($codigoproducto, $codigoproduccion, $cantidad);
     echo $respuesta;
 } elseif ($accion == 'guardarvalordeinsumosporregistro') {
-    $valoresCapturadosProduccion = trim($_POST['valoresCapturadosProduccion']);
+    $valoresCapturadosProduccion = ($_POST['valoresCapturadosProduccion']);
     $codigoproducto = trim($_POST['codigoproducto']);
     $codigoproduccion = trim($_POST['codigoproduccion']);
-    $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion);
+    $cantidad = trim($_POST['cantidad']);
+    $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad);
     echo $respuesta;
 }
 
@@ -2590,13 +2591,12 @@ class c_almacen
 
 
 
-    static function c_mostrar_envases_por_produccion($codigoproducto, $cantidad)
+    static function c_mostrar_envases_por_produccion($codigoproducto, $codigoproduccion, $cantidad)
     {
         try {
 
-
             $mostrar = new m_almacen();
-            $datos = $mostrar->MostrarEnvasesPorProduccion($codigoproducto);
+            $datos = $mostrar->MostrarEnvasesPorProduccion($codigoproducto, $codigoproduccion, $cantidad);
 
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
@@ -2604,7 +2604,7 @@ class c_almacen
             $json = array();
             foreach ($datos as $row) {
                 $json[] = array(
-                    "COD_REQUERIMIENTO" => $row->COD_FORMULACION,
+                    "COD_COD_FORMULACION" => $row->COD_FORMULACION,
                     "COD_PRODUCTO" => $row->COD_PRODUCTO,
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
 
@@ -2621,12 +2621,12 @@ class c_almacen
     }
 
 
-    static function c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion)
+    static function c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad)
     {
         $m_formula = new m_almacen();
 
-        if (isset($valoresCapturadosProduccion) && isset($codigoproducto) && isset($codigoproduccion)) {
-            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion);
+        if (isset($valoresCapturadosProduccion) && isset($codigoproducto) && isset($codigoproduccion) && isset($cantidad)) {
+            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad);
 
             if ($respuesta) {
                 return "ok";

@@ -39,7 +39,7 @@ $(function () {
     let codigoproduccion = $("#selectNumProduccion").val();
     let cantidad = $("#cantidad").val();
 
-    // console.log("codigoproduccion" + codigoproduccion);
+    console.log("codigoproduccion" + codigoproduccion);
 
     let accion = "mostrarregistrosporenvases";
 
@@ -53,21 +53,37 @@ $(function () {
         cantidad: cantidad,
       },
       success: function (response) {
-        if (!response.error) {
+        // console.log(response);
+        if (isJSON(response)) {
           let tasks = JSON.parse(response);
 
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_FORMULACION}">
 
-            <td data-titulo="MATERIALES" taskcodigoproducto=${task.COD_PRODUCTO}>${task.DES_PRODUCTO}</td>
-            <td data-titulo="CANTIDAD" >${task.CANTIDAD_TOTAL}</td>
-            <td data-titulo="LOTE" ><input type='text'/></td>
+                                    <td data-titulo="MATERIALES" taskcodigoproducto=${task.COD_PRODUCTO}>${task.DES_PRODUCTO}</td>
+                                    <td data-titulo="CANTIDAD" >${task.CANTIDAD_TOTAL}</td>
+                                    <td data-titulo="LOTE" ><input type='text'/></td>
 
-        </tr>`;
+                          </tr>`;
           });
 
           $("#tablacalculoregistroenvase").html(template);
+        } else {
+          Swal.fire({
+            title: "¡Supero cantidad!",
+            text: "Cantidad supero lo que hay en produccion.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#cantidad").val("");
+              // $("#selectProductoCombo").val("none").trigger("change");
+              // $("#selectNumProduccion").val("none").trigger("change");
+              $("#tablacalculoregistroenvase").empty();
+            }
+          });
+          $("#tablacalculoregistroenvase").empty();
         }
       },
       error: function (error) {
@@ -80,16 +96,41 @@ $(function () {
     e.preventDefault();
     let codigoproducto = $("#selectProductoCombo").val();
     let codigoproduccion = $("#selectNumProduccion").val();
-    // let cantidad = $("#cantidad").val();
+    let cantidad = $("#cantidad").val();
 
     let valoresCapturadosProduccion = [];
+
+    if (!codigoproducto) {
+      Swal.fire({
+        icon: "error",
+        title: "Seleccione un producto",
+        text: "Debe de seleccionar un producto.",
+      });
+      return;
+    }
+    if (!codigoproduccion) {
+      Swal.fire({
+        icon: "error",
+        title: "Seleccione una produccion",
+        text: "Debe de seleccionar una produccion.",
+      });
+      return;
+    }
+    if (cantidad == "") {
+      Swal.fire({
+        icon: "error",
+        title: "Inserte una cantidad",
+        text: "Debe de escribir una cantidad.",
+      });
+      return;
+    }
 
     $("#tablacalculoregistroenvase tr").each(function () {
       let valorProducto = $(this).find("td:eq(0)").attr("taskcodigoproducto");
       let valorCan = $(this).find("td:eq(1)").text();
-      let valorlote = $(this).find("td:eq(2)").text();
+      let valorLote = $(this).find("td:eq(2) input").val();
 
-      valoresCapturadosProduccion.push(valorProducto, valorCan, valorlote);
+      valoresCapturadosProduccion.push(valorProducto, valorCan, valorLote);
     });
 
     let accion = "guardarvalordeinsumosporregistro";
@@ -102,25 +143,27 @@ $(function () {
         valoresCapturadosProduccion: valoresCapturadosProduccion,
         codigoproducto: codigoproducto,
         codigoproduccion: codigoproduccion,
+        cantidad: cantidad,
       },
       success: function (response) {
         console.log("respuesta" + response);
-        // if (response == "ok") {
-        //   Swal.fire({
-        //     title: "¡Guardado exitoso!",
-        //     text: "Los datos se han guardado correctamente.",
-        //     icon: "success",
-        //     confirmButtonText: "Aceptar",
-        //   }).then((result) => {
-        //     if (result.isConfirmed) {
-        //       $("#selectInsumoEnvase").val("none").trigger("change");
-        //       $("#cantidadInsumoEnvase").val("");
-        //       tablaReqInsumo.empty();
-        //       tablaReqEnv.empty();
-        //       tablatotalInEn.empty();
-        //     }
-        //   });
-        // }
+        if (response == "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#selectProductoCombo").val("none").trigger("change");
+              $("#selectNumProduccion").val("none").trigger("change");
+              $("#cantidad").val("");
+              $("#tablacalculoregistroenvase").empty();
+            }
+          });
+        } else {
+          alert("errr");
+        }
       },
       error: function (error) {
         console.log("ERROR " + error);
@@ -128,3 +171,11 @@ $(function () {
     });
   });
 });
+function isJSON(str) {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}

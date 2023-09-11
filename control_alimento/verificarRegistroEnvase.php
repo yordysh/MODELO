@@ -77,7 +77,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                             <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
                                 <?php foreach ($dataProducto as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['COD_REQUERIMIENTO'] . " "; ?><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
                                 <?php
                                 }
                                 ?>
@@ -90,7 +90,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                             <select id="selectNumProduccion" class="form-select selectNumProduccion" aria-label="Default select example">
                                 <option value="0" selected disabled>Seleccione produccion</option>
                                 <?php foreach ($dataNumeroProduccion as  $listaProduccion) { ?>
-                                    <option value="<?php echo $listaProduccion['COD_PRODUCCION']; ?>" class="option"><?php echo $listaProduccion['NUM_PRODUCION_LOTE']; ?></option>
+                                    <option value="<?php echo $listaProduccion['COD_PRODUCCION']; ?>" class="option"><?php echo $listaProduccion['COD_REQUERIMIENTO'] . " "; ?><?php echo $listaProduccion['NUM_PRODUCION_LOTE']; ?></option>
                                 <?php
                                 }
                                 ?>
@@ -177,7 +177,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
             var mesSeleccionado = document.getElementById("mes").value;
 
             // Enviar los valores a tu script de generación de PDF
-            var url = "pdf-monitoreo.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
+            var url = "pdf-registro-produccion.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
             window.open(url, "_blank");
         }
     </script>
