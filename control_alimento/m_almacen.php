@@ -2646,11 +2646,12 @@ class m_almacen
       // var_dump($resultadoCantidad);
       // exit();
 
-      $resultadofinal = ($cantidadtotalproduccion / $resultadoCantidad);
 
-      $stmConsulta = $this->bd->prepare("SELECT COD_FORMULACION AS COD_FORMULACION, COD_PRODUCTO AS COD_PRODUCTO, 
-                                         CAST((CAN_FORMULACION*'$resultadofinal') AS DECIMAL(10, 2)) AS CANTIDAD_INSUMOS
-                                          FROM T_TMPFORMULACION_ITEM WHERE COD_FORMULACION='$resultado'");
+
+      $stmConsulta = $this->bd->prepare("SELECT TFI.COD_FORMULACION AS COD_FORMULACION, TFI.COD_PRODUCTO AS COD_PRODUCTO, 
+                                          TFI.CAN_FORMULACION AS CAN_FORMULACION, TF.CAN_FORMULACION AS CANTIDAD_FORMULACION FROM T_TMPFORMULACION_ITEM TFI 
+                                          INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFI.COD_FORMULACION
+                                          WHERE TFI.COD_FORMULACION='$resultado'");
 
       $stmConsulta->execute();
       $consulta = $stmConsulta->fetchAll(PDO::FETCH_OBJ);
@@ -2658,9 +2659,10 @@ class m_almacen
 
 
 
-      $stmConsultaEnvase = $this->bd->prepare("SELECT COD_FORMULACION AS COD_FORMULACION, COD_PRODUCTO AS COD_PRODUCTO,
-                                                CAST((CANTIDA*'$resultadofinal') AS DECIMAL(10, 2)) AS CANTIDAD_ENVASE
-                                              FROM T_TMPFORMULACION_ENVASE WHERE COD_FORMULACION='$resultado'");
+      $stmConsultaEnvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO,
+                                                TFE.CANTIDA AS CANTIDA, TF.CAN_FORMULACION AS CANTIDAD_FORMULACION FROM T_TMPFORMULACION_ENVASE TFE 
+                                                INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFE.COD_FORMULACION
+                                                WHERE TFE.COD_FORMULACION='$resultado'");
 
       $stmConsultaEnvase->execute();
       $consultaEnvase = $stmConsultaEnvase->fetchAll(PDO::FETCH_OBJ);
@@ -2682,10 +2684,12 @@ class m_almacen
       foreach ($consulta as $row) {
 
         $codProductoitem = $row->COD_PRODUCTO;
-        $cantidadInsumos = $row->CANTIDAD_INSUMOS;
+        $cantidadInsumos = $row->CAN_FORMULACION;
+        $cantidadformulacion = $row->CANTIDAD_FORMULACION;
+        $totalInsumos =  round((($cantidadInsumos * $cantidadtotalproduccion) / $cantidadformulacion), 3);
         $codigo_categoria = $codigoformula->CodigoCategoriaProducto($codProductoitem);
         $stmProduccionitem = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_ITEM(COD_PRODUCCION, COD_CATEGORIA, COD_PRODUCTO,  CAN_PRODUCCION)
-                                                  VALUES ('$codigo_de_produccion_generado','$codigo_categoria','$codProductoitem','$cantidadInsumos')");
+                                                  VALUES ('$codigo_de_produccion_generado','$codigo_categoria','$codProductoitem','$totalInsumos')");
 
         $stmProduccionitem->execute();
       }
@@ -2693,10 +2697,12 @@ class m_almacen
       foreach ($consultaEnvase as $rowEnvase) {
 
         $codProductoenvase = $rowEnvase->COD_PRODUCTO;
-        $cantidadEnvases = $rowEnvase->CANTIDAD_ENVASE;
+        $cantidadEnvases = $rowEnvase->CANTIDA;
+        $cantidadformulacion = $row->CANTIDAD_FORMULACION;
+        $totalEnvases =  ceil(($cantidadEnvases * $cantidadtotalproduccion) / $cantidadformulacion);
         $codigo_categoria_envase = $codigoformula->CodigoCategoriaProducto($codProductoenvase);
         $stmProduccionenvases = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_ENVASE(COD_PRODUCCION, COD_CATEGORIA_ENVASE, COD_PRODUCTO,  CAN_PRODUCCION_ENVASE)
-                                                  VALUES ('$codigo_de_produccion_generado','$codigo_categoria_envase','$codProductoenvase','$cantidadEnvases')");
+                                                  VALUES ('$codigo_de_produccion_generado','$codigo_categoria_envase','$codProductoenvase','$totalEnvases')");
 
         $stmProduccionenvases->execute();
       }
