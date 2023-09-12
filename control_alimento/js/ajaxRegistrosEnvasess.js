@@ -36,8 +36,11 @@ $(function () {
   $("#botonCalcularregistros").click((e) => {
     e.preventDefault();
     let codigoproducto = $("#selectProductoCombo").val();
+    $("#hiddenproducto").val(codigoproducto);
     let codigoproduccion = $("#selectNumProduccion").val();
+    $("#hiddenproduccion").val(codigoproduccion);
     let cantidad = $("#cantidad").val();
+    $("#hiddencantidad").val(cantidad);
 
     console.log("codigoproduccion" + codigoproduccion);
 
@@ -69,6 +72,9 @@ $(function () {
           });
 
           $("#tablacalculoregistroenvase").html(template);
+          $("#selectProductoCombo").val("none").trigger("change");
+          $("#selectNumProduccion").val("none").trigger("change");
+          $("#cantidad").val("");
         } else {
           Swal.fire({
             title: "¡Supero cantidad!",
@@ -78,8 +84,8 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#cantidad").val("");
-              // $("#selectProductoCombo").val("none").trigger("change");
-              // $("#selectNumProduccion").val("none").trigger("change");
+              $("#selectProductoCombo").val("none").trigger("change");
+              $("#selectNumProduccion").val("none").trigger("change");
               $("#tablacalculoregistroenvase").empty();
             }
           });
@@ -94,9 +100,9 @@ $(function () {
 
   $("#botonguardarregistro").click((e) => {
     e.preventDefault();
-    let codigoproducto = $("#selectProductoCombo").val();
-    let codigoproduccion = $("#selectNumProduccion").val();
-    let cantidad = $("#cantidad").val();
+    let codigoproducto = $("#hiddenproducto").val();
+    let codigoproduccion = $("#hiddenproduccion").val();
+    let cantidad = $("#hiddencantidad").val();
 
     let valoresCapturadosProduccion = [];
 
@@ -157,6 +163,8 @@ $(function () {
             if (result.isConfirmed) {
               $("#selectProductoCombo").val("none").trigger("change");
               $("#selectNumProduccion").val("none").trigger("change");
+              $("#hiddenproducto").val("");
+              $("#hiddenproduccion").val("");
               $("#cantidad").val("");
               $("#tablacalculoregistroenvase").empty();
             }

@@ -89,16 +89,19 @@
             <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
           </li>
           <li>
-            <a class="" href="pedidoRequerimiento.php">Pedido requerimiento</a>
+            <a class="" href="pedidoRequerimiento.php">Confirmacion de requerimiento</a>
           </li>
           <li>
             <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
           </li>
           <li>
-            <a class="" href="registroEnvases.php">Registros envases</a>
+            <a class="" href="registroEnvases.php">Produccion de requerimiento</a>
+          <li>
+            <a class="" href="verificarRegistroEnvase.php">Registros envases</a>
           </li>
-        </ul>
       </li>
+    </ul>
+    </li>
     </ul>
   </nav>
   <?php

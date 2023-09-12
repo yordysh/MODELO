@@ -74,6 +74,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                         <!--Combo Productos -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Producto</label>
+                            <input type="hidden" id="hiddenproducto">
                             <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
                                 <?php foreach ($dataProducto as  $lis) { ?>
@@ -87,8 +88,9 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                         <!--Combo Produccion -->
                         <div class="form-outline mb-4 ">
                             <label class="form-label">N° produccion</label>
+                            <input type="hidden" id="hiddenproduccion">
                             <select id="selectNumProduccion" class="form-select selectNumProduccion" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione produccion</option>
+                                <option value="none" selected disabled>Seleccione produccion</option>
                                 <?php foreach ($dataNumeroProduccion as  $listaProduccion) { ?>
                                     <option value="<?php echo $listaProduccion['COD_PRODUCCION']; ?>" class="option"><?php echo $listaProduccion['COD_REQUERIMIENTO'] . " "; ?><?php echo $listaProduccion['NUM_PRODUCION_LOTE']; ?></option>
                                 <?php
@@ -100,6 +102,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                         <!-- Text input cantidad -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Cantidad</label>
+                            <input type="hidden" id='hiddencantidad'>
                             <input type="text" id="cantidad" class="form-control" name="cantidad" required>
                         </div>
                         <!-- Crear PDF -->
