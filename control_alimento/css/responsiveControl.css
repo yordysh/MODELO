@@ -379,6 +379,9 @@ td {
   .estiloguardar {
     margin-right: 170px;
   }
+  .estilopdf {
+    margin-left: 10px;
+  }
 }
 @media screen and (max-width: 1120px) {
   .btonguardar {
@@ -415,7 +418,7 @@ td {
     margin-bottom: 10px;
   }
   .estilopdf {
-    padding: 4px 50px;
+    padding: 5px 50px;
     font-size: 16px;
     max-width: 130%;
     width: 100%;
@@ -508,6 +511,10 @@ td {
   }
   .styleanmes {
     margin-bottom: 8px;
+  }
+  .estilopdf {
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 
   /*-------------- Estilo de MENUBAR ---------------------*/

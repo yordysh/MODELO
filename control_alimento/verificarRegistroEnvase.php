@@ -78,7 +78,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                             <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
                                 <?php foreach ($dataProducto as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['COD_REQUERIMIENTO'] . " "; ?><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                    <option id_reque="<?php echo $lis['COD_REQUERIMIENTO'] ?>" value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['COD_REQUERIMIENTO'] . " "; ?><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
                                 <?php
                                 }
                                 ?>
@@ -107,10 +107,8 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                         </div>
                         <!-- Crear PDF -->
                         <div class="contenedorgeneral">
-                            <!-- <div class="ctnBtn"> -->
-                            <!-- <input type="hidden" id="taskId"> -->
+
                             <div class="estilocalcular">
-                                <!-- <button id="botonCalcular" type="submit" name="calcular" class="btn btn-primary estilobotoncalcular">Calcular </button> -->
                                 <button id="botonCalcularregistros" type="submit" name="calcular" class="btn btn-primary estilobotoncalcular">Calcular </button>
                             </div>
                             <div class="estiloguardar">
@@ -176,8 +174,18 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
     <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {
+
             var anioSeleccionado = document.getElementById("anio").value;
             var mesSeleccionado = document.getElementById("mes").value;
+            if (!mesSeleccionado) {
+                Swal.fire({
+                    title: "¡Error!",
+                    text: "Seleccionar un mes",
+                    icon: "error",
+                    confirmButtonText: "Aceptar",
+                });
+                return;
+            }
 
             // Enviar los valores a tu script de generación de PDF
             var url = "pdf-registro-produccion.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;

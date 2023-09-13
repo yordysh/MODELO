@@ -33,8 +33,39 @@ $(function () {
   $("#selectProductoCombo").select2();
   $("#selectNumProduccion").select2();
 
+  $("#selectProductoCombo").on("change", (e) => {
+    e.preventDefault();
+    let idrequerimiento = $(this).find("option:selected").attr("id_reque");
+    let codigoproductoverifica = $("#selectProductoCombo").val();
+
+    let accion = "verificaregistromenorconproducto";
+
+    $.ajax({
+      type: "POST",
+      url: "./c_almacen.php",
+      data: {
+        accion: accion,
+        codigoproductoverifica: codigoproductoverifica,
+        idrequerimiento: idrequerimiento,
+      },
+      success: function (response) {
+        console.log(response);
+        if (response == "error") {
+          Swal.fire({
+            title: "¡Valor incorrecto!",
+            text: "Elija el valor minimo de requeriento del producto.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          });
+        } else {
+        }
+      },
+    });
+  });
+
   $("#botonCalcularregistros").click((e) => {
     e.preventDefault();
+
     let codigoproducto = $("#selectProductoCombo").val();
     $("#hiddenproducto").val(codigoproducto);
     let codigoproduccion = $("#selectNumProduccion").val();
@@ -42,7 +73,30 @@ $(function () {
     let cantidad = $("#cantidad").val();
     $("#hiddencantidad").val(cantidad);
 
-    console.log("codigoproduccion" + codigoproduccion);
+    if (!codigoproducto) {
+      Swal.fire({
+        icon: "error",
+        title: "Seleccione un producto",
+        text: "Debe de seleccionar un producto.",
+      });
+      return;
+    }
+    if (!codigoproduccion) {
+      Swal.fire({
+        icon: "error",
+        title: "Seleccione una produccion",
+        text: "Debe de seleccionar una produccion.",
+      });
+      return;
+    }
+    if (cantidad == "") {
+      Swal.fire({
+        icon: "error",
+        title: "Inserte una cantidad",
+        text: "Debe de escribir una cantidad.",
+      });
+      return;
+    }
 
     let accion = "mostrarregistrosporenvases";
 
@@ -56,7 +110,6 @@ $(function () {
         cantidad: cantidad,
       },
       success: function (response) {
-        // console.log(response);
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
 

@@ -432,6 +432,11 @@ if ($accion == 'insertar') {
     $cantidad = trim($_POST['cantidad']);
     $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad);
     echo $respuesta;
+} elseif ($accion == 'verificaregistromenorconproducto') {
+    $codigoproductoverifica = trim($_POST['codigoproductoverifica']);
+    $idrequerimiento = trim($_POST['idrequerimiento']);
+    $respuesta = c_almacen::c_verifica_registro_menor_producto($idrequerimiento, $codigoproductoverifica);
+    echo $respuesta;
 }
 
 
@@ -551,8 +556,6 @@ class c_almacen
                 }
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
-                // $jsonstring = json_encode($datos);
-                // echo $jsonstring;
             }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
@@ -581,10 +584,7 @@ class c_almacen
 
         if (isset($codinfra)) {
 
-
-
             $select = $mostrar->SelectInfra($codinfra);
-
 
             $json = array();
 
@@ -621,7 +621,6 @@ class c_almacen
     {
         try {
 
-
             $mostrar = new m_almacen();
 
             $mostrar = new m_almacen();
@@ -631,15 +630,11 @@ class c_almacen
                 $json[] = array(
                     "COD_ZONA" => $row->COD_ZONA,
                     "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
-                    // "FECHA" =>  convFecSistema($row->FECHA),
-                    // "VERSION" => $row->VERSION,
+
                 );
             }
             $jsonstring = json_encode($json);
             echo $jsonstring;
-            // $jsonstring = json_encode($datos);
-            // echo $jsonstring;
-
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -817,30 +812,21 @@ class c_almacen
         $taskNdias = $_POST['taskNdias'];
         if ($taskNdias == 1) {
 
-            // $fechaCreacion = $_POST['fechaCreacion'];
             $codInfraestructura = $_POST['codInfraestructura'];
-            // var_dump($_POST['fechaCreacion']);
-            // $fechaCreacion = new DateTime();
-            // $fechaCrea = $fechaCreacion->format('Y-m-d');
 
-            // $FECHA_CREACION = retunrFechaSqlphp($fechaCrea);
             $FECHA_CREACION = $mostrar->c_horaserversql('F');
             $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y',  $FECHA_CREACION);
             $FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
-
-            //$fechaTotal = date('Y-m-d', strtotime($fechaCrea . '+' . $taskNdias . ' days'));
 
             // Verificar si la fecha total cae en domingo
             if (date('N', strtotime($FECHA_TOTAL)) == 7) {
                 $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
             }
 
-            // $FECHA_TOTAL = retunrFechaSqlphp($fechaTotal);
-
             $insert = $mostrar->InsertarAlerta($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $taskNdias);
 
             if ($insert) {
-                echo "hola";
+
                 return "ok";
             } else {
                 return "error";
@@ -874,12 +860,8 @@ class c_almacen
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
-                // echo "aqui";
-                // echo "FechaPOSTERGACION" . $fechaPostergacion;
-
 
                 $fechaActual = $mostrar->c_horaserversql('F');
-
 
                 $DIAS_DESCUENTO = 1;
 
@@ -887,7 +869,6 @@ class c_almacen
                 $formattedDate = $fechaPost->format('d-m-Y');
                 $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
 
-                // echo "FECHASS" . $fechaAcordar;
                 $POSTERGACION = 'SI';
 
                 $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION);
@@ -1241,10 +1222,7 @@ class c_almacen
 
         if (isset($cod_frecuencia)) {
 
-
-
             $select = $mostrar->SelectLimpieza($cod_frecuencia);
-
 
             $json = array();
 
@@ -1390,16 +1368,10 @@ class c_almacen
     {
         $mostrar = new m_almacen();
 
-
         if (isset($codcontrolmaquina)) {
 
-
-
             $select = $mostrar->SelectControlMaquina($codcontrolmaquina);
-
-
             $json = array();
-
             foreach ($select as $row) {
                 $json[] = array(
                     "COD_CONTROL_MAQUINA" => $row['COD_CONTROL_MAQUINA'],
@@ -1446,7 +1418,6 @@ class c_almacen
     {
         $mostrar = new m_almacen();
 
-
         $datos = $mostrar->MostrarAlertaControl();
         try {
             if (!$datos) {
@@ -1481,19 +1452,12 @@ class c_almacen
     {
         $mostrar = new m_almacen();
 
-
         $estado = $_POST['estado'];
         $taskId = $_POST['taskId'];
         $observacionTextArea = $_POST['observacionTextArea'];
         $accionCorrectiva = $_POST['accionCorrectiva'];
-        // $FECHA_TOTAL = $_POST['taskFecha'];
-
-
 
         $fechadHoy  = $mostrar->c_horaserversql('F');
-        // $fechaActual = new DateTime();
-        // $fechadHoy = $fechaActual->format('d/m/Y');
-
 
         $alert = $mostrar->actualizarAlertaCheckControl($estado, $taskId, $observacionTextArea, $accionCorrectiva);
 
@@ -1525,15 +1489,9 @@ class c_almacen
 
             // $fechaCreacion = $_POST['fechaCreacion'];
             $codControlMaquina = $_POST['codControlMaquina'];
-            // var_dump($_POST['fechaCreacion']);
-            // $fechaCreacion = new DateTime();
-            // $fechaCrea = $fechaCreacion->format('Y-m-d');
-
-            // $FECHA_CREACION = retunrFechaSqlphp($fechaCrea);
             $FECHA_CREACION = $mostrar->c_horaserversql('F');
             $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y',  $FECHA_CREACION);
             $FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
-
             //$fechaTotal = date('Y-m-d', strtotime($fechaCrea . '+' . $taskNdias . ' days'));
 
             // Verificar si la fecha total cae en domingo
@@ -1661,17 +1619,7 @@ class c_almacen
     {
         $m_formula = new m_almacen();
 
-
         $respuesta = $m_formula->MostrarZonaCombo($term);
-        // $json = array();
-        // foreach ($respuesta as $row) {
-        //     $json[] = array(
-        //         "COD_ZONA" => $row['COD_ZONA'],
-        //         "NOMBRE_T_ZONA_AREAS" => $row['NOMBRE_T_ZONA_AREAS'],
-        //     );
-        // }
-        // $jsonstring = json_encode($json);
-        // echo $jsonstring;
 
         echo json_encode($respuesta);
     }
@@ -1753,10 +1701,7 @@ class c_almacen
     }
     static function c_actualizar_envases_labsabell($codlab, $codigolab)
     {
-
         $m_formula = new m_almacen();
-
-
         if (isset($codlab) && isset($codigolab)) {
 
             $respuesta = $m_formula->editarEnvasesLabsabell($codlab, $codigolab);
@@ -1793,7 +1738,6 @@ class c_almacen
     static function c_buscar_producto_combo_insumos_lab($term)
     {
         $m_formula = new m_almacen();
-
 
         $respuesta = $m_formula->MostrarProductoComboInsumosLab($term);
         echo json_encode($respuesta);
@@ -1879,7 +1823,6 @@ class c_almacen
 
         $m_formula = new m_almacen();
 
-
         if (isset($codInsu) && isset($codigoInsumo)) {
 
             $respuesta = $m_formula->editarInsumoLab($codInsu, $codigoInsumo);
@@ -1929,8 +1872,6 @@ class c_almacen
     static function c_buscar_producto_envase()
     {
         try {
-
-
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarProductoEnvase();
 
@@ -2056,13 +1997,6 @@ class c_almacen
             } else {
                 echo "error";
             }
-            // if (!$datos) {
-            //     throw new Exception("error en la consulta");
-            // }
-
-            // // $jsonstring = json_encode($datos);
-
-            // echo $datos;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -2070,8 +2004,6 @@ class c_almacen
     static function c_mostrar_insumo($selectinsumoenvase, $cantidadinsumoenvase)
     {
         try {
-
-
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarDatosInsumos($selectinsumoenvase);
 
@@ -2081,9 +2013,8 @@ class c_almacen
             $json = array();
             foreach ($datos as $row) {
                 $calculoInsumo = ($row->CAN_FORMULACION_INSUMOS * $cantidadinsumoenvase) / $row->CAN_FORMULACION;
-                // var_dump($calculoInsumo);
+
                 $total = round($calculoInsumo, 3);
-                // $total =  custom_bcdiv($calculoInsumo, '1', 3);
                 $json[] = array(
                     "COD_FORMULACION" => $row->COD_FORMULACION,
                     "DES_PRODUCTO_FORMULACION" => $row->DES_PRODUCTO_FORMULACION,
@@ -2103,12 +2034,8 @@ class c_almacen
     static function c_mostrar_envase($seleccionadoinsumoenvases, $cantidadesinsumoenvases)
     {
         try {
-
-
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarDatosEnvases($seleccionadoinsumoenvases);
-
-
 
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
@@ -2206,10 +2133,8 @@ class c_almacen
     {
         try {
 
-
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarSiCompra($cod_formulacion);
-
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
             }
@@ -2348,9 +2273,7 @@ class c_almacen
     }
     static function c_actualizar_cantidades_minima($codminimo, $selectCantidadminima, $cantidadMinima)
     {
-
         $m_formula = new m_almacen();
-
 
         if (isset($codminimo) && isset($selectCantidadminima) && isset($cantidadMinima)) {
 
@@ -2634,5 +2557,22 @@ class c_almacen
                 return "error";
             };
         }
+    }
+
+    static function c_verifica_registro_menor_producto($idrequerimiento, $codigoproductoverifica)
+    {
+
+        $mostrar = new m_almacen();
+
+        // if (isset($codigoproductoverifica)) {
+        $respuesta = $mostrar->VerificarRegistroMenorProducto($idrequerimiento, $codigoproductoverifica);
+
+
+        if ($respuesta) {
+            return "ok";
+        } else {
+            return "error";
+        };
+        // }
     }
 }

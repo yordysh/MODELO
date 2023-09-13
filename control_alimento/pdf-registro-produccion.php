@@ -15,17 +15,20 @@ $dompdf = new Dompdf();
 $options = new Options();
 
 $options->setIsRemoteEnabled(true);
-$dompdf->set_option('isPhpEnabled', false);
+$options->set('isPhpEnabled', true);
 $dompdf->set_option('isHtml5ParserEnabled', true);
 $dompdf->setOptions($options);
 
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A2', 'landscape');
+// $options->set('margin-top', '10mm');
+// $options->set('margin-right', '10mm');
+// $options->set('margin-bottom', '80mm');
+// $options->set('margin-left', '10mm');
 
 $dompdf->render();
 $canvas = $dompdf->getCanvas();
 $font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
-$canvas->page_text(1350, 80, "{PAGE_NUM}/{PAGE_COUNT}", $font, 15, array(0, 0, 0));
-// $canvas->page_text(800, 1100, "Página:", null, 15);
+$canvas->page_text(1325, 80, "{PAGE_NUM}/{PAGE_COUNT}", $font, 15, array(0, 0, 0));
 
-$dompdf->stream('Monitoreo.pdf', array('Attachment' => 0));
+$dompdf->stream('Registro-envases.pdf', array('Attachment' => 0));

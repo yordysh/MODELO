@@ -1980,8 +1980,6 @@ class m_almacen
       $this->bd->beginTransaction();
       $requerimientoProd = new m_almacen();
 
-      // $fecha_generado = $requerimientoProd->c_horaserversql('F');
-
       $codigo_requerimiento_producto = $requerimientoProd->generarCodigoRequerimientoProducto();
       $cantidad_formulacion = $requerimientoProd->valorFormulacion($selectProductoCombo);
 
@@ -2327,10 +2325,10 @@ class m_almacen
                                                   VALUES ('$codigo_orden_compra','$codProducto', '$canInsu','$multiplicacionTotal')");
         $insert = $stmPedidoOrden->execute();
       }
-      // $fecha_generado = $cod->c_horaserversql('F');
-      $fecha_actual = '09/09/2023';
+      $fecha_generado = $cod->c_horaserversql('F');
+      // $fecha_actual = '09/09/2023';
       //echo $fecha_generado;
-      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      //$fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
       $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $stmActualizar->execute();
 
@@ -2352,10 +2350,10 @@ class m_almacen
 
       $this->bd->beginTransaction();
       $cod = new m_almacen();
-      // $fecha_generado = $cod->c_horaserversql('F');
-      $fecha_actual = '09/09/2023';
+      $fecha_generado = $cod->c_horaserversql('F');
+      // $fecha_actual = '09/09/2023';
       //echo $fecha_generado;
-      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      //$fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $insertar = $stmActualizarOrden->execute();
@@ -2632,6 +2630,20 @@ class m_almacen
     try {
       $this->bd->beginTransaction();
 
+      $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
+      $dateTInicio = $fechaFormateadaIncio->format('d/m/Y');
+
+
+      $fechaFormateadaVencimiento = DateTime::createFromFormat('Y-m-d', $fechavencimiento);
+      $dateTVencimiento = $fechaFormateadaVencimiento->format('d/m/Y');
+
+
+      $zonaHorariaPeru = new DateTimeZone('America/Lima');
+      $horaActualPeru = new DateTime('now', $zonaHorariaPeru);
+      $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
+
+
+
       $stmCodProducto = $this->bd->prepare("SELECT MAX(COD_FORMULACION) AS COD_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codproductoproduccion'");
       $stmCodProducto->execute();
       $consultacodigo = $stmCodProducto->fetch(PDO::FETCH_ASSOC);
@@ -2642,10 +2654,6 @@ class m_almacen
       $stmCantidad->execute();
       $consultacantidad = $stmCantidad->fetch(PDO::FETCH_ASSOC);
       $resultadoCantidad = intval($consultacantidad['CAN_FORMULACION']);
-      // var_dump($resultado);
-      // var_dump($resultadoCantidad);
-      // exit();
-
 
 
       $stmConsulta = $this->bd->prepare("SELECT TFI.COD_FORMULACION AS COD_FORMULACION, TFI.COD_PRODUCTO AS COD_PRODUCTO, 
@@ -2672,9 +2680,9 @@ class m_almacen
       $codigoformula = new m_almacen();
       $codigo_de_produccion_generado = $codigoformula->CodigoProduccionGenerado();
       $codigo_categoria = $codigoformula->CodigoCategoriaProducto($codproductoproduccion);
-
-      $stmProducciontototal = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION(COD_PRODUCCION, COD_REQUERIMIENTO, COD_CATEGORIA, COD_PRODUCTO, NUM_PRODUCION_LOTE, CAN_PRODUCCION,CANTIDAD_PRODUCIDA, FEC_GENERADO,FEC_VENCIMIENTO, OBSERVACION, COD_ALMACEN,CAN_CAJA)
-      VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$cantidadtotalproduccion','$fechainicio','$fechavencimiento','$textAreaObservacion','00017','$cantidadcaja')");
+      $fechainiciogen = new DateTime($fechainicio);
+      $stmProducciontototal = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION(COD_PRODUCCION, COD_REQUERIMIENTO, COD_CATEGORIA, COD_PRODUCTO, NUM_PRODUCION_LOTE, CAN_PRODUCCION,CANTIDAD_PRODUCIDA, FEC_GENERADO,HOR_GENERADO,FEC_VENCIMIENTO, OBSERVACION, COD_ALMACEN,CAN_CAJA)
+      VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$cantidadtotalproduccion','$dateTInicio','$horaMinutosSegundos','$dateTVencimiento','$textAreaObservacion','00017','$cantidadcaja')");
 
       $insert = $stmProducciontototal->execute();
 
@@ -2845,16 +2853,9 @@ class m_almacen
       $codigo_de_avance_insumo = $codigoInsumosAvances->CodigoAvanceInsumo();
       $numero_generado_bachada = $codigoInsumosAvances->NumeroBachadaGenerado();
 
-      // var_dump($codigoproducto);
-      // var_dump($codigoproduccion);
-      // var_dump($cantidad);
-      // exit();
 
-
-      // $stmCantidad = $this->bd->prepare("SELECT CAN_PRODUCCION,CANTIDAD_PRODUCIDA FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto'");
-      // $stmCantidad->execute();
-      // $consultacantidad = $stmCantidad->fetch(PDO::FETCH_ASSOC);
-      // if ($consultacantidad && $consultacantidad['CANTIDAD_PRODUCIDA'] < $consultacantidad['CAN_PRODUCCION']) {}
+      $nombre = 'LBS-OP-FR-01';
+      $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
 
 
 
@@ -2862,12 +2863,6 @@ class m_almacen
       $stmCantidad->execute();
       $consultacantidad = $stmCantidad->fetch(PDO::FETCH_ASSOC);
       $insert = intval($consultacantidad['CANTIDAD_PRODUCIDA']);
-
-
-      // $stmComp = $this->bd->prepare("SELECT COD_PRODUCTO,ESTADO FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
-      // $stmComp->execute();
-      // $consultaCompa = $stmComp->fetch(PDO::FETCH_ASSOC);
-
 
 
 
@@ -2880,7 +2875,7 @@ class m_almacen
 
         $stmInsertarInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS(COD_AVANCE_INSUMOS,N_BACHADA,COD_PRODUCTO,COD_PRODUCCION,CANTIDAD)
           VALUES ('$codigo_de_avance_insumo','$numero_generado_bachada','$codigoproducto','$codigoproduccion','$cantidad')");
-        // var_dump($stmInsertarInsumoAvance);
+
         $stmInsertarInsumoAvance->execute();
 
         for ($i = 0; $i < count($valoresCapturadosProduccion); $i += 3) {
@@ -2957,6 +2952,34 @@ class m_almacen
       return $datos;
     } catch (Exception $e) {
 
+      die($e->getMessage());
+    }
+  }
+
+  public function VerificarRegistroMenorProducto($idrequerimiento, $codigoproductoverifica)
+  {
+    try {
+      // $this->bd->beginTransaction();
+      // $stm = $this->bd->prepare("SELECT COD_REQUERIMIENTO FROM T_TMPREQUERIMIENTO_ITEM WHERE ESTADO='T'");
+      // $stm->execute();
+      // $insert = $stm->fetch();
+      // var_dump($idrequerimiento);
+
+      $stm = $this->bd->prepare("SELECT MIN(COD_REQUERIMIENTO) AS COD_REQUERIMIENTO FROM T_TMPREQUERIMIENTO_ITEM WHERE COD_PRODUCTO='$codigoproductoverifica' AND  ESTADO='T'");
+      $stm->execute();
+      $respuesta = $stm->fetch();
+      $insert = $respuesta['COD_REQUERIMIENTO'];
+      // var_dump($insert);
+      if ($insert == $idrequerimiento) {
+        return $insert;
+      }
+
+
+      // $insert = $this->bd->commit();
+
+      // return $insert;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
       die($e->getMessage());
     }
   }

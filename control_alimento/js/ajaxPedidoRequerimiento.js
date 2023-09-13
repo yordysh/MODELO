@@ -338,7 +338,6 @@ $(function () {
       success: function (response) {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
-          console.log(tasks);
 
           let template = ``;
           tasks.forEach((task) => {
@@ -346,8 +345,7 @@ $(function () {
               task.STOCK_RESULTANTE / task.CANTIDAD_MINIMA
             );
             $resultadototalinsu = task.CANTIDAD_MINIMA * $resultado;
-            // console.log("object");
-            // console.log($resultadototalinsu);
+
             template += `<tr taskId="${task.COD_REQUERIMIENTO}">
                   <td data-titulo="INSUMOS">${task.DES_PRODUCTO}</td>
                   <td data-titulo="CANTIDAD">${task.STOCK_RESULTANTE}</td>

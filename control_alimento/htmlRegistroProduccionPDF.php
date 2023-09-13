@@ -26,8 +26,8 @@ $mesConvert = $mesesEnLetras[$mesNumerico];
 $mostrar = new m_almacen();
 $dataCod = $mostrar->MostrarRegistroProduccionPorCodInsumoPDF($anioSeleccionado, $mesSeleccionado);
 $datos = $mostrar->MostrarRegistroProduccionPDF();
-// $datos = $mostrar->MostrarPreparacionSolucionPDF($anioSeleccionado, $mesSeleccionado);
-// $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
+$nombre = 'LBS-OP-FR-01';
+$versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
 ?>
 <!DOCTYPE html>
@@ -84,14 +84,13 @@ $datos = $mostrar->MostrarRegistroProduccionPDF();
             font-weight: 400;
         }
 
-        .footer {
-            position: absolute;
-            bottom: 100px;
+
+        footer {
+            position: fixed;
+            bottom: 1cm;
             left: 0;
             right: 0;
             text-align: center;
-            /* border-top: 1px solid #000; */
-            /* Línea encima del pie de página */
         }
     </style>
     <!--------------------------------------- Titulo header --------------------------------------->
@@ -101,13 +100,13 @@ $datos = $mostrar->MostrarRegistroProduccionPDF();
                 <tr>
                     <!-- <td rowspan="4" style="text-align: center;"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MODELO/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
                     <!-- <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
-                    <!-- <td rowspan="4" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td> -->
+                    <td rowspan="4" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td>
                     <td rowspan="4" style="text-align: center; font-size:30px; font-weigth:200;">REGISTRO DE ENVASES - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                     <td class="estilotd">LBS-OP-FR-01</td>
 
                 </tr>
                 <tr>
-                    <td class="estilotd">Versión: 01 </td>
+                    <td class="estilotd">Versión: <?php echo $versionMuestra ?> </td>
                 </tr>
                 <tr>
                     <td class="estilotd">Página:</td>
@@ -121,8 +120,7 @@ $datos = $mostrar->MostrarRegistroProduccionPDF();
             </tbody>
         </table>
     </header>
-    <!--------------------------------------- Table solucion y preparaciones----------------------->
-
+    <!--------------------------------------- Table registro de envases----------------------->
     <?php
     foreach ($dataCod as $filas) {
 
@@ -201,10 +199,11 @@ $datos = $mostrar->MostrarRegistroProduccionPDF();
         echo '</table>';
     }
     ?>
-    <div class="footer">
+
+    <footer>
         <table>
             <tr>
-                <td style="border:none;">Donde ME. Material de envase(bolsas,),Otros:cucharitas,etiquetas</td>
+                <td style="border:none;">Donde ME: Material de envase(bolsas,frascos);Otros:cucharitas,etiquetas,alupol,etc.</td>
                 <td style="padding-left: 100px; padding-right:100px;border:none;"></td>
                 <td style="padding-left: 100px; padding-right:100px;border:none;"></td>
             </tr>
@@ -215,12 +214,12 @@ $datos = $mostrar->MostrarRegistroProduccionPDF();
                 <td style="padding-left: 100px; padding-right:100px;border-top:none;border-left:none;border-right:none;"></td>
             </tr>
             <tr>
-                <td style="padding-top:10px; border-left:none;border-right:none;border-bottom:none;">Firma del ase</td>
+                <td style="padding-top:10px; border-left:none;border-right:none;border-bottom:none;text-align:center;">Firma del Asistente de calidad</td>
                 <td style="padding-left: 100px; padding-right:100px;border:none;"></td>
-                <td style="padding-left: 100px; padding-right:100px;border-left:none;border-right:none;border-bottom:none;">Jefe del aseguramiento</td>
+                <td style="padding-left: 100px; padding-right:100px;border-left:none;border-right:none;border-bottom:none;">Jefe de Aseguramiento de la calidad</td>
             </tr>
         </table>
-    </div>
+    </footer>
 </body>
 
 </html>
