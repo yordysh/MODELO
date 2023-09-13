@@ -2761,7 +2761,7 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT COD_PRODUCCION,COD_REQUERIMIENTO,NUM_PRODUCION_LOTE FROM T_TMPPRODUCCION WHERE ESTADO='P'");
+      $stm = $this->bd->prepare("SELECT COD_PRODUCCION,COD_REQUERIMIENTO,NUM_PRODUCION_LOTE FROM T_TMPPRODUCCION WHERE ESTADO='P' OR ESTADO='A'");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -2864,14 +2864,22 @@ class m_almacen
       $insert = intval($consultacantidad['CANTIDAD_PRODUCIDA']);
 
 
+      // $stmComp = $this->bd->prepare("SELECT COD_PRODUCTO,ESTADO FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
+      // $stmComp->execute();
+      // $consultaCompa = $stmComp->fetch(PDO::FETCH_ASSOC);
+
+
+
+
 
       $updatetotal = $insert  - $cantidad;
+
       if ($insert  > 0) {
-        $stmActualizaproduccion = $this->bd->prepare("UPDATE T_TMPPRODUCCION SET CANTIDAD_PRODUCIDA='$updatetotal' WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
+        $stmActualizaproduccion = $this->bd->prepare("UPDATE T_TMPPRODUCCION SET CANTIDAD_PRODUCIDA='$updatetotal',ESTADO='A' WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
         $stmActualizaproduccion->execute();
 
         $stmInsertarInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS(COD_AVANCE_INSUMOS,N_BACHADA,COD_PRODUCTO,COD_PRODUCCION,CANTIDAD)
-        VALUES ('$codigo_de_avance_insumo','$numero_generado_bachada','$codigoproducto','$codigoproduccion','$cantidad')");
+          VALUES ('$codigo_de_avance_insumo','$numero_generado_bachada','$codigoproducto','$codigoproduccion','$cantidad')");
         // var_dump($stmInsertarInsumoAvance);
         $stmInsertarInsumoAvance->execute();
 
@@ -2881,7 +2889,7 @@ class m_almacen
           $cantidadlote = ($valoresCapturadosProduccion[$i + 2]);
 
           $stmInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM(COD_AVANCE_INSUMOS,COD_PRODUCTO,CANTIDAD,LOTE)
-                                                    VALUES ('$codigo_de_avance_insumo','$codProductoAvance','$cantidadcaptura','$cantidadlote')");
+                                                      VALUES ('$codigo_de_avance_insumo','$codProductoAvance','$cantidadcaptura','$cantidadlote')");
           $stmInsumoAvance->execute();
         }
       } else {
@@ -2900,6 +2908,8 @@ class m_almacen
       }
 
 
+
+
       $insert = $this->bd->commit();
       return $insert;
     } catch (Exception $e) {
@@ -2908,7 +2918,7 @@ class m_almacen
     }
   }
 
-  public function MostrarRegistroProduccionPorCodInsumoPDF()
+  public function MostrarRegistroProduccionPorCodInsumoPDF($anioSeleccionado, $mesSeleccionado)
   {
     try {
       // $stmMostrar = $this->bd->prepare("SELECT TIP.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS, TIP.N_BACHADA AS N_BACHADA,
@@ -2924,7 +2934,7 @@ class m_almacen
                                           TP.DES_PRODUCTO AS DES_PRODUCTO, TAI.CANTIDAD AS CANTIDAD,  CONVERT(varchar, TAI.FECHA, 103) AS FECHA
                                           FROM T_TMPAVANCE_INSUMOS_PRODUCTOS TAI 
                                           INNER JOIN T_PRODUCTO TP ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO
-                                          INNER JOIN T_TMPPRODUCCION TPRO ON TPRO.COD_PRODUCCION=TAI.COD_PRODUCCION");
+                                          INNER JOIN T_TMPPRODUCCION TPRO ON TPRO.COD_PRODUCCION=TAI.COD_PRODUCCION WHERE MONTH(FECHA) = '$mesSeleccionado' AND YEAR(FECHA) = '$anioSeleccionado' ");
       $stmMostrar->execute();
       $datos = $stmMostrar->fetchAll(PDO::FETCH_OBJ);
 

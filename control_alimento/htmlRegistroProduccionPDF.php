@@ -24,7 +24,7 @@ $mesesEnLetras = array(
 $mesConvert = $mesesEnLetras[$mesNumerico];
 
 $mostrar = new m_almacen();
-$dataCod = $mostrar->MostrarRegistroProduccionPorCodInsumoPDF();
+$dataCod = $mostrar->MostrarRegistroProduccionPorCodInsumoPDF($anioSeleccionado, $mesSeleccionado);
 $datos = $mostrar->MostrarRegistroProduccionPDF();
 // $datos = $mostrar->MostrarPreparacionSolucionPDF($anioSeleccionado, $mesSeleccionado);
 // $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
@@ -83,6 +83,16 @@ $datos = $mostrar->MostrarRegistroProduccionPDF();
             text-align: center;
             font-weight: 400;
         }
+
+        .footer {
+            position: absolute;
+            bottom: 100px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            /* border-top: 1px solid #000; */
+            /* Línea encima del pie de página */
+        }
     </style>
     <!--------------------------------------- Titulo header --------------------------------------->
     <header>
@@ -91,7 +101,7 @@ $datos = $mostrar->MostrarRegistroProduccionPDF();
                 <tr>
                     <!-- <td rowspan="4" style="text-align: center;"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MODELO/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
                     <!-- <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
-                    <td rowspan="4" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td>
+                    <!-- <td rowspan="4" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td> -->
                     <td rowspan="4" style="text-align: center; font-size:30px; font-weigth:200;">REGISTRO DE ENVASES - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                     <td class="estilotd">LBS-OP-FR-01</td>
 
@@ -168,16 +178,49 @@ $datos = $mostrar->MostrarRegistroProduccionPDF();
         echo '</table>';
         echo '<table style="margin-top:30px;">';
         echo '<tr>';
-        echo '<td style="padding-left:180px;">Observaciones:</td>';
-        echo '<td style="padding-left:400px;padding-rigth:50px;"></td>';
+        echo '<td style="padding-left:180px;border:none; font-size:20px;">Observaciones:</td>';
+        echo '<td style="padding-left:400px;padding-right:50px; border-right:none; border-left:none; border-top:none;"></td>';
         echo '<td style="border:none; padding-left:600px;"></td>';
-        echo '<td style="padding-left:280px;">Acciones correctivas:</td>';
-        echo '<td style="padding-left:300px; padding-rigth:80px;"></td>';
+        echo '<td style="padding-left:200px;border:none; font-size:20px;">Acciones correctivas:</td>';
+        echo '<td style="padding-left:300px; padding-rigth:80px; border-right:none; border-left:none; border-top:none;"></td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td style="padding-left:180px;padding-top:20px;border-right:none;border-left:none; border-top:none;"></td>';
+        echo '<td style="padding-left:400px;padding-rigth:50px;border-right:none;border-left:none;"></td>';
+        echo '<td style="border:none; padding-left:600px;"></td>';
+        echo '<td style="padding-left:300px;border-right:none;border-left:none; border-top:none;"></td>';
+        echo '<td style="padding-left:300px; padding-rigth:80px;border-right:none;border-left:none;"></td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td style="padding-left:180px;padding-top:20px;border-right:none;border-left:none;"></td>';
+        echo '<td style="padding-left:400px;padding-rigth:50px;border-right:none;border-left:none;"></td>';
+        echo '<td style="border:none; padding-left:600px;"></td>';
+        echo '<td style="padding-left:300px;border-right:none;border-left:none;"></td>';
+        echo '<td style="padding-left:300px; padding-rigth:80px;border-right:none;border-left:none;"></td>';
         echo '</tr>';
         echo '</table>';
     }
     ?>
+    <div class="footer">
+        <table>
+            <tr>
+                <td style="border:none;">Donde ME. Material de envase(bolsas,),Otros:cucharitas,etiquetas</td>
+                <td style="padding-left: 100px; padding-right:100px;border:none;"></td>
+                <td style="padding-left: 100px; padding-right:100px;border:none;"></td>
+            </tr>
 
+            <tr>
+                <td style="padding-top:30px; border-top:none;border-left:none;border-right:none;"></td>
+                <td style="padding-left: 400px; padding-right:400px;border:none;"></td>
+                <td style="padding-left: 100px; padding-right:100px;border-top:none;border-left:none;border-right:none;"></td>
+            </tr>
+            <tr>
+                <td style="padding-top:10px; border-left:none;border-right:none;border-bottom:none;">Firma del ase</td>
+                <td style="padding-left: 100px; padding-right:100px;border:none;"></td>
+                <td style="padding-left: 100px; padding-right:100px;border-left:none;border-right:none;border-bottom:none;">Jefe del aseguramiento</td>
+            </tr>
+        </table>
+    </div>
 </body>
 
 </html>

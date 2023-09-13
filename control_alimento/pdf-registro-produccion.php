@@ -26,5 +26,6 @@ $dompdf->render();
 $canvas = $dompdf->getCanvas();
 $font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
 $canvas->page_text(1350, 80, "{PAGE_NUM}/{PAGE_COUNT}", $font, 15, array(0, 0, 0));
+// $canvas->page_text(800, 1100, "Página:", null, 15);
 
 $dompdf->stream('Monitoreo.pdf', array('Attachment' => 0));
