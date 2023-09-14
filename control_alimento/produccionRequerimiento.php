@@ -108,12 +108,12 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Text input fecha inicio-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Fecha produccion</label>
-                            <input type="date" id="fechainicio" class="form-control" name="">
+                            <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y'); ?>-01-01" max="<?php echo date('Y'); ?>-12-31">
                         </div>
                         <!-- Text input fecha inicio-->
-                        <div class="form-outline mb-4">
+                        <div class=" form-outline mb-4">
                             <label class="form-label">Fecha vencimiento</label>
-                            <input type="date" id="fechavencimiento" class="form-control" name="">
+                            <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y'); ?>-01-01" max="<?php echo date('Y'); ?>-12-31">
                         </div>
                         <!-- Text input cantidad por caja-->
                         <div class="form-outline mb-4">
@@ -134,24 +134,6 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             </div>
                         </div>
                     </form>
-
-                    <!-- Tabla total a comprar insumos-->
-                    <!-- <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
-                        <table id="tTotalinsumoscomprar" class="table table-sm mb-3 table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="thtitulo" scope="col">INSUMOS</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD COMPRA</th>
-
-                                </tr>
-                            </thead>
-                            <tbody id="tablatotalinsumosrequeridoscomprar">
-
-                            </tbody>
-                        </table>
-                    </div> -->
-
 
                 </div>
             </div>

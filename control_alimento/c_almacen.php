@@ -401,11 +401,11 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'insertarproducciontotal') {
     $codrequerimientoproduccion = trim($_POST['codrequerimientoproduccion']);
     $codproductoproduccion = trim($_POST['codproductoproduccion']);
-    $numeroproduccion = trim($_POST['numeroproduccion']);
+    $numeroproduccion = strtoupper(trim($_POST['numeroproduccion']));
     $cantidadtotalproduccion = trim($_POST['cantidadtotalproduccion']);
     $fechainicio = trim($_POST['fechainicio']);
     $fechavencimiento = trim($_POST['fechavencimiento']);
-    $textAreaObservacion = trim($_POST['textAreaObservacion']);
+    $textAreaObservacion =  strtoupper(trim($_POST['textAreaObservacion']));
     $cantidadcaja = trim($_POST['cantidadcaja']);
 
     $respuesta = c_almacen::c_insertar_produccion_total($codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja);
@@ -431,6 +431,10 @@ if ($accion == 'insertar') {
     $codigoproductoverifica = trim($_POST['codigoproductoverifica']);
     $idrequerimiento = trim($_POST['idrequerimiento']);
     $respuesta = c_almacen::c_verifica_registro_menor_producto($idrequerimiento, $codigoproductoverifica);
+    echo $respuesta;
+} elseif ($accion == 'mostrarordencompra') {
+
+    $respuesta = c_almacen::c_mostrar_orden_de_compra();
     echo $respuesta;
 }
 
@@ -2562,5 +2566,33 @@ class c_almacen
             return "error";
         };
         // }
+    }
+
+
+
+    static function c_mostrar_orden_de_compra()
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarOrdenDeCompra();
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_COD_FORMULACION" => $row->COD_FORMULACION,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
     }
 }

@@ -143,8 +143,8 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <thead>
                                 <tr>
                                     <th class="thtitulo" scope="col">INSUMOS</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD COMPRA</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD FALTANTE</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD POR COMPRA</th>
 
                                 </tr>
                             </thead>

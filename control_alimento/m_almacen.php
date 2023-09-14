@@ -2285,10 +2285,10 @@ class m_almacen
       $codigo_orden_compra = $cod->generarCodigoOrdenCompra();
 
 
-      $fecha_generado_orden_compra = $cod->c_horaserversql('F');
-      // $fecha_actual = '09/09/2023';
+      // $fecha_generado_orden_compra = $cod->c_horaserversql('F');
+      $fecha_actual = '14/09/2023';
       //echo $fecha_generado;
-      //$fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,COD_REQUERIMIENTO,FECHA)
                                                 VALUES ('$codigo_orden_compra','$idRequerimiento','$fecha_generado_orden_compra')");
@@ -2313,10 +2313,10 @@ class m_almacen
                                                   VALUES ('$codigo_orden_compra','$codProducto', '$canInsu','$multiplicacionTotal')");
         $insert = $stmPedidoOrden->execute();
       }
-      $fecha_generado = $cod->c_horaserversql('F');
-      // $fecha_actual = '09/09/2023';
+      // $fecha_generado = $cod->c_horaserversql('F');
+      $fecha_actual = '14/09/2023';
       //echo $fecha_generado;
-      //$fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
       $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $stmActualizar->execute();
 
@@ -2969,6 +2969,21 @@ class m_almacen
       // return $insert;
     } catch (Exception $e) {
       $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+
+
+  public function MostrarOrdenDeCompra()
+  {
+    try {
+      $stmMostrar = $this->bd->prepare("    SELECT * FROM T_TMPORDEN_COMPRA_ITEM OC INNER JOIN T_PRODUCTO TP ON OC.COD_PRODUCTO=TP.COD_PRODUCTO");
+      $stmMostrar->execute();
+      $datos = $stmMostrar->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+
       die($e->getMessage());
     }
   }

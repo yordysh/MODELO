@@ -28,7 +28,14 @@ $(function () {
     nav.classList.remove("openNav");
   });
   //----------------------------------------------------------------//
+  /* -----------------------Bloquea las fechas marcadas------------------------- */
+  $("#fechainicio").change(function () {
+    var fechaProduccion = $(this).val();
+    $("#fechavencimiento").attr("min", fechaProduccion);
+  });
+  /* -------------------------------------------------------------------------- */
 
+  /*--------------------------Mostrar tabla principal pendientes-------------- */
   function mostrarProduccionRequerimiento() {
     const accion = "mostrarproduccionrequerimiento";
 
@@ -59,6 +66,7 @@ $(function () {
       },
     });
   }
+  /*-------------------------------------------------------------------------- */
 
   $(document).on("click", "#mostrarproduccionrequerimiento", (e) => {
     e.preventDefault();
@@ -204,41 +212,6 @@ $(function () {
       },
     });
   });
-
-  // function mostrarRequerimientoTotal() {
-  //   const accion = "mostrarRquerimientoTotal";
-  //   const search = "";
-  //   $.ajax({
-  //     url: "./c_almacen.php",
-  //     type: "POST",
-  //     data: { accion: accion, buscartotal: search },
-  //     success: function (response) {
-  //       if (isJSON(response)) {
-  //         let tasks = JSON.parse(response);
-  //         console.log(tasks);
-
-  //         let template = ``;
-  //         tasks.forEach((task) => {
-  //           $resultado = Math.ceil(
-  //             task.STOCK_RESULTANTE / task.CANTIDAD_MINIMA
-  //           );
-  //           $resultadototalinsu = task.CANTIDAD_MINIMA * $resultado;
-  //           template += `<tr taskId="${task.COD_REQUERIMIENTO}">
-  //                   <td data-titulo="INSUMOS">${task.DES_PRODUCTO}</td>
-  //                   <td data-titulo="CANTIDAD">${task.STOCK_RESULTANTE}</td>
-  //                   <td data-titulo="CANTIDAD COMPRA">${$resultadototalinsu}</td>
-  //                </tr>`;
-  //         });
-  //         $("#tablatotalinsumosrequeridos").html(template);
-  //       } else {
-  //         $("#tablatotalinsumosrequeridos").empty();
-  //       }
-  //     },
-  //     error: function (xhr, status, error) {
-  //       console.error("Error al cargar los datos de la tabla:", error);
-  //     },
-  //   });
-  // }
 });
 function isJSON(str) {
   try {
