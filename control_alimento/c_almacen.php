@@ -381,19 +381,14 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_si_hay_compra($cod_formulacion);
     echo $respuesta;
 } elseif ($accion == 'insertarordencompraitem') {
-    // var_dump($_POST);
-    // $union = $_POST['union'];
 
     $idRequerimiento = trim($_POST['idRequerimiento']);
-    // $taskcodrequerimiento = trim($_POST['taskcodrequerimiento']);
-    // if (isset($_POST['union']) && isset($_POST['idRequerimiento'])) {
     if (isset($_POST['union'])) {
         $union = $_POST['union'];
         $idRequerimiento = $_POST['idRequerimiento'];
         $respuesta = c_almacen::c_insertar_orden_compra_item($union, $idRequerimiento);
         echo $respuesta;
     } else {
-        // echo "else";
         $respuesta = c_almacen::c_actualizar_orden_compra_item($idRequerimiento);
         echo $respuesta;
     }
@@ -2160,9 +2155,6 @@ class c_almacen
     static function c_insertar_orden_compra_item($union, $idRequerimiento)
     {
         $m_formula = new m_almacen();
-        // var_dump($union);
-        // var_dump($taskcodrequerimiento);
-        // exit();
 
         if (isset($idRequerimiento)) {
             $respuesta = $m_formula->InsertarOrdenCompraItem($union, $idRequerimiento);
@@ -2176,13 +2168,10 @@ class c_almacen
     static function c_actualizar_orden_compra_item($idRequerimiento)
     {
         $m_formula = new m_almacen();
-        // var_dump($union);
-        // var_dump($taskcodrequerimiento);
-        // exit();
-        // echo 'aqui';
+
         if (isset($idRequerimiento)) {
             $respuesta = $m_formula->ActualizarOrdenCompraItem($idRequerimiento);
-            // var_dump($respuesta);
+
             if ($respuesta) {
                 return "ok";
             } else {
@@ -2348,7 +2337,6 @@ class c_almacen
     static function  c_mostrar_total_pendientes_requeridos()
     {
         try {
-
 
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarTotalPendientesRequeridos();

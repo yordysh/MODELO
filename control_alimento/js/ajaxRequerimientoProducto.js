@@ -392,35 +392,32 @@ $(function () {
     let tablaReqInsumo = $("#tablaInsumosDatos");
     let tablaReqEnv = $("#tablaenvase");
     let tablatotalInEn = $("#tablainsumoenvasetotal");
+    let selectinsumoenvase = $("#selectInsumoEnvase").val();
+
+    if (!selectinsumoenvase || !cantidadInsert) {
+      Swal.fire({
+        icon: "error",
+        title: "Campos vacíos",
+        text: "Por favor, seleccione un producto y complete la cantidad.",
+      });
+      return;
+    }
 
     let valoresCapturados = [];
     let valoresCapturadosEnvase = [];
     let valoresCapturadosTotalEnvase = [];
 
     $("#tablaInsumosDatos tr").each(function () {
-      // let valorCelda = $(this).find("td:eq(1)").text();
-      // valoresCapturados.push(valorCelda);
-      // find(":input");
-      // let valorProducto = $(this).find("td:eq(0)").attr("id");
       let taskid = $(this).attr("taskId");
       let valorCan = $(this).find("td:eq(1)").html();
-      // let taskid = $(this).attr("taskid");
-      // let cod_formula = $(this).attr("taskId");
       valoresCapturados.push(taskid, valorCan);
     });
 
     $("#tablaenvase tr").each(function () {
-      // let valorProductoEnvase = $(this).find("td:eq(0)").attr("id_envase");
       let idenvasecodigo = $(this).attr("id_envase");
       let valorCanEnvase = $(this).find("td:eq(1)").html();
-      // let idenvasecodigo = $(this).attr("idenvasecodigo");
 
-      valoresCapturadosEnvase.push(
-        // valorProductoEnvase,
-        idenvasecodigo,
-        valorCanEnvase
-        // idenvasecodigo
-      );
+      valoresCapturadosEnvase.push(idenvasecodigo, valorCanEnvase);
     });
 
     $("#tablainsumoenvasetotal tr").each(function () {

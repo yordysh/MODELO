@@ -2238,15 +2238,6 @@ class m_almacen
   public function  MostrarSiCompra($cod_formulacion)
   {
     try {
-      //  $stm = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO, 
-      //                                 TP.DES_PRODUCTO AS DES_PRODUCTO, SUM(CANTIDAD) AS SUMA_CANTIDADES, TAI.STOCK_ACTUAL AS STOCK_ACTUAL,
-      //                                 COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA FROM T_TMPREQUERIMIENTO_INSUMO TRI 
-      //                                 INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO
-      //                                 INNER JOIN T_TMPALMACEN_INSUMOS TAI ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO 
-      //                                 LEFT JOIN T_TMPCANTIDAD_MINIMA TC ON TRI.COD_PRODUCTO = TC.COD_PRODUCTO
-      //                                 WHERE COD_REQUERIMIENTO='$cod_formulacion' 
-      //                                 GROUP BY COD_REQUERIMIENTO, TRI.COD_PRODUCTO, TP.DES_PRODUCTO,TAI.STOCK_ACTUAL,TC.CANTIDAD_MINIMA");
-      //     $stm->execute();
       $stm = $this->bd->prepare("SELECT TI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
                                   TI.CANTIDAD AS CANTIDAD, TA.STOCK_ACTUAL AS STOCK_ACTUAL, COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA 
                                   FROM T_TMPREQUERIMIENTO_INSUMO TI INNER JOIN T_PRODUCTO TP ON TI.COD_PRODUCTO = TP.COD_PRODUCTO 
@@ -2290,9 +2281,6 @@ class m_almacen
 
       $this->bd->beginTransaction();
       $cod = new m_almacen();
-
-      // var_dump($union);
-      // exit();
 
       $codigo_orden_compra = $cod->generarCodigoOrdenCompra();
 
@@ -2350,10 +2338,10 @@ class m_almacen
 
       $this->bd->beginTransaction();
       $cod = new m_almacen();
-      $fecha_generado = $cod->c_horaserversql('F');
-      // $fecha_actual = '09/09/2023';
+      // $fecha_generado = $cod->c_horaserversql('F');
+      $fecha_actual = '09/09/2023';
       //echo $fecha_generado;
-      //$fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $insertar = $stmActualizarOrden->execute();
@@ -2629,13 +2617,14 @@ class m_almacen
   {
     try {
       $this->bd->beginTransaction();
+      $dateTInicio = $fechainicio;
+      $dateTVencimiento = $fechavencimiento;
+      // $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
+      // $dateTInicio = $fechaFormateadaIncio->format('d/m/Y');
 
-      $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
-      $dateTInicio = $fechaFormateadaIncio->format('d/m/Y');
 
-
-      $fechaFormateadaVencimiento = DateTime::createFromFormat('Y-m-d', $fechavencimiento);
-      $dateTVencimiento = $fechaFormateadaVencimiento->format('d/m/Y');
+      // $fechaFormateadaVencimiento = DateTime::createFromFormat('Y-m-d', $fechavencimiento);
+      // $dateTVencimiento = $fechaFormateadaVencimiento->format('d/m/Y');
 
 
       $zonaHorariaPeru = new DateTimeZone('America/Lima');
@@ -2793,10 +2782,10 @@ class m_almacen
       $consultacodigoformula = $stmCodigoFormula->fetch(PDO::FETCH_ASSOC);
       $resultadoformula = $consultacodigoformula['COD_FORMULACION'];
 
-      $stmverificardatos = $this->bd->prepare("SELECT MAX(CAN_PRODUCCION) AS CAN_PRODUCCION FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
+      $stmverificardatos = $this->bd->prepare("SELECT MAX(CANTIDAD_PRODUCIDA) AS CANTIDAD_PRODUCIDA FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
       $stmverificardatos->execute();
       $consultacodigoformulacion = $stmverificardatos->fetch(PDO::FETCH_ASSOC);
-      $resultadoCantidadFormulacion = intval($consultacodigoformulacion['CAN_PRODUCCION']);
+      $resultadoCantidadFormulacion = intval($consultacodigoformulacion['CANTIDAD_PRODUCIDA']);
 
       if ($cantidad <= $resultadoCantidadFormulacion) {
         $stmformulacionenvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, 
@@ -2855,7 +2844,7 @@ class m_almacen
 
 
       $nombre = 'LBS-OP-FR-01';
-      $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
+      // $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
 
 
 

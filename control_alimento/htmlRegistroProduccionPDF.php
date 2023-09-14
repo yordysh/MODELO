@@ -27,7 +27,7 @@ $mostrar = new m_almacen();
 $dataCod = $mostrar->MostrarRegistroProduccionPorCodInsumoPDF($anioSeleccionado, $mesSeleccionado);
 $datos = $mostrar->MostrarRegistroProduccionPDF();
 $nombre = 'LBS-OP-FR-01';
-$versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
+// $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
 ?>
 <!DOCTYPE html>
@@ -58,6 +58,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             border: 1px solid black;
         }
 
+        /* 40mm bottom, 8mm right, 8mm left, 2mm top*/
         body {
             margin: 40mm 8mm 2mm 8mm;
         }
@@ -87,10 +88,9 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
         footer {
             position: fixed;
-            bottom: 1cm;
+            bottom: 0;
             left: 0;
             right: 0;
-            text-align: center;
         }
     </style>
     <!--------------------------------------- Titulo header --------------------------------------->
@@ -106,17 +106,15 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
                 </tr>
                 <tr>
-                    <td class="estilotd">Versión: <?php echo $versionMuestra ?> </td>
+                    <!-- <td class="estilotd">Versión: <?php echo $versionMuestra ?> </td> -->
+                    <td class="estilotd">Versión: 02 </td>
                 </tr>
                 <tr>
                     <td class="estilotd">Página:</td>
                 </tr>
-
                 <tr>
                     <td class="estilotd">Fecha: <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                 </tr>
-
-
             </tbody>
         </table>
     </header>
@@ -199,7 +197,6 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         echo '</table>';
     }
     ?>
-
     <footer>
         <table>
             <tr>
@@ -221,5 +218,6 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         </table>
     </footer>
 </body>
+
 
 </html>

@@ -38,7 +38,6 @@ $(function () {
       type: "POST",
       data: { accion: accion },
       success: function (response) {
-        // console.log(response);
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
 
@@ -64,6 +63,13 @@ $(function () {
 
   $(document).on("click", "#mostrarInsumosRequerimiento", (e) => {
     e.preventDefault();
+
+    Swal.fire({
+      title: "¡Correcto!",
+      text: "Se añadio a los registros.",
+      icon: "success",
+      confirmButtonText: "Aceptar",
+    });
 
     let capturaTr = $(e.currentTarget).closest("tr");
 
@@ -143,7 +149,7 @@ $(function () {
         cod_formulacion: cod_formulacion,
       },
       success: function (response) {
-        // console.log(JSON.parse(response));
+        console.log(JSON.parse(response));
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
 
@@ -151,7 +157,7 @@ $(function () {
 
           tasks.forEach((task) => {
             let insumo_pedir = (task.CANTIDAD - task.STOCK_ACTUAL).toFixed(3);
-            let total_comprar = Math.ceil(task.CANTIDAD / task.CANTIDAD_MINIMA);
+            let total_comprar = Math.ceil(insumo_pedir / task.CANTIDAD_MINIMA);
             let cantidadtotalminima = total_comprar * task.CANTIDAD_MINIMA;
             if (insumo_pedir > 0) {
               if (task.CANTIDAD_MINIMA == 0) {
@@ -168,9 +174,7 @@ $(function () {
                             <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${
                               task.COD_PRODUCTO
                             }'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CANTIDAD"  style="text-align:center;">${
-                              task.CANTIDAD
-                            }</td>
+                            <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
                             <td data-titulo="CANTIDAD COMPRA"  style="text-align:center;">${
                               isNaN(cantidadtotalminima)
                                 ? "Falta añadir cantidad"
