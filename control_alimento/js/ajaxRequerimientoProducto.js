@@ -116,18 +116,15 @@ $(function () {
       });
       return;
     }
-    // if (!Number.isInteger(cantidadInsumoEnvase)) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "No se aceptan decimales",
-    //     text: "Por favor, escriba un valor entero y no decimal",
-    //   }).then((resultado) => {
-    //     if (resultado.isConfirmed || resultado.isDismissed) {
-    //       $("#cantidadInsumoEnvase").val("");
-    //     }
-    //   });
-    //   return;
-    // }
+    if (selectinsumoenvase) {
+      Swal.fire({
+        title: "¡Correcto!",
+        text: "Se añadio los registros.",
+        icon: "success",
+        confirmButtonText: "Aceptar",
+      });
+    }
+
     /*-------------------- Verifica si hay formulacion ---------------------------- */
 
     const accionverifica = "verificaproductoformulacion";
@@ -139,9 +136,7 @@ $(function () {
       },
       type: "POST",
       success: function (dataverificacion) {
-        // let data = JSON.parse(dataverificacion);
-
-        console.log(dataverificacion);
+        // console.log(dataverificacion);
         if (dataverificacion == "ok") {
           const filaExistente = $(`tr[id="${selectinsumoenvase}"]`);
 
@@ -203,28 +198,11 @@ $(function () {
         if (!responseData.error) {
           const insumos = JSON.parse(responseData);
           let template = "";
-          // const existingRow = $(
-          //   `tr[taskId="${insumos[0]["COD_FORMULACION"]}"]`
-          // );
-          // const existingRow = $(
-          //   `tr td[id="${insumos[0].COD_PRODUCTO}"]`
-          // ).closest("tr");
+
           for (let j = 0; j < insumos.length; j++) {
             let existingRow = $(`tr[taskId='${insumos[j]["COD_PRODUCTO"]}']`);
 
             if (existingRow.length > 0) {
-              // const capturaValoresTabla = existingRow.find("td:eq(1)");
-              // // console.log(capturaValoresTabla);
-              // // for (let cap = 0; cap < capturaValoresTabla.length; cap++) {
-              // let valorFormula = insumos[j]["TOTAL"];
-              // // console.log(valorFormula);
-              // let valorCelda = capturaValoresTabla[0];
-              // console.log(valorCelda);
-              // let cambio = parseFloat($(valorCelda).html());
-              // let suma = cambio + parseFloat(valorFormula);
-              // let sumatotalinsumo = suma.toFixed(3);
-
-              // $(valorCelda).html(sumatotalinsumo);
               let capturaTabla1 = existingRow.find("td:eq(1)");
 
               let valor1 = insumos[j]["TOTAL"];
@@ -236,10 +214,6 @@ $(function () {
 
               let totalsumar1 = sumar1.toFixed(3);
               $(valorCeldas1).html(totalsumar1);
-
-              $("#cantidadInsumoEnvase").val("");
-
-              // }
 
               const codigoForm = $("#tinsumo tr:not(:first)");
               const capturavalorcantidad = codigoForm.find("td:eq(1)");
@@ -256,18 +230,14 @@ $(function () {
                 const parse = sumatotalinsumos.toFixed(1);
                 $(capturadelvalor).html(parse);
               }
+              $("#cantidadInsumoEnvase").val("");
+              $("#selectInsumoEnvase").val("none").trigger("change");
             } else {
-              // insumos.forEach((insumo) => {
-              // template += `<tr taskId="${insumo.COD_FORMULACION}">
-              //                   <td data-titulo="INSUMOS" id='${insumo.COD_PRODUCTO}'>${insumo.DES_PRODUCTO}</td>
-              //                   <td data-titulo="CANTIDAD">${insumo.TOTAL}</td>
-              //                </tr>`;
-              // });
               template = `<tr taskId='${insumos[j]["COD_PRODUCTO"]}'>
                                 <td data-titulo="INSUMOS">${insumos[j]["DES_PRODUCTO"]}</td>
                                 <td data-titulo="CANTIDAD">${insumos[j]["TOTAL"]}</td>
                              </tr>`;
-              //  $("#tablaInsumosDatos").html(template);
+
               $("#tablaInsumosDatos").append(template);
 
               const codigoForm = $("#tinsumo tr:not(:first)");
@@ -293,7 +263,7 @@ $(function () {
 
                 $("#tsumatotal tbody").append(nuevaFila);
               }
-
+              $("#selectInsumoEnvase").val("none").trigger("change");
               $("#cantidadInsumoEnvase").val("");
             }
           }
@@ -388,13 +358,11 @@ $(function () {
   //--------------------- Insertar cantidades ------------//
   $("#botonInsertValor").click((e) => {
     e.preventDefault();
-    let cantidadInsert = $("#cantidadInsumoEnvase").val();
     let tablaReqInsumo = $("#tablaInsumosDatos");
     let tablaReqEnv = $("#tablaenvase");
     let tablatotalInEn = $("#tablainsumoenvasetotal");
-    let selectinsumoenvase = $("#selectInsumoEnvase").val();
 
-    if (!selectinsumoenvase || !cantidadInsert) {
+    if (tablaReqInsumo.find("tr").length === 0) {
       Swal.fire({
         icon: "error",
         title: "Campos vacíos",
@@ -455,6 +423,7 @@ $(function () {
               tablaReqInsumo.empty();
               tablaReqEnv.empty();
               tablatotalInEn.empty();
+              $("#tablasumatotalinsumo").empty();
             }
           });
         }

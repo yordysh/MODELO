@@ -33,22 +33,22 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
             <li>
-                <a class="" href="formulacionEnvases.php">Formulacion</a>
+                <a class="" href="formulacionEnvases.php">Formulación</a>
             </li>
             <li>
-                <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
+                <a class="" href="requerimientoProducto.php">Requerimiento</a>
             </li>
             <li>
-                <a class="" href="#">Confirmacion de requerimiento</a>
+                <a class="" href="#">Confirmación de requerimiento</a>
             </li>
             <li>
-                <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
+                <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
             </li>
             <!-- <li>
                 <a class="" href="registroEnvases.php">Registros envases</a>
             </li> -->
             <li>
-                <a class="" href="produccionRequerimiento.php">Produccion requerimiento</a>
+                <a class="" href="produccionRequerimiento.php">Producción</a>
             </li>
             <li>
                 <a class="" href="verificarRegistroEnvase.php">Registros envases</a>
@@ -93,16 +93,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 </tbody>
                             </table>
                         </div>
-                        <!-- Insertar nuevas cantidades -->
-                        <div class="contenedor">
 
-                            <div class="ctnBtn">
-                                <input type="hidden" id="taskcodrequhiddenvalidar">
-                                <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-primary bt-insert">Guardar</button>
-                                <input type="text" id="mensajecompleto" style="width: 270px; font-weight:bold; display:none;" value="Insumos completos en el almacen" disabled>
-                                <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
-                            </div>
-                        </div>
 
                         <!-- Tabla de producto por reuqerimiento que se requiere-->
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
@@ -163,7 +154,16 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </table>
                     </div>
 
+                    <!-- Insertar nuevas cantidades -->
+                    <div class="contenedor">
 
+                        <div class="ctnBtn">
+                            <input type="hidden" id="taskcodrequhiddenvalidar">
+                            <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-primary boton-insertar">Guardar</button>
+                            <input type="text" id="mensajecompleto" style="width: 270px; font-weight:bold; display:none;" value="Insumos completos en el almacen" disabled>
+                            <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

@@ -83,19 +83,19 @@
         <a class="bpmStyle">OP</a>
         <ul class="menu-vertical">
           <li>
-            <a class="" href="formulacionEnvases.php">Formulacion</a>
+            <a class="" href="formulacionEnvases.php">Formulación</a>
           </li>
           <li>
-            <a class="" href="requerimientoProducto.php">Requerimiento produccion</a>
+            <a class="" href="requerimientoProducto.php">Requerimiento</a>
           </li>
           <li>
-            <a class="" href="pedidoRequerimiento.php">Confirmacion de requerimiento</a>
+            <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
           </li>
           <li>
-            <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
+            <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
           </li>
           <li>
-            <a class="" href="registroEnvases.php">Produccion de requerimiento</a>
+            <a class="" href="registroEnvases.php">Producción</a>
           <li>
             <a class="" href="verificarRegistroEnvase.php">Registros envases</a>
           </li>

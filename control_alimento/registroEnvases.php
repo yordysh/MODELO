@@ -45,6 +45,9 @@ $dataProducto = $mostrar->MostrarProductoComboRegistro();
                 <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
             </li>
             <li>
+                <a class="" href="produccionRequerimiento.php">Produccion</a>
+            </li>
+            <li>
                 <a class="" href="#">Registros envases</a>
             </li>
         </ul>

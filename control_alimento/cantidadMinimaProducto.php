@@ -32,22 +32,22 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
             <li>
-                <a class="" href="formulacionEnvases.php">Formulacion</a>
+                <a class="" href="formulacionEnvases.php">Formulación</a>
             </li>
             <li>
-                <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
+                <a class="" href="requerimientoProducto.php">Requerimiento</a>
             </li>
             <li>
-                <a class="" href="pedidoRequerimiento.php">Confirmacion de requerimiento</a>
+                <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
             <li>
-                <a class="" href="#">Cantidad minima</a>
+                <a class="" href="#">Cantidad mínima</a>
             </li>
             <!-- <li>
                 <a class="" href="registroEnvases.php">Registros envases</a>
             </li> -->
             <li>
-                <a class="" href="produccionRequerimiento.php">Produccion requerimiento</a>
+                <a class="" href="produccionRequerimiento.php">Producción</a>
             </li>
             <li>
                 <a class="" href="verificarRegistroEnvase.php">Registros envases</a>

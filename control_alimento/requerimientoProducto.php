@@ -34,19 +34,19 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             <div class="icon-cross navCloseBtn"></div>
 
             <li>
-                <a class="" href="formulacionEnvases.php">Formulacion</a>
+                <a class="" href="formulacionEnvases.php">Formulación</a>
             </li>
             <li>
-                <a class="" href="#">Requerimiento producto</a>
+                <a class="" href="#">Requerimiento</a>
             </li>
             <li>
-                <a class="" href="pedidoRequerimiento.php">Confirmacion de requerimiento</a>
+                <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
             <li>
-                <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
+                <a class="" href="cantidadMinimaProducto.php">Cantidad mónima</a>
             </li>
             <li>
-                <a class="" href="produccionRequerimiento.php">Produccion requerimiento</a>
+                <a class="" href="produccionRequerimiento.php">Producción</a>
             </li>
             <li>
                 <a class="" href="verificarRegistroEnvase.php">Registros envases</a>
@@ -65,7 +65,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                     <center><label class="title">REQUERIMIENTO DE PRODUCTOS</label></center>
                 </div>
                 <div class="main">
-                    <form method="post" action="" id="formularioRequerimientoProducto">
+                    <form class="formSpace" method="post" action="" id="formularioRequerimientoProducto">
 
                         <!-- Text input -->
                         <div class="form-outline mb-4">
@@ -87,19 +87,14 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
 
                         <!-- Text input cantidad -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Cantidad</label>
-                            <input type="number" id="cantidadInsumoEnvase" class="form-control" name="cantidadProducto" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
-                        </div>
-
-                        <!-- Insertar nuevas cantidades -->
-                        <div class="contenedor">
-                            <div class="ctnBtn">
-                                <input type="hidden" id="taskId">
-                                <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-success bt-insert">Insertar</button>
-                                <button id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary bt-insert">Guardar</button>
-
-                                <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
+                        <div class="contenedorcantidadcalculo">
+                            <div class="form-outline mb-4">
+                                <label class="form-label">Cantidad</label>
+                                <input type="number" id="cantidadInsumoEnvase" class="form-control" name="cantidadProducto" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
+                            </div>
+                            <div class="btncalcular">
+                                <button class="custom-icon-calcular" name="calcular" id="botonCalcularInsumoEnvase"><i class="icon-circle-with-plus"></i></button>
+                                <!-- <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-success">Insertar</button> -->
                             </div>
                         </div>
 
@@ -147,8 +142,6 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <table id="tsumatotal" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <!-- <th class="thtitulo" scope="col">NOMBRE PRODUCTO</th> -->
-                                        <!-- <th class="thtitulo" scope="col">PRODUCTO</th> -->
                                         <th class="thtitulo" scope="col">TOTAL INSUMOS</th>
                                     </tr>
                                 </thead>
@@ -160,14 +153,13 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <!-- Tabla de envases-->
                         <div id="tablaE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                            <div class="row g-4 top-div">
-                                <center><label class="title_table">TOTAL DE ENVASES POR PRODUCTO</label></center>
-                            </div>
                             <table class="table table-sm mb-3 table-hover">
+                                <div class="row g-4 top-div">
+                                    <center><label class="title_table">TOTAL DE ENVASES POR PRODUCTO</label></center>
+                                </div>
                                 <thead>
                                     <tr>
                                         <th class="thtitulo" scope="col">ENVASES</th>
-                                        <!-- <th class="thtitulo" scope="col">CODIGO PRODUCCION</th> -->
                                         <th class="thtitulo" scope="col">CANTIDAD</th>
                                     </tr>
                                 </thead>
@@ -176,6 +168,12 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 </tbody>
                             </table>
                         </div>
+
+                        <!-- Insertar nuevas cantidades -->
+
+                        <input type="hidden" id="taskId">
+                        <button style="margin-bottom: 80px;" id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary boton-insertar">Guardar</button>
+
                     </form>
                 </div>
             </div>

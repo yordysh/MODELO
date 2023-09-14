@@ -34,19 +34,19 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
             <li>
-                <a class="" href="#">Formulacion</a>
+                <a class="" href="#">Formulación</a>
             </li>
             <li>
-                <a class="" href="requerimientoProducto.php">Requerimiento producto</a>
+                <a class="" href="requerimientoProducto.php">Requerimiento</a>
             </li>
             <li>
-                <a class="" href="pedidoRequerimiento.php">Confirmacion de requerimiento</a>
+                <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
             <li>
-                <a class="" href="cantidadMinimaProducto.php">Cantidad minima</a>
+                <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
             </li>
             <li>
-                <a class="" href="produccionRequerimiento.php">Produccion requerimiento</a>
+                <a class="" href="produccionRequerimiento.php">Producción</a>
             </li>
             <li>
                 <a class="" href="verificarRegistroEnvase.php">Registros envases</a>

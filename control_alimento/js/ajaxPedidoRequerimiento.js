@@ -63,13 +63,16 @@ $(function () {
 
   $(document).on("click", "#mostrarInsumosRequerimiento", (e) => {
     e.preventDefault();
-
-    Swal.fire({
-      title: "¡Correcto!",
-      text: "Se añadio a los registros.",
-      icon: "success",
-      confirmButtonText: "Aceptar",
-    });
+    let eliminarInsumoButton = document.getElementById(
+      "eliminarinsumorequerimiento"
+    );
+    eliminarInsumoButton.style.display = "none";
+    // Swal.fire({
+    //   title: "¡Correcto!",
+    //   text: "Se añadio a los registros.",
+    //   icon: "success",
+    //   confirmButtonText: "Aceptar",
+    // });
 
     let capturaTr = $(e.currentTarget).closest("tr");
 
@@ -174,8 +177,8 @@ $(function () {
                             <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${
                               task.COD_PRODUCTO
                             }'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CANTIDAD"  style="text-align:center;">${insumo_pedir}</td>
-                            <td data-titulo="CANTIDAD COMPRA"  style="text-align:center;">${
+                            <td data-titulo="CANTIDAD FALTANTE"  style="text-align:center;">${insumo_pedir}</td>
+                            <td data-titulo="CANTIDAD POR COMPRA"  style="text-align:center;">${
                               isNaN(cantidadtotalminima)
                                 ? "Falta añadir cantidad"
                                 : cantidadtotalminima
@@ -186,7 +189,7 @@ $(function () {
 
           if (template === "") {
             Swal.fire({
-              position: "top-end",
+              position: "center",
               icon: "success",
               title: "Insumos completos en el almacen",
               showConfirmButton: false,
