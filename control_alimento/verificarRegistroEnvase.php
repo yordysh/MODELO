@@ -102,7 +102,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                             </select>
                         </div>
 
-                        <!-- Text input cantidad -->
+                        <!-- Text input canti -->
                         <div class="contenedorcantidadcalculo">
                             <div class="form-outline mb-4">
                                 <label class="form-label">Cantidad</label>
