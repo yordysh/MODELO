@@ -2162,30 +2162,6 @@ class m_almacen
         VALUES ('$codRequerimiento','$codProducto', '$canInsu')");
 
         $stmRequeInsumo->execute();
-
-
-        // $contarRequeInsumo = $this->bd->prepare("SELECT COUNT(*) AS count FROM T_TMPREQUERIMIENTO_INSUMO WHERE COD_REQUERIMIENTO = '$codRequerimiento' AND COD_PRODUCTO = '$codProducto'");
-        // $contarRequeInsumo->execute();
-        // $result = $contarRequeInsumo->fetch(PDO::FETCH_ASSOC);
-
-        // if ($result['count'] > 0) {
-        //   $actualizaRequeInsumo = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_INSUMO SET CANTIDAD = CANTIDAD + '$canInsu' WHERE COD_REQUERIMIENTO = '$codRequerimiento' AND COD_PRODUCTO_ITEM = '$cod_producto_item' AND COD_PRODUCTO = '$codProducto'");
-        //   $actualizaRequeInsumo->execute();
-        // } else {
-        //   $insertarRequeInsumo = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD) VALUES ('$codRequerimiento', '$cod_producto_item', '$codProducto', '$canInsu')");
-        //   $insertarRequeInsumo->execute();
-        // }
-        // $sqlinsumo = "MERGE INTO T_TMPREQUERIMIENTO_INSUMO AS target
-        // USING (VALUES ('$codRequerimiento', '$cod_producto_item', '$codProducto', '$canInsu')) AS source (COD_REQUERIMIENTO, COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
-        // ON target.COD_REQUERIMIENTO = source.COD_REQUERIMIENTO AND target.COD_PRODUCTO = source.COD_PRODUCTO
-        // WHEN MATCHED THEN
-        //     UPDATE SET target.CANTIDAD = target.CANTIDAD + source.CANTIDAD
-        // WHEN NOT MATCHED THEN
-        //     INSERT (COD_REQUERIMIENTO, COD_PRODUCTO_ITEM, COD_PRODUCTO, CANTIDAD)
-        //     VALUES (source.COD_REQUERIMIENTO, source.COD_PRODUCTO_ITEM, source.COD_PRODUCTO, source.CANTIDAD);";
-
-        // $stmtinsumo = $this->bd->prepare($sqlinsumo);
-        // $stmtinsumo->execute();
       }
 
       for ($j = 0; $j < count($unionEnvase); $j += 2) {
@@ -2294,23 +2270,14 @@ class m_almacen
                                                 VALUES ('$codigo_orden_compra','$idRequerimiento','$fecha_generado_orden_compra')");
       $insert = $stmPedidoCompras->execute();
 
-      for ($i = 0; $i < count($union); $i += 2) {
+      for ($i = 0; $i < count($union); $i += 3) {
         $codProducto = $union[$i];
-        $canInsu = intval($union[$i + 1]);
-
-
-
-        $stmCantidadMinima = $this->bd->prepare("SELECT MAX(CANTIDAD_MINIMA) AS CANTIDAD_MINIMA FROM T_TMPCANTIDAD_MINIMA WHERE COD_PRODUCTO='$codProducto'");
-        $stmCantidadMinima->execute();
-        $resultado = $stmCantidadMinima->fetch(PDO::FETCH_OBJ);
-        $cantidad_min = intval($resultado->CANTIDAD_MINIMA);
-
-        $totalPedir = ceil($canInsu / $cantidad_min);
-        $multiplicacionTotal = $totalPedir * $cantidad_min;
+        $canInsu = ($union[$i + 1]);
+        $canMinInsu = $union[$i + 2];
 
 
         $stmPedidoOrden = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA_ITEM(COD_ORDEN_COMPRA,COD_PRODUCTO,CANTIDAD_MINIMA,CANTIDAD_INSUMO_ENVASE)
-                                                  VALUES ('$codigo_orden_compra','$codProducto', '$canInsu','$multiplicacionTotal')");
+                                                  VALUES ('$codigo_orden_compra','$codProducto', '$canMinInsu','$canInsu')");
         $insert = $stmPedidoOrden->execute();
       }
       // $fecha_generado = $cod->c_horaserversql('F');
@@ -2905,15 +2872,6 @@ class m_almacen
   public function MostrarRegistroProduccionPorCodInsumoPDF($anioSeleccionado, $mesSeleccionado)
   {
     try {
-      // $stmMostrar = $this->bd->prepare("SELECT TIP.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS, TIP.N_BACHADA AS N_BACHADA,
-      // TIP.COD_PRODUCCION AS COD_PRODUCCION,
-      // TIP.COD_PRODUCTO_ITEM AS COD_PRODUCTO_ITEM, TPROD.DES_PRODUCTO AS DES_PRODUCTO_ITEM,CONVERT(DATE, TIP.FECHA) AS FECHA, 
-      // TPRO.NUM_PRODUCION_LOTE AS NUM_PRODUCION_LOTE FROM T_TMPAVANCE_INSUMOS_PRODUCTOS TIP 
-      // INNER JOIN T_TMPPRODUCCION TPRO ON TIP.COD_PRODUCCION=TPRO.COD_PRODUCCION
-      // INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TIP.COD_PRODUCTO
-      // INNER JOIN T_PRODUCTO TPROD ON TPROD.COD_PRODUCTO=TPRO.COD_PRODUCTO
-      // GROUP BY TIP.COD_AVANCE_INSUMOS,TIP.N_BACHADA,TIP.COD_PRODUCCION,TIP.COD_PRODUCTO_ITEM,TPROD.DES_PRODUCTO,
-      //  CONVERT(DATE, TIP.FECHA),NUM_PRODUCION_LOTE");
       $stmMostrar = $this->bd->prepare("SELECT TAI.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS,TAI.N_BACHADA AS N_BACHADA,TPRO.NUM_PRODUCION_LOTE AS NUM_PRODUCION_LOTE,
                                           TP.DES_PRODUCTO AS DES_PRODUCTO, TAI.CANTIDAD AS CANTIDAD,  CONVERT(varchar, TAI.FECHA, 103) AS FECHA
                                           FROM T_TMPAVANCE_INSUMOS_PRODUCTOS TAI 
@@ -2948,11 +2906,6 @@ class m_almacen
   public function VerificarRegistroMenorProducto($idrequerimiento, $codigoproductoverifica)
   {
     try {
-      // $this->bd->beginTransaction();
-      // $stm = $this->bd->prepare("SELECT COD_REQUERIMIENTO FROM T_TMPREQUERIMIENTO_ITEM WHERE ESTADO='T'");
-      // $stm->execute();
-      // $insert = $stm->fetch();
-      // var_dump($idrequerimiento);
 
       $stm = $this->bd->prepare("SELECT MIN(COD_REQUERIMIENTO) AS COD_REQUERIMIENTO FROM T_TMPREQUERIMIENTO_ITEM WHERE COD_PRODUCTO='$codigoproductoverifica' AND  ESTADO='T'");
       $stm->execute();
@@ -2977,7 +2930,8 @@ class m_almacen
   public function MostrarOrdenDeCompra()
   {
     try {
-      $stmMostrar = $this->bd->prepare("    SELECT * FROM T_TMPORDEN_COMPRA_ITEM OC INNER JOIN T_PRODUCTO TP ON OC.COD_PRODUCTO=TP.COD_PRODUCTO");
+      $stmMostrar = $this->bd->prepare("  SELECT OC.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO,OC.CANTIDAD_INSUMO_ENVASE AS CANTIDAD_INSUMO_ENVASE,
+      OC.CANTIDAD_MINIMA AS CANTIDAD_MINIMA FROM T_TMPORDEN_COMPRA_ITEM OC INNER JOIN T_PRODUCTO TP ON OC.COD_PRODUCTO=TP.COD_PRODUCTO");
       $stmMostrar->execute();
       $datos = $stmMostrar->fetchAll(PDO::FETCH_OBJ);
 

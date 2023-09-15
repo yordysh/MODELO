@@ -63,10 +63,15 @@ $(function () {
 
   $(document).on("click", "#mostrarInsumosRequerimiento", (e) => {
     e.preventDefault();
-    let eliminarInsumoButton = document.getElementById(
-      "eliminarinsumorequerimiento"
-    );
-    eliminarInsumoButton.style.display = "none";
+    /*----------Oculta el boton eliminar------------------ */
+    const $fila = $(e.target).closest("tr");
+
+    const $botonEliminar = $fila.find("#eliminarinsumorequerimiento");
+
+    $botonEliminar.hide();
+    /*---------------------------------------------------- */
+
+    // eliminarInsumoButton.style.display = "none";
     // Swal.fire({
     //   title: "¡Correcto!",
     //   text: "Se añadio a los registros.",
@@ -232,7 +237,11 @@ $(function () {
       let cantidad_producto_insumo = $(this).find("td:eq(1)").text();
       cantidad_total_minima = $(this).find("td:eq(2)").text();
 
-      valoresCapturadosVenta.push(id_producto_insumo, cantidad_producto_insumo);
+      valoresCapturadosVenta.push(
+        id_producto_insumo,
+        cantidad_producto_insumo,
+        cantidad_total_minima
+      );
     });
 
     if (taskcodrequhiddenvalidar === "") {

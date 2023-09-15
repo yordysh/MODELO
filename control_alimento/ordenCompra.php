@@ -2,8 +2,7 @@
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-// $dataProducto = $mostrar->MostrarProductoComboRegistro();
-$dataProductoTerminado = $mostrar->MostrarProductoTerminado();
+
 
 ?>
 <!DOCTYPE html>
@@ -97,7 +96,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxProduccionRequerimiento.js"></script>
+    <script src="./js/ajaxOrdenCompra.js"></script>
     <script src="./js/select2.min.js"></script>
 </body>
 

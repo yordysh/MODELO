@@ -37,21 +37,19 @@ $(function () {
       type: "POST",
       data: { accion: accion },
       success: function (response) {
-        // console.log(response);
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
           let template = ``;
           tasks.forEach((task) => {
-            template += `<tr taskproduccionrequerimiento="${task.COD_REQUERIMIENTO}">
-                            <td data-titulo='CODIGO' style="text-align:center;">${task.COD_REQUERIMIENTO}</td>
-                            <td data-titulo='PRODUCTO' style="text-align:center;" codigoproducto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo='CANTIDAD' style="text-align:center;">${task.CANTIDAD}</td>
-                            <td  style="text-align:center;"><button class="custom-icon" name="mostrarproduccionrequerimiento" id="mostrarproduccionrequerimiento"><i class="icon-circle-with-plus"></i></button></td>
-                          </tr>`;
+            template += `<tr>
+                            <td data-titulo='INSUMOS'>${task.DES_PRODUCTO}</td>
+                            <td data-titulo='CANTIDAD FALTANTE'>${task.CANTIDAD_INSUMO_ENVASE}</td>
+                            <td data-titulo='CANTIDAD POR COMPRA'>${task.CANTIDAD_MINIMA}</td>
+                         </tr>`;
           });
-          $("#tablaproduccionrequerimiento").html(template);
+          $("#tablatotalordencompra").html(template);
         } else {
-          $("#tablaproduccionrequerimiento").empty();
+          $("#tablatotalordencompra").empty();
         }
       },
       error: function (xhr, status, error) {

@@ -2583,9 +2583,9 @@ class c_almacen
             $json = array();
             foreach ($datos as $row) {
                 $json[] = array(
-                    "COD_COD_FORMULACION" => $row->COD_FORMULACION,
-                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,
+                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
 
                 );
             }
