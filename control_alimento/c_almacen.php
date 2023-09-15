@@ -309,12 +309,13 @@ if ($accion == 'insertar') {
     echo $respuesta;
 } elseif ($accion == 'guardarvalorescapturadosinsumos') {
 
+    $codpersonal = ($_POST['codpersonal']);
     $union = ($_POST['union']);
     $unionEnvase = ($_POST['unionEnvase']);
     $unionItem = ($_POST['unionItem']);
 
 
-    $respuesta = c_almacen::c_guardar_InsumoEnvase($union, $unionEnvase, $unionItem);
+    $respuesta = c_almacen::c_guardar_InsumoEnvase($codpersonal, $union, $unionEnvase, $unionItem);
     echo $respuesta;
 } elseif ($accion == 'buscarpendientestotal') {
 
@@ -399,6 +400,7 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_producccion_por_requerimiento();
     echo $respuesta;
 } elseif ($accion == 'insertarproducciontotal') {
+    $codpersonal = trim($_POST['codpersonal']);
     $codrequerimientoproduccion = trim($_POST['codrequerimientoproduccion']);
     $codproductoproduccion = trim($_POST['codproductoproduccion']);
     $numeroproduccion = strtoupper(trim($_POST['numeroproduccion']));
@@ -408,7 +410,7 @@ if ($accion == 'insertar') {
     $textAreaObservacion =  strtoupper(trim($_POST['textAreaObservacion']));
     $cantidadcaja = trim($_POST['cantidadcaja']);
 
-    $respuesta = c_almacen::c_insertar_produccion_total($codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja);
+    $respuesta = c_almacen::c_insertar_produccion_total($codpersonal, $codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja);
     echo $respuesta;
 } elseif ($accion == 'rechazarpendienterequerimiento') {
     $cod_requerimiento_pedido = trim($_POST['cod_requerimiento_pedido']);
@@ -435,6 +437,10 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'mostrarordencompra') {
 
     $respuesta = c_almacen::c_mostrar_orden_de_compra();
+    echo $respuesta;
+} elseif ($accion == 'seleccionarProductoCombo') {
+
+    $respuesta = c_almacen::c_mostrar_produccion_producto();
     echo $respuesta;
 }
 
@@ -2063,12 +2069,12 @@ class c_almacen
 
 
 
-    static function c_guardar_InsumoEnvase($union, $unionEnvase, $unionItem)
+    static function c_guardar_InsumoEnvase($codpersonal, $union, $unionEnvase, $unionItem)
     {
         $m_formula = new m_almacen();
 
         if (isset($union) && isset($unionEnvase) && isset($unionItem)) {
-            $respuesta = $m_formula->InsertarInsumEnvas($union, $unionEnvase, $unionItem);
+            $respuesta = $m_formula->InsertarInsumEnvas($codpersonal, $union, $unionEnvase, $unionItem);
             if ($respuesta) {
                 return "ok";
             } else {
@@ -2474,12 +2480,12 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function c_insertar_produccion_total($codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja)
+    static function c_insertar_produccion_total($codpersonal, $codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja)
     {
         $m_formula = new m_almacen();
 
         if (isset($codrequerimientoproduccion) && isset($codproductoproduccion) && isset($numeroproduccion) && isset($cantidadtotalproduccion) && isset($fechainicio) && isset($cantidadcaja)) {
-            $respuesta = $m_formula->InsertarProduccionTotalRequerimiento($codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja);
+            $respuesta = $m_formula->InsertarProduccionTotalRequerimiento($codpersonal, $codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja);
 
             if ($respuesta) {
                 return "ok";
@@ -2593,6 +2599,24 @@ class c_almacen
             echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
+        }
+    }
+
+
+    static function c_mostrar_produccion_producto()
+    {
+        $consulta = new m_almacen();
+        $ID_PRODUCTO_COMBO = filter_input(INPUT_POST, 'idProductoCombo');
+
+        $datos = $consulta->MostrarProduccionProductoEnvase($ID_PRODUCTO_COMBO);
+
+        if (count($datos) == 0) {
+            echo '<option value="0">No hay registros en produccion</option>';
+        }
+        echo '<option value="none" selected disabled>Seleccione produccion</option>';
+        for ($i = 0; $i < count($datos); $i++) {
+
+            echo '<option value="' . $datos[$i]["COD_PRODUCCION"] . '">' . $datos[$i]["NUM_PRODUCION_LOTE"] . " " . $datos[$i]["FEC_GENERADO"] . '</option>';
         }
     }
 }

@@ -42,6 +42,9 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                 <a class="" href="pedidoRequerimiento.php">confirmación de requerimiento</a>
             </li>
             <li>
+                <a class="" href="ordenCompra.php">Orden de compra</a>
+            </li>
+            <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
             </li>
             <li>
@@ -64,7 +67,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                     <center><label class="title">REGISTRO DE PRODUCCION ENVASES</label></center>
                 </div>
                 <div class="main">
-                    <form method="post" action="" id="formularioRegistroProduccion">
+                    <form method="post" action="" id="formularioRegistroProduccion" class="formSpaceVerificar">
 
                         <!-- Text input -->
                         <div class="form-outline mb-4">
@@ -91,36 +94,34 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                             <input type="hidden" id="hiddenproduccion">
                             <select id="selectNumProduccion" class="form-select selectNumProduccion" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione produccion</option>
-                                <?php foreach ($dataNumeroProduccion as  $listaProduccion) { ?>
+                                <!-- <?php foreach ($dataNumeroProduccion as  $listaProduccion) { ?>
                                     <option value="<?php echo $listaProduccion['COD_PRODUCCION']; ?>" class="option"><?php echo $listaProduccion['COD_REQUERIMIENTO'] . " "; ?><?php echo $listaProduccion['NUM_PRODUCION_LOTE']; ?></option>
                                 <?php
-                                }
-                                ?>
+                                        }
+                                ?> -->
                             </select>
                         </div>
 
                         <!-- Text input cantidad -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Cantidad</label>
-                            <input type="hidden" id='hiddencantidad'>
-                            <input type="text" id="cantidad" class="form-control" name="cantidad" required>
+                        <div class="contenedorcantidadcalculo">
+                            <div class="form-outline mb-4">
+                                <label class="form-label">Cantidad</label>
+                                <input type="hidden" id='hiddencantidad'>
+                                <input type="text" id="cantidad" class="form-control" name="cantidad" required>
+                            </div>
+                            <div class="btncalcular">
+                                <button class="custom-icon-calcular" name="calcular" id="botonCalcularregistros"><i class="icon-circle-with-plus"></i></button>
+                                <!-- <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-success">Insertar</button> -->
+                            </div>
                         </div>
                         <!-- Crear PDF -->
-                        <div class="contenedorgeneral">
-
-                            <div class="estilocalcular">
-                                <button id="botonCalcularregistros" type="submit" name="calcular" class="btn btn-primary estilobotoncalcular">Calcular </button>
-                            </div>
-                            <div class="estiloguardar">
-                                <button id="botonguardarregistro" type="submit" name="insert" class="btn btn-primary estilobotonguardar">Guardar </button>
-                            </div>
-
-                            <div class="aniomes">
-                                <div class="styleanmes">
+                        <div class="contenedorpdf">
+                            <div class="pdfContent">
+                                <div class="contentaniomes">
                                     <label for="mes">Seleccione el año:</label>
                                     <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
                                 </div>
-                                <div class="styleanmes">
+                                <div class="">
                                     <label for="mes">Seleccione el mes:</label>
                                     <select id="mes" name="mes">
                                         <option value="" selected disabled>Seleccione...</option>
@@ -138,27 +139,34 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                                         <option value="12">Diciembre</option>
                                     </select>
                                 </div>
-                                <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()">Generar PDF</a>
+                            </div>
+                            <div class="botonpdfregistro">
+                                <a class="btn btn-primary estilopdfregistro" href="#" onclick="generarPDF()">Generar PDF</a>
                             </div>
 
                         </div>
-                </div>
-                </form>
 
-                <div id="tablaRE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
-                    <table id="tbRE" class="table table-sm mb-3 table-hover">
-                        <thead>
-                            <tr>
-                                <th class="thtitulo" scope="col">MATERIALES</th>
-                                <th class="thtitulo" scope="col">CANTIDAD</th>
-                                <th class="thtitulo" scope="col">LOTE</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablacalculoregistroenvase">
+                        <div id="tablaRE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                            <table id="tbRE" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">MATERIALES</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th class="thtitulo" scope="col">LOTE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablacalculoregistroenvase">
 
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="estiloguardar">
+                            <button id="botonguardarregistro" type="submit" name="insert" class="btn btn-primary estiloguardar">Guardar </button>
+                        </div>
+                    </form>
+
                 </div>
+
 
             </div>
             </div>

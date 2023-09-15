@@ -361,6 +361,7 @@ $(function () {
     let tablaReqInsumo = $("#tablaInsumosDatos");
     let tablaReqEnv = $("#tablaenvase");
     let tablatotalInEn = $("#tablainsumoenvasetotal");
+    let codpersonal = $("#codpersonal").val();
 
     if (tablaReqInsumo.find("tr").length === 0) {
       Swal.fire({
@@ -407,6 +408,7 @@ $(function () {
         union: valoresCapturados,
         unionEnvase: valoresCapturadosEnvase,
         unionItem: valoresCapturadosTotalEnvase,
+        codpersonal: codpersonal,
       },
       success: function (response) {
         console.log("respuesta" + response);

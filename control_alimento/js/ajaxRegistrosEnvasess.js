@@ -32,7 +32,27 @@ $(function () {
 
   $("#selectProductoCombo").select2();
   $("#selectNumProduccion").select2();
+  /*---------- Al seleccionar un combo producto me muestre contenido en combo produccion---- */
+  let selectNumProduccion = $("#selectNumProduccion");
+  const accion = "seleccionarProductoCombo";
+  $("#selectProductoCombo").change(function () {
+    let idProductoCombo = $(this).find("option:selected").attr("id_reque");
 
+    $.ajax({
+      data: {
+        idProductoCombo: idProductoCombo,
+        accion: accion,
+      },
+      dataType: "html",
+      type: "POST",
+      url: "./c_almacen.php",
+    }).done(function (data) {
+      selectNumProduccion.html(data);
+    });
+  });
+  /*-------------------------------------------------------------------------------------- */
+
+  /*---------Verficar si el producto seleccionado es menor a productos iguales-------------- */
   $("#selectProductoCombo").on("change", (e) => {
     e.preventDefault();
     let idrequerimiento = $(this).find("option:selected").attr("id_reque");
@@ -62,6 +82,7 @@ $(function () {
       },
     });
   });
+  /*-------------------------------------------------------------------------------------- */
 
   $("#botonCalcularregistros").click((e) => {
     e.preventDefault();

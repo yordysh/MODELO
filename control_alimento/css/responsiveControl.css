@@ -376,6 +376,9 @@ td {
 .formSpace {
   margin-bottom: 20px;
 }
+.formSpaceVerificar {
+  margin-bottom: 50px;
+}
 .boton-insertar {
   padding: 10px 50px;
   font-size: 16px;
@@ -383,6 +386,13 @@ td {
   box-sizing: border-box;
   margin-top: 25px;
 }
+.contenedorpdf,
+.pdfContent {
+  display: flex;
+}
+/* .contentaniomes {
+  margin-right: 5px;
+} */
 
 /*-------------- Estilo de responsive ---------------------*/
 
@@ -477,10 +487,34 @@ td {
     padding: 10px 80px;
     font-size: 16px;
     max-width: 120%;
-    width: 118%;
+    width: 102%;
     box-sizing: border-box;
     margin-bottom: 10px;
   }
+
+  .contenedorpdf {
+    display: block;
+  }
+  .botonpdfregistro {
+    margin-top: 15px;
+  }
+  .estilopdfregistro {
+    padding: 5px 40px;
+    font-size: 16px;
+    max-width: 130%;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  .estiloguardar {
+    padding: 10px 40px;
+    font-size: 16px;
+    max-width: 140%;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 15px;
+  }
+
   [data-titulo] {
     text-align: left !important;
   }

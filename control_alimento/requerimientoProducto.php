@@ -1,8 +1,15 @@
 <?php
+session_start();
+
+// $codusuario = $_SESSION["cod"];
+$codusuario = 'Raul';
+
+?>
+
+<?php
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-// $dataProducto = $mostrar->MostrarProductoComboRegistro();
 $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
 ?>
@@ -43,6 +50,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
             <li>
+                <a class="" href="ordenCompra.php">Orden de compra</a>
+            </li>
+            <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad mónima</a>
             </li>
             <li>
@@ -66,7 +76,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 </div>
                 <div class="main">
                     <form class="formSpace" method="post" action="" id="formularioRequerimientoProducto">
-
+                        <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">
                         <!-- Text input -->
                         <div class="form-outline mb-4">
                             <input id="id" type="hidden" class="form-control" name="id" />
@@ -94,7 +104,6 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             </div>
                             <div class="btncalcular">
                                 <button class="custom-icon-calcular" name="calcular" id="botonCalcularInsumoEnvase"><i class="icon-circle-with-plus"></i></button>
-                                <!-- <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-success">Insertar</button> -->
                             </div>
                         </div>
 

@@ -72,16 +72,19 @@ $(function () {
     /*---------------------------------------------------- */
 
     // eliminarInsumoButton.style.display = "none";
-    // Swal.fire({
-    //   title: "¡Correcto!",
-    //   text: "Se añadio a los registros.",
-    //   icon: "success",
-    //   confirmButtonText: "Aceptar",
-    // });
 
     let capturaTr = $(e.currentTarget).closest("tr");
 
     let cod_formulacion = capturaTr.attr("taskId");
+
+    // if (capturaTr) {
+    //   Swal.fire({
+    //     title: "¡Correcto!",
+    //     text: "Se añadio los registros a las tablas correspondientes.",
+    //     icon: "success",
+    //     confirmButtonText: "Aceptar",
+    //   });
+    // }
 
     const accionproductorequerimiento = "mostrarproductoporrequerimiento";
     $.ajax({
@@ -157,7 +160,7 @@ $(function () {
         cod_formulacion: cod_formulacion,
       },
       success: function (response) {
-        console.log(JSON.parse(response));
+        // console.log(JSON.parse(response));
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
 
@@ -203,6 +206,12 @@ $(function () {
             $("#tablainsumorequerido").empty();
             $("#mensajecompleto").css("display", "block");
           } else {
+            Swal.fire({
+              title: "¡Productos por comprar!",
+              text: "Se necesita hacer una orden de compra.",
+              icon: "info",
+              confirmButtonText: "Aceptar",
+            });
             $("#mensajecompleto").css("display", "none");
             $("#tablatotalinsumosrequeridoscomprar").html(template);
           }

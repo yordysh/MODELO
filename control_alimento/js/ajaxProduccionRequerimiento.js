@@ -83,6 +83,14 @@ $(function () {
     $("#idhiddenproducto").val(codigoproducto);
     $("#productorequerimientoitem").val(nombreproducto);
     $("#cantidadhiddentotalrequerimiento").val(cantidadrequerimientototal);
+    if (capturaTr) {
+      Swal.fire({
+        title: "¡Se añadio correctamente!",
+        text: "Los datos se añadieron correctamente al formulario.",
+        icon: "success",
+        confirmButtonText: "Aceptar",
+      });
+    }
   });
   /* -------------------- Cuando escribe en cantidad de caja con decimal lanza alerta --------------- */
   $("#cantidadcaja").keyup((e) => {
@@ -106,6 +114,7 @@ $(function () {
   /* ------------------------------  Inserta los datos de produccion---------------------------- */
   $("#insertarProduccionRequerimiento").click((e) => {
     e.preventDefault();
+    let codpersonal = $("#codpersonal").val();
     let codrequerimientoproduccion = $("#idhiddencodrequerimiento").val();
     let codproductoproduccion = $("#idhiddenproducto").val();
     let productorequerimientoitem = $("#productorequerimientoitem").val();
@@ -182,6 +191,7 @@ $(function () {
         textAreaObservacion: textAreaObservacion,
         cantidadcaja: cantidadcaja,
         fechavencimiento: fechavencimiento,
+        codpersonal: codpersonal,
       },
       success: function (response) {
         console.log("respuesta" + response);

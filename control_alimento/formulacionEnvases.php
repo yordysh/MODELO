@@ -43,6 +43,9 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                 <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
             <li>
+                <a class="" href="ordenCompra.php">Orden de compra</a>
+            </li>
+            <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
             </li>
             <li>

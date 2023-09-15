@@ -767,8 +767,6 @@ class m_almacen
   public function MostrarPreparaciones($ID_SOLUCIONES)
   {
     try {
-
-
       $stm = $this->bd->prepare(
         "SELECT * FROM T_PREPARACIONES WHERE ID_SOLUCIONES=:ID_SOLUCIONES"
       );
@@ -2121,7 +2119,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function InsertarInsumEnvas($union, $unionEnvase, $unionItem)
+  public function InsertarInsumEnvas($codpersonal, $union, $unionEnvase, $unionItem)
   {
     try {
 
@@ -2130,8 +2128,13 @@ class m_almacen
       $codRequerimiento = $cod->generarCodigoRequerimientoProducto();
 
 
-      $stmRequerimiento = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO(COD_REQUERIMIENTO)
-      VALUES ('$codRequerimiento')");
+      $zonaHorariaPeruRequerimiento = new DateTimeZone('America/Lima');
+      $horaActualPeruRequerimiento = new DateTime('now', $zonaHorariaPeruRequerimiento);
+      $horaMinutosSegundosRequerimiento = $horaActualPeruRequerimiento->format('H:i:s');
+
+
+      $stmRequerimiento = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO(COD_REQUERIMIENTO,COD_PERSONAL,HORA)
+      VALUES ('$codRequerimiento','$codpersonal','$horaMinutosSegundosRequerimiento')");
       // var_dump($stmRequerimiento);
       $insert = $stmRequerimiento->execute();
 
@@ -2580,10 +2583,12 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function InsertarProduccionTotalRequerimiento($codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja)
+  public function InsertarProduccionTotalRequerimiento($codpersonal, $codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja)
   {
     try {
       $this->bd->beginTransaction();
+
+
       $dateTInicio = $fechainicio;
       $dateTVencimiento = $fechavencimiento;
       // $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
@@ -2636,9 +2641,29 @@ class m_almacen
       $codigoformula = new m_almacen();
       $codigo_de_produccion_generado = $codigoformula->CodigoProduccionGenerado();
       $codigo_categoria = $codigoformula->CodigoCategoriaProducto($codproductoproduccion);
-      $fechainiciogen = new DateTime($fechainicio);
-      $stmProducciontototal = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION(COD_PRODUCCION, COD_REQUERIMIENTO, COD_CATEGORIA, COD_PRODUCTO, NUM_PRODUCION_LOTE, CAN_PRODUCCION,CANTIDAD_PRODUCIDA, FEC_GENERADO,HOR_GENERADO,FEC_VENCIMIENTO, OBSERVACION, COD_ALMACEN,CAN_CAJA)
-      VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$cantidadtotalproduccion','$dateTInicio','$horaMinutosSegundos','$dateTVencimiento','$textAreaObservacion','00017','$cantidadcaja')");
+
+      $stmabrevia = $this->bd->prepare("SELECT ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_PRODUCTO='$codproductoproduccion'");
+      $stmabrevia->execute();
+      $consultaabrevia =  $stmabrevia->fetch(PDO::FETCH_ASSOC);
+      $resultadoabrevia = trim($consultaabrevia['ABR_PRODUCTO']);
+
+      $stmBarraI = $this->bd->prepare("SELECT MAX(NUM_LOTE) AS NUM_LOTE FROM T_ALMACEN_PRODUCTOS WHERE COD_PRODUCTO='$codproductoproduccion'");
+      $stmBarraI->execute();
+      $consultaBarraI = $stmBarraI->fetch(PDO::FETCH_ASSOC);
+      $resultadoBarraI = $consultaBarraI['NUM_LOTE'];
+      $BarraExtracI = intval(substr($resultadoBarraI, 3));
+      $barraSumaI = ($BarraExtracI + 1);
+      $barraI = str_pad($barraSumaI, 6, '0', STR_PAD_LEFT);
+
+      $resultadoFinalI = $resultadoabrevia . $barraI;
+      $resultadoFinalFin = $resultadoabrevia . $barraI . ($cantidadtotalproduccion - 1);
+
+
+      $maquina = gethostname();
+
+
+      $stmProducciontototal = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION(COD_PRODUCCION, COD_REQUERIMIENTO, COD_CATEGORIA, COD_PRODUCTO, NUM_PRODUCION_LOTE, CAN_PRODUCCION,CANTIDAD_PRODUCIDA, FEC_GENERADO,HOR_GENERADO,FEC_VENCIMIENTO, OBSERVACION,UNI_MEDIDA,BARRA_INICIO,BARRA_FIN, USU_REGISTRO,MAQUINA, COD_ALMACEN,CAN_CAJA)
+      VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$cantidadtotalproduccion','$dateTInicio','$horaMinutosSegundos','$dateTVencimiento','$textAreaObservacion','UNIDAD','$resultadoFinalI','$resultadoFinalFin','$codpersonal','$maquina','00017','$cantidadcaja')");
 
       $insert = $stmProducciontototal->execute();
 
@@ -2821,6 +2846,20 @@ class m_almacen
       $insert = intval($consultacantidad['CANTIDAD_PRODUCIDA']);
 
 
+      $stmFormu = $this->bd->prepare("SELECT  COD_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codigoproducto'");
+      $stmFormu->execute();
+      $consultaFormulac = $stmFormu->fetch(PDO::FETCH_ASSOC);
+      $Codigoformula = $consultaFormulac['COD_FORMULACION'];
+
+      $stmCanFormu = $this->bd->prepare("SELECT  CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codigoproducto'");
+      $stmCanFormu->execute();
+      $cantidadformula = $stmCanFormu->fetch(PDO::FETCH_ASSOC);
+      $cantidadformulait = $cantidadformula['CAN_FORMULACION'];
+
+      $stmCanFormu = $this->bd->prepare("SELECT COD_PRODUCTO, CAN_FORMULACION FROM T_TMPFORMULACION_ITEM WHERE COD_FORMULACION='$Codigoformula'");
+      $stmCanFormu->execute();
+      $cantidadformula = $stmCanFormu->fetchAll();
+      // $cantidadformulait = $cantidadformula['CAN_FORMULACION'];
 
 
       $updatetotal = $insert  - $cantidad;
@@ -2839,9 +2878,22 @@ class m_almacen
           $cantidadcaptura = trim($valoresCapturadosProduccion[$i + 1]);
           $cantidadlote = ($valoresCapturadosProduccion[$i + 2]);
 
-          $stmInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM(COD_AVANCE_INSUMOS,COD_PRODUCTO,CANTIDAD,LOTE)
+          $stmInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ENVASES(COD_AVANCE_INSUMOS,COD_PRODUCTO,CANTIDAD,LOTE)
                                                       VALUES ('$codigo_de_avance_insumo','$codProductoAvance','$cantidadcaptura','$cantidadlote')");
           $stmInsumoAvance->execute();
+        }
+
+        foreach ($cantidadformula as $insumos) {
+          $codProducto = $insumos['COD_PRODUCTO'];
+          $canFormulacion = $insumos['CAN_FORMULACION'];
+
+          $resultadoformula = round((($cantidad * $canFormulacion) / $cantidadformulait), 3);
+
+
+          $stmInsertarInsumo = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM(COD_AVANCE_INSUMOS,COD_PRODUCTO,CANTIDAD)
+          VALUES ('$codigo_de_avance_insumo','$codProducto','$resultadoformula')");
+
+          $stmInsertarInsumo->execute();
         }
       } else {
 
@@ -2876,7 +2928,7 @@ class m_almacen
                                           TP.DES_PRODUCTO AS DES_PRODUCTO, TAI.CANTIDAD AS CANTIDAD,  CONVERT(varchar, TAI.FECHA, 103) AS FECHA
                                           FROM T_TMPAVANCE_INSUMOS_PRODUCTOS TAI 
                                           INNER JOIN T_PRODUCTO TP ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO
-                                          INNER JOIN T_TMPPRODUCCION TPRO ON TPRO.COD_PRODUCCION=TAI.COD_PRODUCCION WHERE MONTH(FECHA) = '$mesSeleccionado' AND YEAR(FECHA) = '$anioSeleccionado' ");
+                                          INNER JOIN T_TMPPRODUCCION TPRO ON TPRO.COD_PRODUCCION=TAI.COD_PRODUCCION WHERE MONTH(FECHA) = '$mesSeleccionado' AND YEAR(FECHA) = '$anioSeleccionado'");
       $stmMostrar->execute();
       $datos = $stmMostrar->fetchAll(PDO::FETCH_OBJ);
 
@@ -2891,7 +2943,7 @@ class m_almacen
   {
     try {
       $stmMostrar = $this->bd->prepare("SELECT TAIP.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS, TP.DES_PRODUCTO AS DES_PRODUCTO,
-                                          TAIP.CANTIDAD AS CANTIDAD, TAIP.LOTE AS LOTE FROM T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM TAIP 
+                                          TAIP.CANTIDAD AS CANTIDAD, TAIP.LOTE AS LOTE FROM T_TMPAVANCE_INSUMOS_PRODUCTOS_ENVASES TAIP 
                                           INNER JOIN T_PRODUCTO TP ON TAIP.COD_PRODUCTO=TP.COD_PRODUCTO");
       $stmMostrar->execute();
       $datos = $stmMostrar->fetchAll(PDO::FETCH_OBJ);
@@ -2938,6 +2990,24 @@ class m_almacen
       return $datos;
     } catch (Exception $e) {
 
+      die($e->getMessage());
+    }
+  }
+
+
+  public function  MostrarProduccionProductoEnvase($ID_PRODUCTO_COMBO)
+  {
+    try {
+
+      $stm = $this->bd->prepare(
+        "SELECT COD_PRODUCCION, CONVERT(VARCHAR, FEC_GENERADO, 103) AS FEC_GENERADO,COD_PRODUCTO,NUM_PRODUCION_LOTE,ESTADO 
+        FROM T_TMPPRODUCCION WHERE ESTADO='P' AND COD_PRODUCCION='$ID_PRODUCTO_COMBO'"
+      );
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
       die($e->getMessage());
     }
   }
