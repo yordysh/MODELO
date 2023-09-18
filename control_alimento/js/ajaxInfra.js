@@ -250,7 +250,6 @@ $(function () {
       data: { accion: accion },
       type: "POST",
       success: function (response) {
-        // console.log(JSON.parse(response));
         let data = JSON.parse(response);
         $("#selectInfra").empty();
         $("#selectInfra").append(
