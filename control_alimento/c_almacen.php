@@ -442,6 +442,10 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_mostrar_produccion_producto();
     echo $respuesta;
+} elseif ($accion == 'actualizarcomboproduccionproducto') {
+
+    $respuesta = c_almacen::c_actualizar_combo_produccion_producto();
+    echo $respuesta;
 }
 
 
@@ -2617,6 +2621,32 @@ class c_almacen
         for ($i = 0; $i < count($datos); $i++) {
 
             echo '<option value="' . $datos[$i]["COD_PRODUCCION"] . '">' . $datos[$i]["NUM_PRODUCION_LOTE"] . " " . $datos[$i]["FEC_GENERADO"] . '</option>';
+        }
+    }
+
+
+    static function c_actualizar_combo_produccion_producto()
+    {
+        try {
+
+            $mostrar = new m_almacen();
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarProductoRegistroEnvase();
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_REQUERIMIENTO" => $row['COD_REQUERIMIENTO'],
+                    "COD_PRODUCTO" => $row['COD_PRODUCTO'],
+                    "DES_PRODUCTO" => $row['DES_PRODUCTO'],
+                    "ABR_PRODUCTO" => $row['ABR_PRODUCTO'],
+
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 }

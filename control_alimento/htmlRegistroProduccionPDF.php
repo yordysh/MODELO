@@ -86,11 +86,12 @@ $nombre = 'LBS-OP-FR-01';
         }
 
 
-        footer {
+        .footer {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
+
         }
     </style>
     <!--------------------------------------- Titulo header --------------------------------------->
@@ -197,7 +198,7 @@ $nombre = 'LBS-OP-FR-01';
         echo '</table>';
     }
     ?>
-    <footer>
+    <div class="footer">
         <table>
             <tr>
                 <td style="border:none;">Donde ME: Material de envase(bolsas,frascos);Otros:cucharitas,etiquetas,alupol,etc.</td>
@@ -216,7 +217,7 @@ $nombre = 'LBS-OP-FR-01';
                 <td style="padding-left: 100px; padding-right:100px;border-left:none;border-right:none;border-bottom:none;">Jefe de Aseguramiento de la calidad</td>
             </tr>
         </table>
-    </footer>
+    </div>
 </body>
 
 

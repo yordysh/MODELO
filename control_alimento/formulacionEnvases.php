@@ -94,19 +94,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                             <label class="form-label">Cantidad producto</label>
                             <input type="number" id="cantidadTotal" class="form-control" name="cantidadTotal" required>
                         </div>
-                        <!-- <div class="table-responsive " style="overflow: scroll;height: 180px !important; margin-top:20px;margin-bottom:100px;">
-                            <table id="tbProEnVa" class="table table-sm mb-3 table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="thtitulo" scope="col">PRODUCTO</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaProductoEnvases">
 
-                                </tbody>
-                            </table>
-                        </div> -->
                         <!--Combo Insumos -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Insumos</label>
@@ -121,11 +109,16 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                         </div>
 
                         <!-- Text input cantidad insumos-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Cantidad insumos</label>
-                            <input type="number" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
+                        <div class="contenedorcantidadcalculo">
+                            <div class="form-outline mb-4">
+                                <label class="form-label">Cantidad insumos</label>
+                                <input type="number" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
+                            </div>
+                            <!-- <button id="botonCalcularInsumos" name="insert" class="btn btn-success bt-Total">Insertar insumos </button> -->
+                            <div class="btncalcular">
+                                <button class="custom-icon-calcular" name="insert" id="botonCalcularInsumos"><i class="icon-circle-with-plus"></i></button>
+                            </div>
                         </div>
-                        <button id="botonCalcularInsumos" name="insert" class="btn btn-success bt-Total">Insertar insumos </button>
                         <div class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;margin-bottom:50px!important;">
                             <table id="tbInsum" class="table table-sm mb-3 table-hover">
                                 <thead>
@@ -155,11 +148,16 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                         </div>
 
                         <!-- Text input cantidad envases-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Cantidad envases</label>
-                            <input type="number" id="cantidadEnvaseProducto" class="form-control" name="cantidadEnvaseProductos" required>
+                        <div class="contenedorcantidadcalculo">
+                            <div class="form-outline mb-4">
+                                <label class="form-label">Cantidad envases</label>
+                                <input type="number" id="cantidadEnvaseProducto" class="form-control" name="cantidadEnvaseProductos" required>
+                            </div>
+                            <!-- <button id="botonCalcularEnvasesProducto" name="insert" class="btn btn-success bt-Total">Insertar envases </button> -->
+                            <div class="btncalcular">
+                                <button class="custom-icon-calcular" name="insert" id="botonCalcularEnvasesProducto"><i class="icon-circle-with-plus"></i></button>
+                            </div>
                         </div>
-                        <button id="botonCalcularEnvasesProducto" name="insert" class="btn btn-success bt-Total">Insertar envases </button>
                         <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
                             <table id="tbEnvaseProducto" class="table table-sm mb-3 table-hover">
                                 <thead>

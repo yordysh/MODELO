@@ -226,7 +226,7 @@ $(function () {
         cantidad: cantidad,
       },
       success: function (response) {
-        console.log("respuesta" + response);
+        // console.log("respuesta" + response);
         if (response == "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
@@ -241,6 +241,7 @@ $(function () {
               $("#hiddenproduccion").val("");
               $("#cantidad").val("");
               $("#tablacalculoregistroenvase").empty();
+              actualizarCombo();
             }
           });
         } else {
@@ -252,6 +253,45 @@ $(function () {
       },
     });
   });
+  function actualizarCombo() {
+    const accion = "actualizarcomboproduccionproducto";
+    $.ajax({
+      url: "./c_almacen.php",
+      data: { accion: accion },
+      type: "POST",
+      success: function (response) {
+        // console.log(JSON.parse(response));
+        let data = JSON.parse(response);
+        $("#selectProductoCombo").empty();
+        $("#selectProductoCombo").append(
+          $("<option>", {
+            value: "none",
+            text: "Seleccione producto",
+            disabled: true,
+            selected: true,
+          })
+        );
+        data.forEach((item) => {
+          const $option = $("<option>", {
+            value: item.COD_PRODUCTO,
+            text:
+              item.COD_REQUERIMIENTO +
+              " " +
+              item.ABR_PRODUCTO +
+              " " +
+              item.DES_PRODUCTO,
+          })
+            .attr("id_reque", item.COD_REQUERIMIENTO)
+            .addClass("option");
+
+          $("#selectProductoCombo").append($option);
+        });
+      },
+      error: function (error) {
+        console.error("Error fetching data:", error);
+      },
+    });
+  }
 });
 function isJSON(str) {
   try {

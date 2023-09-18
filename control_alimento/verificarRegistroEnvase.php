@@ -94,11 +94,6 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                             <input type="hidden" id="hiddenproduccion">
                             <select id="selectNumProduccion" class="form-select selectNumProduccion" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione produccion</option>
-                                <!-- <?php foreach ($dataNumeroProduccion as  $listaProduccion) { ?>
-                                    <option value="<?php echo $listaProduccion['COD_PRODUCCION']; ?>" class="option"><?php echo $listaProduccion['COD_REQUERIMIENTO'] . " "; ?><?php echo $listaProduccion['NUM_PRODUCION_LOTE']; ?></option>
-                                <?php
-                                        }
-                                ?> -->
                             </select>
                         </div>
 
@@ -178,7 +173,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxRegistrosEnvasess.js"></script>
+    <script src="./js/ajaxVerificarRegistroEnvase.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {
