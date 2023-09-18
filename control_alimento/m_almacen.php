@@ -2836,7 +2836,7 @@ class m_almacen
 
 
       $nombre = 'LBS-OP-FR-01';
-      // $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
+      $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
 
 
 
