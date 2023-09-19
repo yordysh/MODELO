@@ -27,7 +27,7 @@ $mostrar = new m_almacen();
 $dataCod = $mostrar->MostrarRegistroProduccionPorCodInsumoPDF($anioSeleccionado, $mesSeleccionado);
 $datos = $mostrar->MostrarRegistroProduccionPDF();
 $nombre = 'LBS-OP-FR-01';
-// $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
+$versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
 ?>
 <!DOCTYPE html>

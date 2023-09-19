@@ -134,6 +134,12 @@ $(function () {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
 
+          Swal.fire({
+            icon: "success",
+            title: "Calculo de registro",
+            text: "Se añadio correctamente el registro.",
+          });
+
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_FORMULACION}">

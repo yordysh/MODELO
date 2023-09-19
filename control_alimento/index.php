@@ -71,9 +71,6 @@
           <li>
             <a class="" href="labsabelForm.php">Envases labsabell</a>
           </li>
-          <!-- <li>
-            <a class="" href="previlifeForm.php">Envases previlife</a>
-          </li> -->
           <li>
             <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
           </li>
@@ -102,9 +99,8 @@
           <li>
             <a class="" href="verificarRegistroEnvase.php">Registros envases</a>
           </li>
+        </ul>
       </li>
-    </ul>
-    </li>
     </ul>
   </nav>
   <?php

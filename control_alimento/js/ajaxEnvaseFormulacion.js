@@ -285,6 +285,12 @@ $(function () {
         }
       });
     } else {
+      Swal.fire({
+        icon: "success",
+        title: "Correcto",
+        text: "Se añadio los registros.",
+      });
+
       let newRow = `<tr>
                       <td data-titulo='Insumos' style='display:none;'>${selectInsumosCombo}</td>
                       <td data-titulo='Insumo'>${selectInsumosTexto}</td>
@@ -358,6 +364,11 @@ $(function () {
         }
       });
     } else {
+      Swal.fire({
+        icon: "success",
+        title: "Correcto",
+        text: "Se añadio los registros.",
+      });
       let newRow = `<tr>
                     <td  data-titulo='Envases' style='display:none;'>${selectEnvasesProductoCombo}</td>
                     <td  data-titulo='Envase'>${selectEnvasesTexto}</td>
