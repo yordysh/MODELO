@@ -240,6 +240,7 @@ $(function () {
     let tablainsumos = $("#tablainsumorequerido");
     let tablatotal = $("#tablatotalinsumosrequeridoscomprar");
     let taskcodrequhiddenvalidar = $("#taskcodrequhiddenvalidar").val();
+    let codpersonal = $("#codpersonal").val();
     let cantidad_total_minima;
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let id_producto_insumo = $(this).find("td:eq(0)").attr("id_producto");
@@ -280,6 +281,7 @@ $(function () {
         accion: accion,
         union: valoresCapturadosVenta,
         idRequerimiento: idRequerimiento,
+        codpersonal: codpersonal,
       },
       success: function (response) {
         console.log("respuesta" + response);

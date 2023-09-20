@@ -1,6 +1,7 @@
 <?php
 
 require_once("../funciones/DataBaseA.php");
+require_once("./maquina.php");
 
 class m_almacen
 {
@@ -2254,7 +2255,7 @@ class m_almacen
     $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
     return $codigoAumento;
   }
-  public function InsertarOrdenCompraItem($union, $idRequerimiento)
+  public function InsertarOrdenCompraItem($union, $idRequerimiento, $codpersonal)
   {
     try {
 
@@ -2264,12 +2265,17 @@ class m_almacen
       $codigo_orden_compra = $cod->generarCodigoOrdenCompra();
 
 
+
+      $zonaHorariaPeru = new DateTimeZone('America/Lima');
+      $horaActualPeru = new DateTime('now', $zonaHorariaPeru);
+      $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
+
+
       $fecha_actual = $cod->c_horaserversql('F');
       $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
       $fecha_generado_orden_compra  = $fecha_convertida->format('d/m/Y');
-      // $fecha_actual = '14/09/2023';
-      //echo $fecha_generado;
-      //$fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      // $fecha_actual = '20/09/2023';
+      // $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,COD_REQUERIMIENTO,FECHA)
                                                 VALUES ('$codigo_orden_compra','$idRequerimiento','$fecha_generado_orden_compra')");
@@ -2286,13 +2292,32 @@ class m_almacen
         $insert = $stmPedidoOrden->execute();
       }
 
+
+      $stmCodreq = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) as COD_REQUERIMIENTO FROM T_REQUERIMIENTO");
+      $stmCodreq->execute();
+      $resultadoRe = $stmCodreq->fetch(PDO::FETCH_ASSOC);
+
+
+      $maxCodigoRe = intval($resultadoRe['COD_REQUERIMIENTO']);
+
+      $nuevoCodigoReq = $maxCodigoRe + 1;
+      $codigoAumentoReq = str_pad($nuevoCodigoReq, 8, '0', STR_PAD_LEFT);
+
       $fecha_actual = $cod->c_horaserversql('F');
       $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
       $fecha_generado  = $fecha_convertida->format('d/m/Y');
 
 
-      // $fecha_actual = '19/09/2023';
+      // $fecha_actual = '20/09/2023';
       // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+
+      $maquina = os_info();
+      // $maquina = 'user';
+
+      $stmtrequerimiento = $this->bd->prepare("INSERT INTO T_REQUERIMIENTO (COD_REQUERIMIENTO, COD_CATEGORIA, FEC_REQUERIMIENTO, HOR_REQUERIMIENTO, EST_REQUERIMIENTO, USU_REGISTRO, FEC_REGISTRO,MAQUINA)
+                                              VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','P','$codpersonal',GETDATE(),'$maquina')");
+      $stmtrequerimiento->execute();
+
 
       $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $stmActualizar->execute();
@@ -2316,9 +2341,8 @@ class m_almacen
       $this->bd->beginTransaction();
       $cod = new m_almacen();
       $fecha_generado = $cod->c_horaserversql('F');
-      // $fecha_actual = '18/09/2023';
-      //echo $fecha_generado;
-      //$fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      // $fecha_actual = '20/09/2023';
+      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $insertar = $stmActualizarOrden->execute();
@@ -2644,24 +2668,46 @@ class m_almacen
       $consultaabrevia =  $stmabrevia->fetch(PDO::FETCH_ASSOC);
       $resultadoabrevia = trim($consultaabrevia['ABR_PRODUCTO']);
 
-      $stmBarraI = $this->bd->prepare("SELECT MAX(NUM_LOTE) AS NUM_LOTE FROM T_ALMACEN_PRODUCTOS WHERE COD_PRODUCTO='$codproductoproduccion'");
-      $stmBarraI->execute();
-      $consultaBarraI = $stmBarraI->fetch(PDO::FETCH_ASSOC);
-      $resultadoBarraI = $consultaBarraI['NUM_LOTE'];
-      $BarraExtracI = intval(substr($resultadoBarraI, 3));
-      $barraSumaI = ($BarraExtracI + 1);
-      $barraI = str_pad($barraSumaI, 6, '0', STR_PAD_LEFT);
+      $stmprodbarras = $this->bd->prepare("SELECT MAX(BARRA_INICIO) AS BARRA_INICIO FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codproductoproduccion'");
+      $stmprodbarras->execute();
+      $consultaprodbarras = $stmprodbarras->fetch(PDO::FETCH_ASSOC);
+      $resultadoProdBarras = $consultaprodbarras['BARRA_INICIO'];
+
+      if ($resultadoProdBarras == null) {
+        $stmBarraI = $this->bd->prepare("SELECT MAX(NUM_LOTE) AS NUM_LOTE FROM T_ALMACEN_PRODUCTOS WHERE COD_PRODUCTO='$codproductoproduccion'");
+        $stmBarraI->execute();
+        $consultaBarraI = $stmBarraI->fetch(PDO::FETCH_ASSOC);
+        $resultadoBarraI = $consultaBarraI['NUM_LOTE'];
+        $BarraExtracI = intval(substr($resultadoBarraI, 3));
+        $barraSumaI = ($BarraExtracI + 1);
+        $barraI = str_pad($barraSumaI, 6, '0', STR_PAD_LEFT);
 
 
-      $barraF = $barraSumaI + ($cantidadtotalproduccion - 1);
-      $resultadoF = str_pad($barraF, 6, '0', STR_PAD_LEFT);
+        $barraF = $barraSumaI + ($cantidadtotalproduccion - 1);
+        $resultadoF = str_pad($barraF, 6, '0', STR_PAD_LEFT);
 
-      $resultadoFinalI = trim($resultadoabrevia . $barraI);
-      $resultadoFinalFin = trim($resultadoabrevia . ($resultadoF));
+        $resultadoFinalI = trim($resultadoabrevia . $barraI);
+        $resultadoFinalFin = trim($resultadoabrevia . ($resultadoF));
+      } else {
+        $stmprodbarrasfn = $this->bd->prepare("SELECT MAX(BARRA_FIN) AS BARRA_FIN FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codproductoproduccion'");
+        $stmprodbarrasfn->execute();
+        $consultaprodbarrasfn = $stmprodbarrasfn->fetch(PDO::FETCH_ASSOC);
+        $resultadoProdBarrasfn = $consultaprodbarrasfn['BARRA_FIN'];
+        $BarraExtracfn = intval(substr($resultadoProdBarrasfn, 3));
+        $barraSumafn = ($BarraExtracfn + 1);
+        $barraI = str_pad($barraSumafn, 6, '0', STR_PAD_LEFT);
 
 
-      $maquina = gethostname();
+        $barraFin = $barraSumafn + ($cantidadtotalproduccion - 1);
+        $resultadoFin = str_pad($barraFin, 6, '0', STR_PAD_LEFT);
 
+        $resultadoFinalI = trim($resultadoabrevia . $barraI);
+        $resultadoFinalFin = trim($resultadoabrevia . ($resultadoFin));
+      }
+
+
+      $maquina = os_info();
+      // $maquina = 'user';
 
       $stmProducciontototal = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION(COD_PRODUCCION, COD_REQUERIMIENTO, COD_CATEGORIA, COD_PRODUCTO, NUM_PRODUCION_LOTE, CAN_PRODUCCION,CANTIDAD_PRODUCIDA, FEC_GENERADO,HOR_GENERADO,FEC_VENCIMIENTO, OBSERVACION,UNI_MEDIDA,BARRA_INICIO,BARRA_FIN, USU_REGISTRO,MAQUINA, COD_ALMACEN,CAN_CAJA)
       VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$cantidadtotalproduccion','$dateTInicio','$horaMinutosSegundos','$dateTVencimiento','$textAreaObservacion','UNIDAD','$resultadoFinalI','$resultadoFinalFin','$codpersonal','$maquina','00017','$cantidadcaja')");
@@ -2846,7 +2892,7 @@ class m_almacen
       $numero_generado_bachada = $codigoInsumosAvances->NumeroBachadaGenerado();
 
       $nombre = 'LBS-OP-FR-01';
-      $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
+      // $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
 
 
 
@@ -2919,7 +2965,6 @@ class m_almacen
         $existeNum = $stmContienevalor->fetch(PDO::FETCH_ASSOC);
         $valorexistente = $existeNum['NUM_LOTE'];
 
-        $codigo_gen_barras = $codigoInsumosAvances->CodigoGenBarras();
         if ($valorexistente == null) {
 
           $stmCodForm = $this->bd->prepare("SELECT BARRA_INICIO FROM T_TMPPRODUCCION WHERE COD_PRODUCCION='$codigoproduccion'");

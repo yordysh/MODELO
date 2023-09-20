@@ -202,17 +202,23 @@ $(function () {
         if (!response.error) {
           const task = JSON.parse(response);
 
-          var selectControl = $("#selectControl");
+          $("#selectControl").prop("disabled", true);
 
-          selectControl.prop("disabled", true);
-
-          if (task.NOMBRE_T_ZONA_AREAS) {
-            selectControl.val(
-              selectControl
-                .find("option:contains('" + task.NOMBRE_T_ZONA_AREAS + "')")
-                .val()
-            );
-          }
+          // if (task.NOMBRE_T_ZONA_AREAS) {
+          //   selectControl.val(
+          //     selectControl
+          //       .find("option:contains('" + task.NOMBRE_T_ZONA_AREAS + "')")
+          //       .val()
+          //   );
+          // }
+          $("#selectControl").append(
+            new Option(
+              task.NOMBRE_T_ZONA_AREAS,
+              task.NOMBRE_T_ZONA_AREAS,
+              true,
+              true
+            )
+          );
 
           $("#NOMBRE_CONTROL_MAQUINA").val(task.NOMBRE_CONTROL_MAQUINA);
           $("#N_DIAS_CONTROL").val(task.N_DIAS_CONTROL);

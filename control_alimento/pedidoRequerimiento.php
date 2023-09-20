@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+$codusuario = $_SESSION["cod"];
+// $codanexo=$_SESSION["ane"];
+// $codusuario = 'Raul';
+
+?>
+<?php
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
@@ -71,7 +79,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 </div>
                 <div class="main">
                     <form method="post" action="" id="formularioPedidoRequerimiento">
-
+                        <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">
                         <!-- Text input -->
                         <div class="form-outline mb-4">
                             <input id="id" type="hidden" class="form-control" name="id" />

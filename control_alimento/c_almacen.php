@@ -387,7 +387,8 @@ if ($accion == 'insertar') {
     if (isset($_POST['union'])) {
         $union = $_POST['union'];
         $idRequerimiento = $_POST['idRequerimiento'];
-        $respuesta = c_almacen::c_insertar_orden_compra_item($union, $idRequerimiento);
+        $codpersonal = $_POST['codpersonal'];
+        $respuesta = c_almacen::c_insertar_orden_compra_item($union, $idRequerimiento,  $codpersonal);
         echo $respuesta;
     } else {
         $respuesta = c_almacen::c_actualizar_orden_compra_item($idRequerimiento);
@@ -2166,12 +2167,12 @@ class c_almacen
         }
     }
 
-    static function c_insertar_orden_compra_item($union, $idRequerimiento)
+    static function c_insertar_orden_compra_item($union, $idRequerimiento, $codpersonal)
     {
         $m_formula = new m_almacen();
 
         if (isset($idRequerimiento)) {
-            $respuesta = $m_formula->InsertarOrdenCompraItem($union, $idRequerimiento);
+            $respuesta = $m_formula->InsertarOrdenCompraItem($union, $idRequerimiento, $codpersonal);
             if ($respuesta) {
                 return "ok";
             } else {
