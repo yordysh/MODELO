@@ -243,7 +243,7 @@ $(function () {
     let taskcodrequhiddenvalidar = $("#taskcodrequhiddenvalidar").val();
     let codpersonal = $("#codpersonal").val();
     let cantidadesTotalesMinimas = [];
-    // console.log(cantidad_total_minima);
+
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let id_producto_insumo = $(this).find("td:eq(0)").attr("id_producto");
       let cantidad_producto_insumo = $(this).find("td:eq(1)").text();
@@ -274,7 +274,8 @@ $(function () {
           icon: "error",
           confirmButtonText: "Aceptar",
         });
-        break;
+        // break;
+        return;
       }
     }
 
