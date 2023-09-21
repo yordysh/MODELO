@@ -4,6 +4,7 @@ session_start();
 $codusuario = $_SESSION["cod"];
 // $codanexo=$_SESSION["ane"];
 // $codusuario = 'Raul';
+// $codanexo = '1010';
 
 ?>
 <?php
@@ -47,7 +48,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <a class="" href="requerimientoProducto.php">Requerimiento</a>
             </li>
             <li>
-                <a class="" href="#">Confirmación de requerimiento</a>
+                <a class="pedidoRequerimiento" href="#">Confirmación de requerimiento</a>
             </li>
             <li>
                 <a class="" href="ordenCompra.php">Orden de compra</a>
@@ -80,6 +81,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <div class="main">
                     <form method="post" action="" id="formularioPedidoRequerimiento">
                         <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">
+                        <!-- <input type="hidden" id="codanexo " name="codanexo " value="<?php echo $codanexo; ?>"> -->
                         <!-- Text input -->
                         <div class="form-outline mb-4">
                             <input id="id" type="hidden" class="form-control" name="id" />

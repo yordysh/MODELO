@@ -70,7 +70,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                 </div>
                 <div class="main">
                     <form method="post" action="" id="formularioEnvasesFormula">
-
+                        <input type="hidden" id="codanexo" name="codanexo " value="<?php echo $codanexo; ?>">
                         <!-- Text input -->
                         <div class="form-outline mb-4">
                             <input id="taskIdProducto" type="hidden" class="form-control" name="taskIdProducto" />

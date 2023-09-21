@@ -2259,6 +2259,7 @@ class m_almacen
   {
     try {
 
+
       $this->bd->beginTransaction();
       $cod = new m_almacen();
 
@@ -2288,20 +2289,11 @@ class m_almacen
 
 
         $stmPedidoOrden = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA_ITEM(COD_ORDEN_COMPRA,COD_PRODUCTO,CANTIDAD_MINIMA,CANTIDAD_INSUMO_ENVASE)
-                                                  VALUES ('$codigo_orden_compra','$codProducto', '$canMinInsu','$canInsu')");
+                                                  VALUES ('$codigo_orden_compra','$codProducto','$canMinInsu','$canInsu')");
         $insert = $stmPedidoOrden->execute();
       }
 
 
-      $stmCodreq = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) as COD_REQUERIMIENTO FROM T_REQUERIMIENTO");
-      $stmCodreq->execute();
-      $resultadoRe = $stmCodreq->fetch(PDO::FETCH_ASSOC);
-
-
-      $maxCodigoRe = intval($resultadoRe['COD_REQUERIMIENTO']);
-
-      $nuevoCodigoReq = $maxCodigoRe + 1;
-      $codigoAumentoReq = str_pad($nuevoCodigoReq, 8, '0', STR_PAD_LEFT);
 
       $fecha_actual = $cod->c_horaserversql('F');
       $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
@@ -2314,8 +2306,22 @@ class m_almacen
       $maquina = os_info();
       // $maquina = 'user';
 
-      $stmtrequerimiento = $this->bd->prepare("INSERT INTO T_REQUERIMIENTO (COD_REQUERIMIENTO, COD_CATEGORIA, FEC_REQUERIMIENTO, HOR_REQUERIMIENTO, EST_REQUERIMIENTO, USU_REGISTRO, FEC_REGISTRO,MAQUINA)
-                                              VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','P','$codpersonal',GETDATE(),'$maquina')");
+      // $totalInsert = $this->bd->prepare("SELECT COUNT(*) as COUNT FROM T_TMPREQUERIMIENTO_ITEM WHERE COD_REQUERIMIENTO='$idRequerimiento'");
+      // $totalInsert->execute();
+      // $resultadoTotalInsert = $totalInsert->fetch(PDO::FETCH_ASSOC);
+      // $countTotal = $resultadoTotalInsert['COUNT'];
+
+
+      $stmCodreq = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) as COD_REQUERIMIENTO FROM T_REQUERIMIENTOTEMP");
+      $stmCodreq->execute();
+      $resultadoRe = $stmCodreq->fetch(PDO::FETCH_ASSOC);
+      $maxCodigoRe = intval($resultadoRe['COD_REQUERIMIENTO']);
+      $nuevoCodigoReq = $maxCodigoRe + 1;
+      $codigoAumentoReq = str_pad($nuevoCodigoReq, 8, '0', STR_PAD_LEFT);
+
+
+      $stmtrequerimiento = $this->bd->prepare("INSERT INTO T_REQUERIMIENTOTEMP (COD_REQUERIMIENTO, COD_CATEGORIA, FEC_REQUERIMIENTO, HOR_REQUERIMIENTO, EST_REQUERIMIENTO, USU_REGISTRO, FEC_REGISTRO,MAQUINA)
+                                                VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','P','$codpersonal',GETDATE(),'$maquina')");
       $stmtrequerimiento->execute();
 
 
@@ -2892,7 +2898,7 @@ class m_almacen
       $numero_generado_bachada = $codigoInsumosAvances->NumeroBachadaGenerado();
 
       $nombre = 'LBS-OP-FR-01';
-      // $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
+      $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
 
 
 
@@ -3113,15 +3119,9 @@ class m_almacen
       $stm->execute();
       $respuesta = $stm->fetch();
       $insert = $respuesta['COD_REQUERIMIENTO'];
-      // var_dump($insert);
       if ($insert == $idrequerimiento) {
         return $insert;
       }
-
-
-      // $insert = $this->bd->commit();
-
-      // return $insert;
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());

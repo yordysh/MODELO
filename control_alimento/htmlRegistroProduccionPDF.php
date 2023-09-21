@@ -27,7 +27,7 @@ $mostrar = new m_almacen();
 $dataCod = $mostrar->MostrarRegistroProduccionPorCodInsumoPDF($anioSeleccionado, $mesSeleccionado);
 $datos = $mostrar->MostrarRegistroProduccionPDF();
 $nombre = 'LBS-OP-FR-01';
-// $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
+$versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
 ?>
 <!DOCTYPE html>
@@ -107,8 +107,8 @@ $nombre = 'LBS-OP-FR-01';
 
                 </tr>
                 <tr>
-                    <!-- <td class="estilotd">Versión: <?php echo $versionMuestra ?> </td> -->
-                    <td class="estilotd">Versión: 02 </td>
+                    <td class="estilotd">Versión: <?php echo $versionMuestra ?> </td>
+                    <!-- <td class="estilotd">Versión: 02 </td> -->
                 </tr>
                 <tr>
                     <td class="estilotd">Página:</td>

@@ -188,7 +188,7 @@ $(function () {
                             <td data-titulo="CANTIDAD FALTANTE"  style="text-align:center;">${insumo_pedir}</td>
                             <td data-titulo="CANTIDAD POR COMPRA"  style="text-align:center;">${
                               isNaN(cantidadtotalminima)
-                                ? "Falta añadir cantidad"
+                                ? "Falta cantidad minina"
                                 : cantidadtotalminima
                             }</td>
                           </tr>`;
@@ -203,7 +203,7 @@ $(function () {
               showConfirmButton: false,
               timer: 2500,
             });
-            $("#tablainsumorequerido").empty();
+            $("#tinsumorequerido").empty();
             $("#mensajecompleto").css("display", "block");
           } else {
             Swal.fire({
@@ -213,6 +213,7 @@ $(function () {
               confirmButtonText: "Aceptar",
             });
             $("#mensajecompleto").css("display", "none");
+            $("#tinsumorequerido").show();
             $("#tablatotalinsumosrequeridoscomprar").html(template);
           }
         } else {
@@ -241,12 +242,13 @@ $(function () {
     let tablatotal = $("#tablatotalinsumosrequeridoscomprar");
     let taskcodrequhiddenvalidar = $("#taskcodrequhiddenvalidar").val();
     let codpersonal = $("#codpersonal").val();
-    let cantidad_total_minima;
+    let cantidadesTotalesMinimas = [];
+    // console.log(cantidad_total_minima);
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let id_producto_insumo = $(this).find("td:eq(0)").attr("id_producto");
       let cantidad_producto_insumo = $(this).find("td:eq(1)").text();
-      cantidad_total_minima = $(this).find("td:eq(2)").text();
-
+      let cantidad_total_minima = $(this).find("td:eq(2)").text();
+      cantidadesTotalesMinimas.push(cantidad_total_minima);
       valoresCapturadosVenta.push(
         id_producto_insumo,
         cantidad_producto_insumo,
@@ -263,15 +265,19 @@ $(function () {
       });
       return;
     }
-    if (cantidad_total_minima === "Falta añadir cantidad") {
-      Swal.fire({
-        title: "¡Error!",
-        text: "Añadir un valor de cantidad minima del producto",
-        icon: "error",
-        confirmButtonText: "Aceptar",
-      });
-      return;
+
+    for (let i = 0; i < cantidadesTotalesMinimas.length; i++) {
+      if (cantidadesTotalesMinimas[i] === "Falta cantidad minina") {
+        Swal.fire({
+          title: "¡Error!",
+          text: "Añadir un valor de cantidad minima del producto",
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
+        break;
+      }
     }
+
     const accion = "insertarordencompraitem";
 
     $.ajax({
