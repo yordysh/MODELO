@@ -1,0 +1,420 @@
+main {
+  width: 88%;
+  margin: 0 auto;
+  padding: 6em;
+  /*border-style: solid;
+      border-width: 1px;
+      border-radius: 8px;*/
+  height: 57%;
+}
+
+#sugerencias {
+  box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  height: auto;
+  position: absolute;
+  top: 85px;
+  z-index: 9999;
+  width: 460px;
+}
+
+/* Optional: Makes the sample page fill the window. */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.responsive {
+  display: none;
+}
+
+/* Optional: Makes the sample page fill the window. */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.title {
+  font-weight: 600;
+}
+.title_table {
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.thtitulo {
+  text-align: center !important;
+}
+
+/*-------------- Cambios de estilo nabvar ---------------------*/
+.bar-color {
+  background-color: #5b8ccc !important;
+}
+img {
+  height: 50px;
+  width: 50px;
+  border-radius: 60px;
+}
+.phsStyle,
+.bpmStyle {
+  font-size: 25px !important;
+}
+.menu-vertical {
+  position: absolute;
+  display: none;
+  list-style: none;
+  width: 150px;
+  background-color: #5b8ccc;
+}
+
+.nav-links li:hover .menu-vertical {
+  display: block;
+}
+
+.menu-vertical li:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.menu-vertical li a {
+  display: block;
+  color: #ffffff;
+}
+
+/* ----------------- Diseño de select2------------------------- */
+.select2-container--default .select2-selection--single {
+  padding: 1em;
+}
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__rendered {
+  color: #0a0a0a !important;
+}
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__rendered {
+  margin-top: -0.75em;
+}
+.select2-container--default .select2-selection--single:focus {
+  border-color: #86b7fe;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+.select2-container--default
+  .select2-search--dropdown
+  .select2-search__field:focus {
+  outline: 1px solid #86b7fe;
+  border-radius: 5px;
+}
+.table-responsive {
+  height: 300px !important;
+}
+section {
+  padding-bottom: 115px !important;
+}
+.custom-icon {
+  background-color: #007bff;
+  color: white;
+  padding: 8px;
+  border-radius: 40%;
+  border: none;
+}
+
+/* --------------------------------------------------------------- */
+
+/*-------------- Estilo de MENUBAR ---------------------*/
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px 80px;
+  background: #5b8ccc;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.wave {
+  position: absolute;
+  /* top: 60px; */
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to bottom, #814092, #ffffff);
+  opacity: 0.5;
+  z-index: -1;
+}
+.nav,
+.nav .nav-links {
+  display: flex;
+  align-items: center;
+}
+.nav {
+  justify-content: space-between;
+  z-index: 1000;
+}
+.select2-dropdown {
+  z-index: 1 !important;
+}
+a {
+  color: #fff;
+  text-decoration: none;
+}
+.nav .nav-links {
+  column-gap: 20px;
+  list-style: none;
+}
+.nav .nav-links a {
+  transition: all 0.2s linear;
+}
+.nav.openSearch .nav-links a {
+  opacity: 0;
+  pointer-events: none;
+}
+.nav .search-icon {
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+.nav .search-box {
+  position: absolute;
+  right: 250px;
+  height: 45px;
+  max-width: 555px;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s linear;
+}
+.nav.openSearch .search-box {
+  opacity: 1;
+  pointer-events: auto;
+}
+.search-box .search-icon {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  left: 15px;
+  color: #5b8ccc;
+  transform: translateY(-50%);
+}
+.search-box input {
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  background-color: #fff;
+  padding: 0 15px 0 45px;
+}
+.nav .navOpenBtn,
+.nav .navCloseBtn {
+  display: none;
+}
+/*-------------------------------------------------------*/
+
+/* td {
+    width: 50%;
+  } */
+.table-responsive table {
+  border-collapse: collapse;
+}
+
+.table-responsive th td {
+  padding: 5px 10px;
+}
+
+/*-------------- Estilo de responsive ---------------------*/
+
+@media screen and (max-width: 1370px) {
+  /* ------------------------------------------------- */
+  .contenedorgeneral {
+    display: flex;
+  }
+
+  .totalinsumo {
+    margin-left: 440px !important;
+  }
+}
+@media screen and (max-width: 1220px) {
+  .totalinsumo {
+    margin-left: 380px !important;
+  }
+  /* #tablasumatotalinsumo {
+      margin-left: 35px !important;
+    } */
+}
+@media screen and (max-width: 1120px) {
+  .btonguardar {
+    margin-right: 70px !important;
+  }
+  .estiloguardar {
+    margin-right: 80px;
+  }
+}
+@media screen and (max-width: 1105px) {
+  .totalinsumo {
+    margin-left: 500px !important;
+  }
+}
+@media screen and (max-width: 992px) {
+  main {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 6em;
+    height: 57%;
+  }
+
+  [data-titulo] {
+    text-align: left !important;
+  }
+  .table-responsive table tr {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid grey;
+  }
+
+  .table-responsive table td[data-titulo] {
+    display: flex;
+  }
+
+  .table-responsive table td[data-titulo]::before {
+    content: attr(data-titulo);
+    width: 150px;
+    font-weight: bold;
+  }
+
+  .table-responsive table thead {
+    display: none;
+  }
+
+  #selectInfra {
+    width: 100%;
+  }
+}
+/*-------------------------------------------------------------*/
+@media screen and (max-width: 950px) {
+  /*-------------- Estilo de MENUBAR ---------------------*/
+
+  /* .nav {
+      padding: 15px 50px;
+    }
+    .nav .search-box {
+      right: 100px;
+      max-width: 400px;
+    } */
+  .nav .navOpenBtn,
+  .nav .navCloseBtn {
+    display: block;
+  }
+  .nav {
+    padding: 15px 20px;
+    z-index: 1000;
+  }
+  .select2-dropdown {
+    z-index: 1 !important;
+  }
+  /* .wave {
+      position: absolute;
+   
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(to bottom, #814092, #ffffff);
+      opacity: 0.5;
+      z-index: -1;
+    } */
+  .nav .nav-links {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    max-width: 280px;
+    width: 100%;
+    padding-top: 100px;
+    /* row-gap: 30px; 
+       flex-direction: column;  */
+    background-color: #5b8ccc;
+    /* background-image: linear-gradient(to left, #814092, #ffffff);
+      opacity: 0.5;
+      z-index: -1; */
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    z-index: 100;
+  }
+  .nav .nav-links li {
+    padding: 10px 0;
+    font-size: 20px;
+  }
+  .nav.openNav .nav-links {
+    left: 0;
+  }
+  .nav .navOpenBtn {
+    color: #fff;
+    font-size: 40px;
+    cursor: pointer;
+  }
+  .nav .navCloseBtn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #fff;
+    font-size: 40px;
+    cursor: pointer;
+  }
+  .nav .search-box {
+    top: calc(100% + 10px);
+    max-width: calc(100% - 20px);
+    right: 50%;
+    transform: translateX(50%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  td {
+    width: 100% !important;
+  }
+}
+/*-------------------------------------------------------------*/
+
+/*----------------------REDMI----------------------------*/
+@media screen and (max-width: 420px) {
+  .container.g-4.row {
+    padding: 0 0 5em 1em;
+  }
+  .bt-guardar {
+    padding: 10px 20px;
+    font-size: 16px;
+    max-width: 140%;
+    width: 113%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  .d-grid.col-6.mx-auto.bt-guardar-zona {
+    padding-bottom: 105px !important;
+    max-width: 120%;
+    width: 100%;
+  }
+  .bt-guardarzona {
+    padding: 10px 50px;
+  }
+  .btnPdf {
+    padding: 10px 20px;
+    font-size: 16px;
+    max-width: 100%;
+    width: 99%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+
+  #selectInfra {
+    width: 100%;
+  }
+  select#selectVerificacion {
+    margin-left: 35px !important;
+  }
+}
+
+/*-------------------------------------------------------------*/

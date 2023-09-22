@@ -47,7 +47,7 @@ $(function () {
                             <td data-titulo='CODIGO' style="text-align:center;">${task.COD_REQUERIMIENTO}</td>
                             <td data-titulo='CODIGO' style="text-align:center;">${task.FECHA}</td>
                             <td data-titulo='PENDIENTE' style="text-align:center;"><button class="custom-icon" name="mostrarinsumos" id="mostrarInsumosRequerimiento"><i class="icon-circle-with-plus"></i></button></td>
-                            <td data-titulo='RECHAZAR' style="text-align:center;"><button class="btn btn-danger" name="rechazarpedido" id="eliminarinsumorequerimiento"><i class="icon-trash"></i></button></td>
+                            <td data-titulo='RECHAZAR' style="text-align:center;"><button class="btn btn-danger" name="rechazarpedido" id="eliminarinsumorequerimiento"><i class="icon-circle-with-cross"></i></button></td>
                           </tr>`;
           });
           $("#tablamostartotalpendientes").html(template);

@@ -89,6 +89,14 @@ $(function () {
         text: "Los datos se añadieron correctamente al formulario.",
         icon: "success",
         confirmButtonText: "Aceptar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $("#numeroproduccion").val("");
+          $("#fechainicio").val("");
+          $("#fechavencimiento").val("");
+          $("#textAreaObservacion").val("");
+          $("#cantidadcaja").val("20");
+        }
       });
     }
   });
@@ -158,6 +166,15 @@ $(function () {
       Swal.fire({
         title: "¡Error!",
         text: "Añadir fecha de vencimiento.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    }
+    if (textAreaObservacion === "") {
+      Swal.fire({
+        title: "¡Error!",
+        text: "Añadir la observación.",
         icon: "error",
         confirmButtonText: "Aceptar",
       });

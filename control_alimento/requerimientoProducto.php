@@ -53,13 +53,13 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <a class="" href="ordenCompra.php">Orden de compra</a>
             </li>
             <li>
-                <a class="" href="cantidadMinimaProducto.php">Cantidad mónima</a>
+                <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
             </li>
             <li>
                 <a class="" href="produccionRequerimiento.php">Producción</a>
             </li>
             <li>
-                <a class="" href="verificarRegistroEnvase.php">Registros envases</a>
+                <a class="" href="verificarRegistroEnvase.php">Avance producción</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -108,16 +108,16 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
 
                         <!-- Tabla de total de productos-->
-                        <div id="tablaTotal" class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:20px;">
+                        <div id="tablaTotal" class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:20px;">
                             <div class="row g-4 top-div">
-                                <center><label class="title_table">TOTAL DE PRODUCTOS</label></center>
+                                <label class="title_table">TOTAL DE PRODUCTOS</label>
                             </div>
                             <table class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
 
-                                        <th class="thtitulo" scope="col">PRODUCTOS</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD TOTAL</th>
+                                        <th class="" scope="col">PRODUCTOS</th>
+                                        <th class="" scope="col">CANTIDAD TOTAL</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablainsumoenvasetotal">
@@ -127,16 +127,19 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
 
                         <!-- Tabla de insumos-->
-                        <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
-                            <div class="row g-4 top-div">
-                                <center><label class="title_table">TOTAL DE INSUMOS POR PRODUCTO</label></center>
-                            </div>
+                        <div class="table-responsive" style="overflow-x: hidden;height: 300px; margin-top:20px;">
+
                             <table id="tinsumo" class="table table-sm mb-3 table-hover">
+                                <!-- <div class="row g-4 top-div">
+                                    <label class="title_table">TOTAL DE INSUMOS POR PRODUCTO</label>
+                                </div> -->
                                 <thead>
                                     <tr>
-                                        <!-- <th class="thtitulo" scope="col">NOMBRE PRODUCTO</th> -->
-                                        <th class="thtitulo" scope="col">INSUMOS</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th class="title_table" colspan="2" scope="col">TOTAL DE INSUMOS POR PRODUCTO</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="" scope="col">INSUMOS</th>
+                                        <th class="" scope="col">CANTIDAD</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaInsumosDatos">
@@ -147,11 +150,11 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
 
                         <!-- Tabla de insumos-->
-                        <div class="table-responsive" style="overflow: scroll;height: 150px!important; margin-top:50px;">
+                        <div class="table-responsive totalinsumo" style="overflow-x: hidden;height: 100px!important; margin-top:10px;margin-left:80px;">
                             <table id="tsumatotal" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="thtitulo" scope="col">TOTAL INSUMOS</th>
+                                        <th class="thtotalinsumo" scope="col">TOTAL INSUMOS</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablasumatotalinsumo">
@@ -161,15 +164,15 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
 
                         <!-- Tabla de envases-->
-                        <div id="tablaE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <div id="tablaE" class="table-responsive " style="overflow-x: hidden;height: 600px; margin-top:20px;">
                             <table class="table table-sm mb-3 table-hover">
                                 <div class="row g-4 top-div">
-                                    <center><label class="title_table">TOTAL DE ENVASES POR PRODUCTO</label></center>
+                                    <label class="title_table">TOTAL DE ENVASES POR PRODUCTO</label>
                                 </div>
                                 <thead>
                                     <tr>
-                                        <th class="thtitulo" scope="col">ENVASES</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th class="" scope="col">ENVASES</th>
+                                        <th class="" scope="col">CANTIDAD</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaenvase">

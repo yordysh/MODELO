@@ -2410,7 +2410,7 @@ class m_almacen
     try {
 
       $stm = $this->bd->prepare("SELECT TCM.COD_CANTIDAD_MINIMA AS COD_CANTIDAD_MINIMA, TCM.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO,
-      TCM.CANTIDAD_MINIMA AS CANTIDAD_MINIMA FROM T_TMPCANTIDAD_MINIMA TCM INNER JOIN T_PRODUCTO TP ON TCM.COD_PRODUCTO=TP.COD_PRODUCTO WHERE TP.DES_PRODUCTO LIKE '$buscarcantidadminimasearch%'");
+      TP.ABR_PRODUCTO AS ABR_PRODUCTO, TCM.CANTIDAD_MINIMA AS CANTIDAD_MINIMA FROM T_TMPCANTIDAD_MINIMA TCM INNER JOIN T_PRODUCTO TP ON TCM.COD_PRODUCTO=TP.COD_PRODUCTO WHERE TP.DES_PRODUCTO  LIKE '$buscarcantidadminimasearch%'");
 
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
@@ -3145,14 +3145,16 @@ class m_almacen
   }
 
 
-  public function  MostrarProduccionProductoEnvase($ID_PRODUCTO_COMBO)
+  public function  MostrarProduccionProductoEnvase($ID_PRODUCTO_COMBO, $idp)
   {
     try {
 
       $stm = $this->bd->prepare(
         "SELECT COD_PRODUCCION, CONVERT(VARCHAR, FEC_GENERADO, 103) AS FEC_GENERADO,
-                                  COD_PRODUCTO,NUM_PRODUCION_LOTE,ESTADO FROM T_TMPPRODUCCION WHERE COD_REQUERIMIENTO='$ID_PRODUCTO_COMBO' 
-                                  AND ESTADO='P' OR ESTADO='A'"
+                                  COD_PRODUCTO,NUM_PRODUCION_LOTE,ESTADO FROM T_TMPPRODUCCION 
+                                  WHERE COD_REQUERIMIENTO='$ID_PRODUCTO_COMBO' AND COD_PRODUCTO='$idp'
+                                  -- AND ESTADO='P' OR ESTADO='A'
+                                  "
       );
 
       $stm->execute();

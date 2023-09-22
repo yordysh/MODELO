@@ -91,16 +91,25 @@ $(function () {
 
   $("#botonCalcularInsumoEnvase").click((e) => {
     e.preventDefault();
+
     let selectinsumoenvase = $("#selectInsumoEnvase").val();
     let textoInsumoEnvase = $("#selectInsumoEnvase option:selected").text();
 
     let cantidadinsumoenvase = $("#cantidadInsumoEnvase").val();
 
-    if (!selectinsumoenvase || !cantidadinsumoenvase) {
+    if (!selectinsumoenvase) {
       Swal.fire({
         icon: "error",
-        title: "Campos vacíos",
-        text: "Por favor, seleccione un producto y complete la cantidad.",
+        title: "Campo vacío",
+        text: "Por favor, seleccione un producto.",
+      });
+      return;
+    }
+    if (!cantidadinsumoenvase) {
+      Swal.fire({
+        icon: "error",
+        title: "Campo vacío",
+        text: "Por favor, ingrese una cantidad.",
       });
       return;
     }

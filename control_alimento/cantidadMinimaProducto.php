@@ -53,7 +53,7 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
                 <a class="" href="produccionRequerimiento.php">Producción</a>
             </li>
             <li>
-                <a class="" href="verificarRegistroEnvase.php">Registros envases</a>
+                <a class="" href="verificarRegistroEnvase.php">Avance producción</a>
             </li>
         </ul>
 
@@ -101,8 +101,8 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
                         <table id="tcantidadminima" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
-                                    <th class="thtitulo" scope="col">INSUMOS</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD</th>
+                                    <th class="" scope="col">INSUMOS</th>
+                                    <th class="" scope="col">CANTIDAD</th>
                                     <th></th>
                                 </tr>
                             </thead>

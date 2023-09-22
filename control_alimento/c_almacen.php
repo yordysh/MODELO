@@ -440,8 +440,8 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_orden_de_compra();
     echo $respuesta;
 } elseif ($accion == 'seleccionarProductoCombo') {
-
-    $respuesta = c_almacen::c_mostrar_produccion_producto();
+    $idp = $_POST['idp'];
+    $respuesta = c_almacen::c_mostrar_produccion_producto($idp);
     echo $respuesta;
 } elseif ($accion == 'actualizarcomboproduccionproducto') {
 
@@ -2225,6 +2225,7 @@ class c_almacen
                     $json[] = array(
                         "COD_CANTIDAD_MINIMA" => $row->COD_CANTIDAD_MINIMA,
                         "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                        "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
                     );
@@ -2608,12 +2609,12 @@ class c_almacen
     }
 
 
-    static function c_mostrar_produccion_producto()
+    static function c_mostrar_produccion_producto($idp)
     {
         $consulta = new m_almacen();
         $ID_PRODUCTO_COMBO = filter_input(INPUT_POST, 'idProductoCombo');
 
-        $datos = $consulta->MostrarProduccionProductoEnvase($ID_PRODUCTO_COMBO);
+        $datos = $consulta->MostrarProduccionProductoEnvase($ID_PRODUCTO_COMBO, $idp);
 
         if (count($datos) == 0) {
             echo '<option value="0">No hay registros en produccion</option>';

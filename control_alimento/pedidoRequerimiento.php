@@ -56,14 +56,11 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
             </li>
-            <!-- <li>
-                <a class="" href="registroEnvases.php">Registros envases</a>
-            </li> -->
             <li>
                 <a class="" href="produccionRequerimiento.php">Producción</a>
             </li>
             <li>
-                <a class="" href="verificarRegistroEnvase.php">Registros envases</a>
+                <a class="" href="verificarRegistroEnvase.php">Avance producción</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -88,7 +85,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
 
                         <!-- Tabla total requerimiento pedido-->
-                        <div class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:30px;margin-bottom:20px;">
+                        <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
                             <div class="row g-4 top-div">
                                 <center><label class="title_table">REQUERIMIENTOS PENDIENTES</label></center>
                             </div>
@@ -109,7 +106,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
 
                         <!-- Tabla de producto por reuqerimiento que se requiere-->
-                        <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                        <div class="table-responsive" style="overflow-x: hidden;height: 300px; margin-top:20px;">
                             <div class="row g-4 top-div">
                                 <center><label class="title_table">PRODUCTOS TOTALES DEL PENDIENTE</label></center>
                             </div>
@@ -128,7 +125,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
 
                         <!-- Tabla de insumos por requerimiento que se requiere-->
-                        <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                        <div class="table-responsive" style="overflow-x: hidden;height: 300px; margin-top:20px;">
                             <div class="row g-4 top-div">
                                 <center><label class="title_table">INSUMOS Y ENVASES DE LOS PRODUCTOS</label></center>
                             </div>
@@ -148,7 +145,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                     </form>
 
                     <!-- Tabla total a comprar insumos-->
-                    <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                    <div class="table-responsive" style="overflow-x: hidden;height: 300px; margin-top:20px;">
                         <div class="row g-4 top-div">
                             <center><label class="title_table">CANTIDADES A COMPRAR</label></center>
                         </div>

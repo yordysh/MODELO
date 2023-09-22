@@ -36,11 +36,13 @@ $(function () {
   let selectNumProduccion = $("#selectNumProduccion");
   const accion = "seleccionarProductoCombo";
   $("#selectProductoCombo").change(function () {
+    let idp = $("#selectProductoCombo").val();
     let idProductoCombo = $(this).find("option:selected").attr("id_reque");
 
     $.ajax({
       data: {
         idProductoCombo: idProductoCombo,
+        idp: idp,
         accion: accion,
       },
       dataType: "html",

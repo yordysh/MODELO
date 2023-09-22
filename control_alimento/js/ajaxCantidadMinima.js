@@ -30,6 +30,46 @@ $(function () {
   //----------------------------------------------------------------//
 
   $("#selectCantidadminima").select2();
+  /*-----------------------Busqueda de cantidad ---------------------*/
+  $("#search").keyup(() => {
+    if ($("#search").val()) {
+      var search = $("#search").val();
+      const accion = "buscarCantidadminima";
+      $.ajax({
+        url: "./c_almacen.php",
+        type: "POST",
+        data: { accion: accion, buscarcantidadminimasearch: search },
+        success: function (response) {
+          if (isJSON(response)) {
+            let tasks = JSON.parse(response);
+
+            let template = ``;
+            tasks.forEach((task) => {
+              template += `<tr taskId="${task.COD_CANTIDAD_MINIMA}">
+  
+              <td data-titulo="INSUMOS">${task.DES_PRODUCTO}</td>
+              <td data-titulo="CANTIDAD">${task.CANTIDAD_MINIMA}</td>
+  
+              <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_CANTIDAD_MINIMA="${task.COD_CANTIDAD_MINIMA}"><i class="icon-trash"></i></button></td>
+              <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_CANTIDAD_MINIMA="${task.COD_CANTIDAD_MINIMA}"><i class="icon-edit"></i></button></td>
+  
+          </tr>`;
+            });
+
+            $("#tablacantidadminima").html(template);
+          } else {
+            $("#tablacantidadminima").empty();
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error al cargar los datos de la tabla:", error);
+        },
+      });
+    } else {
+      fetchTasks();
+    }
+  });
+  /*----------------------------------------- ---------------------*/
 
   /*-----------------------Añadiendo valores ---------------------*/
   $(document).on("click", "#botonminimo", (e) => {

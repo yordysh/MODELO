@@ -58,7 +58,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <a class="" href="#">Producción</a>
             </li>
             <li>
-                <a class="" href="verificarRegistroEnvase.php">Registros envases</a>
+                <a class="" href="verificarRegistroEnvase.php">Avance producción</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -100,8 +100,8 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Text input producto seleccionado-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Producto</label>
-                            <input type="hidden" id="idhiddencodrequerimiento">
-                            <input type="hidden" id="idhiddenproducto">
+                            <input type="text" id="idhiddencodrequerimiento">
+                            <input type="text" id="idhiddenproducto">
                             <input type="text" id="productorequerimientoitem" class="form-control" name="" disabled>
                         </div>
                         <!-- Text input numero de produccion-->

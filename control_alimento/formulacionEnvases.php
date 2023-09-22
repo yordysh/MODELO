@@ -52,7 +52,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                 <a class="" href="produccionRequerimiento.php">Producción</a>
             </li>
             <li>
-                <a class="" href="verificarRegistroEnvase.php">Registros envases</a>
+                <a class="" href="verificarRegistroEnvase.php">Avance producción</a>
             </li>
         </ul>
 
@@ -119,13 +119,13 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                                 <button class="custom-icon-calcular" name="insert" id="botonCalcularInsumos"><i class="icon-circle-with-plus"></i></button>
                             </div>
                         </div>
-                        <div class="table-responsive " style="overflow: scroll;height: 300px; margin-top:20px;margin-bottom:50px!important;">
+                        <div class="table-responsive " style="height: 300px; margin-top:20px;margin-bottom:50px!important;">
                             <table id="tbInsum" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
 
-                                        <th class="thtitulo" scope="col">INSUMOS</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th class="" scope="col">INSUMOS</th>
+                                        <th class="" scope="col">CANTIDAD</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaInsumos">
@@ -158,13 +158,13 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                                 <button class="custom-icon-calcular" name="insert" id="botonCalcularEnvasesProducto"><i class="icon-circle-with-plus"></i></button>
                             </div>
                         </div>
-                        <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
+                        <div class="table-responsive" style="height: 300px; margin-top:20px;">
                             <table id="tbEnvaseProducto" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
 
-                                        <th class="thtitulo" scope="col">ENVASES</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th class="" scope="col">ENVASES</th>
+                                        <th class="" scope="col">CANTIDAD</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaEnvasesCadaProducto">
@@ -173,12 +173,12 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                             </table>
                         </div>
                         <button id="botonCalcularProductosEnvases" type="submit" name="insert" class="btn btn-primary bt-Total">Total de productos</button>
-                        <div class="table-responsive " style="overflow: scroll;height: 200px !important; margin-top:20px;margin-bottom:100px;">
+                        <div class="table-responsive " style="height: 200px !important; margin-top:20px;margin-bottom:100px;">
                             <table id="tbProEnVa" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="thtitulo" scope="col">PRODUCTO</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th class="" scope="col">PRODUCTO</th>
+                                        <th class="" scope="col">CANTIDAD</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaProductoEnvases">

@@ -13,7 +13,7 @@ $mostrar = new m_almacen();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/responsiveControl.css">
+    <link rel="stylesheet" href="./css/responsiveOrdenCompra.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
 
@@ -50,7 +50,7 @@ $mostrar = new m_almacen();
                 <a class="" href="produccionRequerimiento.php">Producción</a>
             </li>
             <li>
-                <a class="" href="verificarRegistroEnvase.php">Registros envases</a>
+                <a class="" href="verificarRegistroEnvase.php">Avance producción</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -73,9 +73,9 @@ $mostrar = new m_almacen();
                             <table id="tOrdenCompra" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="thtitulo" scope="col">INSUMOS</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD FALTANTE</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD POR COMPRA</th>
+                                        <th class="" scope="col">INSUMOS</th>
+                                        <th class="" scope="col">CANTIDAD FALTANTE</th>
+                                        <th class="" scope="col">CANTIDAD POR COMPRA</th>
 
                                     </tr>
                                 </thead>

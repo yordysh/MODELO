@@ -51,7 +51,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                 <a class="" href="produccionRequerimiento.php">Producción</a>
             </li>
             <li>
-                <a class="" href="#">Registros envases</a>
+                <a class="" href="#">Avance producción</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
@@ -64,7 +64,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
         <section>
             <div class="container g-4 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">REGISTRO DE PRODUCCION ENVASES</label></center>
+                    <center><label class="title">AVANCE</label></center>
                 </div>
                 <div class="main">
                     <form method="post" action="" id="formularioRegistroProduccion" class="formSpaceVerificar">
