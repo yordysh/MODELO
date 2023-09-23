@@ -2,20 +2,7 @@ main {
   width: 88%;
   margin: 0 auto;
   padding: 6em;
-  /*border-style: solid;
-    border-width: 1px;
-    border-radius: 8px;*/
   height: 57%;
-}
-
-#sugerencias {
-  box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, 0.2);
-  background-color: #fff;
-  height: auto;
-  position: absolute;
-  top: 85px;
-  z-index: 9999;
-  width: 460px;
 }
 
 .titulos {
@@ -25,25 +12,6 @@ main {
 
 .top-div {
   margin-top: 0px;
-}
-
-.contenedormap1 {
-  width: 100%;
-  margin: 0 auto;
-  padding: 0.2em;
-  height: 63%;
-}
-
-#indicators {
-  padding: 16px;
-  height: 40%;
-  width: 100%;
-  overflow-y: auto;
-  display: block;
-}
-
-#map {
-  height: 100%;
 }
 
 /* Optional: Makes the sample page fill the window. */
@@ -58,14 +26,6 @@ body {
   display: none;
 }
 
-.mapprin {
-  height: 92%;
-}
-
-.mapmos {
-  height: 100%;
-}
-
 /* Optional: Makes the sample page fill the window. */
 html,
 body {
@@ -74,69 +34,6 @@ body {
   padding: 0;
 }
 
-#floating-panel {
-  position: absolute;
-  top: 10px;
-  left: 25%;
-  z-index: 5;
-  background-color: #fff;
-  padding: 5px;
-  border: 1px solid #999;
-  text-align: center;
-  font-family: "Roboto", "sans-serif";
-  line-height: 30px;
-  padding-left: 10px;
-}
-
-.contenedorbs {
-  width: 45%;
-  margin-left: auto;
-  padding: 1em;
-}
-
-.contenerdorslc {
-  float: left;
-  width: 70%;
-}
-
-.divbtn.mx-auto {
-  margin-right: inherit !important;
-}
-
-.divbtnmostrar {
-  padding-left: 33%;
-  margin-left: 12%;
-}
-
-.divtitulo {
-  text-align: center;
-  width: 100%;
-  height: 5%;
-  /* margin: 1px auto; */
-  margin-top: 18px;
-}
-
-#mensajesgenerales {
-  padding: 5px;
-}
-
-.btnactobservacion {
-  margin-left: auto !important;
-  padding: 9px;
-  padding-left: 54%;
-}
-
-.contenedormap {
-  width: 100%;
-  margin: 0 auto;
-  padding: 0.2em;
-  height: 88%;
-}
-
-.contenedormaprutas {
-  width: 100%;
-  height: 84%;
-}
 .title {
   font-weight: 600;
 }
@@ -145,8 +42,8 @@ body {
   margin-bottom: 10px;
 }
 /* .thtotalinsumo {
-  padding-left: 350px !important;
-} */
+    padding-left: 350px !important;
+  } */
 .thtitulo {
   text-align: center !important;
 }
@@ -185,36 +82,6 @@ img {
   color: #ffffff;
 }
 
-/*-------------------- Estilos de PDF Table ---------------------*/
-.tablepdf {
-  border-collapse: collapse;
-  width: 1200px;
-}
-
-/*-------------- Estilo de alerta ---------------------*/
-.cod-infraestructura {
-  padding: 10px 180px 10px 0px;
-}
-.fecha-creacion {
-  padding: 10px 200px 10px 0px;
-  /* margin-bottom: 10px; */
-}
-
-.fecha-total {
-  padding: 10px 255px 10px 0px;
-}
-.fecha-acordar {
-  padding: 10px 230px 10px 0px;
-  margin-bottom: 10px;
-}
-.inputObservacion {
-  margin: 10px;
-}
-.nombre_area,
-.nombre_infra {
-  font-weight: 500;
-  font-size: 28px;
-}
 /* ----------------- Diseño de select2------------------------- */
 .select2-container--default .select2-selection--single {
   padding: 1em;
@@ -347,18 +214,15 @@ a {
 /*-------------------------------------------------------*/
 
 td {
-  text-align: center;
+  width: 50%;
 }
 .table-responsive table {
   border-collapse: collapse;
 }
-
 .table-responsive th td {
   padding: 5px 10px;
 }
-#selectInfra {
-  width: 100%;
-}
+
 .bt-Total {
   width: 50%;
 }
@@ -376,9 +240,6 @@ td {
   margin-top: 32px;
   margin-left: 7px;
 }
-.formSpace {
-  margin-bottom: 20px;
-}
 .formSpaceVerificar {
   margin-bottom: 50px;
 }
@@ -393,23 +254,12 @@ td {
 .pdfContent {
   display: flex;
 }
-/* .contentaniomes {
-  margin-right: 5px;
-} */
 
 /*-------------- Estilo de responsive ---------------------*/
 
 @media screen and (max-width: 1370px) {
   /* ------------------------------------------------- */
-  .contenedorgeneral {
-    display: flex;
-  }
-  .btonguardar {
-    margin-right: 220px;
-  }
-  .aniomes {
-    display: flex;
-  }
+
   .estilocalcular {
     margin-right: 15px;
   }
@@ -428,8 +278,8 @@ td {
     margin-left: 380px !important;
   }
   /* #tablasumatotalinsumo {
-    margin-left: 35px !important;
-  } */
+      margin-left: 35px !important;
+    } */
 }
 @media screen and (max-width: 1120px) {
   .btonguardar {
@@ -451,33 +301,6 @@ td {
     padding-top: 6em;
     height: 57%;
   }
-  .contenedorgeneral {
-    display: block;
-  }
-  .aniomes {
-    display: block;
-  }
-  .ordenar {
-    display: block;
-    margin-top: 10px;
-    margin-left: 0;
-  }
-  .estiloboton {
-    padding: 4px 50px;
-    font-size: 16px;
-    max-width: 130%;
-    width: 117%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-  }
-  .estilopdf {
-    padding: 5px 50px;
-    font-size: 16px;
-    max-width: 130%;
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-  }
   .bt-insert {
     padding: 10px 80px;
     font-size: 16px;
@@ -494,23 +317,6 @@ td {
     box-sizing: border-box;
     margin-top: 15px;
   }
-  .estilobotoncalcular {
-    padding: 10px 80px;
-    font-size: 16px;
-    max-width: 120%;
-    width: 103%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-  }
-  .estilobotonguardar {
-    padding: 10px 80px;
-    font-size: 16px;
-    max-width: 120%;
-    width: 102%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-  }
-
   .contenedorpdf {
     display: block;
   }
@@ -556,22 +362,18 @@ td {
   .table-responsive table thead {
     display: none;
   }
-
-  #selectInfra {
-    width: 100%;
-  }
 }
 /*-------------------------------------------------------------*/
 @media screen and (max-width: 950px) {
   /*-------------- Estilo de MENUBAR ---------------------*/
 
   /* .nav {
-    padding: 15px 50px;
-  }
-  .nav .search-box {
-    right: 100px;
-    max-width: 400px;
-  } */
+      padding: 15px 50px;
+    }
+    .nav .search-box {
+      right: 100px;
+      max-width: 400px;
+    } */
   .nav .navOpenBtn,
   .nav .navCloseBtn {
     display: block;
@@ -583,16 +385,6 @@ td {
   .select2-dropdown {
     z-index: 1 !important;
   }
-  /* .wave {
-    position: absolute;
- 
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(to bottom, #814092, #ffffff);
-    opacity: 0.5;
-    z-index: -1;
-  } */
   .nav .nav-links {
     display: block;
     position: fixed;
@@ -603,11 +395,11 @@ td {
     width: 100%;
     padding-top: 100px;
     /* row-gap: 30px; 
-     flex-direction: column;  */
+       flex-direction: column;  */
     background-color: #5b8ccc;
     /* background-image: linear-gradient(to left, #814092, #ffffff);
-    opacity: 0.5;
-    z-index: -1; */
+      opacity: 0.5;
+      z-index: -1; */
 
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.4s ease;
@@ -665,9 +457,6 @@ td {
     width: 100%;
     padding: 0;
   }
-  .styleanmes {
-    margin-bottom: 8px;
-  }
   .estilopdf {
     padding-top: 8px;
     padding-bottom: 8px;
@@ -695,7 +484,7 @@ td {
     width: 100%;
     padding-top: 100px;
     /* row-gap: 30px; 
-     flex-direction: column;  */
+       flex-direction: column;  */
     background-color: #5b8ccc;
 
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -732,39 +521,6 @@ td {
   .contenedor {
     display: block;
   }
-  .dMes {
-    display: flex;
-  }
-  .ctn {
-    margin: 0 0 10px;
-  }
-  .ordenar {
-    display: block;
-    margin-top: 10px;
-    margin-left: 0;
-  }
-  .bt-guardar {
-    padding: 10px 20px;
-    font-size: 16px;
-    max-width: 122%;
-    width: 107%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-  }
-  .btnPdf {
-    padding: 10px 20px;
-    font-size: 16px;
-    max-width: 100%;
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-  }
-  select#selectVerificacion {
-    margin-left: -10px !important;
-  }
-  [data-titulo] {
-    text-align: left !important;
-  }
   .table-responsive table tr {
     display: flex;
     flex-direction: column;
@@ -783,9 +539,6 @@ td {
 
   .table-responsive table thead {
     display: none;
-  }
-  #selectInfra {
-    width: 100%;
   }
 }
 @media screen and (max-width: 480px) {
@@ -825,14 +578,6 @@ td {
     box-sizing: border-box;
     margin-bottom: 10px;
   }
-  .d-grid.col-6.mx-auto.bt-guardar-zona {
-    padding-bottom: 105px !important;
-    max-width: 120%;
-    width: 100%;
-  }
-  .bt-guardarzona {
-    padding: 10px 50px;
-  }
   .btnPdf {
     padding: 10px 20px;
     font-size: 16px;
@@ -840,13 +585,6 @@ td {
     width: 99%;
     box-sizing: border-box;
     margin-bottom: 10px;
-  }
-
-  #selectInfra {
-    width: 100%;
-  }
-  select#selectVerificacion {
-    margin-left: 35px !important;
   }
 }
 @media screen and (max-width: 400px) {
@@ -878,9 +616,6 @@ td {
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 10px;
-  }
-  #selectInfra {
-    width: 95%;
   }
 }
 

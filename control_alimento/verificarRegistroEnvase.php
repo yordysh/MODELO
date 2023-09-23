@@ -14,7 +14,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/responsiveControl.css">
+    <link rel="stylesheet" href="./css/responsivePO.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
 
@@ -145,9 +145,9 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                             <table id="tbRE" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="thtitulo" scope="col">MATERIALES</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
-                                        <th class="thtitulo" scope="col">LOTE</th>
+                                        <th class="" scope="col">MATERIALES</th>
+                                        <th class="" scope="col">CANTIDAD</th>
+                                        <th class="" scope="col">LOTE</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablacalculoregistroenvase">
