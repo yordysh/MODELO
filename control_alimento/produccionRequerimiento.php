@@ -100,8 +100,8 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Text input producto seleccionado-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Producto</label>
-                            <input type="text" id="idhiddencodrequerimiento">
-                            <input type="text" id="idhiddenproducto">
+                            <input type="hidden" id="idhiddencodrequerimiento">
+                            <input type="hidden" id="idhiddenproducto">
                             <input type="text" id="productorequerimientoitem" class="form-control" name="" disabled>
                         </div>
                         <!-- Text input numero de produccion-->
@@ -116,10 +116,15 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <input type="text" id="cantidadhiddentotalrequerimiento" class="form-control" name="" disabled>
                         </div>
                         <!-- Text input fecha inicio-->
-                        <div class="form-outline mb-4">
+                        <!-- <div class="form-outline mb-4">
                             <label class="form-label">Fecha produccion</label>
                             <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y'); ?>-01-01" max="<?php echo date('Y'); ?>-12-31">
+                        </div> -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Fecha producción</label>
+                            <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y'); ?>-12-31">
                         </div>
+
                         <!-- Text input fecha inicio-->
                         <div class=" form-outline mb-4">
                             <label class="form-label">Fecha vencimiento</label>

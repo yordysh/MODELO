@@ -33,6 +33,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 </head>
 
 <body>
+    <div id="preloader">
+        <div id="loader"></div>
+    </div>
     <nav class="nav">
         <div class="wave"></div>
         <i class="icon-menu navOpenBtn"></i>

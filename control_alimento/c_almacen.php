@@ -428,7 +428,8 @@ if ($accion == 'insertar') {
     $codigoproducto = trim($_POST['codigoproducto']);
     $codigoproduccion = trim($_POST['codigoproduccion']);
     $cantidad = trim($_POST['cantidad']);
-    $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad);
+    $codpersonal = trim($_POST['codpersonal']);
+    $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal);
     echo $respuesta;
 } elseif ($accion == 'verificaregistromenorconproducto') {
     $codigoproductoverifica = trim($_POST['codigoproductoverifica']);
@@ -2548,12 +2549,12 @@ class c_almacen
     }
 
 
-    static function c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad)
+    static function c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal)
     {
         $m_formula = new m_almacen();
 
         if (isset($valoresCapturadosProduccion) && isset($codigoproducto) && isset($codigoproduccion) && isset($cantidad)) {
-            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad);
+            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal);
 
             if ($respuesta) {
                 return "ok";

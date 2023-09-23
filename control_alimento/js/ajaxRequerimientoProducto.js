@@ -2,6 +2,12 @@ $(function () {
   // mostarRequerimientoProducto();
   let edit = false;
 
+  // Detecta cuando la página se ha cargado completamente
+  window.addEventListener("load", function () {
+    // Oculta el preloader
+    document.body.classList.add("loaded");
+  });
+
   //------------- MENU BAR JS ---------------//
   let nav = document.querySelector(".nav"),
     searchIcon = document.querySelector("#searchIcon"),

@@ -185,6 +185,7 @@ $(function () {
     let codigoproducto = $("#hiddenproducto").val();
     let codigoproduccion = $("#hiddenproduccion").val();
     let cantidad = $("#hiddencantidad").val();
+    let codpersonal = $("#codpersonal").val();
 
     let valoresCapturadosProduccion = [];
 
@@ -232,6 +233,7 @@ $(function () {
         codigoproducto: codigoproducto,
         codigoproduccion: codigoproduccion,
         cantidad: cantidad,
+        codpersonal: codpersonal,
       },
       success: function (response) {
         // console.log("respuesta" + response);

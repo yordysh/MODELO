@@ -29,10 +29,59 @@ $(function () {
   });
   //----------------------------------------------------------------//
   /* -----------------------Bloquea las fechas marcadas------------------------- */
+
+  /*fecha ingresada menor a la actual */
+  $("#fechainicio").on("input", function () {
+    var fechaProduc = $(this).val();
+    var fechaActual = new Date().toISOString().split("T")[0];
+
+    if (fechaProduc < fechaActual) {
+      // $(this).val(currentDate);
+      Swal.fire({
+        icon: "error",
+        title: "Error de fecha ingresada",
+        text: "La fecha es menor a la fecha actual",
+      });
+      $(this).val("");
+    }
+    $("#fechavencimiento").val("");
+  });
+
+  /*------------------------------ */
+
+  $("#fechavencimiento").on("input", function () {
+    var fechaVencimiento = $(this).val();
+    var fechaActual = new Date().toISOString().split("T")[0];
+
+    if (fechaVencimiento < fechaActual) {
+      Swal.fire({
+        icon: "error",
+        title: "Error de fecha vencimiento",
+        text: "La fecha es menor a la fecha producción",
+      });
+      $(this).val("");
+    }
+  });
   $("#fechainicio").change(function () {
     var fechaProduccion = $(this).val();
     $("#fechavencimiento").attr("min", fechaProduccion);
   });
+
+  // $("#fechainicio").on("input", function () {
+  //   var fechaInicio = new Date($(this).val());
+  //   var currentYear = new Date().getFullYear();
+
+  //   if (
+  //     fechaInicio.getFullYear() === currentYear &&
+  //     fechaInicio.getMonth() === 11
+  //   ) {
+  //     // 11 representa diciembre (los meses en JavaScript son 0-indexados)
+  //     var nextYear = currentYear + 1;
+  //     $(this).attr("max", nextYear + "-12-31");
+  //   } else {
+  //     $(this).attr("max", currentYear + "-12-31");
+  //   }
+  // });
   /* -------------------------------------------------------------------------- */
 
   /*--------------------------Mostrar tabla principal pendientes-------------- */

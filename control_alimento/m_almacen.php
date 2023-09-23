@@ -2346,9 +2346,9 @@ class m_almacen
 
       $this->bd->beginTransaction();
       $cod = new m_almacen();
-      $fecha_generado = $cod->c_horaserversql('F');
-      // $fecha_actual = '20/09/2023';
-      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      // $fecha_generado = $cod->c_horaserversql('F');
+      $fecha_actual = '23/09/2023';
+      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $insertar = $stmActualizarOrden->execute();
@@ -2616,14 +2616,14 @@ class m_almacen
       $this->bd->beginTransaction();
 
 
-      // $dateTInicio = $fechainicio;
-      // $dateTVencimiento = $fechavencimiento;
-      $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
-      $dateTInicio = $fechaFormateadaIncio->format('d/m/Y');
+      $dateTInicio = $fechainicio;
+      $dateTVencimiento = $fechavencimiento;
+      // $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
+      // $dateTInicio = $fechaFormateadaIncio->format('d/m/Y');
 
 
-      $fechaFormateadaVencimiento = DateTime::createFromFormat('Y-m-d', $fechavencimiento);
-      $dateTVencimiento = $fechaFormateadaVencimiento->format('d/m/Y');
+      // $fechaFormateadaVencimiento = DateTime::createFromFormat('Y-m-d', $fechavencimiento);
+      // $dateTVencimiento = $fechaFormateadaVencimiento->format('d/m/Y');
 
 
       $zonaHorariaPeru = new DateTimeZone('America/Lima');
@@ -2712,8 +2712,8 @@ class m_almacen
       }
 
 
-      $maquina = os_info();
-      // $maquina = 'user';
+      // $maquina = os_info();
+      $maquina = 'user';
 
       $stmProducciontototal = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION(COD_PRODUCCION, COD_REQUERIMIENTO, COD_CATEGORIA, COD_PRODUCTO, NUM_PRODUCION_LOTE, CAN_PRODUCCION,CANTIDAD_PRODUCIDA, FEC_GENERADO,HOR_GENERADO,FEC_VENCIMIENTO, OBSERVACION,UNI_MEDIDA,BARRA_INICIO,BARRA_FIN, USU_REGISTRO,MAQUINA, COD_ALMACEN,CAN_CAJA)
       VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$cantidadtotalproduccion','$dateTInicio','$horaMinutosSegundos','$dateTVencimiento','$textAreaObservacion','UNIDAD','$resultadoFinalI','$resultadoFinalFin','$codpersonal','$maquina','00017','$cantidadcaja')");
@@ -2888,7 +2888,7 @@ class m_almacen
     $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
     return $codigoAumento;
   }
-  public function  InsertarValorInsumoRegistro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad)
+  public function  InsertarValorInsumoRegistro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad,  $codpersonal)
   {
     try {
       $this->bd->beginTransaction();
@@ -2898,7 +2898,7 @@ class m_almacen
       $numero_generado_bachada = $codigoInsumosAvances->NumeroBachadaGenerado();
 
       $nombre = 'LBS-OP-FR-01';
-      $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
+      // $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
 
 
 
@@ -2933,6 +2933,7 @@ class m_almacen
 
 
       $updatetotal = $insert  - $cantidad;
+      $maquina = os_info();
 
       if ($insert  > 0) {
         $stmActualizaproduccion = $this->bd->prepare("UPDATE T_TMPPRODUCCION SET CANTIDAD_PRODUCIDA='$updatetotal',ESTADO='A' WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
@@ -3000,8 +3001,8 @@ class m_almacen
             $valorINICIAL = substr($codigobarrainicio['BARRA_INICIO'], 0, 3);
             $respuestaTotalNumlote = $valorINICIAL . $valorFINAL;
 
-            $insertarproduc = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS(COD_PRODUCCION_BARRAS,COD_PRODUCCION,NUM_LOTE)
-            VALUES('$codigo_gen_barrasIf','$codigoproduccion','$respuestaTotalNumlote')");
+            $insertarproduc = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS(COD_PRODUCCION_BARRAS,COD_PRODUCCION,COD_PRODUCTO,NUM_LOTE,USU_REGISTRO,MAQUINA)
+            VALUES('$codigo_gen_barrasIf','$codigoproduccion','$codigoproducto','$respuestaTotalNumlote','$codpersonal','$maquina')");
             $insertarproduc->execute();
           }
         } else {
@@ -3033,8 +3034,8 @@ class m_almacen
 
 
 
-            $insertarproduc = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS(COD_PRODUCCION_BARRAS,COD_PRODUCCION,NUM_LOTE)
-            VALUES('$codigo_gen_barrasEl','$codigoproduccion','$respuestaTotalNumloteE')");
+            $insertarproduc = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS(COD_PRODUCCION_BARRAS,COD_PRODUCCION,COD_PRODUCTO,NUM_LOTE,USU_REGISTRO,MAQUINA)
+            VALUES('$codigo_gen_barrasEl','$codigoproduccion','$codigoproducto','$respuestaTotalNumloteE','$codpersonal','$maquina')");
             $insertarproduc->execute();
           }
         }
