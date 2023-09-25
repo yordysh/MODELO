@@ -29,13 +29,27 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
     <link rel="stylesheet" href="./styleIcons/style.css">
     <link rel="stylesheet" href="./css/select2.min.css">
     <title>Covifarma</title>
-
 </head>
 
 <body>
-    <div id="preloader">
-        <div id="loader"></div>
+    <!-- preloader -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="ytp-spinner">
+                <div class="ytp-spinner-container">
+                    <div class="ytp-spinner-rotator">
+                        <div class="ytp-spinner-left">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                        <div class="ytp-spinner-right">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <!-- fin -->
     <nav class="nav">
         <div class="wave"></div>
         <i class="icon-menu navOpenBtn"></i>

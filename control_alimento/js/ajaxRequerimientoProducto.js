@@ -1,13 +1,17 @@
 $(function () {
-  // mostarRequerimientoProducto();
   let edit = false;
 
-  // Detecta cuando la página se ha cargado completamente
-  window.addEventListener("load", function () {
-    // Oculta el preloader
-    document.body.classList.add("loaded");
-  });
+  //===== Prealoder
 
+  window.onload = function () {
+    window.setTimeout(fadeout, 500);
+  };
+
+  function fadeout() {
+    document.querySelector(".preloader").style.opacity = "0";
+    document.querySelector(".preloader").style.display = "none";
+  }
+  //-------------------------------------------//
   //------------- MENU BAR JS ---------------//
   let nav = document.querySelector(".nav"),
     searchIcon = document.querySelector("#searchIcon"),
@@ -373,6 +377,7 @@ $(function () {
   //--------------------- Insertar cantidades ------------//
   $("#botonInsertValor").click((e) => {
     e.preventDefault();
+
     let tablaReqInsumo = $("#tablaInsumosDatos");
     let tablaReqEnv = $("#tablaenvase");
     let tablatotalInEn = $("#tablainsumoenvasetotal");
@@ -414,7 +419,6 @@ $(function () {
     });
 
     let accion = "guardarvalorescapturadosinsumos";
-
     $.ajax({
       type: "POST",
       url: "./c_almacen.php",
@@ -425,8 +429,13 @@ $(function () {
         unionItem: valoresCapturadosTotalEnvase,
         codpersonal: codpersonal,
       },
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       success: function (response) {
         console.log("respuesta" + response);
+
         if (response == "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
@@ -448,7 +457,22 @@ $(function () {
       error: function (error) {
         console.log("ERROR " + error);
       },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
+      },
     });
   });
   //-------------------------------------------------------------------------//
+  /*Carga de loading hasta que de la respuesta*/
+  function showLoading() {
+    $(".preloader").css("opacity", "1");
+    $(".preloader").css("display", "block");
+  }
+
+  function hideLoading() {
+    $(".preloader").css("opacity", "0");
+    $(".preloader").css("display", "none");
+  }
+  /*---------------------------------------*/
 });

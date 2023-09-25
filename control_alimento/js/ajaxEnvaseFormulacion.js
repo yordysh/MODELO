@@ -2,6 +2,19 @@ $(function () {
   mostrarProductoEnvase();
 
   let edit = false;
+
+  //===== Prealoder
+
+  window.onload = function () {
+    window.setTimeout(fadeout, 500);
+  };
+
+  function fadeout() {
+    document.querySelector(".preloader").style.opacity = "0";
+    document.querySelector(".preloader").style.display = "none";
+  }
+  //-------------------------------------------//
+
   //------------- MENU BAR JS ---------------//
   let nav = document.querySelector(".nav"),
     searchIcon = document.querySelector("#searchIcon"),
@@ -189,6 +202,10 @@ $(function () {
         dataInsumo: dataInsumo,
         dataEnvase: dataEnvase,
       },
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       type: "POST",
       success: function (response) {
         if (response === "ok") {
@@ -224,6 +241,10 @@ $(function () {
             }
           });
         }
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
       },
     });
   });
@@ -442,4 +463,17 @@ $(function () {
       },
     });
   }
+  //---------------------------------------------------------------------------------//
+
+  /*Carga de loading hasta que de la respuesta*/
+  function showLoading() {
+    $(".preloader").css("opacity", "1");
+    $(".preloader").css("display", "block");
+  }
+
+  function hideLoading() {
+    $(".preloader").css("opacity", "0");
+    $(".preloader").css("display", "none");
+  }
+  /*---------------------------------------*/
 });

@@ -2075,7 +2075,6 @@ class m_almacen
                                   FROM T_TMPFORMULACION_ITEM AS TFI INNER JOIN T_PRODUCTO AS TP ON TFI.COD_PRODUCTO=TP.COD_PRODUCTO 
                                   INNER JOIN T_TMPFORMULACION AS TMP ON TMP.COD_FORMULACION=TFI.COD_FORMULACION
                                   WHERE TFI.COD_FORMULACION='$codigo_corresponde_formulacion'");
-      // var_dump($stm);
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
       return $datos;
@@ -2346,9 +2345,9 @@ class m_almacen
 
       $this->bd->beginTransaction();
       $cod = new m_almacen();
-      // $fecha_generado = $cod->c_horaserversql('F');
-      $fecha_actual = '23/09/2023';
-      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      $fecha_generado = $cod->c_horaserversql('F');
+      // $fecha_actual = '23/09/2023';
+      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $insertar = $stmActualizarOrden->execute();
@@ -2616,14 +2615,14 @@ class m_almacen
       $this->bd->beginTransaction();
 
 
-      $dateTInicio = $fechainicio;
-      $dateTVencimiento = $fechavencimiento;
-      // $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
-      // $dateTInicio = $fechaFormateadaIncio->format('d/m/Y');
+      // $dateTInicio = $fechainicio;
+      // $dateTVencimiento = $fechavencimiento;
+      $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
+      $dateTInicio = $fechaFormateadaIncio->format('d/m/Y');
 
 
-      // $fechaFormateadaVencimiento = DateTime::createFromFormat('Y-m-d', $fechavencimiento);
-      // $dateTVencimiento = $fechaFormateadaVencimiento->format('d/m/Y');
+      $fechaFormateadaVencimiento = DateTime::createFromFormat('Y-m-d', $fechavencimiento);
+      $dateTVencimiento = $fechaFormateadaVencimiento->format('d/m/Y');
 
 
       $zonaHorariaPeru = new DateTimeZone('America/Lima');
@@ -2712,8 +2711,8 @@ class m_almacen
       }
 
 
-      // $maquina = os_info();
-      $maquina = 'user';
+      $maquina = os_info();
+      // $maquina = 'user';
 
       $stmProducciontototal = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION(COD_PRODUCCION, COD_REQUERIMIENTO, COD_CATEGORIA, COD_PRODUCTO, NUM_PRODUCION_LOTE, CAN_PRODUCCION,CANTIDAD_PRODUCIDA, FEC_GENERADO,HOR_GENERADO,FEC_VENCIMIENTO, OBSERVACION,UNI_MEDIDA,BARRA_INICIO,BARRA_FIN, USU_REGISTRO,MAQUINA, COD_ALMACEN,CAN_CAJA)
       VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$cantidadtotalproduccion','$dateTInicio','$horaMinutosSegundos','$dateTVencimiento','$textAreaObservacion','UNIDAD','$resultadoFinalI','$resultadoFinalFin','$codpersonal','$maquina','00017','$cantidadcaja')");
@@ -2898,7 +2897,7 @@ class m_almacen
       $numero_generado_bachada = $codigoInsumosAvances->NumeroBachadaGenerado();
 
       $nombre = 'LBS-OP-FR-01';
-      // $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
+      $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
 
 
 
