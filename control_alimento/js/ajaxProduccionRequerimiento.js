@@ -43,6 +43,13 @@ $(function () {
   /* -----------------------Bloquea las fechas marcadas------------------------- */
 
   /*fecha ingresada menor a la actual */
+  const fechaActual = new Date();
+  const anoActual = fechaActual.getFullYear();
+  const fechaMinima = `${anoActual}-01-01`;
+
+  document.getElementById("fechainicio").setAttribute("min", fechaMinima);
+  document.getElementById("fechainicio").setAttribute("min", fechaMinima);
+
   $("#fechainicio").on("input", function () {
     var fechaProduc = $(this).val();
     var fechaActual = new Date().toISOString().split("T")[0];

@@ -134,19 +134,17 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <input type="text" id="cantidadhiddentotalrequerimiento" class="form-control" name="" disabled>
                         </div>
                         <!-- Text input fecha inicio-->
-                        <!-- <div class="form-outline mb-4">
-                            <label class="form-label">Fecha produccion</label>
-                            <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y'); ?>-01-01" max="<?php echo date('Y'); ?>-12-31">
-                        </div> -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Fecha producción</label>
-                            <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y'); ?>-12-31">
+                            <!-- <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y'); ?>-12-31"> -->
+                            <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y-m-d'); ?>">
                         </div>
 
                         <!-- Text input fecha inicio-->
                         <div class=" form-outline mb-4">
                             <label class="form-label">Fecha vencimiento</label>
-                            <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y'); ?>-01-01" max="<?php echo date('Y'); ?>-12-31">
+                            <!-- <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y'); ?>-01-01" max="<?php echo date('Y'); ?>-12-31"> -->
+                            <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric">
                         </div>
                         <!-- Text input cantidad por caja-->
                         <div class="form-outline mb-4">

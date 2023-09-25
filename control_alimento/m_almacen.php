@@ -2271,11 +2271,11 @@ class m_almacen
       $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
 
 
-      $fecha_actual = $cod->c_horaserversql('F');
-      $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
-      $fecha_generado_orden_compra  = $fecha_convertida->format('d/m/Y');
-      // $fecha_actual = '20/09/2023';
-      // $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      // $fecha_actual = $cod->c_horaserversql('F');
+      // $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
+      // $fecha_generado_orden_compra  = $fecha_convertida->format('d/m/Y');
+      $fecha_actual = '20/09/2023';
+      $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,COD_REQUERIMIENTO,FECHA)
                                                 VALUES ('$codigo_orden_compra','$idRequerimiento','$fecha_generado_orden_compra')");
@@ -2345,9 +2345,9 @@ class m_almacen
 
       $this->bd->beginTransaction();
       $cod = new m_almacen();
-      $fecha_generado = $cod->c_horaserversql('F');
-      // $fecha_actual = '23/09/2023';
-      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      // $fecha_generado = $cod->c_horaserversql('F');
+      $fecha_actual = '25/09/2023';
+      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $insertar = $stmActualizarOrden->execute();
@@ -2615,14 +2615,14 @@ class m_almacen
       $this->bd->beginTransaction();
 
 
-      // $dateTInicio = $fechainicio;
-      // $dateTVencimiento = $fechavencimiento;
-      $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
-      $dateTInicio = $fechaFormateadaIncio->format('d/m/Y');
+      $dateTInicio = $fechainicio;
+      $dateTVencimiento = $fechavencimiento;
+      // $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
+      // $dateTInicio = $fechaFormateadaIncio->format('d/m/Y');
 
 
-      $fechaFormateadaVencimiento = DateTime::createFromFormat('Y-m-d', $fechavencimiento);
-      $dateTVencimiento = $fechaFormateadaVencimiento->format('d/m/Y');
+      // $fechaFormateadaVencimiento = DateTime::createFromFormat('Y-m-d', $fechavencimiento);
+      // $dateTVencimiento = $fechaFormateadaVencimiento->format('d/m/Y');
 
 
       $zonaHorariaPeru = new DateTimeZone('America/Lima');
@@ -2897,7 +2897,7 @@ class m_almacen
       $numero_generado_bachada = $codigoInsumosAvances->NumeroBachadaGenerado();
 
       $nombre = 'LBS-OP-FR-01';
-      $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
+      // $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
 
 
 
@@ -2985,6 +2985,7 @@ class m_almacen
           $resultado = $stm->fetch(PDO::FETCH_ASSOC);
           $maxCodigo = intval($resultado['COD_PRODUCCION_BARRAS']);
           $c = 1;
+          $num_cajas = 1;
           for ($e = 0; $e < $cantidad; $e++) {
 
 
@@ -3003,6 +3004,59 @@ class m_almacen
             $insertarproduc = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS(COD_PRODUCCION_BARRAS,COD_PRODUCCION,COD_PRODUCTO,NUM_LOTE,USU_REGISTRO,MAQUINA)
             VALUES('$codigo_gen_barrasIf','$codigoproduccion','$codigoproducto','$respuestaTotalNumlote','$codpersonal','$maquina')");
             $insertarproduc->execute();
+
+
+
+
+            $stmDesProd = $this->bd->prepare("SELECT DES_PRODUCTO,ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_PRODUCTO='$codigoproducto'");
+            $stmDesProd->execute();
+            $valorProd = $stmDesProd->fetch(PDO::FETCH_ASSOC);
+            $desprod = $valorProd['DES_PRODUCTO'];
+            $abrprod = $valorProd['ABR_PRODUCTO'];
+
+
+            $stmCanCajas = $this->bd->prepare("SELECT CAN_CAJA FROM T_TMPPRODUCCION WHERE COD_PRODUCCION='$codigoproduccion' AND COD_PRODUCTO='$codigoproducto'");
+            $stmCanCajas->execute();
+            $valorCanCajas = $stmCanCajas->fetch(PDO::FETCH_ASSOC);
+            $cantidad_cajas = $valorCanCajas['CAN_CAJA'];
+
+
+            $stmmax = $this->bd->prepare("SELECT MAX(BARRA_INI) AS BARRA_INI  FROM T_TMPPRODUCCION_BARRAS_GRUPO WHERE COD_PRODUCTO='$codigoproducto'");
+            $stmmax->execute();
+            $valormax = $stmmax->fetch(PDO::FETCH_ASSOC);
+            $codmax = intval($valormax['BARRA_INI']);
+
+
+
+            // $stmnumlote = $this->bd->prepare("SELECT MAX(NUM_LOTE) AS NUM_LOTE  FROM T_TMPPRODUCCION_BARRAS_GRUPO WHERE COD_PRODUCTO='$codigoproducto'");
+            // $stmnumlote->execute();
+            // $valormaxnumlote = $stmmax->fetch(PDO::FETCH_ASSOC);
+            // $codmaxnumlote = intval($valormaxnumlote['NUM_LOTE']);
+
+
+            $num_lote_cajas = trim(str_pad($num_cajas, 5, '0', STR_PAD_LEFT));
+            $num_lote = '-' .  trim($abrprod) . $num_lote_cajas;
+
+
+            if ($codmax == null) {
+              $valoriniciobara = $codigonum;
+              $valorfinbarra = $codigonum + $cantidad_cajas - 1;
+              $insertarproducbarra = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS_GRUPO(COD_PRODUCTO,DES_PRODUCTO,N_CAJA,CANTIDAD,ABR_PRODUCTO,BARRA_INI,BARRA_FIN,COD_PRODUCCION,NUM_LOTE)
+              VALUES('$codigoproducto','$desprod','$num_cajas','$cantidad_cajas','$abrprod','$valoriniciobara','$valorfinbarra','$codigoproduccion','$num_lote')");
+
+              $insertarproducbarra->execute();
+              $num_cajas++;
+            } else {
+
+              $valoriniciobara = $codmax + $cantidad_cajas;
+              $valorfinbarra = $valoriniciobara + $cantidad_cajas - 1;
+
+
+              $insertarproducbarra = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS_GRUPO(COD_PRODUCTO,DES_PRODUCTO,N_CAJA,CANTIDAD,ABR_PRODUCTO,BARRA_INI,BARRA_FIN,COD_PRODUCCION,NUM_LOTE)
+              VALUES('$codigoproducto','$desprod','$num_cajas','$cantidad_cajas','$abrprod','$valoriniciobara','$valorfinbarra','$codigoproduccion','$num_lote')");
+              $insertarproducbarra->execute();
+              $num_cajas++;
+            }
           }
         } else {
           $stmcodigoAum = $this->bd->prepare("SELECT MAX(NUM_LOTE) AS NUM_LOTE  FROM T_TMPPRODUCCION_BARRAS WHERE COD_PRODUCCION='$codigoproduccion'");
