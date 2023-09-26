@@ -2271,11 +2271,11 @@ class m_almacen
       $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
 
 
-      // $fecha_actual = $cod->c_horaserversql('F');
-      // $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
-      // $fecha_generado_orden_compra  = $fecha_convertida->format('d/m/Y');
-      $fecha_actual = '20/09/2023';
-      $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      $fecha_actual = $cod->c_horaserversql('F');
+      $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
+      $fecha_generado_orden_compra  = $fecha_convertida->format('d/m/Y');
+      // $fecha_actual = '20/09/2023';
+      // $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,COD_REQUERIMIENTO,FECHA)
                                                 VALUES ('$codigo_orden_compra','$idRequerimiento','$fecha_generado_orden_compra')");
@@ -2345,9 +2345,9 @@ class m_almacen
 
       $this->bd->beginTransaction();
       $cod = new m_almacen();
-      // $fecha_generado = $cod->c_horaserversql('F');
-      $fecha_actual = '25/09/2023';
-      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      $fecha_generado = $cod->c_horaserversql('F');
+      // $fecha_actual = '25/09/2023';
+      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $insertar = $stmActualizarOrden->execute();
@@ -2615,14 +2615,14 @@ class m_almacen
       $this->bd->beginTransaction();
 
 
-      $dateTInicio = $fechainicio;
-      $dateTVencimiento = $fechavencimiento;
-      // $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
-      // $dateTInicio = $fechaFormateadaIncio->format('d/m/Y');
+      // $dateTInicio = $fechainicio;
+      // $dateTVencimiento = $fechavencimiento;
+      $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
+      $dateTInicio = $fechaFormateadaIncio->format('d/m/Y');
 
 
-      // $fechaFormateadaVencimiento = DateTime::createFromFormat('Y-m-d', $fechavencimiento);
-      // $dateTVencimiento = $fechaFormateadaVencimiento->format('d/m/Y');
+      $fechaFormateadaVencimiento = DateTime::createFromFormat('Y-m-d', $fechavencimiento);
+      $dateTVencimiento = $fechaFormateadaVencimiento->format('d/m/Y');
 
 
       $zonaHorariaPeru = new DateTimeZone('America/Lima');
@@ -2897,7 +2897,7 @@ class m_almacen
       $numero_generado_bachada = $codigoInsumosAvances->NumeroBachadaGenerado();
 
       $nombre = 'LBS-OP-FR-01';
-      // $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
+      $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);
 
 
 
