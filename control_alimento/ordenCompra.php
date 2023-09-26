@@ -83,11 +83,12 @@ $mostrar = new m_almacen();
                 <div class="row g-4 top-div">
                     <center><label class="title">ORDEN DE COMPRAS</label></center>
                 </div>
+
                 <div class="main">
                     <form method="post" action="" id="formularioOrdenCompra">
 
                         <!-- Tabla total orden de compra-->
-                        <div class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:20px;margin-bottom:50px;">
+                        <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
                             <table id="tOrdenCompra" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>

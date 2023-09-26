@@ -44,11 +44,18 @@ $(function () {
 
   /*fecha ingresada menor a la actual */
   const fechaActual = new Date();
+  // const anoActual = fechaActual.getFullYear();
+  // const fechaMinima = `${anoActual}-01-01`;
+
+  // document.getElementById("fechainicio").setAttribute("min", fechaMinima);
   const anoActual = fechaActual.getFullYear();
-  const fechaMinima = `${anoActual}-01-01`;
+  const mesActual = (fechaActual.getMonth() + 1).toString().padStart(2, "0");
+  const diaActual = fechaActual.getDate().toString().padStart(2, "0");
+  const fechaMinima = `${anoActual}-${mesActual}-${diaActual}`;
 
   document.getElementById("fechainicio").setAttribute("min", fechaMinima);
-  document.getElementById("fechainicio").setAttribute("min", fechaMinima);
+  document.getElementById("fechainicio").value = fechaMinima;
+  document.getElementById("fechavencimiento").setAttribute("min", fechaMinima);
 
   $("#fechainicio").on("input", function () {
     var fechaProduc = $(this).val();
@@ -85,22 +92,6 @@ $(function () {
     var fechaProduccion = $(this).val();
     $("#fechavencimiento").attr("min", fechaProduccion);
   });
-
-  // $("#fechainicio").on("input", function () {
-  //   var fechaInicio = new Date($(this).val());
-  //   var currentYear = new Date().getFullYear();
-
-  //   if (
-  //     fechaInicio.getFullYear() === currentYear &&
-  //     fechaInicio.getMonth() === 11
-  //   ) {
-  //     // 11 representa diciembre (los meses en JavaScript son 0-indexados)
-  //     var nextYear = currentYear + 1;
-  //     $(this).attr("max", nextYear + "-12-31");
-  //   } else {
-  //     $(this).attr("max", currentYear + "-12-31");
-  //   }
-  // });
   /* -------------------------------------------------------------------------- */
 
   /*--------------------------Mostrar tabla principal pendientes-------------- */
@@ -138,6 +129,7 @@ $(function () {
 
   $(document).on("click", "#mostrarproduccionrequerimiento", (e) => {
     e.preventDefault();
+
     let capturaTr = $(e.currentTarget).closest("tr");
     let codigoproducto = capturaTr.find("td:eq(1)").attr("codigoproducto");
     let nombreproducto = capturaTr.find("td:eq(1)").text();
@@ -160,7 +152,7 @@ $(function () {
       }).then((result) => {
         if (result.isConfirmed) {
           $("#numeroproduccion").val("");
-          $("#fechainicio").val("");
+          document.getElementById("fechainicio").value = fechaMinima;
           $("#fechavencimiento").val("");
           $("#textAreaObservacion").val("");
           $("#cantidadcaja").val("20");
@@ -298,7 +290,7 @@ $(function () {
               $("#productorequerimientoitem").val("");
               $("#numeroproduccion").val("");
               $("#cantidadhiddentotalrequerimiento").val("");
-              $("#fechainicio").val("");
+              document.getElementById("fechainicio").value = fechaMinima;
               $("#fechavencimiento").val("");
               $("#textAreaObservacion").val("");
               $("#cantidadcaja").val("20");

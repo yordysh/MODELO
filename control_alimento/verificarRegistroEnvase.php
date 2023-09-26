@@ -128,7 +128,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                             <div class="form-outline mb-4">
                                 <label class="form-label">Cantidad</label>
                                 <input type="hidden" id='hiddencantidad'>
-                                <input type="text" id="cantidad" class="form-control" name="cantidad" required>
+                                <input type="text" id="cantidad" class="form-control" name="cantidad" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
                             </div>
                             <div class="btncalcular">
                                 <button class="custom-icon-calcular" name="calcular" id="botonCalcularregistros"><i class="icon-circle-with-plus"></i></button>

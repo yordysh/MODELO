@@ -137,7 +137,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <div class="form-outline mb-4">
                             <label class="form-label">Fecha producción</label>
                             <!-- <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y'); ?>-12-31"> -->
-                            <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y-m-d'); ?>">
+                            <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric">
                         </div>
 
                         <!-- Text input fecha inicio-->

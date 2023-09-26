@@ -215,7 +215,7 @@ $(function () {
               showConfirmButton: false,
               timer: 2500,
             });
-            $("#tinsumorequerido").empty();
+            $("#tablainsumorequerido").hide();
             $("#mensajecompleto").css("display", "block");
           } else {
             Swal.fire({
@@ -225,7 +225,7 @@ $(function () {
               confirmButtonText: "Aceptar",
             });
             $("#mensajecompleto").css("display", "none");
-            $("#tinsumorequerido").show();
+            $("#tablainsumorequerido").show();
             $("#tablatotalinsumosrequeridoscomprar").html(template);
           }
         } else {

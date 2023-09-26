@@ -619,6 +619,11 @@ td {
     padding: 6em 0 0 1em;
     height: 57%;
   }
+  section {
+    width: 100%;
+    margin: 0 auto;
+    height: 57%;
+  }
   .container.g-4.row {
     padding: 0 0 5em 1em;
   }
@@ -713,6 +718,9 @@ td {
 
   .table-responsive table thead {
     display: none;
+  }
+  .contenedor {
+    margin-bottom: 50px;
   }
 }
 @media screen and (max-width: 480px) {
