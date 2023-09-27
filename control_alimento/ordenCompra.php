@@ -26,7 +26,7 @@ $mostrar = new m_almacen();
 
 <body>
     <!-- preloader -->
-    <div class="preloader">
+    <div class="preloader" style="display: none;">
         <div class="loader">
             <div class="ytp-spinner">
                 <div class="ytp-spinner-container">

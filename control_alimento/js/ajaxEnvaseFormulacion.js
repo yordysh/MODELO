@@ -4,9 +4,9 @@ $(function () {
   let edit = false;
 
   //===== Prealoder
-
+  // $(".preloader").fadeOut("slow");
   window.onload = function () {
-    window.setTimeout(fadeout, 500);
+    fadeout();
   };
 
   function fadeout() {

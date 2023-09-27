@@ -4,7 +4,7 @@ $(function () {
   //===== Prealoder
 
   window.onload = function () {
-    window.setTimeout(fadeout, 500);
+    fadeout();
   };
 
   function fadeout() {
@@ -46,23 +46,20 @@ $(function () {
   const fechaActual = new Date();
   // const anoActual = fechaActual.getFullYear();
   // const fechaMinima = `${anoActual}-01-01`;
-
-  // document.getElementById("fechainicio").setAttribute("min", fechaMinima);
   const anoActual = fechaActual.getFullYear();
-  const mesActual = (fechaActual.getMonth() + 1).toString().padStart(2, "0");
-  const diaActual = fechaActual.getDate().toString().padStart(2, "0");
-  const fechaMinima = `${anoActual}-${mesActual}-${diaActual}`;
+  const mesActual = fechaActual.getMonth() + 1;
+  const diaActual = fechaActual.getDate();
 
+  const fechaMinima = `${anoActual}-${mesActual
+    .toString()
+    .padStart(2, "0")}-${diaActual.toString().padStart(2, "0")}`;
   document.getElementById("fechainicio").setAttribute("min", fechaMinima);
-  document.getElementById("fechainicio").value = fechaMinima;
   document.getElementById("fechavencimiento").setAttribute("min", fechaMinima);
 
-  $("#fechainicio").on("input", function () {
+  $("#fechainicio").on("blur", function () {
     var fechaProduc = $(this).val();
     var fechaActual = new Date().toISOString().split("T")[0];
-
     if (fechaProduc < fechaActual) {
-      // $(this).val(currentDate);
       Swal.fire({
         icon: "error",
         title: "Error de fecha ingresada",
@@ -75,7 +72,7 @@ $(function () {
 
   /*------------------------------ */
 
-  $("#fechavencimiento").on("input", function () {
+  $("#fechavencimiento").on("blur", function () {
     var fechaVencimiento = $(this).val();
     var fechaActual = new Date().toISOString().split("T")[0];
 
@@ -152,7 +149,8 @@ $(function () {
       }).then((result) => {
         if (result.isConfirmed) {
           $("#numeroproduccion").val("");
-          document.getElementById("fechainicio").value = fechaMinima;
+          // document.getElementById("fechainicio").value = fechaMinima;
+          $("#fechainicio").val("");
           $("#fechavencimiento").val("");
           $("#textAreaObservacion").val("");
           $("#cantidadcaja").val("20");
@@ -290,7 +288,8 @@ $(function () {
               $("#productorequerimientoitem").val("");
               $("#numeroproduccion").val("");
               $("#cantidadhiddentotalrequerimiento").val("");
-              document.getElementById("fechainicio").value = fechaMinima;
+              // document.getElementById("fechainicio").value = fechaMinima;
+              $("#fechainicio").val("");
               $("#fechavencimiento").val("");
               $("#textAreaObservacion").val("");
               $("#cantidadcaja").val("20");

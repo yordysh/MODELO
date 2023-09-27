@@ -6,7 +6,7 @@ $(function () {
   //===== Prealoder
 
   window.onload = function () {
-    window.setTimeout(fadeout, 500);
+    fadeout();
   };
 
   function fadeout() {

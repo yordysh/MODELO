@@ -4,7 +4,8 @@ $(function () {
   //===== Prealoder
 
   window.onload = function () {
-    window.setTimeout(fadeout, 500);
+    // window.setTimeout(fadeout, 200);
+    fadeout();
   };
 
   function fadeout() {
@@ -153,6 +154,10 @@ $(function () {
         accion: accionverifica,
         selectinsumoenvase: selectinsumoenvase,
       },
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       type: "POST",
       success: function (dataverificacion) {
         // console.log(dataverificacion);
@@ -194,6 +199,10 @@ $(function () {
           });
           return;
         }
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
       },
     });
     /*_---------------------------------------------------------------------------- */
