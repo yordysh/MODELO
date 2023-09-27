@@ -73,7 +73,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
             </li>
             <li>
-                <a class="" href="#">Producción</a>
+                <a class="activo" href="#">Producción</a>
             </li>
             <li>
                 <a class="" href="verificarRegistroEnvase.php">Avance producción</a>

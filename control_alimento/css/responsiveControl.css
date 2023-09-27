@@ -160,18 +160,38 @@ img {
   width: 50px;
   border-radius: 60px;
 }
+/*----- Estilo de submenu al poner el mouse ----- */
 .phsStyle,
 .bpmStyle {
   font-size: 25px !important;
 }
+
 .menu-vertical {
   position: absolute;
   display: none;
   list-style: none;
   width: 150px;
   background-color: #5b8ccc;
+  background-image: linear-gradient(to bottom, #7b5185, #5b8ccc);
+  padding-left: 15px;
+}
+.idex {
+  padding-right: 3rem;
 }
 
+.nav-links li:hover .menu-vertical {
+  display: block;
+}
+
+.menu-vertical li:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.menu-vertical li a {
+  display: block;
+  color: #ffffff;
+}
+/*---------------------------------------------------*/
 .nav-links li:hover .menu-vertical {
   display: block;
 }
@@ -344,6 +364,7 @@ a {
 .nav .navCloseBtn {
   display: none;
 }
+
 /*-------------------------------------------------------*/
 
 td {
@@ -582,6 +603,14 @@ td {
   }
   .select2-dropdown {
     z-index: 1 !important;
+  }
+  .menu-vertical {
+    position: absolute;
+    display: none;
+    list-style: none;
+    width: 190px;
+    background-image: linear-gradient(to bottom, #7b5185, #4587de);
+    padding-left: 15px;
   }
   /* .wave {
     position: absolute;

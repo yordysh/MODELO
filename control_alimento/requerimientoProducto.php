@@ -49,6 +49,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             </div>
         </div>
     </div>
+
     <!-- fin -->
     <nav class="nav">
         <div class="wave"></div>
@@ -61,7 +62,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <a class="" href="formulacionEnvases.php">Formulación</a>
             </li>
             <li>
-                <a class="" href="#">Requerimiento</a>
+                <a class="activo" href="#">Requerimiento</a>
             </li>
             <li>
                 <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>

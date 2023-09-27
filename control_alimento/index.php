@@ -14,30 +14,7 @@
   <link rel="stylesheet" href="./css/sweetalert2.min.css">
   <link rel="stylesheet" href="./styleIcons/style.css">
   <title>Covifarma</title>
-  <style>
-    .menu-vertical {
-      position: absolute;
-      display: none;
-      list-style: none;
-      width: 150px;
-      background-color: #5b8ccc;
 
-    }
-
-    .nav-links li:hover .menu-vertical {
-      display: block;
-    }
-
-    .menu-vertical li:hover {
-      background-color: rgba(0, 0, 0, .5);
-    }
-
-    .menu-vertical li a {
-      display: block;
-      color: #FFFFFF;
-
-    }
-  </style>
 </head>
 
 <body>
@@ -46,7 +23,7 @@
     <div class="wave"></div>
     <i class="icon-menu navOpenBtn"></i>
     <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
-    <ul class="nav-links">
+    <ul class="nav-links idex">
       <div class="icon-cross navCloseBtn"></div>
       <li>
         <a class="phsStyle" aria-current="page">PHS</a>
@@ -65,7 +42,7 @@
           </li>
         </ul>
       </li>
-      <li>
+      <!-- <li>
         <a class="bpmStyle">BPM</a>
         <ul class="menu-vertical">
           <li>
@@ -75,7 +52,7 @@
             <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
           </li>
         </ul>
-      </li>
+      </li> -->
       <li>
         <a class="bpmStyle">OP</a>
         <ul class="menu-vertical">

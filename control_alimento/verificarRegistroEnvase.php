@@ -77,7 +77,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                 <a class="" href="produccionRequerimiento.php">Producción</a>
             </li>
             <li>
-                <a class="" href="#">Avance producción</a>
+                <a class="activo" href="#">Avance producción</a>
             </li>
         </ul>
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>

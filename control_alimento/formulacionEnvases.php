@@ -52,7 +52,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
         <ul class="nav-links">
             <div class="icon-cross navCloseBtn"></div>
             <li>
-                <a class="" href="#">Formulación</a>
+                <a class="activo" href="#">Formulación</a>
             </li>
             <li>
                 <a class="" href="requerimientoProducto.php">Requerimiento</a>

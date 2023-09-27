@@ -59,7 +59,7 @@ $mostrar = new m_almacen();
                 <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
             <li>
-                <a class="" href="#">Orden de compra</a>
+                <a class="activo" href="#">Orden de compra</a>
             </li>
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>

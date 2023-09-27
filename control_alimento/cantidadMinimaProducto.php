@@ -62,7 +62,7 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
                 <a class="" href="ordenCompra.php">Orden de compra</a>
             </li>
             <li>
-                <a class="" href="#">Cantidad mínima</a>
+                <a class="activo" href="#">Cantidad mínima</a>
             </li>
             <!-- <li>
                 <a class="" href="registroEnvases.php">Registros envases</a>

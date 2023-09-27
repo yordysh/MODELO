@@ -66,7 +66,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <a class="" href="requerimientoProducto.php">Requerimiento</a>
             </li>
             <li>
-                <a class="pedidoRequerimiento" href="#">Confirmación de requerimiento</a>
+                <a class="pedidoRequerimiento activo" href="#">Confirmación de requerimiento</a>
             </li>
             <li>
                 <a class="" href="ordenCompra.php">Orden de compra</a>
