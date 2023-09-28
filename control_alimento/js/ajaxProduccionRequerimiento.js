@@ -44,8 +44,18 @@ $(function () {
 
   /*fecha ingresada menor a la actual */
   const fechaActual = new Date();
-  // const anoActual = fechaActual.getFullYear();
-  // const fechaMinima = `${anoActual}-01-01`;
+
+  const dia = fechaActual.getDate();
+  const mes = fechaActual.getMonth() + 1;
+  const ano = fechaActual.getFullYear();
+
+  const fechaActualFormato = `${ano}-${mes.toString().padStart(2, "0")}-${dia
+    .toString()
+    .padStart(2, "0")}`;
+
+  document.getElementById("fechainicio").value = fechaActualFormato;
+
+  fechaActual.setDate(fechaActual.getDate() - 3);
   const anoActual = fechaActual.getFullYear();
   const mesActual = fechaActual.getMonth() + 1;
   const diaActual = fechaActual.getDate();
@@ -54,7 +64,15 @@ $(function () {
     .toString()
     .padStart(2, "0")}-${diaActual.toString().padStart(2, "0")}`;
   document.getElementById("fechainicio").setAttribute("min", fechaMinima);
-  document.getElementById("fechavencimiento").setAttribute("min", fechaMinima);
+
+  var fechaAct = new Date();
+  var siguienteAnio = fechaAct.getFullYear() + 1;
+  // Calcula el siguiente año
+  var fechaMin = new Date(siguienteAnio, 0, 1);
+  var fechaMinimaFormato = fechaMin.toISOString().slice(0, 10);
+  var fechvencimin = document
+    .getElementById("fechavencimiento")
+    .setAttribute("min", fechaMinimaFormato);
 
   $("#fechainicio").on("blur", function () {
     var fechaProduc = $(this).val();
@@ -65,7 +83,8 @@ $(function () {
         title: "Error de fecha ingresada",
         text: "La fecha es menor a la fecha actual",
       });
-      $(this).val("");
+      // $(this).val("");
+      document.getElementById("fechainicio").value = fechaActualFormato;
     }
     $("#fechavencimiento").val("");
   });
@@ -73,8 +92,10 @@ $(function () {
   /*------------------------------ */
 
   $("#fechavencimiento").on("blur", function () {
-    var fechaVencimiento = $(this).val();
-    var fechaActual = new Date().toISOString().split("T")[0];
+    var fechaVencimiento = new Date($(this).val());
+    var fechaActual = new Date();
+    var siguienteAnio = new Date(fechaActual);
+    siguienteAnio.setFullYear(siguienteAnio.getFullYear() + 1);
 
     if (fechaVencimiento < fechaActual) {
       Swal.fire({
@@ -85,10 +106,10 @@ $(function () {
       $(this).val("");
     }
   });
-  $("#fechainicio").change(function () {
-    var fechaProduccion = $(this).val();
-    $("#fechavencimiento").attr("min", fechaProduccion);
-  });
+  // $("#fechainicio").change(function () {
+  //   var fechaProduccion = $(this).val();
+  //   $("#fechavencimiento").attr("min", fechaProduccion);
+  // });
   /* -------------------------------------------------------------------------- */
 
   /*--------------------------Mostrar tabla principal pendientes-------------- */

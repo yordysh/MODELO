@@ -165,14 +165,14 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                     <!-- Tabla total a comprar insumos-->
                     <div class="table-responsive" style="overflow-x: hidden;height: 300px; margin-top:20px;">
                         <div class="row g-4 top-div">
-                            <center><label class="title_table">CANTIDADES A COMPRAR</label></center>
+                            <center><label class="title_table">INSUMOS Y ENVASES POR COMPRAR</label></center>
                         </div>
                         <table id="tTotalinsumoscomprar" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
                                     <th class="thtitulo" scope="col">INSUMOS</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD FALTANTE</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD POR COMPRA</th>
+                                    <th class="thtitulo" scope="col">FALTANTE</th>
+                                    <th class="thtitulo" scope="col">POR COMPRA</th>
 
                                 </tr>
                             </thead>

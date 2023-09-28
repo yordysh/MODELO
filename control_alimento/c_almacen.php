@@ -2527,7 +2527,7 @@ class c_almacen
             $datos = $mostrar->MostrarEnvasesPorProduccion($codigoproducto, $codigoproduccion, $cantidad);
 
             if (!$datos) {
-                throw new Exception("Hubo un error en la consulta");
+                throw new Exception("Hubo un error en la consulta.");
             }
             $json = array();
             foreach ($datos as $row) {
@@ -2544,7 +2544,26 @@ class c_almacen
             $jsonstring = json_encode($json);
             echo $jsonstring;
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
+            $dats = $mostrar->MostrarSobranteEnvasesPorProduccion($codigoproducto, $codigoproduccion);
+            $nuevosValores = array();
+
+            foreach ($dats as $row) {
+                $nuevosValores[] = array(
+                    "COD_PRODUCCION" => $row->COD_PRODUCCION,
+                    "CANTIDAD_PRODUCIDA" => $row->CANTIDAD_PRODUCIDA,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO
+                );
+            }
+
+            // Enviar solo el nuevo JSON como respuesta
+            $response = array(
+                'success' => true,
+                'nuevosValores' => $nuevosValores
+            );
+
+            echo json_encode($response);
+
+            // echo "Error: " . $e->getMessage();
         }
     }
 

@@ -91,7 +91,6 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             bottom: 0;
             left: 0;
             right: 0;
-
         }
     </style>
     <!--------------------------------------- Titulo header --------------------------------------->

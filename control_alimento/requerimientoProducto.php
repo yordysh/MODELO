@@ -148,13 +148,11 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <div class="table-responsive" style="overflow-x: hidden;height: 300px; margin-top:20px;">
 
                             <table id="tinsumo" class="table table-sm mb-3 table-hover">
-                                <!-- <div class="row g-4 top-div">
+                                <div class="row g-4 top-div">
                                     <label class="title_table">TOTAL DE INSUMOS POR PRODUCTO</label>
-                                </div> -->
+                                </div>
                                 <thead>
-                                    <tr>
-                                        <th class="title_table" colspan="2" scope="col">TOTAL DE INSUMOS POR PRODUCTO</th>
-                                    </tr>
+
                                     <tr>
                                         <th class="" scope="col">INSUMOS</th>
                                         <th class="" scope="col">CANTIDAD</th>

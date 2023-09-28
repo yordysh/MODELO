@@ -1,6 +1,4 @@
 $(function () {
-  // fetchTasks();
-
   let edit = false;
 
   //===== Prealoder
@@ -84,7 +82,6 @@ $(function () {
         idrequerimiento: idrequerimiento,
       },
       success: function (response) {
-        console.log(response);
         if (response == "error") {
           Swal.fire({
             title: "¡Valor incorrecto!",
@@ -92,7 +89,11 @@ $(function () {
             icon: "error",
             confirmButtonText: "Aceptar",
           });
+          $("#selectNumProduccion").prop("disabled", true);
+          $("#cantidad").prop("disabled", true);
         } else {
+          $("#selectNumProduccion").prop("disabled", false);
+          $("#cantidad").prop("disabled", false);
         }
       },
     });
@@ -173,7 +174,14 @@ $(function () {
         } else {
           Swal.fire({
             title: "¡Supero cantidad!",
-            text: "Cantidad supero lo que hay en produccion.",
+            text:
+              "Cantidad supero lo que hay en producción." +
+              (response.nuevosValores &&
+              response.nuevosValores.length > 0 &&
+              response.nuevosValores[0].hasOwnProperty("CANTIDAD_PRODUCIDA")
+                ? " Cantidad producida adicional: " +
+                  response.nuevosValores[0].CANTIDAD_PRODUCIDA
+                : ""),
             icon: "error",
             confirmButtonText: "Aceptar",
           }).then((result) => {
@@ -253,7 +261,6 @@ $(function () {
         $(".preloader").css("display", "block");
       },
       success: function (response) {
-        // console.log("respuesta" + response);
         if (response == "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",

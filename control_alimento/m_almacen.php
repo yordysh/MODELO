@@ -2688,6 +2688,7 @@ class m_almacen
         $barraI = str_pad($barraSumaI, 6, '0', STR_PAD_LEFT);
 
 
+        // $barraF = $barraSumaI + ($cantidadtotalproduccion - 1);
         $barraF = $barraSumaI + ($cantidadtotalproduccion - 1);
         $resultadoF = str_pad($barraF, 6, '0', STR_PAD_LEFT);
 
@@ -2850,7 +2851,21 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function  MostrarSobranteEnvasesPorProduccion($codigoproducto, $codigoproduccion)
+  {
+    try {
 
+      $stmformulacionenvase = $this->bd->prepare("SELECT TPRO.COD_PRODUCCION AS COD_PRODUCCION, TPRO.CANTIDAD_PRODUCIDA AS CANTIDAD_PRODUCIDA, TP.DES_PRODUCTO AS DES_PRODUCTO FROM T_TMPPRODUCCION TPRO 
+                                                    INNER JOIN T_PRODUCTO TP ON TPRO.COD_PRODUCTO=TP.COD_PRODUCTO
+                                                    WHERE TPRO.COD_PRODUCCION='$codigoproduccion' AND TPRO.COD_PRODUCTO='$codigoproducto'");
+      $stmformulacionenvase->execute();
+      $datos = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function CodigoAvanceInsumo()
   {
     $stm = $this->bd->prepare("SELECT MAX(COD_AVANCE_INSUMOS) as COD_AVANCE_INSUMOS FROM T_TMPAVANCE_INSUMOS_PRODUCTOS");
@@ -2994,16 +3009,16 @@ class m_almacen
             $c++;
 
 
-            $codigonum = intval(substr($valoriniciobarra, 3));
-            $codigogenerado = ($codigonum + $e);
+            $codigonuminci = intval(substr($valoriniciobarra, 3));
+            $codigogenerado = ($codigonuminci + $e);
             $valorFINAL = str_pad($codigogenerado, 6, '0', STR_PAD_LEFT);
 
             $valorINICIAL = substr($codigobarrainicio['BARRA_INICIO'], 0, 3);
             $respuestaTotalNumlote = $valorINICIAL . $valorFINAL;
 
-            $insertarproduc = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS(COD_PRODUCCION_BARRAS,COD_PRODUCCION,COD_PRODUCTO,NUM_LOTE,USU_REGISTRO,MAQUINA)
+            $insertarproducba = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS(COD_PRODUCCION_BARRAS,COD_PRODUCCION,COD_PRODUCTO,NUM_LOTE,USU_REGISTRO,MAQUINA)
             VALUES('$codigo_gen_barrasIf','$codigoproduccion','$codigoproducto','$respuestaTotalNumlote','$codpersonal','$maquina')");
-            $insertarproduc->execute();
+            $insertarproducba->execute();
 
 
 
@@ -3067,8 +3082,8 @@ class m_almacen
 
             if ($codmaxBarraInci == null) {
 
-              $valoriniciobara = $codigonum;
-              $valorfinbarra = $codigonum + $cantidad_cajas - 1;
+              $valoriniciobara = $codigonuminci;
+              $valorfinbarra = $codigonuminci + $cantidad_cajas - 1;
               $insertarproducbarra = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS_GRUPO(COD_PRODUCTO,DES_PRODUCTO,N_CAJA,CANTIDAD,ABR_PRODUCTO,BARRA_INI,BARRA_FIN,COD_PRODUCCION,NUM_LOTE,PRODUCCION,FECHA,FEC_VENCIMIENTO,N_PRODUCCION_G)
               VALUES('$codigoproducto','$desprod','$num_cajas','$cantidad_cajas','$abrprod','$valoriniciobara','$valorfinbarra','$codigoproduccion','$num_lote','$codproduccionlote','$dateFecha','$dateFechavencimi','$codproduccionlote')");
 
@@ -3208,10 +3223,10 @@ class m_almacen
           $valorcodrequerimiento = ($consultarequerimientocod['COD_REQUERIMIENTO']);
 
 
-          $actualizaComboProducto = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='C' WHERE COD_PRODUCTO='$codigoproducto' AND COD_REQUERIMIENTO='$valorcodrequerimiento'");
+          $actualizaComboProducto = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='F' WHERE COD_PRODUCTO='$codigoproducto' AND COD_REQUERIMIENTO='$valorcodrequerimiento'");
           $actualizaComboProducto->execute();
 
-          $actualizarRequerimientoItem = $this->bd->prepare("UPDATE T_TMPPRODUCCION SET ESTADO='C' WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
+          $actualizarRequerimientoItem = $this->bd->prepare("UPDATE T_TMPPRODUCCION SET ESTADO='F' WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
           $actualizarRequerimientoItem->execute();
         }
       } else {
