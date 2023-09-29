@@ -2527,8 +2527,6 @@ class c_almacen
             $datos = $mostrar->MostrarEnvasesPorProduccion($codigoproducto, $codigoproduccion, $cantidad);
 
             if ($datos['tipo'] == 0) {
-                //     // throw new Exception("Hubo un error en la consulta.");
-                // }
                 $json = array();
                 foreach ($datos['respuesta'] as $row) {
                     $json['respuesta'][] = array(

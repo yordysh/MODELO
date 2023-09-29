@@ -177,7 +177,7 @@ $(function () {
             Swal.fire({
               title: "¡Supero cantidad!",
               text: "Cantidad supero lo que hay en producción.",
-              html: `<p>${tasks["respuesta"].CANTIDAD_PRODUCIDA}</p>`,
+              html: `<p>La cantidad minima de ${tasks["respuesta"].COD_PRODUCCION} ${tasks["respuesta"].DES_PRODUCTO} es ${tasks["respuesta"].CANTIDAD_PRODUCIDA}</p>`,
               icon: "error",
               confirmButtonText: "Aceptar",
             }).then((result) => {
