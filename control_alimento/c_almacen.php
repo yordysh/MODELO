@@ -2526,44 +2526,40 @@ class c_almacen
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarEnvasesPorProduccion($codigoproducto, $codigoproduccion, $cantidad);
 
-            if (!$datos) {
-                throw new Exception("Hubo un error en la consulta.");
-            }
-            $json = array();
-            foreach ($datos as $row) {
-                $json[] = array(
-                    "COD_COD_FORMULACION" => $row->COD_FORMULACION,
-                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
-                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+            if ($datos['tipo'] == 0) {
+                //     // throw new Exception("Hubo un error en la consulta.");
+                // }
+                $json = array();
+                foreach ($datos['respuesta'] as $row) {
+                    $json['respuesta'][] = array(
+                        "COD_COD_FORMULACION" => $row->COD_FORMULACION,
+                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
 
-                    $CANTIDAD_TOTAL = ceil(($row->CANTIDA * $cantidad) / $row->CANTIDAD_FORMULACION),
-                    "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
+                        $CANTIDAD_TOTAL = ceil(($row->CANTIDA * $cantidad) / $row->CANTIDAD_FORMULACION),
+                        "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
 
-                );
+                    );
+                }
+                $json['tipo'] = 0;
+            } else {
+                $json = array();
+                foreach ($datos['respuesta'] as $row) {
+                    $json['respuesta'] = array(
+                        "COD_PRODUCCION" => $row->COD_PRODUCCION,
+                        "CANTIDAD_PRODUCIDA" => $row->CANTIDAD_PRODUCIDA,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+
+                    );
+                }
+                $json['tipo'] = 1;
             }
             $jsonstring = json_encode($json);
             echo $jsonstring;
         } catch (Exception $e) {
-            $dats = $mostrar->MostrarSobranteEnvasesPorProduccion($codigoproducto, $codigoproduccion);
-            $nuevosValores = array();
 
-            foreach ($dats as $row) {
-                $nuevosValores[] = array(
-                    "COD_PRODUCCION" => $row->COD_PRODUCCION,
-                    "CANTIDAD_PRODUCIDA" => $row->CANTIDAD_PRODUCIDA,
-                    "DES_PRODUCTO" => $row->DES_PRODUCTO
-                );
-            }
 
-            // Enviar solo el nuevo JSON como respuesta
-            $response = array(
-                'success' => true,
-                'nuevosValores' => $nuevosValores
-            );
-
-            echo json_encode($response);
-
-            // echo "Error: " . $e->getMessage();
+            echo "Error: " . $e->getMessage();
         }
     }
 

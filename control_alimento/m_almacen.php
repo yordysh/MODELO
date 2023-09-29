@@ -2839,13 +2839,23 @@ class m_almacen
                                                       INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFE.COD_FORMULACION
                                                       WHERE TFE.COD_FORMULACION='$resultadoformula'");
         $stmformulacionenvase->execute();
-        $datosEnvases = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+        $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+        $respuesta['tipo'] = 0;
+      } else {
+
+        $stmformulacionenvase = $this->bd->prepare("SELECT TPRO.COD_PRODUCCION AS COD_PRODUCCION, TPRO.CANTIDAD_PRODUCIDA AS CANTIDAD_PRODUCIDA, TP.DES_PRODUCTO AS DES_PRODUCTO FROM T_TMPPRODUCCION TPRO 
+        INNER JOIN T_PRODUCTO TP ON TPRO.COD_PRODUCTO=TP.COD_PRODUCTO
+        WHERE TPRO.COD_PRODUCCION='$codigoproduccion' AND TPRO.COD_PRODUCTO='$codigoproducto'");
+        $stmformulacionenvase->execute();
+        $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+        $respuesta['tipo'] = 1;
       }
 
 
 
       $this->bd->commit();
-      return $datosEnvases;
+
+      return $respuesta;
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());

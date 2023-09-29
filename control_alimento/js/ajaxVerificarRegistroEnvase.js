@@ -150,49 +150,46 @@ $(function () {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
 
-          Swal.fire({
-            icon: "success",
-            title: "Calculo de registro",
-            text: "Se añadio correctamente el registro.",
-          });
+          if (tasks["tipo"] == 0) {
+            Swal.fire({
+              icon: "success",
+              title: "Calculo de registro",
+              text: "Se añadio correctamente el registro.",
+            });
 
-          let template = ``;
-          tasks.forEach((task) => {
-            template += `<tr taskId="${task.COD_FORMULACION}">
+            let template = ``;
+            tasks["respuesta"].forEach((task) => {
+              template += `<tr taskId="${task.COD_FORMULACION}">
 
-                                    <td data-titulo="MATERIALES" taskcodigoproducto=${task.COD_PRODUCTO}>${task.DES_PRODUCTO}</td>
-                                    <td data-titulo="CANTIDAD" >${task.CANTIDAD_TOTAL}</td>
-                                    <td data-titulo="LOTE" ><input type='text'/></td>
+                          <td data-titulo="MATERIALES" taskcodigoproducto=${task.COD_PRODUCTO}>${task.DES_PRODUCTO}</td>
+                          <td data-titulo="CANTIDAD" >${task.CANTIDAD_TOTAL}</td>
+                          <td data-titulo="LOTE" ><input type='text'/></td>
 
-                          </tr>`;
-          });
+                </tr>`;
+            });
 
-          $("#tablacalculoregistroenvase").html(template);
-          $("#selectProductoCombo").val("none").trigger("change");
-          $("#selectNumProduccion").val("none").trigger("change");
-          $("#cantidad").val("");
-        } else {
-          Swal.fire({
-            title: "¡Supero cantidad!",
-            text:
-              "Cantidad supero lo que hay en producción." +
-              (response.nuevosValores &&
-              response.nuevosValores.length > 0 &&
-              response.nuevosValores[0].hasOwnProperty("CANTIDAD_PRODUCIDA")
-                ? " Cantidad producida adicional: " +
-                  response.nuevosValores[0].CANTIDAD_PRODUCIDA
-                : ""),
-            icon: "error",
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              $("#cantidad").val("");
-              $("#selectProductoCombo").val("none").trigger("change");
-              $("#selectNumProduccion").val("none").trigger("change");
-              $("#tablacalculoregistroenvase").empty();
-            }
-          });
-          $("#tablacalculoregistroenvase").empty();
+            $("#tablacalculoregistroenvase").html(template);
+            $("#selectProductoCombo").val("none").trigger("change");
+            $("#selectNumProduccion").val("none").trigger("change");
+            $("#cantidad").val("");
+          } else {
+            console.log(tasks);
+            Swal.fire({
+              title: "¡Supero cantidad!",
+              text: "Cantidad supero lo que hay en producción.",
+              html: `<p>${tasks["respuesta"].CANTIDAD_PRODUCIDA}</p>`,
+              icon: "error",
+              confirmButtonText: "Aceptar",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                $("#cantidad").val("");
+                $("#selectProductoCombo").val("none").trigger("change");
+                $("#selectNumProduccion").val("none").trigger("change");
+                $("#tablacalculoregistroenvase").empty();
+              }
+            });
+            $("#tablacalculoregistroenvase").empty();
+          }
         }
       },
       error: function (error) {
