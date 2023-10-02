@@ -74,21 +74,6 @@ $(function () {
     .getElementById("fechavencimiento")
     .setAttribute("min", fechaMinimaFormato);
 
-  // $("#fechainicio").on("blur", function () {
-  //   var fechaProduc = $(this).val();
-  //   var fechaActual = new Date().toISOString().split("T")[0];
-  //   fechaActual.setDate(fechaActual.getDate() - 3);
-  //   if (fechaProduc < fechaActual) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Error de fecha ingresada",
-  //       text: "La fecha es menor a la fecha actual",
-  //     });
-  //     document.getElementById("fechainicio").value = fechaActualFormato;
-  //   }
-  //   $("#fechavencimiento").val("");
-  // });
-
   $("#fechainicio").on("blur", function () {
     var fechaProduc = $(this).val();
     var fechaActual = new Date();
