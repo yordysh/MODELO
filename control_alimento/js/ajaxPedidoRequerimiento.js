@@ -57,7 +57,7 @@ $(function () {
           tasks.forEach((task) => {
             template += `<tr taskId="${task.COD_REQUERIMIENTO}">
                             <td data-titulo='CODIGO' style="text-align:center;">${task.COD_REQUERIMIENTO}</td>
-                            <td data-titulo='CODIGO' style="text-align:center;">${task.FECHA}</td>
+                            <td data-titulo='FECHA' style="text-align:center;">${task.FECHA}</td>
                             <td data-titulo='PENDIENTE' style="text-align:center;"><button class="custom-icon" name="mostrarinsumos" id="mostrarInsumosRequerimiento"><i class="icon-circle-with-plus"></i></button></td>
                             <td data-titulo='RECHAZAR' style="text-align:center;"><button class="btn btn-danger" name="rechazarpedido" id="eliminarinsumorequerimiento"><i class="icon-circle-with-cross"></i></button></td>
                           </tr>`;
@@ -307,7 +307,7 @@ $(function () {
         $(".preloader").css("display", "block");
       },
       success: function (response) {
-        console.log("respuesta" + response);
+        // console.log("respuesta" + response);
         if (response == "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
@@ -344,12 +344,17 @@ $(function () {
     let capturaTrEliminar = $(e.currentTarget).closest("tr");
 
     let cod_requerimiento_pedido = capturaTrEliminar.attr("taskId");
+    let codpersonal = $("#codpersonal").val();
     // console.log(cod_requerimiento);
     const accioneliminar = "rechazarpendienterequerimiento";
 
     Swal.fire({
       title: "¿Está seguro de rechazar este registro?",
       text: "Este pediente contiene varios productos.",
+      html: `<div>
+                <h3>Observación:</h3> 
+                <textarea class="form-control" id="observacion" rows='3' "></textarea>
+              </div>`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -358,12 +363,15 @@ $(function () {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        let observacion = $("#observacion").val();
         $.ajax({
           url: "./c_almacen.php",
           type: "POST",
           data: {
             accion: accioneliminar,
             cod_requerimiento_pedido: cod_requerimiento_pedido,
+            codpersonal: codpersonal,
+            observacion: observacion,
           },
           success: function (response) {
             mostrarPendientes();

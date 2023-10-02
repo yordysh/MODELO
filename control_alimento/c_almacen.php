@@ -415,7 +415,9 @@ if ($accion == 'insertar') {
     echo $respuesta;
 } elseif ($accion == 'rechazarpendienterequerimiento') {
     $cod_requerimiento_pedido = trim($_POST['cod_requerimiento_pedido']);
-    $respuesta = c_almacen::c_rechazar_pendiente_requerimiento($cod_requerimiento_pedido);
+    $codpersonal = trim($_POST['codpersonal']);
+    $observacion = strtoupper(trim($_POST['observacion']));
+    $respuesta = c_almacen::c_rechazar_pendiente_requerimiento($cod_requerimiento_pedido, $codpersonal, $observacion);
     echo $respuesta;
 } elseif ($accion == 'mostrarregistrosporenvases') {
     $codigoproduccion = trim($_POST['codigoproduccion']);
@@ -439,6 +441,21 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'mostrarordencompra') {
 
     $respuesta = c_almacen::c_mostrar_orden_de_compra();
+    echo $respuesta;
+} elseif ($accion == 'mirarordencompra') {
+    // $codpersonal = trim($_POST['codpersonal']);
+    $idcodordencompra = trim($_POST['idcodordencompra']);
+
+    $respuesta = c_almacen::c_mirar_orden_compra($idcodordencompra);
+    echo $respuesta;
+} elseif ($accion == 'aprobarordencompra') {
+    $codpersonal = trim($_POST['codpersonal']);
+    $idcodordencompra = trim($_POST['idcodordencompra']);
+
+    $respuesta = c_almacen::c_aprobar_orden_compra($idcodordencompra, $codpersonal);
+    echo $respuesta;
+} elseif ($accion == 'mostrarordencompraalmacen') {
+    $respuesta = c_almacen::c_mostrar_orden_compra_alerta();
     echo $respuesta;
 } elseif ($accion == 'seleccionarProductoCombo') {
     $idp = $_POST['idp'];
@@ -2502,12 +2519,12 @@ class c_almacen
         }
     }
 
-    static function  c_rechazar_pendiente_requerimiento($cod_requerimiento_pedido)
+    static function  c_rechazar_pendiente_requerimiento($cod_requerimiento_pedido, $codpersonal, $observacion)
     {
         $mostrar = new m_almacen();
 
         if (isset($cod_requerimiento_pedido)) {
-            $respuesta = $mostrar->RechazarPendienteRequerimiento($cod_requerimiento_pedido);
+            $respuesta = $mostrar->RechazarPendienteRequerimiento($cod_requerimiento_pedido, $codpersonal, $observacion);
             if ($respuesta) {
                 return "ok";
             } else {
@@ -2609,6 +2626,71 @@ class c_almacen
             $json = array();
             foreach ($datos as $row) {
                 $json[] = array(
+                    "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    "FECHA" => $row->FECHA,
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_mirar_orden_compra($idcodordencompra)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MirarOrdenCompra($idcodordencompra);
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,
+                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_aprobar_orden_compra($idcodordencompra, $codpersonal)
+    {
+        $m_formula = new m_almacen();
+
+
+        $respuesta = $m_formula->AprobarOrdenCompra($idcodordencompra, $codpersonal);
+
+        if ($respuesta) {
+            return "ok";
+        } else {
+            return "error";
+        };
+    }
+
+    static function c_mostrar_orden_compra_alerta()
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarOrdenDeCompraAlerta();
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,
                     "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
@@ -2621,6 +2703,10 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
+
+
+
+
 
 
     static function c_mostrar_produccion_producto($idp)

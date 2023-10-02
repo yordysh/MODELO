@@ -2311,17 +2311,17 @@ class m_almacen
       // $countTotal = $resultadoTotalInsert['COUNT'];
 
 
-      $stmCodreq = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) as COD_REQUERIMIENTO FROM T_REQUERIMIENTOTEMP");
-      $stmCodreq->execute();
-      $resultadoRe = $stmCodreq->fetch(PDO::FETCH_ASSOC);
-      $maxCodigoRe = intval($resultadoRe['COD_REQUERIMIENTO']);
-      $nuevoCodigoReq = $maxCodigoRe + 1;
-      $codigoAumentoReq = str_pad($nuevoCodigoReq, 8, '0', STR_PAD_LEFT);
+      // $stmCodreq = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) as COD_REQUERIMIENTO FROM T_REQUERIMIENTOTEMP");
+      // $stmCodreq->execute();
+      // $resultadoRe = $stmCodreq->fetch(PDO::FETCH_ASSOC);
+      // $maxCodigoRe = intval($resultadoRe['COD_REQUERIMIENTO']);
+      // $nuevoCodigoReq = $maxCodigoRe + 1;
+      // $codigoAumentoReq = str_pad($nuevoCodigoReq, 8, '0', STR_PAD_LEFT);
 
 
-      $stmtrequerimiento = $this->bd->prepare("INSERT INTO T_REQUERIMIENTOTEMP (COD_REQUERIMIENTO, COD_CATEGORIA, FEC_REQUERIMIENTO, HOR_REQUERIMIENTO, EST_REQUERIMIENTO, USU_REGISTRO, FEC_REGISTRO,MAQUINA)
-                                                VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','P','$codpersonal',GETDATE(),'$maquina')");
-      $stmtrequerimiento->execute();
+      // $stmtrequerimiento = $this->bd->prepare("INSERT INTO T_REQUERIMIENTOTEMP (COD_REQUERIMIENTO, COD_CATEGORIA, FEC_REQUERIMIENTO, HOR_REQUERIMIENTO, EST_REQUERIMIENTO, USU_REGISTRO, FEC_REGISTRO,MAQUINA)
+      //                                           VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','P','$codpersonal',GETDATE(),'$maquina')");
+      // $stmtrequerimiento->execute();
 
 
       $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
@@ -2761,15 +2761,27 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function RechazarPendienteRequerimiento($cod_requerimiento_pedido)
+  public function RechazarPendienteRequerimiento($cod_requerimiento_pedido, $codpersonal, $observacion)
   {
     try {
       $this->bd->beginTransaction();
-      $stm = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='R' WHERE COD_REQUERIMIENTO = '$cod_requerimiento_pedido'");
+      $cod = new m_almacen();
+      $fecha_actual = $cod->c_horaserversql('F');
+      $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
+      $fecha_generado  = $fecha_convertida->format('d/m/Y');
+
+
+      $zonaHorariaPeru = new DateTimeZone('America/Lima');
+      $horaActualPeru = new DateTime('now', $zonaHorariaPeru);
+      $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
+
+
+      $stm = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='R',COD_CONFIRMACION='$codpersonal',FECHA='$fecha_generado',HORA='$horaMinutosSegundos', OBSERVACION='$observacion' WHERE COD_REQUERIMIENTO = '$cod_requerimiento_pedido'");
       $actualizarRequerimiento = $stm->execute();
 
       $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='R' WHERE COD_REQUERIMIENTO = '$cod_requerimiento_pedido'");
       $stmActualizar->execute();
+
 
       $actualizarRequerimiento = $this->bd->commit();
       return $actualizarRequerimiento;
@@ -3323,14 +3335,73 @@ class m_almacen
   public function MostrarOrdenDeCompra()
   {
     try {
-      $stmMostrar = $this->bd->prepare("  SELECT OC.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO,OC.CANTIDAD_INSUMO_ENVASE AS CANTIDAD_INSUMO_ENVASE,
-      OC.CANTIDAD_MINIMA AS CANTIDAD_MINIMA FROM T_TMPORDEN_COMPRA_ITEM OC INNER JOIN T_PRODUCTO TP ON OC.COD_PRODUCTO=TP.COD_PRODUCTO");
+      $stmMostrar = $this->bd->prepare("SELECT COD_ORDEN_COMPRA,COD_REQUERIMIENTO,FECHA FROM T_TMPORDEN_COMPRA WHERE ESTADO='P'");
       $stmMostrar->execute();
       $datos = $stmMostrar->fetchAll(PDO::FETCH_OBJ);
 
       return $datos;
     } catch (Exception $e) {
 
+      die($e->getMessage());
+    }
+  }
+  public function MirarOrdenCompra($idcodordencompra)
+  {
+    try {
+      $stmMostrar = $this->bd->prepare("SELECT OC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, P.DES_PRODUCTO AS DES_PRODUCTO,
+                                         OC.CANTIDAD_INSUMO_ENVASE AS CANTIDAD_INSUMO_ENVASE, OC.CANTIDAD_MINIMA AS CANTIDAD_MINIMA  
+                                         FROM T_TMPORDEN_COMPRA_ITEM OC INNER JOIN T_PRODUCTO P ON OC.COD_PRODUCTO=P.COD_PRODUCTO WHERE OC.COD_ORDEN_COMPRA='$idcodordencompra'");
+
+      $stmMostrar->execute();
+      $datos = $stmMostrar->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+
+      die($e->getMessage());
+    }
+  }
+  public function AprobarOrdenCompra($idcodordencompra, $codpersonal)
+  {
+    try {
+      $this->bd->beginTransaction();
+
+      $stmCodreq = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) as COD_REQUERIMIENTO FROM T_REQUERIMIENTOTEMP");
+      $stmCodreq->execute();
+      $resultadoRe = $stmCodreq->fetch(PDO::FETCH_ASSOC);
+      $maxCodigoRe = intval($resultadoRe['COD_REQUERIMIENTO']);
+      $nuevoCodigoReq = $maxCodigoRe + 1;
+      $codigoAumentoReq = str_pad($nuevoCodigoReq, 8, '0', STR_PAD_LEFT);
+
+      $zonaHorariaPeru = new DateTimeZone('America/Lima');
+      $horaActualPeru = new DateTime('now', $zonaHorariaPeru);
+      $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
+
+      $maquina = os_info();
+
+
+      $stmtrequerimiento = $this->bd->prepare("INSERT INTO T_REQUERIMIENTOTEMP (COD_REQUERIMIENTO, COD_CATEGORIA, FEC_REQUERIMIENTO, HOR_REQUERIMIENTO, EST_REQUERIMIENTO, USU_REGISTRO, FEC_REGISTRO,MAQUINA)
+                                                VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','R','$codpersonal',GETDATE(),'$maquina')");
+      $stmtrequerimiento->execute();
+
+
+      $stmtrequerimiento = $this->bd->commit();
+      return $stmtrequerimiento;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+  public function MostrarOrdenDeCompraAlerta()
+  {
+    try {
+
+      $stmOrdenCompra = $this->bd->prepare("");
+      $stmOrdenCompra->execute();
+      $datos = $stmOrdenCompra->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
       die($e->getMessage());
     }
   }

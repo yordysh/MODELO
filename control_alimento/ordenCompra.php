@@ -1,4 +1,10 @@
 <?php
+session_start();
+
+// $codusuario = $_SESSION["cod"];
+$codusuario = 'Raul';
+?>
+<?php
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
@@ -86,15 +92,32 @@ $mostrar = new m_almacen();
 
                 <div class="main">
                     <form method="post" action="" id="formularioOrdenCompra">
-
+                        <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">
                         <!-- Tabla total orden de compra-->
+                        <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
+                            <table id="tOrdenComprarequerimiento" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="" scope="col">CODIGO REQUERIMIENTO</th>
+                                        <th class="" scope="col">FECHA</th>
+                                        <th class="" scope="col">MIRAR</th>
+                                        <th class="" scope="col">APROBAR</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaordencomprarequerimiento">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--------------------------------->
+                        <!-- Tabla total ORDEN DE COMPRA ITEM-->
                         <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
                             <table id="tOrdenCompra" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
                                         <th class="" scope="col">INSUMOS</th>
                                         <th class="" scope="col">CANTIDAD FALTANTE</th>
-                                        <th class="" scope="col">CANTIDAD POR COMPRA</th>
+                                        <th class="" scope="col">CANTIDAD POR COMPRAR</th>
 
                                     </tr>
                                 </thead>
@@ -103,6 +126,7 @@ $mostrar = new m_almacen();
                                 </tbody>
                             </table>
                         </div>
+                        <!--------------------------------->
                     </form>
 
                 </div>

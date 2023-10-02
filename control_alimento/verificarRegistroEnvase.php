@@ -169,6 +169,9 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
 
                         <div id="tablaRE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
                             <table id="tbRE" class="table table-sm mb-3 table-hover">
+                                <div class="row g-4 top-div">
+                                    <label class="title_table">TOTAL DE PRODUCTOS</label>
+                                </div>
                                 <thead>
                                     <tr>
                                         <th class="" scope="col">MATERIALES</th>
