@@ -67,23 +67,40 @@ $(function () {
 
   var fechaAct = new Date();
   var siguienteAnio = fechaAct.getFullYear() + 1;
-  // Calcula el siguiente año
+
   var fechaMin = new Date(siguienteAnio, 0, 1);
   var fechaMinimaFormato = fechaMin.toISOString().slice(0, 10);
   var fechvencimin = document
     .getElementById("fechavencimiento")
     .setAttribute("min", fechaMinimaFormato);
 
+  // $("#fechainicio").on("blur", function () {
+  //   var fechaProduc = $(this).val();
+  //   var fechaActual = new Date().toISOString().split("T")[0];
+  //   fechaActual.setDate(fechaActual.getDate() - 3);
+  //   if (fechaProduc < fechaActual) {
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Error de fecha ingresada",
+  //       text: "La fecha es menor a la fecha actual",
+  //     });
+  //     document.getElementById("fechainicio").value = fechaActualFormato;
+  //   }
+  //   $("#fechavencimiento").val("");
+  // });
+
   $("#fechainicio").on("blur", function () {
     var fechaProduc = $(this).val();
-    var fechaActual = new Date().toISOString().split("T")[0];
-    if (fechaProduc < fechaActual) {
+    var fechaActual = new Date();
+    fechaActual.setDate(fechaActual.getDate() - 3);
+    var fechaLimite = fechaActual.toISOString().split("T")[0];
+
+    if (fechaProduc < fechaLimite) {
       Swal.fire({
         icon: "error",
         title: "Error de fecha ingresada",
-        text: "La fecha es menor a la fecha actual",
+        text: "La fecha es menor a la fecha actual o está dentro de los últimos 3 días.",
       });
-      // $(this).val("");
       document.getElementById("fechainicio").value = fechaActualFormato;
     }
     $("#fechavencimiento").val("");

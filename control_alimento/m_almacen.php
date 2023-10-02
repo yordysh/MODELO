@@ -3065,6 +3065,9 @@ class m_almacen
             $fecha_datetime_venci = DateTime::createFromFormat($formato, $codfechavencimi);
             $dateFechavencimi = $fecha_datetime_venci->format('d/m/Y');
 
+
+            $codigo_barra_inicio = intval(substr($valoriniciobarra, 3));
+
             if ($cantidad >= $valorcancaja) {
               $num_lote_cajas = trim(str_pad($valorresultanteestraiEls, 5, '0', STR_PAD_LEFT));
               $num_lote = '-' . trim($abrprod) . $num_lote_cajas;
@@ -3085,11 +3088,11 @@ class m_almacen
               $num_lote = '-' . trim($abrprod) . $num_lote_cajas;
 
               if ($codbarrainicioif == null) {
-                $valoriniciobara = $codigonuminci;
-                $valorfinbarra = $codigonuminci + $cantidad - 1;
+                $valoriniciobara = $codigo_barra_inicio;
+                $valorfinbarra = $codigo_barra_inicio + $valorcancaja - 1;
               } else {
                 $valoriniciobara = $codbarrainicioif + $valorcancaja;
-                $valorfinbarra = $valoriniciobara + $cantidad - 1;
+                $valorfinbarra = $valoriniciobara + $valorcancaja - 1;
               }
 
               $insertarproducbarra = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS_GRUPO(COD_PRODUCTO,DES_PRODUCTO,N_CAJA,CANTIDAD,ABR_PRODUCTO,BARRA_INI,BARRA_FIN,COD_PRODUCCION,NUM_LOTE,PRODUCCION,FECHA,FEC_VENCIMIENTO,N_PRODUCCION_G)
@@ -3179,13 +3182,25 @@ class m_almacen
             $fecha_datetime_venci = DateTime::createFromFormat($formato, $codfechavencimi);
             $dateFechavencimi = $fecha_datetime_venci->format('d/m/Y');
 
+            $stmcodigoAumEls = $this->bd->prepare("SELECT MAX(NUM_LOTE) AS NUM_LOTE  FROM T_TMPPRODUCCION_BARRAS_GRUPO WHERE COD_PRODUCTO='$codigoproducto'");
+            $stmcodigoAumEls->execute();
+            $codigogenEls = $stmcodigoAumEls->fetch(PDO::FETCH_ASSOC);
+            $valorpuestoEls = $codigogenEls['NUM_LOTE'];
+            // var_dump($valorpuestoEls);
+            $extraccionvalor = intval(substr($valorpuestoEls, 4));
+
+            $sum = $extraccionvalor + 1;
+
+
+            $codigo_barra_inicio_els = intval(substr($valoriniciobarra, 3));
+
             if ($cantidad >= $valorcancajaEls) {
-              $num_lote_cajas = trim(str_pad($num_cajas_else, 5, '0', STR_PAD_LEFT));
+              $num_lote_cajas = trim(str_pad($sum, 5, '0', STR_PAD_LEFT));
               $num_lote = '-' . trim($abrprod) . $num_lote_cajas;
 
               if ($codbarrainicioels == null) {
-                $valoriniciobaraif = $codigonumero;
-                $valorfinbarraif = $codigonumero + $valorcancajaEls - 1;
+                $valoriniciobaraif = $codigo_barra_inicio_els;
+                $valorfinbarraif = $codigo_barra_inicio_els + $valorcancajaEls - 1;
               } else {
                 $valoriniciobaraif = $codbarrainicioels + $valorcancajaEls;
                 $valorfinbarraif = $valoriniciobaraif + $valorcancajaEls - 1;
@@ -3194,15 +3209,15 @@ class m_almacen
               VALUES('$codigoproducto','$desprod','$num_cajas_else','$valorcancajaEls','$abrprod','$valoriniciobaraif','$valorfinbarraif','$codigoproduccion','$num_lote','$codproduccionlote',GETDATE(),'$dateFechavencimi','$codproduccionlote')");
               $cantidad = $cantidad - $valorcancajaEls;
             } else {
-              $num_lote_cajas = trim(str_pad($num_cajas_else, 5, '0', STR_PAD_LEFT));
+              $num_lote_cajas = trim(str_pad($sum, 5, '0', STR_PAD_LEFT));
               $num_lote = '-' . trim($abrprod) . $num_lote_cajas;
 
               if ($codbarrainicioels == null) {
                 $valoriniciobara = $codigonumero;
-                $valorfinbarraEls = $codigonumero + $cantidad - 1;
+                $valorfinbarraEls = $codigonumero + $valorcancajaEls - 1;
               } else {
                 $valoriniciobara = $codbarrainicioels + $valorcancajaEls;
-                $valorfinbarraEls = $valoriniciobara + $cantidad - 1;
+                $valorfinbarraEls = $valoriniciobara + $valorcancajaEls - 1;
               }
 
               $insertarproducbarra = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS_GRUPO(COD_PRODUCTO,DES_PRODUCTO,N_CAJA,CANTIDAD,ABR_PRODUCTO,BARRA_INI,BARRA_FIN,COD_PRODUCCION,NUM_LOTE,PRODUCCION,FECHA,FEC_VENCIMIENTO,N_PRODUCCION_G)
