@@ -3381,8 +3381,11 @@ class m_almacen
 
 
       $stmtrequerimiento = $this->bd->prepare("INSERT INTO T_REQUERIMIENTOTEMP (COD_REQUERIMIENTO, COD_CATEGORIA, FEC_REQUERIMIENTO, HOR_REQUERIMIENTO, EST_REQUERIMIENTO, USU_REGISTRO, FEC_REGISTRO,MAQUINA)
-                                                VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','R','$codpersonal',GETDATE(),'$maquina')");
+                                                VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','P','$codpersonal',GETDATE(),'$maquina')");
       $stmtrequerimiento->execute();
+
+      $stmactualiza = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='T' WHERE COD_ORDEN_COMPRA='$idcodordencompra'");
+      $stmactualiza->execute();
 
 
       $stmtrequerimiento = $this->bd->commit();
@@ -3396,7 +3399,7 @@ class m_almacen
   {
     try {
 
-      $stmOrdenCompra = $this->bd->prepare("");
+      $stmOrdenCompra = $this->bd->prepare("SELECT * FROM T_TMPORDEN_COMPRA_ITEM");
       $stmOrdenCompra->execute();
       $datos = $stmOrdenCompra->fetchAll();
 

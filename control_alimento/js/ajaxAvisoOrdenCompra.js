@@ -1,5 +1,6 @@
 $(function () {
   const accion = "mostrarordencompraalmacen";
+
   $.ajax({
     url: "./c_almacen.php",
     type: "POST",

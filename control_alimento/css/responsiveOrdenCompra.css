@@ -118,11 +118,17 @@ section {
 .custom-icon {
   background-color: #007bff;
   color: white;
-  padding: 8px;
+  padding: 4px 8px;
   border-radius: 40%;
   border: none;
 }
-
+.custom-eyes {
+  background-color: #18b347;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 50%;
+  border: none;
+}
 /* --------------------------------------------------------------- */
 
 /*-------------- Estilo de MENUBAR ---------------------*/

@@ -85,7 +85,7 @@ $(function () {
             template += `<tr id_orden_compra='${task.COD_ORDEN_COMPRA}'>
                             <td data-titulo='CODIGO REQUERIMIENTO'>${task.COD_REQUERIMIENTO}</td>
                             <td data-titulo='FECHA'>${task.FECHA}</td>
-                            <td data-titulo='VER' style="text-align:center;"><button class="custom-icon" name="mirarcompra" id="mirarcompra"><i class="icon-eye"></i></button></td>
+                            <td data-titulo='VER' style="text-align:center;"><button class="custom-eyes" name="mirarcompra" id="mirarcompra"><i class="icon-eye"></i></button></td>
                             <td data-titulo='APROBAR' style="text-align:center;"><button class="custom-icon" name="aprobarinsumos" id="aprobarcompra"><i class="icon-check"></i></button></td>
                           </tr>`;
           });

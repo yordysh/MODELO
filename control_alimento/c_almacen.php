@@ -455,6 +455,7 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_aprobar_orden_compra($idcodordencompra, $codpersonal);
     echo $respuesta;
 } elseif ($accion == 'mostrarordencompraalmacen') {
+    // $idcodordencompra = trim($_POST['idcodordencompra']);
     $respuesta = c_almacen::c_mostrar_orden_compra_alerta();
     echo $respuesta;
 } elseif ($accion == 'seleccionarProductoCombo') {
