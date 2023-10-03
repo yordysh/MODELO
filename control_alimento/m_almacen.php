@@ -3399,9 +3399,12 @@ class m_almacen
   {
     try {
 
-      $stmOrdenCompra = $this->bd->prepare("SELECT * FROM T_TMPORDEN_COMPRA_ITEM");
+      $stmOrdenCompra = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TCI.COD_PRODUCTO AS COD_PRODUCTO,
+      TP.ABR_PRODUCTO AS ABR_PRODUCTO  FROM T_TMPORDEN_COMPRA TOC 
+      INNER JOIN T_TMPORDEN_COMPRA_ITEM TCI ON TOC.COD_ORDEN_COMPRA=TCI.COD_ORDEN_COMPRA
+      INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TCI.COD_PRODUCTO WHERE TOC.ESTADO='P'");
       $stmOrdenCompra->execute();
-      $datos = $stmOrdenCompra->fetchAll();
+      $datos = $stmOrdenCompra->fetchAll(PDO::FETCH_OBJ);
 
       return $datos;
     } catch (Exception $e) {

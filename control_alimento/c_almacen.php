@@ -2688,13 +2688,12 @@ class c_almacen
                 throw new Exception("Hubo un error en la consulta");
             }
             $json = array();
+
             foreach ($datos as $row) {
                 $json[] = array(
                     "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
                     "COD_PRODUCTO" => $row->COD_PRODUCTO,
-                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                    "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,
-                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                    "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
 
                 );
             }

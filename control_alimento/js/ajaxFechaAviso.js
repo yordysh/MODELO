@@ -23,15 +23,18 @@ $(function () {
     try {
       await alerta();
     } catch (error) {
-      // console.error("Error executing alerta():", error);
       console.error("Error executing alerta():");
     }
 
     try {
       await alertaControl();
     } catch (error) {
-      // console.error("Error executing alertaControl():", error);
       console.error("Error executing alertaControl():");
+    }
+    try {
+      await alertaOrdenCompra();
+    } catch (error) {
+      console.error("Error executing alertaORdenCompra");
     }
 
     console.log("All alert functions executed!");
@@ -543,6 +546,40 @@ $(function () {
           reject(errorThrown);
         },
       });
+    });
+  }
+  async function alertaOrdenCompra() {
+    const accion = "mostrarordencompraalmacen";
+
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: { accion: accion },
+      success: function (response) {
+        let task = JSON.parse(response);
+        console.log(task);
+        let htmlContent = "<h1>Productos por comprar</h1>";
+        htmlContent += "<ul>";
+        task.forEach(function (producto) {
+          htmlContent +=
+            "<li style='list-style:none;'>" +
+            producto.COD_ORDEN_COMPRA +
+            ":" +
+            producto.ABR_PRODUCTO +
+            "</li>";
+        });
+        htmlContent += "</ul>";
+        Swal.fire({
+          title: "Compra de insumos",
+          icon: "question",
+          html: htmlContent,
+          confirmButtonText: "Ok",
+          showCloseButton: true,
+        });
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
     });
   }
 
