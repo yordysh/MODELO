@@ -161,6 +161,7 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               cargarOrdenCompra();
+              $("#tablatotalordencompra").empty();
             }
           });
         }
