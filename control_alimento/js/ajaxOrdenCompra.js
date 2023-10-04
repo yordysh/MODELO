@@ -11,7 +11,7 @@ $(function () {
   }
   //-------------------------------------------//
 
-  cargarOrdenCompra();
+  cargarOrdenCompraAprobada();
 
   //------------- MENU BAR JS ---------------//
   let nav = document.querySelector(".nav"),
@@ -40,38 +40,9 @@ $(function () {
     nav.classList.remove("openNav");
   });
   //----------------------------------------------------------------//
-
-  // function cargarOrdenCompra() {
-  //   const accion = "mostrarordencompra";
-
-  //   $.ajax({
-  //     url: "./c_almacen.php",
-  //     type: "POST",
-  //     data: { accion: accion },
-  //     success: function (response) {
-  //       if (isJSON(response)) {
-  //         let tasks = JSON.parse(response);
-  //         let template = ``;
-  //         tasks.forEach((task) => {
-  //           template += `<tr id_orden_compra='${task.COD_ORDEN_COMPRA}'>
-  //                           <td data-titulo='INSUMOS' id_producto_compra='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
-  //                           <td data-titulo='CANTIDAD FALTANTE'>${task.CANTIDAD_INSUMO_ENVASE}</td>
-  //                           <td data-titulo='CANTIDAD POR COMPRAR'>${task.CANTIDAD_MINIMA}</td>
-  //                           <td data-titulo='APROBAR' style="text-align:center;"><button class="custom-icon" name="aprobarinsumos" id="aprobarcompra"><i class="icon-check"></i></button></td>
-  //                        </tr>`;
-  //         });
-  //         $("#tablatotalordencompra").html(template);
-  //       } else {
-  //         $("#tablatotalordencompra").empty();
-  //       }
-  //     },
-  //     error: function (xhr, status, error) {
-  //       console.error("Error al cargar los datos de la tabla:", error);
-  //     },
-  //   });
-  // }
-  function cargarOrdenCompra() {
-    const accion = "mostrarordencompra";
+  /*---------Cargar la orden de compra aprobada------------------- */
+  function cargarOrdenCompraAprobada() {
+    const accion = "mostrarordencompraaprobada";
 
     $.ajax({
       url: "./c_almacen.php",
@@ -82,16 +53,17 @@ $(function () {
           let tasks = JSON.parse(response);
           let template = ``;
           tasks.forEach((task) => {
-            template += `<tr id_orden_compra='${task.COD_ORDEN_COMPRA}'>
-                            <td data-titulo='CODIGO REQUERIMIENTO'>${task.COD_REQUERIMIENTO}</td>
+            template += `<tr id_orden_compra_aprobada='${task.COD_ORDEN_COMPRA}'>
+                            <td data-titulo='CODIGO'>${task.COD_REQUERIMIENTO}</td>
                             <td data-titulo='FECHA'>${task.FECHA}</td>
-                            <td data-titulo='VER' style="text-align:center;"><button class="custom-eyes" name="mirarcompra" id="mirarcompra"><i class="icon-eye"></i></button></td>
-                            <td data-titulo='APROBAR' style="text-align:center;"><button class="custom-icon" name="aprobarinsumos" id="aprobarcompra"><i class="icon-check"></i></button></td>
+                            <td data-titulo='PERSONAL'>${task.NOM_PERSONAL}</td>
+                           
+                            <td style="text-align:center;"><button class="custom-icon"  id="aprobarcompraaprobada"><i class="icon-check"></i></button></td>
                           </tr>`;
           });
-          $("#tablaordencomprarequerimiento").html(template);
+          $("#tablamostarcomprasaprobadas").html(template);
         } else {
-          $("#tablaordencomprarequerimiento").empty();
+          $("#tablamostarcomprasaprobadas").empty();
         }
       },
       error: function (xhr, status, error) {
@@ -99,79 +71,31 @@ $(function () {
       },
     });
   }
-  /*-----------------------Mirar compra------------------------- */
-  $(document).on("click", "#mirarcompra", (e) => {
-    e.preventDefault();
-    let idcodordencompra = $("#tablaordencomprarequerimiento tr").attr(
-      "id_orden_compra"
-    );
-    const accion = "mirarordencompra";
-
-    $.ajax({
-      url: "./c_almacen.php",
-      type: "POST",
-      data: { accion: accion, idcodordencompra: idcodordencompra },
-      success: function (response) {
-        if (isJSON(response)) {
-          let tasks = JSON.parse(response);
-          console.log(tasks);
-          let template = ``;
-          tasks.forEach((task) => {
-            template += `<tr>
-                            <td data-titulo='INSUMOS'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo='CANTIDAD  FALTANTE'>${task.CANTIDAD_INSUMO_ENVASE}</td>
-                            <td data-titulo='CANTIDAD POR COMPRAR'>${task.CANTIDAD_MINIMA}</td>
-                         </tr>`;
-          });
-          $("#tablatotalordencompra").html(template);
-        } else {
-          $("#tablatotalordencompra").empty();
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error al cargar los datos de la tabla:", error);
-      },
-    });
-  });
   /*--------------------------------------------------------------*/
-  /*-----------------------Aprobar compra------------------------- */
-  $(document).on("click", "#aprobarcompra", (e) => {
+  /*-------mostrar campos de orden de compra--------------------*/
+  $(document).on("click", "#aprobarcompraaprobada", (e) => {
     e.preventDefault();
-    let idcodordencompra = $("#tablaordencomprarequerimiento tr").attr(
-      "id_orden_compra"
-    );
-    let codpersonal = $("#codpersonal").val();
-    const accion = "aprobarordencompra";
-
-    $.ajax({
-      url: "./c_almacen.php",
-      type: "POST",
-      data: {
-        accion: accion,
-        idcodordencompra: idcodordencompra,
-        codpersonal: codpersonal,
-      },
-      success: function (response) {
-        if (response == "ok") {
-          Swal.fire({
-            title: "¡Guardado exitoso!",
-            text: "Los datos se han guardado correctamente.",
-            icon: "success",
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              cargarOrdenCompra();
-              $("#tablatotalordencompra").empty();
-            }
-          });
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error al cargar los datos de la tabla:", error);
-      },
-    });
+    console.log("object");
   });
-  /*--------------------------------------------------------------*/
+  /*---------------------------------------------------------- */
+  /*-------------------- Guardar datos modal----------------- */
+  $("#ponerproveedor").on("click", (e) => {
+    e.preventDefault();
+    console.log("object");
+
+    var nombreProveedor = $("#nombreproveedor").val();
+    var direccionProveedor = $("#direccionproveedor").val();
+    var ruc = $("#ruc").val();
+    var dniProveedor = $("#dniproveedor").val();
+
+    $("#proveedor").val(nombreProveedor);
+    $("#direccion").val(direccionProveedor);
+    $("#ruc_principal").val(ruc);
+    $("#dni_principal").val(dniProveedor);
+
+    $("#mostrarproveedor").modal("hide");
+  });
+  /*-------------------------------------------------------- */
 });
 function isJSON(str) {
   try {

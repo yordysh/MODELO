@@ -1,8 +1,16 @@
 <?php
+session_start();
+
+// $codusuario = $_SESSION["cod"];
+// $codoficina = $_SESSION["ofi"];
+
+$codusuario = '00004';
+?>
+<?php
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
+
 
 ?>
 <!DOCTYPE html>
@@ -13,7 +21,7 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/responsivePO.css">
+    <link rel="stylesheet" href="./css/responsiveOrdenCompra.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
 
@@ -59,14 +67,11 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
                 <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
             <li>
-                <a class="" href="solicitaCompra.php">Solicitar compra</a>
+                <a class="activo" href="#">Solicitar compra</a>
             </li>
             <li>
-                <a class="activo" href="#">Cantidad mínima</a>
+                <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
             </li>
-            <!-- <li>
-                <a class="" href="registroEnvases.php">Registros envases</a>
-            </li> -->
             <li>
                 <a class="" href="produccionRequerimiento.php">Producción</a>
             </li>
@@ -74,7 +79,6 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
                 <a class="" href="verificarRegistroEnvase.php">Avance producción</a>
             </li>
         </ul>
-
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
         <div class="search-box">
             <i class="icon-magnifying-glass search-icon"></i>
@@ -85,53 +89,48 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
         <section>
             <div class="container g-4 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">CANTIDAD MINIMA DE COMPRA</label></center>
+                    <center><label class="title">ORDEN DE COMPRAS</label></center>
                 </div>
+
                 <div class="main">
-                    <form method="post" action="" id="formulariocantidadminima">
+                    <form method="post" action="" id="formularioOrdenCompra">
+                        <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">
 
-                        <!-- Insertar nuevas cantidades -->
-                        <div class="contenedor">
-                            <div class="mb-3">
-                                <label class="form-label">Productos</label>
-                                <select id="selectCantidadminima" class="form-select" aria-label="Default select example">
-                                    <option value="none" selected disabled>Seleccione producto</option>
-                                    <?php foreach ($dataCantidadMinima as $lis) {
-                                    ?>
-                                        <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['ABR_PRODUCTO'] . " "; ?> <?php echo $lis['DES_PRODUCTO']; ?></option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Cantidad minima</label>
-                                <input class="form-control" type="number" id="cantidadMinima" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required></input>
-                            </div>
+                        <!-- Tabla total orden de compra-->
+                        <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
+                            <table id="tOrdenComprarequerimiento" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="" scope="col">CODIGO REQUERIMIENTO</th>
+                                        <th class="" scope="col">FECHA</th>
+                                        <th class="" scope="col">MIRAR</th>
+                                        <th class="" scope="col">APROBAR</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaordencomprarequerimiento">
+
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="">
-                            <input type="hidden" id="taskId">
-                            <button id="botonminimo" type="submit" name="insert" class="btn btn-primary bt-insert">Guardar </button>
+                        <!--------------------------------->
+                        <!-- Tabla total ORDEN DE COMPRA ITEM-->
+                        <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
+                            <table id="tOrdenCompra" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="" scope="col">INSUMOS</th>
+                                        <th class="" scope="col">CANTIDAD FALTANTE</th>
+                                        <th class="" scope="col">CANTIDAD POR COMPRAR</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="tablatotalordencompra">
+
+                                </tbody>
+                            </table>
                         </div>
+                        <!--------------------------------->
                     </form>
-                    <!-- Tabla de insumos que se requiere-->
-                    <div class="table-responsive" style="overflow: scroll;height: 300px; margin-top:20px;">
-                        <table id="tcantidadminima" class="table table-sm mb-3 table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="" scope="col">INSUMOS</th>
-                                    <th class="" scope="col">CANTIDAD</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablacantidadminima">
-
-                            </tbody>
-                        </table>
-                    </div>
-
-
-
 
                 </div>
             </div>
@@ -143,7 +142,7 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxCantidadMinima.js"></script>
+    <script src="./js/ajaxSolicitaCompra.js"></script>
     <script src="./js/select2.min.js"></script>
 </body>
 

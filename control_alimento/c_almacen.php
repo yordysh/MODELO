@@ -450,6 +450,7 @@ if ($accion == 'insertar') {
     echo $respuesta;
 } elseif ($accion == 'aprobarordencompra') {
     $codpersonal = trim($_POST['codpersonal']);
+
     $idcodordencompra = trim($_POST['idcodordencompra']);
 
     $respuesta = c_almacen::c_aprobar_orden_compra($idcodordencompra, $codpersonal);
@@ -465,6 +466,9 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'actualizarcomboproduccionproducto') {
 
     $respuesta = c_almacen::c_actualizar_combo_produccion_producto();
+    echo $respuesta;
+} elseif ($accion == 'mostrarordencompraaprobada') {
+    $respuesta = c_almacen::c_mostrar_orden_compra_aprobada();
     echo $respuesta;
 }
 
@@ -2629,7 +2633,7 @@ class c_almacen
                 $json[] = array(
                     "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
                     "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-                    "FECHA" => $row->FECHA,
+                    "FECHA" => convFecSistema($row->FECHA),
                 );
             }
             $jsonstring = json_encode($json);
@@ -2743,6 +2747,35 @@ class c_almacen
                     "DES_PRODUCTO" => $row['DES_PRODUCTO'],
                     "ABR_PRODUCTO" => $row['ABR_PRODUCTO'],
 
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+
+
+    static function  c_mostrar_orden_compra_aprobada()
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarOrdenDeCompraAprobada();
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    "FECHA" => convFecSistema($row->FECHA),
+                    "NOM_PERSONAL" => $row->NOM_PERSONAL,
+                    "OFICINA" => $row->OFICINA,
                 );
             }
             $jsonstring = json_encode($json);

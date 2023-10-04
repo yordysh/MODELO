@@ -243,12 +243,11 @@ $(function () {
     e.preventDefault();
 
     let valoresCapturadosVenta = [];
-    // let taskcodvalor = $("#taskcodrequerimiento").val().trim();
 
     let idRequerimiento = $("#tablaproductorequerido tr").attr(
       "codigorequerimiento"
     );
-    // console.log(idRequerimiento);
+
     let tablainsumorequerido = $("#tablaproductorequerido");
     let tablainsumos = $("#tablainsumorequerido");
     let tablatotal = $("#tablatotalinsumosrequeridoscomprar");

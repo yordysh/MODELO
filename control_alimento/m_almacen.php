@@ -1248,9 +1248,7 @@ class m_almacen
   }
   public function actualizarAlertaCheckControl($estado, $taskId, $observacion, $accionCorrectiva)
   {
-    // var_dump($taskId);
     $stmt = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET ESTADO = '$estado', OBSERVACION = '$observacion', ACCION_CORRECTIVA ='$accionCorrectiva' WHERE COD_ALERTA_CONTROL_MAQUINA = '$taskId'");
-    // var_dump($stmt);
     $stmt->execute();
     return $stmt;
   }
@@ -1297,10 +1295,6 @@ class m_almacen
   {
     try {
 
-      // $stm = $this->bd->prepare("SELECT COD_ZONA,NOMBRE_T_ZONA_AREAS FROM T_ZONA_AREAS");
-      // $stm->execute();
-      // $datos = $stm->fetchAll();
-      // return $datos;
       $stm = $this->bd->prepare("SELECT COD_ZONA, NOMBRE_T_ZONA_AREAS FROM T_ZONA_AREAS WHERE NOMBRE_T_ZONA_AREAS LIKE '$term%' ");
       $stm->execute();
       $datos = $stm->fetchAll();
@@ -1355,28 +1349,10 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  // public function  MostrarProductoabreviaturaCombo($term)
-  // {
-  //   try {
 
-  //     $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE ABR_PRODUCTO LIKE '$term%' ");
-  //     $stm->execute();
-  //     $datos = $stm->fetchAll();
 
-  //     $json = array();
-  //     foreach ($datos as $dato) {
-  //       $json[] = array(
-  //         "id" => $dato['COD_PRODUCTO'],
-  //         "nombre" => $dato['DES_PRODUCTO'],
-  //         "label" => $dato['ABR_PRODUCTO']
-  //       );
-  //     }
 
-  //     return $json;
-  //   } catch (Exception $e) {
-  //     die($e->getMessage());
-  //   }
-  // }
+
 
   public function contarRegistrosLabsabell($cod_labsabell, $valorSel)
   {
@@ -2266,9 +2242,9 @@ class m_almacen
 
 
 
-      $zonaHorariaPeru = new DateTimeZone('America/Lima');
-      $horaActualPeru = new DateTime('now', $zonaHorariaPeru);
-      $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
+      // $zonaHorariaPeru = new DateTimeZone('America/Lima');
+      // $horaActualPeru = new DateTime('now', $zonaHorariaPeru);
+      // $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
 
 
       $fecha_actual = $cod->c_horaserversql('F');
@@ -2277,10 +2253,10 @@ class m_almacen
       // $fecha_actual = '20/09/2023';
       // $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
-      $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,COD_REQUERIMIENTO,FECHA)
-                                                VALUES ('$codigo_orden_compra','$idRequerimiento','$fecha_generado_orden_compra')");
+      $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,FECHA)
+                                                VALUES ('$codigo_orden_compra','$fecha_generado_orden_compra')");
       $insert = $stmPedidoCompras->execute();
-
+      $cantidad_minima = 0;
       for ($i = 0; $i < count($union); $i += 3) {
         $codProducto = $union[$i];
         $canInsu = ($union[$i + 1]);
@@ -2290,8 +2266,10 @@ class m_almacen
         $stmPedidoOrden = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA_ITEM(COD_ORDEN_COMPRA,COD_PRODUCTO,CANTIDAD_MINIMA,CANTIDAD_INSUMO_ENVASE)
                                                   VALUES ('$codigo_orden_compra','$codProducto','$canMinInsu','$canInsu')");
         $insert = $stmPedidoOrden->execute();
+        $cantidad_minima = $cantidad_minima + $canMinInsu;
       }
-
+      $stmActualizarordencompra = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET CANTIDAD='$cantidad_minima' WHERE COD_ORDEN_COMPRA='$codigo_orden_compra'");
+      $stmActualizarordencompra->execute();
 
 
       $fecha_actual = $cod->c_horaserversql('F');
@@ -2302,26 +2280,9 @@ class m_almacen
       // $fecha_actual = '20/09/2023';
       // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
-      $maquina = os_info();
+      // $maquina = os_info();
       // $maquina = 'user';
 
-      // $totalInsert = $this->bd->prepare("SELECT COUNT(*) as COUNT FROM T_TMPREQUERIMIENTO_ITEM WHERE COD_REQUERIMIENTO='$idRequerimiento'");
-      // $totalInsert->execute();
-      // $resultadoTotalInsert = $totalInsert->fetch(PDO::FETCH_ASSOC);
-      // $countTotal = $resultadoTotalInsert['COUNT'];
-
-
-      // $stmCodreq = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) as COD_REQUERIMIENTO FROM T_REQUERIMIENTOTEMP");
-      // $stmCodreq->execute();
-      // $resultadoRe = $stmCodreq->fetch(PDO::FETCH_ASSOC);
-      // $maxCodigoRe = intval($resultadoRe['COD_REQUERIMIENTO']);
-      // $nuevoCodigoReq = $maxCodigoRe + 1;
-      // $codigoAumentoReq = str_pad($nuevoCodigoReq, 8, '0', STR_PAD_LEFT);
-
-
-      // $stmtrequerimiento = $this->bd->prepare("INSERT INTO T_REQUERIMIENTOTEMP (COD_REQUERIMIENTO, COD_CATEGORIA, FEC_REQUERIMIENTO, HOR_REQUERIMIENTO, EST_REQUERIMIENTO, USU_REGISTRO, FEC_REGISTRO,MAQUINA)
-      //                                           VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','P','$codpersonal',GETDATE(),'$maquina')");
-      // $stmtrequerimiento->execute();
 
 
       $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
@@ -3384,7 +3345,10 @@ class m_almacen
                                                 VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','P','$codpersonal',GETDATE(),'$maquina')");
       $stmtrequerimiento->execute();
 
-      $stmactualiza = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='T' WHERE COD_ORDEN_COMPRA='$idcodordencompra'");
+      // $stmactualiza = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='T' WHERE COD_ORDEN_COMPRA='$idcodordencompra'");
+      // $stmactualiza->execute();
+
+      $stmactualiza = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET COD_REQUERIMIENTO='$codigoAumentoReq' WHERE COD_ORDEN_COMPRA='$idcodordencompra'");
       $stmactualiza->execute();
 
 
@@ -3427,6 +3391,24 @@ class m_almacen
 
       $stm->execute();
       $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
+
+  public function MostrarOrdenDeCompraAprobada()
+  {
+    try {
+
+      $stmOrdenCompraAprobada = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TOC.FECHA AS FECHA,TP.NOM_PERSONAL AS NOM_PERSONAL,TOC.OFICINA AS OFICINA  FROM T_TMPORDEN_COMPRA  TOC
+                                                      INNER JOIN T_REQUERIMIENTOTEMP TR ON TOC.COD_REQUERIMIENTO=TR.COD_REQUERIMIENTO
+                                                      INNER JOIN T_PERSONAL TP ON TP.COD_PERSONAL=TR.USU_REGISTRO");
+      $stmOrdenCompraAprobada->execute();
+      $datos = $stmOrdenCompraAprobada->fetchAll(PDO::FETCH_OBJ);
 
       return $datos;
     } catch (Exception $e) {
