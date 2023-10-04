@@ -81,7 +81,6 @@ $(function () {
   /*-------------------- Guardar datos modal----------------- */
   $("#ponerproveedor").on("click", (e) => {
     e.preventDefault();
-    console.log("object");
 
     var nombreProveedor = $("#nombreproveedor").val();
     var direccionProveedor = $("#direccionproveedor").val();
