@@ -470,6 +470,26 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'mostrarordencompraaprobada') {
     $respuesta = c_almacen::c_mostrar_orden_compra_aprobada();
     echo $respuesta;
+} elseif ($accion == 'mostrarinsumoscompras') {
+    $idcompraaprobada = trim($_POST['idcompraaprobada']);
+    $respuesta = c_almacen::c_mostrar_insumos_compras($idcompraaprobada);
+    echo $respuesta;
+} elseif ($accion == 'guardarinsumoscompras') {
+    $fecha = trim($_POST['fecha']);
+    $empresa = trim($_POST['empresa']);
+    $personal = trim($_POST['personal']);
+    $oficina = trim($_POST['oficina']);
+    $proveedor = strtoupper(trim($_POST['proveedor']));
+    $proveedordireccion = trim($_POST['proveedordireccion']);
+    $proveedorruc = trim($_POST['proveedorruc']);
+    $proveedordni = trim($_POST['proveedordni']);
+    $formapago = trim($_POST['formapago']);
+    $moneda = trim($_POST['moneda']);
+    $datosSeleccionadosInsumos = $_POST['datosSeleccionadosInsumos'];
+    $idcompraaprobada = $_POST['idcompraaprobada'];
+
+    $respuesta = c_almacen::c_guardar_insumos_compras($fecha, $empresa,  $personal,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda, $datosSeleccionadosInsumos, $idcompraaprobada);
+    echo $respuesta;
 }
 
 
@@ -2758,7 +2778,7 @@ class c_almacen
 
 
 
-    static function  c_mostrar_orden_compra_aprobada()
+    static function c_mostrar_orden_compra_aprobada()
     {
         try {
 
@@ -2783,5 +2803,43 @@ class c_almacen
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
+    }
+    static function c_mostrar_insumos_compras($idcompraaprobada)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarInsumosCompras($idcompraaprobada);
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_guardar_insumos_compras($fecha, $empresa,  $personal,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda, $datosSeleccionadosInsumos, $idcompraaprobada)
+    {
+        $m_formula = new m_almacen();
+
+
+        $respuesta = $m_formula->GuardarInsumosCompras($fecha, $empresa,  $personal,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda, $datosSeleccionadosInsumos, $idcompraaprobada);
+
+        if ($respuesta) {
+            return "ok";
+        } else {
+            return "error";
+        };
     }
 }

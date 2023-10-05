@@ -54,11 +54,11 @@ $(function () {
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr id_orden_compra_aprobada='${task.COD_ORDEN_COMPRA}'>
-                            <td data-titulo='CODIGO'>${task.COD_REQUERIMIENTO}</td>
-                            <td data-titulo='FECHA'>${task.FECHA}</td>
-                            <td data-titulo='PERSONAL'>${task.NOM_PERSONAL}</td>
+                            <td data-titulo='CODIGO' style='text-align: center;'>${task.COD_REQUERIMIENTO}</td>
+                            <td data-titulo='FECHA' style='text-align: center;'>${task.FECHA}</td>
+                            <td data-titulo='PERSONAL' style='text-align: center;'>${task.NOM_PERSONAL}</td>
                            
-                            <td style="text-align:center;"><button class="custom-icon"  id="aprobarcompraaprobada"><i class="icon-check"></i></button></td>
+                            <td style="text-align:center;"><button class="custom-icon"  id="clickcompraaprobada"><i class="icon-check"></i></button></td>
                           </tr>`;
           });
           $("#tablamostarcomprasaprobadas").html(template);
@@ -73,28 +73,247 @@ $(function () {
   }
   /*--------------------------------------------------------------*/
   /*-------mostrar campos de orden de compra--------------------*/
-  $(document).on("click", "#aprobarcompraaprobada", (e) => {
+  $(document).on("click", "#clickcompraaprobada", (e) => {
     e.preventDefault();
-    console.log("object");
+
+    let personal = $("#tmostrarordencompraaprobado tr:eq(1) td:eq(2)").text();
+    let idcompraaprobada = $("#tmostrarordencompraaprobado tr:eq(1)").attr(
+      "id_orden_compra_aprobada"
+    );
+
+    $("#personal").val(personal);
+    mostrarinsumos(idcompraaprobada);
+    Swal.fire({
+      icon: "success",
+      title: "Correcto",
+      text: "Se añadio correctamente.",
+    });
   });
   /*---------------------------------------------------------- */
   /*-------------------- Guardar datos modal----------------- */
   $("#ponerproveedor").on("click", (e) => {
     e.preventDefault();
 
-    var nombreProveedor = $("#nombreproveedor").val();
-    var direccionProveedor = $("#direccionproveedor").val();
-    var ruc = $("#ruc").val();
-    var dniProveedor = $("#dniproveedor").val();
+    let nombreProveedor = $("#nombreproveedor").val();
+    let direccionProveedor = $("#direccionproveedor").val();
+    let ruc = $("#ruc").val();
+    let dniProveedor = $("#dniproveedor").val();
 
     $("#proveedor").val(nombreProveedor);
     $("#direccion").val(direccionProveedor);
     $("#ruc_principal").val(ruc);
     $("#dni_principal").val(dniProveedor);
 
+    if (!nombreProveedor) {
+      Swal.fire({
+        icon: "info",
+        title: "Campo vacio",
+        text: "Ingrese un nombre de proveedor.",
+      });
+      return;
+    }
+    if (!ruc && !dniProveedor) {
+      Swal.fire({
+        icon: "info",
+        title: "Campo vacio",
+        text: "Ingrese RUC o DNI.",
+      });
+      return;
+    }
+    if (dniProveedor && dniProveedor.length < 8) {
+      Swal.fire({
+        icon: "info",
+        title: "Cantidad errónea",
+        text: "Ingrese DNI mínimo 8 números.",
+      });
+      return;
+    }
+
+    if (ruc.length < 11) {
+      Swal.fire({
+        icon: "info",
+        title: "Cantidad erronea",
+        text: "Ingrese RUC minimo 11 numeros.",
+      });
+      return;
+    }
+
     $("#mostrarproveedor").modal("hide");
   });
   /*-------------------------------------------------------- */
+  /*--------- mostrar insumos comprar ----------------------*/
+  function mostrarinsumos(idcompraaprobada) {
+    const accion = "mostrarinsumoscompras";
+
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: { accion: accion, idcompraaprobada: idcompraaprobada },
+      success: function (response) {
+        if (isJSON(response)) {
+          let tasks = JSON.parse(response);
+          let template = ``;
+          tasks.forEach((task) => {
+            template += `<tr id_orden_compra_item='${task.COD_ORDEN_COMPRA}'>
+                            <td data-titulo='MATERIAL' codigo_producto='${task.COD_PRODUCTO}' style='text-align: center;'>${task.DES_PRODUCTO}</td>
+                            <td data-titulo='CANTIDAD' style='text-align: center;'>${task.CANTIDAD_MINIMA}</td>
+                            <td data-titulo='PRECIO' style='text-align: center;'><input type='number' step='any' /></td>
+                            <td data-titulo='SELECCIONAR' style='text-align: center;'><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked></td>
+                            </tr>`;
+          });
+          $("#tablainsumoscomprar").html(template);
+        } else {
+          $("#tablainsumoscomprar").empty();
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+  }
+  /*------------------------------------------------------ */
+
+  /*--------- insertar orden de compra de los insumos con precio-----*/
+
+  $("#insertarOrdenCompraInsumos").on("click", (e) => {
+    e.preventDefault();
+    let fecha = $("#fecha").val();
+    let empresa = $("#selectempresa").val();
+    let personal = $("#personal").val();
+    let oficina = $("#selectoficina").val();
+    let proveedor = $("#proveedor").val();
+    let proveedordireccion = $("#direccion").val();
+    let proveedorruc = $("#ruc_principal").val();
+    let proveedordni = $("#dni_principal").val();
+    let formapago = $("#selectformapago").val();
+    let moneda = $("#selectmoneda").val();
+    let idcompraaprobada = $("#tmostrarordencompraaprobado tr:eq(1)").attr(
+      "id_orden_compra_aprobada"
+    );
+
+    const datosSeleccionadosInsumos = [];
+    $("#tablainsumoscomprar tr").each(function () {
+      const fila = $(this);
+
+      const checkbox = fila.find("input[type='checkbox']");
+
+      if (checkbox.prop("checked")) {
+        const material = fila
+          .find("td[data-titulo='MATERIAL']")
+          .attr("codigo_producto");
+        const cantidad = fila.find("td[data-titulo='CANTIDAD']").text();
+        const precio = fila.find("td[data-titulo='PRECIO'] input").val();
+
+        const datosFila = {
+          material: material,
+          cantidad: cantidad,
+          precio: precio,
+        };
+        datosSeleccionadosInsumos.push(datosFila);
+      }
+    });
+
+    // if (!personal) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     text: "Dar check en listado de documentos aprobados.",
+    //   });
+    //   return;
+    // }
+    // if (!fecha) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     text: "Insertar una fecha.",
+    //   });
+    //   return;
+    // }
+    // if (!empresa) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     text: "Seleccione una empresa",
+    //   });
+    //   return;
+    // }
+    // if (!oficina) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     text: "Seleccione una oficina",
+    //   });
+    //   return;
+    // }
+    // if (!proveedor) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     text: "Añada un proveedor.",
+    //   });
+    //   return;
+    // }
+    // if (!formapago) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     text: "Seleccione una forma de pago.",
+    //   });
+    //   return;
+    // }
+    // if (!moneda) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     text: "Seleccione tipo de moneda.",
+    //   });
+    //   return;
+    // }
+
+    const accion = "guardarinsumoscompras";
+
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        accion: accion,
+        fecha: fecha,
+        empresa: empresa,
+        personal: personal,
+        oficina: oficina,
+        proveedor: proveedor,
+        proveedordireccion: proveedordireccion,
+        proveedorruc: proveedorruc,
+        proveedordni: proveedordni,
+        formapago: formapago,
+        moneda: moneda,
+        datosSeleccionadosInsumos: datosSeleccionadosInsumos,
+        idcompraaprobada: idcompraaprobada,
+      },
+      success: function (response) {
+        if (response == "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#fecha").val("");
+              $("#selectempresa").val("0").trigger("change");
+              $("#personal").val("");
+              $("#selectoficina").val("");
+              $("#proveedor").val("");
+              $("#direccion").val("");
+              $("#ruc_principal").val("");
+              $("#dni_principal").val("");
+              $("#selectformapago").val("0").trigger("change");
+              $("#selectmoneda").val("0").trigger("change");
+              $("#tablainsumoscomprar").empty();
+              cargarOrdenCompraAprobada();
+            }
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+  });
+  /*--------------------------------------------------------------- */
 });
 function isJSON(str) {
   try {

@@ -2247,11 +2247,11 @@ class m_almacen
       // $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
 
 
-      $fecha_actual = $cod->c_horaserversql('F');
-      $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
-      $fecha_generado_orden_compra  = $fecha_convertida->format('d/m/Y');
-      // $fecha_actual = '20/09/2023';
-      // $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      // $fecha_actual = $cod->c_horaserversql('F');
+      // $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
+      // $fecha_generado_orden_compra  = $fecha_convertida->format('d/m/Y');
+      $fecha_actual = '05/10/2023';
+      $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,FECHA)
                                                 VALUES ('$codigo_orden_compra','$fecha_generado_orden_compra')");
@@ -2272,13 +2272,13 @@ class m_almacen
       $stmActualizarordencompra->execute();
 
 
-      $fecha_actual = $cod->c_horaserversql('F');
-      $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
-      $fecha_generado  = $fecha_convertida->format('d/m/Y');
+      // $fecha_actual = $cod->c_horaserversql('F');
+      // $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
+      // $fecha_generado  = $fecha_convertida->format('d/m/Y');
 
 
-      // $fecha_actual = '20/09/2023';
-      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      $fecha_actual = '05/10/2023';
+      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       // $maquina = os_info();
       // $maquina = 'user';
@@ -3345,10 +3345,7 @@ class m_almacen
                                                 VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','P','$codpersonal',GETDATE(),'$maquina')");
       $stmtrequerimiento->execute();
 
-      // $stmactualiza = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='T' WHERE COD_ORDEN_COMPRA='$idcodordencompra'");
-      // $stmactualiza->execute();
-
-      $stmactualiza = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET COD_REQUERIMIENTO='$codigoAumentoReq' WHERE COD_ORDEN_COMPRA='$idcodordencompra'");
+      $stmactualiza = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='T', COD_REQUERIMIENTO='$codigoAumentoReq' WHERE COD_ORDEN_COMPRA='$idcodordencompra'");
       $stmactualiza->execute();
 
 
@@ -3412,6 +3409,96 @@ class m_almacen
 
       return $datos;
     } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarInsumosCompras($idcompraaprobada)
+  {
+    try {
+
+      $stmInsumosCompras = $this->bd->prepare("SELECT CI.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, CI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
+                                                CI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA FROM T_TMPORDEN_COMPRA_ITEM CI
+                                                INNER JOIN T_PRODUCTO TP ON CI.COD_PRODUCTO=TP.COD_PRODUCTO WHERE CI.COD_ORDEN_COMPRA='$idcompraaprobada' AND CI.ESTADO='P'");
+      $stmInsumosCompras->execute();
+      $datos = $stmInsumosCompras->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function GuardarInsumosCompras($fecha, $empresa,  $personal,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda, $datosSeleccionadosInsumos, $idcompraaprobada)
+  {
+    try {
+      $this->bd->beginTransaction();
+
+
+
+
+      // $fechaFormateada = DateTime::createFromFormat('Y-m-d', $fecha);
+      // $fechaformato = $fechaFormateada->format('d/m/Y');
+      $fechaformato = $fecha;
+
+      $stmexisteproveedor = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_PROVEEDOR WHERE NOM_PROVEEDOR='$proveedor'");
+      $stmexisteproveedor->execute();
+      $resultadoExisteProveedor = $stmexisteproveedor->fetch(PDO::FETCH_ASSOC);
+      $count = $resultadoExisteProveedor['COUNT'];
+
+
+
+      $stmMaxProveedor = $this->bd->prepare("SELECT MAX(COD_PROVEEDOR) AS COD_PROVEEDOR FROM T_PROVEEDOR");
+      $stmMaxProveedor->execute();
+      $resultadoProveedor = $stmMaxProveedor->fetch(PDO::FETCH_ASSOC);
+
+
+      $maxCodigo = $resultadoProveedor['COD_PROVEEDOR'];
+
+      $codigoproveedor = $maxCodigo + 1;
+      $codigoproveedorgenerado = str_pad($codigoproveedor, 5, '0', STR_PAD_LEFT);
+
+
+      $actualizarordecomprainsumos = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET FECHA_REALIZADA='$fechaformato',COD_EMPRESA='$empresa',TIPO_MONEDA='$moneda',OFICINA='$oficina',F_PAGO='$formapago'");
+      $insertOCI = $actualizarordecomprainsumos->execute();
+
+      if ($count == 0) {
+        $insertardatosproveedor = $this->bd->prepare("INSERT INTO T_PROVEEDOR(COD_PROVEEDOR,NOM_PROVEEDOR,DIR_PROVEEDOR,RUC_PROVEEDOR,DNI_PROVEEDOR)VALUES('$codigoproveedorgenerado','$proveedor','$proveedordireccion','$proveedorruc','$proveedordni')");
+        $insertardatosproveedor->execute();
+        $actualizacodipro = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET COD_PROVEEDOR='$codigoproveedorgenerado'");
+        $actualizacodipro->execute();
+      } else {
+        $stmbuscarcodproveedor = $this->bd->prepare("SELECT COD_PROVEEDOR FROM T_PROVEEDOR WHERE NOM_PROVEEDOR='$proveedor'");
+        $stmbuscarcodproveedor->execute();
+        $resultadocodproveedor = $stmbuscarcodproveedor->fetch(PDO::FETCH_ASSOC);
+        $maxcodproveedor = $resultadocodproveedor['COD_PROVEEDOR'];
+        $actualizarcodprov = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET COD_PROVEEDOR='$maxcodproveedor'");
+        $actualizarcodprov->execute();
+      }
+      foreach ($datosSeleccionadosInsumos as $insumos) {
+        $codigoproducto = $insumos["material"];
+        $cantidad = $insumos["cantidad"];
+        $precio = $insumos["precio"];
+
+        $stmexisteproveedor = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET MONTO='$precio',ESTADO='C' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_PRODUCTO='$codigoproducto'");
+        $stmexisteproveedor->execute();
+
+        $stmconsultadeestado = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND ESTADO='P'");
+        $stmconsultadeestado->execute();
+        $resul = $stmconsultadeestado->fetch(PDO::FETCH_ASSOC);
+        $contador = $resul['COUNT'];
+        if ($contador == 0) {
+
+          $stmcambioestado = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='O' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
+          $stmcambioestado->execute();
+        }
+      }
+
+
+
+      $insertOCI = $this->bd->commit();
+      return $insertOCI;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
       die($e->getMessage());
     }
   }

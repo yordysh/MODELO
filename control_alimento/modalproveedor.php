@@ -9,7 +9,7 @@
                 <form id="form">
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre proveedor</label>
-                        <input type="text" id="nombreproveedor" name="nombreproveedor" class="form-control">
+                        <input type="text" id="nombreproveedor" name="nombreproveedor" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label for="direccion" class="form-label">Dirección proveedor</label>
@@ -17,11 +17,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="ruc" class="form-label">RUC</label>
-                        <input type="text" id="ruc" name="ruc" class="form-control">
+                        <input type="text" id="ruc" name="ruc" class="form-control" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
                     </div>
                     <div class="mb-3">
                         <label for="dni" class="form-label">DNI</label>
-                        <input type="text" id="dniproveedor" name="dniproveedor" class="form-control">
+                        <input type="text" id="dniproveedor" name="dniproveedor" class="form-control" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
                     </div>
                 </form>
             </div>

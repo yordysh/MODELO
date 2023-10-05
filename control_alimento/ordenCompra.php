@@ -126,19 +126,24 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Text input fecha-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Fecha</label>
-                            <input type="date" id="fecha" class="form-control" name="" disabled>
+                            <input type="date" id="fecha" class="form-control">
                         </div>
 
                         <!-- Text input empresa-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Empresa</label>
-                            <input type="text" id="empresa" class="form-control" name="" disabled>
+                            <select id="selectempresa" class="form-select" aria-label="Default select example">
+                                <option value="0" selected disabled>Seleccione empresa</option>
+                                <option value="00004">LABSABELL</option>
+                                <option value="00003">COVIFARMA</option>
+
+                            </select>
                         </div>
 
                         <!-- Text input personal-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Personal</label>
-                            <input type="text" id="personal" class="form-control" name="" disabled>
+                            <input type="text" id="personal" class="form-control" disabled>
                         </div>
 
                         <!-- Text input oficina-->
@@ -165,30 +170,56 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <input type="text" id="ruc_principal" class="form-control">
                             <input type="text" id="dni_principal" class="form-control">
                         </div>
-                        <button type='button' class="custom-icon" data-bs-toggle="modal" data-bs-target="#mostrarproveedor"><i class="icon-check"></i></button>
+                        <button type='button' class="custom-icon" data-bs-toggle="modal" data-bs-target="#mostrarproveedor"><i class="icon-add-user"></i></button>
+
+                        <!-- Text input FORMA DE PAGO-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">F.pago</label>
+                            <select id="selectformapago" class="form-select" aria-label="Default select example">
+                                <option value="0" selected disabled>Seleccione forma de pago</option>
+                                <option value="E">EFECTIVO</option>
+                                <option value="D">DEPOSITO</option>
+                            </select>
+                        </div>
 
                         <!-- Text input moneda-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Moneda</label>
                             <select id="selectmoneda" class="form-select" aria-label="Default select example">
                                 <option value="0" selected disabled>Seleccione moneda</option>
-                                <option value="S">Soles</option>
-                                <option value="D">Dolares</option>
+                                <option value="S">SOLES</option>
+                                <option value="D">DOLARES</option>
                             </select>
+                        </div>
+
+
+                        <!-- Tabla total insumos por comprar-->
+                        <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
+                            <div class="row g-4 top-div">
+                                <center><label class="title_table">INSUMOS POR COMPRAR</label></center>
+                            </div>
+                            <table id="tinsumoscomprar" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">MATERIAL</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th class="thtitulo" scope="col">PRECIO</th>
+                                        <th class="thtitulo" scope="col">SELECCIONAR</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablainsumoscomprar">
+
+                                </tbody>
+                            </table>
                         </div>
 
                         <!-- Insertar nuevas cantidades -->
                         <div class="contenedor">
-
                             <div class="ctnBtn">
-                                <input type="hidden" id="taskcodrequhiddenvalidar">
-                                <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-primary boton-insertar">Guardar</button>
-                                <input type="text" id="mensajecompleto" style="width: 270px; font-weight:bold; display:none;" value="Insumos completos en el almacen" disabled>
-                                <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
+                                <button id="insertarOrdenCompraInsumos" name="calcularInsEnv" class="btn btn-primary boton-insertar">Guardar</button>
                             </div>
                         </div>
                 </div>
-            </div>
         </section>
     </main>
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
