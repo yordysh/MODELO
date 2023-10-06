@@ -3562,10 +3562,11 @@ class m_almacen
   {
     try {
 
-      $stmmostrarcompracomprobante = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA,TOC.FECHA_REALIZADA AS FECHA_REALIZADA,
+      $stmmostrarcompracomprobante = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA,TC.COD_COMPROBANTE AS COD_COMPROBANTE,TC.FECHA_REALIZADA AS FECHA_REALIZADA,
                                                           TP.NOM_PROVEEDOR AS NOM_PROVEEDOR, TE.NOMBRE AS NOMBRE FROM T_TMPORDEN_COMPRA TOC 
-                                                          INNER JOIN T_PROVEEDOR TP ON TP.COD_PROVEEDOR=TOC.COD_PROVEEDOR
-                                                          INNER JOIN T_EMPRESA TE ON TE.COD_EMPRESA=TOC.COD_EMPRESA WHERE TOC.ESTADO='O'");
+                                                          INNER JOIN T_TMPCOMPROBANTE TC ON TOC.COD_ORDEN_COMPRA=TC.COD_ORDEN_COMPRA
+                                                          INNER JOIN T_PROVEEDOR TP ON TP.COD_PROVEEDOR=TC.COD_PROVEEDOR
+                                                          INNER JOIN T_EMPRESA TE ON TE.COD_EMPRESA=TC.COD_EMPRESA WHERE TOC.ESTADO='O'");
       $stmmostrarcompracomprobante->execute();
       $datoscompra = $stmmostrarcompracomprobante->fetchAll(PDO::FETCH_OBJ);
 

@@ -2894,6 +2894,7 @@ class c_almacen
             foreach ($datos as $row) {
                 $json[] = array(
                     "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                    "COD_COMPROBANTE" => $row->COD_COMPROBANTE,
                     "FECHA_REALIZADA" => convFecSistema($row->FECHA_REALIZADA),
                     "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
                     "NOMBRE" => $row->NOMBRE,
