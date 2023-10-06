@@ -55,6 +55,7 @@ $(function () {
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr id_orden_compra_aprobada='${task.COD_ORDEN_COMPRA}'>
+            <td data-titulo='FECHA' style='text-align: center;'>${task.FECHA_REALIZADA}</td>
                             <td data-titulo='FECHA' style='text-align: center;'>${task.FECHA_REALIZADA}</td>
                             <td data-titulo='PROVEEDOR' style='text-align: center;'>${task.NOM_PROVEEDOR}</td>
                             <td data-titulo='EMPRESA' style='text-align: center;'>${task.NOMBRE}</td>
