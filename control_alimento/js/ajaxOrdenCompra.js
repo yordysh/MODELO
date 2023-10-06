@@ -40,6 +40,7 @@ $(function () {
     nav.classList.remove("openNav");
   });
   //----------------------------------------------------------------//
+  $("#selectproveedor").select2();
   /*---------Cargar la orden de compra aprobada------------------- */
   function cargarOrdenCompraAprobada() {
     const accion = "mostrarordencompraaprobada";
@@ -71,6 +72,35 @@ $(function () {
       },
     });
   }
+  /*--------------------------------------------------------------*/
+
+  /*-----------CLICK DE PROVEEDOR Y PONER INPUTS------------------*/
+  $("#selectproveedor").change((e) => {
+    e.preventDefault();
+    const idprovee = $("#selectproveedor").val();
+
+    const accion = "mostrarlistaproveedores";
+
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: { accion: accion, idprovee: idprovee },
+      success: function (response) {
+        if (isJSON(response)) {
+          let task = JSON.parse(response);
+
+          $("#nombreproveedor").val(task[0].NOM_PROVEEDOR);
+          $("#direccionproveedor").val(task[0].DIR_PROVEEDOR);
+          $("#ruc").val(task[0].RUC_PROVEEDOR);
+          $("#dniproveedor").val(task[0].DNI_PROVEEDOR);
+          $("#selectproveedor").val("none").trigger("change");
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos :", error);
+      },
+    });
+  });
   /*--------------------------------------------------------------*/
   /*-------mostrar campos de orden de compra--------------------*/
   $(document).on("click", "#clickcompraaprobada", (e) => {
@@ -180,6 +210,7 @@ $(function () {
     let fecha = $("#fecha").val();
     let empresa = $("#selectempresa").val();
     let personal = $("#personal").val();
+    let personalcod = $("#codpersonal").val();
     let oficina = $("#selectoficina").val();
     let proveedor = $("#proveedor").val();
     let proveedordireccion = $("#direccion").val();
@@ -187,6 +218,7 @@ $(function () {
     let proveedordni = $("#dni_principal").val();
     let formapago = $("#selectformapago").val();
     let moneda = $("#selectmoneda").val();
+    let observacion = $("#observacion").val();
     let idcompraaprobada = $("#tmostrarordencompraaprobado tr:eq(1)").attr(
       "id_orden_compra_aprobada"
     );
@@ -213,55 +245,62 @@ $(function () {
       }
     });
 
-    // if (!personal) {
-    //   Swal.fire({
-    //     icon: "info",
-    //     text: "Dar check en listado de documentos aprobados.",
-    //   });
-    //   return;
-    // }
-    // if (!fecha) {
-    //   Swal.fire({
-    //     icon: "info",
-    //     text: "Insertar una fecha.",
-    //   });
-    //   return;
-    // }
-    // if (!empresa) {
-    //   Swal.fire({
-    //     icon: "info",
-    //     text: "Seleccione una empresa",
-    //   });
-    //   return;
-    // }
-    // if (!oficina) {
-    //   Swal.fire({
-    //     icon: "info",
-    //     text: "Seleccione una oficina",
-    //   });
-    //   return;
-    // }
-    // if (!proveedor) {
-    //   Swal.fire({
-    //     icon: "info",
-    //     text: "Añada un proveedor.",
-    //   });
-    //   return;
-    // }
-    // if (!formapago) {
-    //   Swal.fire({
-    //     icon: "info",
-    //     text: "Seleccione una forma de pago.",
-    //   });
-    //   return;
-    // }
-    // if (!moneda) {
-    //   Swal.fire({
-    //     icon: "info",
-    //     text: "Seleccione tipo de moneda.",
-    //   });
-    //   return;
-    // }
+    if (!personal) {
+      Swal.fire({
+        icon: "info",
+        text: "Dar check en listado de documentos aprobados.",
+      });
+      return;
+    }
+    if (!fecha) {
+      Swal.fire({
+        icon: "info",
+        text: "Insertar una fecha.",
+      });
+      return;
+    }
+    if (!empresa) {
+      Swal.fire({
+        icon: "info",
+        text: "Seleccione una empresa",
+      });
+      return;
+    }
+    if (!oficina) {
+      Swal.fire({
+        icon: "info",
+        text: "Seleccione una oficina",
+      });
+      return;
+    }
+    if (!proveedor) {
+      Swal.fire({
+        icon: "info",
+        text: "Añada un proveedor.",
+      });
+      return;
+    }
+    if (!formapago) {
+      Swal.fire({
+        icon: "info",
+        text: "Seleccione una forma de pago.",
+      });
+      return;
+    }
+    if (!moneda) {
+      Swal.fire({
+        icon: "info",
+        text: "Seleccione tipo de moneda.",
+      });
+      return;
+    }
+    if (!observacion) {
+      Swal.fire({
+        icon: "info",
+        text: "Escriba una observación.",
+      });
+      return;
+    }
 
     const accion = "guardarinsumoscompras";
 
@@ -272,7 +311,7 @@ $(function () {
         accion: accion,
         fecha: fecha,
         empresa: empresa,
-        personal: personal,
+        personalcod: personalcod,
         oficina: oficina,
         proveedor: proveedor,
         proveedordireccion: proveedordireccion,
@@ -280,6 +319,7 @@ $(function () {
         proveedordni: proveedordni,
         formapago: formapago,
         moneda: moneda,
+        observacion: observacion,
         datosSeleccionadosInsumos: datosSeleccionadosInsumos,
         idcompraaprobada: idcompraaprobada,
       },
@@ -293,16 +333,22 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#fecha").val("");
-              $("#selectempresa").val("0").trigger("change");
+              $("#selectempresa").val("00003").trigger("change");
               $("#personal").val("");
-              $("#selectoficina").val("");
+              $("#selectoficina").val("00026").trigger("change");
               $("#proveedor").val("");
               $("#direccion").val("");
               $("#ruc_principal").val("");
               $("#dni_principal").val("");
-              $("#selectformapago").val("0").trigger("change");
-              $("#selectmoneda").val("0").trigger("change");
+              $("#observacion").val("");
+              $("#selectformapago").val("E").trigger("change");
+              $("#selectmoneda").val("S").trigger("change");
               $("#tablainsumoscomprar").empty();
+
+              $("#nombreproveedor").val("");
+              $("#direccionproveedor").val("");
+              $("#ruc").val("");
+              $("#dniproveedor").val("");
               cargarOrdenCompraAprobada();
             }
           });

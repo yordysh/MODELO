@@ -8,6 +8,17 @@
             <div class="modal-body">
                 <form id="form">
                     <div class="mb-3">
+                        <label for="nombre" class="form-label">Buscar proveedor</label>
+                        <select id="selectproveedor" class="form-select" aria-label="Default select example">
+                            <option value="none" selected>Seleccione un proveedor</option>
+                            <?php foreach ($dataProveedores as $data) { ?>
+                                <option value="<?php echo $data->COD_PROVEEDOR; ?>" class="option"><?php echo $data->NOM_PROVEEDOR; ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre proveedor</label>
                         <input type="text" id="nombreproveedor" name="nombreproveedor" class="form-control" required>
                     </div>

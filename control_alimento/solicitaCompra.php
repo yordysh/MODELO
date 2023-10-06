@@ -116,6 +116,9 @@ $mostrar = new m_almacen();
                         <!-- Tabla total ORDEN DE COMPRA ITEM-->
                         <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
                             <table id="tOrdenCompra" class="table table-sm mb-3 table-hover">
+                                <div class="row g-4 top-div">
+                                    <center><label class="title">PRODUCTOS A COMPRAR</label></center>
+                                </div>
                                 <thead>
                                     <tr>
                                         <th class="" scope="col">INSUMOS</th>

@@ -3401,9 +3401,9 @@ class m_almacen
   {
     try {
 
-      $stmOrdenCompraAprobada = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TOC.FECHA AS FECHA,TP.NOM_PERSONAL AS NOM_PERSONAL,TOC.OFICINA AS OFICINA  FROM T_TMPORDEN_COMPRA  TOC
+      $stmOrdenCompraAprobada = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TOC.FECHA AS FECHA,TP.NOM_PERSONAL AS NOM_PERSONAL FROM T_TMPORDEN_COMPRA  TOC
                                                       INNER JOIN T_REQUERIMIENTOTEMP TR ON TOC.COD_REQUERIMIENTO=TR.COD_REQUERIMIENTO
-                                                      INNER JOIN T_PERSONAL TP ON TP.COD_PERSONAL=TR.USU_REGISTRO");
+                                                      INNER JOIN T_PERSONAL TP ON TP.COD_PERSONAL=TR.USU_REGISTRO WHERE TOC.ESTADO='T'");
       $stmOrdenCompraAprobada->execute();
       $datos = $stmOrdenCompraAprobada->fetchAll(PDO::FETCH_OBJ);
 
@@ -3428,11 +3428,51 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function GuardarInsumosCompras($fecha, $empresa,  $personal,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda, $datosSeleccionadosInsumos, $idcompraaprobada)
+
+  public function   MostrarProveedores()
+  {
+    try {
+
+      $stmproveedores = $this->bd->prepare("SELECT COD_PROVEEDOR,NOM_PROVEEDOR,DIR_PROVEEDOR,RUC_PROVEEDOR,DNI_PROVEEDOR FROM T_PROVEEDOR");
+      $stmproveedores->execute();
+      $datosproveedor = $stmproveedores->fetchAll(PDO::FETCH_OBJ);
+
+      return $datosproveedor;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function   MostrarProveedoresId($id)
+  {
+    try {
+
+      $stmproveedores = $this->bd->prepare("SELECT COD_PROVEEDOR,NOM_PROVEEDOR,DIR_PROVEEDOR,RUC_PROVEEDOR,DNI_PROVEEDOR FROM T_PROVEEDOR WHERE COD_PROVEEDOR='$id'");
+      $stmproveedores->execute();
+      $datosproveedor = $stmproveedores->fetchAll(PDO::FETCH_OBJ);
+
+      return $datosproveedor;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function generarcodigocomprobante()
+  {
+    $stm = $this->bd->prepare("SELECT MAX(COD_COMPROBANTE) as COD_COMPROBANTE FROM T_TMPCOMPROBANTE");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+
+
+    $maxCodigo = intval($resultado['COD_COMPROBANTE']);
+
+    $nuevoCodigo = $maxCodigo + 1;
+    $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
+    return $codigoAumento;
+  }
+  public function GuardarInsumosCompras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada)
   {
     try {
       $this->bd->beginTransaction();
-
+      $codigo = new m_almacen();
 
 
 
@@ -3440,7 +3480,7 @@ class m_almacen
       // $fechaformato = $fechaFormateada->format('d/m/Y');
       $fechaformato = $fecha;
 
-      $stmexisteproveedor = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_PROVEEDOR WHERE NOM_PROVEEDOR='$proveedor'");
+      $stmexisteproveedor = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_PROVEEDOR WHERE RUC_PROVEEDOR='$proveedorruc'");
       $stmexisteproveedor->execute();
       $resultadoExisteProveedor = $stmexisteproveedor->fetch(PDO::FETCH_ASSOC);
       $count = $resultadoExisteProveedor['COUNT'];
@@ -3450,44 +3490,54 @@ class m_almacen
       $stmMaxProveedor = $this->bd->prepare("SELECT MAX(COD_PROVEEDOR) AS COD_PROVEEDOR FROM T_PROVEEDOR");
       $stmMaxProveedor->execute();
       $resultadoProveedor = $stmMaxProveedor->fetch(PDO::FETCH_ASSOC);
-
-
       $maxCodigo = $resultadoProveedor['COD_PROVEEDOR'];
 
       $codigoproveedor = $maxCodigo + 1;
       $codigoproveedorgenerado = str_pad($codigoproveedor, 5, '0', STR_PAD_LEFT);
 
 
-      $actualizarordecomprainsumos = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET FECHA_REALIZADA='$fechaformato',COD_EMPRESA='$empresa',TIPO_MONEDA='$moneda',OFICINA='$oficina',F_PAGO='$formapago'");
+      $actualizarordecomprainsumos = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET FECHA_REALIZADA='$fechaformato',OBSERVACION='$observacion' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
       $insertOCI = $actualizarordecomprainsumos->execute();
 
       if ($count == 0) {
-        $insertardatosproveedor = $this->bd->prepare("INSERT INTO T_PROVEEDOR(COD_PROVEEDOR,NOM_PROVEEDOR,DIR_PROVEEDOR,RUC_PROVEEDOR,DNI_PROVEEDOR)VALUES('$codigoproveedorgenerado','$proveedor','$proveedordireccion','$proveedorruc','$proveedordni')");
+        $insertardatosproveedor = $this->bd->prepare("INSERT INTO T_PROVEEDOR(COD_PROVEEDOR,NOM_PROVEEDOR,DIR_PROVEEDOR,RUC_PROVEEDOR,DNI_PROVEEDOR)
+                                                      VALUES('$codigoproveedorgenerado','$proveedor','$proveedordireccion','$proveedorruc','$proveedordni')");
         $insertardatosproveedor->execute();
-        $actualizacodipro = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET COD_PROVEEDOR='$codigoproveedorgenerado'");
-        $actualizacodipro->execute();
-      } else {
-        $stmbuscarcodproveedor = $this->bd->prepare("SELECT COD_PROVEEDOR FROM T_PROVEEDOR WHERE NOM_PROVEEDOR='$proveedor'");
-        $stmbuscarcodproveedor->execute();
-        $resultadocodproveedor = $stmbuscarcodproveedor->fetch(PDO::FETCH_ASSOC);
-        $maxcodproveedor = $resultadocodproveedor['COD_PROVEEDOR'];
-        $actualizarcodprov = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET COD_PROVEEDOR='$maxcodproveedor'");
-        $actualizarcodprov->execute();
       }
+
+      $codigocomprobante = $codigo->generarcodigocomprobante();
+
+
+      if ($count == 0) {
+        $verificacodprove = $codigoproveedorgenerado;
+      } else {
+
+        $stmproveedorcondicion = $this->bd->prepare("SELECT MAX(COD_PROVEEDOR) AS COD_PROVEEDOR FROM T_PROVEEDOR WHERE RUC_PROVEEDOR='$proveedorruc'");
+        $stmproveedorcondicion->execute();
+        $resultadoProveedorCondicion = $stmproveedorcondicion->fetch(PDO::FETCH_ASSOC);
+        $codproveedoractual = $resultadoProveedorCondicion['COD_PROVEEDOR'];
+
+        $verificacodprove = $codproveedoractual;
+      }
+      $stminsertarcomprobante = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE(COD_COMPROBANTE,COD_PROVEEDOR,COD_EMPRESA,OFICINA,TIPO_MONEDA,F_PAGO,FECHA_REALIZADA,COD_USUARIO,COD_ORDEN_COMPRA)
+                                                    VALUES('$codigocomprobante','$verificacodprove','$empresa','$oficina','$moneda','$formapago','$fechaformato','$personalcod','$idcompraaprobada')");
+      $stminsertarcomprobante->execute();
+
       foreach ($datosSeleccionadosInsumos as $insumos) {
         $codigoproducto = $insumos["material"];
         $cantidad = $insumos["cantidad"];
         $precio = $insumos["precio"];
 
-        $stmexisteproveedor = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET MONTO='$precio',ESTADO='C' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_PRODUCTO='$codigoproducto'");
-        $stmexisteproveedor->execute();
+
+        $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET ESTADO='O',MONTO='$precio' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_PRODUCTO='$codigoproducto'");
+        $stmactualizaitemcompra->execute();
+
 
         $stmconsultadeestado = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND ESTADO='P'");
         $stmconsultadeestado->execute();
         $resul = $stmconsultadeestado->fetch(PDO::FETCH_ASSOC);
         $contador = $resul['COUNT'];
         if ($contador == 0) {
-
           $stmcambioestado = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='O' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
           $stmcambioestado->execute();
         }
@@ -3499,6 +3549,28 @@ class m_almacen
       return $insertOCI;
     } catch (Exception $e) {
       $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+
+
+
+
+
+
+  public function MostrarCompraComprobante()
+  {
+    try {
+
+      $stmmostrarcompracomprobante = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA,TOC.FECHA_REALIZADA AS FECHA_REALIZADA,
+                                                          TP.NOM_PROVEEDOR AS NOM_PROVEEDOR, TE.NOMBRE AS NOMBRE FROM T_TMPORDEN_COMPRA TOC 
+                                                          INNER JOIN T_PROVEEDOR TP ON TP.COD_PROVEEDOR=TOC.COD_PROVEEDOR
+                                                          INNER JOIN T_EMPRESA TE ON TE.COD_EMPRESA=TOC.COD_EMPRESA WHERE TOC.ESTADO='O'");
+      $stmmostrarcompracomprobante->execute();
+      $datoscompra = $stmmostrarcompracomprobante->fetchAll(PDO::FETCH_OBJ);
+
+      return $datoscompra;
+    } catch (Exception $e) {
       die($e->getMessage());
     }
   }

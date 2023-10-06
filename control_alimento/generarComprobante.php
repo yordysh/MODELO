@@ -11,7 +11,8 @@ $codusuario = '00001';
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataProveedores = $mostrar->MostrarProveedores();
+// $dataProducto = $mostrar->MostrarProductoComboRegistro();
+$dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
 ?>
 <!DOCTYPE html>
@@ -89,9 +90,6 @@ $dataProveedores = $mostrar->MostrarProveedores();
     <main>
         <section>
             <div class="container g-4 row">
-                <!-- <div class="row g-4 top-div">
-                    <center><label class="title">DOCUMENTOS APROBADOS</label></center>
-                </div> -->
                 <div class="main">
                     <form method="post" action="" id="formulariocompraorden">
                         <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">
@@ -101,49 +99,27 @@ $dataProveedores = $mostrar->MostrarProveedores();
                         </div>
 
                         <!-- Tabla total requerimiento pedido-->
-                        <div class="table-responsive" style="overflow-x: hidden;height: 150px!important; margin-top:30px;margin-bottom:20px;">
+                        <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
                             <div class="row g-4 top-div">
-                                <center><label class="title_table">DOCUMENTOS APROBADOS</label></center>
+                                <center><label class="title_table">ORDENES DE COMPRA</label></center>
                             </div>
-                            <table id="tmostrarordencompraaprobado" class="table table-sm mb-3 table-hover">
+                            <table id="tmostrarcomprobante" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="thtitulo" scope="col">CODIGO</th>
+                                        <th class="thtitulo" scope="col">ORDEN</th>
                                         <th class="thtitulo" scope="col">FECHA</th>
-                                        <th class="thtitulo" scope="col">PERSONAL</th>
-                                        <!-- <th class="thtitulo" scope="col">MOTIVO</th> -->
-
+                                        <th class="thtitulo" scope="col">PROVEEDOR</th>
+                                        <th class="thtitulo" scope="col">EMPRESA</th>
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody id="tablamostarcomprasaprobadas">
-
-                                </tbody>
-                            </table>
-                        </div>
-
-
-                        <!-- Tabla total insumos por comprar-->
-                        <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
-                            <div class="row g-4 top-div">
-                                <center><label class="title_table">INSUMOS POR COMPRAR</label></center>
-                            </div>
-                            <table id="tinsumoscomprar" class="table table-sm mb-3 table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="thtitulo" scope="col">MATERIAL</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
-                                        <th class="thtitulo" scope="col">PRECIO</th>
-                                        <th class="thtitulo" scope="col">SELECCIONAR</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablainsumoscomprar">
+                                <tbody id="tablamostarcomprobante">
 
                                 </tbody>
                             </table>
                         </div>
                         <div class="row g-4 top-div">
-                            <center><label class="title_table">GENERAR ORDEN DE COMPRAR</label></center>
+                            <center><label class="title_table">REGISTRAR COMPROBANTE</label></center>
                         </div>
                         <!-- Text input fecha-->
                         <div class="form-outline mb-4">
@@ -155,8 +131,8 @@ $dataProveedores = $mostrar->MostrarProveedores();
                         <div class="form-outline mb-4">
                             <label class="form-label">Empresa</label>
                             <select id="selectempresa" class="form-select" aria-label="Default select example">
-                                <option value="00003" selected>LABSABELL</option>
-                                <option value="00004">COVIFARMA</option>
+                                <option value="00004" selected>LABSABELL</option>
+                                <option value="00003">COVIFARMA</option>
 
                             </select>
                         </div>
@@ -209,20 +185,32 @@ $dataProveedores = $mostrar->MostrarProveedores();
                                 <option value="D">DOLARES</option>
                             </select>
                         </div>
-                        <!-- Text observacion-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Observación</label>
-                            <textarea class="form-control" id="observacion" rows="3"></textarea>
-                        </div>
 
+
+                        <!-- Tabla total insumos por comprar-->
+                        <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
+                            <div class="row g-4 top-div">
+                                <center><label class="title_table">INSUMOS POR COMPRAR</label></center>
+                            </div>
+                            <table id="tinsumoscomprar" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">MATERIAL</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th class="thtitulo" scope="col">PRECIO</th>
+                                        <th class="thtitulo" scope="col">SELECCIONAR</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablainsumoscomprar">
+
+                                </tbody>
+                            </table>
+                        </div>
 
                         <!-- Insertar nuevas cantidades -->
                         <div class="contenedor">
                             <div class="ctnBtn">
-                                <button id="insertarOrdenCompraInsumos" class="btn btn-primary boton-insertar">Guardar</button>
-                            </div>
-                            <div class="">
-                                <button id="generarpdf" class="btn btn-success boton-pdf">PDF</button>
+                                <button id="insertarOrdenCompraInsumos" name="calcularInsEnv" class="btn btn-primary boton-insertar">Guardar</button>
                             </div>
                         </div>
                 </div>
@@ -237,7 +225,7 @@ $dataProveedores = $mostrar->MostrarProveedores();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxOrdenCompra.js"></script>
+    <script src="./js/ajaxGenerarComprobante.js"></script>
     <script src="./js/select2.min.js"></script>
 </body>
 
