@@ -3457,12 +3457,12 @@ class m_almacen
   }
   public function generarcodigocomprobante()
   {
-    $stm = $this->bd->prepare("SELECT MAX(COD_COMPROBANTE) as COD_COMPROBANTE FROM T_TMPCOMPROBANTE");
+    $stm = $this->bd->prepare("SELECT MAX(COD_TMPCOMPROBANTE) as COD_TMPCOMPROBANTE FROM T_TMPCOMPROBANTE");
     $stm->execute();
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
 
 
-    $maxCodigo = intval($resultado['COD_COMPROBANTE']);
+    $maxCodigo = intval($resultado['COD_TMPCOMPROBANTE']);
 
     $nuevoCodigo = $maxCodigo + 1;
     $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
@@ -3496,7 +3496,7 @@ class m_almacen
       $codigoproveedorgenerado = str_pad($codigoproveedor, 5, '0', STR_PAD_LEFT);
 
 
-      $actualizarordecomprainsumos = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET FECHA_REALIZADA='$fechaformato',OBSERVACION='$observacion' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
+      $actualizarordecomprainsumos = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET FECHA_REALIZADA='$fechaformato' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
       $insertOCI = $actualizarordecomprainsumos->execute();
 
       if ($count == 0) {
@@ -3519,31 +3519,38 @@ class m_almacen
 
         $verificacodprove = $codproveedoractual;
       }
-      $stminsertarcomprobante = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE(COD_COMPROBANTE,COD_PROVEEDOR,COD_EMPRESA,OFICINA,TIPO_MONEDA,F_PAGO,FECHA_REALIZADA,COD_USUARIO,COD_ORDEN_COMPRA)
-                                                    VALUES('$codigocomprobante','$verificacodprove','$empresa','$oficina','$moneda','$formapago','$fechaformato','$personalcod','$idcompraaprobada')");
+      $stminsertarcomprobante = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE(COD_TMPCOMPROBANTE,COD_PROVEEDOR,COD_EMPRESA,OFICINA,TIPO_MONEDA,F_PAGO,FECHA_REALIZADA,COD_USUARIO,COD_ORDEN_COMPRA,OBSERVACION)
+                                                    VALUES('$codigocomprobante','$verificacodprove','$empresa','$oficina','$moneda','$formapago','$fechaformato','$personalcod','$idcompraaprobada','$observacion')");
       $stminsertarcomprobante->execute();
-
+      $sumordenitem = 0;
       foreach ($datosSeleccionadosInsumos as $insumos) {
         $codigoproducto = $insumos["material"];
         $cantidad = $insumos["cantidad"];
         $precio = $insumos["precio"];
 
 
-        $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET ESTADO='O',MONTO='$precio' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_PRODUCTO='$codigoproducto'");
+        $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET ESTADO='O',MONTO='$precio',COD_TMPCOMPROBANTE='$codigocomprobante' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_PRODUCTO='$codigoproducto'");
         $stmactualizaitemcompra->execute();
-
+        $sumordenitem = $sumordenitem + $precio;
 
         $stmconsultadeestado = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND ESTADO='P'");
         $stmconsultadeestado->execute();
         $resul = $stmconsultadeestado->fetch(PDO::FETCH_ASSOC);
         $contador = $resul['COUNT'];
         if ($contador == 0) {
-          $stmcambioestado = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='O' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
+
+          $stmSumaTotal = $this->bd->prepare("SELECT SUM(MONTO) AS MONTO FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND ESTADO='P'");
+          $stmSumaTotal->execute();
+          $resulsum = $stmSumaTotal->fetch(PDO::FETCH_ASSOC);
+          $sumatotal = $resulsum['MONTO'];
+
+          $stmcambioestado = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='O',TOTAL='$sumatotal' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
           $stmcambioestado->execute();
         }
       }
 
-
+      $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPCOMPROBANTE SET MONTO_TOTAL='$sumordenitem' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_TMPCOMPROBANTE='$codigocomprobante'");
+      $stmactualizaitemcompra->execute();
 
       $insertOCI = $this->bd->commit();
       return $insertOCI;
@@ -3562,16 +3569,70 @@ class m_almacen
   {
     try {
 
-      $stmmostrarcompracomprobante = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA,TC.COD_COMPROBANTE AS COD_COMPROBANTE,TC.FECHA_REALIZADA AS FECHA_REALIZADA,
+      $stmmostrarcompracomprobante = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA,TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE,TC.FECHA_REALIZADA AS FECHA_REALIZADA,
                                                           TP.NOM_PROVEEDOR AS NOM_PROVEEDOR, TE.NOMBRE AS NOMBRE FROM T_TMPORDEN_COMPRA TOC 
                                                           INNER JOIN T_TMPCOMPROBANTE TC ON TOC.COD_ORDEN_COMPRA=TC.COD_ORDEN_COMPRA
                                                           INNER JOIN T_PROVEEDOR TP ON TP.COD_PROVEEDOR=TC.COD_PROVEEDOR
-                                                          INNER JOIN T_EMPRESA TE ON TE.COD_EMPRESA=TC.COD_EMPRESA WHERE TOC.ESTADO='O'");
+                                                          INNER JOIN T_EMPRESA TE ON TE.COD_EMPRESA=TC.COD_EMPRESA WHERE TC.ESTADO='P'");
       $stmmostrarcompracomprobante->execute();
       $datoscompra = $stmmostrarcompracomprobante->fetchAll(PDO::FETCH_OBJ);
 
       return $datoscompra;
     } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function MostrarValoresOrdenfactura($codigoComprobante)
+  {
+    try {
+
+      $stmponervaloresfact = $this->bd->prepare("SELECT TC.COD_EMPRESA AS COD_EMPRESA, TPER.NOM_PERSONAL AS NOM_PERSONAL,TP.NOM_PROVEEDOR,TC.F_PAGO AS F_PAGO,
+                                                  TC.TIPO_MONEDA AS TIPO_MONEDA, TC.OBSERVACION AS OBSERVACION FROM T_TMPCOMPROBANTE TC
+                                                  INNER JOIN T_PROVEEDOR TP ON TP.COD_PROVEEDOR=TC.COD_PROVEEDOR
+                                                  INNER JOIN T_USUARIO TU ON TU.COD_USUARIO=TC.COD_USUARIO
+                                                  INNER JOIN T_PERSONAL TPER ON TPER.COD_PERSONAL=TU.COD_PERSONAL WHERE TC.COD_TMPCOMPROBANTE='$codigoComprobante'");
+      $stmponervaloresfact->execute();
+      $datosfactura = $stmponervaloresfact->fetchAll(PDO::FETCH_OBJ);
+
+      return $datosfactura;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function MostrarPonerValoresComprarFactura($codigoComprobantemostrar)
+  {
+    try {
+
+      $stmponer = $this->bd->prepare("SELECT TP.DES_PRODUCTO AS DES_PRODUCTO, TOI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA, TOI.MONTO AS MONTO FROM T_TMPORDEN_COMPRA_ITEM TOI
+                                                  INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TOI.COD_PRODUCTO WHERE TOI.COD_TMPCOMPROBANTE='$codigoComprobantemostrar'");
+      $stmponer->execute();
+      $datosf = $stmponer->fetchAll(PDO::FETCH_OBJ);
+
+      return $datosf;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function GuardarDatosFactura($idcomprobantecaptura, $empresa,  $fecha_emision, $hora, $fecha_entrega, $selecttipocompro,  $selectformapago, $selectmoneda, $serie, $correlativo, $observacion)
+  {
+    try {
+      $this->bd->beginTransaction();
+      $codigo = new m_almacen();
+
+
+
+      $insertarfacturacompra = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE_ITEM(COD_TMPCOMPROBANTE,SERIE,COD_EMPRESA,TIPO_MONEDA,F_PAGO,FECHA_EMISION,HORA,FECHA_ENTREGA,TIPO_COMPROBANTE)
+                                                    VALUES('$idcomprobantecaptura','$serie','$empresa','$selectmoneda','$selectformapago','$hora','$fecha_emision','$fecha_entrega','$selecttipocompro')");
+      $insertfactura = $insertarfacturacompra->execute();
+
+
+
+
+
+      $insertfactura = $this->bd->commit();
+      return $insertfactura;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
       die($e->getMessage());
     }
   }
