@@ -41,6 +41,21 @@ $(function () {
   });
   //----------------------------------------------------------------//
 
+  /*------------------------- PONER LA HORA ACTUAL --------------------*/
+  function actualizarHora() {
+    var ahora = new Date();
+    var horaActual = ahora.getHours();
+    var minutosActuales = ahora.getMinutes();
+    var horaYMinutos =
+      horaActual + ":" + (minutosActuales < 10 ? "0" : "") + minutosActuales;
+
+    $("#hora").val(horaYMinutos);
+  }
+
+  actualizarHora();
+  setInterval(actualizarHora, 100);
+  /*----------------------------------------------------------------- */
+
   /*----------------------MOSTRAR LA ORDEN DE COMPRA--------------- */
   function cargarOrdenCompraComprobante() {
     const accion = "mostrarcompracomprobante";
@@ -60,6 +75,7 @@ $(function () {
                             <td data-titulo='PROVEEDOR' style='text-align: center;'>${task.NOM_PROVEEDOR}</td>
                             <td data-titulo='EMPRESA' style='text-align: center;'>${task.NOMBRE}</td>
                             <td style="text-align:center;"><button class="custom-icon"  id="clickcomprobante"><i class="icon-check"></i></button></td>
+                            <!--<td style="text-align:center;"><button class="custom-icon-pdf"  id="clickpdf"><i class="icon-print"></i></button></td>-->
                           </tr>`;
           });
           $("#tablamostarcomprobante").html(template);
@@ -73,6 +89,61 @@ $(function () {
     });
   }
   /*-------------------------------------------------------------- */
+
+  /* -----------------------Bloquea las fechas marcadas------------------------- */
+
+  let fechaActual = new Date().toISOString().split("T")[0];
+  $("#fecha_emision").val(fechaActual);
+  $("#fecha_emision").attr("min", fechaActual);
+  $("#fecha_emision").on("blur", function () {
+    var fechaemision = $(this).val();
+
+    if (fechaemision < fechaActual) {
+      Swal.fire({
+        icon: "error",
+        title: "Error de fecha ingresada",
+        allowOutsideClick: false,
+        text: "La fecha es menor a la fecha actual.",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById("fecha_emision").value = fechaActual;
+        }
+      });
+    }
+  });
+
+  $("#fecha_entrega").val(fechaActual);
+  $("#fecha_entrega").attr("min", fechaActual);
+  $("#fecha_entrega").on("blur", function () {
+    var fechaentrega = $(this).val();
+
+    if (fechaentrega < fechaActual) {
+      Swal.fire({
+        icon: "error",
+        title: "Error de fecha ingresada",
+        allowOutsideClick: false,
+        text: "La fecha de entrega es menor a la fecha actual.",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById("fecha_entrega").value = fechaActual;
+        }
+      });
+    }
+  });
+  /*--------------------------------------------------------------------------- */
+
+  /*------------------------------DARLE CLICK EN DOLARES ---------------------- */
+  $("#selectmoneda").on("input", function () {
+    let tipomonedacambio = $("#selectmoneda").val();
+    if (tipomonedacambio === "D") {
+      $("#tipocambio").prop("disabled", false);
+    } else {
+      $("#tipocambio").prop("disabled", true);
+    }
+  });
+
+  /*---------------------------------------------------------------------------*/
+
   /*---------------------MOSTRAR EN ALGUNOS CAMPOS---------------- */
   $(document).on("click", "#clickcomprobante", (e) => {
     e.preventDefault();
@@ -82,12 +153,10 @@ $(function () {
       title: "Se añadio datos",
       text: "Se puso los datos correctos.",
     });
-    var codigoComprobante = $(
-      "#tmostrarcomprobante tbody tr:eq(0) td:eq(0)"
-    ).text();
 
-    // console.log("Código del Comprobante:", codigoComprobante);
-
+    let filafactura = $(e.target).closest("tr");
+    let codigoComprobante = filafactura.find("td:eq(0)").text();
+    $("#codigoorden").val(codigoComprobante);
     const accion = "ponercomprobantefactura";
 
     $.ajax({
@@ -102,6 +171,10 @@ $(function () {
         $("#selectformapago").val(lista[0].F_PAGO);
         $("#selectmoneda").val(lista[0].TIPO_MONEDA);
         // $("#observacion").val(lista[0].OBSERVACION);
+        $("#fecha_emision").val(fechaActual);
+        $("#fecha_emision").attr("min", fechaActual);
+        $("#fecha_entrega").val(fechaActual);
+        $("#fecha_entrega").attr("min", fechaActual);
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);
@@ -123,6 +196,9 @@ $(function () {
         console.error("Error al cargar los datos de la tabla:", error);
       },
     });
+
+    // let filafactura = $(e.target).closest("tr");
+    // let idcomprobantefac = filafactura.find("td:eq(0)").text();
 
     const accionfactura = "ponervaloresacomprarfactura";
     $.ajax({
@@ -157,7 +233,34 @@ $(function () {
     });
   });
   /*------------------------------------------------------------- */
+  /*----------------------AL SELECCIONAR EN DOLARES-----------------*/
+  $("#selectmoneda").on("input", function () {
+    let tipomonedacambio = $("#selectmoneda").val();
+    if (tipomonedacambio === "D") {
+      const accion = "consultadecambiodemoneda";
 
+      $.ajax({
+        url: "./c_almacen.php",
+        type: "POST",
+        data: {
+          accion: accion,
+        },
+        success: function (response) {
+          if (isJSON(response)) {
+            let tipocambio = JSON.parse(response);
+            console.log(tipocambio);
+            $("#tipocambio").val(tipocambio[0].VENTA);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error al cargar los datos:", error);
+        },
+      });
+    } else {
+      $("#tipocambio").val("");
+    }
+  });
+  /*---------------------------------------------------------------*/
   /*---------- GUARDAR LOS DATOS CAPTURADOS---------------------- */
   $("#guardarfacturaorden").click((e) => {
     e.preventDefault();
@@ -171,37 +274,67 @@ $(function () {
     let correlativo = $("#correlativo").val();
     let selectformapago = $("#selectformapago").val();
     let selectmoneda = $("#selectmoneda").val();
+    let tipocambio = $("#tipocambio").val();
     let observacion = $("#observacion").val();
 
-    var idcomprobantecaptura = $(
-      "#tmostrarcomprobante tbody tr:eq(0) td:eq(0)"
-    ).text();
+    let idcomprobantecaptura = $("#codigoorden").val();
+    console.log(empresa);
+    // const accion = "guardadatosfactura";
 
-    const accion = "guardadatosfactura";
-
-    $.ajax({
-      url: "./c_almacen.php",
-      type: "POST",
-      data: {
-        accion: accion,
-        idcomprobantecaptura: idcomprobantecaptura,
-        empresa: empresa,
-        fecha_emision: fecha_emision,
-        hora: hora,
-        fecha_entrega: fecha_entrega,
-        codusu: codusu,
-        selecttipocompro: selecttipocompro,
-        serie: serie,
-        selectformapago: selectformapago,
-        selectmoneda: selectmoneda,
-        correlativo: correlativo,
-        observacion: observacion,
-      },
-      success: function (response) {},
-      error: function (xhr, status, error) {
-        console.error("Error al cargar los datos de la tabla:", error);
-      },
-    });
+    // $.ajax({
+    //   url: "./c_almacen.php",
+    //   type: "POST",
+    //   data: {
+    //     accion: accion,
+    //     idcomprobantecaptura: idcomprobantecaptura,
+    //     empresa: empresa,
+    //     fecha_emision: fecha_emision,
+    //     hora: hora,
+    //     fecha_entrega: fecha_entrega,
+    //     codusu: codusu,
+    //     selecttipocompro: selecttipocompro,
+    //     serie: serie,
+    //     selectformapago: selectformapago,
+    //     selectmoneda: selectmoneda,
+    //     tipocambio: tipocambio,
+    //     correlativo: correlativo,
+    //     observacion: observacion,
+    //   },
+    //   success: function (response) {
+    //     if (response == "ok") {
+    //       Swal.fire({
+    //         title: "¡Guardado exitoso!",
+    //         text: "Los datos se han guardado correctamente.",
+    //         icon: "success",
+    //         allowOutsideClick: false,
+    //         confirmButtonText: "Aceptar",
+    //       }).then((result) => {
+    //         if (result.isConfirmed) {
+    //           $("#selectempresa").val("00003");
+    //           $("#fecha_emision").val(fechaActual);
+    //           $("#fecha_emision").attr("min", fechaActual);
+    //           $("#fecha_entrega").val(fechaActual);
+    //           $("#fecha_entrega").attr("min", fechaActual);
+    //           $("#selecttipocompro").val("none").trigger("change");
+    //           $("#personal").val("");
+    //           $("#proveedor").val("");
+    //           $("#serie").val("");
+    //           $("#correlativo").val("");
+    //           $("#selectformapago").val("E");
+    //           $("#selectmoneda").val("S");
+    //           $("#tipocambio").prop("disabled", true);
+    //           $("#tipocambio").val("");
+    //           $("#observacion").val("");
+    //           $("#codigoorden").val("");
+    //           cargarOrdenCompraComprobante();
+    //         }
+    //       });
+    //     }
+    //   },
+    //   error: function (xhr, status, error) {
+    //     console.error("Error al cargar los datos de la tabla:", error);
+    //   },
+    // });
   });
   /*---------------------------------------------------------- */
 });

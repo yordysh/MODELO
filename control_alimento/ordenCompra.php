@@ -221,8 +221,29 @@ $dataProveedores = $mostrar->MostrarProveedores();
                             <div class="ctnBtn">
                                 <button id="insertarOrdenCompraInsumos" class="btn btn-primary boton-insertar">Guardar</button>
                             </div>
-                            <div class="">
-                                <button id="generarpdf" class="btn btn-success boton-pdf">PDF</button>
+                            <div class="aniomes">
+                                <div class="styleanmes"><label for="mes">Seleccione el año:</label>
+                                    <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
+                                </div>
+                                <div class="styleanmes"> <label for="mes">Seleccione el mes:</label>
+                                    <select id="mes" name="mes">
+                                        <option value="" selected disabled>Seleccione...</option>
+                                        <option value="01">Enero</option>
+                                        <option value="02">Febrero</option>
+                                        <option value="03">Marzo</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Mayo</option>
+                                        <option value="06">Junio</option>
+                                        <option value="07">Julio</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Septiembre</option>
+                                        <option value="10">Octubre</option>
+                                        <option value="11">Noviembre</option>
+                                        <option value="12">Diciembre</option>
+                                    </select>
+                                </div>
+
+                                <a class="btn btn-success" href="#" onclick="generarPDF()">Generar PDF</a>
                             </div>
                         </div>
                 </div>
@@ -239,6 +260,20 @@ $dataProveedores = $mostrar->MostrarProveedores();
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxOrdenCompra.js"></script>
     <script src="./js/select2.min.js"></script>
+    <script>
+        function generarPDF() {
+            var anioSeleccionado = document.getElementById("anio").value;
+            var mesSeleccionado = document.getElementById("mes").value;
+
+            // Enviar los valores a tu script de generación de PDF
+            var url =
+                "pdf-factura-orden.php?anio=" +
+                anioSeleccionado +
+                "&mes=" +
+                mesSeleccionado;
+            window.open(url, "_blank");
+        }
+    </script>
 </body>
 
 </html>

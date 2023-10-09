@@ -1,21 +1,24 @@
-<div class="modal fade" id="subirfactura" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="mostrarfacturasubir" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Datos personales proveedor</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Tomar foto</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="form">
 
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre proveedor</label>
-                        <input type="text" id="nombreproveedor" name="nombreproveedor" class="form-control" required>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="checkfoto">
+                        <label class="form-check-label" for="flexCheckDefault"> Subir imagen de galeria</label>
                     </div>
                     <div class="mb-3">
-                        <label for="dni" class="form-label">DNI</label>
-                        <input type="text" id="dniproveedor" name="dniproveedor" class="form-control" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
+                        <select id="selectdispositivo" class="form-select" aria-label="Default select example">
+                            <option value="E" selected>DroidCam Source3</option>
+                        </select>
+
                     </div>
+                    <button>Tomar foto</button>
                 </form>
             </div>
             <div class="modal-footer">

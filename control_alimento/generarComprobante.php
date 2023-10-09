@@ -118,6 +118,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 </tbody>
                             </table>
                         </div>
+                        <input type="text" id="codigoorden" class="form-control">
                         <div class="row g-4 top-div">
                             <center><label class="title_table">REGISTRAR COMPROBANTE</label></center>
                         </div>
@@ -140,12 +141,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Text input hora-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Hora emisión</label>
-                            <?php
-                            date_default_timezone_set('America/Lima');
-
-                            $horaPeru = date('H:i');
-                            ?>
-                            <input type="text" id="hora" class="form-control" value="<?php echo $horaPeru; ?>" disabled>
+                            <input type="text" id="hora" class="form-control" disabled>
                         </div>
 
                         <!-- Text input fecha entrega-->
@@ -228,7 +224,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Text input tipo de cambio-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Tipo cambio</label>
-                            <input type="text" id="tipocambio" class="form-control" value="0.000" disabled>
+                            <input type="text" id="tipocambio" class="form-control" disabled placeholder="0.000">
                         </div>
 
                         <!-- Text input tipo de cambio sunat-->
@@ -291,7 +287,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Insertar nuevas cantidades -->
                         <div class="contenedor">
                             <div class="ctnBtn">
-                                <button id="guardarfacturaorden" class="btn btn-primary boton-insertar">Guardar</button>
+                                <button id="guardarfacturaorden" class="btn btn-primary boton-insertar" data-bs-toggle="modal" data-bs-target="#mostrarfacturasubir">Guardar</button>
                             </div>
                         </div>
                 </div>

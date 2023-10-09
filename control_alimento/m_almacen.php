@@ -3531,29 +3531,6 @@ class m_almacen
         $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET ESTADO='O',MONTO='$precio',COD_TMPCOMPROBANTE='$codigocomprobante' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_PRODUCTO='$codigoproducto'");
         $stmactualizaitemcompra->execute();
         $sumordenitem = $sumordenitem + $precio;
-
-
-
-        // $stmconsultadeestado = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND ESTADO='P'");
-        // $stmconsultadeestado->execute();
-        // $resul = $stmconsultadeestado->fetch(PDO::FETCH_ASSOC);
-        // $contador = $resul['COUNT'];
-        // if ($contador == 0) {
-
-
-        // $stmSumaTotal = $this->bd->prepare("SELECT SUM(MONTO) AS MONTO FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_TMPCOMPROBANTE='$codigocomprobante'");
-        // $stmSumaTotal->execute();
-        // $resulsum = $stmSumaTotal->fetch(PDO::FETCH_ASSOC);
-        // $sumatotal = $resulsum['MONTO'];
-
-        //   $stmcambioestado = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='O',TOTAL='$sumatotal' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
-        //   $stmcambioestado->execute();
-        // }
-        // else {
-        //   $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET ESTADO='O',MONTO='$precio',COD_TMPCOMPROBANTE='$codigocomprobante' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_PRODUCTO='$codigoproducto'");
-        //   $stmactualizaitemcompra->execute();
-        //   $sumordenitem = $sumordenitem + $precio;
-        // }
       }
 
       $stmconsultadeestado = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND ESTADO='P'");
@@ -3652,26 +3629,88 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function GuardarDatosFactura($idcomprobantecaptura, $empresa,  $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $serie, $correlativo, $observacion)
+  public function MostrarTipoCambioEnSoles()
+  {
+    try {
+
+      $stmmostrartipocambio = $this->bd->prepare("SELECT TOP 1 FECHA, VENTA FROM T_TIPOCAMBIO ORDER BY FECHA DESC");
+      $stmmostrartipocambio->execute();
+      $datostipocambio = $stmmostrartipocambio->fetchAll(PDO::FETCH_OBJ);
+
+      return $datostipocambio;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function GuardarDatosFactura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro, $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion)
   {
     try {
       $this->bd->beginTransaction();
       $codigo = new m_almacen();
 
+      // var_dump($idcomprobantecaptura);
+      // var_dump($empresa);
+      // var_dump($fecha_emision);
+      // var_dump($hora);
+      // var_dump($fecha_entrega);
+      // var_dump($codusu);
+      // var_dump($selecttipocompro);
+      // var_dump($selectformapago);
+      // var_dump($selectmoneda);
+      // var_dump($tipocambio);
+      // var_dump($serie);
+      // var_dump($correlativo);
+      // var_dump($observacion);
 
-
-      $insertarfacturacompra = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE_ITEM(COD_TMPCOMPROBANTE,SERIE,CORRELATIVO,COD_EMPRESA,TIPO_MONEDA,F_PAGO,FECHA_EMISION,HORA,FECHA_ENTREGA,TIPO_COMPROBANTE,OBSERVACION)
-                                                    VALUES('$idcomprobantecaptura','$serie','$correlativo','$empresa','$selectmoneda','$selectformapago','$hora','$fecha_emision','$fecha_entrega','$codusu','$selecttipocompro','$observacion')");
+      // exit();
+      if ($tipocambio) {
+        $insertarfacturacompra = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE_ITEM(COD_TMPCOMPROBANTE,SERIE,CORRELATIVO,COD_EMPRESA,TIPO_MONEDA,F_PAGO,FECHA_EMISION,HORA,FECHA_ENTREGA,TIPO_COMPROBANTE,OBSERVACION,COD_USUARIO,TIPO_VENTA)
+                                                       VALUES('$idcomprobantecaptura','$serie','$correlativo','$empresa','$selectmoneda','$selectformapago','$fecha_emision','$hora','$fecha_entrega','$selecttipocompro','$observacion','$codusu','$tipocambio')");
+      } else {
+        $insertarfacturacompra = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE_ITEM(COD_TMPCOMPROBANTE,SERIE,CORRELATIVO,COD_EMPRESA,TIPO_MONEDA,F_PAGO,FECHA_EMISION,HORA,FECHA_ENTREGA,TIPO_COMPROBANTE,OBSERVACION,COD_USUARIO)
+                                                        VALUES('$idcomprobantecaptura','$serie','$correlativo','$empresa','$selectmoneda','$selectformapago','$fecha_emision','$hora','$fecha_entrega','$selecttipocompro','$observacion','$codusu')");
+      }
       $insertfactura = $insertarfacturacompra->execute();
 
-
-
-
+      $actualizarcomprobante = $this->bd->prepare("UPDATE T_TMPCOMPROBANTE SET ESTADO='C' WHERE COD_TMPCOMPROBANTE='$idcomprobantecaptura'");
+      $actualizarcomprobante->execute();
 
       $insertfactura = $this->bd->commit();
       return $insertfactura;
     } catch (Exception $e) {
       $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarFacturaProveedorPDF()
+  {
+    try {
+
+      $mostrardatospdf = $this->bd->prepare("SELECT TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR FROM T_TMPCOMPROBANTE TC
+                                              INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TC.COD_PROVEEDOR");
+      $mostrardatospdf->execute();
+      $datosfactura = $mostrardatospdf->fetchAll(PDO::FETCH_OBJ);
+
+      return $datosfactura;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function MostrarFacturaPDF()
+  {
+    try {
+
+      $mostrardatospdf = $this->bd->prepare("SELECT TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR, TP.DES_PRODUCTO AS DES_PRODUCTO,
+                                              TI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA,TI.MONTO AS MONTO FROM T_TMPCOMPROBANTE TC
+                                              INNER JOIN T_TMPORDEN_COMPRA_ITEM TI ON TI.COD_TMPCOMPROBANTE=TC.COD_TMPCOMPROBANTE
+                                              INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TC.COD_PROVEEDOR
+                                              INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO= TI.COD_PRODUCTO");
+      $mostrardatospdf->execute();
+      $datosfactura = $mostrardatospdf->fetchAll(PDO::FETCH_OBJ);
+
+      return $datosfactura;
+    } catch (Exception $e) {
       die($e->getMessage());
     }
   }

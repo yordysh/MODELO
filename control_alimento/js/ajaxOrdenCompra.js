@@ -74,6 +74,30 @@ $(function () {
   }
   /*--------------------------------------------------------------*/
 
+  /* -----------------------Bloquea las fechas marcadas------------------------- */
+
+  let fechaActual = new Date().toISOString().split("T")[0];
+  $("#fecha").val(fechaActual);
+  $("#fecha").attr("min", fechaActual);
+  $("#fecha").on("blur", function () {
+    var fechaemision = $(this).val();
+
+    if (fechaemision < fechaActual) {
+      Swal.fire({
+        icon: "error",
+        title: "Error de fecha ingresada",
+        allowOutsideClick: false,
+        text: "La fecha es menor a la fecha actual.",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById("fecha").value = fechaActual;
+        }
+      });
+    }
+  });
+
+  /*--------------------------------------------------------------------------- */
+
   /*-----------CLICK DE PROVEEDOR Y PONER INPUTS------------------*/
   $("#selectproveedor").change((e) => {
     e.preventDefault();
@@ -333,7 +357,7 @@ $(function () {
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
-              $("#fecha").val("");
+              $("#fecha").val(fechaActual);
               $("#selectempresa").val("00003").trigger("change");
               $("#personal").val("");
               $("#selectoficina").val("00026").trigger("change");

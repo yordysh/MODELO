@@ -510,6 +510,9 @@ if ($accion == 'insertar') {
     $codigoComprobantemostrar = trim($_POST['codigoComprobantemostrar']);
     $respuesta = c_almacen::c_poner_valores_comprar_factura($codigoComprobantemostrar);
     echo $respuesta;
+} elseif ($accion == 'consultadecambiodemoneda') {
+    $respuesta = c_almacen::c_consulta_de_tipo_cambio();
+    echo $respuesta;
 } elseif ($accion == 'guardadatosfactura') {
     $idcomprobantecaptura = trim($_POST['idcomprobantecaptura']);
     $empresa = trim($_POST['empresa']);
@@ -520,11 +523,12 @@ if ($accion == 'insertar') {
     $selecttipocompro = trim($_POST['selecttipocompro']);
     $selectformapago = trim($_POST['selectformapago']);
     $selectmoneda = trim($_POST['selectmoneda']);
+    $tipocambio = trim($_POST['tipocambio']);
     $serie = trim($_POST['serie']);
     $correlativo = trim($_POST['correlativo']);
     $observacion = trim($_POST['observacion']);
 
-    $respuesta = c_almacen::c_guardar_datos_factura($idcomprobantecaptura, $empresa,  $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $serie, $correlativo, $observacion);
+    $respuesta = c_almacen::c_guardar_datos_factura($idcomprobantecaptura, $empresa,  $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion);
     echo $respuesta;
 }
 
@@ -3011,12 +3015,34 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function  c_guardar_datos_factura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $serie, $correlativo, $observacion)
+    static function  c_consulta_de_tipo_cambio()
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarTipoCambioEnSoles();
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "FECHA" => $row->FECHA,
+                    "VENTA" => $row->VENTA,
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function  c_guardar_datos_factura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion)
     {
         $m_formula = new m_almacen();
 
 
-        $respuesta = $m_formula->GuardarDatosFactura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro, $selectformapago, $selectmoneda, $serie, $correlativo, $observacion);
+        $respuesta = $m_formula->GuardarDatosFactura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro, $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion);
 
         if ($respuesta) {
             return "ok";

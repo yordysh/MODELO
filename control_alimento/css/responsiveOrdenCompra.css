@@ -129,6 +129,13 @@ section {
   border-radius: 50%;
   border: none;
 }
+.custom-icon-pdf {
+  background-color: #f5530e;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 40%;
+  border: none;
+}
 /* --------------------------------------------------------------- */
 
 /*-------------- Estilo de MENUBAR ---------------------*/
