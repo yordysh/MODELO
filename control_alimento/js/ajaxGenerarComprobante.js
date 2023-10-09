@@ -77,10 +77,16 @@ $(function () {
   $(document).on("click", "#clickcomprobante", (e) => {
     e.preventDefault();
 
+    Swal.fire({
+      icon: "success",
+      title: "Se añadio datos",
+      text: "Se puso los datos correctos.",
+    });
     var codigoComprobante = $(
       "#tmostrarcomprobante tbody tr:eq(0) td:eq(0)"
     ).text();
-    console.log("Código del Comprobante:", codigoComprobante);
+
+    // console.log("Código del Comprobante:", codigoComprobante);
 
     const accion = "ponercomprobantefactura";
 
@@ -91,11 +97,27 @@ $(function () {
       success: function (response) {
         let lista = JSON.parse(response);
         $("#selectempresa").val(lista[0].COD_EMPRESA);
-        $("#personal").val(lista[0].NOM_PERSONAL);
+        // $("#personal").val(lista[0].NOM_PERSONAL);
         $("#proveedor").val(lista[0].NOM_PROVEEDOR);
         $("#selectformapago").val(lista[0].F_PAGO);
         $("#selectmoneda").val(lista[0].TIPO_MONEDA);
-        $("#observacion").val(lista[0].OBSERVACION);
+        // $("#observacion").val(lista[0].OBSERVACION);
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+
+    let codpersonalusu = $("#codpersonal").val();
+    const accionpersonal = "ponerpersonalentrante";
+
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: { accion: accionpersonal, codpersonalusu: codpersonalusu },
+      success: function (response) {
+        let listaresponse = JSON.parse(response);
+        $("#personal").val(listaresponse[0].NOM_PERSONAL);
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);
@@ -120,7 +142,7 @@ $(function () {
             <td data-titulo="NOMBRE">${task.DES_PRODUCTO}</td>
             <td data-titulo="CANTIDAD">${task.CANTIDAD_MINIMA}</td>
             <td data-titulo="PRECIO">${task.MONTO}</td>
-            <td data-titulo="LOTE">${task.MONTO}</td>
+            <!--<td data-titulo="LOTE">${task.MONTO}</td>-->
         </tr>`;
           });
 
@@ -143,11 +165,12 @@ $(function () {
     let fecha_emision = $("#fecha_emision").val();
     let hora = $("#hora").val();
     let fecha_entrega = $("#fecha_entrega").val();
+    let codusu = $("#codpersonal").val();
     let selecttipocompro = $("#selecttipocompro").val();
     let serie = $("#serie").val();
+    let correlativo = $("#correlativo").val();
     let selectformapago = $("#selectformapago").val();
     let selectmoneda = $("#selectmoneda").val();
-    let correlativo = $("#correlativo").val();
     let observacion = $("#observacion").val();
 
     var idcomprobantecaptura = $(
@@ -166,6 +189,7 @@ $(function () {
         fecha_emision: fecha_emision,
         hora: hora,
         fecha_entrega: fecha_entrega,
+        codusu: codusu,
         selecttipocompro: selecttipocompro,
         serie: serie,
         selectformapago: selectformapago,

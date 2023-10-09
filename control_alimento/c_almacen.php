@@ -502,6 +502,10 @@ if ($accion == 'insertar') {
     $codigoComprobante = trim($_POST['codigoComprobante']);
     $respuesta = c_almacen::c_poner_comprobantefactura($codigoComprobante);
     echo $respuesta;
+} elseif ($accion == 'ponerpersonalentrante') {
+    $codpersonalusu = trim($_POST['codpersonalusu']);
+    $respuesta = c_almacen::c_poner_personal_usu($codpersonalusu);
+    echo $respuesta;
 } elseif ($accion == 'ponervaloresacomprarfactura') {
     $codigoComprobantemostrar = trim($_POST['codigoComprobantemostrar']);
     $respuesta = c_almacen::c_poner_valores_comprar_factura($codigoComprobantemostrar);
@@ -512,6 +516,7 @@ if ($accion == 'insertar') {
     $fecha_emision = $_POST['fecha_emision'];
     $hora = $_POST['hora'];
     $fecha_entrega = $_POST['fecha_entrega'];
+    $codusu = $_POST['codusu'];
     $selecttipocompro = trim($_POST['selecttipocompro']);
     $selectformapago = trim($_POST['selectformapago']);
     $selectmoneda = trim($_POST['selectmoneda']);
@@ -519,7 +524,7 @@ if ($accion == 'insertar') {
     $correlativo = trim($_POST['correlativo']);
     $observacion = trim($_POST['observacion']);
 
-    $respuesta = c_almacen::c_guardar_datos_factura($idcomprobantecaptura, $empresa,  $fecha_emision, $hora, $fecha_entrega, $selecttipocompro,  $selectformapago, $selectmoneda, $serie, $correlativo, $observacion);
+    $respuesta = c_almacen::c_guardar_datos_factura($idcomprobantecaptura, $empresa,  $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $serie, $correlativo, $observacion);
     echo $respuesta;
 }
 
@@ -2957,6 +2962,31 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
+    static function c_poner_personal_usu($codpersonalusu)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->PonerPersonalUsu($codpersonalusu);
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_USUARIO" => $row->COD_USUARIO,
+                    "COD_PERSONAL " => $row->COD_PERSONAL,
+                    "NOM_PERSONAL" => $row->NOM_PERSONAL,
+
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
     static function c_poner_valores_comprar_factura($codigoComprobantemostrar)
     {
         try {
@@ -2981,12 +3011,12 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function  c_guardar_datos_factura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $selecttipocompro,  $selectformapago, $selectmoneda, $serie, $correlativo, $observacion)
+    static function  c_guardar_datos_factura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $serie, $correlativo, $observacion)
     {
         $m_formula = new m_almacen();
 
 
-        $respuesta = $m_formula->GuardarDatosFactura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $selecttipocompro, $selectformapago, $selectmoneda, $serie, $correlativo, $observacion);
+        $respuesta = $m_formula->GuardarDatosFactura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro, $selectformapago, $selectmoneda, $serie, $correlativo, $observacion);
 
         if ($respuesta) {
             return "ok";

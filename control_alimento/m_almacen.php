@@ -3528,25 +3528,50 @@ class m_almacen
         $cantidad = $insumos["cantidad"];
         $precio = $insumos["precio"];
 
-
         $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET ESTADO='O',MONTO='$precio',COD_TMPCOMPROBANTE='$codigocomprobante' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_PRODUCTO='$codigoproducto'");
         $stmactualizaitemcompra->execute();
         $sumordenitem = $sumordenitem + $precio;
 
-        $stmconsultadeestado = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND ESTADO='P'");
-        $stmconsultadeestado->execute();
-        $resul = $stmconsultadeestado->fetch(PDO::FETCH_ASSOC);
-        $contador = $resul['COUNT'];
-        if ($contador == 0) {
 
-          $stmSumaTotal = $this->bd->prepare("SELECT SUM(MONTO) AS MONTO FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND ESTADO='P'");
-          $stmSumaTotal->execute();
-          $resulsum = $stmSumaTotal->fetch(PDO::FETCH_ASSOC);
-          $sumatotal = $resulsum['MONTO'];
 
-          $stmcambioestado = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='O',TOTAL='$sumatotal' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
-          $stmcambioestado->execute();
-        }
+        // $stmconsultadeestado = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND ESTADO='P'");
+        // $stmconsultadeestado->execute();
+        // $resul = $stmconsultadeestado->fetch(PDO::FETCH_ASSOC);
+        // $contador = $resul['COUNT'];
+        // if ($contador == 0) {
+
+
+        // $stmSumaTotal = $this->bd->prepare("SELECT SUM(MONTO) AS MONTO FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_TMPCOMPROBANTE='$codigocomprobante'");
+        // $stmSumaTotal->execute();
+        // $resulsum = $stmSumaTotal->fetch(PDO::FETCH_ASSOC);
+        // $sumatotal = $resulsum['MONTO'];
+
+        //   $stmcambioestado = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='O',TOTAL='$sumatotal' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
+        //   $stmcambioestado->execute();
+        // }
+        // else {
+        //   $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET ESTADO='O',MONTO='$precio',COD_TMPCOMPROBANTE='$codigocomprobante' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_PRODUCTO='$codigoproducto'");
+        //   $stmactualizaitemcompra->execute();
+        //   $sumordenitem = $sumordenitem + $precio;
+        // }
+      }
+
+      $stmconsultadeestado = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND ESTADO='P'");
+      $stmconsultadeestado->execute();
+      $resul = $stmconsultadeestado->fetch(PDO::FETCH_ASSOC);
+      $contador = $resul['COUNT'];
+
+      $stmsumatoriadecordenitem = $this->bd->prepare("SELECT SUM(MONTO) AS SUMA FROM T_TMPORDEN_COMPRA_ITEM  WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
+      $stmsumatoriadecordenitem->execute();
+      $resulsumitem = $stmsumatoriadecordenitem->fetch(PDO::FETCH_ASSOC);
+      $sumatoria = $resulsumitem['SUMA'];
+
+      if ($contador == 0) {
+        $stmSumatoriadeinsumospedidos = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET TOTAL='$sumatoria' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
+        $stmSumatoriadeinsumospedidos->execute();
+
+        $stmcambioestado = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='O' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
+        $stmcambioestado->execute();
       }
 
       $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPCOMPROBANTE SET MONTO_TOTAL='$sumordenitem' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_TMPCOMPROBANTE='$codigocomprobante'");
@@ -3599,6 +3624,20 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function PonerPersonalUsu($codpersonalusu)
+  {
+    try {
+
+      $stmponerpersonal = $this->bd->prepare("SELECT TU.COD_USUARIO AS COD_USUARIO,TP.COD_PERSONAL AS COD_PERSONAL, TP.NOM_PERSONAL AS NOM_PERSONAL FROM T_USUARIO TU 
+                                                INNER JOIN T_PERSONAL TP ON TP.COD_PERSONAL=TU.COD_PERSONAL WHERE TU.COD_USUARIO='$codpersonalusu'");
+      $stmponerpersonal->execute();
+      $datospersonal = $stmponerpersonal->fetchAll(PDO::FETCH_OBJ);
+
+      return $datospersonal;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function MostrarPonerValoresComprarFactura($codigoComprobantemostrar)
   {
     try {
@@ -3613,7 +3652,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function GuardarDatosFactura($idcomprobantecaptura, $empresa,  $fecha_emision, $hora, $fecha_entrega, $selecttipocompro,  $selectformapago, $selectmoneda, $serie, $correlativo, $observacion)
+  public function GuardarDatosFactura($idcomprobantecaptura, $empresa,  $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $serie, $correlativo, $observacion)
   {
     try {
       $this->bd->beginTransaction();
@@ -3621,8 +3660,8 @@ class m_almacen
 
 
 
-      $insertarfacturacompra = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE_ITEM(COD_TMPCOMPROBANTE,SERIE,COD_EMPRESA,TIPO_MONEDA,F_PAGO,FECHA_EMISION,HORA,FECHA_ENTREGA,TIPO_COMPROBANTE)
-                                                    VALUES('$idcomprobantecaptura','$serie','$empresa','$selectmoneda','$selectformapago','$hora','$fecha_emision','$fecha_entrega','$selecttipocompro')");
+      $insertarfacturacompra = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE_ITEM(COD_TMPCOMPROBANTE,SERIE,CORRELATIVO,COD_EMPRESA,TIPO_MONEDA,F_PAGO,FECHA_EMISION,HORA,FECHA_ENTREGA,TIPO_COMPROBANTE,OBSERVACION)
+                                                    VALUES('$idcomprobantecaptura','$serie','$correlativo','$empresa','$selectmoneda','$selectformapago','$hora','$fecha_emision','$fecha_entrega','$codusu','$selecttipocompro','$observacion')");
       $insertfactura = $insertarfacturacompra->execute();
 
 

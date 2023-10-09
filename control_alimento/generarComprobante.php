@@ -224,6 +224,43 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 <option value="D">DOLARES</option>
                             </select>
                         </div>
+
+                        <!-- Text input tipo de cambio-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Tipo cambio</label>
+                            <input type="text" id="tipocambio" class="form-control" value="0.000" disabled>
+                        </div>
+
+                        <!-- Text input tipo de cambio sunat-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">TIPO CAMBIO SUNAT</label>
+                            <input type="text" id="tipocambiosunat" class="form-control" value="3.823" disabled>
+                        </div>
+
+                        <!-- Text input numero operacion-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">N° OPERACIÓN</label>
+                            <input type="text" id="numoperacion" class="form-control" value="0.000" disabled>
+                        </div>
+
+                        <!-- Text input numero operacion referencial-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">N° OPERACIÓN REFERENCIAL</label>
+                            <input type="text" id="numoperacion" class="form-control" value="0.000" disabled>
+                        </div>
+
+
+                        <!-- Text input IGV-->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">INCLUYE IGV</label>
+                        </div>
+                        <div class="form-outline mb-4">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioigvsi" checked>
+                            <label class="form-check-label">SI</label>
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioigvno">
+                            <label class="form-check-label">NO</label>
+                        </div>
+
                         <!-- Text observacion-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Observación</label>
@@ -241,7 +278,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                         <th class="thtitulo" scope="col">NOMBRE</th>
                                         <th class="thtitulo" scope="col">CANTIDAD</th>
                                         <th class="thtitulo" scope="col">PRECIO</th>
-                                        <th class="thtitulo" scope="col">LOTE</th>
+                                        <!-- <th class="thtitulo" scope="col">LOTE</th> -->
                                         <th class="thtitulo" scope="col">SELECCIONAR</th>
                                     </tr>
                                 </thead>

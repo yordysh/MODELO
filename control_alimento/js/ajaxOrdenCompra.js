@@ -329,6 +329,7 @@ $(function () {
             title: "¡Guardado exitoso!",
             text: "Los datos se han guardado correctamente.",
             icon: "success",
+            allowOutsideClick: false,
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {

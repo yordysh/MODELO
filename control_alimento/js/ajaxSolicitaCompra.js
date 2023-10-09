@@ -73,6 +73,7 @@ $(function () {
   /*-----------------------Mirar compra------------------------- */
   $(document).on("click", "#mirarcompra", (e) => {
     e.preventDefault();
+
     let idcodordencompra = $("#tablaordencomprarequerimiento tr").attr(
       "id_orden_compra"
     );
@@ -94,7 +95,18 @@ $(function () {
                             <td data-titulo='CANTIDAD POR COMPRAR'>${task.CANTIDAD_MINIMA}</td>
                          </tr>`;
           });
-          $("#tablatotalordencompra").html(template);
+          Swal.fire({
+            title: "¡Datos añadidos!",
+            text: "Se añadieron los datos correctamente.",
+            icon: "success",
+            allowOutsideClick: false,
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#tablatotalordencompra").html(template);
+            }
+          });
+          // $("#tablatotalordencompra").html(template);
         } else {
           $("#tablatotalordencompra").empty();
         }
@@ -129,6 +141,7 @@ $(function () {
             title: "¡Guardado exitoso!",
             text: "Los datos se han guardado correctamente.",
             icon: "success",
+            allowOutsideClick: false,
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
