@@ -347,6 +347,10 @@ $(function () {
         datosSeleccionadosInsumos: datosSeleccionadosInsumos,
         idcompraaprobada: idcompraaprobada,
       },
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       success: function (response) {
         if (response == "ok") {
           Swal.fire({
@@ -381,6 +385,10 @@ $(function () {
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
       },
     });
   });

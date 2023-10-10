@@ -549,7 +549,7 @@ $(function () {
     });
   }
   async function alertaOrdenCompra() {
-    const accion = "mostrarordencompraalmacen";
+    const accion = "mostrarordencompraalmacenalerta";
 
     $.ajax({
       url: "./c_almacen.php",

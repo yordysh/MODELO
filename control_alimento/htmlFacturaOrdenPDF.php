@@ -2,9 +2,10 @@
 require_once "m_almacen.php";
 // require_once "../funciones/f_funcion.php";
 
-$anioSeleccionado = $_GET['anio'];
-$mesSeleccionado = $_GET['mes'];
+$anioSeleccionado = $_GET['seleccion'];
+$anio = substr($anioSeleccionado, 0, 4);
 /*convierte el valor en enetero*/
+$mesSeleccionado = substr($anioSeleccionado, -2);
 $mesNumerico = intval($mesSeleccionado);
 
 $mesesEnLetras = array(
@@ -24,7 +25,7 @@ $mesesEnLetras = array(
 $mesConvert = $mesesEnLetras[$mesNumerico];
 
 $mostrar = new m_almacen();
-$proveedor = $mostrar->MostrarFacturaProveedorPDF();
+$proveedor = $mostrar->MostrarFacturaProveedorPDF($anioSeleccionado);
 $productoscompra = $mostrar->MostrarFacturaPDF();
 $nombre = 'LBS-OP-FR-01';
 // $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
@@ -100,7 +101,7 @@ $nombre = 'LBS-OP-FR-01';
                 <tr>
 
                     <td rowspan="4" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td>
-                    <td rowspan="4" style="text-align: center; font-size:30px; font-weigth:200;">FACTURA ORDEN COMPRA - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                    <td rowspan="4" style="text-align: center; font-size:30px; font-weigth:200;">FACTURA ORDEN COMPRA - <?php echo ($mesConvert . ' ' . $anio); ?> </td>
                     <td class="estilotd">LBS-OP-FR-01</td>
 
                 </tr>
@@ -112,7 +113,7 @@ $nombre = 'LBS-OP-FR-01';
                     <td class="estilotd">Página:</td>
                 </tr>
                 <tr>
-                    <td class="estilotd">Fecha: <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                    <td class="estilotd">Fecha: <?php echo $anioSeleccionado; ?> </td>
                 </tr>
             </tbody>
         </table>

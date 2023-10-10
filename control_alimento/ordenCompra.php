@@ -222,7 +222,7 @@ $dataProveedores = $mostrar->MostrarProveedores();
                                 <button id="insertarOrdenCompraInsumos" class="btn btn-primary boton-insertar">Guardar</button>
                             </div>
                             <div class="aniomes">
-                                <div class="styleanmes"><label for="mes">Seleccione el año:</label>
+                                <!-- <div class="styleanmes"><label for="mes">Seleccione el año:</label>
                                     <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
                                 </div>
                                 <div class="styleanmes"> <label for="mes">Seleccione el mes:</label>
@@ -241,8 +241,8 @@ $dataProveedores = $mostrar->MostrarProveedores();
                                         <option value="11">Noviembre</option>
                                         <option value="12">Diciembre</option>
                                     </select>
-                                </div>
-
+                                </div> -->
+                                <input type="date" id="fechabuscar" class="form-control">
                                 <a class="btn btn-success" href="#" onclick="generarPDF()">Generar PDF</a>
                             </div>
                         </div>
@@ -262,15 +262,13 @@ $dataProveedores = $mostrar->MostrarProveedores();
     <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {
-            var anioSeleccionado = document.getElementById("anio").value;
-            var mesSeleccionado = document.getElementById("mes").value;
-
+            // var anioSeleccionado = document.getElementById("anio").value;
+            // var mesSeleccionado = document.getElementById("mes").value;
+            var seleccion = document.getElementById("fechabuscar").value;
             // Enviar los valores a tu script de generación de PDF
             var url =
-                "pdf-factura-orden.php?anio=" +
-                anioSeleccionado +
-                "&mes=" +
-                mesSeleccionado;
+                "pdf-factura-orden.php?seleccion=" +
+                seleccion;
             window.open(url, "_blank");
         }
     </script>

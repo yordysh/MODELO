@@ -1,5 +1,5 @@
 $(function () {
-  //===== Prealoder
+  //===== Prealoder===============================//
 
   window.onload = function () {
     fadeout();
@@ -338,6 +338,10 @@ $(function () {
       data: formData,
       contentType: false,
       processData: false,
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       success: function (response) {
         $("#mostrarfacturasubir").modal("hide");
         if (response == "ok") {
@@ -374,6 +378,10 @@ $(function () {
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
       },
     });
   });

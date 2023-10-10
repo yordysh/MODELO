@@ -3648,21 +3648,9 @@ class m_almacen
       $this->bd->beginTransaction();
       $codigo = new m_almacen();
 
-      // var_dump($idcomprobantecaptura);
-      // var_dump($empresa);
-      // var_dump($fecha_emision);
-      // var_dump($hora);
-      // var_dump($fecha_entrega);
-      // var_dump($codusu);
-      // var_dump($selecttipocompro);
-      // var_dump($selectformapago);
-      // var_dump($selectmoneda);
-      // var_dump($tipocambio);
-      // var_dump($serie);
-      // var_dump($correlativo);
-      // var_dump($observacion);
+      //   $nombre = 'ordencompra';
+      //  $codigo->generarVersionGeneral($nombre);
 
-      // exit();
       $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fecha_emision);
       $fecha_emision_formato = $fechaFormateadaIncio->format('d/m/Y');
 
@@ -3691,12 +3679,12 @@ class m_almacen
     }
   }
 
-  public function MostrarFacturaProveedorPDF()
+  public function MostrarFacturaProveedorPDF($anioSeleccionado)
   {
     try {
 
       $mostrardatospdf = $this->bd->prepare("SELECT TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR FROM T_TMPCOMPROBANTE TC
-                                              INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TC.COD_PROVEEDOR");
+                                              INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TC.COD_PROVEEDOR WHERE TC.FECHA_REALIZADA='$anioSeleccionado'");
       $mostrardatospdf->execute();
       $datosfactura = $mostrardatospdf->fetchAll(PDO::FETCH_OBJ);
 
