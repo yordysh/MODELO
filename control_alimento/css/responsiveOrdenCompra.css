@@ -261,6 +261,27 @@ a {
   opacity: 1;
   width: 40%;
 }
+
+/*ESTILO CAMARA*/
+#img {
+  width: 250px;
+  height: 250px; /* Ajusta la altura a un valor razonable */
+  border-radius: 40%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-size: 2rem; /* Reduce el tamaño de la fuente */
+}
+
+.icon-camera {
+  height: 250px;
+  background-color: #2aadea;
+  color: white;
+  padding: 4px 8px;
+  /* border-radius: 50%; */
+  border: none;
+}
+
+/*-------------*/
+
 /*-------------------------------------------------------*/
 
 /* td {

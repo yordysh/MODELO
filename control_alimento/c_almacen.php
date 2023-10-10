@@ -528,7 +528,58 @@ if ($accion == 'insertar') {
     $correlativo = trim($_POST['correlativo']);
     $observacion = trim($_POST['observacion']);
 
-    $respuesta = c_almacen::c_guardar_datos_factura($idcomprobantecaptura, $empresa,  $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion);
+
+    // var_dump($empresa);
+    // var_dump($_FILES['foto']);
+    // exit();
+
+    if (isset($_FILES['foto'])) {
+        // Validar que se haya seleccionado una imagen
+        if (empty($_FILES['foto']['name'])) {
+            echo json_encode(array('status' => 'error', 'message' => 'Debe seleccionar una imagen.'));
+            exit;
+        }
+
+        // Obtener la información sobre el archivo
+        $imagen_info = getimagesize($_FILES['foto']['tmp_name']);
+        $imagen_tipo = $imagen_info['mime'];
+
+        // Verificar que el tipo de archivo sea JPEG o PNG
+        if ($imagen_tipo !== 'image/jpeg' && $imagen_tipo !== 'image/png') {
+            echo json_encode(array('status' => 'error', 'message' => 'Formato de imagen no válido. Solo se permiten imágenes JPEG, JPG, PNG.'));
+            exit;
+        }
+
+        // Verificar el tipo de archivo y usar la función adecuada para crear el recurso de imagen
+        if ($imagen_tipo === 'image/jpeg') {
+            $calidad = 30;
+            $imagen_comprimida = imagecreatefromjpeg($_FILES['foto']['tmp_name']);
+            ob_start();
+            imagejpeg($imagen_comprimida, null, $calidad);
+            $imagen_comprimida_binaria = ob_get_contents();
+            ob_end_clean();
+            $hex = bin2hex($imagen_comprimida_binaria);
+            $imagen = '0x' . $hex;
+            imagedestroy($imagen_comprimida);
+        } elseif ($imagen_tipo === 'image/png') {
+            $calidad = 5;
+            $imagen_comprimida = imagecreatefrompng($_FILES['foto']['tmp_name']);
+            ob_start();
+            imagepng($imagen_comprimida, null, $calidad);
+            $imagen_comprimida_binaria = ob_get_contents();
+            ob_end_clean();
+            $hex = bin2hex($imagen_comprimida_binaria);
+            $imagen = '0x' . $hex;
+            imagedestroy($imagen_comprimida);
+        }
+    } else {
+        // La variable imagen no existe
+        $imagen = null;
+        echo json_encode(array('status' => 'error', 'message' => 'No hay imagen seleccionada.'));
+        exit;
+    }
+
+    $respuesta = c_almacen::c_guardar_datos_factura($idcomprobantecaptura, $empresa,  $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion, $imagen);
     echo $respuesta;
 }
 
@@ -3037,12 +3088,12 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function  c_guardar_datos_factura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion)
+    static function  c_guardar_datos_factura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion, $imagen)
     {
         $m_formula = new m_almacen();
 
 
-        $respuesta = $m_formula->GuardarDatosFactura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro, $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion);
+        $respuesta = $m_formula->GuardarDatosFactura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro, $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion, $imagen);
 
         if ($respuesta) {
             return "ok";

@@ -262,81 +262,143 @@ $(function () {
   });
   /*---------------------------------------------------------------*/
   /*---------- GUARDAR LOS DATOS CAPTURADOS---------------------- */
-  $("#guardarfacturaorden").click((e) => {
+
+  $("#formulariocompraorden").submit((e) => {
     e.preventDefault();
-    let empresa = $("#selectempresa").val();
-    let fecha_emision = $("#fecha_emision").val();
-    let hora = $("#hora").val();
-    let fecha_entrega = $("#fecha_entrega").val();
-    let codusu = $("#codpersonal").val();
-    let selecttipocompro = $("#selecttipocompro").val();
-    let serie = $("#serie").val();
-    let correlativo = $("#correlativo").val();
-    let selectformapago = $("#selectformapago").val();
-    let selectmoneda = $("#selectmoneda").val();
-    let tipocambio = $("#tipocambio").val();
-    let observacion = $("#observacion").val();
+    const formData = new FormData();
+    formData.append("accion", "guardadatosfactura");
+    formData.append("idcomprobantecaptura", $("#codigoorden").val());
+    formData.append("empresa", $("#selectempresa").val());
+    formData.append("fecha_emision", $("#fecha_emision").val());
+    formData.append("hora", $("#hora").val());
+    formData.append("fecha_entrega", $("#fecha_entrega").val());
+    formData.append("codusu", $("#codpersonal").val());
+    formData.append("selecttipocompro", $("#selecttipocompro").val());
+    formData.append("serie", $("#serie").val());
+    formData.append("correlativo", $("#correlativo").val());
+    formData.append("selectformapago", $("#selectformapago").val());
+    formData.append("selectmoneda", $("#selectmoneda").val());
+    formData.append("tipocambio", $("#tipocambio").val());
+    formData.append("observacion", $("#observacion").val());
 
-    let idcomprobantecaptura = $("#codigoorden").val();
-    console.log(empresa);
-    // const accion = "guardadatosfactura";
+    const fileInput = document.getElementById("foto");
+    const file = fileInput.files[0];
+    formData.append("foto", file);
 
-    // $.ajax({
-    //   url: "./c_almacen.php",
-    //   type: "POST",
-    //   data: {
-    //     accion: accion,
-    //     idcomprobantecaptura: idcomprobantecaptura,
-    //     empresa: empresa,
-    //     fecha_emision: fecha_emision,
-    //     hora: hora,
-    //     fecha_entrega: fecha_entrega,
-    //     codusu: codusu,
-    //     selecttipocompro: selecttipocompro,
-    //     serie: serie,
-    //     selectformapago: selectformapago,
-    //     selectmoneda: selectmoneda,
-    //     tipocambio: tipocambio,
-    //     correlativo: correlativo,
-    //     observacion: observacion,
-    //   },
-    //   success: function (response) {
-    //     if (response == "ok") {
-    //       Swal.fire({
-    //         title: "¡Guardado exitoso!",
-    //         text: "Los datos se han guardado correctamente.",
-    //         icon: "success",
-    //         allowOutsideClick: false,
-    //         confirmButtonText: "Aceptar",
-    //       }).then((result) => {
-    //         if (result.isConfirmed) {
-    //           $("#selectempresa").val("00003");
-    //           $("#fecha_emision").val(fechaActual);
-    //           $("#fecha_emision").attr("min", fechaActual);
-    //           $("#fecha_entrega").val(fechaActual);
-    //           $("#fecha_entrega").attr("min", fechaActual);
-    //           $("#selecttipocompro").val("none").trigger("change");
-    //           $("#personal").val("");
-    //           $("#proveedor").val("");
-    //           $("#serie").val("");
-    //           $("#correlativo").val("");
-    //           $("#selectformapago").val("E");
-    //           $("#selectmoneda").val("S");
-    //           $("#tipocambio").prop("disabled", true);
-    //           $("#tipocambio").val("");
-    //           $("#observacion").val("");
-    //           $("#codigoorden").val("");
-    //           cargarOrdenCompraComprobante();
-    //         }
-    //       });
-    //     }
-    //   },
-    //   error: function (xhr, status, error) {
-    //     console.error("Error al cargar los datos de la tabla:", error);
-    //   },
-    // });
+    let serieform = $("#serie").val();
+    let correlativoform = $("#correlativo").val();
+    let observacionform = $("#observacion").val();
+    let idcomprobantecapturaform = $("#codigoorden").val();
+    if (!idcomprobantecapturaform) {
+      Swal.fire({
+        icon: "error",
+        title: "No hay un comprobante",
+        text: "Necesita añadir un comprobante",
+      });
+      return;
+    }
+
+    if (!serieform) {
+      Swal.fire({
+        icon: "error",
+        title: "Campo obligatorio",
+        text: "Necesita añadir una serie.",
+      });
+      return;
+    }
+    if (!correlativoform) {
+      Swal.fire({
+        icon: "error",
+        title: "Campo obligatorio",
+        text: "Necesita añadir un correlativo.",
+      });
+      return;
+    }
+    if (!observacionform) {
+      Swal.fire({
+        icon: "error",
+        title: "Campo obligatorio",
+        text: "Necesita añadir una observación.",
+      });
+      return;
+    }
+
+    if (!file) {
+      Swal.fire({
+        icon: "error",
+        title: "Seleccionar imagen",
+        text: "Necesita añadir una imagen.",
+      });
+      return;
+    }
+
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function (response) {
+        $("#mostrarfacturasubir").modal("hide");
+        if (response == "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            allowOutsideClick: false,
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#selectempresa").val("00003");
+              $("#fecha_emision").val(fechaActual);
+              $("#fecha_emision").attr("min", fechaActual);
+              $("#fecha_entrega").val(fechaActual);
+              $("#fecha_entrega").attr("min", fechaActual);
+              $("#selecttipocompro").val("none").trigger("change");
+              $("#personal").val("");
+              $("#proveedor").val("");
+              $("#serie").val("");
+              $("#correlativo").val("");
+              $("#selectformapago").val("E");
+              $("#selectmoneda").val("S");
+              $("#tipocambio").prop("disabled", true);
+              $("#tipocambio").val("");
+              $("#observacion").val("");
+              $("#codigoorden").val("");
+              $("#tablainsumoscomprarfactura").empty();
+              $("#foto").val("");
+              cargarOrdenCompraComprobante();
+            }
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
   });
+  // });
+
   /*---------------------------------------------------------- */
+
+  /*-------------------VISUALIZAR IMAGEN---------------------- */
+  /*const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg';*/
+
+  const file = document.getElementById("foto");
+  const img = document.getElementById("img");
+  file.addEventListener("change", (e) => {
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    // else {
+    //   img.src = defaultFile;
+    // }
+  });
+  /*--------------------------------------------------------- */
 });
 function isJSON(str) {
   try {

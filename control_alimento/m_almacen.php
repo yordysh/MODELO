@@ -2247,11 +2247,11 @@ class m_almacen
       // $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
 
 
-      // $fecha_actual = $cod->c_horaserversql('F');
-      // $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
-      // $fecha_generado_orden_compra  = $fecha_convertida->format('d/m/Y');
-      $fecha_actual = '05/10/2023';
-      $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      $fecha_actual = $cod->c_horaserversql('F');
+      $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
+      $fecha_generado_orden_compra  = $fecha_convertida->format('d/m/Y');
+      // $fecha_actual = '05/10/2023';
+      // $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,FECHA)
                                                 VALUES ('$codigo_orden_compra','$fecha_generado_orden_compra')");
@@ -2272,13 +2272,13 @@ class m_almacen
       $stmActualizarordencompra->execute();
 
 
-      // $fecha_actual = $cod->c_horaserversql('F');
-      // $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
-      // $fecha_generado  = $fecha_convertida->format('d/m/Y');
+      $fecha_actual = $cod->c_horaserversql('F');
+      $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
+      $fecha_generado  = $fecha_convertida->format('d/m/Y');
 
 
-      $fecha_actual = '05/10/2023';
-      $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
+      // $fecha_actual = '05/10/2023';
+      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       // $maquina = os_info();
       // $maquina = 'user';
@@ -3476,9 +3476,9 @@ class m_almacen
 
 
 
-      // $fechaFormateada = DateTime::createFromFormat('Y-m-d', $fecha);
-      // $fechaformato = $fechaFormateada->format('d/m/Y');
-      $fechaformato = $fecha;
+      $fechaFormateada = DateTime::createFromFormat('Y-m-d', $fecha);
+      $fechaformato = $fechaFormateada->format('d/m/Y');
+      // $fechaformato = $fecha;
 
       $stmexisteproveedor = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_PROVEEDOR WHERE RUC_PROVEEDOR='$proveedorruc'");
       $stmexisteproveedor->execute();
@@ -3642,7 +3642,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function GuardarDatosFactura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro, $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion)
+  public function GuardarDatosFactura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro, $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion, $imagen)
   {
     try {
       $this->bd->beginTransaction();
@@ -3663,13 +3663,21 @@ class m_almacen
       // var_dump($observacion);
 
       // exit();
+      $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fecha_emision);
+      $fecha_emision_formato = $fechaFormateadaIncio->format('d/m/Y');
+
+      $fechaFormateadaposterga = DateTime::createFromFormat('Y-m-d', $fecha_entrega);
+      $fecha_entrega_formato = $fechaFormateadaposterga->format('d/m/Y');
+
+
       if ($tipocambio) {
-        $insertarfacturacompra = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE_ITEM(COD_TMPCOMPROBANTE,SERIE,CORRELATIVO,COD_EMPRESA,TIPO_MONEDA,F_PAGO,FECHA_EMISION,HORA,FECHA_ENTREGA,TIPO_COMPROBANTE,OBSERVACION,COD_USUARIO,TIPO_VENTA)
-                                                       VALUES('$idcomprobantecaptura','$serie','$correlativo','$empresa','$selectmoneda','$selectformapago','$fecha_emision','$hora','$fecha_entrega','$selecttipocompro','$observacion','$codusu','$tipocambio')");
+        $insertarfacturacompra = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE_ITEM(COD_TMPCOMPROBANTE,SERIE,CORRELATIVO,COD_EMPRESA,TIPO_MONEDA,F_PAGO,FECHA_EMISION,HORA,FECHA_ENTREGA,TIPO_COMPROBANTE,OBSERVACION,COD_USUARIO,TIPO_VENTA,PDF)
+                                                       VALUES('$idcomprobantecaptura','$serie','$correlativo','$empresa','$selectmoneda','$selectformapago',' $fecha_emision_formato','$hora','$fecha_entrega_formato','$selecttipocompro','$observacion','$codusu','$tipocambio',$imagen)");
       } else {
-        $insertarfacturacompra = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE_ITEM(COD_TMPCOMPROBANTE,SERIE,CORRELATIVO,COD_EMPRESA,TIPO_MONEDA,F_PAGO,FECHA_EMISION,HORA,FECHA_ENTREGA,TIPO_COMPROBANTE,OBSERVACION,COD_USUARIO)
-                                                        VALUES('$idcomprobantecaptura','$serie','$correlativo','$empresa','$selectmoneda','$selectformapago','$fecha_emision','$hora','$fecha_entrega','$selecttipocompro','$observacion','$codusu')");
+        $insertarfacturacompra = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE_ITEM(COD_TMPCOMPROBANTE,SERIE,CORRELATIVO,COD_EMPRESA,TIPO_MONEDA,F_PAGO,FECHA_EMISION,HORA,FECHA_ENTREGA,TIPO_COMPROBANTE,OBSERVACION,COD_USUARIO,PDF)
+                                                        VALUES('$idcomprobantecaptura','$serie','$correlativo','$empresa','$selectmoneda','$selectformapago','$fecha_emision_formato','$hora','$fecha_entrega_formato','$selecttipocompro','$observacion','$codusu',$imagen)");
       }
+
       $insertfactura = $insertarfacturacompra->execute();
 
       $actualizarcomprobante = $this->bd->prepare("UPDATE T_TMPCOMPROBANTE SET ESTADO='C' WHERE COD_TMPCOMPROBANTE='$idcomprobantecaptura'");

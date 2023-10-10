@@ -283,22 +283,23 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 </tbody>
                             </table>
                         </div>
-
+                        <?php
+                        require_once "modalfacturasubir.php";
+                        ?>
                         <!-- Insertar nuevas cantidades -->
                         <div class="contenedor">
                             <div class="ctnBtn">
                                 <button id="guardarfacturaorden" class="btn btn-primary boton-insertar" data-bs-toggle="modal" data-bs-target="#mostrarfacturasubir">Guardar</button>
                             </div>
                         </div>
+                    </form>
                 </div>
         </section>
     </main>
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
         Covifarma-2023
     </footer>
-    <?php
-    require_once "modalfacturasubir.php";
-    ?>
+
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>

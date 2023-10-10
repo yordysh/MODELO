@@ -140,43 +140,10 @@ $nombre = 'LBS-OP-FR-01';
                 echo '<td class="tdcentrado-bold">' . $filadata->DES_PRODUCTO . '</td>';
                 echo '<td class="tdcentrado-bold">' . $filadata->CANTIDAD_MINIMA . '</td>';
                 echo '<td class="tdcentrado-bold">' . $filadata->MONTO . '</td>';
-                // echo '<td style="border-bottom:none; border-top:none;"></td>';
-                // echo '<td style="border-bottom:none; border-top:none;"></td>';
                 echo '</tr>';
             }
         }
-        // echo '<tr>';
-        // echo '<td colspan="2" style="border-bottom:none; border-left:none; border-right:none;"></td>';
-        // echo '<td colspan="2" style="border-bottom:none; border-left:none; border-right:none;"></td>';
-        // echo '<td colspan="2" style="border-bottom:none; border-left:none; border-right:none;"></td>';
-        // echo '< style="border-bottom:none; border-left:none; border-right:none:none;"></td>';
-        // echo '<td style="border-bottom:none; border-left:none; border-right:none;"></td>';
-        // echo '<td style="border-bottom:none; border-left:none; border-right:none;"></td>';
-        // echo '</tr>';
         echo '</tbody>';
-        // echo '</table>';
-        // echo '<table style="margin-top:30px;">';
-        // echo '<tr>';
-        // echo '<td style="padding-left:180px;border:none; font-size:20px;">Observaciones:</td>';
-        // echo '<td style="padding-left:400px;padding-right:50px; border-right:none; border-left:none; border-top:none;"></td>';
-        // echo '<td style="border:none; padding-left:600px;"></td>';
-        // echo '<td style="padding-left:200px;border:none; font-size:20px;">Acciones correctivas:</td>';
-        // echo '<td style="padding-left:300px; padding-rigth:80px; border-right:none; border-left:none; border-top:none;"></td>';
-        // echo '</tr>';
-        // echo '<tr>';
-        // echo '<td style="padding-left:180px;padding-top:20px;border-right:none;border-left:none; border-top:none;"></td>';
-        // echo '<td style="padding-left:400px;padding-rigth:50px;border-right:none;border-left:none;"></td>';
-        // echo '<td style="border:none; padding-left:600px;"></td>';
-        // echo '<td style="padding-left:300px;border-right:none;border-left:none; border-top:none;"></td>';
-        // echo '<td style="padding-left:300px; padding-rigth:80px;border-right:none;border-left:none;"></td>';
-        // echo '</tr>';
-        // echo '<tr>';
-        // echo '<td style="padding-left:180px;padding-top:20px;border-right:none;border-left:none;"></td>';
-        // echo '<td style="padding-left:400px;padding-rigth:50px;border-right:none;border-left:none;"></td>';
-        // echo '<td style="border:none; padding-left:600px;"></td>';
-        // echo '<td style="padding-left:300px;border-right:none;border-left:none;"></td>';
-        // echo '<td style="padding-left:300px; padding-rigth:80px;border-right:none;border-left:none;"></td>';
-        // echo '</tr>';
         echo '</table>';
     }
     ?>
