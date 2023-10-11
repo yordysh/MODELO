@@ -481,7 +481,13 @@ a {
   height: 0;
   margin-top: 35px;
 }
-
+.contenedorpdf {
+  display: flex;
+}
+.estilorequerimiento {
+  margin-left: 35rem;
+  margin-right: 15px;
+}
 /*-------------- Estilo de responsive ---------------------*/
 
 @media screen and (max-width: 1370px) {
@@ -509,10 +515,18 @@ a {
   .estiloguardar {
     margin-right: 80px;
   }
+  .estilorequerimiento {
+    margin-left: 17rem;
+    margin-right: 15px;
+  }
 }
 @media screen and (max-width: 1105px) {
   .totalinsumo {
     margin-left: 500px !important;
+  }
+  .estilorequerimiento {
+    margin-left: 16rem;
+    margin-right: 15px;
   }
 }
 @media screen and (max-width: 992px) {
@@ -548,6 +562,29 @@ a {
 
   #selectInfra {
     width: 100%;
+  }
+  .estiloordencompra {
+    display: block;
+  }
+  .estiloordencompra {
+    flex-direction: column;
+  }
+
+  .estilorequerimiento {
+    flex: 1;
+    margin-left: 0;
+  }
+  .estiloproveedor {
+    margin-right: 25px;
+  }
+  .estilorequerimiento {
+    margin-left: 5rem;
+    margin-right: 15px;
+  }
+  .buttonproveedor {
+    padding: 0;
+    height: 0;
+    margin: -35px 0 40px 495px;
   }
 }
 /*-------------------------------------------------------------*/
@@ -648,6 +685,14 @@ a {
 
   .table-responsive table thead {
     display: none;
+  }
+  .buttonproveedor {
+    padding: 0;
+    height: 0;
+    margin: -35px 0 40px 445px;
+  }
+  .boton-insertar {
+    margin-right: 10px;
   }
 }
 /*-------------------------------------------------------------*/
@@ -756,6 +801,14 @@ a {
   .table-responsive table thead {
     display: none;
   }
+  .buttonproveedor {
+    padding: 0;
+    height: 0;
+    margin: -35px 0 40px 490px;
+  }
+  .boton-insertar {
+    margin-right: 10px;
+  }
 }
 /*----------------------REDMI----------------------------*/
 @media screen and (max-width: 420px) {
@@ -786,6 +839,15 @@ a {
 
   select#selectVerificacion {
     margin-left: 35px !important;
+  }
+  .buttonproveedor {
+    padding: 0;
+    height: 0;
+    margin: -35px 0 40px 315px;
+  }
+  .estilorequerimiento {
+    margin-left: 1rem;
+    margin-right: 15px;
   }
 }
 

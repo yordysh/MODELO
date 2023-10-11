@@ -40,8 +40,6 @@ $(function () {
     nav.classList.remove("openNav");
   });
   //----------------------------------------------------------------//
-  $("#selectproveedor").select2();
-
   $("#selectproveedor").select2({
     dropdownParent: $("#mostrarproveedor .modal-body"),
   });
@@ -139,6 +137,10 @@ $(function () {
       "id_orden_compra_aprobada"
     );
 
+    let codigorequerimiento = $(
+      "#tmostrarordencompraaprobado tr:eq(1) td:eq(0)"
+    ).text();
+    $("#idrequerimientotemp").val(codigorequerimiento);
     $("#personal").val(personal);
     mostrarinsumos(idcompraaprobada);
     Swal.fire({
@@ -215,7 +217,7 @@ $(function () {
             template += `<tr id_orden_compra_item='${task.COD_ORDEN_COMPRA}'>
                             <td data-titulo='MATERIAL' codigo_producto='${task.COD_PRODUCTO}' style='text-align: center;'>${task.DES_PRODUCTO}</td>
                             <td data-titulo='CANTIDAD' style='text-align: center;'>${task.CANTIDAD_MINIMA}</td>
-                            <td data-titulo='PRECIO' style='text-align: center;'><input type='number' step='any' /></td>
+                            <td data-titulo='PRECIO' style='text-align: center;'><input type='number'/></td>
                             <td data-titulo='SELECCIONAR' style='text-align: center;'><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked></td>
                             </tr>`;
           });
@@ -326,6 +328,20 @@ $(function () {
       Swal.fire({
         icon: "info",
         text: "Escriba una observación.",
+      });
+      return;
+    }
+
+    var precioInput = document.querySelector('td[data-titulo="PRECIO"] input');
+    var checkbox = document.querySelector(
+      'td[data-titulo="SELECCIONAR"] input'
+    );
+
+    // Validamos que el checkbox esté marcado y el campo de precio esté vacío
+    if (checkbox.checked && precioInput.value === "") {
+      Swal.fire({
+        icon: "info",
+        text: "El campo de precio está vacío. Por favor, complételo.",
       });
       return;
     }

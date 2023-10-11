@@ -3679,12 +3679,14 @@ class m_almacen
     }
   }
 
-  public function MostrarFacturaProveedorPDF($anioSeleccionado)
+  public function MostrarFacturaProveedorPDF($requerimiento)
   {
     try {
 
       $mostrardatospdf = $this->bd->prepare("SELECT TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR FROM T_TMPCOMPROBANTE TC
-                                              INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TC.COD_PROVEEDOR WHERE TC.FECHA_REALIZADA='$anioSeleccionado'");
+                                                INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TC.COD_PROVEEDOR 
+                                                INNER JOIN T_TMPORDEN_COMPRA OC ON OC.COD_ORDEN_COMPRA=TC.COD_ORDEN_COMPRA 
+                                                WHERE CONVERT(DATE, TC.FECHA_REALIZADA) = CONVERT(DATE, GETDATE()) AND OC.COD_REQUERIMIENTO='$requerimiento'");
       $mostrardatospdf->execute();
       $datosfactura = $mostrardatospdf->fetchAll(PDO::FETCH_OBJ);
 

@@ -147,7 +147,6 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <table class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-
                                         <th class="" scope="col">PRODUCTOS</th>
                                         <th class="" scope="col">CANTIDAD TOTAL</th>
                                     </tr>

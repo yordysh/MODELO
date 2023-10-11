@@ -1,11 +1,12 @@
 <?php
 require_once "m_almacen.php";
-// require_once "../funciones/f_funcion.php";
 
-$anioSeleccionado = $_GET['seleccion'];
+$requerimiento = $_GET['requerimiento'];
+
+$anioSeleccionado = date('Y-m-d');
 $anio = substr($anioSeleccionado, 0, 4);
 /*convierte el valor en enetero*/
-$mesSeleccionado = substr($anioSeleccionado, -2);
+$mesSeleccionado = date('m');
 $mesNumerico = intval($mesSeleccionado);
 
 $mesesEnLetras = array(
@@ -25,7 +26,7 @@ $mesesEnLetras = array(
 $mesConvert = $mesesEnLetras[$mesNumerico];
 
 $mostrar = new m_almacen();
-$proveedor = $mostrar->MostrarFacturaProveedorPDF($anioSeleccionado);
+$proveedor = $mostrar->MostrarFacturaProveedorPDF($requerimiento);
 $productoscompra = $mostrar->MostrarFacturaPDF();
 $nombre = 'LBS-OP-FR-01';
 // $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);

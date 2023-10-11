@@ -136,71 +136,77 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <div class="row g-4 top-div">
                             <center><label class="title_table">REGISTRAR COMPROBANTE</label></center>
                         </div>
-                        <!-- Text input empresa-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Empresa</label>
-                            <select id="selectempresa" class="form-select" aria-label="Default select example">
-                                <option value="00003" selected>LABSABELL</option>
-                                <option value="00004">COVIFARMA</option>
 
-                            </select>
+                        <div class="estiloordencompra">
+                            <!-- Text input empresa-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Empresa</label>
+                                <select id="selectempresa" class="form-select" aria-label="Default select example">
+                                    <option value="00003" selected>LABSABELL</option>
+                                    <option value="00004">COVIFARMA</option>
+
+                                </select>
+                            </div>
+
+                            <!-- Text input fecha-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Fecha emisión</label>
+                                <input type="date" id="fecha_emision" class="form-control">
+                            </div>
+
+                            <!-- Text input hora-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Hora emisión</label>
+                                <input type="text" id="hora" class="form-control" disabled>
+                            </div>
+
+                            <!-- Text input fecha entrega-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Fecha entrega</label>
+                                <input type="date" id="fecha_entrega" class="form-control">
+                            </div>
                         </div>
 
-                        <!-- Text input fecha-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Fecha emisión</label>
-                            <input type="date" id="fecha_emision" class="form-control">
+                        <div class="estiloordencompra">
+                            <!-- Text input personal-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Personal</label>
+                                <input type="text" id="personal" class="form-control" disabled>
+                            </div>
+
+                            <!-- Text input proveedor-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Proveedor</label>
+                                <input type="text" id="proveedor" class="form-control" disabled>
+                            </div>
                         </div>
 
-                        <!-- Text input hora-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Hora emisión</label>
-                            <input type="text" id="hora" class="form-control" disabled>
-                        </div>
+                        <div class="estiloordencompra">
+                            <!-- Text input tipo comprobante-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Tipo</label>
+                                <select id="selecttipocompro" class="form-select" aria-label="Default select example">
+                                    <option value="none" selected>Seleccione comprobante</option>
+                                    <option value="F">FACTURA</option>
+                                    <option value="B">BOLETA</option>
+                                    <option value="R">RECIBO</option>
+                                    <option value="T">TICKET</option>
+                                    <option value="H">RECIBO POR HONORARIO</option>
+                                </select>
+                            </div>
 
-                        <!-- Text input fecha entrega-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Fecha entrega</label>
-                            <input type="date" id="fecha_entrega" class="form-control">
-                        </div>
+                            <!-- Text input serie-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Serie</label>
+                                <input type="text" id="serie" class="form-control" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57">
+                            </div>
 
-                        <!-- Text input personal-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Personal</label>
-                            <input type="text" id="personal" class="form-control" disabled>
+                            <!-- Text input correlativo-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Correlativo</label>
+                                <input type="text" id="correlativo" class="form-control" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57">
+                            </div>
                         </div>
-
-                        <!-- Text input proveedor-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Proveedor</label>
-                            <input type="text" id="proveedor" class="form-control" disabled>
-                        </div>
-
-                        <!-- Text input tipo comprobante-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Tipo</label>
-                            <select id="selecttipocompro" class="form-select" aria-label="Default select example">
-                                <option value="none" selected>Seleccione comprobante</option>
-                                <option value="F">FACTURA</option>
-                                <option value="B">BOLETA</option>
-                                <option value="R">RECIBO</option>
-                                <option value="T">TICKET</option>
-                                <option value="H">RECIBO POR HONORARIO</option>
-                            </select>
-                        </div>
-
-                        <!-- Text input serie-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Serie</label>
-                            <input type="text" id="serie" class="form-control" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57">
-                        </div>
-
-                        <!-- Text input correlativo-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Correlativo</label>
-                            <input type="text" id="correlativo" class="form-control" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57">
-                        </div>
-
                         <!-- Text input oficina-->
                         <!-- <div class="form-outline mb-4">
                             <label class="form-label">Oficina</label>
@@ -216,59 +222,64 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 <option value="00041">SMP10</option>
                             </select>
                         </div> -->
+                        <div class="estiloordencompra">
+                            <!-- Text input FORMA DE PAGO-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">F.pago</label>
+                                <select id="selectformapago" class="form-select" aria-label="Default select example">
+                                    <option value="E" selected>EFECTIVO</option>
+                                    <option value="D">DEPOSITO</option>
+                                </select>
+                            </div>
 
-                        <!-- Text input FORMA DE PAGO-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">F.pago</label>
-                            <select id="selectformapago" class="form-select" aria-label="Default select example">
-                                <option value="E" selected>EFECTIVO</option>
-                                <option value="D">DEPOSITO</option>
-                            </select>
+                            <!-- Text input moneda-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Moneda</label>
+                                <select id="selectmoneda" class="form-select" aria-label="Default select example">
+                                    <option value="S" selected>SOLES</option>
+                                    <option value="D">DOLARES</option>
+                                </select>
+                            </div>
+
+                            <!-- Text input tipo de cambio-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Tipo cambio</label>
+                                <input type="text" id="tipocambio" class="form-control" disabled placeholder="0.000">
+                            </div>
                         </div>
 
-                        <!-- Text input moneda-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Moneda</label>
-                            <select id="selectmoneda" class="form-select" aria-label="Default select example">
-                                <option value="S" selected>SOLES</option>
-                                <option value="D">DOLARES</option>
-                            </select>
-                        </div>
+                        <div class="estiloordencompra">
+                            <!-- Text input tipo de cambio sunat-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">TIPO CAMBIO SUNAT</label>
+                                <input type="text" id="tipocambiosunat" class="form-control" value="3.823" disabled>
+                            </div>
 
-                        <!-- Text input tipo de cambio-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Tipo cambio</label>
-                            <input type="text" id="tipocambio" class="form-control" disabled placeholder="0.000">
-                        </div>
+                            <!-- Text input numero operacion-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">N° OPERACIÓN</label>
+                                <input type="text" id="numoperacion" class="form-control" value="0.000" disabled>
+                            </div>
 
-                        <!-- Text input tipo de cambio sunat-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">TIPO CAMBIO SUNAT</label>
-                            <input type="text" id="tipocambiosunat" class="form-control" value="3.823" disabled>
-                        </div>
-
-                        <!-- Text input numero operacion-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">N° OPERACIÓN</label>
-                            <input type="text" id="numoperacion" class="form-control" value="0.000" disabled>
-                        </div>
-
-                        <!-- Text input numero operacion referencial-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">N° OPERACIÓN REFERENCIAL</label>
-                            <input type="text" id="numoperacion" class="form-control" value="0.000" disabled>
-                        </div>
+                            <!-- Text input numero operacion referencial-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">N° OPERACIÓN REFERENCIAL</label>
+                                <input type="text" id="numoperacion" class="form-control" value="0.000" disabled>
+                            </div>
 
 
-                        <!-- Text input IGV-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">INCLUYE IGV</label>
-                        </div>
-                        <div class="form-outline mb-4">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioigvsi" checked>
-                            <label class="form-check-label">SI</label>
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioigvno">
-                            <label class="form-check-label">NO</label>
+                            <!-- Text input IGV-->
+                            <div class="custom-input">
+                                <div class="form-outline mb-4 ">
+                                    <label class="form-label">INCLUYE IGV</label>
+                                </div>
+                                <div class="form-outline mb-4 ">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioigvsi" checked>
+                                    <label class="form-check-label">SI</label>
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioigvno">
+                                    <label class="form-check-label">NO</label>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Text observacion-->
