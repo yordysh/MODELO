@@ -233,11 +233,12 @@ img {
   font-size: 25px !important;
 }
 .menu-vertical {
-  position: absolute;
+  /* position: absolute; */
   display: none;
   list-style: none;
-  width: 150px;
-  background-color: #5b8ccc;
+  width: 190px;
+  background-image: linear-gradient(to bottom, #7b5185, #4587de);
+  padding-left: 15px;
 }
 
 .nav-links li:hover .menu-vertical {

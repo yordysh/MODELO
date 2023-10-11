@@ -3679,14 +3679,19 @@ class m_almacen
     }
   }
 
-  public function MostrarFacturaProveedorPDF($requerimiento)
+  public function MostrarFacturaProveedorPDF($requerimiento, $comprobante)
   {
     try {
 
-      $mostrardatospdf = $this->bd->prepare("SELECT TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR FROM T_TMPCOMPROBANTE TC
-                                                INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TC.COD_PROVEEDOR 
-                                                INNER JOIN T_TMPORDEN_COMPRA OC ON OC.COD_ORDEN_COMPRA=TC.COD_ORDEN_COMPRA 
-                                                WHERE CONVERT(DATE, TC.FECHA_REALIZADA) = CONVERT(DATE, GETDATE()) AND OC.COD_REQUERIMIENTO='$requerimiento'");
+      // $mostrardatospdf = $this->bd->prepare("SELECT TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR FROM T_TMPCOMPROBANTE TC
+      //                                           INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TC.COD_PROVEEDOR 
+      //                                           INNER JOIN T_TMPORDEN_COMPRA OC ON OC.COD_ORDEN_COMPRA=TC.COD_ORDEN_COMPRA 
+      //                                           WHERE CONVERT(DATE, TC.FECHA_REALIZADA) = CONVERT(DATE, GETDATE()) AND OC.COD_REQUERIMIENTO='$requerimiento'");
+      $mostrardatospdf = $this->bd->prepare("SELECT TP.NOM_PROVEEDOR AS NOM_PROVEEDOR,TP.DIR_PROVEEDOR AS DIR_PROVEEDOR,TP.TEL_PROVEEDOR AS TEL_PROVEEDOR,
+      TP.CORREO_PROVEEDOR AS CORREO_PROVEEDOR  FROM T_TMPCOMPROBANTE TC 
+     INNER JOIN T_PROVEEDOR TP ON TP.COD_PROVEEDOR=TC.COD_PROVEEDOR
+      INNER JOIN T_TMPORDEN_COMPRA TOC ON TOC.COD_ORDEN_COMPRA=TC.COD_ORDEN_COMPRA 
+      WHERE TOC.COD_REQUERIMIENTO='00000020' AND TC.COD_TMPCOMPROBANTE='000000001'");
       $mostrardatospdf->execute();
       $datosfactura = $mostrardatospdf->fetchAll(PDO::FETCH_OBJ);
 

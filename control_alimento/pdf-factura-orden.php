@@ -1,6 +1,7 @@
 <?php
 ob_start();
-include "htmlFacturaOrdenPDF.php";
+// include "htmlFacturaOrdenPDF.php";
+include "htmlFacturaPlantilla.php";
 
 $html = ob_get_clean();
 
@@ -17,11 +18,11 @@ $options->setIsRemoteEnabled(true);
 $dompdf->setOptions($options);
 
 $dompdf->loadHtml($html);
-$dompdf->setPaper('A2', 'landscape');
+$dompdf->setPaper('A4', 'landscape');
 
 $dompdf->render();
 $canvas = $dompdf->getCanvas();
-$font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
-$canvas->page_text(1428, 81, "{PAGE_NUM}/{PAGE_COUNT}", $font, 14, array(0, 0, 0));
+// $font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
+// $canvas->page_text(1428, 81, "{PAGE_NUM}/{PAGE_COUNT}", $font, 14, array(0, 0, 0));
 
 $dompdf->stream('Factura.pdf', array('Attachment' => 0));
