@@ -68,8 +68,22 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             <li>
                 <a class="pedidoRequerimiento activo" href="#">Confirmación de requerimiento</a>
             </li>
-            <li>
+            <!-- <li>
                 <a class="" href="solicitaCompra.php">Solicitar compra</a>
+            </li> -->
+            <li>
+                <a class="">Compras realizar</a>
+                <ul class="menu-vertical">
+                    <li>
+                        <a class="" href="solicitaCompra.php">Solicitar compra</a>
+                    </li>
+                    <li>
+                        <a class="" href="generarComprobante.php">Generar comprobante</a>
+                    </li>
+                    <li>
+                        <a class="" href="ordenCompra.php">Orden de compra</a>
+                    </li>
+                </ul>
             </li>
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>

@@ -67,8 +67,22 @@ $dataProveedores = $mostrar->MostrarProveedores();
             <li>
                 <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
-            <li>
+            <!-- <li>
                 <a class="activo" href="#">Solicitar compra</a>
+            </li> -->
+            <li>
+                <a class="activo">Compras realizar</a>
+                <ul class="menu-vertical">
+                    <li>
+                        <a class="" href="solicitaCompra.php">Solicitar compra</a>
+                    </li>
+                    <li>
+                        <a class="" href="generarComprobante.php">Generar comprobante</a>
+                    </li>
+                    <li>
+                        <a class="" href="#">Orden de compra</a>
+                    </li>
+                </ul>
             </li>
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
@@ -108,7 +122,7 @@ $dataProveedores = $mostrar->MostrarProveedores();
                             <table id="tmostrarordencompraaprobado" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="thtitulo" scope="col">CODIGO</th>
+                                        <th class="thtitulo" scope="col">CODIGO REQUERIMIENTO</th>
                                         <th class="thtitulo" scope="col">FECHA</th>
                                         <th class="thtitulo" scope="col">PERSONAL</th>
                                         <!-- <th class="thtitulo" scope="col">MOTIVO</th> -->
@@ -123,6 +137,33 @@ $dataProveedores = $mostrar->MostrarProveedores();
                         </div>
 
 
+
+                        <div class="row g-4 top-div">
+                            <center><label class="title_table">GENERAR ORDEN DE COMPRAR</label></center>
+                        </div>
+                        <div class="estiloordencompra">
+                            <!-- Text input fecha-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Fecha</label>
+                                <input type="date" id="fecha" class="form-control">
+                            </div>
+
+                            <!-- Text input empresa-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Empresa</label>
+                                <select id="selectempresa" class="form-select" aria-label="Default select example">
+                                    <option value="00003" selected>LABSABELL</option>
+                                    <option value="00004">COVIFARMA</option>
+
+                                </select>
+                            </div>
+
+                            <!-- Text input personal-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Personal</label>
+                                <input type="text" id="personal" class="form-control" disabled>
+                            </div>
+                        </div>
                         <!-- Tabla total insumos por comprar-->
                         <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
                             <div class="row g-4 top-div">
@@ -142,33 +183,9 @@ $dataProveedores = $mostrar->MostrarProveedores();
                                 </tbody>
                             </table>
                         </div>
-                        <div class="row g-4 top-div">
-                            <center><label class="title_table">GENERAR ORDEN DE COMPRAR</label></center>
-                        </div>
-                        <!-- Text input fecha-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Fecha</label>
-                            <input type="date" id="fecha" class="form-control">
-                        </div>
-
-                        <!-- Text input empresa-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Empresa</label>
-                            <select id="selectempresa" class="form-select" aria-label="Default select example">
-                                <option value="00003" selected>LABSABELL</option>
-                                <option value="00004">COVIFARMA</option>
-
-                            </select>
-                        </div>
-
-                        <!-- Text input personal-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Personal</label>
-                            <input type="text" id="personal" class="form-control" disabled>
-                        </div>
 
                         <!-- Text input oficina-->
-                        <div class="form-outline mb-4">
+                        <div class="form-outline mb-4" style="display: none;">
                             <label class="form-label">Oficina</label>
                             <select id="selectoficina" class="form-select" aria-label="Default select example">
                                 <option value="00011">SMP</option>
@@ -182,32 +199,40 @@ $dataProveedores = $mostrar->MostrarProveedores();
                                 <option value="00041">SMP10</option>
                             </select>
                         </div>
-                        <!-- Text input proveedor-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Proveedor</label>
-                            <input type="text" id="proveedor" class="form-control" disabled>
-                            <input type="hidden" id="direccion" class="form-control">
-                            <input type="hidden" id="ruc_principal" class="form-control">
-                            <input type="hidden" id="dni_principal" class="form-control">
-                        </div>
-                        <button type='button' class="custom-icon" data-bs-toggle="modal" data-bs-target="#mostrarproveedor"><i class="icon-add-user"></i></button>
+                        <div class="estiloordencompra">
+                            <!-- Text input proveedor-->
+                            <div class="form-outline mb-4 estiloproveedor">
+                                <div class="estiloordencompra">
+                                    <div class="estiloproveedor">
+                                        <label class="form-label">Proveedor</label>
+                                        <input type="text" id="proveedor" class="form-control" disabled>
+                                        <input type="hidden" id="direccion" class="form-control">
+                                        <input type="hidden" id="ruc_principal" class="form-control">
+                                        <input type="hidden" id="dni_principal" class="form-control">
+                                    </div>
+                                    <div class="buttonproveedor">
+                                        <button type='button' class="custom-icon" data-bs-toggle="modal" data-bs-target="#mostrarproveedor"><i class="icon-add-user"></i></button>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <!-- Text input FORMA DE PAGO-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">F.pago</label>
-                            <select id="selectformapago" class="form-select" aria-label="Default select example">
-                                <option value="E" selected>EFECTIVO</option>
-                                <option value="D">DEPOSITO</option>
-                            </select>
-                        </div>
+                            <!-- Text input FORMA DE PAGO-->
+                            <div class="form-outline mb-4 estiloselect">
+                                <label class="form-label">F.pago</label>
+                                <select id="selectformapago" class="form-select" aria-label="Default select example">
+                                    <option value="E" selected>EFECTIVO</option>
+                                    <option value="D">DEPOSITO</option>
+                                </select>
+                            </div>
 
-                        <!-- Text input moneda-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Moneda</label>
-                            <select id="selectmoneda" class="form-select" aria-label="Default select example">
-                                <option value="S" selected>SOLES</option>
-                                <option value="D">DOLARES</option>
-                            </select>
+                            <!-- Text input moneda-->
+                            <div class="form-outline mb-4 estiloselect">
+                                <label class="form-label">Moneda</label>
+                                <select id="selectmoneda" class="form-select" aria-label="Default select example">
+                                    <option value="S" selected>SOLES</option>
+                                    <option value="D">DOLARES</option>
+                                </select>
+                            </div>
                         </div>
                         <!-- Text observacion-->
                         <div class="form-outline mb-4">

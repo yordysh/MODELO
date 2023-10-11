@@ -41,6 +41,10 @@ $(function () {
   });
   //----------------------------------------------------------------//
   $("#selectproveedor").select2();
+
+  $("#selectproveedor").select2({
+    dropdownParent: $("#mostrarproveedor .modal-body"),
+  });
   /*---------Cargar la orden de compra aprobada------------------- */
   function cargarOrdenCompraAprobada() {
     const accion = "mostrarordencompraaprobada";
@@ -55,7 +59,7 @@ $(function () {
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr id_orden_compra_aprobada='${task.COD_ORDEN_COMPRA}'>
-                            <td data-titulo='CODIGO' style='text-align: center;'>${task.COD_REQUERIMIENTO}</td>
+                            <td data-titulo='CODIGO REQUERIMIENTO' style='text-align: center;'>${task.COD_REQUERIMIENTO}</td>
                             <td data-titulo='FECHA' style='text-align: center;'>${task.FECHA}</td>
                             <td data-titulo='PERSONAL' style='text-align: center;'>${task.NOM_PERSONAL}</td>
                            

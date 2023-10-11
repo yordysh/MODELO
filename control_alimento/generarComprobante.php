@@ -68,8 +68,22 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             <li>
                 <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
-            <li>
+            <!-- <li>
                 <a class="activo" href="#">Solicitar compra</a>
+            </li> -->
+            <li>
+                <a class="activo">Compras realizar</a>
+                <ul class="menu-vertical">
+                    <li>
+                        <a class="" href="solicitaCompra.php">Solicitar compra</a>
+                    </li>
+                    <li>
+                        <a class="" href="#">Generar comprobante</a>
+                    </li>
+                    <li>
+                        <a class="" href="ordenCompra.php">Orden de compra</a>
+                    </li>
+                </ul>
             </li>
             <li>
                 <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
@@ -118,7 +132,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 </tbody>
                             </table>
                         </div>
-                        <input type="text" id="codigoorden" class="form-control">
+                        <input type="hidden" id="codigoorden" class="form-control">
                         <div class="row g-4 top-div">
                             <center><label class="title_table">REGISTRAR COMPROBANTE</label></center>
                         </div>
@@ -178,13 +192,13 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Text input serie-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Serie</label>
-                            <input type="text" id="serie" class="form-control">
+                            <input type="text" id="serie" class="form-control" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57">
                         </div>
 
                         <!-- Text input correlativo-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Correlativo</label>
-                            <input type="text" id="correlativo" class="form-control">
+                            <input type="text" id="correlativo" class="form-control" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57">
                         </div>
 
                         <!-- Text input oficina-->

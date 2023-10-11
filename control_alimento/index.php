@@ -90,7 +90,6 @@
   <script src="./js/sweetalert2.all.min.js"></script>
 
   <script src="./js/ajaxFechaAviso.js"></script>
-  <!-- <script src="./js/ajaxFechaAvisoControl.js"></script> -->
   <script src="./js/ajaxIndex.js"></script>
 </body>
 
