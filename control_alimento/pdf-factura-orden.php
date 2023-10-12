@@ -1,6 +1,7 @@
 <?php
+
 ob_start();
-// include "htmlFacturaOrdenPDF.php";
+
 include "htmlFacturaPlantilla.php";
 
 $html = ob_get_clean();
@@ -10,19 +11,15 @@ require_once 'DomPDF/autoload.inc.php';
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-$dompdf = new Dompdf();
-
 $options = new Options();
-$options->setIsRemoteEnabled(true);
+$options->set('isHtml5ParserEnabled', true);
+$options->set('isPhpEnabled', true);
 
-$dompdf->setOptions($options);
+$dompdf = new Dompdf($options);
 
 $dompdf->loadHtml($html);
-$dompdf->setPaper('A4', 'landscape');
+$dompdf->setPaper('A4', 'portrait');
 
 $dompdf->render();
-$canvas = $dompdf->getCanvas();
-// $font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
-// $canvas->page_text(1428, 81, "{PAGE_NUM}/{PAGE_COUNT}", $font, 14, array(0, 0, 0));
 
-$dompdf->stream('Factura.pdf', array('Attachment' => 0));
+$dompdf->stream('Factura.pdf', ['Attachment' => 0]);

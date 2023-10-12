@@ -2,10 +2,9 @@
 require_once "m_almacen.php";
 
 $requerimiento = $_GET['requerimiento'];
-$comprobante = '000000001';
 
 $mostrar = new m_almacen();
-$proveedor = $mostrar->MostrarFacturaProveedorPDF($requerimiento, $comprobante);
+$proveedor = $mostrar->MostrarFacturaProveedorPDF($requerimiento);
 $productoscompra = $mostrar->MostrarFacturaPDF();
 ?>
 
@@ -47,7 +46,7 @@ $productoscompra = $mostrar->MostrarFacturaPDF();
             font-family: 'BrixSansBlack';
             font-size: 12pt;
             display: block;
-            background: #0a4661;
+            background: #814092;
             color: #FFF;
             text-align: center;
             padding: 3px;
@@ -76,7 +75,7 @@ $productoscompra = $mostrar->MostrarFacturaPDF();
         }
 
         .info_factura {
-            width: 25%;
+            width: 15%;
         }
 
         .info_cliente {
@@ -118,9 +117,11 @@ $productoscompra = $mostrar->MostrarFacturaPDF();
 
         .round {
             border-radius: 10px;
-            border: 1px solid #0a4661;
+            border: 1px solid #814092;
             overflow: hidden;
             padding-bottom: 15px;
+            margin-left: 150px;
+            margin-right: 150px;
         }
 
         .round p {
@@ -132,7 +133,7 @@ $productoscompra = $mostrar->MostrarFacturaPDF();
         }
 
         #factura_detalle thead th {
-            background: #058167;
+            background: #2670bf;
             color: #FFF;
             padding: 5px;
         }
@@ -163,235 +164,78 @@ $productoscompra = $mostrar->MostrarFacturaPDF();
             top: 50%;
             transform: translateX(-50%) translateY(-50%);
         }
+
+        body {
+            margin: 10mm 8mm 2mm 8mm;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
     </style>
-    <img class="anulada" src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/anulado.png')); ?>" alt="Anulada">
-    <div id="page_pdf">
-        <table id="factura_head">
-            <tr>
-                <td class="logo_factura">
-                    <div>
-                        <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>">
-                    </div>
-                </td>
-                <td class="info_empresa">
-                    <div>
-                        <span class="h2">EMPRESA </span>
-                        <p>Avenida las américas Zona 13, Perú</p>
-                        <p>Teléfono: +((51) 945-451-856)</p>
-                        <p>Email: ejemplo@gmail.com</p>
-                    </div>
-                </td>
-                <td class="info_factura">
-                    <div class="round">
-                        <span class="h3">Factura</span>
-                        <p>No. Factura: <strong>000001</strong></p>
-                        <p>Fecha: 20/01/2023</p>
-                        <p>Hora: 10:30am</p>
-                        <p>Proveedor: Jorge Pérez Hernández Cabrera</p>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <table id="factura_cliente">
-            <tr>
-                <td class="info_cliente">
-                    <div class="round">
-                        <span class="h3">Cliente</span>
-                        <table class="datos_cliente">
-                            <tr>
-                                <!-- <td><label>Nit:</label>
-                                    <p>54895468</p>
-                                </td> -->
-                                <td><label>Teléfono:</label>
-                                    <p>7854526</p>
-                                </td>
-                                <td><label>Nombre:</label>
-                                    <p>Angel Arana Cabrera</p>
-                                </td>
-                            </tr>
-                            <tr>
 
-                                <td><label>Dirección:</label>
-                                    <p>Callao</p>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
 
-            </tr>
-        </table>
+    <?php
+    foreach ($proveedor as $filasproveedor) {
 
-        <table id="factura_detalle">
-            <thead>
-                <tr>
-                    <th width="50px">Cant.</th>
-                    <th class="textleft">Descripción</th>
-                    <th class="textright" width="150px">Precio Unitario.</th>
-                    <th class="textright" width="150px"> Precio Total</th>
-                </tr>
-            </thead>
-            <tbody id="detalle_productos">
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
-                <tr>
-                    <td class="textcenter">1</td>
-                    <td>Plancha</td>
-                    <td class="textright">516.67</td>
-                    <td class="textright">516.67</td>
-                </tr>
 
-            </tbody>
-            <tfoot id="detalle_totales">
-                <tr>
-                    <td colspan="3" class="textright"><span>SUBTOTAL Q.</span></td>
-                    <td class="textright"><span>516.67</span></td>
-                </tr>
-                <tr>
-                    <td colspan="3" class="textright"><span>IVA (12%)</span></td>
-                    <td class="textright"><span>516.67</span></td>
-                </tr>
-                <tr>
-                    <td colspan="3" class="textright"><span>TOTAL Q.</span></td>
-                    <td class="textright"><span>516.67</span></td>
-                </tr>
-            </tfoot>
-        </table>
-        <div>
-            <p class="nota">Si usted tiene preguntas sobre esta factura, <br>pongase en contacto con nombre, teléfono y Email</p>
-            <h4 class="label_gracias">¡Gracias por su compra!</h4>
-        </div>
+        echo '<img class="anulada" src="data:image/png;base64,' . base64_encode(file_get_contents('./images/anulado.png')) . '" alt="Anulada">';
+        echo '<div id="page_pdf">';
+        echo '<table id="factura_head">';
+        echo '<tr>';
+        // echo '<td class="logo_factura">';
+        // echo '<div>';
+        // echo '<img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')) . '">';
+        // echo '</div>';
+        // echo '</td>';
+        echo '<td class="info_factura">';
+        echo '<div class="round">';
+        echo '<span class="h3">Factura</span>';
+        echo '<p>No. Factura: <strong>' . $filasproveedor->SERIE . $filasproveedor->CORRELATIVO . '</strong></p>';
+        echo '<p>Fecha:' . $filasproveedor->FECHA_REALIZADA . '</p>';
+        echo '<p>Hora: ' . $filasproveedor->HORA . '</p>';
+        echo '<p>Proveedor: ' . $filasproveedor->NOM_PROVEEDOR . '</p>';
+        echo '</div>';
+        echo '</td>';
+        echo '</tr>';
+        echo '</table>';
 
+        echo '<table id="factura_detalle">';
+        echo '<thead>';
+        echo '<tr>';
+        echo '<th width="100px">Cant.</th>';
+        echo '<th class="textleft">Descripción</th>';
+        // echo '<th class="textright" width="150px">Precio Unitario.</th>';
+        echo '<th class="textright" width="150px"> Precio Total</th>';
+        echo '</tr>';
+        echo '</thead>';
+        foreach ($productoscompra as $filadata) {
+            if ($filadata->COD_TMPCOMPROBANTE == $filasproveedor->COD_TMPCOMPROBANTE) {
+                echo '<tbody id="detalle_productos">';
+                echo '<tr>';
+                echo '<td style="text-align:center;">' . $filadata->CANTIDAD_MINIMA . '</td>';
+                echo '<td >' . $filadata->DES_PRODUCTO . '</td>';
+                echo '<td class="textright">' . $filadata->MONTO . '</td>';
+                echo '</tr>';
+
+                echo '</tbody>';
+            }
+        }
+        echo '<tfoot id="detalle_totales">';
+        echo '<tr>';
+        echo '<td colspan="2" class="textright"><span>TOTAL</span></td>';
+        echo '<td class="textright"><span>' . $filasproveedor->MONTO_TOTAL . '</span></td>';
+        echo '</tr>';
+
+        echo '</tfoot>';
+        echo '</table>';
+        echo '</table>';
+    }
+
+    ?>
     </div>
 
 </body>

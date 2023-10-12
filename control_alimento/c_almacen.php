@@ -518,7 +518,7 @@ if ($accion == 'insertar') {
     $fecha_emision = $_POST['fecha_emision'];
     $hora = $_POST['hora'];
     $fecha_entrega = $_POST['fecha_entrega'];
-    $codusu = $_POST['codusu'];
+    $codusu = trim($_POST['codusu']);
     $selecttipocompro = trim($_POST['selecttipocompro']);
     $selectformapago = trim($_POST['selectformapago']);
     $selectmoneda = trim($_POST['selectmoneda']);
@@ -580,7 +580,13 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_guardar_datos_factura($idcomprobantecaptura, $empresa,  $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro,  $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion, $imagen);
     echo $respuesta;
+} elseif ($accion == 'actualizarrequerimientoitem') {
+    $codrequerimiento  = trim($_POST['codrequerimiento']);
+    $codordencompra  = trim($_POST['codordencompra']);
+    $respuesta = c_almacen::c_actualizar_requerimiento_item($codrequerimiento, $codordencompra);
+    echo $respuesta;
 }
+
 
 
 
@@ -2808,7 +2814,7 @@ class c_almacen
                     "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
                     "COD_PRODUCTO" => $row->COD_PRODUCTO,
                     "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
-
+                    "COD_TMPREQUERIMIENTO" => $row->COD_TMPREQUERIMIENTO,
                 );
             }
             $jsonstring = json_encode($json);
@@ -3093,6 +3099,18 @@ class c_almacen
 
 
         $respuesta = $m_formula->GuardarDatosFactura($idcomprobantecaptura, $empresa, $fecha_emision, $hora, $fecha_entrega, $codusu, $selecttipocompro, $selectformapago, $selectmoneda, $tipocambio, $serie, $correlativo, $observacion, $imagen);
+
+        if ($respuesta) {
+            return "ok";
+        } else {
+            return "error";
+        };
+    }
+
+    static function  c_actualizar_requerimiento_item($codrequerimiento, $codordencompra)
+    {
+        $m_formula = new m_almacen();
+        $respuesta = $m_formula->actualizar_requerimiento_item($codrequerimiento, $codordencompra);
 
         if ($respuesta) {
             return "ok";

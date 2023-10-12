@@ -212,9 +212,7 @@ body {
   font-weight: 500;
   margin-bottom: 10px;
 }
-/* .thtotalinsumo {
-    padding-left: 350px !important;
-  } */
+
 .thtitulo {
   text-align: center !important;
 }
@@ -233,7 +231,7 @@ img {
   font-size: 25px !important;
 }
 .menu-vertical {
-  /* position: absolute; */
+  position: absolute;
   display: none;
   list-style: none;
   width: 190px;
@@ -500,7 +498,7 @@ td {
 }
 @media screen and (max-width: 1105px) {
   .totalinsumo {
-    margin-left: 500px !important;
+    margin-left: 300px !important;
   }
 }
 @media screen and (max-width: 992px) {
@@ -646,6 +644,14 @@ td {
   }
   .totalinsumo {
     margin-left: 0 !important;
+  }
+  .menu-vertical {
+    position: relative;
+    display: none;
+    list-style: none;
+    width: 190px;
+    background-image: linear-gradient(to bottom, #7b5185, #4587de);
+    padding-left: 15px;
   }
 }
 /*-------------------------------------------------------------*/

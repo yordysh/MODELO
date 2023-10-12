@@ -2253,8 +2253,8 @@ class m_almacen
       // $fecha_actual = '05/10/2023';
       // $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
-      $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,FECHA)
-                                                VALUES ('$codigo_orden_compra','$fecha_generado_orden_compra')");
+      $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,FECHA,COD_TMPREQUERIMIENTO)
+                                                VALUES ('$codigo_orden_compra','$fecha_generado_orden_compra','$idRequerimiento')");
       $insert = $stmPedidoCompras->execute();
       $cantidad_minima = 0;
       for ($i = 0; $i < count($union); $i += 3) {
@@ -3361,9 +3361,9 @@ class m_almacen
     try {
 
       $stmOrdenCompra = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TCI.COD_PRODUCTO AS COD_PRODUCTO,
-      TP.ABR_PRODUCTO AS ABR_PRODUCTO  FROM T_TMPORDEN_COMPRA TOC 
-      INNER JOIN T_TMPORDEN_COMPRA_ITEM TCI ON TOC.COD_ORDEN_COMPRA=TCI.COD_ORDEN_COMPRA
-      INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TCI.COD_PRODUCTO WHERE TOC.ESTADO='P'");
+                                             TP.ABR_PRODUCTO AS ABR_PRODUCTO, TOC.COD_TMPREQUERIMIENTO AS COD_TMPREQUERIMIENTO FROM T_TMPORDEN_COMPRA TOC 
+                                             INNER JOIN T_TMPORDEN_COMPRA_ITEM TCI ON TOC.COD_ORDEN_COMPRA=TCI.COD_ORDEN_COMPRA
+                                             INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TCI.COD_PRODUCTO WHERE TOC.ESTADO='O'");
       $stmOrdenCompra->execute();
       $datos = $stmOrdenCompra->fetchAll(PDO::FETCH_OBJ);
 
@@ -3679,19 +3679,14 @@ class m_almacen
     }
   }
 
-  public function MostrarFacturaProveedorPDF($requerimiento, $comprobante)
+  public function MostrarFacturaProveedorPDF($requerimiento)
   {
     try {
-
-      // $mostrardatospdf = $this->bd->prepare("SELECT TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR FROM T_TMPCOMPROBANTE TC
-      //                                           INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TC.COD_PROVEEDOR 
-      //                                           INNER JOIN T_TMPORDEN_COMPRA OC ON OC.COD_ORDEN_COMPRA=TC.COD_ORDEN_COMPRA 
-      //                                           WHERE CONVERT(DATE, TC.FECHA_REALIZADA) = CONVERT(DATE, GETDATE()) AND OC.COD_REQUERIMIENTO='$requerimiento'");
-      $mostrardatospdf = $this->bd->prepare("SELECT TP.NOM_PROVEEDOR AS NOM_PROVEEDOR,TP.DIR_PROVEEDOR AS DIR_PROVEEDOR,TP.TEL_PROVEEDOR AS TEL_PROVEEDOR,
-      TP.CORREO_PROVEEDOR AS CORREO_PROVEEDOR  FROM T_TMPCOMPROBANTE TC 
-     INNER JOIN T_PROVEEDOR TP ON TP.COD_PROVEEDOR=TC.COD_PROVEEDOR
-      INNER JOIN T_TMPORDEN_COMPRA TOC ON TOC.COD_ORDEN_COMPRA=TC.COD_ORDEN_COMPRA 
-      WHERE TOC.COD_REQUERIMIENTO='00000020' AND TC.COD_TMPCOMPROBANTE='000000001'");
+      $mostrardatospdf = $this->bd->prepare("SELECT TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE , TCI.SERIE AS SERIE, TCI.CORRELATIVO AS CORRELATIVO, CONVERT(VARCHAR, TC.FECHA_REALIZADA, 105) AS FECHA_REALIZADA, 
+      TCI.HORA AS HORA, TP.NOM_PROVEEDOR AS NOM_PROVEEDOR,TC.MONTO_TOTAL AS MONTO_TOTAL, TOR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO FROM T_TMPCOMPROBANTE TC
+      INNER JOIN T_TMPCOMPROBANTE_ITEM TCI ON TCI.COD_TMPCOMPROBANTE = TC.COD_TMPCOMPROBANTE
+      INNER JOIN T_PROVEEDOR TP ON TP.COD_PROVEEDOR = TC.COD_PROVEEDOR
+      INNER JOIN T_TMPORDEN_COMPRA TOR ON TOR.COD_ORDEN_COMPRA=TC.COD_ORDEN_COMPRA WHERE TOR.COD_REQUERIMIENTO='$requerimiento'");
       $mostrardatospdf->execute();
       $datosfactura = $mostrardatospdf->fetchAll(PDO::FETCH_OBJ);
 
@@ -3714,6 +3709,23 @@ class m_almacen
 
       return $datosfactura;
     } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function actualizar_requerimiento_item($codrequerimiento, $codordencompra)
+  {
+    try {
+      $this->bd->beginTransaction();
+      $mostrardatospdf = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='A' WHERE COD_REQUERIMIENTO='$codrequerimiento'");
+      $actualizaritemrequerimiento = $mostrardatospdf->execute();
+      $actualizarestadooc = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='C' WHERE COD_ORDEN_COMPRA='$codordencompra'");
+      $actualizarestadooc->execute();
+
+      $actualizaritemrequerimiento = $this->bd->commit();
+      return $actualizaritemrequerimiento;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
       die($e->getMessage());
     }
   }

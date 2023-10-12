@@ -179,7 +179,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
 
                         <!-- Tabla de insumos-->
-                        <div class="table-responsive totalinsumo" style="overflow-x: hidden;height: 100px!important; margin-top:10px;margin-left:80px;">
+                        <div class="table-responsive totalinsumo" style="overflow-x: hidden;height: 100px!important; margin-top:10px;margin-left:600px;">
                             <table id="tsumatotal" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>

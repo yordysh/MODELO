@@ -550,7 +550,7 @@ $(function () {
   }
   async function alertaOrdenCompra() {
     const accion = "mostrarordencompraalmacenalerta";
-
+    var codrequerimiento, codordencompra;
     $.ajax({
       url: "./c_almacen.php",
       type: "POST",
@@ -558,15 +558,14 @@ $(function () {
       success: function (response) {
         let task = JSON.parse(response);
         console.log(task);
-        let htmlContent = "<h1>Productos por comprar</h1>";
+        codrequerimiento = task[0].COD_TMPREQUERIMIENTO;
+        codordencompra = task[0].COD_ORDEN_COMPRA;
+
+        let htmlContent = "<h1>¡Listo para producción!</h1>";
         htmlContent += "<ul>";
         task.forEach(function (producto) {
           htmlContent +=
-            "<li style='list-style:none;'>" +
-            producto.COD_ORDEN_COMPRA +
-            ":" +
-            producto.ABR_PRODUCTO +
-            "</li>";
+            "<li style='list-style:none;'>" + producto.ABR_PRODUCTO + "</li>";
         });
         htmlContent += "</ul>";
         Swal.fire({
@@ -575,6 +574,22 @@ $(function () {
           html: htmlContent,
           confirmButtonText: "Ok",
           showCloseButton: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const accion = "actualizarrequerimientoitem";
+            $.ajax({
+              url: "./c_almacen.php",
+              type: "POST",
+              data: {
+                accion: accion,
+                codrequerimiento: codrequerimiento,
+                codordencompra: codordencompra,
+              },
+              success: function (response) {
+                console.log("se actualizo");
+              },
+            });
+          }
         });
       },
       error: function (xhr, status, error) {
