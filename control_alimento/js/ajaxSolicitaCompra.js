@@ -124,7 +124,7 @@ $(function () {
       "id_orden_compra"
     );
     let codpersonal = $("#codpersonal").val();
-
+    console.log(idcodordencompra);
     const accion = "aprobarordencompra";
 
     $.ajax({

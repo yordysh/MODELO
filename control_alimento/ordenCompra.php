@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-// $codusuario = $_SESSION["cod"];
+$codusuario = $_SESSION["cod"];
 // $codanexo=$_SESSION["ane"];
-$codusuario = '00001';
+// $codusuario = '00001';
 // $codanexo = '1010';
 
 ?>
@@ -260,7 +260,7 @@ $dataProveedores = $mostrar->MostrarProveedores();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxOrdenCompra.js"></script>
+    <script src="./js/ajaxOrdenCompra.js?v=0.001"></script>
     <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {

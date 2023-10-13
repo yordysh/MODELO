@@ -300,7 +300,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                         <th class="thtitulo" scope="col">CANTIDAD</th>
                                         <th class="thtitulo" scope="col">PRECIO</th>
                                         <!-- <th class="thtitulo" scope="col">LOTE</th> -->
-                                        <th class="thtitulo" scope="col">SELECCIONAR</th>
+                                        <!-- <th class="thtitulo" scope="col">SELECCIONAR</th> -->
                                     </tr>
                                 </thead>
                                 <tbody id="tablainsumoscomprarfactura">
@@ -328,7 +328,8 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxGenerarComprobante.js"></script>
+    <!-- <script src="./js/ajaxGenerarComprobante.js"></script> -->
+    <script src="./js/ajaxGenerarComprobante.js?v=0.001"></script>
     <script src="./js/select2.min.js"></script>
 </body>
 

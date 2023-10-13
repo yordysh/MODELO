@@ -218,7 +218,6 @@ $(function () {
             <td data-titulo="NOMBRE" style='text-align:center;'>${task.DES_PRODUCTO}</td>
             <td data-titulo="CANTIDAD" style='text-align:center;'>${task.CANTIDAD_MINIMA}</td>
             <td data-titulo="PRECIO" style='text-align:center;'>${task.MONTO}</td>
-            <!--<td data-titulo="LOTE">${task.MONTO}</td>-->
         </tr>`;
           });
 
@@ -289,15 +288,25 @@ $(function () {
     let correlativoform = $("#correlativo").val();
     let observacionform = $("#observacion").val();
     let idcomprobantecapturaform = $("#codigoorden").val();
+    let tipoform = $("#selecttipocompro").val();
+
     if (!idcomprobantecapturaform) {
       Swal.fire({
         icon: "error",
         title: "No hay un comprobante",
-        text: "Necesita añadir un comprobante",
+        text: "Necesita darle check a un comprobante",
       });
       return;
     }
 
+    if (tipoform === "none") {
+      Swal.fire({
+        icon: "error",
+        title: "Campo obligatorio",
+        text: "Necesita seleccionar un tipo comprobante.",
+      });
+      return;
+    }
     if (!serieform) {
       Swal.fire({
         icon: "error",

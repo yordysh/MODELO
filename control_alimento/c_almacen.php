@@ -452,6 +452,8 @@ if ($accion == 'insertar') {
     $codpersonal = trim($_POST['codpersonal']);
 
     $idcodordencompra = trim($_POST['idcodordencompra']);
+    // var_dump($codpersonal)
+    // var_dump()
 
     $respuesta = c_almacen::c_aprobar_orden_compra($idcodordencompra, $codpersonal);
     echo $respuesta;
