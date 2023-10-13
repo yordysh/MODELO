@@ -123,8 +123,8 @@ $(function () {
     let idcodordencompra = $("#tablaordencomprarequerimiento tr").attr(
       "id_orden_compra"
     );
-    let codpersonal = $("#codpersonal").val();
-    console.log(idcodordencompra);
+    let codigopersonal = $("#codpersonal").val();
+
     const accion = "aprobarordencompra";
 
     $.ajax({
@@ -133,7 +133,7 @@ $(function () {
       data: {
         accion: accion,
         idcodordencompra: idcodordencompra,
-        codpersonal: codpersonal,
+        codigopersonal: codigopersonal,
       },
       success: function (response) {
         if (response == "ok") {

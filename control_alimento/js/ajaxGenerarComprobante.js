@@ -75,7 +75,6 @@ $(function () {
                             <td data-titulo='PROVEEDOR' style='text-align: center;'>${task.NOM_PROVEEDOR}</td>
                             <td data-titulo='EMPRESA' style='text-align: center;'>${task.NOMBRE}</td>
                             <td style="text-align:center;"><button class="custom-icon"  id="clickcomprobante"><i class="icon-check"></i></button></td>
-                            <!--<td style="text-align:center;"><button class="custom-icon-pdf"  id="clickpdf"><i class="icon-print"></i></button></td>-->
                           </tr>`;
           });
           $("#tablamostarcomprobante").html(template);
@@ -156,21 +155,30 @@ $(function () {
 
     let filafactura = $(e.target).closest("tr");
     let codigoComprobante = filafactura.find("td:eq(0)").text();
+    // console.log(codigoComprobante);
     $("#codigoorden").val(codigoComprobante);
+
+    let oficina = $("#vroficina").val();
+    let codigopersonal = $("#codpersonal").val();
+
     const accion = "ponercomprobantefactura";
 
     $.ajax({
       url: "./c_almacen.php",
       type: "POST",
-      data: { accion: accion, codigoComprobante: codigoComprobante },
+      data: {
+        accion: accion,
+        codigoComprobante: codigoComprobante,
+        oficina: oficina,
+        codigopersonal: codigopersonal,
+      },
       success: function (response) {
         let lista = JSON.parse(response);
         $("#selectempresa").val(lista[0].COD_EMPRESA);
-        // $("#personal").val(lista[0].NOM_PERSONAL);
         $("#proveedor").val(lista[0].NOM_PROVEEDOR);
         $("#selectformapago").val(lista[0].F_PAGO);
         $("#selectmoneda").val(lista[0].TIPO_MONEDA);
-        // $("#observacion").val(lista[0].OBSERVACION);
+        $("#personal").val(lista[0].NOM_PERSONAL1);
         $("#fecha_emision").val(fechaActual);
         $("#fecha_emision").attr("min", fechaActual);
         $("#fecha_entrega").val(fechaActual);
@@ -189,8 +197,11 @@ $(function () {
       type: "POST",
       data: { accion: accionpersonal, codpersonalusu: codpersonalusu },
       success: function (response) {
-        let listaresponse = JSON.parse(response);
-        $("#personal").val(listaresponse[0].NOM_PERSONAL);
+        if (isJSON(response)) {
+          let listaresponse = JSON.parse(response);
+
+          $("#personal").val(listaresponse[0].NOM_PERSONAL);
+        }
       },
       error: function (xhr, status, error) {
         console.error("Error al cargar los datos de la tabla:", error);

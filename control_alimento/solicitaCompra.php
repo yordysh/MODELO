@@ -1,10 +1,11 @@
 <?php
 session_start();
 
-$codusuario = $_SESSION["cod"];
-// $codoficina = $_SESSION["ofi"];
+// $codusuario = $_SESSION["cod"];
+// $oficina=$_SESSION["ofi"];
 
-// $codusuario = '00004';
+$codusuario = '0002';
+// $codusuario = '00002';
 ?>
 <?php
 require_once "m_almacen.php";
@@ -109,6 +110,7 @@ $mostrar = new m_almacen();
                 <div class="main">
                     <form method="post" action="" id="formularioOrdenCompra">
                         <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">
+
 
                         <!-- Tabla total orden de compra-->
                         <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">

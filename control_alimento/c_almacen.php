@@ -4,6 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once("./m_almacen.php");
+
 include("../funciones/f_funcion.php");
 
 
@@ -449,13 +450,10 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mirar_orden_compra($idcodordencompra);
     echo $respuesta;
 } elseif ($accion == 'aprobarordencompra') {
-    $codpersonal = trim($_POST['codpersonal']);
-
+    $codigopersonal = trim($_POST['codigopersonal']);
     $idcodordencompra = trim($_POST['idcodordencompra']);
-    // var_dump($codpersonal)
-    // var_dump()
 
-    $respuesta = c_almacen::c_aprobar_orden_compra($idcodordencompra, $codpersonal);
+    $respuesta = c_almacen::c_aprobar_orden_compra($idcodordencompra, $codigopersonal);
     echo $respuesta;
 } elseif ($accion == 'mostrarordencompraalmacenalerta') {
     $respuesta = c_almacen::c_mostrar_orden_compra_alerta();
@@ -469,7 +467,10 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_actualizar_combo_produccion_producto();
     echo $respuesta;
 } elseif ($accion == 'mostrarordencompraaprobada') {
-    $respuesta = c_almacen::c_mostrar_orden_compra_aprobada();
+    $codigopersonalsmp2 = trim($_POST['codigopersonal']);
+    $oficinasmp2 = trim($_POST['oficina']);
+
+    $respuesta = c_almacen::c_mostrar_orden_compra_aprobada($codigopersonalsmp2, $oficinasmp2);
     echo $respuesta;
 } elseif ($accion == 'mostrarlistaproveedores') {
     $id = trim($_POST['idprovee']);
@@ -501,7 +502,10 @@ if ($accion == 'insertar') {
     echo $respuesta;
 } elseif ($accion == 'ponercomprobantefactura') {
     $codigoComprobante = trim($_POST['codigoComprobante']);
-    $respuesta = c_almacen::c_poner_comprobantefactura($codigoComprobante);
+    $codigopersonalsmp2 = trim($_POST['codigopersonal']);
+    $oficinasmp2 = trim($_POST['oficina']);
+
+    $respuesta = c_almacen::c_poner_comprobantefactura($codigoComprobante, $codigopersonalsmp2, $oficinasmp2);
     echo $respuesta;
 } elseif ($accion == 'ponerpersonalentrante') {
     $codpersonalusu = trim($_POST['codpersonalusu']);
@@ -2785,12 +2789,13 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function c_aprobar_orden_compra($idcodordencompra, $codpersonal)
+
+    static function c_aprobar_orden_compra($idcodordencompra, $codigopersonal)
     {
         $m_formula = new m_almacen();
 
 
-        $respuesta = $m_formula->AprobarOrdenCompra($idcodordencompra, $codpersonal);
+        $respuesta = $m_formula->AprobarOrdenCompra($idcodordencompra, $codigopersonal);
 
         if ($respuesta) {
             return "ok";
@@ -2876,25 +2881,43 @@ class c_almacen
 
 
 
-    static function c_mostrar_orden_compra_aprobada()
+
+    static function c_mostrar_orden_compra_aprobada($codigopersonalsmp2, $oficinasmp2)
     {
         try {
 
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarOrdenDeCompraAprobada();
 
+            require_once("./m_consulta_personal.php");
+            $mostrarpersonal = new m_almacen_consulta($oficinasmp2);
+
+            $datospersonal = $mostrarpersonal->MostrarNomPersonal($codigopersonalsmp2);
+
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
             }
             $json = array();
             foreach ($datos as $row) {
-                $json[] = array(
-                    "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
-                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-                    "FECHA" => convFecSistema($row->FECHA),
-                    "NOM_PERSONAL" => $row->NOM_PERSONAL,
+                // $json[] = array(
+                //     "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                //     "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                //     "FECHA" => convFecSistema($row->FECHA),
 
+                // );
+                $item = array(
+                    "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                    "COD_REQUERIMIENTO" => trim($row->COD_REQUERIMIENTO),
+                    "FECHA" => convFecSistema($row->FECHA),
                 );
+
+                // Verifica si hay resultados en el segundo bucle
+                if (count($datospersonal) == 1) {
+                    $row = $datospersonal[0];
+                    $item["NOM_PERSONAL1"] = $row->NOM_PERSONAL1;
+                }
+
+                $json[] = $item;
             }
             $jsonstring = json_encode($json);
             echo $jsonstring;
@@ -2997,26 +3020,39 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function c_poner_comprobantefactura($codigoComprobante)
+    static function c_poner_comprobantefactura($codigoComprobante, $codigopersonalsmp2, $oficinasmp2)
     {
         try {
 
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarValoresOrdenfactura($codigoComprobante);
 
+            require_once("./m_consulta_personal.php");
+            $mostrarpersonal = new m_almacen_consulta($oficinasmp2);
+
+            $datospersonal = $mostrarpersonal->MostrarNomPersonal($codigopersonalsmp2);
+
+
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
             }
             $json = array();
             foreach ($datos as $row) {
-                $json[] = array(
+                $item = array(
                     "COD_EMPRESA" => $row->COD_EMPRESA,
-                    "NOM_PERSONAL" => $row->NOM_PERSONAL,
                     "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
                     "F_PAGO" => $row->F_PAGO,
                     "TIPO_MONEDA" => $row->TIPO_MONEDA,
                     "OBSERVACION" => $row->OBSERVACION,
                 );
+
+                // Verifica si hay resultados en el segundo bucle
+                if (count($datospersonal) == 1) {
+                    $row = $datospersonal[0];
+                    $item["NOM_PERSONAL1"] = $row->NOM_PERSONAL1;
+                }
+
+                $json[] = $item;
             }
             $jsonstring = json_encode($json);
             echo $jsonstring;

@@ -45,22 +45,29 @@ $(function () {
   });
   /*---------Cargar la orden de compra aprobada------------------- */
   function cargarOrdenCompraAprobada() {
-    const accion = "mostrarordencompraaprobada";
+    let oficina = $("#vroficina").val();
+    let codigopersonal = $("#codpersonal").val();
 
+    const accion = "mostrarordencompraaprobada";
     $.ajax({
       url: "./c_almacen.php",
       type: "POST",
-      data: { accion: accion },
+      data: {
+        accion: accion,
+        oficina: oficina,
+        codigopersonal: codigopersonal,
+      },
       success: function (response) {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
+          console.log(tasks);
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr id_orden_compra_aprobada='${task.COD_ORDEN_COMPRA}'>
                             <td data-titulo='CODIGO REQUERIMIENTO' style='text-align: center;'>${task.COD_REQUERIMIENTO}</td>
                             <td data-titulo='FECHA' style='text-align: center;'>${task.FECHA}</td>
-                            <td data-titulo='PERSONAL' style='text-align: center;'>${task.NOM_PERSONAL}</td>
-                           
+                             <td data-titulo='PERSONAL' style='text-align: center;'>${task.NOM_PERSONAL1}</td>
+
                             <td style="text-align:center;"><button class="custom-icon"  id="clickcompraaprobada"><i class="icon-check"></i></button></td>
                           </tr>`;
           });
@@ -140,6 +147,7 @@ $(function () {
     let codigorequerimiento = $(
       "#tmostrarordencompraaprobado tr:eq(1) td:eq(0)"
     ).text();
+    console.log(codigorequerimiento);
     $("#idrequerimientotemp").val(codigorequerimiento);
     $("#personal").val(personal);
     mostrarinsumos(idcompraaprobada);

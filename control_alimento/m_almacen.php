@@ -3322,7 +3322,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function AprobarOrdenCompra($idcodordencompra, $codpersonal)
+  public function AprobarOrdenCompra($idcodordencompra, $codigopersonal)
   {
     try {
       $this->bd->beginTransaction();
@@ -3342,7 +3342,7 @@ class m_almacen
 
 
       $stmtrequerimiento = $this->bd->prepare("INSERT INTO T_REQUERIMIENTOTEMP (COD_REQUERIMIENTO, COD_CATEGORIA, FEC_REQUERIMIENTO, HOR_REQUERIMIENTO, EST_REQUERIMIENTO, USU_REGISTRO, FEC_REGISTRO,MAQUINA)
-                                                VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','P','$codpersonal',GETDATE(),'$maquina')");
+                                                VALUES('$codigoAumentoReq','00004',GETDATE(),'$horaMinutosSegundos','P','$codigopersonal',GETDATE(),'$maquina')");
       $stmtrequerimiento->execute();
 
       $stmactualiza = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='T', COD_REQUERIMIENTO='$codigoAumentoReq' WHERE COD_ORDEN_COMPRA='$idcodordencompra'");
@@ -3401,9 +3401,13 @@ class m_almacen
   {
     try {
 
-      $stmOrdenCompraAprobada = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TOC.FECHA AS FECHA,TP.NOM_PERSONAL AS NOM_PERSONAL FROM T_TMPORDEN_COMPRA  TOC
-                                                      INNER JOIN T_REQUERIMIENTOTEMP TR ON TOC.COD_REQUERIMIENTO=TR.COD_REQUERIMIENTO
-                                                      INNER JOIN T_PERSONAL TP ON TP.COD_PERSONAL=TR.USU_REGISTRO WHERE TOC.ESTADO='T'");
+      // $stmOrdenCompraAprobada = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TOC.FECHA AS FECHA,TP.NOM_PERSONAL AS NOM_PERSONAL FROM T_TMPORDEN_COMPRA  TOC
+      //                                                 INNER JOIN T_REQUERIMIENTOTEMP TR ON TOC.COD_REQUERIMIENTO=TR.COD_REQUERIMIENTO
+      //                                                 INNER JOIN T_USUARIO TU ON TU.COD_USUARIO=TR.USU_REGISTRO
+      //                                                 INNER JOIN T_PERSONAL TP ON TP.COD_PERSONAL=TU.COD_PERSONAL WHERE TOC.ESTADO='T'");
+
+      $stmOrdenCompraAprobada = $this->bd->prepare("SELECT COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, COD_REQUERIMIENTO AS COD_REQUERIMIENTO,
+                                                      FECHA AS FECHA FROM T_TMPORDEN_COMPRA  WHERE ESTADO='T'");
       $stmOrdenCompraAprobada->execute();
       $datos = $stmOrdenCompraAprobada->fetchAll(PDO::FETCH_OBJ);
 
@@ -3519,6 +3523,7 @@ class m_almacen
 
         $verificacodprove = $codproveedoractual;
       }
+
       $stminsertarcomprobante = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE(COD_TMPCOMPROBANTE,COD_PROVEEDOR,COD_EMPRESA,OFICINA,TIPO_MONEDA,F_PAGO,FECHA_REALIZADA,COD_USUARIO,COD_ORDEN_COMPRA,OBSERVACION)
                                                     VALUES('$codigocomprobante','$verificacodprove','$empresa','$oficina','$moneda','$formapago','$fechaformato','$personalcod','$idcompraaprobada','$observacion')");
       $stminsertarcomprobante->execute();
@@ -3550,6 +3555,8 @@ class m_almacen
         $stmcambioestado = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='O' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
         $stmcambioestado->execute();
       }
+      $actualizacodigoperson = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET COD_USU='$personalcod' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
+      $actualizacodigoperson->execute();
 
       $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPCOMPROBANTE SET MONTO_TOTAL='$sumordenitem' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_TMPCOMPROBANTE='$codigocomprobante'");
       $stmactualizaitemcompra->execute();
@@ -3588,11 +3595,10 @@ class m_almacen
   {
     try {
 
-      $stmponervaloresfact = $this->bd->prepare("SELECT TC.COD_EMPRESA AS COD_EMPRESA, TPER.NOM_PERSONAL AS NOM_PERSONAL,TP.NOM_PROVEEDOR,TC.F_PAGO AS F_PAGO,
+      $stmponervaloresfact = $this->bd->prepare("SELECT TC.COD_EMPRESA AS COD_EMPRESA,TP.NOM_PROVEEDOR,TC.F_PAGO AS F_PAGO,
                                                   TC.TIPO_MONEDA AS TIPO_MONEDA, TC.OBSERVACION AS OBSERVACION FROM T_TMPCOMPROBANTE TC
                                                   INNER JOIN T_PROVEEDOR TP ON TP.COD_PROVEEDOR=TC.COD_PROVEEDOR
-                                                  INNER JOIN T_USUARIO TU ON TU.COD_USUARIO=TC.COD_USUARIO
-                                                  INNER JOIN T_PERSONAL TPER ON TPER.COD_PERSONAL=TU.COD_PERSONAL WHERE TC.COD_TMPCOMPROBANTE='$codigoComprobante'");
+                                                  WHERE TC.COD_TMPCOMPROBANTE='$codigoComprobante'");
       $stmponervaloresfact->execute();
       $datosfactura = $stmponervaloresfact->fetchAll(PDO::FETCH_OBJ);
 

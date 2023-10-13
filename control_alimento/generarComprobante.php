@@ -2,9 +2,11 @@
 session_start();
 
 // $codusuario = $_SESSION["cod"];
+// $oficina=$_SESSION["ofi"];
+
 // $codanexo=$_SESSION["ane"];
-$codusuario = '00001';
-// $codanexo = '1010';
+$codusuario = '0002';
+$codoficina = 'SMP2';
 
 ?>
 <?php
@@ -107,6 +109,8 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                 <div class="main">
                     <form method="post" action="" id="formulariocompraorden">
                         <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">
+                        <input type="hidden" id="vroficina" name="vroficina" value="<?php echo $codoficina; ?>">
+
                         <!-- Text input -->
                         <div class="form-outline mb-4">
                             <input id="id" type="hidden" class="form-control" name="id" />

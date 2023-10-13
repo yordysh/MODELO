@@ -1,9 +1,11 @@
 <?php
 session_start();
 
-$codusuario = $_SESSION["cod"];
+// $codusuario = $_SESSION["cod"];
+// $oficina=$_SESSION["ofi"];
 // $codanexo=$_SESSION["ane"];
-// $codusuario = '00001';
+$codusuario = '0002';
+$codoficina = 'SMP2';
 // $codanexo = '1010';
 
 ?>
@@ -109,6 +111,7 @@ $dataProveedores = $mostrar->MostrarProveedores();
                 <div class="main">
                     <form method="post" action="" id="formulariocompraorden">
                         <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">
+                        <input type="hidden" id="vroficina" name="vroficina" value="<?php echo $codoficina; ?>">
 
                         <!-- Tabla total requerimiento pedido-->
                         <div class="table-responsive" style="overflow-x: hidden;height: 150px!important; margin-top:30px;margin-bottom:20px;">
