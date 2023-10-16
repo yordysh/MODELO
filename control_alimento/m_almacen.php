@@ -3524,12 +3524,17 @@ class m_almacen
         $verificacodprove = $codproveedoractual;
       }
 
-      $stminsertarcomprobante = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE(COD_TMPCOMPROBANTE,COD_PROVEEDOR,COD_EMPRESA,OFICINA,TIPO_MONEDA,F_PAGO,FECHA_REALIZADA,COD_USUARIO,COD_ORDEN_COMPRA,OBSERVACION)
-                                                    VALUES('$codigocomprobante','$verificacodprove','$empresa','$oficina','$moneda','$formapago','$fechaformato','$personalcod','$idcompraaprobada','$observacion')");
+      $zonaHorariaPeru = new DateTimeZone('America/Lima');
+      $horaActualPeru = new DateTime('now', $zonaHorariaPeru);
+      $horaMinutosSegundos = $horaActualPeru->format('H:i');
+
+
+      $stminsertarcomprobante = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE(COD_TMPCOMPROBANTE,COD_PROVEEDOR,COD_EMPRESA,OFICINA,TIPO_MONEDA,F_PAGO,FECHA_REALIZADA,COD_USUARIO,COD_ORDEN_COMPRA,OBSERVACION,HORA)
+                                                    VALUES('$codigocomprobante','$verificacodprove','$empresa','$oficina','$moneda','$formapago','$fechaformato','$personalcod','$idcompraaprobada','$observacion','$horaMinutosSegundos')");
       $stminsertarcomprobante->execute();
       $sumordenitem = 0;
       foreach ($datosSeleccionadosInsumos as $insumos) {
-        $codigoproducto = $insumos["material"];
+        $codigoproducto = $insumos["codproducto"];
         $cantidad = $insumos["cantidad"];
         $precio = $insumos["precio"];
 
@@ -3688,9 +3693,8 @@ class m_almacen
   public function MostrarFacturaProveedorPDF($requerimiento)
   {
     try {
-      $mostrardatospdf = $this->bd->prepare("SELECT TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE , TCI.SERIE AS SERIE, TCI.CORRELATIVO AS CORRELATIVO, CONVERT(VARCHAR, TC.FECHA_REALIZADA, 105) AS FECHA_REALIZADA, 
-      TCI.HORA AS HORA, TP.NOM_PROVEEDOR AS NOM_PROVEEDOR,TC.MONTO_TOTAL AS MONTO_TOTAL, TOR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO FROM T_TMPCOMPROBANTE TC
-      INNER JOIN T_TMPCOMPROBANTE_ITEM TCI ON TCI.COD_TMPCOMPROBANTE = TC.COD_TMPCOMPROBANTE
+      $mostrardatospdf = $this->bd->prepare("SELECT TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE , CONVERT(VARCHAR, TC.FECHA_REALIZADA, 105) AS FECHA_REALIZADA, 
+      TC.HORA AS HORA, TP.NOM_PROVEEDOR AS NOM_PROVEEDOR,TC.MONTO_TOTAL AS MONTO_TOTAL, TOR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO FROM T_TMPCOMPROBANTE TC
       INNER JOIN T_PROVEEDOR TP ON TP.COD_PROVEEDOR = TC.COD_PROVEEDOR
       INNER JOIN T_TMPORDEN_COMPRA TOR ON TOR.COD_ORDEN_COMPRA=TC.COD_ORDEN_COMPRA WHERE TOR.COD_REQUERIMIENTO='$requerimiento'");
       $mostrardatospdf->execute();

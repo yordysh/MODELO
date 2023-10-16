@@ -67,9 +67,6 @@ $dataProveedores = $mostrar->MostrarProveedores();
             <li>
                 <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
-            <!-- <li>
-                <a class="activo" href="#">Solicitar compra</a>
-            </li> -->
             <li>
                 <a class="activo">Compras realizar</a>
                 <ul class="menu-vertical">
@@ -119,8 +116,6 @@ $dataProveedores = $mostrar->MostrarProveedores();
                                         <th class="thtitulo" scope="col">CODIGO REQUERIMIENTO</th>
                                         <th class="thtitulo" scope="col">FECHA</th>
                                         <th class="thtitulo" scope="col">PERSONAL</th>
-                                        <!-- <th class="thtitulo" scope="col">MOTIVO</th> -->
-
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -130,6 +125,25 @@ $dataProveedores = $mostrar->MostrarProveedores();
                             </table>
                         </div>
 
+                        <!-- Tabla total insumos por comprar-->
+                        <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
+                            <div class="row g-4 top-div">
+                                <center><label class="title_table">INSUMOS POR COMPRAR</label></center>
+                            </div>
+                            <table id="tinsumoscomprar" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">MATERIAL</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <!-- <th class="thtitulo" scope="col">PRECIO</th> -->
+                                        <th class="thtitulo" scope="col">SELECCIONAR</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablainsumoscomprar">
+
+                                </tbody>
+                            </table>
+                        </div>
 
 
                         <div class="row g-4 top-div">
@@ -217,18 +231,17 @@ $dataProveedores = $mostrar->MostrarProveedores();
                         <!-- Tabla total insumos por comprar-->
                         <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
                             <div class="row g-4 top-div">
-                                <center><label class="title_table">INSUMOS POR COMPRAR</label></center>
+                                <center><label class="title_table">DETALLE DE COMPRA</label></center>
                             </div>
-                            <table id="tinsumoscomprar" class="table table-sm mb-3 table-hover">
+                            <table id="tinsumoscomprarprecio" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
                                         <th class="thtitulo" scope="col">MATERIAL</th>
                                         <th class="thtitulo" scope="col">CANTIDAD</th>
                                         <th class="thtitulo" scope="col">PRECIO</th>
-                                        <th class="thtitulo" scope="col">SELECCIONAR</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tablainsumoscomprar">
+                                <tbody id="tablainsumoscomprarprecio">
 
                                 </tbody>
                             </table>

@@ -60,7 +60,7 @@ $(function () {
       success: function (response) {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
-          console.log(tasks);
+          // console.log(tasks);
           let template = ``;
           tasks.forEach((task) => {
             template += `<tr id_orden_compra_aprobada='${task.COD_ORDEN_COMPRA}'>
@@ -147,7 +147,7 @@ $(function () {
     let codigorequerimiento = $(
       "#tmostrarordencompraaprobado tr:eq(1) td:eq(0)"
     ).text();
-    console.log(codigorequerimiento);
+
     $("#idrequerimientotemp").val(codigorequerimiento);
     $("#personal").val(personal);
     mostrarinsumos(idcompraaprobada);
@@ -225,8 +225,8 @@ $(function () {
             template += `<tr id_orden_compra_item='${task.COD_ORDEN_COMPRA}'>
                             <td data-titulo='MATERIAL' codigo_producto='${task.COD_PRODUCTO}' style='text-align: center;'>${task.DES_PRODUCTO}</td>
                             <td data-titulo='CANTIDAD' style='text-align: center;'>${task.CANTIDAD_MINIMA}</td>
-                            <td data-titulo='PRECIO' style='text-align: center;'><input type='number'/></td>
-                            <td data-titulo='SELECCIONAR' style='text-align: center;'><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked></td>
+                            <!-- <td data-titulo='PRECIO' style='text-align: center;'><input type='number'/></td> -->
+                            <td data-titulo='SELECCIONAR' style='text-align: center;'><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" ></td>
                             </tr>`;
           });
           $("#tablainsumoscomprar").html(template);
@@ -240,6 +240,35 @@ $(function () {
     });
   }
   /*------------------------------------------------------ */
+  /*------- Check mostrar los añadidos en tabla detalle----- */
+  $(document).on("click", "#flexCheckDefault", (e) => {
+    let filaActual = $(e.target).closest("tr");
+    let producto = filaActual.find("td:eq(0)").text();
+    let codproducto = filaActual.find("td:eq(0)").attr("codigo_producto");
+    let cantidad = filaActual.find("td:eq(1)").text();
+
+    let tisumos = $("#tinsumoscomprarprecio tbody");
+
+    if (e.target.checked) {
+      tisumos.append(
+        "<tr><td data-titulo='MATERIAL' codigo_prod='" +
+          codproducto +
+          "' style='text-align:center;'>" +
+          producto +
+          "</td><td data-titulo='CANTIDAD' style='text-align:center;'>" +
+          cantidad +
+          "</td><td data-titulo='PRECIO'><input type='number' /></td></tr>"
+      );
+    } else {
+      tisumos.find("tr").each(function () {
+        if ($(this).find("td:eq(0)").attr("codigo_prod") === codproducto) {
+          $(this).remove();
+        }
+      });
+    }
+  });
+
+  /*------------------------------------------------------- */
 
   /*--------- insertar orden de compra de los insumos con precio-----*/
 
@@ -262,31 +291,33 @@ $(function () {
     );
 
     const datosSeleccionadosInsumos = [];
-    $("#tablainsumoscomprar tr").each(function () {
+    $("#tablainsumoscomprarprecio tr").each(function () {
       const fila = $(this);
 
-      const checkbox = fila.find("input[type='checkbox']");
-
-      if (checkbox.prop("checked")) {
-        const material = fila
-          .find("td[data-titulo='MATERIAL']")
-          .attr("codigo_producto");
-        const cantidad = fila.find("td[data-titulo='CANTIDAD']").text();
-        const precio = fila.find("td[data-titulo='PRECIO'] input").val();
-
-        const datosFila = {
-          material: material,
-          cantidad: cantidad,
-          precio: precio,
-        };
-        datosSeleccionadosInsumos.push(datosFila);
-      }
+      const codproducto = fila.find("td:eq(0)").attr("codigo_prod");
+      const desproducto = fila.find("td:eq(0)").text();
+      const cantidad = fila.find("td:eq(1)").text();
+      const precio = fila.find("td:eq(2) input").val();
+      const datosFila = {
+        codproducto: codproducto,
+        // desproducto: desproducto,
+        cantidad: cantidad,
+        precio: precio,
+      };
+      datosSeleccionadosInsumos.push(datosFila);
     });
 
     if (!personal) {
       Swal.fire({
         icon: "info",
         text: "Dar check en listado de documentos aprobados.",
+      });
+      return;
+    }
+    if (!$("input[type=checkbox]:checked").length) {
+      Swal.fire({
+        icon: "info",
+        text: "Por favor, marca al menos un producto antes de guardar.",
       });
       return;
     }
@@ -340,20 +371,19 @@ $(function () {
       return;
     }
 
-    var precioInput = document.querySelector('td[data-titulo="PRECIO"] input');
-    var checkbox = document.querySelector(
-      'td[data-titulo="SELECCIONAR"] input'
-    );
-
-    // Validamos que el checkbox esté marcado y el campo de precio esté vacío
-    if (checkbox.checked && precioInput.value === "") {
+    var inputVacioEncontrado = false;
+    $("#tinsumoscomprarprecio tbody input").each(function () {
+      if ($(this).val() === "") {
+        inputVacioEncontrado = true;
+      }
+    });
+    if (inputVacioEncontrado) {
       Swal.fire({
         icon: "info",
-        text: "El campo de precio está vacío. Por favor, complételo.",
+        text: "Debes ingresar el precio antes de guardar la orden de compra.",
       });
       return;
     }
-
     const accion = "guardarinsumoscompras";
 
     $.ajax({
@@ -406,6 +436,7 @@ $(function () {
               $("#direccionproveedor").val("");
               $("#ruc").val("");
               $("#dniproveedor").val("");
+              $("#tablainsumoscomprarprecio").empty();
               cargarOrdenCompraAprobada();
             }
           });

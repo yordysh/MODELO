@@ -182,7 +182,7 @@ $productoscompra = $mostrar->MostrarFacturaPDF();
     foreach ($proveedor as $filasproveedor) {
 
 
-        echo '<img class="anulada" src="data:image/png;base64,' . base64_encode(file_get_contents('./images/anulado.png')) . '" alt="Anulada">';
+        // echo '<img class="anulada" src="data:image/png;base64,' . base64_encode(file_get_contents('./images/anulado.png')) . '" alt="Anulada">';
         echo '<div id="page_pdf">';
         echo '<table id="factura_head">';
         echo '<tr>';
@@ -194,7 +194,7 @@ $productoscompra = $mostrar->MostrarFacturaPDF();
         echo '<td class="info_factura">';
         echo '<div class="round">';
         echo '<span class="h3">Factura</span>';
-        echo '<p>No. Factura: <strong>' . $filasproveedor->SERIE . $filasproveedor->CORRELATIVO . '</strong></p>';
+        echo '<p>No. Factura: <strong>' . $filasproveedor->COD_TMPCOMPROBANTE . '</strong></p>';
         echo '<p>Fecha:' . $filasproveedor->FECHA_REALIZADA . '</p>';
         echo '<p>Hora: ' . $filasproveedor->HORA . '</p>';
         echo '<p>Proveedor: ' . $filasproveedor->NOM_PROVEEDOR . '</p>';
