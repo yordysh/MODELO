@@ -5,7 +5,6 @@ session_start();
 // $oficina=$_SESSION["ofi"];
 
 $codusuario = '0002';
-// $codusuario = '00002';
 ?>
 <?php
 require_once "m_almacen.php";
@@ -67,9 +66,6 @@ $mostrar = new m_almacen();
             <li>
                 <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
-            <!-- <li>
-                <a class="activo" href="#">Solicitar compra</a>
-            </li> -->
             <li>
                 <a class="activo">Compras realizar</a>
                 <ul class="menu-vertical">
@@ -77,10 +73,10 @@ $mostrar = new m_almacen();
                         <a class="" href="#">Solicitar compra</a>
                     </li>
                     <li>
-                        <a class="" href="generarComprobante.php">Generar comprobante</a>
+                        <a class="" href="ordenCompra.php">Orden de compra</a>
                     </li>
                     <li>
-                        <a class="" href="ordenCompra.php">Orden de compra</a>
+                        <a class="" href="generarComprobante.php">Generar comprobante</a>
                     </li>
                 </ul>
             </li>

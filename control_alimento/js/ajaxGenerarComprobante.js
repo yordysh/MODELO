@@ -416,6 +416,9 @@ $(function () {
 
   const file = document.getElementById("foto");
   const img = document.getElementById("img");
+
+  const defaultIconClass = "icon-camera";
+
   file.addEventListener("change", (e) => {
     if (e.target.files[0]) {
       const reader = new FileReader();
@@ -424,9 +427,8 @@ $(function () {
       };
       reader.readAsDataURL(e.target.files[0]);
     }
-    // else {
-    //   img.src = defaultFile;
-    // }
+    img.src = "";
+    img.classList.add(defaultIconClass);
   });
   /*--------------------------------------------------------- */
 });

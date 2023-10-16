@@ -2892,26 +2892,20 @@ class c_almacen
             require_once("./m_consulta_personal.php");
             $mostrarpersonal = new m_almacen_consulta($oficinasmp2);
 
-            $datospersonal = $mostrarpersonal->MostrarNomPersonal($codigopersonalsmp2);
 
+            $datospersonal = $mostrarpersonal->MostrarNomPersonal($codigopersonalsmp2);
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
             }
             $json = array();
             foreach ($datos as $row) {
-                // $json[] = array(
-                //     "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
-                //     "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-                //     "FECHA" => convFecSistema($row->FECHA),
 
-                // );
                 $item = array(
                     "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
                     "COD_REQUERIMIENTO" => trim($row->COD_REQUERIMIENTO),
                     "FECHA" => convFecSistema($row->FECHA),
                 );
 
-                // Verifica si hay resultados en el segundo bucle
                 if (count($datospersonal) == 1) {
                     $row = $datospersonal[0];
                     $item["NOM_PERSONAL1"] = $row->NOM_PERSONAL1;

@@ -2,7 +2,7 @@
 session_start();
 
 // $codusuario = $_SESSION["cod"];
-// $oficina=$_SESSION["ofi"];
+// $codoficina = $_SESSION["ofi"];
 
 // $codanexo=$_SESSION["ane"];
 $codusuario = '0002';
@@ -13,7 +13,6 @@ $codoficina = 'SMP2';
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-// $dataProducto = $mostrar->MostrarProductoComboRegistro();
 $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
 ?>
@@ -80,10 +79,10 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <a class="" href="solicitaCompra.php">Solicitar compra</a>
                     </li>
                     <li>
-                        <a class="" href="#">Generar comprobante</a>
+                        <a class="" href="ordenCompra.php">Orden de compra</a>
                     </li>
                     <li>
-                        <a class="" href="ordenCompra.php">Orden de compra</a>
+                        <a class="" href="#">Generar comprobante</a>
                     </li>
                 </ul>
             </li>

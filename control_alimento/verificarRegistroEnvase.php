@@ -67,9 +67,6 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
             <li>
                 <a class="" href="pedidoRequerimiento.php">confirmación de requerimiento</a>
             </li>
-            <!-- <li>
-                <a class="" href="solicitaCompra.php">Solicitar compra</a>
-            </li> -->
             <li>
                 <a class="">Compras realizar</a>
                 <ul class="menu-vertical">
@@ -77,10 +74,10 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                         <a class="" href="solicitaCompra.php">Solicitar compra</a>
                     </li>
                     <li>
-                        <a class="" href="generarComprobante.php">Generar comprobante</a>
+                        <a class="" href="ordenCompra.php">Orden de compra</a>
                     </li>
                     <li>
-                        <a class="" href="ordenCompra.php">Orden de compra</a>
+                        <a class="" href="generarComprobante.php">Generar comprobante</a>
                     </li>
                 </ul>
             </li>

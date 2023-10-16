@@ -58,9 +58,6 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
             <li>
                 <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
-            <!-- <li>
-                <a class="" href="solicitaCompra.php">Solicitar compra</a>
-            </li> -->
             <li>
                 <a class="">Compras realizar</a>
                 <ul class="menu-vertical">
@@ -68,10 +65,10 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
                         <a class="" href="solicitaCompra.php">Solicitar compra</a>
                     </li>
                     <li>
-                        <a class="" href="generarComprobante.php">Generar comprobante</a>
+                        <a class="" href="ordenCompra.php">Orden de compra</a>
                     </li>
                     <li>
-                        <a class="" href="ordenCompra.php">Orden de compra</a>
+                        <a class="" href="generarComprobante.php">Generar comprobante</a>
                     </li>
                 </ul>
             </li>

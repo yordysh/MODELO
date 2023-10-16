@@ -11,7 +11,6 @@ $codusuario = $_SESSION["cod"];
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-// $dataProducto = $mostrar->MostrarProductoComboRegistro();
 $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
 ?>
@@ -68,9 +67,6 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             <li>
                 <a class="pedidoRequerimiento activo" href="#">Confirmación de requerimiento</a>
             </li>
-            <!-- <li>
-                <a class="" href="solicitaCompra.php">Solicitar compra</a>
-            </li> -->
             <li>
                 <a class="">Compras realizar</a>
                 <ul class="menu-vertical">
@@ -78,10 +74,10 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <a class="" href="solicitaCompra.php">Solicitar compra</a>
                     </li>
                     <li>
-                        <a class="" href="generarComprobante.php">Generar comprobante</a>
+                        <a class="" href="ordenCompra.php">Orden de compra</a>
                     </li>
                     <li>
-                        <a class="" href="ordenCompra.php">Orden de compra</a>
+                        <a class="" href="generarComprobante.php">Generar comprobante</a>
                     </li>
                 </ul>
             </li>

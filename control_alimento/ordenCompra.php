@@ -2,11 +2,9 @@
 session_start();
 
 // $codusuario = $_SESSION["cod"];
-// $oficina=$_SESSION["ofi"];
-// $codanexo=$_SESSION["ane"];
+// $codoficina = $_SESSION["ofi"];
 $codusuario = '0002';
 $codoficina = 'SMP2';
-// $codanexo = '1010';
 
 ?>
 <?php
@@ -79,10 +77,10 @@ $dataProveedores = $mostrar->MostrarProveedores();
                         <a class="" href="solicitaCompra.php">Solicitar compra</a>
                     </li>
                     <li>
-                        <a class="" href="generarComprobante.php">Generar comprobante</a>
+                        <a class="" href="#">Orden de compra</a>
                     </li>
                     <li>
-                        <a class="" href="#">Orden de compra</a>
+                        <a class="" href="generarComprobante.php">Generar comprobante</a>
                     </li>
                 </ul>
             </li>
@@ -105,9 +103,6 @@ $dataProveedores = $mostrar->MostrarProveedores();
     <main>
         <section>
             <div class="container g-4 row">
-                <!-- <div class="row g-4 top-div">
-                    <center><label class="title">DOCUMENTOS APROBADOS</label></center>
-                </div> -->
                 <div class="main">
                     <form method="post" action="" id="formulariocompraorden">
                         <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">

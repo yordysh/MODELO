@@ -427,15 +427,16 @@ a {
 /*---------------------------------------------*/
 
 /*ESTILO CAMARA*/
-#img {
+/* #img {
   width: 250px;
-  height: 250px; /* Ajusta la altura a un valor razonable */
+  height: 250px;
   border-radius: 40%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  font-size: 2rem; /* Reduce el tamaño de la fuente */
-}
+  font-size: 2rem;
+} */
 
 .icon-camera {
+  width: 250px;
   height: 250px;
   background-color: #2aadea;
   color: white;
