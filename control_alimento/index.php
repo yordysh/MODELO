@@ -18,8 +18,10 @@
 </head>
 
 <body>
-
-  <nav class="nav">
+  <?php
+  require_once('./menuusers.php');
+  ?>
+  <!-- <nav class="nav">
     <div class="wave"></div>
     <i class="icon-menu navOpenBtn"></i>
     <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
@@ -42,17 +44,7 @@
           </li>
         </ul>
       </li>
-      <!-- <li>
-        <a class="bpmStyle">BPM</a>
-        <ul class="menu-vertical">
-          <li>
-            <a class="" href="labsabelForm.php">Envases labsabell</a>
-          </li>
-          <li>
-            <a class="" href="insumosLabsabellForm.php">Insumos labsabell</a>
-          </li>
-        </ul>
-      </li> -->
+
       <li>
         <a class="bpmStyle">OP</a>
         <ul class="menu-vertical">
@@ -79,7 +71,7 @@
         </ul>
       </li>
     </ul>
-  </nav>
+  </nav> -->
   <?php
   require_once "modal.php";
   ?>

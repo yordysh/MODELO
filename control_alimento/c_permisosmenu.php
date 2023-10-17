@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 date_default_timezone_set('America/Lima');
 require_once("m_menu.php");
-require_once("./funciones/f_funcion.php");
+require_once("../funciones/f_funcion.php");
 
 /*$permisos = new c_permisosmenu();
     session_start();
@@ -65,8 +65,8 @@ class c_permisosmenu
             $_SESSION["subsub_c"] = $subSub_c;
 
             // echo "<script>location.href='menu/index.php';</script>";
-            header('Location: principal/index.php');
-            exit;
+            // header('Location: index.php');
+            // exit;
         } else {
             print_r("No tiene permiso");
         }

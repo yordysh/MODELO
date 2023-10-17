@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Lima');
-require_once("./funciones/DataBase.php");
-require_once("./funciones/f_funcion.php");
+require_once("../funciones/DataBaseA.php");
+// require_once("../funciones/f_funcion.php");
 
 class m_menu
 {
@@ -42,6 +42,7 @@ class m_menu
     {
         try {
             $query = $this->db->prepare("SELECT * FROM T_TMPSUB_MENUS WHERE ID_MENU = '$id_menu' and ID_SUBMENU1='$id_submenu' AND ESTADO1 = '1'");
+
             $query->execute();
             return $query->fetchAll();
         } catch (Exception $e) {
