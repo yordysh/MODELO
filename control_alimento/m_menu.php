@@ -15,7 +15,7 @@ class m_menu
     public function m_permisos($anexo)
     {
         try {
-            $query = $this->db->prepare("SELECT * from T_PERMISOS where ANEXO = '$anexo'");
+            $query = $this->db->prepare("SELECT * from T_TMPPERMISOS where ANEXO = '$anexo'");
             $query->execute();
             $permisos = $query->fetchAll();
             return  $permisos;
@@ -34,6 +34,18 @@ class m_menu
             return  $menu;
         } catch (Exception $e) {
             print_r("Error buscar Cabecera" . $e);
+        }
+    }
+    public function m_listarmenuc($idmenu)
+    {
+        try {
+            $query = $this->db->prepare("SELECT * FROM T_TMPCAB_MENU TCM INNER JOIN T_TMPSUB_MENUS TSM ON TCM.ID_MENU=TSM.ID_MENU where TCM.ID_MENU = '$idmenu' 
+            and ESTADO = '1'");
+            $query->execute();
+            $menu = $query->fetchAll();
+            return  $menu;
+        } catch (Exception $e) {
+            print_r("Error buscar Cabecera submenus" . $e);
         }
     }
 

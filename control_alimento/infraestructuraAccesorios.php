@@ -26,38 +26,9 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
 </head>
 
 <body>
-    <nav class="nav">
-        <div class="wave"></div>
-        <i class="icon-menu navOpenBtn"></i>
-        <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
-        <ul class="nav-links">
-            <div class="icon-cross navCloseBtn"></div>
-            <!-- <li>
-                <a class="" aria-current="page" href="zonaAreas.php">Zona</a>
-            </li> -->
-            <!-- <li>
-                <a class="" href="#">Infraestructura</a>
-            </li> -->
-            <li>
-                <a class="" href="#">LBS-PHS-FR-01</a>
-            </li>
-            <li>
-                <a class="" href="preparacionSolucion.php">LBS-PHS-FR-02</a>
-            </li>
-            <li>
-                <a class="" href="controlMaquinas.php">LBS-PHS-FR-03</a>
-            </li>
-            <li>
-                <a class="" href="limpiezaDesinfeccion.php">LBS-PHS-FR-04</a>
-            </li>
-
-        </ul>
-        <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
-        <div class="search-box">
-            <i class="icon-magnifying-glass search-icon"></i>
-            <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
-        </div>
-    </nav>
+    <?php
+    require_once('./menuusers.php');
+    ?>
     <main>
         <section>
             <div class="container g-4 row">

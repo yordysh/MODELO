@@ -51,7 +51,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
     </div>
 
     <!-- fin -->
-    <nav class="nav">
+    <!-- <nav class="nav">
         <div class="wave"></div>
         <i class="icon-menu navOpenBtn"></i>
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
@@ -67,9 +67,6 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             <li>
                 <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
             </li>
-            <!-- <li>
-                <a class="" href="solicitaCompra.php">Solicitar compra</a>
-            </li> -->
             <li>
                 <a class="">Compras realizar</a>
                 <ul class="menu-vertical">
@@ -99,7 +96,10 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
             <i class="icon-magnifying-glass search-icon"></i>
             <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
         </div>
-    </nav>
+    </nav> -->
+    <?php
+    require_once('./menuusers.php');
+    ?>
     <main>
         <section>
             <div class="container g-4 row">

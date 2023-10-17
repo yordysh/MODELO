@@ -170,13 +170,14 @@ img {
   position: absolute;
   display: none;
   list-style: none;
-  width: 150px;
+  width: 180px;
   background-color: #5b8ccc;
   background-image: linear-gradient(to bottom, #7b5185, #5b8ccc);
   padding-left: 15px;
 }
+
 .idex {
-  padding-right: 3rem;
+  padding-right: 6rem;
 }
 
 .nav-links li:hover .menu-vertical {
@@ -201,6 +202,21 @@ img {
 }
 
 .menu-vertical li a {
+  display: block;
+  color: #ffffff;
+}
+
+.menu-vertical-item {
+  list-style: none;
+  position: relative;
+  /* display: none; */
+}
+
+.menu-vertical-item:hover {
+  display: block;
+}
+
+.menu-vertical-item li a {
   display: block;
   color: #ffffff;
 }
@@ -274,7 +290,6 @@ section {
   border: none;
 }
 
-
 /* --------------------------------------------------------------- */
 
 /*-------------- Estilo de MENUBAR ---------------------*/
@@ -315,7 +330,7 @@ a {
   text-decoration: none;
 }
 .nav .nav-links {
-  column-gap: 20px;
+  column-gap: 80px;
   list-style: none;
 }
 .nav .nav-links a {

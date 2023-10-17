@@ -77,6 +77,16 @@ img {
   color: #ffffff;
 }
 
+.menu-vertical-item {
+  list-style: none;
+  position: relative;
+  /* display: none; */
+}
+
+.menu-vertical-item:hover {
+  display: block;
+}
+
 /* ----------------- Diseño de select2------------------------- */
 .select2-container--default .select2-selection--single {
   padding: 1em;

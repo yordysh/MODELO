@@ -238,6 +238,9 @@ img {
   background-image: linear-gradient(to bottom, #7b5185, #4587de);
   padding-left: 15px;
 }
+.idex {
+  padding-right: 6rem;
+}
 
 .nav-links li:hover .menu-vertical {
   display: block;
@@ -251,7 +254,11 @@ img {
   display: block;
   color: #ffffff;
 }
-
+.menu-vertical-item {
+  list-style: none;
+  position: relative;
+  /* display: none; */
+}
 /* ----------------- Diseño de select2------------------------- */
 .select2-container--default .select2-selection--single {
   padding: 1em;
@@ -331,7 +338,7 @@ a {
   text-decoration: none;
 }
 .nav .nav-links {
-  column-gap: 20px;
+  column-gap: 80px;
   list-style: none;
 }
 .nav .nav-links a {

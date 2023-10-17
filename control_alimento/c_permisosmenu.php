@@ -16,9 +16,11 @@ class c_permisosmenu
     public function c_permisos($anexo)
     {
         $menu_c = array();
+
         $sub_c = array();
         $subSub_c = array();
         $contM = 0;
+
         $m_login = new m_menu();
 
         $contS = 0;
@@ -32,6 +34,7 @@ class c_permisosmenu
                 if (!in_array($permisos_c[$i][2], $Arrmenu_c)) {
                     array_push($Arrmenu_c, $permisos_c[$i][2]);
                     $cabmenu = $m_login->m_listarmenu($permisos_c[$i][2]);
+
 
                     for ($l = 0; $l < count($cabmenu); $l++) {
                         $menu_c[$contM] = [$cabmenu[$l][0], $cabmenu[$l][1], $cabmenu[$l][2]];

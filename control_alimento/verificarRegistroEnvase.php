@@ -52,7 +52,7 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
         </div>
     </div>
     <!-- fin -->
-    <nav class="nav">
+    <!-- <nav class="nav">
         <div class="wave"></div>
         <i class="icon-menu navOpenBtn"></i>
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
@@ -96,7 +96,10 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
             <i class="icon-magnifying-glass search-icon"></i>
             <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
         </div>
-    </nav>
+    </nav> -->
+    <?php
+    require_once('./menuusers.php');
+    ?>
     <main>
         <section>
             <div class="container g-4 row">

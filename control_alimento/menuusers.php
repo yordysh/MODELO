@@ -18,24 +18,33 @@ $submenu2 = $_SESSION["subsub_c"];
     <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
 
     <ul class="nav-links idex">
+
         <?php
+        echo "<div class='icon-cross navCloseBtn'></div>";
         for ($i = 0; $i < count($menu); $i++) {
             if ($menu[$i][2] == '') {
                 echo "<li>";
-                echo   " <a class='phsStyle' aria-current='page'>" . $menu[$i][1] . "</a>";
+                echo   "<a class='phsStyle' aria-current='page'>" . $menu[$i][1] . "</a>";
                 echo "<ul class='menu-vertical'>";
                 for ($l = 0; $l < count($submenu); $l++) {
+
                     if ($menu[$i][0] == $submenu[$l][0]) {
                         echo "<li>";
                         if ($submenu[$l][2] != '') {
+
                             echo "<a   href='" . $submenu[$l][2] . "'>" . $submenu[$l][1] . "</a>";
 
                             // echo "<li><a href='" . $submenu[$l][2] . "' class='submenulista font'>" . $submenu[$l][1] . "<span class='icon-dot'></span></a>";
                         } else {
                             echo "<a>" . $submenu[$l][1] . "</a>";
-
-                            // echo "<li><a class='submenulista font'>" . $submenu[$l][1] . "<span class='icon-dot'></span></a>";
                         }
+                        echo "<ul class='menu-vertical-item'>";
+                        for ($j = 0; $j < count($submenu2); $j++) {
+                            if ($menu[$i][0] == $submenu2[$j][0] && $submenu[$l][3] == $submenu2[$j][1]) {
+                                echo "<li><a href=" . $submenu2[$j][4] . ">" . $submenu2[$j][3] . "</a></li>";
+                            }
+                        }
+                        echo "</ul>";
 
                         echo "</li>";
                     }

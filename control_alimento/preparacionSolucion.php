@@ -24,8 +24,10 @@ $dataInsumos = $mostrar->MostrarSoluciones();
 </head>
 
 <body>
-
-    <nav class="nav">
+    <?php
+    require_once('./menuusers.php');
+    ?>
+    <!-- <nav class="nav">
         <div class="wave"></div>
         <i class="icon-menu navOpenBtn"></i>
         <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
@@ -50,7 +52,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
             <i class="icon-magnifying-glass search-icon"></i>
             <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
         </div>
-    </nav>
+    </nav> -->
     <main>
         <section>
             <div class="container g-4 row">
