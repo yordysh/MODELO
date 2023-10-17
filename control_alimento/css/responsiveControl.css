@@ -197,7 +197,7 @@ img {
   display: block;
 }
 
-.menu-vertical li:hover {
+.menu-vertical-item li:hover {
   background-color: rgba(0, 0, 0, 0.5);
 }
 

@@ -107,4 +107,9 @@ $submenu2 = $_SESSION["subsub_c"];
             </ul>
         </li>
     </ul> -->
+    <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
+    <div class="search-box">
+        <i class="icon-magnifying-glass search-icon"></i>
+        <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
+    </div>
 </nav>
