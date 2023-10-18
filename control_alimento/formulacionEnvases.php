@@ -91,8 +91,9 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
             <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
         </div>
     </nav> -->
+
     <?php
-    require_once('./menuusers.php');
+    require_once('../menulista/index.php');
     ?>
     <main>
         <section>
@@ -232,6 +233,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxEnvaseFormulacion.js"></script>
+    <script src="../js/menu.js"></script>
     <script src="./js/select2.min.js"></script>
 </body>
 

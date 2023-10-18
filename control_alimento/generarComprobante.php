@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-// $codusuario = $_SESSION["cod"];
-// $codoficina = $_SESSION["ofi"];
+$codusuario = $_SESSION["cod"];
+$codoficina = $_SESSION["ofi"];
 
 // $codanexo=$_SESSION["ane"];
-$codusuario = '0002';
-$codoficina = 'SMP2';
+// $codusuario = '0002';
+// $codoficina = 'SMP2';
 
 ?>
 <?php
@@ -100,7 +100,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
         </div>
     </nav> -->
     <?php
-    require_once('./menuusers.php');
+    require_once('../menulista/index.php');
     ?>
 
     <main>
@@ -202,7 +202,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <!-- Text input serie-->
                             <div class="form-outline mb-4 custom-input">
                                 <label class="form-label">Serie</label>
-                                <input type="text" id="serie" class="form-control" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57">
+                                <input type="text" id="serie" class="form-control" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" maxlength="4" min="0" max="999999">
                             </div>
 
                             <!-- Text input correlativo-->
@@ -332,7 +332,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <!-- <script src="./js/ajaxGenerarComprobante.js"></script> -->
+    <script src="../js/menu.js"></script>
     <script src="./js/ajaxGenerarComprobante.js?v=0.001"></script>
     <script src="./js/select2.min.js"></script>
 </body>

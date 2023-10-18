@@ -5,55 +5,35 @@ $(function () {
   let edit = false;
 
   //------------- MENU BAR JS ---------------//
-  let nav = document.querySelector(".nav"),
-    searchIcon = document.querySelector("#searchIcon"),
-    navOpenBtn = document.querySelector(".navOpenBtn"),
-    navCloseBtn = document.querySelector(".navCloseBtn");
+  // let nav = document.querySelector(".nav"),
+  //   searchIcon = document.querySelector("#searchIcon"),
+  //   navOpenBtn = document.querySelector(".navOpenBtn"),
+  //   navCloseBtn = document.querySelector(".navCloseBtn");
 
-  searchIcon.addEventListener("click", () => {
-    nav.classList.toggle("openSearch");
-    nav.classList.remove("openNav");
-    if (nav.classList.contains("openSearch")) {
-      return searchIcon.classList.replace(
-        "icon-magnifying-glass",
-        "icon-cross"
-      );
-    }
+  // searchIcon.addEventListener("click", () => {
+  //   nav.classList.toggle("openSearch");
+  //   nav.classList.remove("openNav");
+  //   if (nav.classList.contains("openSearch")) {
+  //     return searchIcon.classList.replace(
+  //       "icon-magnifying-glass",
+  //       "icon-cross"
+  //     );
+  //   }
 
-    searchIcon.classList.replace("icon-cross", "icon-magnifying-glass");
-  });
+  //   searchIcon.classList.replace("icon-cross", "icon-magnifying-glass");
+  // });
 
-  navOpenBtn.addEventListener("click", () => {
-    nav.classList.add("openNav");
-    nav.classList.remove("openSearch");
-  });
+  // navOpenBtn.addEventListener("click", () => {
+  //   nav.classList.add("openNav");
+  //   nav.classList.remove("openSearch");
+  // });
 
-  navCloseBtn.addEventListener("click", () => {
-    nav.classList.remove("openNav");
-  });
+  // navCloseBtn.addEventListener("click", () => {
+  //   nav.classList.remove("openNav");
+  // });
   //----------------------------------------------------------------//
 
   $("#selectInfra").select2();
-
-  // $(document).ready(function () {
-  //   // const accion = "buscarZonaCombo";
-  //   // $.ajax({
-  //   //   url: "./c_almacen.php",
-  //   //   data: { accion: accion },
-  //   //   type: "POST",
-  //   //   // dataType: "json",
-  //   //   success: function (data) {
-  //   //     var res = JSON.parse(data);
-  //   //     $("#selectInfra").autocomplete({
-  //   //       source: res,
-  //   //       select: function (request, ui) {
-  //   //         //const search = $("#selectInfra").val();
-  //   //         var nombre = ui.item.COD_ZONA1;
-  //   //         console.log(nombre);
-  //   //       },
-  //   //     });
-  //   //   },
-  //   // });
 
   //   $("#selectInfra").autocomplete({
   //     source: function (request, response) {

@@ -2,9 +2,6 @@ main {
   width: 88%;
   margin: 0 auto;
   padding: 6em;
-  /*border-style: solid;
-    border-width: 1px;
-    border-radius: 8px;*/
   height: 57%;
 }
 
@@ -152,16 +149,16 @@ body {
 }
 
 /*-------------- Cambios de estilo nabvar ---------------------*/
-.bar-color {
+/* .bar-color {
   background-color: #5b8ccc !important;
 }
 img {
   height: 50px;
   width: 50px;
   border-radius: 60px;
-}
+} */
 /*----- Estilo de submenu al poner el mouse ----- */
-.phsStyle,
+/* .phsStyle,
 .bpmStyle {
   font-size: 25px !important;
 }
@@ -174,9 +171,9 @@ img {
   background-color: #5b8ccc;
   background-image: linear-gradient(to bottom, #7b5185, #5b8ccc);
   padding-left: 15px;
-}
+} */
 
-.idex {
+/* .idex {
   padding-right: 6rem;
 }
 
@@ -191,9 +188,9 @@ img {
 .menu-vertical li a {
   display: block;
   color: #ffffff;
-}
+} */
 /*---------------------------------------------------*/
-.nav-links li:hover .menu-vertical {
+/* .nav-links li:hover .menu-vertical {
   display: block;
 }
 
@@ -209,7 +206,7 @@ img {
 .menu-vertical-item {
   list-style: none;
   position: relative;
-  /* display: none; */
+
 }
 
 .menu-vertical-item:hover {
@@ -219,7 +216,7 @@ img {
 .menu-vertical-item li a {
   display: block;
   color: #ffffff;
-}
+} */
 
 /*-------------------- Estilos de PDF Table ---------------------*/
 .tablepdf {
@@ -294,7 +291,7 @@ section {
 
 /*-------------- Estilo de MENUBAR ---------------------*/
 
-.nav {
+/* .nav {
   position: fixed;
   top: 0;
   left: 0;
@@ -305,15 +302,14 @@ section {
 }
 .wave {
   position: absolute;
-  /* top: 60px; */
   left: 0;
   width: 100%;
   height: 100%;
   background-image: linear-gradient(to bottom, #814092, #ffffff);
   opacity: 0.5;
   z-index: -1;
-}
-.nav,
+} */
+/* .nav,
 .nav .nav-links {
   display: flex;
   align-items: center;
@@ -321,7 +317,7 @@ section {
 .nav {
   justify-content: space-between;
   z-index: 1000;
-}
+}*/
 .select2-dropdown {
   z-index: 1 !important;
 }
@@ -329,6 +325,7 @@ a {
   color: #fff;
   text-decoration: none;
 }
+/*
 .nav .nav-links {
   column-gap: 80px;
   list-style: none;
@@ -379,7 +376,7 @@ a {
 .nav .navOpenBtn,
 .nav .navCloseBtn {
   display: none;
-}
+} */
 
 /*-------------------------------------------------------*/
 
@@ -602,25 +599,18 @@ td {
 @media screen and (max-width: 950px) {
   /*-------------- Estilo de MENUBAR ---------------------*/
 
-  /* .nav {
-    padding: 15px 50px;
-  }
-  .nav .search-box {
-    right: 100px;
-    max-width: 400px;
-  } */
-  .nav .navOpenBtn,
+  /* .nav .navOpenBtn,
   .nav .navCloseBtn {
     display: block;
   }
   .nav {
     padding: 15px 20px;
     z-index: 1000;
-  }
+  } */
   .select2-dropdown {
     z-index: 1 !important;
   }
-  .menu-vertical {
+  /* .menu-vertical {
     position: absolute;
     display: none;
     list-style: none;
@@ -628,16 +618,6 @@ td {
     background-image: linear-gradient(to bottom, #7b5185, #4587de);
     padding-left: 15px;
   }
-  /* .wave {
-    position: absolute;
- 
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(to bottom, #814092, #ffffff);
-    opacity: 0.5;
-    z-index: -1;
-  } */
   .nav .nav-links {
     display: block;
     position: fixed;
@@ -647,12 +627,7 @@ td {
     max-width: 280px;
     width: 100%;
     padding-top: 100px;
-    /* row-gap: 30px; 
-     flex-direction: column;  */
     background-color: #5b8ccc;
-    /* background-image: linear-gradient(to left, #814092, #ffffff);
-    opacity: 0.5;
-    z-index: -1; */
 
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.4s ease;
@@ -684,7 +659,7 @@ td {
     right: 50%;
     transform: translateX(50%);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
+  } */
   td {
     width: 100% !important;
   }

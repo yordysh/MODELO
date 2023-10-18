@@ -27,7 +27,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
 
 <body>
     <?php
-    require_once('./menuusers.php');
+    require_once('../menulista/index.php');
     ?>
     <main>
         <section>
@@ -169,7 +169,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/sweetalert2.all.min.js"></script>
     <!-- <script src="./js/ui_1.12.1_jquery-ui.min.js"></script> -->
     <script src="./js/ajaxInfra.js"></script>
-    <!-- <script src="./js/ajaxZona.js"></script> -->
+    <script src="../js/menu.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {

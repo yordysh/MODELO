@@ -52,7 +52,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
         </div>
     </nav> -->
     <?php
-    require_once('./menuusers.php');
+    require_once('../menulista/index.php');
     ?>
     <main>
         <section>
@@ -165,6 +165,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxControlMaquinas.js"></script>
+    <script src="../js/menu.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {

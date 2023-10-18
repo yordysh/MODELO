@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-// $codusuario = $_SESSION["cod"];
-// $codoficina = $_SESSION["ofi"];
-$codusuario = '0002';
-$codoficina = 'SMP2';
+$codusuario = $_SESSION["cod"];
+$codoficina = $_SESSION["ofi"];
+// $codusuario = '0002';
+// $codoficina = 'SMP2';
 
 ?>
 <?php
@@ -98,7 +98,7 @@ $dataProveedores = $mostrar->MostrarProveedores();
         </div>
     </nav> -->
     <?php
-    require_once('./menuusers.php');
+    require_once('../menulista/index.php');
     ?>
 
     <main>
@@ -276,6 +276,7 @@ $dataProveedores = $mostrar->MostrarProveedores();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxOrdenCompra.js?v=0.001"></script>
+    <script src="../js/menu.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {

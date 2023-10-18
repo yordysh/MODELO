@@ -19,7 +19,7 @@
 
 <body>
   <?php
-  require_once('./menuusers.php');
+  require_once('../menulista/index.php');
   ?>
 
   <?php
@@ -32,7 +32,7 @@
   <script src="./js/sweetalert2.all.min.js"></script>
 
   <script src="./js/ajaxFechaAviso.js"></script>
-  <script src="./js/ajaxIndex.js"></script>
+  <script src="../js/menu.js"></script>
 </body>
 
 </html>

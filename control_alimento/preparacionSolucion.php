@@ -25,7 +25,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
 
 <body>
     <?php
-    require_once('./menuusers.php');
+    require_once('../menulista/index.php');
     ?>
     <!-- <nav class="nav">
         <div class="wave"></div>
@@ -186,7 +186,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxPreparacion.js"></script>
-    <!-- <script src="js/ajaxAlerta.js"></script> -->
+    <script src="../js/menu.js"></script>
     <script>
         function generarPDF() {
             var anioSeleccionado = document.getElementById("anio").value;
