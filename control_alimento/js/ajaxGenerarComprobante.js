@@ -12,22 +12,7 @@ $(function () {
   //-------------------------------------------//
 
   cargarOrdenCompraComprobante();
-
-  //------------- MENU BAR JS ---------------//
-
-  // let nav = document.querySelector(".nav"),
-  //   navOpenBtn = document.querySelector(".navOpenBtn"),
-  //   navCloseBtn = document.querySelector(".navCloseBtn");
-
-  // navOpenBtn.addEventListener("click", () => {
-  //   nav.classList.add("openNav");
-  //   nav.classList.remove("openSearch");
-  // });
-
-  // navCloseBtn.addEventListener("click", () => {
-  //   nav.classList.remove("openNav");
-  // });
-  //----------------------------------------------------------------//
+  cargarcambiosunat();
 
   /*------------------------- PONER LA HORA ACTUAL --------------------*/
   function actualizarHora() {
@@ -232,32 +217,60 @@ $(function () {
   });
   /*------------------------------------------------------------- */
   /*----------------------AL SELECCIONAR EN DOLARES-----------------*/
-  $("#selectmoneda").on("input", function () {
-    let tipomonedacambio = $("#selectmoneda").val();
-    if (tipomonedacambio === "D") {
-      const accion = "consultadecambiodemoneda";
+  // $("#selectmoneda").on("input", function () {
+  //   let tipomonedacambio = $("#selectmoneda").val();
+  //   if (tipomonedacambio === "D") {
+  //     const accion = "consultadecambiodemoneda";
 
-      $.ajax({
-        url: "./c_almacen.php",
-        type: "POST",
-        data: {
-          accion: accion,
-        },
-        success: function (response) {
-          if (isJSON(response)) {
-            let tipocambio = JSON.parse(response);
-            console.log(tipocambio);
-            $("#tipocambio").val(tipocambio[0].VENTA);
-          }
-        },
-        error: function (xhr, status, error) {
-          console.error("Error al cargar los datos:", error);
-        },
-      });
-    } else {
-      $("#tipocambio").val("");
-    }
-  });
+  //     $.ajax({
+  //       url: "./c_almacen.php",
+  //       type: "POST",
+  //       data: {
+  //         accion: accion,
+  //       },
+  //       success: function (response) {
+  //         if (isJSON(response)) {
+  //           let tipocambio = JSON.parse(response);
+  //           console.log(tipocambio);
+  //           $("#tipocambio").val(tipocambio[0].VENTA);
+  //         }
+  //       },
+  //       error: function (xhr, status, error) {
+  //         console.error("Error al cargar los datos:", error);
+  //       },
+  //     });
+  //   } else {
+  //     $("#tipocambio").val("");
+  //   }
+  // });
+
+  // $("#tipocambiosunat").on("input", function () {
+  function cargarcambiosunat() {
+    const accion = "consultatipodecambiosunat";
+
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        accion: accion,
+      },
+      success: function (response) {
+        if (isJSON(response)) {
+          let tipocambio = JSON.parse(response);
+          console.log(tipocambio);
+          $("#tipocambiosunat").val(tipocambio[0].VENTA);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos:", error);
+      },
+    });
+    // }
+    // else {
+    //   $("#tipocambio").val("");
+    // }
+  }
+  // });
   /*---------------------------------------------------------------*/
   /*---------- GUARDAR LOS DATOS CAPTURADOS---------------------- */
 

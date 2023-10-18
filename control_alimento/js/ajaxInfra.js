@@ -4,35 +4,6 @@ $(function () {
 
   let edit = false;
 
-  //------------- MENU BAR JS ---------------//
-  // let nav = document.querySelector(".nav"),
-  //   searchIcon = document.querySelector("#searchIcon"),
-  //   navOpenBtn = document.querySelector(".navOpenBtn"),
-  //   navCloseBtn = document.querySelector(".navCloseBtn");
-
-  // searchIcon.addEventListener("click", () => {
-  //   nav.classList.toggle("openSearch");
-  //   nav.classList.remove("openNav");
-  //   if (nav.classList.contains("openSearch")) {
-  //     return searchIcon.classList.replace(
-  //       "icon-magnifying-glass",
-  //       "icon-cross"
-  //     );
-  //   }
-
-  //   searchIcon.classList.replace("icon-cross", "icon-magnifying-glass");
-  // });
-
-  // navOpenBtn.addEventListener("click", () => {
-  //   nav.classList.add("openNav");
-  //   nav.classList.remove("openSearch");
-  // });
-
-  // navCloseBtn.addEventListener("click", () => {
-  //   nav.classList.remove("openNav");
-  // });
-  //----------------------------------------------------------------//
-
   $("#selectInfra").select2();
 
   //   $("#selectInfra").autocomplete({
@@ -325,24 +296,32 @@ $(function () {
       type: "POST",
       success: function (response) {
         if (!response.error) {
-          const task = JSON.parse(response);
-          // console.log(task);
-          $("#selectInfra").prop("disabled", true);
-          $("#selectInfra")
-            .append(
-              new Option(
-                task.NOMBRE_T_ZONA_AREAS,
-                task.NOMBRE_T_ZONA_AREAS,
-                true,
-                true
-              )
-            )
-            .trigger("change");
-          $("#NOMBRE_INFRAESTRUCTURA").val(task.NOMBRE_INFRAESTRUCTURA);
-          $("#NDIAS").val(task.NDIAS);
-          $("#taskId").val(task.COD_INFRAESTRUCTURA);
+          Swal.fire({
+            icon: "success",
+            title: "Correcto",
+            text: "Se añadio correctamente.",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const task = JSON.parse(response);
 
-          edit = true;
+              $("#selectInfra").prop("disabled", true);
+              $("#selectInfra")
+                .append(
+                  new Option(
+                    task.NOMBRE_T_ZONA_AREAS,
+                    task.NOMBRE_T_ZONA_AREAS,
+                    true,
+                    true
+                  )
+                )
+                .trigger("change");
+              $("#NOMBRE_INFRAESTRUCTURA").val(task.NOMBRE_INFRAESTRUCTURA);
+              $("#NDIAS").val(task.NDIAS);
+              $("#taskId").val(task.COD_INFRAESTRUCTURA);
+
+              edit = true;
+            }
+          });
         }
       },
     });

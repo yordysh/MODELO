@@ -256,7 +256,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <!-- Text input tipo de cambio sunat-->
                             <div class="form-outline mb-4 custom-input">
                                 <label class="form-label">TIPO CAMBIO SUNAT</label>
-                                <input type="text" id="tipocambiosunat" class="form-control" value="3.823" disabled>
+                                <input type="text" id="tipocambiosunat" class="form-control" value="" disabled>
                             </div>
 
                             <!-- Text input numero operacion-->

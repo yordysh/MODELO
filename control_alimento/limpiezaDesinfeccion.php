@@ -85,29 +85,29 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                         <div class="form-outline mb-4">
                             <input id="id" type="hidden" class="form-control" name="id" />
                         </div>
+                        <div class="estiloordencompra">
+                            <!--Combo zona areas -->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Zona/Areas</label>
+                                <select id="selectZona" class="form-select" aria-label="Default select example">
+                                    <option value="none" selected disabled>Seleccione Zona/Areas</option>
+                                    <?php foreach ($dataZona as $lis) {
+                                        if ($lis->NOMBRE_T_ZONA_AREAS != "PASADIZO" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES)" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(VARONES)") {
+                                    ?>
+                                            <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
+                                    <?php
+                                        }
+                                    } ?>
+                                </select>
 
-                        <!--Combo zona areas -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Zona/Areas</label>
-                            <select id="selectZona" class="form-select" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione Zona/Areas</option>
-                                <?php foreach ($dataZona as $lis) {
-                                    if ($lis->NOMBRE_T_ZONA_AREAS != "PASADIZO" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES)" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(VARONES)") {
-                                ?>
-                                        <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
-                                <?php
-                                    }
-                                } ?>
-                            </select>
+                            </div>
 
+                            <!-- Text input dias-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Materiales</label>
+                                <input type="text" id="nombreFrecuencia" class="form-control" name="nombreFrecuencia" required>
+                            </div>
                         </div>
-
-                        <!-- Text input dias-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Materiales</label>
-                            <input type="text" id="nombreFrecuencia" class="form-control" name="nombreFrecuencia" required>
-                        </div>
-
                         <!-- Text input Observacion-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Observaciones</label>

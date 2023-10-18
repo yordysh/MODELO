@@ -148,6 +148,14 @@ body {
   text-align: center !important;
 }
 
+.estiloordencompra {
+  display: flex;
+}
+
+.custom-input {
+  flex: 1;
+  margin-right: 10px;
+}
 /*-------------- Cambios de estilo nabvar ---------------------*/
 /* .bar-color {
   background-color: #5b8ccc !important;
@@ -484,6 +492,9 @@ td {
     margin: 0 auto;
     padding-top: 6em;
     height: 57%;
+  }
+  .estiloordencompra {
+    display: block;
   }
   .contenedorgeneral {
     display: block;
@@ -831,6 +842,12 @@ td {
   }
   .styleanmes {
     margin-bottom: 8px;
+  }
+  input#anio {
+    padding: 2px 80px;
+  }
+  select#mes {
+    padding: 2px 58px;
   }
 }
 /*----------------------REDMI----------------------------*/

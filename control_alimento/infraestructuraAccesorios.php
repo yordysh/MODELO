@@ -68,38 +68,43 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                             <label class="form-label">Nombre de infraestructura</label>
                             <input type="text" id="NOMBRE_INFRAESTRUCTURA" class="form-control" name="NOMBRE_INFRAESTRUCTURA" required>
                         </div>
-                        <!-- Text input dias-->
-                        <div class="form-outline mb-4 ">
-                            <label class="form-label">Frecuencia</label>
-                            <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
-                            <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione frecuencia</option>
-                                <option value="1">Diario</option>
-                                <option value="2">Inter-diario</option>
-                                <option value="7">Semanal</option>
-                                <option value="15">Quincenal</option>
-                                <option value="30">Mensual</option>
-                            </select>
-                        </div>
 
-                        <!--Combo zona areas -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Zona/Areas</label>
-                            <select id="selectInfra" class="form-select selectZona" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione Zona/Areas</option>
-                                <?php foreach ($dataInfra as $lis) {
-                                    if ($lis->NOMBRE_T_ZONA_AREAS != "TRANSITO DE PERSONAL" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES Y VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES Y VARONES)") {
-                                ?>
-                                        <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
-                                <?php
+                        <div class="estiloordencompra">
+                            <!-- Text input dias-->
+
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Frecuencia</label>
+                                <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
+                                <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
+                                    <option value="0" selected disabled>Seleccione frecuencia</option>
+                                    <option value="1">Diario</option>
+                                    <option value="2">Inter-diario</option>
+                                    <option value="7">Semanal</option>
+                                    <option value="15">Quincenal</option>
+                                    <option value="30">Mensual</option>
+                                </select>
+                            </div>
+
+                            <!--Combo zona areas -->
+
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Zona/Areas</label>
+                                <select id="selectInfra" class="form-select selectZona" aria-label="Default select example">
+                                    <option value="none" selected disabled>Seleccione Zona/Areas</option>
+                                    <?php foreach ($dataInfra as $lis) {
+                                        if ($lis->NOMBRE_T_ZONA_AREAS != "TRANSITO DE PERSONAL" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES Y VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES Y VARONES)") {
+                                    ?>
+                                            <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
+                                    <?php
+                                        }
                                     }
-                                }
-                                ?>
-                            </select>
+                                    ?>
+                                </select>
+                            </div>
                             <!-- <input type="hidden" id="task_zona">
-                            <input id="selectInfra" class="form-control" required> -->
-                        </div>
+                                  <input id="selectInfra" class="form-control" required> -->
 
+                        </div>
                         <!-- Crear PDF -->
                         <div class="contenedorgeneral">
                             <div class="btonguardar">

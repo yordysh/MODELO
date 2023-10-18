@@ -73,60 +73,12 @@ $submenu2 = $_SESSION["subsub_c"];
             ?>
         </ul>
 
-
-        <!-- <ul class="nav-links idex">
-        <div class="icon-cross navCloseBtn"></div>
-        <li>
-            <a class="phsStyle" aria-current="page">PHS</a>
-            <ul class="menu-vertical">
-                <li>
-                    <a class="" href="infraestructuraAccesorios.php">LBS-PHS-FR-01</a>
-                </li>
-                <li>
-                    <a class="" href="preparacionSolucion.php">LBS-PHS-FR-02</a>
-                </li>
-                <li>
-                    <a class="" href="controlMaquinas.php">LBS-PHS-FR-03</a>
-                </li>
-                <li>
-                    <a class="" href="limpiezaDesinfeccion.php">LBS-PHS-FR-04</a>
-                </li>
-            </ul>
-        </li>
-
-        <li>
-            <a class="bpmStyle">OP</a>
-            <ul class="menu-vertical">
-                <li>
-                    <a class="" href="formulacionEnvases.php">Formulación</a>
-                </li>
-                <li>
-                    <a class="" href="requerimientoProducto.php">Requerimiento</a>
-                </li>
-                <li>
-                    <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
-                </li>
-                <li>
-                    <a class="" href="solicitaCompra.php">Solicitar compra</a>
-                </li>
-                <li>
-                    <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
-                </li>
-                <li>
-                    <a class="" href="registroEnvases.php">Producción</a>
-                <li>
-                    <a class="" href="verificarRegistroEnvase.php">Registros envases</a>
-                </li>
-            </ul>
-        </li>
-    </ul> -->
         <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
         <div class="search-box">
             <i class="icon-magnifying-glass search-icon"></i>
             <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
         </div>
     </nav>
-    <!-- <script src="../js/menu.js"></script> -->
 </body>
 
 </html>

@@ -3640,7 +3640,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function MostrarTipoCambioEnSoles()
+  public function MostrarTipoCambioSunat()
   {
     try {
 

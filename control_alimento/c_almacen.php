@@ -515,8 +515,8 @@ if ($accion == 'insertar') {
     $codigoComprobantemostrar = trim($_POST['codigoComprobantemostrar']);
     $respuesta = c_almacen::c_poner_valores_comprar_factura($codigoComprobantemostrar);
     echo $respuesta;
-} elseif ($accion == 'consultadecambiodemoneda') {
-    $respuesta = c_almacen::c_consulta_de_tipo_cambio();
+} elseif ($accion == 'consultatipodecambiosunat') {
+    $respuesta = c_almacen::c_consulta_de_tipo_cambio_sunat();
     echo $respuesta;
 } elseif ($accion == 'guardadatosfactura') {
     $idcomprobantecaptura = trim($_POST['idcomprobantecaptura']);
@@ -3103,12 +3103,12 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function  c_consulta_de_tipo_cambio()
+    static function  c_consulta_de_tipo_cambio_sunat()
     {
         try {
 
             $mostrar = new m_almacen();
-            $datos = $mostrar->MostrarTipoCambioEnSoles();
+            $datos = $mostrar->MostrarTipoCambioSunat();
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
             }
