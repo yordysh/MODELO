@@ -32,7 +32,7 @@
   <script src="./js/sweetalert2.all.min.js"></script>
 
   <script src="./js/ajaxFechaAviso.js"></script>
-  <script src="../js/menu.js"></script>
+  <script src="../js/menu_a.js"></script>
 </body>
 
 </html>

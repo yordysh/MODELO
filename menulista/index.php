@@ -3,7 +3,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-
+require_once("../menulista/c_permisosmenu.php");
 // $controller = new c_permisosmenu();
 // $controller->c_permisos("1100");
 /*--------------------------- */
@@ -20,7 +20,7 @@ $submenu2 = $_SESSION["subsub_c"];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/menu_a.css">
 
 </head>
 
@@ -28,7 +28,7 @@ $submenu2 = $_SESSION["subsub_c"];
     <nav class="nav">
         <div class="wave"></div>
         <i class="icon-menu navOpenBtn"></i>
-        <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
+        <a class="logo" href="./"><img src="../imagenes/logo-covifarma.png" alt=""></a>
 
         <ul class="nav-links idex">
 
@@ -45,7 +45,7 @@ $submenu2 = $_SESSION["subsub_c"];
                             echo "<li>";
                             if ($submenu[$l][2] != '') {
 
-                                echo "<a   href='" . $submenu[$l][2] . "'>" . $submenu[$l][1] . "</a>";
+                                echo "<a class='activo'  href='" . $submenu[$l][2] . "'>" . $submenu[$l][1] . "</a>";
 
                                 // echo "<li><a href='" . $submenu[$l][2] . "' class='submenulista font'>" . $submenu[$l][1] . "<span class='icon-dot'></span></a>";
                             } else {

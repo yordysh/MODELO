@@ -4,7 +4,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set('America/Lima');
-require_once("m_menu.php");
+// require_once("m_menu.php");
+require_once("../menulista/m_menu.php");
 require_once("../funciones/f_funcion.php");
 
 /*$permisos = new c_permisosmenu();

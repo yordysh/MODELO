@@ -186,7 +186,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxPreparacion.js"></script>
-    <script src="../js/menu.js"></script>
+    <script src="../js/menu_a.js"></script>
     <script>
         function generarPDF() {
             var anioSeleccionado = document.getElementById("anio").value;

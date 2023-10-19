@@ -276,7 +276,7 @@ $dataProveedores = $mostrar->MostrarProveedores();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxOrdenCompra.js?v=0.001"></script>
-    <script src="../js/menu.js"></script>
+    <script src="../js/menu_a.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {
