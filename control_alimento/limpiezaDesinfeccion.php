@@ -157,7 +157,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                                     </select>
                                 </div>
 
-                                <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()">Generar PDF</a>
+                                <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()">PDF</a>
                             </div>
                         </div>
                     </form>

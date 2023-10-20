@@ -13,7 +13,6 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" href="./css/ui_1.12.1_themes_base_jquery-ui.css"> -->
     <link rel="stylesheet" href="./css/responsiveControl.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
@@ -72,7 +71,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         <div class="estiloordencompra">
                             <!-- Text input dias-->
 
-                            <div class="form-outline mb-4 custom-input">
+                            <div class="form-outline mb-4 custom-select">
                                 <label class="form-label">Frecuencia</label>
                                 <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
                                 <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
@@ -87,8 +86,10 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
 
                             <!--Combo zona areas -->
 
-                            <div class="form-outline mb-4 custom-input">
+                            <div class="form-outline mb-4 custom-select">
+
                                 <label class="form-label">Zona/Areas</label>
+
                                 <select id="selectInfra" class="form-select selectZona" aria-label="Default select example">
                                     <option value="none" selected disabled>Seleccione Zona/Areas</option>
                                     <?php foreach ($dataInfra as $lis) {
@@ -100,9 +101,12 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                     }
                                     ?>
                                 </select>
+
+                                <div class="buttonzonas">
+                                    <button type='button' class="custom-icon" data-bs-toggle="modal" data-bs-target="#mostrarzonas"><i class="icon-add-user"></i></button>
+                                </div>
                             </div>
-                            <!-- <input type="hidden" id="task_zona">
-                                  <input id="selectInfra" class="form-control" required> -->
+
 
                         </div>
                         <!-- Crear PDF -->
@@ -133,35 +137,10 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                     </select>
                                 </div>
 
-                                <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()">Generar PDF</a>
+                                <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()"> PDF</a>
                             </div>
                         </div>
                     </form>
-
-                    <div class="container g-4 row">
-                        <div class="row g-4 top-div" style="margin-top: 55px;">
-                            <center><label class="title">ZONAS/ÁREAS</label></center>
-                        </div>
-                        <div class="main">
-                            <form method="post" action="" id="formularioZona">
-
-                                <!-- Text input -->
-                                <div class="form-outline mb-4">
-                                    <label class="form-label">Nombre de área</label>
-                                    <input type="text" id="NOMBRE_T_ZONA_AREAS" class="form-control" name="NOMBRE_T_ZONA_AREAS" required>
-                                </div>
-
-                                <!-- Submit button -->
-                                <div class="d-grid  col-6 mx-auto bt-guardar-zona">
-                                    <input type="hidden" id="taskId">
-                                    <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardarzona">Guardar </button>
-                                </div>
-                            </form>
-
-
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </section>
@@ -169,6 +148,9 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
         Covifarma-2023
     </footer>
+    <?php
+    require_once "modalzonas.php";
+    ?>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>

@@ -250,16 +250,16 @@ class m_almacen
       $this->bd->beginTransaction();
       $cod = new m_almacen();
       $COD_ZONA = $cod->generarCodigo();
-      // $VERSION = $cod->generarVersion();
+      $VERSION = $cod->generarVersion();
       $nombre = 'LBS-PHS-FR-01';
 
 
       $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
 
       $FECHA = $cod->c_horaserversql('F');
-      // $FECHA = '02/09/2023';
-      //$FECHA = date('Y-m-d');
-      $mesAnioHoy = date('Y-m', strtotime(str_replace('/', '-',  $FECHA)));
+      // $FECHAACTUAL = '19/10/2023';
+
+      // $FECHA = date('Y-m-d', strtotime(str_replace('/', '-', $FECHAACTUAL)));
       if ($repetir == 0) {
         $VERSION = $cod->generarVersionGeneral($nombre);
 
@@ -268,44 +268,6 @@ class m_almacen
 
 
         $insert = $stm->execute();
-
-        //$fechaDHoy = date('Y-m-d');
-        // $fechaDHoy = $cod->c_horaserversql('F');
-
-
-        // if ($VERSION == '01') {
-        //   // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
-        //   // //$stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE cast(FECHA_VERSION as DATE) =cast('$FECHA_CREACION' as date) AND NOMBRE='$nombre'");
-        //   // $stmver->execute();
-        //   // $valor = $stmver->fetchAll();
-
-        //   // $valor1 = count($valor);
-
-        //   // if ($valor1 == 0) {
-        //   $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
-        //   $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-        //   $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-        //   $stmVersion->bindParam(':FECHA_VERSION', $FECHA);
-
-        //   $stmVersion->execute();
-        //   // }
-        // } else {
-
-        //   // $stmver = $this->bd->prepare("SELECT * FROM T_VERSION_GENERAL WHERE CONVERT(VARCHAR(7), FECHA_VERSION, 126) = '$mesAnioHoy' AND NOMBRE = '$nombre'");
-        //   // $stmver->execute();
-        //   // $valor = $stmver->fetchAll();
-
-        //   // $valor1 = count($valor);
-
-        //   // if ($valor1 == 0) {
-        //   $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION WHERE NOMBRE=:nombre");
-        //   $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-        //   $stmVersion->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-        //   $stmVersion->bindParam(':FECHA_VERSION', $FECHA);
-
-        //   $stmVersion->execute();
-        //   // }
-        // }
 
         $insert = $this->bd->commit();
 
@@ -490,50 +452,18 @@ class m_almacen
 
       $FECHA = $cod->c_horaserversql('F');
       $nombre = 'LBS-PHS-FR-01';
-      // $FECHA = date('Y-m-d');
+      // $FECHAACTUAL = '19/10/2023';
+
+      // $FECHA = date('Y-m-d', strtotime(str_replace('/', '-', $FECHAACTUAL)));
 
       if ($repetir == 0) {
 
         $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION)
                                   VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION')");
-        // var_dump($stm);
         $insert = $stm->execute();
 
-        // $fechaDHoy = date('Y-m-d');
-        //$fechaDHoy = '19/07/2023';
-        $fechaDHoy  = $cod->c_horaserversql('F');
-        $cod->generarVersionGeneral($nombre);
-        // if ($VERSION == '01') {
-        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
 
-
-        //   $stmver->execute();
-        //   $valor = $stmver->fetchAll();
-
-        //   $valor1 = count($valor);
-
-        //   if ($valor1 == 0) {
-        //     $stmVersion = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
-        //     $stmVersion->bindParam(':version', $VERSION, PDO::PARAM_STR);
-        //     $stmVersion->execute();
-        //   }
-        // } else {
-        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
-
-
-        //   $stmver->execute();
-        //   $valor = $stmver->fetchAll();
-
-        //   $valor1 = count($valor);
-
-        //   if ($valor1 == 0) {
-        //     $stmVersion = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
-        //     $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-        //     $stmVersion->bindParam(':FECHA_VERSION', $fechaDHoy);
-        //     $stmVersion->execute();
-        //   }
-        // }
-
+        // $fechaDHoy  = $cod->c_horaserversql('F');
 
 
 
@@ -542,6 +472,9 @@ class m_almacen
         $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA);
         $FECHA_TOTAL = $FECHA_FORMATO->modify("+$NDIAS days")->format('d-m-Y');
         // $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA . '+ ' . $NDIAS));
+        // $FECHA = date('Y-m-d', strtotime($FECHA));
+        // $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA . ' + ' . $NDIAS . ' days'));
+
         // Verificar si la fecha total cae en domingo
         if (date('N', strtotime($FECHA_TOTAL)) == 7) {
           $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA_TOTAL . '+1 day'));
@@ -549,14 +482,12 @@ class m_almacen
 
         if (!($NDIAS == 1 || $NDIAS == 2)) {
           $FECHA_ACORDAR = date('d-m-Y', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days'));
-          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) values('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$NDIAS')");
+          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) VALUES('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$NDIAS')");
         } else {
-          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) values('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$NDIAS')");
+          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) VALUES('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$NDIAS')");
         }
-
-
-
         $stm1->execute();
+
         $insert = $this->bd->commit();
         return $insert;
       }

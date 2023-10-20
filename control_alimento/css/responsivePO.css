@@ -206,7 +206,9 @@ body {
 }
 
 .title {
-  font-weight: 600;
+  font-weight: 800;
+  font-size: 20px;
+  color: #2011f5;
 }
 .title_table {
   font-weight: 500;

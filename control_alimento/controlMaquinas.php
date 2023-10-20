@@ -81,46 +81,46 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                     </div>
 
                     <form method="post" action="" id="formularioControl">
+                        <div class="estiloordencompra">
+                            <!-- Text input -->
+                            <div class="form-outline mb-4">
+                                <input id="id" type="hidden" class="form-control" name="id" />
+                            </div>
 
-                        <!-- Text input -->
-                        <div class="form-outline mb-4">
-                            <input id="id" type="hidden" class="form-control" name="id" />
+                            <!--Combo zona areas -->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Zona/Areas</label>
+                                <select id="selectControl" class="form-select" aria-label="Default select example">
+                                    <option value="none" selected disabled>Seleccione Zona/Areas</option>
+                                    <?php
+                                    foreach ($dataZona as $lis) { ?>
+                                        <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+
+                            </div>
+
+                            <!-- Text input nombre -->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Nombre máquina, equipo</label>
+                                <input type="text" id="NOMBRE_CONTROL_MAQUINA" class="form-control" name="NOMBRE_CONTROL_MAQUINA" required>
+                            </div>
+                            <!-- Text input dias-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Frecuencia</label>
+                                <!-- <input type="text" id="N_DIAS_CONTROL" class="form-control" name="N_DIAS_CONTROL" required> -->
+                                <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
+                                    <option value="0" selected disabled>Seleccione frecuencia</option>
+                                    <option value="1">Diario</option>
+                                    <option value="2">Inter-diario</option>
+                                    <option value="7">Semanal</option>
+                                    <option value="15">Quincenal</option>
+                                    <option value="30">Mensual</option>
+                                </select>
+                            </div>
                         </div>
-
-                        <!--Combo zona areas -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Zona/Areas</label>
-                            <select id="selectControl" class="form-select" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione Zona/Areas</option>
-                                <?php
-                                foreach ($dataZona as $lis) { ?>
-                                    <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
-                                <?php
-                                }
-                                ?>
-                            </select>
-
-                        </div>
-
-                        <!-- Text input nombre -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Nombre máquina, equipo</label>
-                            <input type="text" id="NOMBRE_CONTROL_MAQUINA" class="form-control" name="NOMBRE_CONTROL_MAQUINA" required>
-                        </div>
-                        <!-- Text input dias-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Frecuencia</label>
-                            <!-- <input type="text" id="N_DIAS_CONTROL" class="form-control" name="N_DIAS_CONTROL" required> -->
-                            <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione frecuencia</option>
-                                <option value="1">Diario</option>
-                                <option value="2">Inter-diario</option>
-                                <option value="7">Semanal</option>
-                                <option value="15">Quincenal</option>
-                                <option value="30">Mensual</option>
-                            </select>
-                        </div>
-
                         <!-- Submit button -->
                         <div class="contenedorgeneral">
                             <div class="btonguardar">
@@ -149,7 +149,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                                     </select>
                                 </div>
 
-                                <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()">Generar PDF</a>
+                                <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()">PDF</a>
                             </div>
                         </div>
                     </form>

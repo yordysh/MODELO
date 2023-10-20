@@ -615,6 +615,7 @@ class c_almacen
 
         if (isset($nombrezonaArea)) {
             $respuesta = $m_formula->InsertarAlmacen($nombrezonaArea);
+
             if ($respuesta) {
 
                 return "ok";

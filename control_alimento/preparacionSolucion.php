@@ -82,44 +82,48 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                     </div>
 
                     <form method="post" action="" id="formularioSoluciones">
+                        <div class="estiloordencompra">
+                            <!-- Text input Insumos -->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Producto de saneamiento</label>
+                                <select id="selectInsumos" class="form-select" aria-label="Default select example">
+                                    <option value="0" selected disabled>Seleccione producto</option>
+                                    <?php foreach ($dataInsumos as $lista) { ?>
+                                        <option value="<?php echo $lista['ID_SOLUCIONES']; ?>" class="option"><?php echo $lista['NOMBRE_INSUMOS']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <!-- Text input Preparacion-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Preparación</label>
+                                <select id="selectPreparaciones" class="form-select" aria-label="Default select example">
+                                    <option value="0" selected disabled>Seleccione preparación</option>
+                                </select>
+                            </div>
+                            <!-- Text input cantidad-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Cantidad ("%" o "ppm")</label>
+                                <select id="selectCantidad" class="form-select" aria-label="Default select example">
+                                    <option value="0" selected disabled>Seleccione cantidad</option>
+                                </select>
+                            </div>
+                        </div>
 
-                        <!-- Text input Insumos -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Producto de saneamiento</label>
-                            <select id="selectInsumos" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione producto</option>
-                                <?php foreach ($dataInsumos as $lista) { ?>
-                                    <option value="<?php echo $lista['ID_SOLUCIONES']; ?>" class="option"><?php echo $lista['NOMBRE_INSUMOS']; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <!-- Text input Preparacion-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Preparación</label>
-                            <select id="selectPreparaciones" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione preparación</option>
-                            </select>
-                        </div>
-                        <!-- Text input cantidad-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Cantidad ("%" o "ppm")</label>
-                            <select id="selectCantidad" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione cantidad</option>
-                            </select>
-                        </div>
-                        <!-- Text input numero ML-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Número de preparacion en ml</label>
-                            <select id="selectML" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione cantidad ML</option>
-                            </select>
-                        </div>
-                        <!-- Text input numero L-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Número de preparacion en L</label>
-                            <select id="selectL" class="form-select" aria-label="Default select example">
-                                <option value="0" selected disabled>Seleccione cantidad L</option>
-                            </select>
+                        <div class="estiloordencompra">
+                            <!-- Text input numero ML-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Número de preparacion en ml</label>
+                                <select id="selectML" class="form-select" aria-label="Default select example">
+                                    <option value="0" selected disabled>Seleccione cantidad ML</option>
+                                </select>
+                            </div>
+                            <!-- Text input numero L-->
+                            <div class="form-outline mb-4 custom-input">
+                                <label class="form-label">Número de preparacion en L</label>
+                                <select id="selectL" class="form-select" aria-label="Default select example">
+                                    <option value="0" selected disabled>Seleccione cantidad L</option>
+                                </select>
+                            </div>
                         </div>
                         <!-- Text input Observacion-->
                         <div class="form-outline mb-4">
@@ -169,7 +173,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                                     </select>
                                 </div>
 
-                                <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()">Generar PDF</a>
+                                <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()">PDF</a>
                             </div>
                         </div>
                 </div>

@@ -6,40 +6,6 @@ $(function () {
 
   $("#selectInfra").select2();
 
-  //   $("#selectInfra").autocomplete({
-  //     source: function (request, response) {
-  //       const accion = "buscarZonaCombo";
-
-  //       $.ajax({
-  //         url: "./c_almacen.php",
-  //         method: "POST",
-  //         dataType: "json",
-  //         data: {
-  //           accion: accion,
-  //           term: request.term,
-  //         },
-  //         success: function (data) {
-  //           if (!data) {
-  //             $("#task_zona").val("");
-  //           }
-  //           response(data);
-  //         },
-  //       });
-  //     },
-  //     select: function (event, ui) {
-  //       console.log(ui.item.id);
-  //       $("#task_zona").val(ui.item.id);
-  //     },
-  //     close: function () {
-  //       const searchTerm = $("#selectInfra").val().trim();
-
-  //       if (searchTerm === "") {
-  //         $("#task_zona").val("");
-  //       }
-  //     },
-  //   });
-  // });
-
   //------------- Busqueda con ajax infraestructura Accesorio----------------//
 
   $("#search").keyup(() => {
@@ -150,16 +116,15 @@ $(function () {
   //-----------------------------------------------------------------------------//
 
   //------------- Añadiendo con ajax ZonaAreas----------------//
-  $("#formularioZona").submit((e) => {
-    e.preventDefault();
-
+  // $("#formularioZona").submit((e) => {
+  $("#ponerzona").on("click", (e) => {
     const accion = edit === false ? "insertar" : "actualizar";
 
     $.ajax({
       url: "./c_almacen.php",
       data: {
         accion: accion,
-        nombrezonaArea: $("#NOMBRE_T_ZONA_AREAS").val(),
+        nombrezonaArea: $("#nombrezona").val(),
         codzona: $("#taskId").val(),
       },
 
@@ -173,7 +138,8 @@ $(function () {
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
-              $("#formularioZona").trigger("reset");
+              $("#nombrezona").val("");
+              $("#mostrarzonas").modal("hide");
               actualizarCombo();
             }
           });

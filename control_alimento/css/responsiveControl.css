@@ -135,7 +135,9 @@ body {
   height: 84%;
 }
 .title {
-  font-weight: 600;
+  font-weight: 800;
+  font-size: 20px;
+  color: #2011f5;
 }
 .title_table {
   font-weight: 500;
@@ -156,6 +158,7 @@ body {
   flex: 1;
   margin-right: 10px;
 }
+
 /*-------------- Cambios de estilo nabvar ---------------------*/
 /* .bar-color {
   background-color: #5b8ccc !important;
@@ -299,33 +302,6 @@ section {
 
 /*-------------- Estilo de MENUBAR ---------------------*/
 
-/* .nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 15px 80px;
-  background: #5b8ccc;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-.wave {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(to bottom, #814092, #ffffff);
-  opacity: 0.5;
-  z-index: -1;
-} */
-/* .nav,
-.nav .nav-links {
-  display: flex;
-  align-items: center;
-}
-.nav {
-  justify-content: space-between;
-  z-index: 1000;
-}*/
 .select2-dropdown {
   z-index: 1 !important;
 }
@@ -333,58 +309,6 @@ a {
   color: #fff;
   text-decoration: none;
 }
-/*
-.nav .nav-links {
-  column-gap: 80px;
-  list-style: none;
-}
-.nav .nav-links a {
-  transition: all 0.2s linear;
-}
-.nav.openSearch .nav-links a {
-  opacity: 0;
-  pointer-events: none;
-}
-.nav .search-icon {
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-}
-.nav .search-box {
-  position: absolute;
-  right: 250px;
-  height: 45px;
-  max-width: 555px;
-  width: 100%;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.2s linear;
-}
-.nav.openSearch .search-box {
-  opacity: 1;
-  pointer-events: auto;
-}
-.search-box .search-icon {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  left: 15px;
-  color: #5b8ccc;
-  transform: translateY(-50%);
-}
-.search-box input {
-  height: 100%;
-  width: 100%;
-  border: none;
-  outline: none;
-  border-radius: 6px;
-  background-color: #fff;
-  padding: 0 15px 0 45px;
-}
-.nav .navOpenBtn,
-.nav .navCloseBtn {
-  display: none;
-} */
 
 /*-------------------------------------------------------*/
 
@@ -438,16 +362,39 @@ td {
 /* .contentaniomes {
   margin-right: 5px;
 } */
-
+.buttonzonas {
+  position: absolute;
+  padding: 0;
+  height: 0;
+  margin-top: -38px;
+  margin-left: 450px;
+}
+.custom-select {
+  flex: 0.49;
+  margin-right: 20px;
+}
 /*-------------- Estilo de responsive ---------------------*/
 
 @media screen and (max-width: 1370px) {
   /* ------------------------------------------------- */
   .contenedorgeneral {
-    display: flex;
+    display: block;
   }
   .btonguardar {
-    margin-right: 220px;
+    /* margin-right: 220px; */
+    text-align: center;
+  }
+  .estiloboton {
+    padding: 5px 50px;
+    font-size: 16px;
+    max-width: 100%;
+    width: 50%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+  }
+  .styleanmes {
+    flex: 1;
+    padding: 5px 0;
   }
   .aniomes {
     display: flex;
@@ -469,9 +416,17 @@ td {
   .totalinsumo {
     margin-left: 380px !important;
   }
-  /* #tablasumatotalinsumo {
-    margin-left: 35px !important;
-  } */
+  .custom-select {
+    flex: 0.55;
+    margin-right: 30px;
+  }
+  .buttonzonas {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 400px;
+  }
 }
 @media screen and (max-width: 1120px) {
   .btonguardar {
@@ -480,10 +435,41 @@ td {
   .estiloguardar {
     margin-right: 80px;
   }
+  .buttonzonas {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 350px;
+  }
+  .estiloboton {
+    padding: 4px 50px;
+    font-size: 16px;
+    max-width: 130%;
+    width: 117%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  .estilopdf {
+    padding: 5px 50px;
+    font-size: 16px;
+    max-width: 130%;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    margin-left: 0;
+  }
 }
 @media screen and (max-width: 1105px) {
   .totalinsumo {
     margin-left: 500px !important;
+  }
+  .buttonzonas {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 345px;
   }
 }
 @media screen and (max-width: 992px) {
@@ -507,21 +493,11 @@ td {
     margin-top: 10px;
     margin-left: 0;
   }
-  .estiloboton {
-    padding: 4px 50px;
-    font-size: 16px;
-    max-width: 130%;
-    width: 117%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
+  input#anio {
+    padding: 2px 170px;
   }
-  .estilopdf {
-    padding: 5px 50px;
-    font-size: 16px;
-    max-width: 130%;
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
+  select#mes {
+    padding: 0 150px;
   }
   .bt-insert {
     padding: 10px 80px;
@@ -605,6 +581,21 @@ td {
   #selectInfra {
     width: 100%;
   }
+  .buttonzonas {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 510px;
+  }
+  .custom-select {
+    margin: 0;
+  }
+  #selectInfra {
+    font-size: 14px;
+    width: 500px;
+    padding: 5px;
+  }
 }
 /*-------------------------------------------------------------*/
 @media screen and (max-width: 950px) {
@@ -671,12 +662,32 @@ td {
     transform: translateX(50%);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   } */
+  .buttonzonas {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 470px;
+  }
+  .custom-select {
+    margin: 0;
+  }
+  #selectInfra {
+    font-size: 14px;
+    width: 460px;
+    padding: 5px;
+  }
   td {
     width: 100% !important;
   }
+  input#anio {
+    padding: 2px 130px;
+  }
+  select#mes {
+    padding: 0 110px;
+  }
 }
 /*-------------------------------------------------------------*/
-
 @media screen and (max-width: 768px) {
   main {
     width: 100%;
@@ -702,6 +713,7 @@ td {
   .estilopdf {
     padding-top: 8px;
     padding-bottom: 8px;
+    margin-left: 0;
   }
 
   /*-------------- Estilo de MENUBAR ---------------------*/
@@ -815,8 +827,26 @@ td {
   .table-responsive table thead {
     display: none;
   }
+  input#anio {
+    padding: 2px 160px;
+  }
+  select#mes {
+    padding: 2px 138px;
+  }
+  .buttonzonas {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 470px;
+  }
+  .custom-select {
+    margin: 0;
+  }
   #selectInfra {
-    width: 100%;
+    font-size: 14px;
+    width: 460px;
+    padding: 5px;
   }
 }
 @media screen and (max-width: 480px) {
@@ -835,6 +865,7 @@ td {
     width: 96%;
     box-sizing: border-box;
     margin-bottom: 10px;
+    margin-left: 0;
   }
   .aniomes {
     display: block;
@@ -848,6 +879,21 @@ td {
   }
   select#mes {
     padding: 2px 58px;
+  }
+
+  .buttonzonas {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 410px;
+  }
+  .custom-select {
+    margin: 0;
+  }
+  #selectInfra {
+    font-size: 14px;
+    width: 400px;
   }
 }
 /*----------------------REDMI----------------------------*/
@@ -880,11 +926,22 @@ td {
     margin-bottom: 10px;
   }
 
-  #selectInfra {
-    width: 100%;
-  }
   select#selectVerificacion {
     margin-left: 35px !important;
+  }
+  .buttonzonas {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 355px;
+  }
+  .custom-select {
+    margin: 0;
+  }
+  #selectInfra {
+    font-size: 14px;
+    width: 350px;
   }
 }
 @media screen and (max-width: 400px) {
