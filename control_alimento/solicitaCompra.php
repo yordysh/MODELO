@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-// $codusuario = $_SESSION["cod"];
+$codusuario = $_SESSION["cod"];
 // $oficina=$_SESSION["ofi"];
 
-$codusuario = '0002';
+// $codusuario = '0002';
 ?>
 <?php
 require_once "m_almacen.php";

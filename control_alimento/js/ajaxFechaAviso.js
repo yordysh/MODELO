@@ -1,17 +1,4 @@
 $(function () {
-  // alertaMensaje()
-  //   .then(function () {
-  //     alerta();
-  //   })
-  //   .catch(function (error) {
-  //     // console.error(error);
-  //     alerta();
-  //   })
-  //   .then(function () {
-  //     console.log(error);
-  //     alertaControl();
-  //   });
-
   async function executeAlerts() {
     try {
       await alertaMensaje();
@@ -82,7 +69,8 @@ $(function () {
       }
       const accion = "fechaalertamensaje";
       $.ajax({
-        url: "c_almacen.php",
+        url: "../control_alimento/c_almacen.php",
+        // url: "./c_almacen.php",
         method: "POST",
         dataType: "json",
         data: { accion: accion },
@@ -136,16 +124,16 @@ $(function () {
                   <option value="2">No conforme</option>
                 </select>
               </div>
-              <label>
+              <label class='estilolabel'>
                 <input type="radio" name="estado-${task.COD_ALERTA}" value="R"> Realizado
               </label>
-              <label>
+              <label class='estilolabel'>
                 <input type="radio" name="estado-${task.COD_ALERTA}" value="NR"> No Realizado
               </label>
-              <label>
+              <label class='estilolabel'>
               <input type="radio" name="estado-${task.COD_ALERTA}" value="OB"> Observación
-            </label>
-              <label id="postergacion">
+              </label>
+              <label class='estilolabel' id="postergacion">
               <input type="radio" name="estado-${task.COD_ALERTA}" value="PO"> Postergación
               </label>
               <textarea class="form-control" id="observacion-${task.COD_ALERTA}" rows="3" style="display: none;"></textarea>
@@ -196,15 +184,14 @@ $(function () {
               ).text();
 
               if (postergacionRadio.checked) {
-                // Abrir modal
                 $("#myModalExito").modal("show");
 
                 return Promise.resolve();
               }
               const accion = "actualizaalerta";
               return $.ajax({
-                // url: "./php/checkbox-confirma.php",
-                url: "c_almacen.php",
+                url: "../control_alimento/c_almacen.php",
+                // url: "./c_almacen.php",
                 method: "POST",
                 data: {
                   accion: accion,
@@ -225,8 +212,8 @@ $(function () {
                   const nuevaFechaTotal = new Date();
                   const accion = "insertaralertamix";
                   return $.ajax({
-                    // url: "./php/insertar-alertamix.php",
-                    url: "c_almacen.php",
+                    url: "../control_alimento/c_almacen.php",
+                    // url: "./c_almacen.php",
                     method: "POST",
                     data: {
                       accion: accion,
@@ -257,7 +244,7 @@ $(function () {
             );
 
             if (postergacionRadio.checked) {
-              // Abrir modal
+              /*abrir modal al darle aceptar */
               $("#myModalExito").modal("show");
               // Resolves the promise to confirm the action
               Promise.resolve().then(() => {
@@ -289,8 +276,7 @@ $(function () {
 
                   // Realizar la actualización del estado con "PO" utilizando una solicitud AJAX
                   $.ajax({
-                    url: "c_almacen.php",
-                    // url: "./php/checkbox-confirma.php",
+                    url: "../control_alimento/c_almacen.php",
                     method: "POST",
                     data: {
                       accion: accion,
@@ -314,7 +300,8 @@ $(function () {
                       const accion = "insertaralertamix";
                       // Insertar nueva alerta con la fecha total utilizando una solicitud AJAX
                       $.ajax({
-                        url: "c_almacen.php",
+                        // url: "../control_alimento/c_almacen.php",
+                        url: "./c_almacen.php",
                         method: "POST",
                         data: {
                           accion: accion,
@@ -396,7 +383,8 @@ $(function () {
       }
       const accion = "fechaalerta";
       $.ajax({
-        url: "c_almacen.php",
+        url: "../control_alimento/c_almacen.php",
+        // url: "./c_almacen.php",
         method: "POST",
         dataType: "json",
         data: { accion: accion },
@@ -465,7 +453,8 @@ $(function () {
 
               const accion = "actualizaalertacontrol";
               $.ajax({
-                url: "c_almacen.php",
+                url: "../control_alimento/c_almacen.php",
+                // url: "./c_almacen.php",
                 method: "POST",
                 data: {
                   accion: accion,
@@ -480,7 +469,8 @@ $(function () {
               const accioninsertar = "insertaralertamixcontrolmaquina";
 
               $.ajax({
-                url: "c_almacen.php",
+                url: "../control_alimento/c_almacen.php",
+                // url: "./c_almacen.php",
                 method: "POST",
                 data: {
                   accion: accioninsertar,
@@ -528,7 +518,8 @@ $(function () {
 
       const accion = "fechaalertacontrol";
       $.ajax({
-        url: "c_almacen.php",
+        url: "../control_alimento/c_almacen.php",
+        // url: "./c_almacen.php",
         method: "POST",
         dataType: "json",
         data: { accion: accion },
@@ -552,7 +543,8 @@ $(function () {
     const accion = "mostrarordencompraalmacenalerta";
     var codrequerimiento, codordencompra;
     $.ajax({
-      url: "./c_almacen.php",
+      url: "../control_alimento/c_almacen.php",
+      // url: "./c_almacen.php",
       type: "POST",
       data: { accion: accion },
       success: function (response) {
@@ -578,7 +570,8 @@ $(function () {
           if (result.isConfirmed) {
             const accion = "actualizarrequerimientoitem";
             $.ajax({
-              url: "./c_almacen.php",
+              url: "../control_alimento/c_almacen.php",
+              // url: "./c_almacen.php",
               type: "POST",
               data: {
                 accion: accion,

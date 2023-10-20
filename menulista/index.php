@@ -3,7 +3,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once("../menulista/c_permisosmenu.php");
+// require_once("../menulista/c_permisosmenu.php");
 // $controller = new c_permisosmenu();
 // $controller->c_permisos("1100");
 /*--------------------------- */
@@ -21,7 +21,9 @@ $submenu2 = $_SESSION["subsub_c"];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/menu_a.css">
-
+    <link rel="stylesheet" href="../control_alimento/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../control_alimento/css/sweetalert2.min.css">
+    <link rel="stylesheet" href="../control_alimento/css/responsiveControl.css">
 </head>
 
 <body>
@@ -79,6 +81,11 @@ $submenu2 = $_SESSION["subsub_c"];
             <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
         </div>
     </nav>
+    <?php require_once("../control_alimento/modal.php"); ?>
+    <script src="../control_alimento/js/bootstrap.min.js"></script>
+    <script src="../control_alimento/js/sweetalert2.all.min.js"></script>
+    <script src="../control_alimento/js/jquery-3.7.0.min.js"></script>
+    <script src="../control_alimento/js/ajaxFechaAviso.js"></script>
 </body>
 
 </html>

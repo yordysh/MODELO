@@ -103,7 +103,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                 </select>
 
                                 <div class="buttonzonas">
-                                    <button type='button' class="custom-icon" data-bs-toggle="modal" data-bs-target="#mostrarzonas"><i class="icon-add-user"></i></button>
+                                    <button type='button' class="custom-icon-zona" data-bs-toggle="modal" data-bs-target="#mostrarzonas"><i class="icon-circle-with-plus"></i></button>
                                 </div>
                             </div>
 
@@ -136,8 +136,9 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                         <option value="12">Diciembre</option>
                                     </select>
                                 </div>
-
-                                <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()"> PDF</a>
+                                <div class="botonpdf">
+                                    <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()"> PDF</a>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -154,7 +155,6 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <!-- <script src="./js/ui_1.12.1_jquery-ui.min.js"></script> -->
     <script src="./js/ajaxInfra.js"></script>
     <script src="../js/menu_a.js"></script>
     <script src="./js/select2.min.js"></script>
@@ -163,6 +163,15 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
             var anioSeleccionado = document.getElementById("anio").value;
             var mesSeleccionado = document.getElementById("mes").value;
 
+            if (!mesSeleccionado) {
+                Swal.fire({
+                    title: "¡Error!",
+                    text: "Seleccionar un mes",
+                    icon: "error",
+                    confirmButtonText: "Aceptar",
+                });
+                return;
+            }
             // Enviar los valores a tu script de generación de PDF
             var url = "pdf-monitoreo.php?anio=" + anioSeleccionado + "&mes=" + mesSeleccionado;
             window.open(url, "_blank");

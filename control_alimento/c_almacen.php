@@ -886,7 +886,7 @@ class c_almacen
             $jsonstring = json_encode($json);
             echo $jsonstring;
         } catch (Exception $e) {
-            echo "Error: ";
+            echo "Error: " . $e;
         }
     }
 

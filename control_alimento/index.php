@@ -22,16 +22,10 @@
   require_once('../menulista/index.php');
   ?>
 
-  <?php
-  require_once "modal.php";
-  ?>
-
   <script src="./js/bootstrap.min.js"></script>
 
   <script src="./js/jquery-3.7.0.min.js"></script>
   <script src="./js/sweetalert2.all.min.js"></script>
-
-  <script src="./js/ajaxFechaAviso.js"></script>
   <script src="../js/menu_a.js"></script>
 </body>
 
