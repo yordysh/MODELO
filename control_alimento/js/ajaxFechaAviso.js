@@ -205,7 +205,7 @@ $(function () {
                 dataType: "json",
               })
                 .done(function (response) {
-                  console.log(response);
+                  // console.log(response);
                   mostrarAlertas(data, index + 1);
 
                   // Crea una nueva alerta con la fecha total
