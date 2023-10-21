@@ -115,6 +115,21 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function MostrarVersionGeneralFecha($nombre)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT MAX(FECHA_VERSION) AS FECHA_VERSION FROM T_VERSION_GENERAL WHERE NOMBRE ='$nombre'");
+
+      $stm->execute();
+      $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+      $versionGeneralFecha = $resultado['FECHA_VERSION'];
+
+      return $versionGeneralFecha;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function generarVersionGeneral($nombre)
   {
     $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_VERSION_GENERAL WHERE NOMBRE = '$nombre'");
@@ -263,8 +278,8 @@ class m_almacen
       if ($repetir == 0) {
         $VERSION = $cod->generarVersionGeneral($nombre);
 
-        $stm = $this->bd->prepare("INSERT INTO T_ZONA_AREAS (COD_ZONA, NOMBRE_T_ZONA_AREAS, FECHA)
-                                  VALUES ( '$COD_ZONA', '$NOMBRE_T_ZONA_AREAS', '$FECHA')");
+        $stm = $this->bd->prepare("INSERT INTO T_ZONA_AREAS (COD_ZONA, NOMBRE_T_ZONA_AREAS, FECHA,VERSION)
+                                  VALUES ('$COD_ZONA', '$NOMBRE_T_ZONA_AREAS', '$FECHA','$VERSION')");
 
 
         $insert = $stm->execute();
@@ -447,7 +462,7 @@ class m_almacen
       $this->bd->beginTransaction();
       $cod = new m_almacen();
       $COD_INFRAESTRUCTURA = $cod->generarCodigoInfraestructura();
-      $VERSION = $cod->generarVersion();
+      // $VERSION = $cod->generarVersion();
       $repetir = $cod->contarRegistrosInfraestructura($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado);
 
       $FECHA = $cod->c_horaserversql('F');
@@ -458,13 +473,14 @@ class m_almacen
 
       if ($repetir == 0) {
 
+        $VERSION = $cod->generarVersionGeneral($nombre);
+
         $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION)
-                                  VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION')");
+                                    VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION')");
         $insert = $stm->execute();
 
 
         // $fechaDHoy  = $cod->c_horaserversql('F');
-
 
 
         $DIAS_DESCUENTO = 2;
@@ -655,7 +671,22 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function MostrarInfraestructuraEstadoPDF($anioSeleccionado, $mesSeleccionado)
+  {
+    try {
+      $stm = $this->bd->prepare("SELECT TA.FECHA_TOTAL AS FECHA_TOTAL,TZ.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
+                                  TA.OBSERVACION AS OBSERVACION, TA.ACCION_CORRECTIVA AS ACCION_CORRECTIVA,TA.VERIFICACION_REALIZADA AS VERIFICACION_REALIZADA FROM T_ALERTA TA 
+                                  INNER JOIN T_INFRAESTRUCTURA TI ON TA.COD_INFRAESTRUCTURA=TI.COD_INFRAESTRUCTURA
+                                  INNER JOIN T_ZONA_AREAS TZ ON TZ.COD_ZONA=TI.COD_ZONA
+                                  WHERE ESTADO='OB' AND MONTH(FECHA_TOTAL) = '$mesSeleccionado' AND YEAR(FECHA_TOTAL) = '$anioSeleccionado'");
 
+      $stm->execute();
+      $datos = $stm->fetchAll();
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function VersionMostrar()
   {
     try {
@@ -791,6 +822,26 @@ class m_almacen
     }
   }
 
+  // public function insertarLitros($litrosadd)
+  // {
+  //   try {
+  //     $cod = new m_almacen();
+  //     $nombre = 'LBS-PHS-FR-02';
+
+
+
+  //     $stm = $this->bd->prepare("INSERT INTO T_L(CANTIDAD_LITROS) VALUES('$litrosadd')");
+
+  //     $insert = $stm->execute();
+  //     $cod->generarVersionGeneral($nombre);
+  //     // }
+
+  //     return $insert;
+  //   } catch (Exception $e) {
+
+  //     die($e->getMessage());
+  //   }
+  // }
   public function insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion)
   {
     try {
@@ -805,14 +856,14 @@ class m_almacen
 
       $valor1 = count($valor);
 
-      if ($valor1 == 0) {
-        $stm = $this->bd->prepare("INSERT INTO T_UNION(NOMBRE_INSUMOS, NOMBRE_PREPARACION,CANTIDAD_PORCENTAJE,
+      // if ($valor1 == 0) {
+      $stm = $this->bd->prepare("INSERT INTO T_UNION(NOMBRE_INSUMOS, NOMBRE_PREPARACION,CANTIDAD_PORCENTAJE,
                                     CANTIDAD_MILILITROS, CANTIDAD_LITROS, OBSERVACION, ACCION_CORRECTIVA, VERIFICACION)
                                   VALUES ('$selectSolucion','$selectPreparacion', '$selectCantidad','$selectML', '$selectL','$textAreaObservacion','$textAreaAccion','$selectVerificacion')");
 
-        $insert = $stm->execute();
-        $cod->generarVersionGeneral($nombre);
-      }
+      $insert = $stm->execute();
+      $cod->generarVersionGeneral($nombre);
+      // }
 
       return $insert;
     } catch (Exception $e) {
@@ -909,37 +960,6 @@ class m_almacen
 
         $insert = $stm->execute();
         $codGen->generarVersionGeneral($nombre);
-        // if ($version == '01') {
-
-        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
-
-
-        //   $stmver->execute();
-        //   $valor = $stmver->fetchAll();
-
-        //   $valor1 = count($valor);
-
-        //   if ($valor1 == 0) {
-        //     $stm1 = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) VALUES ( :version)");
-        //     $stm1->bindParam(':version', $version, PDO::PARAM_STR);
-        //     $stm1->execute();
-        //   }
-        // } else {
-        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
-
-
-        //   $stmver->execute();
-        //   $valor = $stmver->fetchAll();
-
-        //   $valor1 = count($valor);
-
-        //   if ($valor1 == 0) {
-        //     $stm1 = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
-        //     $stm1->bindParam(':VERSION', $version, PDO::PARAM_STR);
-        //     $stm1->bindParam(':FECHA_VERSION', $fechaDHoy);
-        //     $stm1->execute();
-        //   }
-        // }
 
         $insert = $this->bd->commit();
 
@@ -1050,36 +1070,7 @@ class m_almacen
         // $fechaDHoy = '24/07/2023';
         $fechaDHoy  = $cod->c_horaserversql('F');
         $cod->generarVersionGeneral($nombre);
-        // if ($VERSION == '01') {
-        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
 
-
-        //   $stmver->execute();
-        //   $valor = $stmver->fetchAll();
-
-        //   $valor1 = count($valor);
-
-        //   if ($valor1 == 0) {
-        //     $stmVersion = $this->bd->prepare("INSERT INTO T_VERSION(VERSION) values(:version)");
-        //     $stmVersion->bindParam(':version', $VERSION, PDO::PARAM_STR);
-        //     $stmVersion->execute();
-        //   }
-        // } else {
-        //   $stmver = $this->bd->prepare("SELECT * FROM T_VERSION WHERE cast(FECHA_VERSION as DATE) =cast('$fechaDHoy' as date)");
-
-
-        //   $stmver->execute();
-        //   $valor = $stmver->fetchAll();
-
-        //   $valor1 = count($valor);
-
-        //   if ($valor1 == 0) {
-        //     $stmVersion = $this->bd->prepare("UPDATE T_VERSION SET VERSION = :VERSION, FECHA_VERSION = :FECHA_VERSION");
-        //     $stmVersion->bindParam(':VERSION', $VERSION, PDO::PARAM_STR);
-        //     $stmVersion->bindParam(':FECHA_VERSION', $fechaDHoy);
-        //     $stmVersion->execute();
-        //   }
-        // }
 
         $DIAS_DESCUENTO = 2;
 

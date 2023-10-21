@@ -2,33 +2,6 @@ $(function () {
   fetchTasks();
   cargarSelect();
 
-  //------------- MENU BAR JS ---------------//
-  // let nav = document.querySelector(".nav"),
-  //   searchIcon = document.querySelector("#searchIcon"),
-  //   navOpenBtn = document.querySelector(".navOpenBtn"),
-  //   navCloseBtn = document.querySelector(".navCloseBtn");
-
-  // searchIcon.addEventListener("click", () => {
-  //   nav.classList.toggle("openSearch");
-  //   nav.classList.remove("openNav");
-  //   if (nav.classList.contains("openSearch")) {
-  //     return searchIcon.classList.replace(
-  //       "icon-magnifying-glass",
-  //       "icon-cross"
-  //     );
-  //   }
-  //   searchIcon.classList.replace("icon-cross", "icon-magnifying-glass");
-  // });
-
-  // navOpenBtn.addEventListener("click", () => {
-  //   nav.classList.add("openNav");
-  //   nav.classList.remove("openSearch");
-  // });
-
-  // navCloseBtn.addEventListener("click", () => {
-  //   nav.classList.remove("openNav");
-  // });
-
   //----------------------------------------------------------------//
 
   $("#search").keyup(() => {
@@ -201,8 +174,44 @@ $(function () {
       });
     });
   }
-
-  $("#formularioSoluciones").submit(function (e) {
+  /**-------- INSERTAR NUEVOS LITROS----------------------- */
+  $("#ponerlitros").click((e) => {
+    e.preventDefault();
+    let litrosadd = $("#litrosadd").val();
+    const accion = "guardarnuevoslitros";
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        litrosadd: litrosadd,
+        accion: accion,
+      },
+      success: function (response) {
+        if (response == "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#litrosadd").val("");
+            }
+          });
+        } else {
+          Swal.fire(
+            "Error",
+            "Solo se puede añadir una preparación por día",
+            "error"
+          );
+          $("#formularioSoluciones").trigger("reset");
+        }
+      },
+    });
+  });
+  /**----------------------------------------------------- */
+  // $("#formularioSoluciones").submit(function (e) {
+  $("#boton").click((e) => {
     e.preventDefault();
     var selectSolucion = $("#selectInsumos option:selected").text();
     var selectPreparacion = $("#selectPreparaciones option:selected").text();

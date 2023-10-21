@@ -1286,6 +1286,20 @@ class c_almacen
             echo '<option value="' . $datos[$i]["ID_LI"] . '">' . $datos[$i]["CANTIDAD_LITROS"] . '</option>';
         }
     }
+    // static function c_insertar_litros($litrosadd)
+    // {
+    //     $mostrar = new m_almacen();
+    //     if (isset($litrosadd) ) {
+
+    //         $respuesta = $mostrar->insertarLitros($litrosadd);
+    //         if ($respuesta) {
+
+    //             return "ok";
+    //         } else {
+    //             return "error";
+    //         };
+    //     }
+    // }
     static function c_selectCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion)
     {
         $mostrar = new m_almacen();

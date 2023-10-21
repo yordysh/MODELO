@@ -56,6 +56,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
     <main>
         <section>
             <div class="container g-4 row">
+                <div class="clock" id='reloj' onload="time()"></div>
                 <div class="row g-4 top-div">
                     <center><label class="title">LBS-PHS-FR-02:PREPARACIÓN DE SOLUCIONES DE LIMPIEZA Y DESINFECCIÓN</label></center>
                 </div>
@@ -112,17 +113,20 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                         <div class="estiloordencompra">
                             <!-- Text input numero ML-->
                             <div class="form-outline mb-4 custom-input">
-                                <label class="form-label">Número de preparacion en ml</label>
+                                <label class="form-label">Número de preparacion en ml(Hipoclorito)</label>
                                 <select id="selectML" class="form-select" aria-label="Default select example">
                                     <option value="0" selected disabled>Seleccione cantidad ML</option>
                                 </select>
                             </div>
                             <!-- Text input numero L-->
                             <div class="form-outline mb-4 custom-input">
-                                <label class="form-label">Número de preparacion en L</label>
+                                <label class="form-label">Número de preparación en L(H<sub>2</sub>O)</label>
                                 <select id="selectL" class="form-select" aria-label="Default select example">
                                     <option value="0" selected disabled>Seleccione cantidad L</option>
                                 </select>
+                                <!-- <div>
+                                    <button type='button' class="custom-icon-zona" data-bs-toggle="modal" data-bs-target="#mostrarlitros"><i class="icon-circle-with-plus"></i></button>
+                                </div> -->
                             </div>
                         </div>
                         <!-- Text input Observacion-->
@@ -149,7 +153,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                         <div class="contenedorgeneral">
                             <div class="btonguardar">
                                 <input type="hidden" id="taskId">
-                                <button id="boton" type="submit" name="insert" class="btn btn-primary estiloboton">Guardar </button>
+                                <button id="boton" name="insert" class="btn btn-primary estiloboton">Guardar </button>
                             </div>
                             <div class="aniomes">
                                 <div class="styleanmes"><label for="mes">Seleccione el año:</label>
@@ -176,21 +180,26 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                                 <a class="btn btn-primary estilopdf" href="#" onclick="generarPDF()">PDF</a>
                             </div>
                         </div>
+                    </form>
                 </div>
-                </form>
 
-            </div>
+
             </div>
         </section>
     </main>
+
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
         Covifarma-2023
     </footer>
-    <script src="./js/bootstrap.min.js"></script>
+    <?php require_once("modallitros.php"); ?>
+
     <script src="./js/jquery-3.7.0.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxPreparacion.js"></script>
+    <script src="./js/time.js"></script>
     <script src="../js/menu_a.js"></script>
+    <script src="./js/select2.min.js"></script>
     <script>
         function generarPDF() {
             var anioSeleccionado = document.getElementById("anio").value;

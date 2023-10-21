@@ -4,6 +4,13 @@ require_once "../funciones/f_funcion.php";
 
 $anioSeleccionado = $_GET['anio'];
 $mesSeleccionado = $_GET['mes'];
+
+$mostrar = new m_almacen();
+$nombre = 'LBS-PHS-FR-03';
+$versionMuestraFecha = $mostrar->MostrarVersionGeneralFecha($nombre);
+$fechaDateTime = new DateTime($versionMuestraFecha);
+$anio = $fechaDateTime->format('Y');
+$mesExtra = intval($fechaDateTime->format('m'));
 /*convierte el valor en entero*/
 $mesNumerico = intval($mesSeleccionado);
 
@@ -22,8 +29,9 @@ $mesesEnLetras = array(
     12 => "DICIEMBRE",
 );
 $mesConvert = $mesesEnLetras[$mesNumerico];
+$mesversion = $mesesEnLetras[$mesExtra];
 
-$mostrar = new m_almacen();
+
 $dataControl = $mostrar->MostrarControlMaquinaPDF($anioSeleccionado, $mesSeleccionado);
 
 // $versionMuestra = $mostrar->VersionMostrar();
@@ -122,8 +130,8 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         <table>
             <tbody>
                 <tr>
-                    <!-- <td rowspan="4" style="text-align: center;"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
-                    <td rowspan="4" style="text-align: center;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
+                    <td rowspan="4" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td>
+                    <!-- <td rowspan="4" style="text-align: center;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
                     <td rowspan="4" style="text-align: center; font-size:25px; font-weigth:200;">LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS DE LIMPIEZA - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                     <td>LBS-PHS-FR-03</td>
 
@@ -135,7 +143,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                     <td>Página:</td>
                 </tr>
                 <tr>
-                    <td>Fecha: <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                    <td>Fecha: <?php echo ($mesversion . ' ' . $anio); ?> </td>
                 </tr>
 
 
@@ -214,8 +222,8 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
                     for ($i = 1; $i <= $numDias; $i++) {
                         if (in_array($i, $fechasArray)) {
-                            //echo '<td style="text-align:center; max-width: 10px;"><img src="http://localhost:8080/MASTER/control_alimento/images/check.png" alt="" width="25"></td>';
-                            echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt="" width="25"></td>';
+                            echo '<td style="text-align: center; max-width: 10px;"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt="" width="25"></td>';
+                            // echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt="" width="25"></td>';
                         } else {
                             echo "<td></td>";
                         }

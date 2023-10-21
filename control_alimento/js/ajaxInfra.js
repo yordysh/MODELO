@@ -139,7 +139,7 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#nombrezona").val("");
-              $("#mostrarzonas").modal("hide");
+              // $("#mostrarzonas").modal("hide");
               actualizarCombo();
             }
           });
@@ -151,8 +151,9 @@ $(function () {
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
+              $("#nombrezona").val("");
               fetchTasks();
-              $("#formularioZona").trigger("reset");
+              // $("#formularioZona").trigger("reset");
             }
           });
         }

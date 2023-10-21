@@ -330,6 +330,14 @@ td {
   flex: 1;
   padding: 5px 0;
 }
+.clock {
+  margin: 0;
+  color: #2287c5;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 10px;
+  text-align: center;
+}
 
 /*-------------- Estilo de responsive ---------------------*/
 

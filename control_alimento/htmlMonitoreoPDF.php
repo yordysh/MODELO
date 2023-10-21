@@ -7,6 +7,13 @@ $mesSeleccionado = $_GET['mes'];
 /*convierte el valor en enetero*/
 $mesNumerico = intval($mesSeleccionado);
 
+$mostrar = new m_almacen();
+
+$nombre = 'LBS-PHS-FR-01';
+$versionMuestraFecha = $mostrar->MostrarVersionGeneralFecha($nombre);
+$fechaDateTime = new DateTime($versionMuestraFecha);
+$anio = $fechaDateTime->format('Y');
+$mesExtra = intval($fechaDateTime->format('m'));
 
 $mesesEnLetras = array(
     1 => "ENERO",
@@ -23,14 +30,16 @@ $mesesEnLetras = array(
     12 => "DICIEMBRE",
 );
 $mesConvert = $mesesEnLetras[$mesNumerico];
+$mesversion = $mesesEnLetras[$mesExtra];
 
-$mostrar = new m_almacen();
+
 $datos = $mostrar->MostrarInfraestructuraPDF($anioSeleccionado, $mesSeleccionado);
+$data = $mostrar->MostrarInfraestructuraEstadoPDF($anioSeleccionado, $mesSeleccionado);
 // $versionMuestra = $mostrar->VersionMostrar();
-$nombre = 'LBS-PHS-FR-01';
+
 $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
-
+print_r($versionMuestraFecha);
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +50,6 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="http://192.168.1.102/SISTEMA/control_alimento/images/icon/covifarma-ico.ico" type="images/png">
     <title>COVIFARMA</title>
-
 </head>
 
 <body>
@@ -88,7 +96,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         }
 
         td.estado-R {
-            background-color: #4f79c2;
+            background-color: #008000;
             /* color: #f2f2f2; */
             text-align: center;
             height: 30px;
@@ -96,21 +104,21 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         }
 
         td.estado-NR {
-            background-color: #f56b3d;
+            background-color: #FF0000;
             /* color: #f2f2f2; */
             text-align: center;
             height: 30px;
         }
 
         td.estado-OB {
-            background-color: #f29d2e;
+            background-color: #ffff00;
             /* color: #f2f2f2; */
             text-align: center;
             height: 30px;
         }
 
         td.estado-PO {
-            background-color: #27a121;
+            background-color: #0000ff;
             /* color: #f2f2f2; */
             text-align: center;
             height: 30px;
@@ -157,8 +165,8 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         <table>
 
             <tr>
-                <!-- <td rowspan="4" style="text-align: center;"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MASTER/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
-                <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td>
+                <td rowspan="4" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td>
+                <!-- <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
                 <td rowspan="4" style="text-align: center; font-size:25px; font-weigth:200;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS - MES DE <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                 <td>LBS-PHS-FR-01</th>
             </tr>
@@ -169,7 +177,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 <td>Página:</td>
             </tr>
             <tr>
-                <td>Fecha: <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                <td>Fecha: <?php echo ($mesversion . ' ' . $anio); ?> </td>
             </tr>
 
         </table>
@@ -284,11 +292,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                     }
                 }
 
-                // Agregar columna en blanco si el mes tiene 30 días
-                // if ($columnasFechaTotal == 30) {
-                //     $columnas[31] = '';
-                // }
-                print_r($valor['estados']);
+                // print_r($valor['estados']);
                 // Asignar los estados a las columnas correspondientes
                 foreach ($valor['estados'] as $fecha => $estado) {
                     $dia = date('d', strtotime($fecha));
@@ -375,7 +379,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             array_multisort($fechas, SORT_ASC, $datos);
 
 
-            foreach ($datos as $fils) {
+            foreach ($data as $fils) {
 
                 echo '<tr>';
 

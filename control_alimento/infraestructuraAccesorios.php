@@ -31,6 +31,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <main>
         <section>
             <div class="container g-4 row">
+                <div class="clock" id='reloj' onload="time()"></div>
                 <div class="row g-4 top-div">
                     <center><label class="title">LBS-PHS-FR-01:<span class="titulo-span">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS</span></label></center>
                 </div>
@@ -156,6 +157,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxInfra.js"></script>
+    <script src="./js/time.js"></script>
     <script src="../js/menu_a.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>

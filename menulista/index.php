@@ -3,9 +3,9 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// require_once("../menulista/c_permisosmenu.php");
-// $controller = new c_permisosmenu();
-// $controller->c_permisos("1100");
+require_once("../menulista/c_permisosmenu.php");
+$controller = new c_permisosmenu();
+$controller->c_permisos("9002");
 /*--------------------------- */
 $menu = $_SESSION["menu_c"];
 $submenu = $_SESSION["submenu_c"];

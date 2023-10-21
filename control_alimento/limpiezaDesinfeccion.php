@@ -24,38 +24,13 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
 </head>
 
 <body>
-    <!-- <nav class="nav">
-        <div class="wave"></div>
-        <i class="icon-menu navOpenBtn"></i>
-        <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
-        <ul class="nav-links">
-            <div class="icon-cross navCloseBtn"></div>
-            <li>
-                <a class="" href="infraestructuraAccesorios.php">LBS-PHS-FR-01</a>
-            </li>
-            <li>
-                <a class="" href="preparacionSolucion.php">LBS-PHS-FR-02</a>
-            </li>
-            <li>
-                <a class="" href="controlMaquinas.php">LBS-PHS-FR-03</a>
-            </li>
-            <li>
-                <a class="" href="#">LBS-PHS-FR-04</a>
-            </li>
-
-        </ul>
-        <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
-        <div class="search-box">
-            <i class="icon-magnifying-glass search-icon"></i>
-            <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
-        </div>
-    </nav> -->
     <?php
     require_once('../menulista/index.php');
     ?>
     <main>
         <section>
             <div class="container g-4 row">
+                <div class="clock" id='reloj' onload="time()"></div>
                 <div class="row g-4 top-div">
                     <center><label class="title">LBS-PHS-FR-04:LIMPIEZA Y DESINFECCIÓN DE UTENSILIOS Y LIMPIEZA</label></center>
                 </div>
@@ -173,6 +148,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxLimpieza.js"></script>
+    <script src="./js/time.js"></script>
     <script src="../js/menu_a.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>
