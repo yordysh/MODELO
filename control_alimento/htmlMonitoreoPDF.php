@@ -39,7 +39,6 @@ $data = $mostrar->MostrarInfraestructuraEstadoPDF($anioSeleccionado, $mesSelecci
 
 $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
-print_r($versionMuestraFecha);
 ?>
 
 <!DOCTYPE html>
@@ -103,12 +102,12 @@ print_r($versionMuestraFecha);
 
         }
 
+        /* 
         td.estado-NR {
             background-color: #FF0000;
-            /* color: #f2f2f2; */
             text-align: center;
             height: 30px;
-        }
+        } */
 
         td.estado-OB {
             background-color: #ffff00;
@@ -118,7 +117,7 @@ print_r($versionMuestraFecha);
         }
 
         td.estado-PO {
-            background-color: #0000ff;
+            background-color: #FF0000;
             /* color: #f2f2f2; */
             text-align: center;
             height: 30px;
@@ -348,12 +347,13 @@ print_r($versionMuestraFecha);
                 <td class="ancho"></td>
                 <td class="estado-R ancho"></td>
                 <td class="mover-derecha ancho">L&D realizada</td>
-                <td class="estado-NR ancho"></td>
+                <!-- <td class="estado-NR ancho"></td> -->
+                <td class="estado-PO ancho"></td>
                 <td class="mover-derecha ancho">L&D pendiente</td>
                 <td class="estado-OB ancho"></td>
                 <td class="mover-derecha ancho">L&D observado</td>
-                <td class="estado-PO ancho"></td>
-                <td class="mover-derecha ancho">L&D postergado</td>
+                <!-- <td class="estado-PO ancho"></td>
+                <td class="mover-derecha ancho">L&D postergado</td> -->
             </tr>
         </tbody>
     </table>

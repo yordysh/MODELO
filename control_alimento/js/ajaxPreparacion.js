@@ -186,50 +186,7 @@ $(function () {
       });
     });
   }
-  /**-------- INSERTAR NUEVOS LITROS----------------------- */
-  $("#ponerlitros").click((e) => {
-    e.preventDefault();
-    let litrosadd = $("#litrosadd").val();
-    const accion = "guardarnuevoslitros";
-    $.ajax({
-      url: "./c_almacen.php",
-      type: "POST",
-      data: {
-        litrosadd: litrosadd,
-        accion: accion,
-      },
-      beforeSend: function () {
-        $(".preloader").css("opacity", "1");
-        $(".preloader").css("display", "block");
-      },
-      success: function (response) {
-        if (response == "ok") {
-          Swal.fire({
-            title: "¡Guardado exitoso!",
-            text: "Los datos se han guardado correctamente.",
-            icon: "success",
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              $("#litrosadd").val("");
-            }
-          });
-        } else {
-          Swal.fire(
-            "Error",
-            "Solo se puede añadir una preparación por día",
-            "error"
-          );
-          $("#formularioSoluciones").trigger("reset");
-        }
-      },
-      complete: function () {
-        $(".preloader").css("opacity", "0");
-        $(".preloader").css("display", "none");
-      },
-    });
-  });
-  /**----------------------------------------------------- */
+
   // $("#formularioSoluciones").submit(function (e) {
   $("#boton").click((e) => {
     e.preventDefault();
@@ -241,6 +198,7 @@ $(function () {
     var textAreaObservacion = $("#textAreaObservacion").val();
     var textAreaAccion = $("#textAreaAccion").val();
     var selectVerificacion = $("#selectVerificacion option:selected").text();
+    var valorextra = $("#valorextra").val();
 
     enviarCombos(
       selectSolucion,
@@ -250,7 +208,8 @@ $(function () {
       selectL,
       textAreaObservacion,
       textAreaAccion,
-      selectVerificacion
+      selectVerificacion,
+      valorextra
     );
     $("#formularioSoluciones").trigger("reset");
   });
@@ -263,7 +222,8 @@ $(function () {
     selectL,
     textAreaObservacion,
     textAreaAccion,
-    selectVerificacion
+    selectVerificacion,
+    valorextra
   ) {
     var accion = "enviarSelectCombo";
     $.ajax({
@@ -278,7 +238,12 @@ $(function () {
         textAreaObservacion: textAreaObservacion,
         textAreaAccion: textAreaAccion,
         selectVerificacion: selectVerificacion,
+        valorextra: valorextra,
         accion: accion,
+      },
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
       },
       success: function (response) {
         if (response == "ok") {
@@ -301,6 +266,10 @@ $(function () {
           );
           $("#formularioSoluciones").trigger("reset");
         }
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
       },
     });
   }

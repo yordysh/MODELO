@@ -620,9 +620,9 @@ class m_almacen
     return $insert1;
   }
 
-  public function InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION)
+  public function InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION)
   {
-    $stm = $this->bd->prepare("INSERT INTO T_ALERTA (COD_INFRAESTRUCTURA, FECHA_CREACION, FECHA_TOTAL,FECHA_ACORDAR, N_DIAS_POS,POSTERGACION) VALUES ( '$codInfraestructura','$fechaActual', '$fechaPostergacion','$fechaAcordar','$taskNdias','$POSTERGACION')");
+    $stm = $this->bd->prepare("INSERT INTO T_ALERTA (COD_INFRAESTRUCTURA, FECHA_CREACION, FECHA_TOTAL, N_DIAS_POS,POSTERGACION) VALUES ( '$codInfraestructura','$fechaActual', '$fechaPostergacion','$taskNdias','$POSTERGACION')");
 
     $insert2 = $stm->execute();
     return $insert2;
@@ -687,7 +687,7 @@ class m_almacen
                                   TA.OBSERVACION AS OBSERVACION, TA.ACCION_CORRECTIVA AS ACCION_CORRECTIVA,TA.VERIFICACION_REALIZADA AS VERIFICACION_REALIZADA FROM T_ALERTA TA 
                                   INNER JOIN T_INFRAESTRUCTURA TI ON TA.COD_INFRAESTRUCTURA=TI.COD_INFRAESTRUCTURA
                                   INNER JOIN T_ZONA_AREAS TZ ON TZ.COD_ZONA=TI.COD_ZONA
-                                  WHERE ESTADO='OB' AND MONTH(FECHA_TOTAL) = '$mesSeleccionado' AND YEAR(FECHA_TOTAL) = '$anioSeleccionado'");
+                                  WHERE ESTADO='OB'AND ESTADO='PO' AND MONTH(FECHA_TOTAL) = '$mesSeleccionado' AND YEAR(FECHA_TOTAL) = '$anioSeleccionado'");
 
       $stm->execute();
       $datos = $stm->fetchAll();
@@ -831,27 +831,8 @@ class m_almacen
     }
   }
 
-  // public function insertarLitros($litrosadd)
-  // {
-  //   try {
-  //     $cod = new m_almacen();
-  //     $nombre = 'LBS-PHS-FR-02';
 
-
-
-  //     $stm = $this->bd->prepare("INSERT INTO T_L(CANTIDAD_LITROS) VALUES('$litrosadd')");
-
-  //     $insert = $stm->execute();
-  //     $cod->generarVersionGeneral($nombre);
-  //     // }
-
-  //     return $insert;
-  //   } catch (Exception $e) {
-
-  //     die($e->getMessage());
-  //   }
-  // }
-  public function insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion)
+  public function insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion, $valorextra)
   {
     try {
       $cod = new m_almacen();
@@ -864,15 +845,21 @@ class m_almacen
       $valor = $stmU->fetchAll();
 
       $valor1 = count($valor);
-
+      $cod->generarVersionGeneral($nombre);
       // if ($valor1 == 0) {
-      $stm = $this->bd->prepare("INSERT INTO T_UNION(NOMBRE_INSUMOS, NOMBRE_PREPARACION,CANTIDAD_PORCENTAJE,
+      if ($valorextra) {
+        $stm = $this->bd->prepare("INSERT INTO T_UNION(NOMBRE_INSUMOS, NOMBRE_PREPARACION,CANTIDAD_PORCENTAJE,
+         OBSERVACION, ACCION_CORRECTIVA, VERIFICACION,CANTIDAD_DIFERENTE)
+        VALUES ('$selectSolucion','$selectPreparacion', '$selectCantidad','$textAreaObservacion','$textAreaAccion','$selectVerificacion','$valorextra')");
+
+        $insert = $stm->execute();
+      } else {
+        $stm = $this->bd->prepare("INSERT INTO T_UNION(NOMBRE_INSUMOS, NOMBRE_PREPARACION,CANTIDAD_PORCENTAJE,
                                     CANTIDAD_MILILITROS, CANTIDAD_LITROS, OBSERVACION, ACCION_CORRECTIVA, VERIFICACION)
                                   VALUES ('$selectSolucion','$selectPreparacion', '$selectCantidad','$selectML', '$selectL','$textAreaObservacion','$textAreaAccion','$selectVerificacion')");
 
-      $insert = $stm->execute();
-      $cod->generarVersionGeneral($nombre);
-      // }
+        $insert = $stm->execute();
+      }
 
       return $insert;
     } catch (Exception $e) {
@@ -904,9 +891,7 @@ class m_almacen
     try {
 
 
-      $stm = $this->bd->prepare(
-        "SELECT * FROM T_UNION WHERE MONTH(FECHA) = :mesSeleccionado AND YEAR(FECHA) = :anioSeleccionado"
-      );
+      $stm = $this->bd->prepare("SELECT * FROM T_UNION WHERE MONTH(FECHA) = :mesSeleccionado AND YEAR(FECHA) = :anioSeleccionado");
       $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
       $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
       $stm->execute();

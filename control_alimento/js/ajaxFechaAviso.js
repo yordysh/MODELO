@@ -127,9 +127,9 @@ $(function () {
               <label class='estilolabel'>
                 <input type="radio" name="estado-${task.COD_ALERTA}" value="R"> Realizado
               </label>
-              <label class='estilolabel'>
-                <input type="radio" name="estado-${task.COD_ALERTA}" value="NR"> No Realizado
-              </label>
+              <!-- <label class='estilolabel'>
+                 <input type="radio" name="estado-${task.COD_ALERTA}" value="NR"> No Realizado
+               </label> -->
               <label class='estilolabel'>
               <input type="radio" name="estado-${task.COD_ALERTA}" value="OB"> Observación
               </label>
@@ -146,9 +146,9 @@ $(function () {
             const realizadoRadio = document.querySelector(
               `input[name="estado-${task.COD_ALERTA}"][value="R"]`
             );
-            const noRealizadoRadio = document.querySelector(
-              `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
-            );
+            // const noRealizadoRadio = document.querySelector(
+            //   `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
+            // );
             const observacionButtonRadio = document.querySelector(
               `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
             );
@@ -158,15 +158,15 @@ $(function () {
 
             if (
               realizadoRadio.checked ||
-              noRealizadoRadio.checked ||
+              // noRealizadoRadio.checked ||
               observacionButtonRadio.checked ||
               postergacionRadio.checked
             ) {
               const estado = realizadoRadio.checked
                 ? "R"
-                : noRealizadoRadio.checked
-                ? "NR"
-                : observacionButtonRadio.checked
+                : // : noRealizadoRadio.checked
+                // ? "NR"
+                observacionButtonRadio.checked
                 ? "OB"
                 : "PO";
 
@@ -252,12 +252,12 @@ $(function () {
                 const realizadoRadio = document.querySelector(
                   `input[name="estado-${task.COD_ALERTA}"][value="R"]`
                 );
-                const noRealizadoRadio = document.querySelector(
-                  `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
-                );
+                // const noRealizadoRadio = document.querySelector(
+                //   `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
+                // );
 
                 realizadoRadio.checked = false;
-                noRealizadoRadio.checked = false;
+                // noRealizadoRadio.checked = false;
 
                 // Agregar evento de clic al botón de confirmación dentro del modal
                 const modalConfirmButton = document.querySelector(
@@ -344,12 +344,12 @@ $(function () {
           observacionTextarea.style.display = this.checked ? "block" : "none";
         });
 
-        const noRealizadoRadio = document.querySelector(
-          `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
-        );
-        noRealizadoRadio.addEventListener("change", function () {
-          observacionTextarea.style.display = this.checked ? "block" : "none";
-        });
+        // const noRealizadoRadio = document.querySelector(
+        //   `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
+        // );
+        // noRealizadoRadio.addEventListener("change", function () {
+        //   observacionTextarea.style.display = this.checked ? "block" : "none";
+        // });
 
         const realizadoRadio = document.querySelector(
           `input[name="estado-${task.COD_ALERTA}"][value="R"]`
@@ -359,27 +359,27 @@ $(function () {
         });
         const obs = document.getElementById("postergacion");
 
-        if (task.NDIAS > 6 && task.POSTERGACION == "NO") {
-          postergacionRadio.style.display = "block";
-          realizadoRadio.addEventListener("change", function () {
-            observacionTextarea.style.display = "block";
-          });
-          noRealizadoRadio.addEventListener("change", function () {
-            observacionTextarea.style.display = "block";
-          });
-          console.log(task.POSTERGACION);
-        } else {
-          if (task.POSTERGACION == "SI") {
-            realizadoRadio.addEventListener("change", function () {
-              observacionTextarea.style.display = "block";
-            });
-            noRealizadoRadio.addEventListener("change", function () {
-              observacionTextarea.style.display = "block";
-            });
-          }
-          postergacionRadio.style.display = "none";
-          obs.style.visibility = "hidden";
-        }
+        // if (task.NDIAS > 6 && task.POSTERGACION == "NO") {
+        //     postergacionRadio.style.display = "block";
+        //     realizadoRadio.addEventListener("change", function () {
+        //       observacionTextarea.style.display = "block";
+        //     });
+        //     noRealizadoRadio.addEventListener("change", function () {
+        //       observacionTextarea.style.display = "block";
+        //     });
+        //     console.log(task.POSTERGACION);
+        //   } else {
+        //     if (task.POSTERGACION == "SI") {
+        //       realizadoRadio.addEventListener("change", function () {
+        //         observacionTextarea.style.display = "block";
+        //       });
+        //       noRealizadoRadio.addEventListener("change", function () {
+        //         observacionTextarea.style.display = "block";
+        //       });
+        //     }
+        //     postergacionRadio.style.display = "none";
+        //     obs.style.visibility = "hidden";
+        //   }
       }
       const accion = "fechaalerta";
       $.ajax({

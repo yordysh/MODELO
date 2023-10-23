@@ -142,6 +142,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                                 <select id="selectL" class="form-select" aria-label="Default select example">
                                     <option value="0" selected disabled>Seleccione cantidad L</option>
                                 </select>
+                                <input type="number" id="valorextra">
                                 <!-- <div>
                                     <button type='button' class="custom-icon-zona" data-bs-toggle="modal" data-bs-target="#mostrarlitros"><i class="icon-circle-with-plus"></i></button>
                                 </div> -->

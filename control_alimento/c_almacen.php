@@ -112,8 +112,9 @@ if ($accion == 'insertar') {
     $textAreaObservacion = trim($_POST['textAreaObservacion']);
     $textAreaAccion = trim($_POST['textAreaAccion']);
     $selectVerificacion = trim($_POST['selectVerificacion']);
+    $valorextra = trim($_POST['valorextra']);
 
-    $respuesta = c_almacen::c_selectCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion);
+    $respuesta = c_almacen::c_selectCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion, $valorextra);
     echo $respuesta;
 } elseif ($accion == 'buscarprepararacion') {
 
@@ -970,46 +971,98 @@ class c_almacen
         $taskNdias = $_POST['taskNdias'];
         if ($taskNdias == 1) {
 
-            $codInfraestructura = $_POST['codInfraestructura'];
+            if (isset($_POST['fechaPostergacion'])) {
 
-            $FECHA_CREACION = $mostrar->c_horaserversql('F');
-            $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y',  $FECHA_CREACION);
-            $FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
+                $codInfraestructura = $_POST['codInfraestructura'];
 
-            // Verificar si la fecha total cae en domingo
-            if (date('N', strtotime($FECHA_TOTAL)) == 7) {
-                $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
-            }
+                $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
 
-            $insert = $mostrar->InsertarAlerta($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $taskNdias);
+                $fechaActual = $mostrar->c_horaserversql('F');
 
-            if ($insert) {
+                $DIAS_DESCUENTO = 1;
 
-                return "ok";
+                $fechaPost = DateTime::createFromFormat('d/m/Y', $fechaPostergacion);
+                $formattedDate = $fechaPost->format('d-m-Y');
+                // $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
+
+                $POSTERGACION = 'SI';
+
+                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $formattedDate, $taskNdias, $POSTERGACION);
+
+                if ($insert) {
+                    echo "Inserción exitosa";
+                } else {
+                    echo "Error en la inserción: ";
+                }
             } else {
-                return "error";
+
+                $codInfraestructura = $_POST['codInfraestructura'];
+
+                $FECHA_CREACION = $mostrar->c_horaserversql('F');
+                $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y',  $FECHA_CREACION);
+                $FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
+
+
+                // Verificar si la fecha total cae en domingo
+                if (date('N', strtotime($FECHA_TOTAL)) == 7) {
+                    $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
+                }
+
+                $insert = $mostrar->InsertarAlerta($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $taskNdias);
+
+                if ($insert) {
+
+                    return "ok";
+                } else {
+                    return "error";
+                }
             }
         } else if ($taskNdias == 2) {
 
+            if (isset($_POST['fechaPostergacion'])) {
 
-            $codInfraestructura = $_POST['codInfraestructura'];
+                $codInfraestructura = $_POST['codInfraestructura'];
 
-            $FECHA_CREACION = $mostrar->c_horaserversql('F');
-            $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y',  $FECHA_CREACION);
-            $FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
+                $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
 
+                $fechaActual = $mostrar->c_horaserversql('F');
 
-            // Verificar si la fecha total cae en domingo
-            if (date('N', strtotime($FECHA_TOTAL)) == 7) {
-                $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
-            }
+                $DIAS_DESCUENTO = 1;
 
-            $insert = $mostrar->InsertarAlerta($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $taskNdias);
+                $fechaPost = DateTime::createFromFormat('d/m/Y', $fechaPostergacion);
+                $formattedDate = $fechaPost->format('d-m-Y');
+                // $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
 
-            if ($insert) {
-                echo "ok";
+                $POSTERGACION = 'SI';
+
+                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $formattedDate, $taskNdias, $POSTERGACION);
+
+                if ($insert) {
+                    echo "Inserción exitosa";
+                } else {
+                    echo "Error en la inserción: ";
+                }
             } else {
-                echo "error";
+
+                $codInfraestructura = $_POST['codInfraestructura'];
+
+                $FECHA_CREACION = $mostrar->c_horaserversql('F');
+                $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y',  $FECHA_CREACION);
+                $FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
+
+
+                // Verificar si la fecha total cae en domingo
+                if (date('N', strtotime($FECHA_TOTAL)) == 7) {
+                    $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
+                }
+
+                $insert = $mostrar->InsertarAlerta($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $taskNdias);
+
+                if ($insert) {
+                    echo "ok";
+                } else {
+                    echo "error";
+                }
             }
         } elseif ($taskNdias == 7) {
 
@@ -1025,12 +1078,12 @@ class c_almacen
 
                 $fechaPost = DateTime::createFromFormat('d/m/Y', $fechaPostergacion);
                 $formattedDate = $fechaPost->format('d-m-Y');
-                $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
+                // $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
 
                 $POSTERGACION = 'SI';
 
-                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION);
-
+                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION);
+                var_dump($insert);
                 if ($insert) {
                     echo "Inserción exitosa";
                 } else {
@@ -1083,12 +1136,12 @@ class c_almacen
 
                 $fechaPost = DateTime::createFromFormat('d/m/Y', $fechaPostergacion);
                 $formattedDate = $fechaPost->format('d-m-Y');
-                $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
+                // $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
 
                 // echo "FECHASS" . $fechaAcordar;
                 $POSTERGACION = 'SI';
 
-                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION);
+                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION);
 
                 if ($insert) {
                     echo "Inserción exitosa";
@@ -1143,12 +1196,12 @@ class c_almacen
 
                 $fechaPost = DateTime::createFromFormat('d/m/Y', $fechaPostergacion);
                 $formattedDate = $fechaPost->format('d-m-Y');
-                $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
+                // $fechaAcordar = date('d-m-Y', strtotime($formattedDate . '-' . $DIAS_DESCUENTO . ' days'));
 
                 // echo "FECHASS" . $fechaAcordar;
                 $POSTERGACION = 'SI';
 
-                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $fechaAcordar, $taskNdias, $POSTERGACION);
+                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION);
 
                 if ($insert) {
                     echo "Inserción exitosa";
@@ -1302,12 +1355,12 @@ class c_almacen
     //         };
     //     }
     // }
-    static function c_selectCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion)
+    static function c_selectCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion, $valorextra)
     {
         $mostrar = new m_almacen();
         if (isset($selectSolucion) && isset($selectPreparacion) && isset($selectCantidad) && isset($selectML) && isset($selectL) && isset($textAreaObservacion) && isset($textAreaAccion) && isset($selectVerificacion)) {
 
-            $respuesta = $mostrar->insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion);
+            $respuesta = $mostrar->insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion, $valorextra);
             if ($respuesta) {
 
                 return "ok";
