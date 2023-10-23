@@ -24,6 +24,24 @@ $dataInsumos = $mostrar->MostrarSoluciones();
 </head>
 
 <body>
+    <!-- preloader -->
+    <div class="preloader" style="display: none;">
+        <div class="loader">
+            <div class="ytp-spinner">
+                <div class="ytp-spinner-container">
+                    <div class="ytp-spinner-rotator">
+                        <div class="ytp-spinner-left">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                        <div class="ytp-spinner-right">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin -->
     <?php
     require_once('../menulista/index.php');
     ?>

@@ -1,4 +1,10 @@
 <?php
+session_start();
+
+$codusuario = $_SESSION["cod"];
+// $codusuario = '0002';
+?>
+<?php
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
@@ -25,6 +31,24 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
 </head>
 
 <body>
+    <!-- preloader -->
+    <div class="preloader" style="display: none;">
+        <div class="loader">
+            <div class="ytp-spinner">
+                <div class="ytp-spinner-container">
+                    <div class="ytp-spinner-rotator">
+                        <div class="ytp-spinner-left">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                        <div class="ytp-spinner-right">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin -->
     <?php
     require_once('../menulista/index.php');
     ?>
@@ -57,7 +81,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                         </table>
                     </div>
                     <form method="post" action="" id="formularioInfra">
-
+                        <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">
                         <!-- Text input -->
                         <div class="form-outline mb-4">
                             <input id="id" type="hidden" class="form-control" name="id" />

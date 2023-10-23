@@ -1,34 +1,18 @@
 $(function () {
   fetchTasks();
   let edit = false;
-  //------------- MENU BAR JS ---------------//
-  // let nav = document.querySelector(".nav"),
-  //   searchIcon = document.querySelector("#searchIcon"),
-  //   navOpenBtn = document.querySelector(".navOpenBtn"),
-  //   navCloseBtn = document.querySelector(".navCloseBtn");
 
-  // searchIcon.addEventListener("click", () => {
-  //   nav.classList.toggle("openSearch");
-  //   nav.classList.remove("openNav");
-  //   if (nav.classList.contains("openSearch")) {
-  //     return searchIcon.classList.replace(
-  //       "icon-magnifying-glass",
-  //       "icon-cross"
-  //     );
-  //   }
-  //   searchIcon.classList.replace("icon-cross", "icon-magnifying-glass");
-  // });
+  //===== Prealoder
 
-  // navOpenBtn.addEventListener("click", () => {
-  //   nav.classList.add("openNav");
-  //   nav.classList.remove("openSearch");
-  // });
+  window.onload = function () {
+    fadeout();
+  };
 
-  // navCloseBtn.addEventListener("click", () => {
-  //   nav.classList.remove("openNav");
-  // });
-
-  //----------------------------------------------------------------//
+  function fadeout() {
+    document.querySelector(".preloader").style.opacity = "0";
+    document.querySelector(".preloader").style.display = "none";
+  }
+  //-------------------------------------------//
 
   $("#search").keyup(() => {
     if ($("#search").val()) {
@@ -124,6 +108,10 @@ $(function () {
         codfre: $("#taskId").val(),
       },
       type: "POST",
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       success: function (response) {
         console.log(response);
 
@@ -152,6 +140,10 @@ $(function () {
             }
           });
         }
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
       },
     });
   });

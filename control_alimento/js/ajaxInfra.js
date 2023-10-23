@@ -6,6 +6,18 @@ $(function () {
 
   $("#selectInfra").select2();
 
+  //===== Prealoder
+
+  window.onload = function () {
+    fadeout();
+  };
+
+  function fadeout() {
+    document.querySelector(".preloader").style.opacity = "0";
+    document.querySelector(".preloader").style.display = "none";
+  }
+  //-------------------------------------------//
+
   //------------- Busqueda con ajax infraestructura Accesorio----------------//
 
   $("#search").keyup(() => {
@@ -77,9 +89,13 @@ $(function () {
         // ndias: $("#NDIAS").val(),
         codinfra: $("#taskId").val(),
         valorSeleccionado: $("#selectInfra").val(),
-        // valorSeleccionado: $("#task_zona").val(),
+        codpersonal: $("#codpersonal").val(),
       },
       type: "POST",
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       success: function (response) {
         console.log(response);
         if (response == "ok") {
@@ -110,6 +126,10 @@ $(function () {
           });
         }
         // console.log(data);
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
       },
     });
   });

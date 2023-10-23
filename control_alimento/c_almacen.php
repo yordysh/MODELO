@@ -37,11 +37,13 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_buscar_zona($buscarzona);
     echo $respuesta;
 } elseif ($accion == 'insertarinfra') {
+
     $nombreinfraestructura = strtoupper(trim($_POST['nombreinfraestructura']));
     $ndias = trim($_POST['ndias']);
     $valorSeleccionado = trim($_POST['valorSeleccionado']);
+    $codpersonal = trim($_POST['codpersonal']);
 
-    $respuesta = c_almacen::c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias);
+    $respuesta = c_almacen::c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias, $codpersonal);
 
     echo $respuesta;
 } elseif ($accion == 'editarinfra') {
@@ -718,12 +720,12 @@ class c_almacen
         }
     }
 
-    static function c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias)
+    static function c_insertar_infra($valorSeleccionado, $nombreinfraestructura, $ndias, $codpersonal)
     {
         $mostrar = new m_almacen();
         if (isset($nombreinfraestructura) && isset($ndias) && isset($valorSeleccionado)) {
 
-            $respuesta = $mostrar->insertarInfraestructura($valorSeleccionado, $nombreinfraestructura,  $ndias);
+            $respuesta = $mostrar->insertarInfraestructura($valorSeleccionado, $nombreinfraestructura,  $ndias, $codpersonal);
             if ($respuesta) {
 
                 return "ok";

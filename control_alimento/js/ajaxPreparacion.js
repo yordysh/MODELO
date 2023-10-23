@@ -2,6 +2,18 @@ $(function () {
   fetchTasks();
   cargarSelect();
 
+  //===== Prealoder
+
+  window.onload = function () {
+    fadeout();
+  };
+
+  function fadeout() {
+    document.querySelector(".preloader").style.opacity = "0";
+    document.querySelector(".preloader").style.display = "none";
+  }
+  //-------------------------------------------//
+
   //----------------------------------------------------------------//
 
   $("#search").keyup(() => {
@@ -186,6 +198,10 @@ $(function () {
         litrosadd: litrosadd,
         accion: accion,
       },
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       success: function (response) {
         if (response == "ok") {
           Swal.fire({
@@ -206,6 +222,10 @@ $(function () {
           );
           $("#formularioSoluciones").trigger("reset");
         }
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
       },
     });
   });

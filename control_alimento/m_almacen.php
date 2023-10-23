@@ -178,6 +178,13 @@ class m_almacen
       if ($valor1 === 0) {
         $stmVersion = $this->bd->prepare("UPDATE T_VERSION_GENERAL SET VERSION = '$codPrefix', FECHA_VERSION='$FECHA_VERSION'  WHERE NOMBRE='$nombre'");
         $stmVersion->execute();
+      } else {
+
+        $stm = $this->bd->prepare("SELECT MAX(VERSION) AS VERSION FROM T_VERSION_GENERAL WHERE NOMBRE='$nombre'");
+        $stm->execute();
+        $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+        $maxContador = $resultado['VERSION'];
+        return $maxContador;
       }
     }
   }
@@ -455,7 +462,7 @@ class m_almacen
       print_r("Error al buscar fecha sql" . $e);
     }
   }
-  public function insertarInfraestructura($valorSeleccionado, $NOMBRE_INFRAESTRUCTURA, $NDIAS)
+  public function insertarInfraestructura($valorSeleccionado, $NOMBRE_INFRAESTRUCTURA, $NDIAS, $codpersonal)
   {
     try {
 
@@ -470,13 +477,15 @@ class m_almacen
       // $FECHAACTUAL = '19/10/2023';
 
       // $FECHA = date('Y-m-d', strtotime(str_replace('/', '-', $FECHAACTUAL)));
+      $VERSION = $cod->generarVersionGeneral($nombre);
+      // var_dump($VERSION);
+      // exit();
 
       if ($repetir == 0) {
 
-        $VERSION = $cod->generarVersionGeneral($nombre);
+        $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION,USUARIO)
+                                    VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION','$codpersonal')");
 
-        $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION)
-                                    VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION')");
         $insert = $stm->execute();
 
 
@@ -941,7 +950,7 @@ class m_almacen
       $nombre = 'LBS-PHS-FR-04';
 
       $codFrecuencia = $codGen->generarCodigoLimpieza();
-      $version = $codGen->generarVersion();
+      // $version = $codGen->generarVersion();
 
       $fechaDHoy = $codGen->c_horaserversql('F');
       // $fechaDHoy = date('Y-m-d');
@@ -954,7 +963,7 @@ class m_almacen
       $contador = count($valor);
 
       if ($contador == 0) {
-
+        $version = $codGen->generarVersionGeneral($nombre);
         $stm = $this->bd->prepare("INSERT INTO T_FRECUENCIA(COD_FRECUENCIA, COD_ZONA, NOMBRE_FRECUENCIA, VERSION,OBSERVACION,ACCION_CORRECTIVA,VERIFICACION)
                                   VALUES ('$codFrecuencia','$selectZona', '$textfrecuencia','$version','$textAreaObservacion','$textAreaAccion','$selectVerificacion')");
 
