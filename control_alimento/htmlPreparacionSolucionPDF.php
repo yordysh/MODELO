@@ -7,10 +7,10 @@ $mesSeleccionado = $_GET['mes'];
 
 $mostrar = new m_almacen();
 $nombre = 'LBS-PHS-FR-02';
-$versionMuestraFecha = $mostrar->MostrarVersionGeneralFecha($nombre);
-$fechaDateTime = new DateTime($versionMuestraFecha);
-$anio = $fechaDateTime->format('Y');
-$mesExtra = intval($fechaDateTime->format('m'));
+// $versionMuestraFecha = $mostrar->MostrarVersionGeneralFecha($nombre);
+// $fechaDateTime = new DateTime($versionMuestraFecha);
+// $anio = $fechaDateTime->format('Y');
+// $mesExtra = intval($fechaDateTime->format('m'));
 /*convierte el valor en enetero*/
 $mesNumerico = intval($mesSeleccionado);
 
@@ -29,12 +29,12 @@ $mesesEnLetras = array(
     12 => "DICIEMBRE",
 );
 $mesConvert = $mesesEnLetras[$mesNumerico];
-$mesversion = $mesesEnLetras[$mesExtra];
+// $mesversion = $mesesEnLetras[$mesExtra];
 
 
 $datos = $mostrar->MostrarPreparacionSolucionPDF($anioSeleccionado, $mesSeleccionado);
 // $versionMuestra = $mostrar->VersionMostrar();
-$versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
+// $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
 ?>
 <!DOCTYPE html>
@@ -137,14 +137,14 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
                 </tr>
                 <tr>
-                    <td>Versión: <?php echo $versionMuestra ?> </td>
+                    <!-- <td>Versión: <?php echo $versionMuestra ?> </td> -->
                 </tr>
                 <tr>
                     <td>Página:</td>
                 </tr>
 
                 <tr>
-                    <td>Fecha: <?php echo ($mesversion . ' ' . $anio); ?> </td>
+                    <!-- <td>Fecha: <?php echo ($mesversion . ' ' . $anio); ?> </td> -->
                 </tr>
 
 
@@ -260,34 +260,60 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             $contadorN++;
             echo '<tbody>';
             echo '<tr>';
-            echo '<td style="text-align:center;">' . convFecSistema($filas['FECHA']) . '</td>';
+            // echo '<td style="text-align:center;">' . convFecSistema($filas['FECHA']) . '</td>';
+            echo '<td></td>';
+            $arreglo = [0, 0, 0];
+            $r = 1;
+            while ($r <= 3) {
+                if ($valordiferente >= 10) {
+                    $valordiferente = $valordiferente % 10;
+                    $arreglo[2] = 1;
+                } elseif ($valordiferente >= 5) {
+                    $valordiferente = $valordiferente % 5;
+                    $arreglo[1] = 1;
+                } elseif ($valordiferente >= 1) {
+                    $arreglo[0] = 1;
+                }
+                $r++;
+            }
             for ($i = 0; $i < 28; $i++) {
-                if ($i == 0) {
-                    if ($filas['CANTIDAD_MILILITROS'] == '50ml') {
-                        echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
-                    } elseif ($porcentaje == '5%') {
-                        if (($valordiferente > 1 && $valordiferente < 5) || $multiplo > 0 && $multiplo < 5) {
-                            echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
-                        }
-                    }
-                } else if ($i == 1) {
-                    if ($filas['CANTIDAD_MILILITROS'] == '250ml') {
-                        echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
-                    } elseif ($porcentaje == '5%') {
-                        if (($valordiferente > 5 && $valordiferente < 10) || $multiplo > 0 && $multiplo < 5 || $multiplo1 >= 5 && $multiplo1 < 10) {
-                            echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
-                        }
-                    }
-                    // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 2) {
-                    if ($filas['CANTIDAD_MILILITROS'] == '500ml') {
-                        echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
-                    } elseif ($porcentaje == '5%') {
 
-                        if (($valordiferente > 10) || $multiplo1 == 0) {
+                if ($i == 0 && $filas['CANTIDAD_MILILITROS'] == '50ml') {
+                    for ($j = 0; $j < count($arreglo); $j++) {
+                        if ($arreglo[$j] == 1) {
                             echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                        } else {
+                            echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                         }
                     }
+                    // if ($filas['CANTIDAD_MILILITROS'] == '50ml') {
+                    echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                    // }
+                    // elseif ($porcentaje == '5%') {
+                    //     if (($valordiferente > 1 && $valordiferente < 5) || $multiplo > 0 && $multiplo < 5) {
+                    //         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                    //     }
+                    // }
+                } else if ($i == 1 && $filas['CANTIDAD_MILILITROS'] == '250ml') {
+                    // if ($filas['CANTIDAD_MILILITROS'] == '250ml') {
+                    echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                    // }
+                    //  elseif ($porcentaje == '5%') {
+                    //     if (($valordiferente > 5 && $valordiferente < 10) || $multiplo > 0 && $multiplo < 5 || $multiplo1 >= 5 && $multiplo1 < 10) {
+                    //         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                    //     }
+                    // }
+                    // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
+                } else if ($i == 2 && $filas['CANTIDAD_MILILITROS'] == '500ml') {
+                    // if ($filas['CANTIDAD_MILILITROS'] == '500ml') {
+                    echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                    // }
+                    //  elseif ($porcentaje == '5%') {
+
+                    //     if (($valordiferente > 10) || $multiplo1 == 0) {
+                    //         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                    //     }
+                    // }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                 } else if ($i == 3 && $filas['CANTIDAD_MILILITROS'] == '39ml') {
                     echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
@@ -368,6 +394,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                     echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                 }
             }
+
             echo '<td style="text-align:center;">USUARIO</td>';
             echo '</tr>';
             if ($contadorN % 26 == 0) {
