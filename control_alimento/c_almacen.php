@@ -82,7 +82,9 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_checkbox_confirma();
     echo $respuesta;
 } elseif ($accion == 'insertaralertamix') {
+
     $respuesta = c_almacen::c_insertar_alertamix();
+
     echo $respuesta;
 } elseif ($accion == 'fechaalerta') {
     $respuesta = c_almacen::c_fecha_alerta();
@@ -1358,7 +1360,7 @@ class c_almacen
     static function c_selectCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion, $valorextra)
     {
         $mostrar = new m_almacen();
-        if (isset($selectSolucion) && isset($selectPreparacion) && isset($selectCantidad) && isset($selectML) && isset($selectL) && isset($textAreaObservacion) && isset($textAreaAccion) && isset($selectVerificacion)) {
+        if (isset($selectSolucion) && isset($selectPreparacion)) {
 
             $respuesta = $mostrar->insertarCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion, $valorextra);
             if ($respuesta) {

@@ -200,6 +200,34 @@ $(function () {
     var selectVerificacion = $("#selectVerificacion option:selected").text();
     var valorextra = $("#valorextra").val();
 
+    if ($("#selectInsumos").val() == null) {
+      Swal.fire({
+        title: "Llenar campo",
+        text: "Elegir un producto de saneamiento",
+        icon: "question",
+        confirmButtonText: "Ok",
+      });
+      return;
+    }
+    if ($("#selectPreparaciones").val() == null) {
+      Swal.fire({
+        title: "Llenar campo",
+        text: "Elegir una preparación.",
+        icon: "question",
+        confirmButtonText: "Ok",
+      });
+      return;
+    }
+    if ($("#selectCantidad").val() == null) {
+      Swal.fire({
+        title: "Llenar campo",
+        text: "Elegir una cantidad.",
+        icon: "question",
+        confirmButtonText: "Ok",
+      });
+      return;
+    }
+
     enviarCombos(
       selectSolucion,
       selectPreparacion,
@@ -211,7 +239,7 @@ $(function () {
       selectVerificacion,
       valorextra
     );
-    $("#formularioSoluciones").trigger("reset");
+    // $("#formularioSoluciones").trigger("reset");
   });
 
   function enviarCombos(
@@ -255,15 +283,20 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
-              $("#formularioSoluciones").trigger("reset");
+              // $("#formularioSoluciones").trigger("reset");
+              $("#selectInsumos").val("0").trigger("change");
+              $("#selectPreparaciones").val("0").trigger("change");
+              $("#selectCantidad").val("0").trigger("change");
+              $("#selectML").val("0").trigger("change");
+              $("#selectL").val("0").trigger("change");
+              $("#textAreaObservacion").val("");
+              $("#textAreaAccion").val("");
+              $("#selectVerificacion").val("0").trigger("change");
+              $("#valorextra").val("");
             }
           });
         } else {
-          Swal.fire(
-            "Error",
-            "Solo se puede añadir una preparación por día",
-            "error"
-          );
+          Swal.fire("Error", "Error al insertar", "error");
           $("#formularioSoluciones").trigger("reset");
         }
       },

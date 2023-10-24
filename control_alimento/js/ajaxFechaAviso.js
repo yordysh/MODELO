@@ -291,7 +291,7 @@ $(function () {
                     dataType: "json",
                   })
                     .done(function (response) {
-                      console.log(response);
+                      // console.log(response);
                       $("#myModalExito").modal("hide");
                       mostrarAlertas(data, index + 1);
 
@@ -300,8 +300,8 @@ $(function () {
                       const accion = "insertaralertamix";
                       // Insertar nueva alerta con la fecha total utilizando una solicitud AJAX
                       $.ajax({
-                        // url: "../control_alimento/c_almacen.php",
-                        url: "./c_almacen.php",
+                        url: "../control_alimento/c_almacen.php",
+                        // url: "./c_almacen.php",
                         method: "POST",
                         data: {
                           accion: accion,

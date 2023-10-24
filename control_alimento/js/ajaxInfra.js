@@ -97,7 +97,7 @@ $(function () {
         $(".preloader").css("display", "block");
       },
       success: function (response) {
-        console.log(response);
+        // console.log(response);
         if (response == "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
@@ -107,7 +107,10 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
-              $("#formularioInfra").trigger("reset");
+              // $("#formularioInfra").trigger("reset");
+              $("#taskId").val("");
+              $("#selectFrecuencia").val("0").trigger("change");
+              $("#NOMBRE_INFRAESTRUCTURA").val("");
               $("#selectInfra").val("none").trigger("change");
             }
           });

@@ -623,7 +623,6 @@ class m_almacen
   public function InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION)
   {
     $stm = $this->bd->prepare("INSERT INTO T_ALERTA (COD_INFRAESTRUCTURA, FECHA_CREACION, FECHA_TOTAL, N_DIAS_POS,POSTERGACION) VALUES ( '$codInfraestructura','$fechaActual', '$fechaPostergacion','$taskNdias','$POSTERGACION')");
-
     $insert2 = $stm->execute();
     return $insert2;
   }
