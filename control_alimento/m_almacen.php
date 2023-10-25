@@ -842,14 +842,39 @@ class m_almacen
       $stmU = $this->bd->prepare("SELECT * FROM T_UNION WHERE cast(FECHA as DATE) =cast('$fechaDHoy' as date)");
       $stmU->execute();
       $valor = $stmU->fetchAll();
-
       $valor1 = count($valor);
+      if ($selectCantidad == '5%') {
+        $valorcant = '1';
+      } elseif ($selectCantidad == '3.9%') {
+        $valorcant = '2';
+      } elseif ($selectCantidad == 'N°de preparaciones') {
+        $valorcant = '3';
+      } elseif ($selectCantidad == '50ppm') {
+        $valorcant = '4';
+      } elseif ($selectCantidad == '100ppm') {
+        $valorcant = '5';
+      } elseif ($selectCantidad == '200ppm') {
+        $valorcant = '6';
+      } elseif ($selectCantidad == '300ppm') {
+        $valorcant = '7';
+      } elseif ($selectCantidad == '400ppm') {
+        $valorcant = '8';
+      } elseif ($selectCantidad == '200ppm') {
+        $valorcant = '9';
+      }
+      $valormili = $this->bd->prepare("SELECT top 1 (CANTIDAD_MILILITROS) AS CANTIDAD_MILILITROS  FROM T_ML where ID_CANTIDAD='$valorcant'");
+      $valormili->execute();
+      $result = $valormili->fetch(PDO::FETCH_ASSOC);
+      $mili = intval($result['CANTIDAD_MILILITROS']);
+
       $cod->generarVersionGeneral($nombre);
       // if ($valor1 == 0) {
       if ($valorextra) {
+        $valormililitros = ($mili * $valorextra) . "ml";
+        $valorlitros = $valorextra . "L";
         $stm = $this->bd->prepare("INSERT INTO T_UNION(NOMBRE_INSUMOS, NOMBRE_PREPARACION,CANTIDAD_PORCENTAJE,
-         OBSERVACION, ACCION_CORRECTIVA, VERIFICACION,CANTIDAD_DIFERENTE)
-        VALUES ('$selectSolucion','$selectPreparacion', '$selectCantidad','$textAreaObservacion','$textAreaAccion','$selectVerificacion','$valorextra')");
+        CANTIDAD_MILILITROS, CANTIDAD_LITROS, OBSERVACION, ACCION_CORRECTIVA, VERIFICACION,CANTIDAD_DIFERENTE)
+        VALUES ('$selectSolucion','$selectPreparacion', '$selectCantidad','$valormililitros','$valorlitros','$textAreaObservacion','$textAreaAccion','$selectVerificacion','$valorextra')");
 
         $insert = $stm->execute();
       } else {
@@ -1044,8 +1069,7 @@ class m_almacen
       $cod = new m_almacen();
       $COD_CONTROL_MAQUINA = $cod->generarCodigoControlMaquina();
       $nombre = 'LBS-PHS-FR-03';
-      //var_dump("codio" . $COD_CONTROL_MAQUINA);
-      $VERSION = $cod->generarVersion();
+
       $repetir = $cod->contarRegistrosControl($NOMBRE_CONTROL_MAQUINA, $valorSeleccionado);
 
       $FECHA = $cod->c_horaserversql('F');
@@ -1054,7 +1078,7 @@ class m_almacen
       // var_dump($FECHA);
 
       if ($repetir == 0) {
-
+        $VERSION = $cod->generarVersionGeneral($nombre);
         $stm = $this->bd->prepare("INSERT INTO T_CONTROL_MAQUINA(COD_CONTROL_MAQUINA, COD_ZONA,NOMBRE_CONTROL_MAQUINA ,N_DIAS_CONTROL, FECHA,VERSION)
                                   VALUES ('$COD_CONTROL_MAQUINA','$valorSeleccionado', '$NOMBRE_CONTROL_MAQUINA','$N_DIAS_CONTROL', '$FECHA', '$VERSION')");
 

@@ -94,6 +94,16 @@ $(function () {
     var textAreaAccion = $("#textAreaAccion").val();
     var selectVerificacion = $("#selectVerificacion option:selected").text();
 
+    if ($("#selectZona").val() == null) {
+      Swal.fire({
+        title: "Llenar campo",
+        text: "Seleccione una zona",
+        icon: "question",
+        confirmButtonText: "Ok",
+      });
+      return;
+    }
+
     const accion = edit === false ? "insertarLimpieza" : "actualizarLimpieza";
 
     $.ajax({
@@ -124,6 +134,7 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
+              $("#selectZona").val("none").trigger("change");
               $("#formularioLimpieza").trigger("reset");
             }
           });

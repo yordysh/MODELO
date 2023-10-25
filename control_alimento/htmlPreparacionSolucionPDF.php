@@ -166,21 +166,21 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         <thead>
             <tr>
                 <th rowspan='4' class="cabecera-fila">FECHA DE PREPARACIÓN</th>
-                <th colspan="10" class="cabecera-fila">Detergente</th>
+                <th colspan="11" class="cabecera-fila">Detergente</th>
                 <th colspan="18" class="cabecera-fila">Desinfectante</th>
                 <th rowspan="6" class="cabecera-fila">RESPONSABLE DE LA EJECUCIÓN</th>
             </tr>
             <tr>
                 <th colspan="3" class="cabecera-fila">Alcalino</th>
                 <th colspan="3" class="cabecera-fila">Ácido</th>
-                <th colspan="4" class="cabecera-fila">En polvo</th>
+                <th colspan="5" class="cabecera-fila">En polvo</th>
                 <th colspan="15" class="cabecera-fila">Hipoclorito de Sodio 7.5%</th>
                 <th colspan="3" class="cabecera-fila">Amonio cuaternario 11.59%</th>
             </tr>
             <tr>
                 <th colspan="3" class="cabecera-valores">5%</th>
                 <th colspan="3" class="cabecera-valores">3.90%</th>
-                <th colspan="4" rowspan="2" class="cabecera-valores">N° de preparaciones</th>
+                <th colspan="5" rowspan="2" class="cabecera-valores">N° de preparaciones</th>
                 <th colspan="3" class="cabecera-valores">50 ppm</th>
                 <th colspan="3" class="cabecera-valores">100 ppm</th>
                 <th colspan="3" class="cabecera-valores">200 ppm</th>
@@ -201,6 +201,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 <th class="cabecera-valores">39ml</th>
                 <th class="cabecera-valores">195ml</th>
                 <th class="cabecera-valores">390ml</th>
+                <th class="cabecera-valores">15g</th>
                 <th class="cabecera-valores">75g</th>
                 <th class="cabecera-valores">150g</th>
                 <th class="cabecera-valores">300g</th>
@@ -232,6 +233,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 <th class="cabecera-valores">1L</th>
                 <th class="cabecera-valores">5L</th>
                 <th class="cabecera-valores">10L</th>
+                <th class="cabecera-valores">1L</th>
                 <th class="cabecera-valores">5L</th>
                 <th class="cabecera-valores">10L</th>
                 <th class="cabecera-valores">20L</th>
@@ -275,7 +277,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             echo '<tr>';
             echo '<td style="text-align:center;">' . convFecSistema($filas['FECHA']) . '</td>';
 
-            for ($i = 0; $i < 28; $i++) {
+            for ($i = 0; $i < 29; $i++) {
 
                 if ($i == 0) {
                     if ($filas['CANTIDAD_MILILITROS'] == '50ml') {
@@ -386,6 +388,22 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
                 } else if ($i == 6) {
+                    if ($filas['CANTIDAD_MILILITROS'] == '15g') {
+                        echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                    } elseif (isset($valordiferente)) {
+                        if ($porcentaje == 'N°de preparaciones') {
+                            if (($multiplo >= 1 && $multiplo < 5)) {
+                                echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                            } else {
+                                echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
+                            }
+                        } else {
+                            echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
+                        }
+                    } else {
+                        echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
+                    }
+                } else if ($i == 7) {
                     if ($filas['CANTIDAD_MILILITROS'] == '75g') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -402,7 +420,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 7) {
+                } else if ($i == 8) {
                     if ($filas['CANTIDAD_MILILITROS'] == '150g') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -423,7 +441,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 8) {
+                } else if ($i == 9) {
                     if ($filas['CANTIDAD_MILILITROS'] == '300g') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -444,7 +462,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 9) {
+                } else if ($i == 10) {
                     if ($filas['CANTIDAD_MILILITROS'] == '400g') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -465,7 +483,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 10) {
+                } else if ($i == 11) {
                     if ($filas['CANTIDAD_MILILITROS'] == '0.7ml') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -482,7 +500,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 11) {
+                } else if ($i == 12) {
                     if ($filas['CANTIDAD_MILILITROS'] == '3.3ml') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -499,7 +517,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 12) {
+                } else if ($i == 13) {
                     if ($filas['CANTIDAD_MILILITROS'] == '6.7ml' && $filas['CANTIDAD_LITROS'] == '10L') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -520,7 +538,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 13) {
+                } else if ($i == 14) {
                     if ($filas['CANTIDAD_MILILITROS'] == '1.3ml') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -537,7 +555,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 14) {
+                } else if ($i == 15) {
                     if ($filas['CANTIDAD_MILILITROS'] == '6.7ml' && $filas['CANTIDAD_LITROS'] == '5L') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -554,7 +572,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 15) {
+                } else if ($i == 16) {
                     if ($filas['CANTIDAD_MILILITROS'] == '13.3ml' && $filas['CANTIDAD_LITROS'] == '10L') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -575,7 +593,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 16) {
+                } else if ($i == 17) {
                     if ($filas['CANTIDAD_MILILITROS'] == '2.7ml') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -592,7 +610,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 17) {
+                } else if ($i == 18) {
                     if ($filas['CANTIDAD_MILILITROS'] == '13.3ml' && $filas['CANTIDAD_LITROS'] == '5L') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -609,7 +627,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 18) {
+                } else if ($i == 19) {
                     if ($filas['CANTIDAD_MILILITROS'] == '26.7ml' && $filas['CANTIDAD_LITROS'] == '10L') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -630,7 +648,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 19) {
+                } else if ($i == 20) {
                     if ($filas['CANTIDAD_MILILITROS'] == '4ml') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -647,7 +665,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 20) {
+                } else if ($i == 21) {
                     if ($filas['CANTIDAD_MILILITROS'] == '20ml') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -664,7 +682,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 21) {
+                } else if ($i == 22) {
                     if ($filas['CANTIDAD_MILILITROS'] == '40ml') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -685,7 +703,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 22) {
+                } else if ($i == 23) {
                     if ($filas['CANTIDAD_MILILITROS'] == '5.3ml') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -702,7 +720,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 23) {
+                } else if ($i == 24) {
                     if ($filas['CANTIDAD_MILILITROS'] == '26.7ml' && $filas['CANTIDAD_LITROS'] == '5L') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -719,7 +737,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 24) {
+                } else if ($i == 25) {
                     if ($filas['CANTIDAD_MILILITROS'] == '53.3ml') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -740,7 +758,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 25) {
+                } else if ($i == 26) {
                     if ($filas['CANTIDAD_MILILITROS'] == '1.7ml') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -757,7 +775,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 26) {
+                } else if ($i == 27) {
                     if ($filas['CANTIDAD_MILILITROS'] == '8.6ml') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -774,7 +792,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                         echo '<td class="cabeceraPreparacion" style="text-align:center;"></td>';
                     }
                     // echo '<td class="cabeceraPreparacion" ><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt=""></td>';
-                } else if ($i == 27) {
+                } else if ($i == 28) {
                     if ($filas['CANTIDAD_MILILITROS'] == '17.2ml') {
                         echo '<td class="cabeceraPreparacion"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                     } elseif (isset($valordiferente)) {
@@ -812,7 +830,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             }
             if ($contadorN % count($datos) == 0) {
                 echo '<tr>';
-                for ($i = 0; $i < 30; $i++) {
+                for ($i = 0; $i < 31; $i++) {
                     echo '<td style="text-align:center;height:20rem;border-left:none; border:right:none;"></td>';
                 }
                 echo '</tr>';

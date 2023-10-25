@@ -871,27 +871,36 @@ class c_almacen
         $datos = $mostrar->AlertaMensaje();
         try {
             if (!$datos) {
-                throw new Exception("Hubo un error en la consulta");
-            }
+                $json = array();
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
 
-            $json = array();
-            foreach ($datos as $row) {
-                $json[] = array(
-                    "COD_ALERTA" => $row->COD_ALERTA,
-                    "NDIAS" => $row->NDIAS,
-                    "NOMBRE_AREA" => $row->NOMBRE_AREA,
-                    "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
-                    "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
-                    "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
-                    "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
-                    "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_ALERTA" => $row->COD_ALERTA,
+                        "NDIAS" => $row->NDIAS,
+                        "NOMBRE_AREA" => $row->NOMBRE_AREA,
+                        "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
+                        "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
+                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                        "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
+                        "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
 
-                );
+                    );
+                }
+
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
             }
-            $jsonstring = json_encode($json);
-            echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e;
+            // $response = array(
+            //     'success' => true,
+            //     'message' => $e->getMessage()
+            // );
+            // echo $response;
         }
     }
 
@@ -1250,28 +1259,31 @@ class c_almacen
         $datos = $mostrar->MostrarAlerta();
         try {
             if (!$datos) {
-                throw new Exception("Hubo un error en la consulta");
+                // throw new Exception("Hubo un error en la consulta");
+                $json = array();
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_ALERTA" => $row->COD_ALERTA,
+                        "NDIAS" => $row->NDIAS,
+                        "NOMBRE_AREA" => $row->NOMBRE_AREA,
+                        "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
+                        "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
+                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                        "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
+                        "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
+                        "N_DIAS_POS" =>  $row->N_DIAS_POS,
+                        "POSTERGACION" =>  $row->POSTERGACION,
+
+                    );
+                }
+
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
             }
-
-            $json = array();
-            foreach ($datos as $row) {
-                $json[] = array(
-                    "COD_ALERTA" => $row->COD_ALERTA,
-                    "NDIAS" => $row->NDIAS,
-                    "NOMBRE_AREA" => $row->NOMBRE_AREA,
-                    "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
-                    "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
-                    "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
-                    "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
-                    "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
-                    "N_DIAS_POS" =>  $row->N_DIAS_POS,
-                    "POSTERGACION" =>  $row->POSTERGACION,
-
-                );
-            }
-
-            $jsonstring = json_encode($json);
-            echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: ";
         }
@@ -1648,29 +1660,32 @@ class c_almacen
         $datos = $mostrar->MostrarAlertaControl();
         try {
             if (!$datos) {
-                throw new Exception("Hubo un error en la consulta");
+                $json = array();
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+                // throw new Exception("Hubo un error en la consulta");
+            } else {
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+
+                        "COD_ALERTA_CONTROL_MAQUINA" => $row->COD_ALERTA_CONTROL_MAQUINA,
+                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                        "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
+                        "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
+                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                        "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
+                        "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
+                        "N_DIAS_POS" =>  $row->N_DIAS_POS,
+                        "ACCION_CORRECTIVA" =>  $row->ACCION_CORRECTIVA,
+
+
+                    );
+                }
+
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
             }
-
-            $json = array();
-            foreach ($datos as $row) {
-                $json[] = array(
-
-                    "COD_ALERTA_CONTROL_MAQUINA" => $row->COD_ALERTA_CONTROL_MAQUINA,
-                    "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
-                    "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
-                    "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
-                    "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
-                    "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
-                    "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
-                    "N_DIAS_POS" =>  $row->N_DIAS_POS,
-                    "ACCION_CORRECTIVA" =>  $row->ACCION_CORRECTIVA,
-
-
-                );
-            }
-
-            $jsonstring = json_encode($json);
-            echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: ";
         }
@@ -2884,20 +2899,24 @@ class c_almacen
             $datos = $mostrar->MostrarOrdenDeCompraAlerta();
 
             if (!$datos) {
-                throw new Exception("Hubo un error en la consulta");
-            }
-            $json = array();
+                // throw new Exception("Hubo un error en la consulta");
+                $json = array();
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                $json = array();
 
-            foreach ($datos as $row) {
-                $json[] = array(
-                    "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
-                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
-                    "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
-                    "COD_TMPREQUERIMIENTO" => $row->COD_TMPREQUERIMIENTO,
-                );
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                        "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
+                        "COD_TMPREQUERIMIENTO" => $row->COD_TMPREQUERIMIENTO,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
             }
-            $jsonstring = json_encode($json);
-            echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }

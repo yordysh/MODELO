@@ -61,16 +61,21 @@ $(function () {
       success: function (response) {
         if (!response.error) {
           let tasks = JSON.parse(response);
+          // console.log(tasks);
           let template = ``;
           tasks.forEach((task) => {
+            let cantidad = task.CANTIDAD_PORCENTAJE;
+            if (cantidad === "N°de preparaciones") {
+              cantidad = "NEUTRO";
+            }
             template += `<tr taskId="${task.ID_UNION}">
 
-            <td data-titulo="PRODUCTO SANEAMIENTO">${task.NOMBRE_INSUMOS}</td>
-            <td data-titulo="PRODUCTOS">${task.NOMBRE_PREPARACION}</td>
-            <td data-titulo="CANTIDAD">${task.CANTIDAD_PORCENTAJE}</td>
-            <td data-titulo="ML">${task.CANTIDAD_MILILITROS}</td>
+           <!-- <td data-titulo="PRODUCTO SANEAMIENTO">${task.NOMBRE_INSUMOS}</td>
+            <td data-titulo="PRODUCTOS">${task.NOMBRE_PREPARACION}</td> -->
+            <td data-titulo="CANTIDAD">${cantidad}</td>
+            <!-- <td data-titulo="ML">${task.CANTIDAD_MILILITROS}</td>
             <td data-titulo="L">${task.CANTIDAD_LITROS}</td>
-            <td data-titulo="FECHA">${task.FECHA}</td>
+            <td data-titulo="FECHA">${task.FECHA}</td> -->
 
             </tr>`;
           });

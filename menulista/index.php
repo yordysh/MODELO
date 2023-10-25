@@ -83,6 +83,7 @@ $submenu2 = $_SESSION["subsub_c"];
     </nav>
     <?php require_once("../control_alimento/modal.php"); ?>
     <script src="../control_alimento/js/bootstrap.min.js"></script>
+    <script src="../control_alimento/js/ajaxIndex.js"></script>
     <script src="../control_alimento/js/sweetalert2.all.min.js"></script>
     <script src="../control_alimento/js/jquery-3.7.0.min.js"></script>
     <script src="../control_alimento/js/ajaxFechaAviso.js"></script>

@@ -105,6 +105,7 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
+              $("#selectControl").val("none").trigger("change");
               $("#formularioControl").trigger("reset");
             }
           });

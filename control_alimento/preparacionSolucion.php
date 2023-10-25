@@ -85,12 +85,12 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                             <thead>
                                 <tr>
 
-                                    <th class="thtitulo" scope="col">PRODUCTO SANEAMIENTO</th>
-                                    <th class="thtitulo" scope="col">PRODUCTOS</th>
+                                    <!-- <th class="thtitulo" scope="col">PRODUCTO SANEAMIENTO</th>
+                                    <th class="thtitulo" scope="col">PRODUCTOS</th> -->
                                     <th class="thtitulo" scope="col">CANTIDAD</th>
-                                    <th class="thtitulo" scope="col">ML</th>
+                                    <!-- <th class="thtitulo" scope="col">ML</th>
                                     <th class="thtitulo" scope="col">L</th>
-                                    <th class="thtitulo" scope="col">FECHA</th>
+                                    <th class="thtitulo" scope="col">FECHA</th> -->
 
                                 </tr>
                             </thead>

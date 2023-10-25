@@ -3,7 +3,6 @@ $(function () {
     try {
       await alertaMensaje();
     } catch (error) {
-      // console.error("Error executing alertaMensaje():", error);
       console.error("Error executing alertaMensaje():");
     }
 
@@ -29,14 +28,16 @@ $(function () {
 
   async function alertaMensaje() {
     return new Promise(function (resolve, reject) {
-      function mostrarMensaje(data, index) {
-        if (index >= data.length) {
+      function mostrarMensaje(datas, index) {
+        if (index >= datas.length) {
           resolve();
           return;
         }
 
-        const task = data[index];
+        const task = datas[index];
+
         var fecha = task.FECHA_TOTAL;
+
         var partesFecha = fecha.split("/");
         var fechaTotal = new Date(
           partesFecha[2],
@@ -64,7 +65,7 @@ $(function () {
           confirmButtonText: "Aceptar",
           allowOutsideClick: false,
         }).then(function () {
-          mostrarMensaje(data, index + 1);
+          mostrarMensaje(datas, index + 1);
         });
       }
       const accion = "fechaalertamensaje";
@@ -72,12 +73,13 @@ $(function () {
         url: "../control_alimento/c_almacen.php",
         // url: "./c_almacen.php",
         method: "POST",
-        dataType: "json",
+        dataType: "text",
         data: { accion: accion },
         success: function (data) {
-          console.log(data);
-          if (data.length > 0) {
-            mostrarMensaje(data, 0);
+          // console.log(data);
+          const datas = JSON.parse(data);
+          if (datas.length > 0) {
+            mostrarMensaje(datas, 0);
           } else {
             resolve();
           }
@@ -96,13 +98,13 @@ $(function () {
 
   async function alerta() {
     return new Promise(function (resolve, reject) {
-      function mostrarAlertas(data, index) {
-        if (index >= data.length) {
+      function mostrarAlertas(datass, index) {
+        if (index >= datass.length) {
           resolve();
           return;
         }
 
-        const task = data[index];
+        const task = datass[index];
 
         let accionCorrectiva;
         let selectVerificacion;
@@ -113,11 +115,11 @@ $(function () {
               <div><h2 class="nombre_area">Nombre del área:</h2> <p>${task.NOMBRE_AREA}</p></div>
               <div><h2 class="nombre_infra">Nombre de la infraestructura:</h2> <p>${task.NOMBRE_INFRAESTRUCTURA}</p></div>
               <div>
-              <h3>Accion correctiva:</h3> 
+              <h3>Accion correctiva:</h3>
               <textarea class="form-control" id="accionCorrectiva" rows='3' "></textarea>
               </div>
               <div>
-              <h3>Verificacion realizada:</h3> 
+              <h3>Verificacion realizada:</h3>
                <select id="selectVerificacion" class="form-select selectVerif" style="width:250px; margin-left:140px;" aria-label="Default select example">
                   <option selected>Seleccione una verificacion</option>
                   <option value="1">Conforme</option>
@@ -206,7 +208,7 @@ $(function () {
               })
                 .done(function (response) {
                   // console.log(response);
-                  mostrarAlertas(data, index + 1);
+                  mostrarAlertas(datass, index + 1);
 
                   // Crea una nueva alerta con la fecha total
                   const nuevaFechaTotal = new Date();
@@ -386,10 +388,11 @@ $(function () {
         url: "../control_alimento/c_almacen.php",
         // url: "./c_almacen.php",
         method: "POST",
-        dataType: "json",
+        dataType: "text",
         data: { accion: accion },
         success: function (data) {
-          mostrarAlertas(data, 0);
+          const datass = JSON.parse(data);
+          mostrarAlertas(datass, 0);
         },
         error: function (jqXHR, textStatus, errorThrown) {
           console.error("Error in alerta AJAX:", textStatus, errorThrown);
@@ -401,13 +404,13 @@ $(function () {
 
   async function alertaControl() {
     return new Promise(function (resolve, reject) {
-      function mostrarAlertasControl(data, index) {
-        if (index >= data.length) {
+      function mostrarAlertasControl(dato, index) {
+        if (index >= dato.length) {
           resolve();
           return;
         }
 
-        const task = data[index];
+        const task = dato[index];
 
         Swal.fire({
           title: "Información de LBS-PHS-FR-03",
@@ -489,7 +492,7 @@ $(function () {
           },
         }).then((result) => {
           if (result.isConfirmed) {
-            mostrarAlertasControl(data, index + 1);
+            mostrarAlertasControl(dato, index + 1);
           }
         });
 
@@ -521,12 +524,13 @@ $(function () {
         url: "../control_alimento/c_almacen.php",
         // url: "./c_almacen.php",
         method: "POST",
-        dataType: "json",
+        dataType: "text",
         data: { accion: accion },
         success: function (data) {
           // console.log(data);
+          const dato = JSON.parse(data);
           const index = 0;
-          mostrarAlertasControl(data, index);
+          mostrarAlertasControl(dato, index);
         },
         error: function (jqXHR, textStatus, errorThrown) {
           console.error(
@@ -539,55 +543,123 @@ $(function () {
       });
     });
   }
-  async function alertaOrdenCompra() {
-    const accion = "mostrarordencompraalmacenalerta";
-    var codrequerimiento, codordencompra;
-    $.ajax({
-      url: "../control_alimento/c_almacen.php",
-      // url: "./c_almacen.php",
-      type: "POST",
-      data: { accion: accion },
-      success: function (response) {
-        let task = JSON.parse(response);
-        console.log(task);
-        codrequerimiento = task[0].COD_TMPREQUERIMIENTO;
-        codordencompra = task[0].COD_ORDEN_COMPRA;
+  // async function alertaOrdenCompra() {
+  //   const accion = "mostrarordencompraalmacenalerta";
+  //   var codrequerimiento, codordencompra;
+  //   $.ajax({
+  //     url: "../control_alimento/c_almacen.php",
+  //     // url: "./c_almacen.php",
+  //     type: "POST",
+  //     data: { accion: accion },
+  //     success: function (response) {
+  //       let task = JSON.parse(response);
+  //       console.log(task);
+  //       codrequerimiento = task[0].COD_TMPREQUERIMIENTO;
+  //       codordencompra = task[0].COD_ORDEN_COMPRA;
 
-        let htmlContent = "<h1>¡Listo para producción!</h1>";
-        htmlContent += "<ul>";
-        task.forEach(function (producto) {
-          htmlContent +=
-            "<li style='list-style:none;'>" + producto.ABR_PRODUCTO + "</li>";
-        });
-        htmlContent += "</ul>";
-        Swal.fire({
-          title: "Compra de insumos",
-          icon: "question",
-          html: htmlContent,
-          confirmButtonText: "Ok",
-          showCloseButton: true,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            const accion = "actualizarrequerimientoitem";
-            $.ajax({
-              url: "../control_alimento/c_almacen.php",
-              // url: "./c_almacen.php",
-              type: "POST",
-              data: {
-                accion: accion,
-                codrequerimiento: codrequerimiento,
-                codordencompra: codordencompra,
-              },
-              success: function (response) {
-                console.log("se actualizo");
-              },
+  //       let htmlContent = "<h1>¡Listo para producción!</h1>";
+  //       htmlContent += "<ul>";
+  //       task.forEach(function (producto) {
+  //         htmlContent +=
+  //           "<li style='list-style:none;'>" + producto.ABR_PRODUCTO + "</li>";
+  //       });
+  //       htmlContent += "</ul>";
+  //       Swal.fire({
+  //         title: "Compra de insumos",
+  //         icon: "question",
+  //         html: htmlContent,
+  //         confirmButtonText: "Ok",
+  //         showCloseButton: true,
+  //       }).then((result) => {
+  //         if (result.isConfirmed) {
+  //           const accion = "actualizarrequerimientoitem";
+  //           $.ajax({
+  //             url: "../control_alimento/c_almacen.php",
+  //             // url: "./c_almacen.php",
+  //             type: "POST",
+  //             data: {
+  //               accion: accion,
+  //               codrequerimiento: codrequerimiento,
+  //               codordencompra: codordencompra,
+  //             },
+  //             success: function (response) {
+  //               console.log("se actualizo");
+  //             },
+  //           });
+  //         }
+  //       });
+  //     },
+  //     error: function (xhr, status, error) {
+  //       console.error("Error al cargar los datos de la tabla:", error);
+  //     },
+  //   });
+  // }
+  async function alertaOrdenCompra() {
+    return new Promise((resolve, reject) => {
+      const accion = "mostrarordencompraalmacenalerta";
+      var codrequerimiento, codordencompra;
+
+      $.ajax({
+        url: "../control_alimento/c_almacen.php",
+        type: "POST",
+        data: { accion: accion },
+        success: function (response) {
+          if (response > 0) {
+            let task = JSON.parse(response);
+
+            codrequerimiento = task[0].COD_TMPREQUERIMIENTO;
+            codordencompra = task[0].COD_ORDEN_COMPRA;
+
+            let htmlContent = "<h1>¡Listo para producción!</h1>";
+            htmlContent += "<ul>";
+            task.forEach(function (producto) {
+              htmlContent +=
+                "<li style='list-style:none;'>" +
+                producto.ABR_PRODUCTO +
+                "</li>";
             });
+            htmlContent += "</ul";
+            Swal.fire({
+              title: "Compra de insumos",
+              icon: "question",
+              html: htmlContent,
+              confirmButtonText: "Ok",
+              showCloseButton: true,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                const accion = "actualizarrequerimientoitem";
+                $.ajax({
+                  url: "../control_alimento/c_almacen.php",
+                  type: "POST",
+                  data: {
+                    accion: accion,
+                    codrequerimiento: codrequerimiento,
+                    codordencompra: codordencompra,
+                  },
+                  success: function (response) {
+                    resolve("La actualización se realizó con éxito");
+                  },
+                  error: function (xhr, status, error) {
+                    console.error(
+                      "Error al cargar los datos de la tabla:",
+                      error
+                    );
+                    reject("Error al actualizar");
+                  },
+                });
+              } else {
+                reject("El usuario no confirmó la acción");
+              }
+            });
+          } else {
+            console.log("vacio");
           }
-        });
-      },
-      error: function (xhr, status, error) {
-        console.error("Error al cargar los datos de la tabla:", error);
-      },
+        },
+        error: function (xhr, status, error) {
+          console.error("Error al cargar los datos de la tabla:", error);
+          reject("Error al cargar datos de la tabla");
+        },
+      });
     });
   }
 
