@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-// $codusuario = $_SESSION["cod"];
-$codusuario = '0002';
+$codusuario = $_SESSION["cod"];
+// $codusuario = '0002';
 ?>
 <?php
 require_once "m_almacen.php";
@@ -131,6 +131,18 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                     <button type='button' class="custom-icon-zona" data-bs-toggle="modal" data-bs-target="#mostrarzonas"><i class="icon-circle-with-plus"></i></button>
                                 </div>
                             </div>
+                            <div class="form-outline mb-4 custom-select">
+
+                                <label class="form-label">Infraestructura</label>
+
+                                <select id="seleccionzonainfraestructura" class="form-select" aria-label="Default select example">
+                                    <option value="none" selected disabled>Seleccione infraestructura</option>
+
+                                </select>
+                                <div class="buttonifraestructura">
+                                    <button type='button' class="custom-icon" data-bs-toggle="modal" data-bs-target="#mostrarinfraestructura"><i class="icon-circle-with-plus"></i></button>
+                                </div>
+                            </div>
 
 
                         </div>
@@ -176,6 +188,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
     </footer>
     <?php
     require_once "modalzonas.php";
+    require_once "modalinfraestructura.php";
     ?>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>

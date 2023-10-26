@@ -21,6 +21,7 @@ $submenu2 = $_SESSION["subsub_c"];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/menu_a.css">
+    <link rel="stylesheet" href="../control_alimento/styleIcons/style.css">
     <link rel="stylesheet" href="../control_alimento/css/bootstrap.min.css">
     <link rel="stylesheet" href="../control_alimento/css/sweetalert2.min.css">
     <link rel="stylesheet" href="../control_alimento/css/responsiveControl.css">
@@ -83,7 +84,7 @@ $submenu2 = $_SESSION["subsub_c"];
     </nav>
     <?php require_once("../control_alimento/modal.php"); ?>
     <script src="../control_alimento/js/bootstrap.min.js"></script>
-    <script src="../control_alimento/js/ajaxIndex.js"></script>
+    <!-- <script src="../control_alimento/js/ajaxIndex.js"></script> -->
     <script src="../control_alimento/js/sweetalert2.all.min.js"></script>
     <script src="../control_alimento/js/jquery-3.7.0.min.js"></script>
     <script src="../control_alimento/js/ajaxFechaAviso.js"></script>

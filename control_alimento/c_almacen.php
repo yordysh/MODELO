@@ -70,6 +70,14 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_buscar_infra($buscarinfra);
     echo $respuesta;
+} elseif ($accion == 'seleccionarzonainfra') {
+    // $idzona = $_POST['idzona'];
+    $respuesta = c_almacen::c_mostrar_infraestructura_zona();
+    echo $respuesta;
+} elseif ($accion == 'guardarinfraestructura') {
+    $nombreinfraestructuraz = $_POST['nombreinfraestructuraz'];
+    $respuesta = c_almacen::c_insertar_infraestructura_zona($nombreinfraestructuraz);
+    echo $respuesta;
 } elseif ($accion == 'actualizarcombozona') {
 
     $respuesta = c_almacen::c_actualizar_combo();
@@ -801,6 +809,21 @@ class c_almacen
         }
     }
 
+    static function c_insertar_infraestructura_zona($nombreinfraestructuraz)
+    {
+        $mostrar = new m_almacen();
+        if (isset($nombreinfraestructuraz)) {
+
+            $respuesta = $mostrar->insertarInfraestructuraZona($nombreinfraestructuraz);
+            if ($respuesta) {
+
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
     static function c_eliminar_infra($codinfra)
     {
         $mostrar = new m_almacen();
@@ -863,6 +886,22 @@ class c_almacen
         }
     }
 
+    static function c_mostrar_infraestructura_zona()
+    {
+        $consulta = new m_almacen();
+        $idzona = filter_input(INPUT_POST, 'idzona');
+
+        $datos = $consulta->Mostrarzonainfraestructura($idzona);
+
+        if (count($datos) == 0) {
+            echo '<option value="0">No hay registros en infraestructura</option>';
+        }
+        echo '<option value="none" selected disabled>Seleccione infraestructura</option>';
+        for ($i = 0; $i < count($datos); $i++) {
+
+            echo '<option value="' . $datos[$i]["COD_INFRAESTRUCTURA"] . '">' . $datos[$i]["NOMBRE_INFRAESTRUCTURA"] . '</option>';
+        }
+    }
 
     static function c_fecha_alerta_mensaje()
     {

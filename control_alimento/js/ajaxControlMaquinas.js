@@ -84,7 +84,6 @@ $(function () {
       data: {
         accion: accion,
         nombrecontrol: $("#NOMBRE_CONTROL_MAQUINA").val(),
-        // ndiascontrol: $("#N_DIAS_CONTROL").val(),
         ndiascontrol: $("#selectFrecuencia").val(),
         codcontrol: $("#taskId").val(),
         valorSeleccionado: $("#selectControl").val(),
@@ -95,7 +94,6 @@ $(function () {
         $(".preloader").css("display", "block");
       },
       success: function (response) {
-        console.log(response);
         if (response == "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",

@@ -466,7 +466,7 @@ class m_almacen
   {
     try {
 
-      $this->bd->beginTransaction();
+      // $this->bd->beginTransaction();
       $cod = new m_almacen();
       $COD_INFRAESTRUCTURA = $cod->generarCodigoInfraestructura();
       // $VERSION = $cod->generarVersion();
@@ -483,10 +483,10 @@ class m_almacen
 
       if ($repetir == 0) {
 
-        $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION,USUARIO)
-                                    VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION','$codpersonal')");
+        // $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION,USUARIO)
+        //                             VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION','$codpersonal')");
 
-        $insert = $stm->execute();
+        // $insert = $stm->execute();
 
 
         // $fechaDHoy  = $cod->c_horaserversql('F');
@@ -511,7 +511,7 @@ class m_almacen
         } else {
           $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) VALUES('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$NDIAS')");
         }
-        $stm1->execute();
+        $insert = $stm1->execute();
 
         $insert = $this->bd->commit();
         return $insert;
@@ -549,6 +549,55 @@ class m_almacen
       return $delete;
     } catch (Exception $e) {
       die("Error al eliminar los datos: " . $e->getMessage());
+    }
+  }
+  public function Mostrarzonainfraestructura($idzona)
+  {
+
+    try {
+      $stm = $this->bd->prepare(
+        "SELECT * FROM T_INFRAESTRUCTURA WHERE COD_ZONA='$idzona'"
+      );
+
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function insertarInfraestructuraZona($nombreinfraestructuraz)
+  {
+    try {
+
+
+      $cod = new m_almacen();
+      $COD_INFRAESTRUCTURA = $cod->generarCodigoInfraestructura();
+
+      $nombre = 'LBS-PHS-FR-01';
+
+
+      $repetir = $cod->contarRegistrosInfraestructura($nombreinfraestructuraz, $valorSeleccionado);
+
+
+      if ($repetir == 0) {
+        $VERSION = $cod->generarVersionGeneral($nombre);
+
+        $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,VERSION)
+                                     VALUES ('$COD_INFRAESTRUCTURA','$codigodezona', '$nombreinfraestructuraz', '$VERSION')");
+
+
+        $insert = $stm->execute();
+
+
+
+        return $insert;
+      }
+    } catch (Exception $e) {
+
+      die($e->getMessage());
     }
   }
   // public function MostrarUsuario($USUARIO, $CLAVE)
@@ -686,7 +735,7 @@ class m_almacen
                                   TA.OBSERVACION AS OBSERVACION, TA.ACCION_CORRECTIVA AS ACCION_CORRECTIVA,TA.VERIFICACION_REALIZADA AS VERIFICACION_REALIZADA FROM T_ALERTA TA 
                                   INNER JOIN T_INFRAESTRUCTURA TI ON TA.COD_INFRAESTRUCTURA=TI.COD_INFRAESTRUCTURA
                                   INNER JOIN T_ZONA_AREAS TZ ON TZ.COD_ZONA=TI.COD_ZONA
-                                  WHERE ESTADO='OB'AND ESTADO='PO' AND MONTH(FECHA_TOTAL) = '$mesSeleccionado' AND YEAR(FECHA_TOTAL) = '$anioSeleccionado'");
+                                  WHERE ESTADO='OB' OR ESTADO='PO' AND MONTH(FECHA_TOTAL) = '$mesSeleccionado' AND YEAR(FECHA_TOTAL) = '$anioSeleccionado'");
 
       $stm->execute();
       $datos = $stm->fetchAll();
@@ -3675,6 +3724,24 @@ class m_almacen
       return $actualizaritemrequerimiento;
     } catch (Exception $e) {
       $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+
+
+  public function MostrarRequerimientoEstadoT()
+  {
+    try {
+
+      $mostrarrequerimiento = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TOC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,TOC.COD_TMPREQUERIMIENTO AS COD_TMPREQUERIMIENTO,
+                                                    TOC.ESTADO AS ESTADO, TRI.COD_PRODUCTO AS COD_PRODUCTO,PRO.DES_PRODUCTO  AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD FROM T_TMPORDEN_COMPRA TOC 
+                                                    INNER JOIN T_TMPREQUERIMIENTO_ITEM TRI ON TOC.COD_TMPREQUERIMIENTO=TRI.COD_REQUERIMIENTO
+                                                    INNER JOIN T_PRODUCTO AS PRO ON PRO.COD_PRODUCTO=TRI.COD_PRODUCTO WHERE TOC.ESTADO='T'");
+      $mostrarrequerimiento->execute();
+      $datosrequerimiento = $mostrarrequerimiento->fetchAll(PDO::FETCH_OBJ);
+
+      return $datosrequerimiento;
+    } catch (Exception $e) {
       die($e->getMessage());
     }
   }

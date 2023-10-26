@@ -295,7 +295,7 @@ $(function () {
                     .done(function (response) {
                       // console.log(response);
                       $("#myModalExito").modal("hide");
-                      mostrarAlertas(data, index + 1);
+                      mostrarAlertas(datass, index + 1);
 
                       // Crea una nueva alerta con la fecha total
                       const nuevaFechaTotal = new Date();
@@ -324,7 +324,7 @@ $(function () {
               });
             } else {
               observacionTextarea.style.display = "none";
-              mostrarAlertas(data, index + 1);
+              mostrarAlertas(datass, index + 1);
             }
           }
         });

@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-$codusuario = $_SESSION["cod"];
-$codoficina = $_SESSION["ofi"];
+// $codusuario = $_SESSION["cod"];
+// $codoficina = $_SESSION["ofi"];
 
 // $codanexo=$_SESSION["ane"];
-// $codusuario = '0002';
-// $codoficina = 'SMP2';
+$codusuario = '0002';
+$codoficina = 'SMP2';
 
 ?>
 <?php
@@ -303,8 +303,8 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                         <th class="thtitulo" scope="col">NOMBRE</th>
                                         <th class="thtitulo" scope="col">CANTIDAD</th>
                                         <th class="thtitulo" scope="col">PRECIO</th>
-                                        <!-- <th class="thtitulo" scope="col">LOTE</th> -->
-                                        <!-- <th class="thtitulo" scope="col">SELECCIONAR</th> -->
+                                        <!-- <th class="thtitulo" scope="col">CODIGO LOTE</th>
+                                        <th class="thtitulo" scope="col">FECHA VENCIMIENTO</th> -->
                                     </tr>
                                 </thead>
                                 <tbody id="tablainsumoscomprarfactura">

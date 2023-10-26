@@ -183,7 +183,52 @@ $(function () {
       },
     });
   });
+  //----------------------------------------------------------//
 
+  //------------- Añadiendo con ajax infraestrutura----------------//
+  $("#guardarinfra").on("click", (e) => {
+    const accion = "guardarinfraestructura";
+
+    $.ajax({
+      url: "./c_almacen.php",
+      data: {
+        accion: accion,
+        nombreinfraestructuraz: $("#nombreinfraestructura").val(),
+      },
+
+      type: "POST",
+      success: function (response) {
+        if (response.toLowerCase() === "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#nombreinfraestructura").val("");
+              // $("#mostrarzonas").modal("hide");
+              actualizarComboInfraestructura();
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Duplicado!",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#nombreinfraestructura").val("");
+              fetchTasks();
+              // $("#formularioZona").trigger("reset");
+            }
+          });
+        }
+      },
+    });
+  });
+  //--------------------------------------------------------------//
   function actualizarCombo() {
     const accion = "actualizarcombozona";
     $.ajax({
@@ -216,6 +261,26 @@ $(function () {
     });
   }
   //-----------------------------------------------------------------------------//
+
+  /*---------- Al seleccionar un combo zona me muestre contenido en combo infraestructura---- */
+  let seleccionzonainfraestructura = $("#seleccionzonainfraestructura");
+  const accion = "seleccionarzonainfra";
+  $("#selectInfra").change(function () {
+    let idzona = $("#selectInfra").val();
+
+    $.ajax({
+      data: {
+        idzona: idzona,
+        accion: accion,
+      },
+      dataType: "html",
+      type: "POST",
+      url: "./c_almacen.php",
+    }).done(function (data) {
+      seleccionzonainfraestructura.html(data);
+    });
+  });
+  /*-------------------------------------------------------------------------------------- */
 
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
   // Cargar registros INFRAESTRUCTURA
