@@ -76,7 +76,8 @@ if ($accion == 'insertar') {
     echo $respuesta;
 } elseif ($accion == 'guardarinfraestructura') {
     $nombreinfraestructuraz = $_POST['nombreinfraestructuraz'];
-    $respuesta = c_almacen::c_insertar_infraestructura_zona($nombreinfraestructuraz);
+    $nombrezonain = $_POST['nombrezonain'];
+    $respuesta = c_almacen::c_insertar_infraestructura_zona($nombreinfraestructuraz, $nombrezonain);
     echo $respuesta;
 } elseif ($accion == 'actualizarcombozona') {
 
@@ -809,12 +810,12 @@ class c_almacen
         }
     }
 
-    static function c_insertar_infraestructura_zona($nombreinfraestructuraz)
+    static function c_insertar_infraestructura_zona($nombreinfraestructuraz, $nombrezonain)
     {
         $mostrar = new m_almacen();
-        if (isset($nombreinfraestructuraz)) {
+        if (isset($nombrezonain)) {
 
-            $respuesta = $mostrar->insertarInfraestructuraZona($nombreinfraestructuraz);
+            $respuesta = $mostrar->insertarInfraestructuraZona($nombreinfraestructuraz, $nombrezonain);
             if ($respuesta) {
 
                 return "ok";

@@ -185,6 +185,17 @@ $(function () {
   });
   //----------------------------------------------------------//
 
+  /*--------------- Poner el value de zona------------------- */
+  var selectInfra = document.getElementById("selectInfra");
+  var valordezonahidden = document.getElementById("valordezonahidden");
+
+  // Add an event listener to the select element
+  selectInfra.addEventListener("change", function () {
+    // Update the input field with the selected option's value
+    console.log(selectInfra);
+    valordezonahidden.value = selectInfra.value;
+  });
+  /*----------------------------------------------------------- */
   //------------- Añadiendo con ajax infraestrutura----------------//
   $("#guardarinfra").on("click", (e) => {
     const accion = "guardarinfraestructura";
@@ -194,6 +205,7 @@ $(function () {
       data: {
         accion: accion,
         nombreinfraestructuraz: $("#nombreinfraestructura").val(),
+        nombrezonain: $("#nombrezona").val(),
       },
 
       type: "POST",

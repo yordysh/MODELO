@@ -132,9 +132,8 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                 </div>
                             </div>
                             <div class="form-outline mb-4 custom-select">
-
+                                <input type="text" id="valordezonahidden">
                                 <label class="form-label">Infraestructura</label>
-
                                 <select id="seleccionzonainfraestructura" class="form-select" aria-label="Default select example">
                                     <option value="none" selected disabled>Seleccione infraestructura</option>
 
