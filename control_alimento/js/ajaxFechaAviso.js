@@ -220,6 +220,7 @@ $(function () {
                     data: {
                       accion: accion,
                       fechaCreacion: nuevaFechaTotal.toISOString(),
+                      codigozona: task.COD_ZONA,
                       codInfraestructura: task.COD_INFRAESTRUCTURA,
                       taskNdias: task.NDIAS,
                     },

@@ -81,17 +81,18 @@ $(function () {
     const accion = edit === false ? "insertarinfra" : "actualizarinfra";
 
     $.ajax({
+      type: "POST",
       url: "./c_almacen.php",
       data: {
         accion: accion,
-        nombreinfraestructura: $("#NOMBRE_INFRAESTRUCTURA").val(),
+        // nombreinfraestructura: $("#NOMBRE_INFRAESTRUCTURA").val(),
+        nombreinfraestructura: $("#seleccionzonainfraestructura").val(),
         ndias: $("#selectFrecuencia").val(),
         // ndias: $("#NDIAS").val(),
         codinfra: $("#taskId").val(),
         valorSeleccionado: $("#selectInfra").val(),
         codpersonal: $("#codpersonal").val(),
       },
-      type: "POST",
       beforeSend: function () {
         $(".preloader").css("opacity", "1");
         $(".preloader").css("display", "block");
@@ -144,16 +145,19 @@ $(function () {
     const accion = edit === false ? "insertar" : "actualizar";
 
     $.ajax({
+      type: "POST",
       url: "./c_almacen.php",
       data: {
         accion: accion,
         nombrezonaArea: $("#nombrezona").val(),
         codzona: $("#taskId").val(),
       },
-
-      type: "POST",
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       success: function (response) {
-        if (response.toLowerCase() === "ok") {
+        if (response == "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
             text: "Los datos se han guardado correctamente.",
@@ -181,19 +185,22 @@ $(function () {
           });
         }
       },
+      error: function (error) {
+        console.log("ERROR " + error);
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
+      },
     });
   });
   //----------------------------------------------------------//
 
   /*--------------- Poner el value de zona------------------- */
-  var selectInfra = document.getElementById("selectInfra");
-  var valordezonahidden = document.getElementById("valordezonahidden");
 
-  // Add an event listener to the select element
-  selectInfra.addEventListener("change", function () {
-    // Update the input field with the selected option's value
-    console.log(selectInfra);
-    valordezonahidden.value = selectInfra.value;
+  $("#selectInfra").change(function () {
+    let selectinfra = $("#selectInfra").val();
+    $("#valordezonahidden").val(selectinfra);
   });
   /*----------------------------------------------------------- */
   //------------- Añadiendo con ajax infraestrutura----------------//
@@ -201,16 +208,19 @@ $(function () {
     const accion = "guardarinfraestructura";
 
     $.ajax({
+      type: "POST",
       url: "./c_almacen.php",
       data: {
         accion: accion,
         nombreinfraestructuraz: $("#nombreinfraestructura").val(),
-        nombrezonain: $("#nombrezona").val(),
+        nombrezonain: $("#valordezonahidden").val(),
       },
-
-      type: "POST",
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       success: function (response) {
-        if (response.toLowerCase() === "ok") {
+        if (response == "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
             text: "Los datos se han guardado correctamente.",
@@ -219,7 +229,6 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#nombreinfraestructura").val("");
-              // $("#mostrarzonas").modal("hide");
               actualizarComboInfraestructura();
             }
           });
@@ -232,14 +241,22 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#nombreinfraestructura").val("");
-              fetchTasks();
+              // fetchTasks();
               // $("#formularioZona").trigger("reset");
             }
           });
         }
       },
+      error: function (error) {
+        console.log("ERROR " + error);
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
+      },
     });
   });
+
   //--------------------------------------------------------------//
   function actualizarCombo() {
     const accion = "actualizarcombozona";
@@ -272,6 +289,39 @@ $(function () {
       },
     });
   }
+
+  function actualizarComboInfraestructura() {
+    const accion = "actualizarcomboinfraestructura";
+    $.ajax({
+      url: "./c_almacen.php",
+      data: { accion: accion },
+      type: "POST",
+      success: function (response) {
+        let data = JSON.parse(response);
+        $("#seleccionzonainfraestructura").empty();
+        $("#seleccionzonainfraestructura").append(
+          $("<option>", {
+            value: "none",
+            text: "Seleccione infraestructura",
+            disabled: true,
+            selected: true,
+          })
+        );
+        data.forEach((item) => {
+          $("#seleccionzonainfraestructura").append(
+            $("<option>", {
+              value: item.COD_INFRAESTRUCTURA,
+              text: item.NOMBRE_INFRAESTRUCTURA,
+            })
+          );
+        });
+      },
+      error: function (error) {
+        console.error("Error fetching data:", error);
+      },
+    });
+  }
+
   //-----------------------------------------------------------------------------//
 
   /*---------- Al seleccionar un combo zona me muestre contenido en combo infraestructura---- */

@@ -75,9 +75,14 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_infraestructura_zona();
     echo $respuesta;
 } elseif ($accion == 'guardarinfraestructura') {
-    $nombreinfraestructuraz = $_POST['nombreinfraestructuraz'];
-    $nombrezonain = $_POST['nombrezonain'];
+    $nombreinfraestructuraz =  strtoupper($_POST['nombreinfraestructuraz']);
+    $nombrezonain = trim($_POST['nombrezonain']);
+
     $respuesta = c_almacen::c_insertar_infraestructura_zona($nombreinfraestructuraz, $nombrezonain);
+    echo $respuesta;
+} elseif ($accion == 'actualizarcomboinfraestructura') {
+
+    $respuesta = c_almacen::c_actualizar_combo_infraestructura();
     echo $respuesta;
 } elseif ($accion == 'actualizarcombozona') {
 
@@ -605,6 +610,11 @@ if ($accion == 'insertar') {
     $codordencompra  = trim($_POST['codordencompra']);
     $respuesta = c_almacen::c_actualizar_requerimiento_item($codrequerimiento, $codordencompra);
     echo $respuesta;
+} elseif ($accion == 'mostrarvaloresporcodigorequerimiento') {
+    $selectrequerimiento = trim($_POST['selectrequerimiento']);
+
+    $respuesta = c_almacen::c_mostrar_valores_por_codigo_requerimiento($selectrequerimiento);
+    echo $respuesta;
 }
 
 
@@ -784,6 +794,28 @@ class c_almacen
             } else {
                 return "error";
             };
+        }
+    }
+    static function c_actualizar_combo_infraestructura()
+    {
+        try {
+
+            $mostrar = new m_almacen();
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarInfraestructura();
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
+                    "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
+
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 
@@ -1024,6 +1056,7 @@ class c_almacen
 
             if (isset($_POST['fechaPostergacion'])) {
 
+                $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
@@ -1038,15 +1071,15 @@ class c_almacen
 
                 $POSTERGACION = 'SI';
 
-                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $formattedDate, $taskNdias, $POSTERGACION);
-
+                // $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $formattedDate, $taskNdias, $POSTERGACION);
+                $insert = $mostrar->InsertarAlertaMayor($codigozona, $codInfraestructura, $fechaActual, $formattedDate, $taskNdias, $POSTERGACION);
                 if ($insert) {
                     echo "Inserción exitosa";
                 } else {
                     echo "Error en la inserción: ";
                 }
             } else {
-
+                $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $FECHA_CREACION = $mostrar->c_horaserversql('F');
@@ -1058,8 +1091,8 @@ class c_almacen
                 if (date('N', strtotime($FECHA_TOTAL)) == 7) {
                     $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
                 }
-
-                $insert = $mostrar->InsertarAlerta($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $taskNdias);
+                $insert = $mostrar->InsertarAlerta($FECHA_CREACION, $codigozona, $codInfraestructura, $FECHA_TOTAL, $taskNdias);
+                // $insert = $mostrar->InsertarAlerta($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $taskNdias);
 
                 if ($insert) {
 
@@ -1071,7 +1104,7 @@ class c_almacen
         } else if ($taskNdias == 2) {
 
             if (isset($_POST['fechaPostergacion'])) {
-
+                $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
@@ -1094,7 +1127,7 @@ class c_almacen
                     echo "Error en la inserción: ";
                 }
             } else {
-
+                $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $FECHA_CREACION = $mostrar->c_horaserversql('F');
@@ -1118,7 +1151,7 @@ class c_almacen
         } elseif ($taskNdias == 7) {
 
             if (isset($_POST['fechaPostergacion'])) {
-
+                $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
@@ -1142,6 +1175,7 @@ class c_almacen
                 }
             } else {
                 // $fechaCreacion = $_POST['fechaCreacion'];
+                $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
 
 
@@ -1172,7 +1206,7 @@ class c_almacen
         } elseif ($taskNdias == 15) {
 
             if (isset($_POST['fechaPostergacion'])) {
-
+                $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
@@ -1201,6 +1235,7 @@ class c_almacen
                 }
             } else {
                 // $fechaCreacion = $_POST['fechaCreacion'];
+                $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
 
 
@@ -1232,7 +1267,7 @@ class c_almacen
 
 
             if (isset($_POST['fechaPostergacion'])) {
-
+                $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
@@ -1261,6 +1296,7 @@ class c_almacen
                 }
             } else {
                 // $fechaCreacion = $_POST['fechaCreacion'];
+                $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
 
 
@@ -1309,6 +1345,7 @@ class c_almacen
                     $json[] = array(
                         "COD_ALERTA" => $row->COD_ALERTA,
                         "NDIAS" => $row->NDIAS,
+                        "COD_ZONA" => $row->COD_ZONA,
                         "NOMBRE_AREA" => $row->NOMBRE_AREA,
                         "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
                         "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
@@ -3280,5 +3317,31 @@ class c_almacen
         } else {
             return "error";
         };
+    }
+
+
+    static function c_mostrar_valores_por_codigo_requerimiento($selectrequerimiento)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarValoresPorCodigoRequerimiento($selectrequerimiento);
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CANTIDAD" => $row->CANTIDAD,
+
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
     }
 }

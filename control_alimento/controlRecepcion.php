@@ -70,23 +70,37 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                             <center><label class="title_table">CONTROL DE RECEPCIÓN</label></center>
                         </div>
 
-                        <div class="estiloordencompra">
-                            <!-- Text input empresa-->
-                            <div class="form-outline mb-4 custom-input">
-                                <label class="form-label">Requerimiento</label>
-                                <select id="selectrequerimiento" class="form-select" aria-label="Default select example">
-                                    <option value="none" selected disabled>Seleccione requerimiento</option>
-                                    <?php
-                                    $uniqueRequerimientos = array();
-                                    foreach ($dataRequerimiento as $lista) {
-                                        if (!in_array($lista->COD_REQUERIMIENTO, $uniqueRequerimientos)) {
-                                            echo '<option value="' . $lista->COD_REQUERIMIENTO . '" class="option">' . $lista->COD_REQUERIMIENTO . '</option>';
-                                            $uniqueRequerimientos[] = $lista->COD_REQUERIMIENTO;
-                                        }
+
+                        <!-- Text input empresa-->
+                        <div class="form-outline mb-4 custom-input">
+                            <label class="form-label">Requerimiento</label>
+                            <select id="selectrequerimiento" class="form-select" aria-label="Default select example">
+                                <option value="none" selected disabled>Seleccione requerimiento</option>
+                                <?php
+                                $uniqueRequerimientos = array();
+                                foreach ($dataRequerimiento as $lista) {
+                                    if (!in_array($lista->COD_REQUERIMIENTO, $uniqueRequerimientos)) {
+                                        echo '<option value="' . $lista->COD_REQUERIMIENTO . '" class="option">' . $lista->COD_REQUERIMIENTO . '</option>';
+                                        $uniqueRequerimientos[] = $lista->COD_REQUERIMIENTO;
                                     }
-                                    ?>
-                                </select>
-                            </div>
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div id="tablaInfra" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
+                            <table id="tbInfra" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">PRODUCTOS</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaproductoscantidades">
+
+                                </tbody>
+                            </table>
+                        </div>
                     </form>
                 </div>
         </section>
@@ -99,7 +113,7 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="../js/menu_a.js"></script>
-    <script src="./js/ajaxGenerarComprobante.js?v=0.001"></script>
+    <script src="./js/ajaxControlRecepcion.js"></script>
     <script src="./js/select2.min.js"></script>
 </body>
 

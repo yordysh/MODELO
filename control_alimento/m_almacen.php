@@ -470,7 +470,7 @@ class m_almacen
       $cod = new m_almacen();
       $COD_INFRAESTRUCTURA = $cod->generarCodigoInfraestructura();
       // $VERSION = $cod->generarVersion();
-      $repetir = $cod->contarRegistrosInfraestructura($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado);
+      // $repetir = $cod->contarRegistrosInfraestructura($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado);
 
       $FECHA = $cod->c_horaserversql('F');
       $nombre = 'LBS-PHS-FR-01';
@@ -481,41 +481,43 @@ class m_almacen
       // var_dump($VERSION);
       // exit();
 
-      if ($repetir == 0) {
+      // if ($repetir == 0) {
 
-        // $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION,USUARIO)
-        //                             VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION','$codpersonal')");
+      // $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION,USUARIO)
+      //                             VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION','$codpersonal')");
 
-        // $insert = $stm->execute();
-
-
-        // $fechaDHoy  = $cod->c_horaserversql('F');
+      // $insert = $stm->execute();
 
 
-        $DIAS_DESCUENTO = 2;
+      // $fechaDHoy  = $cod->c_horaserversql('F');
 
-        $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA);
-        $FECHA_TOTAL = $FECHA_FORMATO->modify("+$NDIAS days")->format('d-m-Y');
-        // $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA . '+ ' . $NDIAS));
-        // $FECHA = date('Y-m-d', strtotime($FECHA));
-        // $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA . ' + ' . $NDIAS . ' days'));
 
-        // Verificar si la fecha total cae en domingo
-        if (date('N', strtotime($FECHA_TOTAL)) == 7) {
-          $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA_TOTAL . '+1 day'));
-        }
+      $DIAS_DESCUENTO = 2;
 
-        if (!($NDIAS == 1 || $NDIAS == 2)) {
-          $FECHA_ACORDAR = date('d-m-Y', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days'));
-          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) VALUES('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$NDIAS')");
-        } else {
-          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) VALUES('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$NDIAS')");
-        }
-        $insert = $stm1->execute();
+      $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA);
+      $FECHA_TOTAL = $FECHA_FORMATO->modify("+$NDIAS days")->format('d-m-Y');
+      // $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA . '+ ' . $NDIAS));
+      // $FECHA = date('Y-m-d', strtotime($FECHA));
+      // $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA . ' + ' . $NDIAS . ' days'));
 
-        $insert = $this->bd->commit();
-        return $insert;
+      // Verificar si la fecha total cae en domingo
+      if (date('N', strtotime($FECHA_TOTAL)) == 7) {
+        $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA_TOTAL . '+1 day'));
       }
+
+      if (!($NDIAS == 1 || $NDIAS == 2)) {
+        $FECHA_ACORDAR = date('d-m-Y', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days'));
+        // $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) VALUES('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$NDIAS')");
+        $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_ZONA,COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) VALUES('$valorSeleccionado','$NOMBRE_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$NDIAS')");
+      } else {
+        //  $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) VALUES('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$NDIAS')");
+        $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_ZONA,COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) VALUES('$valorSeleccionado','$NOMBRE_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$NDIAS')");
+      }
+      $insert = $stm1->execute();
+
+      $insert = $this->bd->commit();
+      return $insert;
+      // }
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());
@@ -577,26 +579,20 @@ class m_almacen
       $COD_INFRAESTRUCTURA = $cod->generarCodigoInfraestructura();
 
       $nombre = 'LBS-PHS-FR-01';
-      var_dump($nombrezonain);
-      var_dump($nombreinfraestructuraz);
-      exit();
-
-      // $repetir = $cod->contarRegistrosInfraestructura($nombreinfraestructuraz, $nombrezonain);
 
 
-      // if ($repetir == 0) {
-      //   $VERSION = $cod->generarVersionGeneral($nombre);
-
-      //   $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,VERSION)
-      //                                VALUES ('$COD_INFRAESTRUCTURA','$codigodezona', '$nombreinfraestructuraz', '$VERSION')");
+      $repetir = $cod->contarRegistrosInfraestructura($nombreinfraestructuraz, $nombrezonain);
 
 
-      //   $insert = $stm->execute();
+      if ($repetir == 0) {
+        $VERSION = $cod->generarVersionGeneral($nombre);
 
+        $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,VERSION)
+                                     VALUES ('$COD_INFRAESTRUCTURA','$nombrezonain', '$nombreinfraestructuraz', '$VERSION')");
 
-
-      //   return $insert;
-      // }
+        $insert = $stm->execute();
+        return $insert;
+      }
     } catch (Exception $e) {
 
       die($e->getMessage());
@@ -641,7 +637,7 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_AREA,T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,
+      $stm = $this->bd->prepare("SELECT T_ZONA_AREAS.COD_ZONA AS COD_ZONA, T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_AREA,T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,
       T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,T_INFRAESTRUCTURA.NDIAS AS NDIAS,T_ALERTA.COD_ALERTA AS COD_ALERTA,
       T_ALERTA.FECHA_CREACION AS FECHA_CREACION,T_ALERTA.FECHA_TOTAL AS FECHA_TOTAL, T_ALERTA.FECHA_ACORDAR AS FECHA_ACORDAR,
       T_ALERTA.ESTADO AS ESTADO, T_ALERTA.N_DIAS_POS AS N_DIAS_POS, T_ALERTA.POSTERGACION AS POSTERGACION FROM T_ALERTA INNER JOIN T_INFRAESTRUCTURA
@@ -2903,6 +2899,11 @@ class m_almacen
       $codigobarrainicio = $stmCodForm->fetch(PDO::FETCH_ASSOC);
       $valoriniciobarra = $codigobarrainicio['BARRA_INICIO'];
 
+      $stmabrproducto = $this->bd->prepare("SELECT DES_PRODUCTO,ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_PRODUCTO='$codigoproducto'");
+      $stmabrproducto->execute();
+      $valorProd = $stmabrproducto->fetch(PDO::FETCH_ASSOC);
+      $abrprod = trim($valorProd['ABR_PRODUCTO']);
+
 
 
       $updatetotal = $insert  - $cantidad;
@@ -3226,30 +3227,22 @@ class m_almacen
           }
         }
 
-        $stmbusquedabfin = $this->bd->prepare("SELECT MAX(BARRA_FIN) AS BARRA_FIN FROM T_TMPPRODUCCION_BARRAS_GRUPO");
+        $stmbusquedabfin = $this->bd->prepare("SELECT MAX(NUM_LOTE) AS NUM_LOTE FROM T_TMPPRODUCCION_BARRAS WHERE COD_PRODUCCION='$codigoproduccion' AND COD_PRODUCTO='$codigoproducto'");
         $stmbusquedabfin->execute();
         $valorbusquedafin = $stmbusquedabfin->fetch(PDO::FETCH_ASSOC);
-        $valorfinbuqueda = $valorbusquedafin['BARRA_FIN'];
+        $valorfinbuqueda = $valorbusquedafin['NUM_LOTE'];
+        $numeroextraidofin = substr($valorfinbuqueda, 3);
 
-        $stmbusquedabcajas = $this->bd->prepare("SELECT N_CAJA FROM T_TMPPRODUCCION_BARRAS_GRUPO
-                                                    WHERE CODIGO = (SELECT MAX(CODIGO) FROM T_TMPPRODUCCION_BARRAS_GRUPO)");
-        $stmbusquedabcajas->execute();
-        $valorbusquedacaja = $stmbusquedabcajas->fetch(PDO::FETCH_ASSOC);
-        $caja_numero = intval($valorbusquedacaja['N_CAJA']);
+        $valorconvint = intval($numeroextraidofin);
 
-        $stmbusquedacantidadprod = $this->bd->prepare("SELECT CAN_CAJA FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
-        $stmbusquedacantidadprod->execute();
-        $valorbusquedacantprod = $stmbusquedacantidadprod->fetch(PDO::FETCH_ASSOC);
-        $valorprod = intval($valorbusquedacantprod['CAN_CAJA']);
 
-        $valorarestar = $caja_numero * $valorprod;
+        $valorabrfin = trim($abrprod) . trim($valorconvint);
+        $valoriniciodebarra =  $valorconvint - $cantidadrestar + 1;
+        $valorinicioabr = trim($abrprod) . trim($valoriniciodebarra);
 
 
 
-        $valorconvint = intval($valorfinbuqueda);
-        $valoriniciodebarra =  $valorconvint - $valorarestar + 1;
-
-        $stmbusquedabfin = $this->bd->prepare("UPDATE T_TMPAVANCE_INSUMOS_PRODUCTOS SET BARRA_INICIO='$valoriniciodebarra', BARRA_FIN=' $valorfinbuqueda',CANT_INSUMOS='$suminsumos' WHERE COD_AVANCE_INSUMOS ='$codigo_de_avance_insumo'");
+        $stmbusquedabfin = $this->bd->prepare("UPDATE T_TMPAVANCE_INSUMOS_PRODUCTOS SET BARRA_INICIO='$valorinicioabr', BARRA_FIN='$valorabrfin',CANT_INSUMOS='$suminsumos' WHERE COD_AVANCE_INSUMOS ='$codigo_de_avance_insumo'");
         $stmbusquedabfin->execute();
         if ($updatetotal == 0) {
           $stmVerificaCodReque = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) AS COD_REQUERIMIENTO FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
@@ -3797,7 +3790,24 @@ class m_almacen
       $mostrarrequerimiento = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TOC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,TOC.COD_TMPREQUERIMIENTO AS COD_TMPREQUERIMIENTO,
                                                     TOC.ESTADO AS ESTADO, TRI.COD_PRODUCTO AS COD_PRODUCTO,PRO.DES_PRODUCTO  AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD FROM T_TMPORDEN_COMPRA TOC 
                                                     INNER JOIN T_TMPREQUERIMIENTO_ITEM TRI ON TOC.COD_TMPREQUERIMIENTO=TRI.COD_REQUERIMIENTO
-                                                    INNER JOIN T_PRODUCTO AS PRO ON PRO.COD_PRODUCTO=TRI.COD_PRODUCTO WHERE TOC.ESTADO='T'");
+                                                    INNER JOIN T_PRODUCTO AS PRO ON PRO.COD_PRODUCTO=TRI.COD_PRODUCTO");
+      $mostrarrequerimiento->execute();
+      $datosrequerimiento = $mostrarrequerimiento->fetchAll(PDO::FETCH_OBJ);
+
+      return $datosrequerimiento;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarValoresPorCodigoRequerimiento($selectrequerimiento)
+  {
+    try {
+
+      $mostrarrequerimiento = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TOC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,TOC.COD_TMPREQUERIMIENTO AS COD_TMPREQUERIMIENTO,
+      TOC.ESTADO AS ESTADO, TRI.COD_PRODUCTO AS COD_PRODUCTO,PRO.DES_PRODUCTO  AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD FROM T_TMPORDEN_COMPRA TOC 
+      INNER JOIN T_TMPREQUERIMIENTO_ITEM TRI ON TOC.COD_TMPREQUERIMIENTO=TRI.COD_REQUERIMIENTO
+      INNER JOIN T_PRODUCTO AS PRO ON PRO.COD_PRODUCTO=TRI.COD_PRODUCTO WHERE TOC.COD_REQUERIMIENTO='$selectrequerimiento'");
       $mostrarrequerimiento->execute();
       $datosrequerimiento = $mostrarrequerimiento->fetchAll(PDO::FETCH_OBJ);
 

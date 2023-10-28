@@ -87,30 +87,12 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                             <input id="id" type="hidden" class="form-control" name="id" />
                         </div>
 
-                        <!-- Text input nombre -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Nombre de infraestructura</label>
-                            <input type="text" id="NOMBRE_INFRAESTRUCTURA" class="form-control" name="NOMBRE_INFRAESTRUCTURA" required>
-                        </div>
+
 
                         <div class="estiloordencompra">
-                            <!-- Text input dias-->
 
-                            <div class="form-outline mb-4 custom-select">
-                                <label class="form-label">Frecuencia</label>
-                                <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
-                                <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
-                                    <option value="0" selected disabled>Seleccione frecuencia</option>
-                                    <option value="1">Diario</option>
-                                    <option value="2">Inter-diario</option>
-                                    <option value="7">Semanal</option>
-                                    <option value="15">Quincenal</option>
-                                    <option value="30">Mensual</option>
-                                </select>
-                            </div>
 
                             <!--Combo zona areas -->
-
                             <div class="form-outline mb-4 custom-select">
 
                                 <label class="form-label">Zona/Areas</label>
@@ -131,8 +113,10 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                     <button type='button' class="custom-icon-zona" data-bs-toggle="modal" data-bs-target="#mostrarzonas"><i class="icon-circle-with-plus"></i></button>
                                 </div>
                             </div>
+
+                            <!--Combo infraestructura -->
                             <div class="form-outline mb-4 custom-select">
-                                <input type="text" id="valordezonahidden">
+                                <input type="hidden" id="valordezonahidden">
                                 <label class="form-label">Infraestructura</label>
                                 <select id="seleccionzonainfraestructura" class="form-select" aria-label="Default select example">
                                     <option value="none" selected disabled>Seleccione infraestructura</option>
@@ -143,7 +127,25 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                 </div>
                             </div>
 
+                            <!-- Text input dias-->
+                            <div class="form-outline mb-4 custom-select">
+                                <label class="form-label">Frecuencia</label>
+                                <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
+                                <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
+                                    <option value="0" selected disabled>Seleccione frecuencia</option>
+                                    <option value="1">Diario</option>
+                                    <option value="2">Inter-diario</option>
+                                    <option value="7">Semanal</option>
+                                    <option value="15">Quincenal</option>
+                                    <option value="30">Mensual</option>
+                                </select>
+                            </div>
 
+                        </div>
+                        <!-- Text input nombre -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Nombre de infraestructura</label>
+                            <input type="text" id="NOMBRE_INFRAESTRUCTURA" class="form-control" name="NOMBRE_INFRAESTRUCTURA" required>
                         </div>
                         <!-- Crear PDF -->
                         <div class="contenedorgeneral">
