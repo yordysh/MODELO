@@ -81,8 +81,8 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_insertar_infraestructura_zona($nombreinfraestructuraz, $nombrezonain);
     echo $respuesta;
 } elseif ($accion == 'actualizarcomboinfraestructura') {
-
-    $respuesta = c_almacen::c_actualizar_combo_infraestructura();
+    $nombrezonain = trim($_POST['nombrezonain']);
+    $respuesta = c_almacen::c_actualizar_combo_infraestructura($nombrezonain);
     echo $respuesta;
 } elseif ($accion == 'actualizarcombozona') {
 
@@ -796,14 +796,14 @@ class c_almacen
             };
         }
     }
-    static function c_actualizar_combo_infraestructura()
+    static function c_actualizar_combo_infraestructura($nombrezonain)
     {
         try {
 
             $mostrar = new m_almacen();
 
             $mostrar = new m_almacen();
-            $datos = $mostrar->MostrarInfraestructura();
+            $datos = $mostrar->MostrarInfraestructuraID($nombrezonain);
             $json = array();
             foreach ($datos as $row) {
                 $json[] = array(
@@ -980,12 +980,15 @@ class c_almacen
     {
         $mostrar = new m_almacen();
 
-        if (isset($_POST['observacion'])) {
+        // if (isset($_POST['observacion'])) {
+        if (isset($_POST['fechaPostergacion'])) {
+            $codigozonaalerta = trim($_POST['codigozonaalerta']);
             $estado = $_POST['estado'];
             $taskId = $_POST['taskId'];
             $observacion = $_POST['observacion'];
             $fechaPosterga = $_POST['fechaPostergacion'];
             $FECHA_POSTERGACION =  convFecSistema($fechaPosterga);
+
             $FECHA_TOTAL = $_POST['taskFecha'];
 
             $accionCorrectiva = $_POST['accionCorrectiva'];
@@ -1000,12 +1003,13 @@ class c_almacen
 
             if ($FECHA_TOTAL != $fechadHoy) {
                 $FECHA_ACTUALIZA = $fechadHoy;
-                $alert = $mostrar->actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion);
+                $alert = $mostrar->actualizarAlertaCheckBox($codigozonaalerta, $estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion);
             } else {
                 $FECHA_ACTUALIZA = $FECHA_TOTAL;
-                $alert = $mostrar->actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion);
+                $alert = $mostrar->actualizarAlertaCheckBox($codigozonaalerta, $estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion);
             }
         } else {
+            $codigozonaalerta = trim($_POST['codigozonaalerta']);
             $estado = $_POST['estado'];
             // var_dump($estado);
             $taskId = $_POST['taskId'];
@@ -1014,8 +1018,6 @@ class c_almacen
             $accionCorrectiva = $_POST['accionCorrectiva'];
             $selectVerificacion = $_POST['selectVerificacion'];
 
-
-
             $fechadHoy  = $mostrar->c_horaserversql('F');
             // $fechaActual = new DateTime();
             // $fechadHoy = $fechaActual->format('d/m/Y');
@@ -1023,10 +1025,10 @@ class c_almacen
 
             if ($FECHA_TOTAL != $fechadHoy) {
                 $FECHA_ACTUALIZA = $fechadHoy;
-                $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion);
+                $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($codigozonaalerta, $estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion);
             } else {
                 $FECHA_ACTUALIZA = $FECHA_TOTAL;
-                $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion);
+                $alert = $mostrar->actualizarAlertaCheckBoxSinPOS($codigozonaalerta, $estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion);
             }
         }
         $insert2 = $alert->execute();
@@ -1052,6 +1054,7 @@ class c_almacen
 
 
         $taskNdias = $_POST['taskNdias'];
+
         if ($taskNdias == 1) {
 
             if (isset($_POST['fechaPostergacion'])) {
@@ -1119,7 +1122,7 @@ class c_almacen
 
                 $POSTERGACION = 'SI';
 
-                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $formattedDate, $taskNdias, $POSTERGACION);
+                $insert = $mostrar->InsertarAlertaMayor($codigozona, $codInfraestructura, $fechaActual, $formattedDate, $taskNdias, $POSTERGACION);
 
                 if ($insert) {
                     echo "Inserción exitosa";
@@ -1140,7 +1143,7 @@ class c_almacen
                     $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA_TOTAL . '+1 day'));
                 }
 
-                $insert = $mostrar->InsertarAlerta($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $taskNdias);
+                $insert = $mostrar->InsertarAlerta($FECHA_CREACION, $codigozona, $codInfraestructura, $FECHA_TOTAL, $taskNdias);
 
                 if ($insert) {
                     echo "ok";
@@ -1153,9 +1156,7 @@ class c_almacen
             if (isset($_POST['fechaPostergacion'])) {
                 $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
-
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
-
                 $fechaActual = $mostrar->c_horaserversql('F');
 
                 $DIAS_DESCUENTO = 1;
@@ -1166,8 +1167,8 @@ class c_almacen
 
                 $POSTERGACION = 'SI';
 
-                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION);
-                var_dump($insert);
+                $insert = $mostrar->InsertarAlertaMayor($codigozona, $codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION);
+
                 if ($insert) {
                     echo "Inserción exitosa";
                 } else {
@@ -1177,8 +1178,6 @@ class c_almacen
                 // $fechaCreacion = $_POST['fechaCreacion'];
                 $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
-
-
 
                 $FECHA_CREACION  = $mostrar->c_horaserversql('F');
                 $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA_CREACION);
@@ -1195,7 +1194,7 @@ class c_almacen
                 $DIAS_DESCUENTO = 2;
                 $FECHA_ACORDAR = retunrFechaSqlphp(date('Y-m-d', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days')));
 
-                $insert = $mostrar->InsertarAlertaMayorSinPost($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $FECHA_ACORDAR, $taskNdias);
+                $insert = $mostrar->InsertarAlertaMayorSinPost($FECHA_CREACION, $codigozona, $codInfraestructura, $FECHA_TOTAL, $FECHA_ACORDAR, $taskNdias);
 
                 if ($insert) {
                     echo "Inserción exitosa";
@@ -1226,7 +1225,7 @@ class c_almacen
                 // echo "FECHASS" . $fechaAcordar;
                 $POSTERGACION = 'SI';
 
-                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION);
+                $insert = $mostrar->InsertarAlertaMayor($codigozona, $codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION);
 
                 if ($insert) {
                     echo "Inserción exitosa";
@@ -1237,8 +1236,6 @@ class c_almacen
                 // $fechaCreacion = $_POST['fechaCreacion'];
                 $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
-
-
 
                 $FECHA_CREACION  = $mostrar->c_horaserversql('F');
                 $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA_CREACION);
@@ -1255,7 +1252,7 @@ class c_almacen
                 $DIAS_DESCUENTO = 2;
                 $FECHA_ACORDAR = retunrFechaSqlphp(date('Y-m-d', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days')));
 
-                $insert = $mostrar->InsertarAlertaMayorSinPost($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $FECHA_ACORDAR, $taskNdias);
+                $insert = $mostrar->InsertarAlertaMayorSinPost($FECHA_CREACION, $codigozona, $codInfraestructura, $FECHA_TOTAL, $FECHA_ACORDAR, $taskNdias);
 
                 if ($insert) {
                     echo "Inserción exitosa";
@@ -1265,7 +1262,6 @@ class c_almacen
             }
         } elseif ($taskNdias == 30) {
 
-
             if (isset($_POST['fechaPostergacion'])) {
                 $codigozona = $_POST['codigozona'];
                 $codInfraestructura = $_POST['codInfraestructura'];
@@ -1274,9 +1270,7 @@ class c_almacen
                 // echo "aqui";
                 // echo "FechaPOSTERGACION" . $fechaPostergacion;
 
-
                 $fechaActual = $mostrar->c_horaserversql('F');
-
 
                 $DIAS_DESCUENTO = 1;
 
@@ -1287,7 +1281,7 @@ class c_almacen
                 // echo "FECHASS" . $fechaAcordar;
                 $POSTERGACION = 'SI';
 
-                $insert = $mostrar->InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION);
+                $insert = $mostrar->InsertarAlertaMayor($codigozona, $codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION);
 
                 if ($insert) {
                     echo "Inserción exitosa";
@@ -1316,7 +1310,7 @@ class c_almacen
                 $DIAS_DESCUENTO = 2;
                 $FECHA_ACORDAR = retunrFechaSqlphp(date('Y-m-d', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days')));
 
-                $insert = $mostrar->InsertarAlertaMayorSinPost($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $FECHA_ACORDAR, $taskNdias);
+                $insert = $mostrar->InsertarAlertaMayorSinPost($FECHA_CREACION, $codigozona, $codInfraestructura, $FECHA_TOTAL, $FECHA_ACORDAR, $taskNdias);
 
                 if ($insert) {
                     echo "Inserción exitosa";

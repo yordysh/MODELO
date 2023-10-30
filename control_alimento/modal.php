@@ -21,28 +21,45 @@
     </div>
 </div>
 <script>
+    // var fechaActual = new Date();
+    // fechaActual.setDate(fechaActual.getDate() + 1);
+
+    // var fechaLimite = new Date();
+    // fechaLimite.setDate(fechaLimite.getDate() + 3);
+
+
+
+    // var inputFecha = document.getElementById('fecha_postergacion');
+    // inputFecha.setAttribute('min', fechaActual.toISOString().split('T')[0]);
+    // inputFecha.setAttribute('max', fechaLimite.toISOString().split('T')[0]);
+
+
+    // inputFecha.addEventListener('input', function() {
+    //     var selectedDate = new Date(inputFecha.value);
+    //     if (selectedDate.getDay() === 6) {
+    //         inputFecha.value = '';
+    //         Swal.fire({
+    //             title: 'La fecha ingresada es domingo',
+    //             icon: 'info',
+    //             allowOutsideClick: false,
+    //             confirmButtonText: 'Ok',
+    //         });
+    //     }
+    // });
+
+    var fechaPostergacionInput = document.getElementById("fecha_postergacion");
+
     var fechaActual = new Date();
-    fechaActual.setDate(fechaActual.getDate() + 1);
+    var fechaMinima = new Date(fechaActual);
+    fechaMinima.setDate(fechaActual.getDate() + 1);
 
-    var fechaLimite = new Date();
-    fechaLimite.setDate(fechaLimite.getDate() + 3);
+    var fechaMaxima = new Date(fechaActual);
+    fechaMaxima.setDate(fechaActual.getDate() + 3);
 
 
+    var fechaMinimaString = fechaMinima.toISOString().split('T')[0];
+    var fechaMaximaString = fechaMaxima.toISOString().split('T')[0];
 
-    var inputFecha = document.getElementById('fecha_postergacion');
-    inputFecha.setAttribute('min', fechaActual.toISOString().split('T')[0]);
-    inputFecha.setAttribute('max', fechaLimite.toISOString().split('T')[0]);
-
-    inputFecha.addEventListener('input', function() {
-        var selectedDate = new Date(inputFecha.value);
-        if (selectedDate.getDay() === 6) {
-            inputFecha.value = '';
-            Swal.fire({
-                title: 'La fecha ingresada es domingo',
-                icon: 'info',
-                allowOutsideClick: false,
-                confirmButtonText: 'Ok',
-            });
-        }
-    });
+    fechaPostergacionInput.setAttribute("min", fechaMinimaString);
+    fechaPostergacionInput.setAttribute("max", fechaMaximaString);
 </script>

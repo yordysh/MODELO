@@ -267,10 +267,12 @@ $(function () {
                   "#myModalExito .confirm-button"
                 );
                 modalConfirmButton.addEventListener("click", function () {
-                  const fechaPostergacion = document.querySelector(
-                    "input[name='fecha_postergacion']"
-                  ).value;
+                  // const fechaPostergacion = document.querySelector(
+                  //   "input[name='fecha_postergacion']"
+                  // ).value;
+                  const fechaPostergacion = $("#fecha_postergacion").val();
 
+                  console.log("fecha" + fechaPostergacion);
                   console.log("accionCorrectiva: " + accionCorrectiva);
                   console.log("selectVerificacion: " + selectVerificacion);
 
@@ -284,6 +286,7 @@ $(function () {
                     data: {
                       accion: accion,
                       estado: "PO",
+                      codigozonaalerta: task.COD_ZONA,
                       taskId: task.COD_ALERTA,
                       taskFecha: task.FECHA_TOTAL,
                       observacion: observacion,
@@ -309,6 +312,7 @@ $(function () {
                         data: {
                           accion: accion,
                           fechaCreacion: nuevaFechaTotal.toISOString(),
+                          codigozona: task.COD_ZONA,
                           codInfraestructura: task.COD_INFRAESTRUCTURA,
                           taskNdias: task.NDIAS,
                           fechaPostergacion: fechaPostergacion,

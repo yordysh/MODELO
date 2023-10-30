@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-$codusuario = $_SESSION["cod"];
-// $codusuario = '0002';
+// $codusuario = $_SESSION["cod"];
+$codusuario = '0002';
 ?>
 <?php
 require_once "m_almacen.php";
@@ -143,10 +143,10 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
 
                         </div>
                         <!-- Text input nombre -->
-                        <div class="form-outline mb-4">
+                        <!-- <div class="form-outline mb-4">
                             <label class="form-label">Nombre de infraestructura</label>
                             <input type="text" id="NOMBRE_INFRAESTRUCTURA" class="form-control" name="NOMBRE_INFRAESTRUCTURA" required>
-                        </div>
+                        </div> -->
                         <!-- Crear PDF -->
                         <div class="contenedorgeneral">
                             <div class="btonguardar">

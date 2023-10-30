@@ -71,7 +71,8 @@ $(function () {
   });
 
   //------------- Añadiendo con ajax InfraestructuraAccesorios----------------//
-  $("#formularioInfra").submit((e) => {
+  // $("#formularioInfra").submit((e) => {
+  $("#boton").on("click", (e) => {
     e.preventDefault();
 
     var selectInfra = document.getElementById("selectInfra");
@@ -206,6 +207,7 @@ $(function () {
   //------------- Añadiendo con ajax infraestrutura----------------//
   $("#guardarinfra").on("click", (e) => {
     const accion = "guardarinfraestructura";
+    let nombrezonain = $("#valordezonahidden").val();
 
     $.ajax({
       type: "POST",
@@ -213,7 +215,7 @@ $(function () {
       data: {
         accion: accion,
         nombreinfraestructuraz: $("#nombreinfraestructura").val(),
-        nombrezonain: $("#valordezonahidden").val(),
+        nombrezonain: nombrezonain,
       },
       beforeSend: function () {
         $(".preloader").css("opacity", "1");
@@ -229,7 +231,7 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#nombreinfraestructura").val("");
-              actualizarComboInfraestructura();
+              actualizarComboInfraestructura(nombrezonain);
             }
           });
         } else {
@@ -290,11 +292,11 @@ $(function () {
     });
   }
 
-  function actualizarComboInfraestructura() {
+  function actualizarComboInfraestructura(nombrezonain) {
     const accion = "actualizarcomboinfraestructura";
     $.ajax({
       url: "./c_almacen.php",
-      data: { accion: accion },
+      data: { accion: accion, nombrezonain: nombrezonain },
       type: "POST",
       success: function (response) {
         let data = JSON.parse(response);

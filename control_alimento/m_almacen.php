@@ -241,6 +241,17 @@ class m_almacen
 
     return $count;
   }
+  public function contarRegistrosInfraestructuraZona($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado)
+  {
+    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_ALERTA WHERE COD_INFRAESTRUCTURA = :NOMBRE_INFRAESTRUCTURA AND COD_ZONA = :COD_ZONA");
+    $repetir->bindParam(':NOMBRE_INFRAESTRUCTURA', $NOMBRE_INFRAESTRUCTURA, PDO::PARAM_STR);
+    $repetir->bindParam(':COD_ZONA', $valorSeleccionado, PDO::PARAM_STR);
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['count'];
+
+    return $count;
+  }
   public function contarRegistrosControl($NOMBRE_CONTROL_MAQUINA, $valorSeleccionado)
   {
     $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_CONTROL_MAQUINA WHERE NOMBRE_CONTROL_MAQUINA = :NOMBRE_CONTROL_MAQUINA AND COD_ZONA= :COD_ZONA");
@@ -382,6 +393,20 @@ class m_almacen
     }
   }
 
+  public function MostrarInfraestructuraID($nombrezonain)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT * FROM T_INFRAESTRUCTURA WHERE COD_ZONA='$nombrezonain'");
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
   public function MostrarInfraestructuraTabla()
   {
     try {
@@ -402,10 +427,10 @@ class m_almacen
     try {
 
 
-      $stm = $this->bd->prepare("SELECT T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
-                                 T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA, T_INFRAESTRUCTURA.NDIAS AS NDIAS ,T_INFRAESTRUCTURA.FECHA AS FECHA,
-                                 T_INFRAESTRUCTURA.USUARIO AS USUARIO  FROM T_INFRAESTRUCTURA
-                                 INNER JOIN T_ZONA_AREAS ON T_INFRAESTRUCTURA.COD_ZONA = T_ZONA_AREAS.COD_ZONA WHERE T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA LIKE '$search%'");
+      $stm = $this->bd->prepare("SELECT TI.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,TZ.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
+                                  TI.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,TI.NDIAS AS NDIAS,TA.FECHA_CREACION AS FECHA, TI.USUARIO AS USUARIO FROM T_ALERTA TA 
+                                  INNER JOIN T_INFRAESTRUCTURA TI ON TA.COD_INFRAESTRUCTURA=TI.COD_INFRAESTRUCTURA
+                                  INNER JOIN T_ZONA_AREAS TZ ON TZ.COD_ZONA=TA.COD_ZONA WHERE TI.NOMBRE_INFRAESTRUCTURA LIKE '$search%'");
 
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
@@ -466,11 +491,11 @@ class m_almacen
   {
     try {
 
-      // $this->bd->beginTransaction();
+      $this->bd->beginTransaction();
       $cod = new m_almacen();
       $COD_INFRAESTRUCTURA = $cod->generarCodigoInfraestructura();
       // $VERSION = $cod->generarVersion();
-      // $repetir = $cod->contarRegistrosInfraestructura($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado);
+      $repetir = $cod->contarRegistrosInfraestructuraZona($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado);
 
       $FECHA = $cod->c_horaserversql('F');
       $nombre = 'LBS-PHS-FR-01';
@@ -481,43 +506,46 @@ class m_almacen
       // var_dump($VERSION);
       // exit();
 
-      // if ($repetir == 0) {
+      if ($repetir == 0) {
 
-      // $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION,USUARIO)
-      //                             VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION','$codpersonal')");
+        // $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA  (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,NDIAS, FECHA,VERSION,USUARIO)
+        //                             VALUES ('$COD_INFRAESTRUCTURA','$valorSeleccionado', '$NOMBRE_INFRAESTRUCTURA ','$NDIAS', '$FECHA', '$VERSION','$codpersonal')");
 
-      // $insert = $stm->execute();
-
-
-      // $fechaDHoy  = $cod->c_horaserversql('F');
+        // $insert = $stm->execute();
 
 
-      $DIAS_DESCUENTO = 2;
+        // $fechaDHoy  = $cod->c_horaserversql('F');
 
-      $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA);
-      $FECHA_TOTAL = $FECHA_FORMATO->modify("+$NDIAS days")->format('d-m-Y');
-      // $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA . '+ ' . $NDIAS));
-      // $FECHA = date('Y-m-d', strtotime($FECHA));
-      // $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA . ' + ' . $NDIAS . ' days'));
 
-      // Verificar si la fecha total cae en domingo
-      if (date('N', strtotime($FECHA_TOTAL)) == 7) {
-        $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA_TOTAL . '+1 day'));
+        $DIAS_DESCUENTO = 2;
+
+        $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA);
+        $FECHA_TOTAL = $FECHA_FORMATO->modify("+$NDIAS days")->format('d-m-Y');
+        // $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA . '+ ' . $NDIAS));
+        // $FECHA = date('Y-m-d', strtotime($FECHA));
+        // $FECHA_TOTAL = date('Y-m-d', strtotime($FECHA . ' + ' . $NDIAS . ' days'));
+
+        // Verificar si la fecha total cae en domingo
+        if (date('N', strtotime($FECHA_TOTAL)) == 7) {
+          $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA_TOTAL . '+1 day'));
+        }
+
+        if (!($NDIAS == 1 || $NDIAS == 2)) {
+          $FECHA_ACORDAR = date('d-m-Y', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days'));
+          // $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) VALUES('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$NDIAS')");
+          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_ZONA,COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS,VERSION) VALUES('$valorSeleccionado','$NOMBRE_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$NDIAS','$VERSION')");
+        } else {
+          //  $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) VALUES('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$NDIAS')");
+          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_ZONA,COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS,VERSION) VALUES('$valorSeleccionado','$NOMBRE_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$NDIAS','$VERSION')");
+        }
+        $actualizainfra = $this->bd->prepare("UPDATE T_INFRAESTRUCTURA SET NDIAS='$NDIAS' WHERE COD_ZONA='$valorSeleccionado' AND COD_INFRAESTRUCTURA='$NOMBRE_INFRAESTRUCTURA'");
+        $actualizainfra->execute();
+
+        $insert = $stm1->execute();
+
+        $insert = $this->bd->commit();
+        return $insert;
       }
-
-      if (!($NDIAS == 1 || $NDIAS == 2)) {
-        $FECHA_ACORDAR = date('d-m-Y', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days'));
-        // $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) VALUES('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$NDIAS')");
-        $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_ZONA,COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) VALUES('$valorSeleccionado','$NOMBRE_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$NDIAS')");
-      } else {
-        //  $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) VALUES('$COD_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$NDIAS')");
-        $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_ZONA,COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) VALUES('$valorSeleccionado','$NOMBRE_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$NDIAS')");
-      }
-      $insert = $stm1->execute();
-
-      $insert = $this->bd->commit();
-      return $insert;
-      // }
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());
@@ -643,7 +671,7 @@ class m_almacen
       T_ALERTA.ESTADO AS ESTADO, T_ALERTA.N_DIAS_POS AS N_DIAS_POS, T_ALERTA.POSTERGACION AS POSTERGACION FROM T_ALERTA INNER JOIN T_INFRAESTRUCTURA
       ON T_ALERTA.COD_INFRAESTRUCTURA= T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA inner join T_ZONA_AREAS ON
       T_ZONA_AREAS.COD_ZONA= T_INFRAESTRUCTURA.COD_ZONA
-      WHERE CAST(FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE)   AND ESTADO='P' ");
+      WHERE CAST(FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE) AND ESTADO='P'");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
@@ -653,12 +681,13 @@ class m_almacen
     }
   }
 
-  public function InsertarAlerta($FECHA_CREACION, $codInfraestructura, $FECHA_TOTAL, $taskNdias)
+  public function InsertarAlerta($FECHA_CREACION, $codigozona, $codInfraestructura, $FECHA_TOTAL, $taskNdias)
   {
-    $stm = $this->bd->prepare("INSERT INTO T_ALERTA (COD_INFRAESTRUCTURA, FECHA_CREACION, FECHA_TOTAL,N_DIAS_POS) VALUES (:COD_INFRAESTRUCTURA, :FECHA_CREACION, :FECHA_TOTAL,:N_DIAS_POS)");
+    $stm = $this->bd->prepare("INSERT INTO T_ALERTA (COD_ZONA,COD_INFRAESTRUCTURA, FECHA_CREACION, FECHA_TOTAL,N_DIAS_POS) VALUES (:COD_ZONA, :COD_INFRAESTRUCTURA, :FECHA_CREACION, :FECHA_TOTAL,:N_DIAS_POS)");
 
 
     $stm->bindParam(':FECHA_CREACION', $FECHA_CREACION);
+    $stm->bindParam(':COD_ZONA', $codigozona);
     $stm->bindParam(':COD_INFRAESTRUCTURA', $codInfraestructura);
     $stm->bindParam(':FECHA_TOTAL', $FECHA_TOTAL);
     $stm->bindParam(':N_DIAS_POS', $taskNdias);
@@ -667,9 +696,9 @@ class m_almacen
     return $insert1;
   }
 
-  public function InsertarAlertaMayor($codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION)
+  public function InsertarAlertaMayor($codigozona, $codInfraestructura, $fechaActual, $fechaPostergacion, $taskNdias, $POSTERGACION)
   {
-    $stm = $this->bd->prepare("INSERT INTO T_ALERTA (COD_INFRAESTRUCTURA, FECHA_CREACION, FECHA_TOTAL, N_DIAS_POS,POSTERGACION) VALUES ( '$codInfraestructura','$fechaActual', '$fechaPostergacion','$taskNdias','$POSTERGACION')");
+    $stm = $this->bd->prepare("INSERT INTO T_ALERTA (COD_ZONA, COD_INFRAESTRUCTURA, FECHA_CREACION, FECHA_TOTAL, N_DIAS_POS,POSTERGACION) VALUES ('$codigozona','$codInfraestructura','$fechaActual', '$fechaPostergacion','$taskNdias','$POSTERGACION')");
     $insert2 = $stm->execute();
     return $insert2;
   }
@@ -689,20 +718,21 @@ class m_almacen
     return $insert2;
   }
 
-  public function actualizarAlertaCheckBox($estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion)
+  public function actualizarAlertaCheckBox($codigozonaalerta, $estado, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion)
   {
 
-    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = '$estado', OBSERVACION = '$observacion', FECHA_POSTERGACION= '$FECHA_POSTERGACION', FECHA_TOTAL = '$FECHA_ACTUALIZA', ACCION_CORRECTIVA = '$accionCorrectiva', VERIFICACION_REALIZADA='$selectVerificacion' WHERE COD_ALERTA = '$taskId'");
+    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET COD_ZONA='$codigozonaalerta', ESTADO = '$estado', OBSERVACION = '$observacion', FECHA_POSTERGACION= '$FECHA_POSTERGACION', FECHA_TOTAL = '$FECHA_ACTUALIZA', ACCION_CORRECTIVA = '$accionCorrectiva', VERIFICACION_REALIZADA='$selectVerificacion' WHERE COD_ALERTA = '$taskId'");
+
     $stmt->execute();
     return $stmt;
   }
 
-  public function actualizarAlertaCheckBoxSinPOS($estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion)
+  public function actualizarAlertaCheckBoxSinPOS($codigozonaalerta, $estado, $taskId, $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva, $selectVerificacion)
   {
     // $fecha_actualiza = convFecSistema1($FECHA_ACTUALIZA);
-    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO = :estado, OBSERVACION = :observacionTextArea, FECHA_TOTAL = :FECHA_ACTUALIZA, ACCION_CORRECTIVA = :ACCION_CORRECTIVA, VERIFICACION_REALIZADA=:VERIFICACION_REALIZADA WHERE COD_ALERTA = :COD_ALERTA");
+    $stmt = $this->bd->prepare("UPDATE T_ALERTA SET COD_ZONA=:COD_ZONA, ESTADO = :estado, OBSERVACION = :observacionTextArea, FECHA_TOTAL = :FECHA_ACTUALIZA, ACCION_CORRECTIVA = :ACCION_CORRECTIVA, VERIFICACION_REALIZADA=:VERIFICACION_REALIZADA WHERE COD_ALERTA = :COD_ALERTA");
 
-
+    $stmt->bindParam(':COD_ZONA', $codigozonaalerta, PDO::PARAM_STR);
     $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
     $stmt->bindParam(':observacionTextArea', $observacionTextArea, PDO::PARAM_STR);
     $stmt->bindParam(':COD_ALERTA', $taskId, PDO::PARAM_STR);
