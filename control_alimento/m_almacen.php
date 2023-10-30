@@ -602,27 +602,26 @@ class m_almacen
   {
     try {
 
-
+      $this->bd->beginTransaction();
       $cod = new m_almacen();
       $COD_INFRAESTRUCTURA = $cod->generarCodigoInfraestructura();
 
       $nombre = 'LBS-PHS-FR-01';
 
+      $repetircod = $cod->contarRegistrosInfraestructura($nombreinfraestructuraz, $nombrezonain);
 
-      $repetir = $cod->contarRegistrosInfraestructura($nombreinfraestructuraz, $nombrezonain);
-
-
-      if ($repetir == 0) {
+      if ($repetircod == 0) {
         $VERSION = $cod->generarVersionGeneral($nombre);
 
         $stm = $this->bd->prepare("INSERT INTO T_INFRAESTRUCTURA (COD_INFRAESTRUCTURA, COD_ZONA,NOMBRE_INFRAESTRUCTURA ,VERSION)
                                      VALUES ('$COD_INFRAESTRUCTURA','$nombrezonain', '$nombreinfraestructuraz', '$VERSION')");
 
         $insert = $stm->execute();
+        $insert = $this->bd->commit();
         return $insert;
       }
     } catch (Exception $e) {
-
+      $this->bd->rollBack();
       die($e->getMessage());
     }
   }
@@ -2864,13 +2863,11 @@ class m_almacen
     $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
     return $codigoAumento;
   }
-  public function NumeroBachadaGenerado()
+  public function NumeroBachadaGenerado($codigoproducto, $codigoproduccion)
   {
-    $stm = $this->bd->prepare("SELECT MAX(N_BACHADA) as N_BACHADA FROM T_TMPAVANCE_INSUMOS_PRODUCTOS");
+    $stm = $this->bd->prepare("SELECT MAX(N_BACHADA) as N_BACHADA FROM T_TMPAVANCE_INSUMOS_PRODUCTOS WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
     $stm->execute();
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
-
-
     $maxCodigo = intval($resultado['N_BACHADA']);
 
     $nuevoCodigo = $maxCodigo + 1;
@@ -2894,7 +2891,7 @@ class m_almacen
 
       $codigoInsumosAvances = new m_almacen();
       $codigo_de_avance_insumo = $codigoInsumosAvances->CodigoAvanceInsumo();
-      $numero_generado_bachada = $codigoInsumosAvances->NumeroBachadaGenerado();
+      $numero_generado_bachada = $codigoInsumosAvances->NumeroBachadaGenerado($codigoproducto, $codigoproduccion);
 
       $nombre = 'LBS-OP-FR-01';
       $VERSION = $codigoInsumosAvances->generarVersionGeneral($nombre);

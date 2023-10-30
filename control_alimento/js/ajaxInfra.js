@@ -4,8 +4,6 @@ $(function () {
 
   let edit = false;
 
-  $("#selectInfra").select2();
-
   //===== Prealoder
 
   window.onload = function () {
@@ -17,7 +15,7 @@ $(function () {
     document.querySelector(".preloader").style.display = "none";
   }
   //-------------------------------------------//
-
+  $("#selectInfra").select2();
   //------------- Busqueda con ajax infraestructura Accesorio----------------//
 
   $("#search").keyup(() => {
@@ -77,9 +75,9 @@ $(function () {
 
     var selectInfra = document.getElementById("selectInfra");
 
-    selectInfra.disabled = false;
+    // selectInfra.disabled = false;
 
-    const accion = edit === false ? "insertarinfra" : "actualizarinfra";
+    let accion = edit === false ? "insertarinfra" : "actualizarinfra";
 
     $.ajax({
       type: "POST",
@@ -99,8 +97,8 @@ $(function () {
         $(".preloader").css("display", "block");
       },
       success: function (response) {
-        // console.log(response);
-        if (response == "ok") {
+        console.log(response);
+        if (response === "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
             text: "Los datos se han guardado correctamente.",
@@ -108,12 +106,12 @@ $(function () {
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
-              fetchTasks();
               // $("#formularioInfra").trigger("reset");
               $("#taskId").val("");
               $("#selectFrecuencia").val("0").trigger("change");
               $("#NOMBRE_INFRAESTRUCTURA").val("");
               $("#selectInfra").val("none").trigger("change");
+              fetchTasks();
             }
           });
         } else {
@@ -205,10 +203,12 @@ $(function () {
   });
   /*----------------------------------------------------------- */
   //------------- Añadiendo con ajax infraestrutura----------------//
-  $("#guardarinfra").on("click", (e) => {
-    const accion = "guardarinfraestructura";
-    let nombrezonain = $("#valordezonahidden").val();
+  // $("#guardarinfra").on("click", (e) => {
+  $(document).on("click", "#guardarinfra", (e) => {
+    e.preventDefault();
 
+    let nombrezonain = $("#valordezonahidden").val();
+    let accion = "guardarinfraestructura";
     $.ajax({
       type: "POST",
       url: "./c_almacen.php",
@@ -222,7 +222,9 @@ $(function () {
         $(".preloader").css("display", "block");
       },
       success: function (response) {
-        if (response == "ok") {
+        console.log("respuesta" + response);
+
+        if (response === "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
             text: "Los datos se han guardado correctamente.",

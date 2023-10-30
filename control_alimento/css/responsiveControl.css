@@ -489,6 +489,10 @@ td {
   flex: 0.45;
   margin-right: 20px;
 }
+.custom-infra {
+  flex: 0.45;
+  margin-right: 40px;
+}
 .styleanmes {
   flex: 1;
   padding: 5px 0;
@@ -501,6 +505,20 @@ td {
   letter-spacing: 10px;
   text-align: center;
   padding-top: 50px;
+}
+.buttonzonas {
+  position: absolute;
+  padding: 0;
+  height: 0;
+  margin-top: -38px;
+  margin-left: 355px;
+}
+.buttonifraestructura {
+  position: absolute;
+  padding: 0;
+  height: 0;
+  margin-top: -38px;
+  margin-left: 350px;
 }
 
 /*-------------- Estilo de responsive ---------------------*/
@@ -528,7 +546,14 @@ td {
     padding: 0;
     height: 0;
     margin-top: -38px;
-    margin-left: 390px;
+    margin-left: 208px;
+  }
+  .buttonifraestructura {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 210px;
   }
 }
 
@@ -585,7 +610,14 @@ td {
     padding: 0;
     height: 0;
     margin-top: -38px;
-    margin-left: 310px;
+    margin-left: 150px;
+  }
+  .buttonifraestructura {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 150px;
   }
 }
 @media screen and (max-width: 992px) {
@@ -704,6 +736,13 @@ td {
     margin-top: -38px;
     margin-left: 510px;
   }
+  .buttonifraestructura {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 510px;
+  }
   .custom-select {
     margin: 0;
   }
@@ -731,7 +770,15 @@ td {
     margin-top: -38px;
     margin-left: 470px;
   }
-  .custom-select {
+  .buttonifraestructura {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 470px;
+  }
+  .custom-select,
+  .custom-infra {
     margin: 0;
   }
   #selectInfra {

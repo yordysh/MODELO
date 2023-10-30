@@ -849,7 +849,6 @@ class c_almacen
 
             $respuesta = $mostrar->insertarInfraestructuraZona($nombreinfraestructuraz, $nombrezonain);
             if ($respuesta) {
-
                 return "ok";
             } else {
                 return "error";

@@ -43,52 +43,7 @@ $dataCantidadMinima = $mostrar->MostrarProductoComboRegistro();
         </div>
     </div>
     <!-- fin -->
-    <!-- <nav class="nav">
-        <div class="wave"></div>
-        <i class="icon-menu navOpenBtn"></i>
-        <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
-        <ul class="nav-links">
-            <div class="icon-cross navCloseBtn"></div>
-            <li>
-                <a class="" href="formulacionEnvases.php">Formulación</a>
-            </li>
-            <li>
-                <a class="" href="requerimientoProducto.php">Requerimiento</a>
-            </li>
-            <li>
-                <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
-            </li>
-            <li>
-                <a class="">Compras realizar</a>
-                <ul class="menu-vertical">
-                    <li>
-                        <a class="" href="solicitaCompra.php">Solicitar compra</a>
-                    </li>
-                    <li>
-                        <a class="" href="ordenCompra.php">Orden de compra</a>
-                    </li>
-                    <li>
-                        <a class="" href="generarComprobante.php">Generar comprobante</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a class="activo" href="#">Cantidad mínima</a>
-            </li>
-            <li>
-                <a class="" href="produccionRequerimiento.php">Producción</a>
-            </li>
-            <li>
-                <a class="" href="verificarRegistroEnvase.php">Avance producción</a>
-            </li>
-        </ul>
 
-        <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
-        <div class="search-box">
-            <i class="icon-magnifying-glass search-icon"></i>
-            <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
-        </div>
-    </nav> -->
     <?php
     require_once('../menulista/index.php');
     ?>

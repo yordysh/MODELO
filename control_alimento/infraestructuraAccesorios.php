@@ -87,13 +87,9 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                             <input id="id" type="hidden" class="form-control" name="id" />
                         </div>
 
-
-
                         <div class="estiloordencompra">
-
-
                             <!--Combo zona areas -->
-                            <div class="form-outline mb-4 custom-select">
+                            <div class="form-outline mb-4 custom-infra">
 
                                 <label class="form-label">Zona/Areas</label>
 
@@ -115,7 +111,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                             </div>
 
                             <!--Combo infraestructura -->
-                            <div class="form-outline mb-4 custom-select">
+                            <div class="form-outline mb-4 custom-infra">
                                 <input type="hidden" id="valordezonahidden">
                                 <label class="form-label">Infraestructura</label>
                                 <select id="seleccionzonainfraestructura" class="form-select" aria-label="Default select example">
@@ -128,7 +124,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                             </div>
 
                             <!-- Text input dias-->
-                            <div class="form-outline mb-4 custom-select">
+                            <div class="form-outline mb-4">
                                 <label class="form-label">Frecuencia</label>
                                 <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
                                 <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
