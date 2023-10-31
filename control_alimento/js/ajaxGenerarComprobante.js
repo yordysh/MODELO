@@ -364,7 +364,7 @@ $(function () {
         $(".preloader").css("display", "block");
       },
       success: function (response) {
-        $("#mostrarfacturasubir").modal("hide");
+        // $("#mostrarfacturasubir").modal("hide");
         if (response == "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
@@ -374,6 +374,12 @@ $(function () {
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
+              $("#mostrarfacturasubir").on("hidden.bs.modal", function () {
+                $("body").css("overflow", "auto");
+              });
+              $("#mostrarfacturasubir").modal("hide");
+              $(".modal-backdrop").remove();
+
               $("#selectempresa").val("00003");
               $("#fecha_emision").val(fechaActual);
               $("#fecha_emision").attr("min", fechaActual);

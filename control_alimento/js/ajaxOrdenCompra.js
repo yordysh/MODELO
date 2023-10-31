@@ -206,8 +206,11 @@ $(function () {
       });
       return;
     }
-
+    $("#mostrarproveedor").on("hidden.bs.modal", function () {
+      $("body").css("overflow", "auto");
+    });
     $("#mostrarproveedor").modal("hide");
+    $(".modal-backdrop").remove();
   });
   /*-------------------------------------------------------- */
   /*--------- mostrar insumos comprar ----------------------*/

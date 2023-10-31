@@ -57,7 +57,20 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
     <?php
     require_once('../menulista/index.php');
     ?>
+    <style>
+        .vertical-text {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            text-align: center;
+            width: 30px;
+            height: 100px;
+        }
 
+        td {
+            width: 150px !important;
+
+        }
+    </style>
     <main>
         <section>
             <div class="container g-4 row">
@@ -77,12 +90,9 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                             <select id="selectrequerimiento" class="form-select" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione requerimiento</option>
                                 <?php
-                                $uniqueRequerimientos = array();
+
                                 foreach ($dataRequerimiento as $lista) {
-                                    if (!in_array($lista->COD_REQUERIMIENTO, $uniqueRequerimientos)) {
-                                        echo '<option value="' . $lista->COD_REQUERIMIENTO . '" class="option">' . $lista->COD_REQUERIMIENTO . '</option>';
-                                        $uniqueRequerimientos[] = $lista->COD_REQUERIMIENTO;
-                                    }
+                                    echo '<option value="' . $lista->COD_REQUERIMIENTO . '" class="option">' . $lista->COD_REQUERIMIENTO . '</option>';
                                 }
                                 ?>
                             </select>
@@ -101,6 +111,58 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                                 </tbody>
                             </table>
                         </div>
+
+                        <div class="row g-4 top-div">
+                            <center><label class="title">CONTROL DE RECEPCION DE MATERIA PRIMA</label></center>
+                        </div>
+                        <div id="tablarecepcion" class="table-responsive" style="overflow: scroll;height: 600px; margin-top:20px;">
+                            <table id="tbrecepcion" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="encabezado-especial" rowspan="2">FECHA DE INGRESO</th>
+                                        <th rowspan="2">HORA</th>
+                                        <th rowspan="2">PRODUCTO</th>
+                                        <th rowspan="2">CÓDIGO DE LOTE</th>
+                                        <th rowspan="2">F.V</th>
+                                        <th rowspan="2">PROVEEDOR</th>
+                                        <th colspan="3" style="width: 30px;">GUÍA/BOLETA/FACTURA</th>
+                                        <th rowspan="2">N° GUÍA,BOLETA O FACTURA</th>
+                                        <th colspan="2">Empaque</th>
+                                        <th colspan="4">Presentación</th>
+                                        <th rowspan="2">CANTIDAD (kg)</th>
+                                        <th colspan="3">CONTROL DEL PRODUCTO</th>
+                                        <th colspan="3">DEL PERSONAL DE TRANSPORTE</th>
+                                        <th colspan="4">CONDICIONES DEL TRANSPORTE</th>
+                                        <th rowspan="2">V°B°</th>
+                                    </tr>
+                                    <tr>
+                                        <th rowspan="2" class="vertical-text">G.Remisión</th>
+                                        <th class="vertical-text">Boleta</th>
+                                        <th class="vertical-text">Factura</th>
+                                        <th class="vertical-text">Primario</th>
+                                        <th class="vertical-text">Secundario</th>
+                                        <th class="vertical-text">Saco</th>
+                                        <th class="vertical-text">Caja</th>
+                                        <th class="vertical-text">Cilindro</th>
+                                        <th class="vertical-text">bolsa</th>
+                                        <th class="vertical-text">Envase integro/ hermético</th>
+                                        <th class="vertical-text">Certificado de calidad</th>
+                                        <th class="vertical-text">Rotulación conforme</th>
+                                        <th class="vertical-text">Aplicación de las BPD</th>
+                                        <th class="vertical-text">Higiene & salud</th>
+                                        <th class="vertical-text">Indumentaria completa y limpia</th>
+                                        <th class="vertical-text">Limpio</th>
+                                        <th class="vertical-text">Exclusivo</th>
+                                        <th class="vertical-text">Hermético</th>
+                                        <th class="vertical-text">Ausencia de plagas</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablacontrolrecepcion">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <button style="margin-bottom: 80px;" id="guardarrecepcion" name="guardarrecepcion" class="btn btn-primary">Guardar</button>
                     </form>
                 </div>
         </section>

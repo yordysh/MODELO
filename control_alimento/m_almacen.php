@@ -3814,10 +3814,7 @@ class m_almacen
   {
     try {
 
-      $mostrarrequerimiento = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TOC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,TOC.COD_TMPREQUERIMIENTO AS COD_TMPREQUERIMIENTO,
-                                                    TOC.ESTADO AS ESTADO, TRI.COD_PRODUCTO AS COD_PRODUCTO,PRO.DES_PRODUCTO  AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD FROM T_TMPORDEN_COMPRA TOC 
-                                                    INNER JOIN T_TMPREQUERIMIENTO_ITEM TRI ON TOC.COD_TMPREQUERIMIENTO=TRI.COD_REQUERIMIENTO
-                                                    INNER JOIN T_PRODUCTO AS PRO ON PRO.COD_PRODUCTO=TRI.COD_PRODUCTO");
+      $mostrarrequerimiento = $this->bd->prepare("SELECT COD_REQUERIMIENTO FROM T_TMPORDEN_COMPRA");
       $mostrarrequerimiento->execute();
       $datosrequerimiento = $mostrarrequerimiento->fetchAll(PDO::FETCH_OBJ);
 
@@ -3839,6 +3836,27 @@ class m_almacen
       $datosrequerimiento = $mostrarrequerimiento->fetchAll(PDO::FETCH_OBJ);
 
       return $datosrequerimiento;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarValoresComprobante($selectrequerimiento)
+  {
+    try {
+
+      $mostrarvalorcomprobante = $this->bd->prepare("SELECT OC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, OC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TCOMP.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE, TCOMI.FECHA_EMISION AS FECHA_EMISION, TCI.COD_PRODUCTO AS COD_PRODUCTO, TPRO.DES_PRODUCTO AS DES_PRODUCTO, 
+                                                        TCOMP.COD_PROVEEDOR AS COD_PROVEEDOR, TPV.NOM_PROVEEDOR AS NOM_PROVEEDOR, TCOMI.SERIE AS SERIE, TCOMI.CORRELATIVO AS CORRELATIVO, TCI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA FROM T_TMPORDEN_COMPRA_ITEM TCI 
+                                                        INNER JOIN T_TMPCOMPROBANTE_ITEM TCOMI ON TCI.COD_TMPCOMPROBANTE=TCOMI.COD_TMPCOMPROBANTE
+                                                        INNER JOIN T_TMPORDEN_COMPRA OC ON OC.COD_ORDEN_COMPRA=TCI.COD_ORDEN_COMPRA
+                                                        INNER JOIN T_TMPCOMPROBANTE TCOMP ON TCOMP.COD_TMPCOMPROBANTE=TCOMI.COD_TMPCOMPROBANTE
+                                                        INNER JOIN T_PRODUCTO TPRO ON TPRO.COD_PRODUCTO=TCI.COD_PRODUCTO
+                                                        INNER JOIN T_PROVEEDOR TPV ON TPV.COD_PROVEEDOR=TCOMP.COD_PROVEEDOR
+                                                        WHERE OC.COD_REQUERIMIENTO='$selectrequerimiento'");
+      $mostrarvalorcomprobante->execute();
+      $datosvalorcomprobante = $mostrarvalorcomprobante->fetchAll(PDO::FETCH_OBJ);
+
+      return $datosvalorcomprobante;
     } catch (Exception $e) {
       die($e->getMessage());
     }

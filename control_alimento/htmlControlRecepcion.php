@@ -181,7 +181,7 @@ $mesesEnLetras = array(
                 <th rowspan="2">CÓDIGO DE LOTE</th>
                 <th rowspan="2">F.V</th>
                 <th rowspan="2">PROVEEDOR</th>
-                <th colspan="3" style="width: 30px;">GUÍA/ BOLETA/ FACTURA</th>
+                <th colspan="3" style="width: 30px;">GUÍA/BOLETA/ FACTURA</th>
                 <th rowspan="2">N° GUÍA,BOLETA O FACTURA</th>
                 <th colspan="2">Empaque</th>
                 <th colspan="4">Presentación</th>

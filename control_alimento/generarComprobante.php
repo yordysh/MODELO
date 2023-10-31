@@ -324,6 +324,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                     </form>
                 </div>
         </section>
+
     </main>
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
         Covifarma-2023

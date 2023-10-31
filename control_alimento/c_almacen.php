@@ -616,9 +616,11 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_valores_por_codigo_requerimiento($selectrequerimiento);
     echo $respuesta;
 } elseif ($accion == 'fechaactualservidor') {
-
-
     $respuesta = c_almacen::c_mostrar_fecha_actual_servidor();
+    echo $respuesta;
+} elseif ($accion == 'mostrartotaldeinsumosporcomprar') {
+    $selectrequerimiento = trim($_POST['selectrequerimiento']);
+    $respuesta = c_almacen::c_mostrar_valores_comprobante($selectrequerimiento);
     echo $respuesta;
 }
 
@@ -3364,6 +3366,39 @@ class c_almacen
             // $jsonstring = json_encode($json);
             // echo $jsonstring;
             return $datos;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_mostrar_valores_comprobante($selectrequerimiento)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarValoresComprobante($selectrequerimiento);
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                    "COD_TMPCOMPROBANTE" => $row->COD_TMPCOMPROBANTE,
+                    "FECHA_EMISION" => $row->FECHA_EMISION,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+                    "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
+                    "SERIE" => $row->SERIE,
+                    "CORRELATIVO" => $row->CORRELATIVO,
+                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
