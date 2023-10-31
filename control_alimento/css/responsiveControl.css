@@ -546,17 +546,32 @@ td {
     padding: 0;
     height: 0;
     margin-top: -38px;
-    margin-left: 208px;
+    margin-left: 300px;
   }
   .buttonifraestructura {
     position: absolute;
     padding: 0;
     height: 0;
     margin-top: -38px;
-    margin-left: 210px;
+    margin-left: 300px;
   }
 }
-
+@media screen and (max-width: 1240px) {
+  .buttonzonas {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 250px;
+  }
+  .buttonifraestructura {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 250px;
+  }
+}
 @media screen and (max-width: 1120px) {
   .btonguardar {
     margin-right: 70px !important;
@@ -610,14 +625,14 @@ td {
     padding: 0;
     height: 0;
     margin-top: -38px;
-    margin-left: 150px;
+    margin-left: 200px;
   }
   .buttonifraestructura {
     position: absolute;
     padding: 0;
     height: 0;
     margin-top: -38px;
-    margin-left: 150px;
+    margin-left: 200px;
   }
 }
 @media screen and (max-width: 992px) {

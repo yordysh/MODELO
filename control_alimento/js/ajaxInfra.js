@@ -178,8 +178,6 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#nombrezona").val("");
-              fetchTasks();
-              // $("#formularioZona").trigger("reset");
             }
           });
         }

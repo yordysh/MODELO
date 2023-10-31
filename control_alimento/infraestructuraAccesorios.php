@@ -179,19 +179,20 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                 </div>
             </div>
         </section>
+        <?php
+        require_once "modalzonas.php";
+        require_once "modalinfraestructura.php";
+        ?>
     </main>
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
         Covifarma-2023
     </footer>
-    <?php
-    require_once "modalzonas.php";
-    require_once "modalinfraestructura.php";
-    ?>
+
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
-    <script src="./js/ajaxInfra.js"></script>
-    <script src="./js/time.js"></script>
+    <script src="./js/ajaxInfra.js?v=0.001"></script>
+    <script src="./js/time.js?v=0.001"></script>
     <script src="../js/menu_a.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>

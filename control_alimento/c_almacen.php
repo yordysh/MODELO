@@ -615,6 +615,11 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_mostrar_valores_por_codigo_requerimiento($selectrequerimiento);
     echo $respuesta;
+} elseif ($accion == 'fechaactualservidor') {
+
+
+    $respuesta = c_almacen::c_mostrar_fecha_actual_servidor();
+    echo $respuesta;
 }
 
 
@@ -3333,6 +3338,32 @@ class c_almacen
             }
             $jsonstring = json_encode($json);
             echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_mostrar_fecha_actual_servidor()
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->c_horaserversql('F');
+
+            // if (!$datos) {
+            //     throw new Exception("Hubo un error en la consulta");
+            // }
+            // $json = array();
+            // foreach ($datos as $row) {
+            //     $json[] = array(
+            //         "DES_PRODUCTO" => $row->DES_PRODUCTO,
+            //         "CANTIDAD" => $row->CANTIDAD,
+
+            //     );
+            // }
+            // $jsonstring = json_encode($json);
+            // echo $jsonstring;
+            return $datos;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
