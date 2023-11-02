@@ -6,11 +6,11 @@ require_once "../funciones/f_funcion.php";
 // $mesSeleccionado = $_GET['mes'];
 
 $mostrar = new m_almacen();
-$nombre = 'LBS-PHS-FR-02';
-// $versionMuestraFecha = $mostrar->MostrarVersionGeneralFecha($nombre);
-// $fechaDateTime = new DateTime($versionMuestraFecha);
-// $anio = $fechaDateTime->format('Y');
-// $mesExtra = intval($fechaDateTime->format('m'));
+$nombre = 'LBS-BPM-Fr-09';
+$versionMuestraFecha = $mostrar->MostrarVersionGeneralFecha($nombre);
+$fechaDateTime = new DateTime($versionMuestraFecha);
+$anio = $fechaDateTime->format('Y');
+$mesExtra = intval($fechaDateTime->format('m'));
 // /*convierte el valor en enetero*/
 // $mesNumerico = intval($mesSeleccionado);
 
@@ -29,12 +29,12 @@ $mesesEnLetras = array(
     12 => "DICIEMBRE",
 );
 // $mesConvert = $mesesEnLetras[$mesNumerico];
-// $mesversion = $mesesEnLetras[$mesExtra];
+$mesversion = $mesesEnLetras[$mesExtra];
 
 
-// $datos = $mostrar->MostrarPreparacionSolucionPDF($anioSeleccionado, $mesSeleccionado);
+$datos = $mostrar->MostrarControlRecepcionPDF($anioSeleccionado, $mesSeleccionado);
 // $versionMuestra = $mostrar->VersionMostrar();
-// $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
+$versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
 ?>
 <!DOCTYPE html>
@@ -134,14 +134,6 @@ $mesesEnLetras = array(
             color: red;
             font-size: 20px;
         }
-
-        .vertical-text {
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            text-align: center;
-            width: 30px;
-            height: 100px;
-        }
     </style>
     <!-- Table titulo-->
     <header>
@@ -149,21 +141,21 @@ $mesesEnLetras = array(
             <tbody>
                 <tr>
                     <td rowspan="4" class="cabecera"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td>
-                    <td rowspan="4" style="text-align: center; font-size:25px; font-weigth:200;"> CONTROL DE RECEPCIÓN DE MATERIA PRIMA E INSUMOS - </td>
-                    <td>LBS-PHS-FR-02</td>
+                    <td rowspan="4" style="text-align: center; font-size:25px; font-weight:200;"> CONTROL DE RECEPCIÓN DE MATERIA PRIMA E INSUMOS </td>
+                    <td>LBS-BPM-FR-09</td>
 
                 </tr>
                 <tr>
-                    <!-- <td>Versión: <?php echo $versionMuestra ?> </td> -->
-                    <td>Versión: </td>
+                    <td>Versión: <?php echo $versionMuestra ?> </td>
+                    <!-- <td>Versión: </td> -->
                 </tr>
                 <tr>
                     <td>Página:</td>
                 </tr>
 
                 <tr>
-                    <!-- <td>Fecha: <?php echo ($mesversion . ' ' . $anio); ?> </td> -->
-                    <td>Fecha:</td>
+                    <td>Fecha: <?php echo ($mesversion . ' ' . $anio); ?> </td>
+                    <!-- <td>Fecha:</td> -->
                 </tr>
 
 
@@ -192,7 +184,7 @@ $mesesEnLetras = array(
                 <th rowspan="2">V°B°</th>
             </tr>
             <tr>
-                <th rowspan="2" class="vertical-text">G.Remisión</th>
+                <th class="vertical-text">G.Remisión</th>
                 <th class="vertical-text">Boleta</th>
                 <th class="vertical-text">Factura</th>
                 <th class="vertical-text">Primario</th>
@@ -212,9 +204,9 @@ $mesesEnLetras = array(
                 <th class="vertical-text">Hermético</th>
                 <th class="vertical-text">Ausencia de plagas</th>
             </tr>
-
         </thead>
-
+        <tbody>
+        </tbody>
     </table>
     <!-- tabla de instrucciones-->
     <table>
@@ -244,15 +236,15 @@ $mesesEnLetras = array(
         <tbody>
             <?php
 
-            foreach ($datos as $fils) {
-                echo '<tr>';
-                echo '<td class="cabecera">' . convFecSistema($fils['FECHA']) . '</td>';
-                echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
-                echo '<td class="cabecera">' . $fils['ACCION_CORRECTIVA'] . '</td>';
-                echo '<td class="cabecera">' . $fils['VERIFICACION'] . '</td>';
-                echo '<td></td>';
-                echo '</tr>';
-            }
+            // foreach ($datos as $fils) {
+            //     echo '<tr>';
+            //     echo '<td class="cabecera">' . convFecSistema($fils['FECHA']) . '</td>';
+            //     echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
+            //     echo '<td class="cabecera">' . $fils['ACCION_CORRECTIVA'] . '</td>';
+            //     echo '<td class="cabecera">' . $fils['VERIFICACION'] . '</td>';
+            //     echo '<td></td>';
+            //     echo '</tr>';
+            // }
             ?>
 
         </tbody>

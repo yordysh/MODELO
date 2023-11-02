@@ -3402,6 +3402,7 @@ class c_almacen
                     "SERIE" => $row->SERIE,
                     "CORRELATIVO" => $row->CORRELATIVO,
                     "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                    "HORA" => $row->HORA,
                 );
             }
             $jsonstring = json_encode($json);

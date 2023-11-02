@@ -3846,10 +3846,11 @@ class m_almacen
     try {
 
       $mostrarvalorcomprobante = $this->bd->prepare("SELECT OC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, OC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TCOMP.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE, TCOMI.FECHA_EMISION AS FECHA_EMISION, TCI.COD_PRODUCTO AS COD_PRODUCTO, TPRO.DES_PRODUCTO AS DES_PRODUCTO, 
-                                                        TCOMP.COD_PROVEEDOR AS COD_PROVEEDOR, TPV.NOM_PROVEEDOR AS NOM_PROVEEDOR, TCOMI.SERIE AS SERIE, TCOMI.CORRELATIVO AS CORRELATIVO, TCI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA FROM T_TMPORDEN_COMPRA_ITEM TCI 
+                                                        TCOMP.COD_PROVEEDOR AS COD_PROVEEDOR, TPV.NOM_PROVEEDOR AS NOM_PROVEEDOR, TCOMI.SERIE AS SERIE, TCOMI.CORRELATIVO AS CORRELATIVO, TCI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA, TCITEM.HORA AS HORA FROM T_TMPORDEN_COMPRA_ITEM TCI 
                                                         INNER JOIN T_TMPCOMPROBANTE_ITEM TCOMI ON TCI.COD_TMPCOMPROBANTE=TCOMI.COD_TMPCOMPROBANTE
                                                         INNER JOIN T_TMPORDEN_COMPRA OC ON OC.COD_ORDEN_COMPRA=TCI.COD_ORDEN_COMPRA
                                                         INNER JOIN T_TMPCOMPROBANTE TCOMP ON TCOMP.COD_TMPCOMPROBANTE=TCOMI.COD_TMPCOMPROBANTE
+                                                        INNER JOIN T_TMPCOMPROBANTE_ITEM TCITEM ON TCITEM.COD_TMPCOMPROBANTE=TCOMP.COD_TMPCOMPROBANTE
                                                         INNER JOIN T_PRODUCTO TPRO ON TPRO.COD_PRODUCTO=TCI.COD_PRODUCTO
                                                         INNER JOIN T_PROVEEDOR TPV ON TPV.COD_PROVEEDOR=TCOMP.COD_PROVEEDOR
                                                         WHERE OC.COD_REQUERIMIENTO='$selectrequerimiento'");
@@ -3880,12 +3881,13 @@ class m_almacen
   {
     try {
       $this->bd->beginTransaction();
-      var_dump($datos);
-      var_dump($idrequerimiento);
-      var_dump($codpersonal);
-      exit();
+      // var_dump($datos);
+      // var_dump($idrequerimiento);
+      // var_dump($codpersonal);
+      // exit();
       $codigo = new m_almacen();
       $codigorecepcion = $codigo->generarcodigocontrolrecepcion();
+      $nombre = 'LBS-BPM-FR-09';
 
       $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, CODIGO_REQUERIMIENTO)
                                                        VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
@@ -3903,13 +3905,19 @@ class m_almacen
         $remision = $dato["remision"];
         $boleta = $dato["boleta"];
         $factura = $dato["factura"];
-        if ($remision == true || $boleta == true || $factura == true) {
+        if ($remision == "true") {
           $remision = 'C';
-          $boleta = 'C';
-          $factura = 'C';
         } else {
           $remision = 'V';
+        }
+        if ($boleta == "true") {
+          $boleta = 'C';
+        } else {
           $boleta = 'V';
+        }
+        if ($factura == "true") {
+          $factura = 'C';
+        } else {
           $factura = 'V';
         }
         $gbf = $dato["gbf"];
@@ -3919,21 +3927,35 @@ class m_almacen
         $caja = $dato["caja"];
         $cilindro = $dato["cilindro"];
         $bolsa = $dato["bolsa"];
-        if ($gbf == true || $primario == true || $secundario == true || $saco == true || $caja == true || $cilindro == true || $bolsa == true) {
-          $gbf = 'C';
+
+        if ($primario == "true") {
           $primario = 'C';
+        } else {
+          $primario = 'V';
+        }
+        if ($secundario == "true") {
           $secundario = 'C';
+        } else {
+          $secundario = 'V';
+        }
+        if ($saco == "true") {
           $saco = 'C';
+        } else {
+          $saco = 'V';
+        }
+        if ($caja == "true") {
           $caja = 'C';
+        } else {
+          $caja = 'V';
+        }
+        if ($cilindro == "true") {
           $cilindro = 'C';
+        } else {
+          $cilindro = 'V';
+        }
+        if ($bolsa == "true") {
           $bolsa = 'C';
         } else {
-          $gbf = 'V';
-          $primario = 'V';
-          $secundario = 'V';
-          $saco = 'V';
-          $caja = 'V';
-          $cilindro = 'V';
           $bolsa = 'V';
         }
         $cantidadminima =  $dato["cantidadminima"];
@@ -3947,41 +3969,90 @@ class m_almacen
         $exclusivo =  $dato["exclusivo"];
         $hermetico =  $dato["hermetico"];
         $ausencia =  $dato["ausencia"];
-        if ($eih == true || $cdc == true || $rotulacion == true || $aplicacion == true || $higienesalud == true || $indumentaria == true || $limpio == true || $exclusivo == true || $hermetico == true || $ausencia == true) {
+        if ($eih == "true") {
           $eih =  'C';
-          $cdc =  'C';
-          $rotulacion =  'C';
-          $aplicacion =  'C';
-          $higienesalud =  'C';
-          $indumentaria =  'C';
-          $limpio =  'C';
-          $exclusivo =  'C';
-          $hermetico =  'C';
-          $ausencia = 'C';
         } else {
           $eih =  'A';
+        }
+        if ($cdc == "true") {
+          $cdc =  'C';
+        } else {
           $cdc =  'A';
+        }
+        if ($rotulacion == "true") {
+          $rotulacion =  'C';
+        } else {
           $rotulacion =  'A';
+        }
+        if ($aplicacion == "true") {
+          $aplicacion =  'C';
+        } else {
           $aplicacion =  'A';
+        }
+        if ($higienesalud == "true") {
+          $higienesalud =  'C';
+        } else {
           $higienesalud =  'A';
+        }
+        if ($indumentaria == "true") {
+          $indumentaria =  'C';
+        } else {
           $indumentaria =  'A';
+        }
+        if ($limpio == "true") {
+          $limpio =  'C';
+        } else {
           $limpio =  'A';
+        }
+        if ($exclusivo == "true") {
+          $exclusivo =  'C';
+        } else {
           $exclusivo =  'A';
+        }
+        if ($hermetico == "true") {
+          $hermetico =  'C';
+        } else {
           $hermetico =  'A';
+        }
+        if ($ausencia == "true") {
+          $ausencia = 'C';
+        } else {
           $ausencia = 'A';
         }
+        // $codigorecepcion = $codigo->generarcodigocontrolrecepcion();
 
-        $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE, FECHA_INGRESO, HORA, CODIGO_LOTE, FECHA_VENCIMIENTO, GUIA, BOLETA, FACTURA, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, ENVASE, CERTIFICADO, RESOLUCION, AISLAMIENTO, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
-                                                 VALUES('$codigorecepcion','$idcomprobante','$fechaingreso','$hora','$producto','$codigolote','$fechavencimiento','$remision','$boleta','$factura','')");
+        $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO, GUIA, BOLETA, FACTURA, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
+                                                 VALUES('$codigorecepcion','$idcomprobante','$codigolote','$producto','$fechavencimiento','$remision','$boleta','$factura','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
+
         $insertarrecepcion->execute();
       }
-
+      $codigo->generarVersionGeneral($nombre);
 
 
       $insertarecepcioncompras = $this->bd->commit();
       return $insertarecepcioncompras;
     } catch (Exception $e) {
       $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+  public function MostrarControlRecepcionPDF($anioSeleccionado, $mesSeleccionado)
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT 
+        WHERE  ESTADO='R'
+        AND MONTH(FECHA_TOTAL) = :mesSeleccionado AND YEAR(FECHA_TOTAL) = :anioSeleccionado"
+      );
+      $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
+      $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
       die($e->getMessage());
     }
   }

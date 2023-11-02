@@ -33,17 +33,17 @@ $(function () {
           console.log(tasks);
           let template = ``;
           tasks.forEach((task) => {
-            template += `<tr idcomprobante='${task.COD_TMPCOMPROBANTE}'">
+            template += `<tr  class="hoverable" idcomprobante='${task.COD_TMPCOMPROBANTE}'">
                             <td class='encabezado-especial' data-titulo="FECHA DE INGRESO" >${task.FECHA_EMISION}</td>
-                            <td data-titulo="HORA"><input class='hora' /></td>
+                            <td data-titulo="HORA">${task.HORA}</td>
                             <td data-titulo="PRODUCTO" codigoproducto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CODIGO DE LOTE"><input class='codigolote'/></td>
-                            <td data-titulo="F.V"><input class='fechavencimiento'/></td>
+                            <td data-titulo="CODIGO DE LOTE"><input class='codigolote' id='codigolote'/></td>
+                            <td data-titulo="F.V"><input type='date' class='fechavencimiento'/></td>
                             <td data-titulo="PROVEEDOR">${task.NOM_PROVEEDOR}</td>
                             <td data-titulo="G.Remisión"> <input class="form-check-input remision" type="checkbox" value="" id="remision"></td>
                             <td data-titulo="Boleta"><input class="form-check-input boleta" type="checkbox" value="" id="boleta"></td>
                             <td data-titulo="Factura"><input class="form-check-input factura" type="checkbox" value="" id="factura"></td>
-                            <td data-titulo="N° GUIA,BOLETA O FACTURA"><input class='gbf'/></td>  
+                            <td data-titulo="N° GUIA,BOLETA O FACTURA">${task.SERIE}_${task.CORRELATIVO}</td>  
                             <td data-titulo="Primario"><input class="form-check-input primario" type="checkbox" value="" id="primario"></td>
                             <td data-titulo="Secundario"><input class="form-check-input secundario" type="checkbox" value="" id="secundario"></td>
                             <td data-titulo="Saco"><input class="form-check-input saco" type="checkbox" value="" id="saco"></td>
@@ -74,11 +74,12 @@ $(function () {
     e.preventDefault();
     let idrequerimiento = $("#selectrequerimiento").val();
     let codpersonal = $("#codpersonal").val();
+
     let datos = [];
     $("#tbrecepcion tbody tr").each(function () {
       let idcomprobante = $(this).attr("idcomprobante");
       let fechaingreso = $(this).find("td:eq(0)").text();
-      let hora = $(this).find("td:eq(1) input.hora").val();
+      let hora = $(this).find("td:eq(1)").text();
       let producto = $(this).find("td:eq(2)").attr("codigoproducto");
       let codigolote = $(this).find("td:eq(3) input.codigolote").val();
       let fechavencimiento = $(this)
@@ -88,7 +89,7 @@ $(function () {
       let remision = $(this).find("td:eq(6) input.remision").is(":checked");
       let boleta = $(this).find("td:eq(7) input.boleta").is(":checked");
       let factura = $(this).find("td:eq(8) input.factura ").is(":checked");
-      let gbf = $(this).find("td:eq(9) input.gbf").is(":checked");
+      let gbf = $(this).find("td:eq(9)").text();
       let primario = $(this).find("td:eq(10) input.primario").is(":checked");
       let secundario = $(this)
         .find("td:eq(11) input.secundario")
@@ -149,7 +150,36 @@ $(function () {
       });
     });
     console.log(datos);
-
+    let codigolote;
+    let fechavencimiento;
+    $("#tbrecepcion tbody tr").each(function () {
+      codigolote = $(this).find("td:eq(3) input.codigolote").val();
+      fechavencimiento = $(this).find("td:eq(4) input.fechavencimiento").val();
+    });
+    if (!idrequerimiento) {
+      Swal.fire({
+        icon: "info",
+        title: "Seleccione un requerimiento",
+        text: "Debe de seleccionar un requerimiento.",
+      });
+      return;
+    }
+    if (codigolote == "") {
+      Swal.fire({
+        icon: "info",
+        title: "Inserte un codigo",
+        text: "Debe de escribir un codigo lote.",
+      });
+      return;
+    }
+    if (fechavencimiento === "") {
+      Swal.fire({
+        icon: "info",
+        title: "Inserte una fecha",
+        text: "Debe de seleccionar una fecha.",
+      });
+      return;
+    }
     const accioninsertardatos = "insertardatoscontrolrecepcion";
     $.ajax({
       url: "./c_almacen.php",
@@ -162,6 +192,18 @@ $(function () {
       type: "POST",
       success: function (response) {
         if (response == "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#selectrequerimiento").val("none").trigger("change");
+              $("#tablaproductoscantidades").empty();
+              $("#tablacontrolrecepcion").empty();
+            }
+          });
         }
       },
     });
