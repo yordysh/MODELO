@@ -622,6 +622,13 @@ if ($accion == 'insertar') {
     $selectrequerimiento = trim($_POST['selectrequerimiento']);
     $respuesta = c_almacen::c_mostrar_valores_comprobante($selectrequerimiento);
     echo $respuesta;
+} elseif ($accion == 'insertardatoscontrolrecepcion') {
+    $datos = $_POST['datos'];
+    $idrequerimiento = trim($_POST['idrequerimiento']);
+    $codpersonal = trim($_POST['codpersonal']);
+
+    $respuesta = c_almacen::c_guardar_control_recepcion($datos, $idrequerimiento, $codpersonal);
+    echo $respuesta;
 }
 
 
@@ -3401,6 +3408,21 @@ class c_almacen
             echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_guardar_control_recepcion($datos, $idrequerimiento, $codpersonal)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($datos)) {
+            $respuesta = $m_formula->InsertarControlRecepcion($datos, $idrequerimiento, $codpersonal);
+
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
         }
     }
 }

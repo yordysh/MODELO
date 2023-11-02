@@ -3861,4 +3861,128 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
+  public function generarcodigocontrolrecepcion()
+  {
+    $stm = $this->bd->prepare("SELECT MAX(COD_TMPCONTROL_RECEPCION_COMPRAS) AS COD_TMPCONTROL_RECEPCION_COMPRAS FROM T_TMPCONTROL_RECEPCION_COMPRAS");
+    $stm->execute();
+    $resultado = $stm->fetch(PDO::FETCH_ASSOC);
+
+
+    $maxCodigo = intval($resultado['COD_TMPCONTROL_RECEPCION_COMPRAS']);
+
+    $nuevoCodigo = $maxCodigo + 1;
+    $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
+    return $codigoAumento;
+  }
+
+  public function InsertarControlRecepcion($datos, $idrequerimiento, $codpersonal)
+  {
+    try {
+      $this->bd->beginTransaction();
+      var_dump($datos);
+      var_dump($idrequerimiento);
+      var_dump($codpersonal);
+      exit();
+      $codigo = new m_almacen();
+      $codigorecepcion = $codigo->generarcodigocontrolrecepcion();
+
+      $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, CODIGO_REQUERIMIENTO)
+                                                       VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
+      $insertarecepcioncompras->execute();
+
+
+      foreach ($datos as $dato) {
+        $idcomprobante = $dato["idcomprobante"];
+        $fechaingreso = $dato["fechaingreso"];
+        $hora = $dato["hora"];
+        $producto = trim($dato["producto"]);
+        $codigolote = $dato["codigolote"];
+        $fechavencimiento = $dato["fechavencimiento"];
+        $proveedor = $dato["proveedor"];
+        $remision = $dato["remision"];
+        $boleta = $dato["boleta"];
+        $factura = $dato["factura"];
+        if ($remision == true || $boleta == true || $factura == true) {
+          $remision = 'C';
+          $boleta = 'C';
+          $factura = 'C';
+        } else {
+          $remision = 'V';
+          $boleta = 'V';
+          $factura = 'V';
+        }
+        $gbf = $dato["gbf"];
+        $primario = $dato["primario"];
+        $secundario = $dato["secundario"];
+        $saco = $dato["saco"];
+        $caja = $dato["caja"];
+        $cilindro = $dato["cilindro"];
+        $bolsa = $dato["bolsa"];
+        if ($gbf == true || $primario == true || $secundario == true || $saco == true || $caja == true || $cilindro == true || $bolsa == true) {
+          $gbf = 'C';
+          $primario = 'C';
+          $secundario = 'C';
+          $saco = 'C';
+          $caja = 'C';
+          $cilindro = 'C';
+          $bolsa = 'C';
+        } else {
+          $gbf = 'V';
+          $primario = 'V';
+          $secundario = 'V';
+          $saco = 'V';
+          $caja = 'V';
+          $cilindro = 'V';
+          $bolsa = 'V';
+        }
+        $cantidadminima =  $dato["cantidadminima"];
+        $eih =  $dato["eih"];
+        $cdc =  $dato["cdc"];
+        $rotulacion =  $dato["rotulacion"];
+        $aplicacion =  $dato["aplicacion"];
+        $higienesalud =  $dato["higienesalud"];
+        $indumentaria =  $dato["indumentaria"];
+        $limpio =  $dato["limpio"];
+        $exclusivo =  $dato["exclusivo"];
+        $hermetico =  $dato["hermetico"];
+        $ausencia =  $dato["ausencia"];
+        if ($eih == true || $cdc == true || $rotulacion == true || $aplicacion == true || $higienesalud == true || $indumentaria == true || $limpio == true || $exclusivo == true || $hermetico == true || $ausencia == true) {
+          $eih =  'C';
+          $cdc =  'C';
+          $rotulacion =  'C';
+          $aplicacion =  'C';
+          $higienesalud =  'C';
+          $indumentaria =  'C';
+          $limpio =  'C';
+          $exclusivo =  'C';
+          $hermetico =  'C';
+          $ausencia = 'C';
+        } else {
+          $eih =  'A';
+          $cdc =  'A';
+          $rotulacion =  'A';
+          $aplicacion =  'A';
+          $higienesalud =  'A';
+          $indumentaria =  'A';
+          $limpio =  'A';
+          $exclusivo =  'A';
+          $hermetico =  'A';
+          $ausencia = 'A';
+        }
+
+        $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE, FECHA_INGRESO, HORA, CODIGO_LOTE, FECHA_VENCIMIENTO, GUIA, BOLETA, FACTURA, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, ENVASE, CERTIFICADO, RESOLUCION, AISLAMIENTO, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
+                                                 VALUES('$codigorecepcion','$idcomprobante','$fechaingreso','$hora','$producto','$codigolote','$fechavencimiento','$remision','$boleta','$factura','')");
+        $insertarrecepcion->execute();
+      }
+
+
+
+      $insertarecepcioncompras = $this->bd->commit();
+      return $insertarecepcioncompras;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
 }
