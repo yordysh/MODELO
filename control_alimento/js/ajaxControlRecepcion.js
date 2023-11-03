@@ -39,7 +39,7 @@ $(function () {
                             <td data-titulo="PRODUCTO" codigoproducto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
                             <td data-titulo="CODIGO DE LOTE"><input class='codigolote' id='codigolote'/></td>
                             <td data-titulo="F.V"><input type='date' class='fechavencimiento'/></td>
-                            <td data-titulo="PROVEEDOR">${task.NOM_PROVEEDOR}</td>
+                            <td data-titulo="PROVEEDOR" codigoproveedor='${task.COD_PROVEEDOR}'>${task.NOM_PROVEEDOR}</td>
                             <td data-titulo="G.Remisión"> <input class="form-check-input remision" type="checkbox" value="" id="remision"></td>
                             <td data-titulo="Boleta"><input class="form-check-input boleta" type="checkbox" value="" id="boleta"></td>
                             <td data-titulo="Factura"><input class="form-check-input factura" type="checkbox" value="" id="factura"></td>
@@ -51,16 +51,16 @@ $(function () {
                             <td data-titulo="Cilindro"><input class="form-check-input cilindro" type="checkbox" value="" id="cilindro"></td>
                             <td data-titulo="Bolsa"><input class="form-check-input bolsa" type="checkbox" value="" id="bolsa"></td>
                             <td data-titulo="CANTIDAD (Kg)">${task.CANTIDAD_MINIMA}</td>
-                            <td data-titulo="Envase integro/Hermético"><input class="form-check-input eih" type="checkbox" value="" id="eih" checked></td>
-                            <td data-titulo="Certificado de calidad"><input class="form-check-input cdc" type="checkbox" value="" id="cdc" checked></td>
-                            <td data-titulo="Rotulación conforme"><input class="form-check-input rotulacion" type="checkbox" value="" id="rotulacion" checked></td>
-                            <td data-titulo="Aplicación de las BPD"><input class="form-check-input aplicacion" type="checkbox" value="" id="aplicacion" checked></td>
-                            <td data-titulo="Higiene & salud"><input class="form-check-input higienesalud" type="checkbox" value="" id="higienesalud" checked></td>
-                            <td data-titulo="Indumentaria completa y limpia"><input class="form-check-input indumentaria" type="checkbox" value="" id="indumentaria" checked></td>
-                            <td data-titulo="Limpio"><input class="form-check-input limpio" type="checkbox" value="" id="limpio" checked></td>
-                            <td data-titulo="Exclusivo"><input class="form-check-input exclusivo" type="checkbox" value="" id="exclusivo" checked></td>
-                            <td data-titulo="Hermetico"><input class="form-check-input hermetico" type="checkbox" value="" id="hermetico" checked></td>
-                            <td data-titulo="Ausencia de plagas"><input class="form-check-input ausencia" type="checkbox" value="" id="ausencia" checked></td>
+                            <td data-titulo="Envase integro/Hermético"><input class="form-check-input eih obs" type="checkbox" value="" id="eih" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                            <td data-titulo="Certificado de calidad"><input class="form-check-input cdc obs" type="checkbox" value="" id="cdc" data-codigoprod='${task.COD_PRODUCTO}'  checked></td>
+                            <td data-titulo="Rotulación conforme"><input class="form-check-input rotulacion obs" type="checkbox" value="" id="rotulacion" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                            <td data-titulo="Aplicación de las BPD"><input class="form-check-input aplicacion obs" type="checkbox" value="" id="aplicacion" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                            <td data-titulo="Higiene & salud"><input class="form-check-input higienesalud obs" type="checkbox" value="" id="higienesalud" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                            <td data-titulo="Indumentaria completa y limpia"><input class="form-check-input indumentaria obs" type="checkbox" value="" id="indumentaria" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                            <td data-titulo="Limpio"><input class="form-check-input limpio obs" type="checkbox" value="" id="limpio" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                            <td data-titulo="Exclusivo"><input class="form-check-input exclusivo obs" type="checkbox" value="" id="exclusivo" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                            <td data-titulo="Hermetico"><input class="form-check-input hermetico obs" type="checkbox" value="" id="hermetico" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                            <td data-titulo="Ausencia de plagas"><input class="form-check-input ausencia obs" type="checkbox" value="" id="ausencia" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
                             <td data-titulo="V°B°"></td>
                          </tr>`;
           });
@@ -69,6 +69,44 @@ $(function () {
       },
     });
   });
+
+  /*----click en check y me muestre tabla----------------- */
+
+  function agregarFila(codigoprod, checkboxId) {
+    var nuevafila = $("<tr></tr>");
+
+    var columnafecha = $(
+      `<td><input type="text" codigo_productos="${codigoprod}" codigoidcheck=${checkboxId}></td>`
+    );
+    var columnaobservacion = $(
+      `<td><textarea class="form-control" id="observacioneih_${checkboxId}" rows="2"></textarea></td>`
+    );
+    var columnaaccioncorrectiva = $(
+      `<td><textarea class="form-control" id="acccioncorrectivaeih_${checkboxId}" rows="2"></textarea></td>`
+    );
+
+    nuevafila.append(columnafecha, columnaobservacion, columnaaccioncorrectiva);
+
+    $("#tbrecepcionobservacion tbody").append(nuevafila);
+  }
+
+  function eliminarFila(checkboxId) {
+    $(`#observacioneih_${checkboxId}`).closest("tr").remove();
+  }
+
+  $(document).on("click", ".obs", (e) => {
+    var celda = $(e.target);
+    var codigoprod = celda.data("codigoprod");
+    var checkboxId = celda.attr("id");
+
+    if (celda.is(":checked")) {
+      eliminarFila(checkboxId);
+    } else {
+      agregarFila(codigoprod, checkboxId);
+    }
+  });
+
+  /*---------------------------------------------------- */
 
   $("#guardarrecepcion").click((e) => {
     e.preventDefault();
@@ -85,7 +123,8 @@ $(function () {
       let fechavencimiento = $(this)
         .find("td:eq(4) input.fechavencimiento")
         .val();
-      let proveedor = $(this).find("td:eq(5)").text();
+      // let proveedor = $(this).find("td:eq(5)").text();
+      let proveedor = $(this).find("td:eq(5)").attr("codigoproveedor");
       let remision = $(this).find("td:eq(6) input.remision").is(":checked");
       let boleta = $(this).find("td:eq(7) input.boleta").is(":checked");
       let factura = $(this).find("td:eq(8) input.factura ").is(":checked");
@@ -180,12 +219,36 @@ $(function () {
       });
       return;
     }
+
+    var datosTabla = [];
+    $("#tbrecepcionobservacion tbody tr").each(function () {
+      let productoc = $(this)
+        .find('input[type="text"]')
+        .attr("codigo_productos");
+      let id = $(this).find('input[type="text"]').attr("codigoidcheck");
+      var fechax = $(this).find('input[type="text"]').val();
+      var observacionx = $(this).find('textarea[id^="observacioneih"]').val();
+      var accionCorrectivax = $(this)
+        .find('textarea[id^="acccioncorrectivaeih"]')
+        .val();
+
+      var fila = {
+        productoc: productoc,
+        id: id,
+        Fechax: fechax,
+        Observacionx: observacionx,
+        AccionCorrectivax: accionCorrectivax,
+      };
+      datosTabla.push(fila);
+    });
+
     const accioninsertardatos = "insertardatoscontrolrecepcion";
     $.ajax({
       url: "./c_almacen.php",
       data: {
         accion: accioninsertardatos,
         datos: datos,
+        datosTabla: datosTabla,
         idrequerimiento: idrequerimiento,
         codpersonal: codpersonal,
       },
@@ -202,6 +265,7 @@ $(function () {
               $("#selectrequerimiento").val("none").trigger("change");
               $("#tablaproductoscantidades").empty();
               $("#tablacontrolrecepcion").empty();
+              $("#tablacontrolrecepcionobservacion").empty();
             }
           });
         }

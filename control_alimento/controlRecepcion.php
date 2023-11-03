@@ -162,6 +162,24 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                                 </tbody>
                             </table>
                         </div>
+
+                        <div class="row g-4 top-div">
+                            <center><label class="title">OBSERVACIONES</label></center>
+                        </div>
+                        <div id="tablarecepcionobservacion" class="" style="overflow: scroll;height: 300px; margin-top:20px;">
+                            <table id="tbrecepcionobservacion" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo">FECHA</th>
+                                        <th class="thtitulo">OBSERVACIÓN</th>
+                                        <th class="thtitulo">ACCIÓN CORRECTIVA</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablacontrolrecepcionobservacion">
+
+                                </tbody>
+                            </table>
+                        </div>
                         <button style="margin-bottom: 80px;" id="guardarrecepcion" name="guardarrecepcion" class="btn btn-primary">Guardar</button>
                         <div class="aniomes">
                             <div class="styleanmes"><label for="mes">Seleccione el año:</label>

@@ -3877,14 +3877,15 @@ class m_almacen
     return $codigoAumento;
   }
 
-  public function InsertarControlRecepcion($datos, $idrequerimiento, $codpersonal)
+  public function InsertarControlRecepcion($datos, $datosTabla, $idrequerimiento, $codpersonal)
   {
     try {
       $this->bd->beginTransaction();
-      // var_dump($datos);
+      var_dump($datos);
+      var_dump($datosTabla);
       // var_dump($idrequerimiento);
       // var_dump($codpersonal);
-      // exit();
+      exit();
       $codigo = new m_almacen();
       $codigorecepcion = $codigo->generarcodigocontrolrecepcion();
       $nombre = 'LBS-BPM-FR-09';
@@ -3896,7 +3897,10 @@ class m_almacen
 
       foreach ($datos as $dato) {
         $idcomprobante = $dato["idcomprobante"];
-        $fechaingreso = $dato["fechaingreso"];
+        $fechaingresoC = $dato["fechaingreso"];
+        $fechaConvertida = date_create($fechaingresoC);
+        $fechaingreso = $fechaConvertida->format('Y-m-d');
+
         $hora = $dato["hora"];
         $producto = trim($dato["producto"]);
         $codigolote = $dato["codigolote"];
@@ -4021,10 +4025,19 @@ class m_almacen
         }
         // $codigorecepcion = $codigo->generarcodigocontrolrecepcion();
 
-        $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO, GUIA, BOLETA, FACTURA, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
-                                                 VALUES('$codigorecepcion','$idcomprobante','$codigolote','$producto','$fechavencimiento','$remision','$boleta','$factura','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
+        $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE,FECHA_INGRESO, HORA, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO,COD_PROVEEDOR, GUIA, BOLETA, FACTURA, GBF, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, CANTIDAD_MINIMA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
+                                                 VALUES('$codigorecepcion','$idcomprobante','$fechaingreso','$hora','$codigolote','$producto','$fechavencimiento','$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
 
         $insertarrecepcion->execute();
+      }
+      if ($datosTabla) {
+        foreach ($datosTabla as $datot) {
+          $codproductos = $dato["productoc"];
+          $idcheck = $dato["id"];
+          $fecha = $dato["Fechax"];
+          $observacion = $dato["Observacionx"];
+          $accioncorrectiva = $dato["AccionCorrectivax"];
+        }
       }
       $codigo->generarVersionGeneral($nombre);
 
@@ -4042,12 +4055,17 @@ class m_almacen
 
 
       $stm = $this->bd->prepare(
-        "SELECT 
-        WHERE  ESTADO='R'
-        AND MONTH(FECHA_TOTAL) = :mesSeleccionado AND YEAR(FECHA_TOTAL) = :anioSeleccionado"
+        " SELECT TRECEP.FECHA_INGRESO AS FECHA_INGRESO, TRECEP.HORA AS HORA,TP.DES_PRODUCTO AS DES_PRODUCTO, TRECEP.CODIGO_LOTE AS CODIGO_LOTE,
+        TRECEP.FECHA_VENCIMIENTO AS FECHA_VENCIMIENTO, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR, TRECEP.GUIA AS GUIA, TRECEP.BOLETA AS BOLETA, TRECEP.FACTURA AS FACTURA,
+        TRECEP.GBF AS GBF, TRECEP.PRIMARIO AS PRIMARIO, TRECEP.SECUNDARIO AS SECUNDARIO, TRECEP.SACO AS SACO, TRECEP.CAJA AS CAJA, TRECEP.CILINDRO AS CILINDRO, TRECEP.BOLSA AS BOLSA,
+        TRECEP.CANTIDAD_MINIMA AS CANTIDAD_MINIMA, TRECEP.ENVASE AS ENVASE, TRECEP.CERTIFICADO AS CERTIFICADO, TRECEP.ROTULACION AS ROTULACION,
+        TRECEP.APLICACION AS APLICACION, TRECEP.HIGIENE AS HIGIENE, TRECEP.INDUMENTARIA AS INDUMENTARIA, TRECEP.EXCLUSIVO AS EXCLUSIVO, TRECEP.LIMPIO AS LIMPIO,
+        TRECEP.HERMETICO AS HERMETICO,TRECEP.AUSENCIA AS AUSENCIA FROM T_TMPCONTROL_RECEPCION_COMPRAS_ITEM TRECEP
+        INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TRECEP.COD_PROVEEDOR
+        INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TRECEP.COD_PRODUCTO
+        INNER JOIN T_TMPCONTROL_RECEPCION_COMPRAS TCR ON TCR.COD_TMPCONTROL_RECEPCION_COMPRAS=TRECEP.COD_TMPCONTROL_RECEPCION_COMPRAS
+        WHERE TCR.ESTADO='P'AND MONTH(FECHA_GENERADA) = '$mesSeleccionado' AND YEAR(FECHA_GENERADA) = '$anioSeleccionado'"
       );
-      $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
-      $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
       $stm->execute();
       $datos = $stm->fetchAll();
 

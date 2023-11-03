@@ -624,10 +624,11 @@ if ($accion == 'insertar') {
     echo $respuesta;
 } elseif ($accion == 'insertardatoscontrolrecepcion') {
     $datos = $_POST['datos'];
+    $datosTabla = $_POST['datosTabla'];
     $idrequerimiento = trim($_POST['idrequerimiento']);
     $codpersonal = trim($_POST['codpersonal']);
 
-    $respuesta = c_almacen::c_guardar_control_recepcion($datos, $idrequerimiento, $codpersonal);
+    $respuesta = c_almacen::c_guardar_control_recepcion($datos, $datosTabla, $idrequerimiento, $codpersonal);
     echo $respuesta;
 }
 
@@ -3358,20 +3359,6 @@ class c_almacen
 
             $mostrar = new m_almacen();
             $datos = $mostrar->c_horaserversql('F');
-
-            // if (!$datos) {
-            //     throw new Exception("Hubo un error en la consulta");
-            // }
-            // $json = array();
-            // foreach ($datos as $row) {
-            //     $json[] = array(
-            //         "DES_PRODUCTO" => $row->DES_PRODUCTO,
-            //         "CANTIDAD" => $row->CANTIDAD,
-
-            //     );
-            // }
-            // $jsonstring = json_encode($json);
-            // echo $jsonstring;
             return $datos;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
@@ -3412,12 +3399,12 @@ class c_almacen
         }
     }
 
-    static function c_guardar_control_recepcion($datos, $idrequerimiento, $codpersonal)
+    static function c_guardar_control_recepcion($datos, $datosTabla, $idrequerimiento, $codpersonal)
     {
         $m_formula = new m_almacen();
 
         if (isset($datos)) {
-            $respuesta = $m_formula->InsertarControlRecepcion($datos, $idrequerimiento, $codpersonal);
+            $respuesta = $m_formula->InsertarControlRecepcion($datos, $datosTabla, $idrequerimiento, $codpersonal);
 
             if ($respuesta) {
                 return "ok";

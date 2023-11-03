@@ -2,8 +2,8 @@
 require_once "m_almacen.php";
 require_once "../funciones/f_funcion.php";
 
-// $anioSeleccionado = $_GET['anio'];
-// $mesSeleccionado = $_GET['mes'];
+$anioSeleccionado = $_GET['anio'];
+$mesSeleccionado = $_GET['mes'];
 
 $mostrar = new m_almacen();
 $nombre = 'LBS-BPM-Fr-09';
@@ -85,10 +85,25 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             text-align: center;
         }
 
-        .column-1:nth-child(1),
-        .column-2:nth-child(2) {
-            width: 320px;
+        .columnafecha:nth-child(1) {
+            width: 100px;
+        }
 
+        .columnahora:nth-child(2) {
+            width: 80px;
+        }
+
+        .columnacodigo:nth-child(4),
+        .columnafv:nth-child(5) {
+            width: 80px;
+        }
+
+        .columnaproveedor:nth-child(6) {
+            width: 110px;
+        }
+
+        .columnavb:nth-child(15) {
+            width: 70px;
         }
 
         .mover-derecha {
@@ -134,6 +149,10 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             color: red;
             font-size: 20px;
         }
+
+        .imagen {
+            text-align: center;
+        }
     </style>
     <!-- Table titulo-->
     <header>
@@ -142,7 +161,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 <tr>
                     <td rowspan="4" class="cabecera"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td>
                     <td rowspan="4" style="text-align: center; font-size:25px; font-weight:200;"> CONTROL DE RECEPCIÓN DE MATERIA PRIMA E INSUMOS </td>
-                    <td>LBS-BPM-FR-09</td>
+                    <td>Código: LBS-BPM-FR-09</td>
 
                 </tr>
                 <tr>
@@ -164,16 +183,16 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
     </header>
 
     <!-- Table solucion y preparaciones-->
-    <table style="margin-top: 10px;">
+    <table style="margin-top: 10px; margin-bottom:20px;">
         <thead>
             <tr>
-                <th rowspan="2">FECHA DE INGRESO</th>
-                <th rowspan="2">HORA</th>
+                <th rowspan="2" class="columnafecha">FECHA DE INGRESO</th>
+                <th rowspan="2" class="columnahora">HORA</th>
                 <th rowspan="2">PRODUCTO</th>
-                <th rowspan="2">CÓDIGO DE LOTE</th>
-                <th rowspan="2">F.V</th>
-                <th rowspan="2">PROVEEDOR</th>
-                <th colspan="3" style="width: 30px;">GUÍA/BOLETA/ FACTURA</th>
+                <th rowspan="2" class="columnacodigo">CÓDIGO DE LOTE</th>
+                <th rowspan="2" class="columnafv">F.V</th>
+                <th rowspan="2" class="columnaproveedor">PROVEEDOR</th>
+                <th colspan="3" class="columnap">GUÍA/BOLETA/ FACTURA</th>
                 <th rowspan="2">N° GUÍA,BOLETA O FACTURA</th>
                 <th colspan="2">Empaque</th>
                 <th colspan="4">Presentación</th>
@@ -181,7 +200,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 <th colspan="3">CONTROL DEL PRODUCTO</th>
                 <th colspan="3">DEL PERSONAL DE TRANSPORTE</th>
                 <th colspan="4">CONDICIONES DEL TRANSPORTE</th>
-                <th rowspan="2">V°B°</th>
+                <th rowspan="2" class="columnavb">V°B°</th>
             </tr>
             <tr>
                 <th class="vertical-text">G.Remisión</th>
@@ -206,13 +225,123 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             </tr>
         </thead>
         <tbody>
+            <?php
+            foreach ($datos as $dato) {
+                echo '<tr>';
+                echo '<td>' . $dato['FECHA_INGRESO'] . '</td>';
+                echo '<td>' . $dato['HORA'] . '</td>';
+                echo '<td>' . $dato['DES_PRODUCTO'] . '</td>';
+                echo '<td>' . $dato['CODIGO_LOTE'] . '</td>';
+                echo '<td>' . $dato['FECHA_VENCIMIENTO'] . '</td>';
+                echo '<td>' . $dato['NOM_PROVEEDOR'] . '</td>';
+                if ($dato['GUIA'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td></td>';
+                }
+                if ($dato['BOLETA'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td></td>';
+                }
+                if ($dato['FACTURA'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td></td>';
+                }
+                echo '<td>' . $dato['GBF'] . '</td>';
+                if ($dato['PRIMARIO'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td></td>';
+                }
+                if ($dato['SECUNDARIO'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td></td>';
+                }
+                if ($dato['SACO'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td></td>';
+                }
+                if ($dato['CAJA'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td></td>';
+                }
+                if ($dato['CILINDRO'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td></td>';
+                }
+                if ($dato['BOLSA'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td></td>';
+                }
+                echo '<td>' . $dato['CANTIDAD_MINIMA'] . '</td>';
+                if ($dato['ENVASE'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
+                }
+                if ($dato['CERTIFICADO'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
+                }
+                if ($dato['ROTULACION'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
+                }
+                if ($dato['APLICACION'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
+                }
+                if ($dato['HIGIENE'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
+                }
+                if ($dato['INDUMENTARIA'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
+                }
+                if ($dato['LIMPIO'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
+                }
+                if ($dato['EXCLUSIVO'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
+                }
+                if ($dato['HERMETICO'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
+                }
+                if ($dato['AUSENCIA'] == 'C') {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                } else {
+                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
+                }
+                echo '<td></td>';
+                echo '</tr>';
+            }
+            ?>
         </tbody>
     </table>
     <!-- tabla de instrucciones-->
-    <table>
+    <table style="margin-bottom: 20px;">
         <tr>
-            <td style="border:none;"><strong>Colocar:Conforme:</strong> <span class="checkmark">&#10004;</span>,
-                <strong>No Conforme:</strong> <span class="cross">&#10006;</span>, <strong>Frecuencia:</strong> Cada recepción de materia,insumos,envases y embalajes.
+            <td style="border:none;"><strong>Colocar:Conforme:</strong><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/checkobs.png')); ?>" alt="">,
+                <strong>No Conforme:</strong> <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/aspaobs.png')); ?>" alt="">, <strong>Frecuencia:</strong> Cada recepción de materia,insumos,envases y embalajes.
                 Indumentaria de la empresa:Polo,camisao casaca de la empresa,mascarilla.
                 Salud: Sin enfermedades, sin cortes o heridas,
                 Higiene: Cabello corto, rasurado,uñas cortas, sin objetos(anillos,aretes,etc)
