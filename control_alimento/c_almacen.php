@@ -445,13 +445,20 @@ if ($accion == 'insertar') {
     $cantidad = trim($_POST['cantidad']);
     $respuesta = c_almacen::c_mostrar_envases_por_produccion($codigoproducto, $codigoproduccion, $cantidad);
     echo $respuesta;
+} elseif ($accion == 'mostrarinsumostotales') {
+    $codigoproduccion = trim($_POST['codigoproduccion']);
+    $codigoproducto = trim($_POST['codigoproducto']);
+    $cantidad = trim($_POST['cantidad']);
+    $respuesta = c_almacen::c_mostrar_insumos_totales_avance($codigoproducto, $codigoproduccion, $cantidad);
+    echo $respuesta;
 } elseif ($accion == 'guardarvalordeinsumosporregistro') {
     $valoresCapturadosProduccion = ($_POST['valoresCapturadosProduccion']);
+    $valoresCapturadosProduccioninsumo = ($_POST['valoresCapturadosProduccioninsumo']);
     $codigoproducto = trim($_POST['codigoproducto']);
     $codigoproduccion = trim($_POST['codigoproduccion']);
     $cantidad = trim($_POST['cantidad']);
     $codpersonal = trim($_POST['codpersonal']);
-    $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal);
+    $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal);
     echo $respuesta;
 } elseif ($accion == 'verificaregistromenorconproducto') {
     $codigoproductoverifica = trim($_POST['codigoproductoverifica']);
@@ -624,9 +631,11 @@ if ($accion == 'insertar') {
     echo $respuesta;
 } elseif ($accion == 'insertardatoscontrolrecepcion') {
     $datos = $_POST['datos'];
-    $datosTabla = $_POST['datosTabla'];
-    var_dump($datosTabla);
-    exit();
+    if (isset($_POST['datosTabla'])) {
+        $datosTabla = $_POST['datosTabla'];
+    } else {
+        $datosTabla = null;
+    }
     $idrequerimiento = trim($_POST['idrequerimiento']);
     $codpersonal = trim($_POST['codpersonal']);
 
@@ -2878,14 +2887,56 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
+    static function  c_mostrar_insumos_totales_avance($codigoproducto, $codigoproduccion, $cantidad)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarInsumosTotalesAvance($codigoproducto, $codigoproduccion, $cantidad);
+
+            if ($datos['tipo'] == 0) {
+                $json = array();
+                foreach ($datos['respuesta'] as $row) {
+                    $json['respuesta'][] = array(
+                        "COD_COD_FORMULACION" => $row->COD_FORMULACION,
+                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+
+                        $resultado = (($row->CAN_FORMULACION * $cantidad) / $row->CANTIDAD_FORMULACION),
+                        $CANTIDAD_TOTAL = number_format($resultado, 4),
+                        "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
+
+                    );
+                }
+                $json['tipo'] = 0;
+            } else {
+                $json = array();
+                foreach ($datos['respuesta'] as $row) {
+                    $json['respuesta'] = array(
+                        "COD_PRODUCCION" => $row->COD_PRODUCCION,
+                        "CANTIDAD_PRODUCIDA" => $row->CANTIDAD_PRODUCIDA,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+
+                    );
+                }
+                $json['tipo'] = 1;
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
 
 
-    static function c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal)
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+
+    static function c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal)
     {
         $m_formula = new m_almacen();
 
         if (isset($valoresCapturadosProduccion) && isset($codigoproducto) && isset($codigoproduccion) && isset($cantidad)) {
-            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal);
+            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal);
 
             if ($respuesta) {
                 return "ok";
@@ -3405,14 +3456,14 @@ class c_almacen
     {
         $m_formula = new m_almacen();
 
-        if (isset($datos)) {
-            $respuesta = $m_formula->InsertarControlRecepcion($datos, $datosTabla, $idrequerimiento, $codpersonal);
+        // if (isset($datos)) {
+        $respuesta = $m_formula->InsertarControlRecepcion($datos, $datosTabla, $idrequerimiento, $codpersonal);
 
-            if ($respuesta) {
-                return "ok";
-            } else {
-                return "error";
-            };
-        }
+        if ($respuesta) {
+            return "ok";
+        } else {
+            return "error";
+        };
+        // }
     }
 }

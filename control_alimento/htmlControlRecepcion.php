@@ -33,6 +33,7 @@ $mesversion = $mesesEnLetras[$mesExtra];
 
 
 $datos = $mostrar->MostrarControlRecepcionPDF($anioSeleccionado, $mesSeleccionado);
+$datosobservacion = $mostrar->MostrarControlRecepcionObservacionPDF($anioSeleccionado, $mesSeleccionado);
 // $versionMuestra = $mostrar->VersionMostrar();
 $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
@@ -365,15 +366,15 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         <tbody>
             <?php
 
-            // foreach ($datos as $fils) {
-            //     echo '<tr>';
-            //     echo '<td class="cabecera">' . convFecSistema($fils['FECHA']) . '</td>';
-            //     echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
-            //     echo '<td class="cabecera">' . $fils['ACCION_CORRECTIVA'] . '</td>';
-            //     echo '<td class="cabecera">' . $fils['VERIFICACION'] . '</td>';
-            //     echo '<td></td>';
-            //     echo '</tr>';
-            // }
+            foreach ($datosobservacion as $fils) {
+                echo '<tr>';
+                echo '<td class="cabecera">' . convFecSistema($fils['FECHA']) . '</td>';
+                echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
+                echo '<td class="cabecera">' . $fils['ACCION_CORRECTIVA'] . '</td>';
+                // echo '<td class="cabecera">' . $fils['VERIFICACION'] . '</td>';
+                echo '<td></td>';
+                echo '</tr>';
+            }
             ?>
 
         </tbody>

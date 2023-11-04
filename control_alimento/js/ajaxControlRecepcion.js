@@ -76,7 +76,7 @@ $(function () {
     var nuevafila = $("<tr></tr>");
 
     var columnafecha = $(
-      `<td><input type="text" codigo_productos="${codigoprod}" codigoidcheck=${checkboxId}></td>`
+      `<td><input type="date" codigo_productos="${codigoprod}" codigoidcheck=${checkboxId}></td>`
     );
     var columnaobservacion = $(
       `<td><textarea class="form-control" id="observacioneih_${checkboxId}" rows="2"></textarea></td>`
@@ -191,42 +191,52 @@ $(function () {
     console.log(datos);
     let codigolote;
     let fechavencimiento;
+    let iscodigoloteEmpty = false;
+    let isFechavencimientoEmpty = false;
     $("#tbrecepcion tbody tr").each(function () {
       codigolote = $(this).find("td:eq(3) input.codigolote").val();
       fechavencimiento = $(this).find("td:eq(4) input.fechavencimiento").val();
+      if (codigolote === "") {
+        iscodigoloteEmpty = true;
+      }
+
+      // Check if fechavencimiento is empty and set the flag
+      if (fechavencimiento === "") {
+        isFechavencimientoEmpty = true;
+      }
     });
-    // if (!idrequerimiento) {
-    //   Swal.fire({
-    //     icon: "info",
-    //     title: "Seleccione un requerimiento",
-    //     text: "Debe de seleccionar un requerimiento.",
-    //   });
-    //   return;
-    // }
-    // if (codigolote == "") {
-    //   Swal.fire({
-    //     icon: "info",
-    //     title: "Inserte un codigo",
-    //     text: "Debe de escribir un codigo lote.",
-    //   });
-    //   return;
-    // }
-    // if (fechavencimiento === "") {
-    //   Swal.fire({
-    //     icon: "info",
-    //     title: "Inserte una fecha",
-    //     text: "Debe de seleccionar una fecha.",
-    //   });
-    //   return;
-    // }
+    if (!idrequerimiento) {
+      Swal.fire({
+        icon: "info",
+        title: "Seleccione un requerimiento",
+        text: "Debe de seleccionar un requerimiento.",
+      });
+      return;
+    }
+    if (iscodigoloteEmpty) {
+      Swal.fire({
+        icon: "info",
+        title: "Inserte un codigo",
+        text: "Debe de escribir un codigo lote.",
+      });
+      return;
+    }
+    if (isFechavencimientoEmpty) {
+      Swal.fire({
+        icon: "info",
+        title: "Inserte una fecha",
+        text: "Debe seleccionar una fecha en al menos una fila.",
+      });
+      return;
+    }
 
     var datosTabla = [];
     $("#tbrecepcionobservacion tbody tr").each(function () {
       let productoc = $(this)
-        .find('input[type="text"]')
+        .find('input[type="date"]')
         .attr("codigo_productos");
-      let idc = $(this).find('input[type="text"]').attr("codigoidcheck");
-      var fechax = $(this).find('input[type="text"]').val();
+      let idc = $(this).find('input[type="date"]').attr("codigoidcheck");
+      var fechax = $(this).find('input[type="date"]').val();
       var observacionx = $(this).find('textarea[id^="observacioneih"]').val();
       var accionCorrectivax = $(this)
         .find('textarea[id^="acccioncorrectivaeih"]')
@@ -241,6 +251,23 @@ $(function () {
       };
       datosTabla.push(fila);
     });
+    let fechax;
+    let fechaobs = false;
+    $("#tbrecepcionobservacion tbody tr").each(function () {
+      fechax = $(this).find('input[type="date"]').val();
+      if (fechax === "") {
+        fechaobs = true;
+      }
+    });
+
+    if (fechaobs) {
+      Swal.fire({
+        icon: "info",
+        title: "Inserte una fecha en la tabla observación",
+        text: "Debe seleccionar una fecha en al menos una fila.",
+      });
+      return;
+    }
 
     const accioninsertardatos = "insertardatoscontrolrecepcion";
     $.ajax({

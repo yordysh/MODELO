@@ -11,35 +11,6 @@ $(function () {
     document.querySelector(".preloader").style.opacity = "0";
     document.querySelector(".preloader").style.display = "none";
   }
-  //-------------------------------------------//
-
-  //------------- MENU BAR JS ---------------//
-  // let nav = document.querySelector(".nav"),
-  //   searchIcon = document.querySelector("#searchIcon"),
-  //   navOpenBtn = document.querySelector(".navOpenBtn"),
-  //   navCloseBtn = document.querySelector(".navCloseBtn");
-
-  // searchIcon.addEventListener("click", () => {
-  //   nav.classList.toggle("openSearch");
-  //   nav.classList.remove("openNav");
-  //   if (nav.classList.contains("openSearch")) {
-  //     return searchIcon.classList.replace(
-  //       "icon-magnifying-glass",
-  //       "icon-cross"
-  //     );
-  //   }
-  //   searchIcon.classList.replace("icon-cross", "icon-magnifying-glass");
-  // });
-
-  // navOpenBtn.addEventListener("click", () => {
-  //   nav.classList.add("openNav");
-  //   nav.classList.remove("openSearch");
-  // });
-
-  // navCloseBtn.addEventListener("click", () => {
-  //   nav.classList.remove("openNav");
-  // });
-
   //----------------------------------------------------------------//
 
   $("#selectProductoCombo").select2();
@@ -197,6 +168,68 @@ $(function () {
         console.log("ERROR " + error);
       },
     });
+
+    let accioninsumos = "mostrarinsumostotales";
+
+    $.ajax({
+      type: "POST",
+      url: "./c_almacen.php",
+      data: {
+        accion: accioninsumos,
+        codigoproduccion: codigoproduccion,
+        codigoproducto: codigoproducto,
+        cantidad: cantidad,
+      },
+      success: function (response) {
+        if (isJSON(response)) {
+          let tasks = JSON.parse(response);
+
+          if (tasks["tipo"] == 0) {
+            Swal.fire({
+              icon: "success",
+              title: "Calculo de registro",
+              text: "Se añadio correctamente el registro.",
+            });
+
+            let template = ``;
+            tasks["respuesta"].forEach((task) => {
+              template += `<tr taskId="${task.COD_FORMULACION}">
+
+                          <td data-titulo="MATERIALES" insumocodigoproducto=${task.COD_PRODUCTO}>${task.DES_PRODUCTO}</td>
+                          <td data-titulo="CANTIDAD" >${task.CANTIDAD_TOTAL}</td>
+                          <td data-titulo="LOTE" ><input type='text'/></td>
+
+                </tr>`;
+            });
+
+            $("#tablainsumosavancetotal").html(template);
+            $("#selectProductoCombo").val("none").trigger("change");
+            $("#selectNumProduccion").val("none").trigger("change");
+            $("#cantidad").val("");
+          } else {
+            console.log(tasks);
+            // Swal.fire({
+            //   title: "¡Supero cantidad!",
+            //   text: "Cantidad supero lo que hay en producción.",
+            //   html: `<p>La cantidad minima de ${tasks["respuesta"].COD_PRODUCCION} ${tasks["respuesta"].DES_PRODUCTO} es ${tasks["respuesta"].CANTIDAD_PRODUCIDA}</p>`,
+            //   icon: "error",
+            //   confirmButtonText: "Aceptar",
+            // }).then((result) => {
+            //   if (result.isConfirmed) {
+            //     $("#cantidad").val("");
+            //     $("#selectProductoCombo").val("none").trigger("change");
+            //     $("#selectNumProduccion").val("none").trigger("change");
+            //     $("#tablacalculoregistroenvase").empty();
+            //   }
+            // });
+            // $("#tablacalculoregistroenvase").empty();
+          }
+        }
+      },
+      error: function (error) {
+        console.log("ERROR " + error);
+      },
+    });
   });
 
   $("#botonguardarregistro").click((e) => {
@@ -207,6 +240,7 @@ $(function () {
     let codpersonal = $("#codpersonal").val();
 
     let valoresCapturadosProduccion = [];
+    let valoresCapturadosProduccioninsumo = [];
 
     if (!codigoproducto) {
       Swal.fire({
@@ -240,7 +274,19 @@ $(function () {
 
       valoresCapturadosProduccion.push(valorProducto, valorCan, valorLote);
     });
+    $("#tablainsumosavancetotal tr").each(function () {
+      let valorProductoinsumo = $(this)
+        .find("td:eq(0)")
+        .attr("insumocodigoproducto");
+      let valorCaninsumo = $(this).find("td:eq(1)").text();
+      let valorLoteinsumo = $(this).find("td:eq(2) input").val();
 
+      valoresCapturadosProduccioninsumo.push(
+        valorProductoinsumo,
+        valorCaninsumo,
+        valorLoteinsumo
+      );
+    });
     let accion = "guardarvalordeinsumosporregistro";
 
     $.ajax({
@@ -249,6 +295,7 @@ $(function () {
       data: {
         accion: accion,
         valoresCapturadosProduccion: valoresCapturadosProduccion,
+        valoresCapturadosProduccioninsumo: valoresCapturadosProduccioninsumo,
         codigoproducto: codigoproducto,
         codigoproduccion: codigoproduccion,
         cantidad: cantidad,

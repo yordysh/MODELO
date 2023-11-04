@@ -152,6 +152,24 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                                 </tbody>
                             </table>
                         </div>
+
+                        <div id="tablainsumosavance" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px; margin-bottom:10px;">
+                            <table id="tbinsumosavance" class="table table-sm mb-3 table-hover">
+                                <div class="row g-4 top-div">
+                                    <label class="title_table">TOTAL DE INSUMOS</label>
+                                </div>
+                                <thead>
+                                    <tr>
+                                        <th class="" scope="col">INSUMOS</th>
+                                        <th class="" scope="col">CANTIDAD</th>
+                                        <th class="" scope="col">LOTE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablainsumosavancetotal">
+
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="estiloguardar">
                             <button id="botonguardarregistro" type="submit" name="insert" class="btn btn-primary estiloguardar">Guardar </button>
                         </div>

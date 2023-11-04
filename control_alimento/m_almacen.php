@@ -2849,6 +2849,51 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function MostrarInsumosTotalesAvance($codigoproducto, $codigoproduccion, $cantidad)
+  {
+    try {
+      $this->bd->beginTransaction();
+
+      $stmCodigoFormula = $this->bd->prepare("SELECT MAX(COD_FORMULACION) AS COD_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codigoproducto'");
+      $stmCodigoFormula->execute();
+      $consultacodigoformula = $stmCodigoFormula->fetch(PDO::FETCH_ASSOC);
+      $resultadoformula = $consultacodigoformula['COD_FORMULACION'];
+
+      $stmverificardatos = $this->bd->prepare("SELECT MAX(CANTIDAD_PRODUCIDA) AS CANTIDAD_PRODUCIDA FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
+      $stmverificardatos->execute();
+      $consultacodigoformulacion = $stmverificardatos->fetch(PDO::FETCH_ASSOC);
+      $resultadoCantidadFormulacion = intval($consultacodigoformulacion['CANTIDAD_PRODUCIDA']);
+
+      if ($cantidad <= $resultadoCantidadFormulacion) {
+        $stmformulacionenvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, 
+                                                      TFE.CAN_FORMULACION AS CAN_FORMULACION, TF.CAN_FORMULACION AS CANTIDAD_FORMULACION FROM T_TMPFORMULACION_ITEM TFE 
+                                                      INNER JOIN T_PRODUCTO TP ON TFE.COD_PRODUCTO=TP.COD_PRODUCTO
+                                                      INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFE.COD_FORMULACION
+                                                      WHERE TFE.COD_FORMULACION='$resultadoformula'");
+        $stmformulacionenvase->execute();
+
+        $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+        $respuesta['tipo'] = 0;
+      } else {
+
+        $stmformulacionenvase = $this->bd->prepare("SELECT TPRO.COD_PRODUCCION AS COD_PRODUCCION, TPRO.CANTIDAD_PRODUCIDA AS CANTIDAD_PRODUCIDA, TP.DES_PRODUCTO AS DES_PRODUCTO FROM T_TMPPRODUCCION TPRO 
+        INNER JOIN T_PRODUCTO TP ON TPRO.COD_PRODUCTO=TP.COD_PRODUCTO
+        WHERE TPRO.COD_PRODUCCION='$codigoproduccion' AND TPRO.COD_PRODUCTO='$codigoproducto'");
+        $stmformulacionenvase->execute();
+        $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+        $respuesta['tipo'] = 1;
+      }
+
+
+
+      $this->bd->commit();
+
+      return $respuesta;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
 
   public function CodigoAvanceInsumo()
   {
@@ -2884,7 +2929,7 @@ class m_almacen
     $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
     return $codigoAumento;
   }
-  public function  InsertarValorInsumoRegistro($valoresCapturadosProduccion, $codigoproducto, $codigoproduccion, $cantidad,  $codpersonal)
+  public function  InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad,  $codpersonal)
   {
     try {
       $this->bd->beginTransaction();
@@ -2973,6 +3018,7 @@ class m_almacen
                                                       VALUES ('$codigo_de_avance_insumo','$codProductoAvance','$cantidadcaptura','$cantidadlote')");
           $stmInsumoAvance->execute();
         }
+
         $suminsumos = 0;
         foreach ($cantidadformula as $insumos) {
           $codProducto = $insumos['COD_PRODUCTO'];
@@ -4034,10 +4080,11 @@ class m_almacen
 
         foreach ($datosTabla as $datot) {
           $codproductos = $datot["productoc"];
-          $idcheck = $datot["id"];
+          $idcheck = $datot["idc"];
           $fechaC = $datot["Fechax"];
           $fechaConvertida = date_create($fechaC);
-          $fecha = $fechaConvertida->format('Y-m-d');
+          $fecha = date_format($fechaConvertida, 'Y-m-d');
+
           $observacion = $datot["Observacionx"];
           $accioncorrectivaobs = $datot["AccionCorrectivax"];
 
@@ -4214,6 +4261,26 @@ class m_almacen
         INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TRECEP.COD_PRODUCTO
         INNER JOIN T_TMPCONTROL_RECEPCION_COMPRAS TCR ON TCR.COD_TMPCONTROL_RECEPCION_COMPRAS=TRECEP.COD_TMPCONTROL_RECEPCION_COMPRAS
         WHERE TCR.ESTADO='P'AND MONTH(FECHA_GENERADA) = '$mesSeleccionado' AND YEAR(FECHA_GENERADA) = '$anioSeleccionado'"
+      );
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarControlRecepcionObservacionPDF($anioSeleccionado, $mesSeleccionado)
+  {
+    try {
+
+
+      $stm = $this->bd->prepare(
+        "SELECT TOBS.COD_TMPCONTROL_RECEPCION_COMPRAS AS COD_TMPCONTROL_RECEPCION_COMPRAS,TOBS.FECHA AS FECHA,
+        TOBS.OBSERVACION AS OBSERVACION, TOBS.ACCION_CORRECTIVA AS ACCION_CORRECTIVA, TCOM.FECHA AS FECHA FROM T_TMPCONTROL_RECEPCION_COMPRAS_OBSERVACION TOBS 
+        INNER JOIN T_TMPCONTROL_RECEPCION_COMPRAS TCOM ON TCOM.COD_TMPCONTROL_RECEPCION_COMPRAS=TOBS.COD_TMPCONTROL_RECEPCION_COMPRAS
+        WHERE MONTH(TCOM.FECHA) = '$mesSeleccionado' AND YEAR(TCOM.FECHA) = '$anioSeleccionado'"
       );
       $stm->execute();
       $datos = $stm->fetchAll();
