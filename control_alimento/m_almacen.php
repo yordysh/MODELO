@@ -3881,164 +3881,313 @@ class m_almacen
   {
     try {
       $this->bd->beginTransaction();
-      var_dump($datos);
-      var_dump($datosTabla);
+      //var_dump($datos);
+      //var_dump($datosTabla);
       // var_dump($idrequerimiento);
       // var_dump($codpersonal);
-      exit();
+      //exit();
       $codigo = new m_almacen();
       $codigorecepcion = $codigo->generarcodigocontrolrecepcion();
       $nombre = 'LBS-BPM-FR-09';
 
-      $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, CODIGO_REQUERIMIENTO)
-                                                       VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
-      $insertarecepcioncompras->execute();
-
-
-      foreach ($datos as $dato) {
-        $idcomprobante = $dato["idcomprobante"];
-        $fechaingresoC = $dato["fechaingreso"];
-        $fechaConvertida = date_create($fechaingresoC);
-        $fechaingreso = $fechaConvertida->format('Y-m-d');
-
-        $hora = $dato["hora"];
-        $producto = trim($dato["producto"]);
-        $codigolote = $dato["codigolote"];
-        $fechavencimiento = $dato["fechavencimiento"];
-        $proveedor = $dato["proveedor"];
-        $remision = $dato["remision"];
-        $boleta = $dato["boleta"];
-        $factura = $dato["factura"];
-        if ($remision == "true") {
-          $remision = 'C';
-        } else {
-          $remision = 'V';
-        }
-        if ($boleta == "true") {
-          $boleta = 'C';
-        } else {
-          $boleta = 'V';
-        }
-        if ($factura == "true") {
-          $factura = 'C';
-        } else {
-          $factura = 'V';
-        }
-        $gbf = $dato["gbf"];
-        $primario = $dato["primario"];
-        $secundario = $dato["secundario"];
-        $saco = $dato["saco"];
-        $caja = $dato["caja"];
-        $cilindro = $dato["cilindro"];
-        $bolsa = $dato["bolsa"];
-
-        if ($primario == "true") {
-          $primario = 'C';
-        } else {
-          $primario = 'V';
-        }
-        if ($secundario == "true") {
-          $secundario = 'C';
-        } else {
-          $secundario = 'V';
-        }
-        if ($saco == "true") {
-          $saco = 'C';
-        } else {
-          $saco = 'V';
-        }
-        if ($caja == "true") {
-          $caja = 'C';
-        } else {
-          $caja = 'V';
-        }
-        if ($cilindro == "true") {
-          $cilindro = 'C';
-        } else {
-          $cilindro = 'V';
-        }
-        if ($bolsa == "true") {
-          $bolsa = 'C';
-        } else {
-          $bolsa = 'V';
-        }
-        $cantidadminima =  $dato["cantidadminima"];
-        $eih =  $dato["eih"];
-        $cdc =  $dato["cdc"];
-        $rotulacion =  $dato["rotulacion"];
-        $aplicacion =  $dato["aplicacion"];
-        $higienesalud =  $dato["higienesalud"];
-        $indumentaria =  $dato["indumentaria"];
-        $limpio =  $dato["limpio"];
-        $exclusivo =  $dato["exclusivo"];
-        $hermetico =  $dato["hermetico"];
-        $ausencia =  $dato["ausencia"];
-        if ($eih == "true") {
-          $eih =  'C';
-        } else {
-          $eih =  'A';
-        }
-        if ($cdc == "true") {
-          $cdc =  'C';
-        } else {
-          $cdc =  'A';
-        }
-        if ($rotulacion == "true") {
-          $rotulacion =  'C';
-        } else {
-          $rotulacion =  'A';
-        }
-        if ($aplicacion == "true") {
-          $aplicacion =  'C';
-        } else {
-          $aplicacion =  'A';
-        }
-        if ($higienesalud == "true") {
-          $higienesalud =  'C';
-        } else {
-          $higienesalud =  'A';
-        }
-        if ($indumentaria == "true") {
-          $indumentaria =  'C';
-        } else {
-          $indumentaria =  'A';
-        }
-        if ($limpio == "true") {
-          $limpio =  'C';
-        } else {
-          $limpio =  'A';
-        }
-        if ($exclusivo == "true") {
-          $exclusivo =  'C';
-        } else {
-          $exclusivo =  'A';
-        }
-        if ($hermetico == "true") {
-          $hermetico =  'C';
-        } else {
-          $hermetico =  'A';
-        }
-        if ($ausencia == "true") {
-          $ausencia = 'C';
-        } else {
-          $ausencia = 'A';
-        }
-        // $codigorecepcion = $codigo->generarcodigocontrolrecepcion();
-
-        $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE,FECHA_INGRESO, HORA, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO,COD_PROVEEDOR, GUIA, BOLETA, FACTURA, GBF, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, CANTIDAD_MINIMA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
-                                                 VALUES('$codigorecepcion','$idcomprobante','$fechaingreso','$hora','$codigolote','$producto','$fechavencimiento','$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
-
-        $insertarrecepcion->execute();
-      }
       if ($datosTabla) {
+        $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, CODIGO_REQUERIMIENTO)
+                                                        VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
+        $insertarecepcioncompras->execute();
+
+
+        foreach ($datos as $dato) {
+          $idcomprobante = $dato["idcomprobante"];
+          $fechaingresoC = $dato["fechaingreso"];
+          $fechaConvertida = date_create($fechaingresoC);
+          $fechaingreso = $fechaConvertida->format('Y-m-d');
+
+          $hora = $dato["hora"];
+          $producto = trim($dato["producto"]);
+          $codigolote = $dato["codigolote"];
+          $fechavencimiento = $dato["fechavencimiento"];
+          $proveedor = $dato["proveedor"];
+          $remision = $dato["remision"];
+          $boleta = $dato["boleta"];
+          $factura = $dato["factura"];
+          if ($remision == "true") {
+            $remision = 'C';
+          } else {
+            $remision = 'V';
+          }
+          if ($boleta == "true") {
+            $boleta = 'C';
+          } else {
+            $boleta = 'V';
+          }
+          if ($factura == "true") {
+            $factura = 'C';
+          } else {
+            $factura = 'V';
+          }
+          $gbf = $dato["gbf"];
+          $primario = $dato["primario"];
+          $secundario = $dato["secundario"];
+          $saco = $dato["saco"];
+          $caja = $dato["caja"];
+          $cilindro = $dato["cilindro"];
+          $bolsa = $dato["bolsa"];
+
+          if ($primario == "true") {
+            $primario = 'C';
+          } else {
+            $primario = 'V';
+          }
+          if ($secundario == "true") {
+            $secundario = 'C';
+          } else {
+            $secundario = 'V';
+          }
+          if ($saco == "true") {
+            $saco = 'C';
+          } else {
+            $saco = 'V';
+          }
+          if ($caja == "true") {
+            $caja = 'C';
+          } else {
+            $caja = 'V';
+          }
+          if ($cilindro == "true") {
+            $cilindro = 'C';
+          } else {
+            $cilindro = 'V';
+          }
+          if ($bolsa == "true") {
+            $bolsa = 'C';
+          } else {
+            $bolsa = 'V';
+          }
+          $cantidadminima =  $dato["cantidadminima"];
+          $eih =  $dato["eih"];
+          $cdc =  $dato["cdc"];
+          $rotulacion =  $dato["rotulacion"];
+          $aplicacion =  $dato["aplicacion"];
+          $higienesalud =  $dato["higienesalud"];
+          $indumentaria =  $dato["indumentaria"];
+          $limpio =  $dato["limpio"];
+          $exclusivo =  $dato["exclusivo"];
+          $hermetico =  $dato["hermetico"];
+          $ausencia =  $dato["ausencia"];
+          if ($eih == "true") {
+            $eih =  'C';
+          } else {
+            $eih =  'A';
+          }
+          if ($cdc == "true") {
+            $cdc =  'C';
+          } else {
+            $cdc =  'A';
+          }
+          if ($rotulacion == "true") {
+            $rotulacion =  'C';
+          } else {
+            $rotulacion =  'A';
+          }
+          if ($aplicacion == "true") {
+            $aplicacion =  'C';
+          } else {
+            $aplicacion =  'A';
+          }
+          if ($higienesalud == "true") {
+            $higienesalud =  'C';
+          } else {
+            $higienesalud =  'A';
+          }
+          if ($indumentaria == "true") {
+            $indumentaria =  'C';
+          } else {
+            $indumentaria =  'A';
+          }
+          if ($limpio == "true") {
+            $limpio =  'C';
+          } else {
+            $limpio =  'A';
+          }
+          if ($exclusivo == "true") {
+            $exclusivo =  'C';
+          } else {
+            $exclusivo =  'A';
+          }
+          if ($hermetico == "true") {
+            $hermetico =  'C';
+          } else {
+            $hermetico =  'A';
+          }
+          if ($ausencia == "true") {
+            $ausencia = 'C';
+          } else {
+            $ausencia = 'A';
+          }
+
+
+          $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE,FECHA_INGRESO, HORA, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO,COD_PROVEEDOR, GUIA, BOLETA, FACTURA, GBF, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, CANTIDAD_MINIMA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
+                                    VALUES('$codigorecepcion','$idcomprobante','$fechaingreso','$hora','$codigolote','$producto','$fechavencimiento','$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
+
+          $insertarrecepcion->execute();
+        }
+
         foreach ($datosTabla as $datot) {
-          $codproductos = $dato["productoc"];
-          $idcheck = $dato["id"];
-          $fecha = $dato["Fechax"];
-          $observacion = $dato["Observacionx"];
-          $accioncorrectiva = $dato["AccionCorrectivax"];
+          $codproductos = $datot["productoc"];
+          $idcheck = $datot["id"];
+          $fechaC = $datot["Fechax"];
+          $fechaConvertida = date_create($fechaC);
+          $fecha = $fechaConvertida->format('Y-m-d');
+          $observacion = $datot["Observacionx"];
+          $accioncorrectivaobs = $datot["AccionCorrectivax"];
+
+          $insertarobs = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_OBSERVACION(COD_TMPCONTROL_RECEPCION_COMPRAS, FECHA, COD_PRODUCTO, ACCION_CORRECTIVA, OBSERVACION, IDCHECK)
+                            VALUES('$codigorecepcion','$fecha','$codproductos','$accioncorrectivaobs','$observacion','$idcheck')");
+          $insertarobs->execute();
+        }
+      } else {
+        $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, CODIGO_REQUERIMIENTO)
+                                                          VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
+        $insertarecepcioncompras->execute();
+
+
+        foreach ($datos as $dato) {
+          $idcomprobante = $dato["idcomprobante"];
+          $fechaingresoC = $dato["fechaingreso"];
+          $fechaConvertida = date_create($fechaingresoC);
+          $fechaingreso = $fechaConvertida->format('Y-m-d');
+
+          $hora = $dato["hora"];
+          $producto = trim($dato["producto"]);
+          $codigolote = $dato["codigolote"];
+          $fechavencimiento = $dato["fechavencimiento"];
+          $proveedor = $dato["proveedor"];
+          $remision = $dato["remision"];
+          $boleta = $dato["boleta"];
+          $factura = $dato["factura"];
+          if ($remision == "true") {
+            $remision = 'C';
+          } else {
+            $remision = 'V';
+          }
+          if ($boleta == "true") {
+            $boleta = 'C';
+          } else {
+            $boleta = 'V';
+          }
+          if ($factura == "true") {
+            $factura = 'C';
+          } else {
+            $factura = 'V';
+          }
+          $gbf = $dato["gbf"];
+          $primario = $dato["primario"];
+          $secundario = $dato["secundario"];
+          $saco = $dato["saco"];
+          $caja = $dato["caja"];
+          $cilindro = $dato["cilindro"];
+          $bolsa = $dato["bolsa"];
+
+          if ($primario == "true") {
+            $primario = 'C';
+          } else {
+            $primario = 'V';
+          }
+          if ($secundario == "true") {
+            $secundario = 'C';
+          } else {
+            $secundario = 'V';
+          }
+          if ($saco == "true") {
+            $saco = 'C';
+          } else {
+            $saco = 'V';
+          }
+          if ($caja == "true") {
+            $caja = 'C';
+          } else {
+            $caja = 'V';
+          }
+          if ($cilindro == "true") {
+            $cilindro = 'C';
+          } else {
+            $cilindro = 'V';
+          }
+          if ($bolsa == "true") {
+            $bolsa = 'C';
+          } else {
+            $bolsa = 'V';
+          }
+          $cantidadminima =  $dato["cantidadminima"];
+          $eih =  $dato["eih"];
+          $cdc =  $dato["cdc"];
+          $rotulacion =  $dato["rotulacion"];
+          $aplicacion =  $dato["aplicacion"];
+          $higienesalud =  $dato["higienesalud"];
+          $indumentaria =  $dato["indumentaria"];
+          $limpio =  $dato["limpio"];
+          $exclusivo =  $dato["exclusivo"];
+          $hermetico =  $dato["hermetico"];
+          $ausencia =  $dato["ausencia"];
+          if ($eih == "true") {
+            $eih =  'C';
+          } else {
+            $eih =  'A';
+          }
+          if ($cdc == "true") {
+            $cdc =  'C';
+          } else {
+            $cdc =  'A';
+          }
+          if ($rotulacion == "true") {
+            $rotulacion =  'C';
+          } else {
+            $rotulacion =  'A';
+          }
+          if ($aplicacion == "true") {
+            $aplicacion =  'C';
+          } else {
+            $aplicacion =  'A';
+          }
+          if ($higienesalud == "true") {
+            $higienesalud =  'C';
+          } else {
+            $higienesalud =  'A';
+          }
+          if ($indumentaria == "true") {
+            $indumentaria =  'C';
+          } else {
+            $indumentaria =  'A';
+          }
+          if ($limpio == "true") {
+            $limpio =  'C';
+          } else {
+            $limpio =  'A';
+          }
+          if ($exclusivo == "true") {
+            $exclusivo =  'C';
+          } else {
+            $exclusivo =  'A';
+          }
+          if ($hermetico == "true") {
+            $hermetico =  'C';
+          } else {
+            $hermetico =  'A';
+          }
+          if ($ausencia == "true") {
+            $ausencia = 'C';
+          } else {
+            $ausencia = 'A';
+          }
+
+
+          $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE,FECHA_INGRESO, HORA, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO,COD_PROVEEDOR, GUIA, BOLETA, FACTURA, GBF, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, CANTIDAD_MINIMA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
+                                                    VALUES('$codigorecepcion','$idcomprobante','$fechaingreso','$hora','$codigolote','$producto','$fechavencimiento','$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
+
+          $insertarrecepcion->execute();
         }
       }
+
       $codigo->generarVersionGeneral($nombre);
 
 

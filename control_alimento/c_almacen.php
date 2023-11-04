@@ -625,6 +625,8 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'insertardatoscontrolrecepcion') {
     $datos = $_POST['datos'];
     $datosTabla = $_POST['datosTabla'];
+    var_dump($datosTabla);
+    exit();
     $idrequerimiento = trim($_POST['idrequerimiento']);
     $codpersonal = trim($_POST['codpersonal']);
 

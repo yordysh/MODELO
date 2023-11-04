@@ -195,37 +195,37 @@ $(function () {
       codigolote = $(this).find("td:eq(3) input.codigolote").val();
       fechavencimiento = $(this).find("td:eq(4) input.fechavencimiento").val();
     });
-    if (!idrequerimiento) {
-      Swal.fire({
-        icon: "info",
-        title: "Seleccione un requerimiento",
-        text: "Debe de seleccionar un requerimiento.",
-      });
-      return;
-    }
-    if (codigolote == "") {
-      Swal.fire({
-        icon: "info",
-        title: "Inserte un codigo",
-        text: "Debe de escribir un codigo lote.",
-      });
-      return;
-    }
-    if (fechavencimiento === "") {
-      Swal.fire({
-        icon: "info",
-        title: "Inserte una fecha",
-        text: "Debe de seleccionar una fecha.",
-      });
-      return;
-    }
+    // if (!idrequerimiento) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     title: "Seleccione un requerimiento",
+    //     text: "Debe de seleccionar un requerimiento.",
+    //   });
+    //   return;
+    // }
+    // if (codigolote == "") {
+    //   Swal.fire({
+    //     icon: "info",
+    //     title: "Inserte un codigo",
+    //     text: "Debe de escribir un codigo lote.",
+    //   });
+    //   return;
+    // }
+    // if (fechavencimiento === "") {
+    //   Swal.fire({
+    //     icon: "info",
+    //     title: "Inserte una fecha",
+    //     text: "Debe de seleccionar una fecha.",
+    //   });
+    //   return;
+    // }
 
     var datosTabla = [];
     $("#tbrecepcionobservacion tbody tr").each(function () {
       let productoc = $(this)
         .find('input[type="text"]')
         .attr("codigo_productos");
-      let id = $(this).find('input[type="text"]').attr("codigoidcheck");
+      let idc = $(this).find('input[type="text"]').attr("codigoidcheck");
       var fechax = $(this).find('input[type="text"]').val();
       var observacionx = $(this).find('textarea[id^="observacioneih"]').val();
       var accionCorrectivax = $(this)
@@ -234,7 +234,7 @@ $(function () {
 
       var fila = {
         productoc: productoc,
-        id: id,
+        idc: idc,
         Fechax: fechax,
         Observacionx: observacionx,
         AccionCorrectivax: accionCorrectivax,
