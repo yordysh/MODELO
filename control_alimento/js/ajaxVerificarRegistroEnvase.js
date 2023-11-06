@@ -15,6 +15,7 @@ $(function () {
 
   $("#selectProductoCombo").select2();
   $("#selectNumProduccion").select2();
+  $("#selectOperario").select2();
   /*---------- Al seleccionar un combo producto me muestre contenido en combo produccion---- */
   let selectNumProduccion = $("#selectNumProduccion");
   const accion = "seleccionarProductoCombo";
@@ -238,6 +239,7 @@ $(function () {
     let codigoproduccion = $("#hiddenproduccion").val();
     let cantidad = $("#hiddencantidad").val();
     let codpersonal = $("#codpersonal").val();
+    let codoperario = $("#selectOperario").val();
 
     let valoresCapturadosProduccion = [];
     let valoresCapturadosProduccioninsumo = [];
@@ -263,6 +265,14 @@ $(function () {
         icon: "error",
         title: "Inserte una cantidad",
         text: "Debe de escribir una cantidad.",
+      });
+      return;
+    }
+    if (!codoperario) {
+      Swal.fire({
+        icon: "error",
+        title: "Seleccione un operario",
+        text: "Debe de seleccionar un operario.",
       });
       return;
     }
@@ -300,6 +310,7 @@ $(function () {
         codigoproduccion: codigoproduccion,
         cantidad: cantidad,
         codpersonal: codpersonal,
+        codoperario: codoperario,
       },
       beforeSend: function () {
         $(".preloader").css("opacity", "1");
@@ -321,6 +332,8 @@ $(function () {
               $("#hiddenproduccion").val("");
               $("#cantidad").val("");
               $("#tablacalculoregistroenvase").empty();
+              $("#tablainsumosavancetotal").empty();
+              $("#selectOperario").val("none").trigger("change");
               actualizarCombo();
             }
           });

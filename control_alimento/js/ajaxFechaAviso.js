@@ -114,32 +114,33 @@ $(function () {
           html: `
               <div><h2 class="nombre_area">Nombre del área:</h2> <p>${task.NOMBRE_AREA}</p></div>
               <div><h2 class="nombre_infra">Nombre de la infraestructura:</h2> <p>${task.NOMBRE_INFRAESTRUCTURA}</p></div>
+                <label class='estilolabel'>
+                     <input type="radio" name="estado-${task.COD_ALERTA}" value="R"> Realizado
+                </label>
+                   <!-- <label class='estilolabel'>
+                        <input type="radio" name="estado-${task.COD_ALERTA}" value="NR"> No Realizado
+                  </label> -->
+               <label class='estilolabel'>
+                <input type="radio" name="estado-${task.COD_ALERTA}" value="OB"> Observación
+               </label>
+                <label class='estilolabel' id="postergacion">
+                    <input type="radio" name="estado-${task.COD_ALERTA}" value="PO"> Pendiente
+                </label>
+                <textarea class="form-control" id="observacion-${task.COD_ALERTA}" rows="3" style="display: none;"></textarea>
+
               <div>
-              <h3>Accion correctiva:</h3>
+              <h3 class='accioncorrectiva'>Accion correctiva:</h3>
               <textarea class="form-control" id="accionCorrectiva" rows='3' "></textarea>
               </div>
               <div>
-              <h3>Verificacion realizada:</h3>
+              <h3 class='verificarealizada'>Verificacion realizada:</h3>
                <select id="selectVerificacion" class="form-select selectVerif" style="width:250px; margin-left:140px;" aria-label="Default select example">
                   <option selected>Seleccione una verificacion</option>
                   <option value="1">Conforme</option>
                   <option value="2">No conforme</option>
                 </select>
               </div>
-              <label class='estilolabel'>
-                <input type="radio" name="estado-${task.COD_ALERTA}" value="R"> Realizado
-              </label>
-              <!-- <label class='estilolabel'>
-                 <input type="radio" name="estado-${task.COD_ALERTA}" value="NR"> No Realizado
-               </label> -->
-              <label class='estilolabel'>
-              <input type="radio" name="estado-${task.COD_ALERTA}" value="OB"> Observación
-              </label>
-              <label class='estilolabel' id="postergacion">
-              <input type="radio" name="estado-${task.COD_ALERTA}" value="PO"> Postergación
-              </label>
-              <textarea class="form-control" id="observacion-${task.COD_ALERTA}" rows="3" style="display: none;"></textarea>
-               `,
+             `,
           icon: "info",
           width: 600,
           allowOutsideClick: false,
@@ -191,6 +192,7 @@ $(function () {
                 return Promise.resolve();
               }
               const accion = "actualizaalerta";
+              console.log(task.COD_ZONA);
               return $.ajax({
                 url: "../control_alimento/c_almacen.php",
                 // url: "./c_almacen.php",
@@ -203,6 +205,7 @@ $(function () {
                   observacionTextArea: observacionTextArea,
                   accionCorrectiva: accionCorrectiva,
                   selectVerificacion: selectVerificacion,
+                  codigozonaalerta: task.COD_ZONA,
                 },
                 dataType: "json",
               })
@@ -293,6 +296,7 @@ $(function () {
                       fechaPostergacion: fechaPostergacion,
                       accionCorrectiva: accionCorrectiva,
                       selectVerificacion: selectVerificacion,
+                      codigozonaalerta: task.COD_ZONA,
                     },
                     dataType: "json",
                   })
@@ -333,23 +337,6 @@ $(function () {
             }
           }
         });
-        const postergacionRadio = document.querySelector(
-          `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
-        );
-        const observacionTextarea = document.querySelector(
-          `#observacion-${task.COD_ALERTA}`
-        );
-
-        postergacionRadio.addEventListener("change", function () {
-          observacionTextarea.style.display = this.checked ? "block" : "none";
-        });
-
-        const observacionButtonRadio = document.querySelector(
-          `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
-        );
-        observacionButtonRadio.addEventListener("change", function () {
-          observacionTextarea.style.display = this.checked ? "block" : "none";
-        });
 
         // const noRealizadoRadio = document.querySelector(
         //   `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
@@ -358,12 +345,53 @@ $(function () {
         //   observacionTextarea.style.display = this.checked ? "block" : "none";
         // });
 
+        const accionCorrectivax = document.getElementById("accionCorrectiva");
+        const selectVerificacionx =
+          document.getElementById("selectVerificacion");
+        const postergacionRadio = document.querySelector(
+          `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
+        );
+        const observacionButtonRadio = document.querySelector(
+          `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
+        );
+
+        const h3accion = document.querySelector(".accioncorrectiva");
+        const h3verifica = document.querySelector(".verificarealizada");
+
+        const observacionTextarea = document.querySelector(
+          `#observacion-${task.COD_ALERTA}`
+        );
+
+        postergacionRadio.addEventListener("change", function () {
+          observacionTextarea.style.display = this.checked ? "block" : "none";
+          accionCorrectivax.style.display = this.checked ? "block" : "none";
+          selectVerificacionx.style.display = this.checked ? "block" : "none";
+          h3accion.style.display = this.checked ? "block" : "none";
+          h3verifica.style.display = this.checked ? "block" : "none";
+        });
+
+        observacionButtonRadio.addEventListener("change", function () {
+          observacionTextarea.style.display = this.checked ? "block" : "none";
+          accionCorrectivax.style.display = this.checked ? "block" : "none";
+          selectVerificacionx.style.display = this.checked ? "block" : "none";
+          h3accion.style.display = this.checked ? "block" : "none";
+          h3verifica.style.display = this.checked ? "block" : "none";
+        });
+
         const realizadoRadio = document.querySelector(
           `input[name="estado-${task.COD_ALERTA}"][value="R"]`
         );
-        realizadoRadio.addEventListener("change", function () {
-          observacionTextarea.style.display = this.checked ? "block" : "none";
+
+        realizadoRadio.addEventListener("click", function () {
+          if (this.checked) {
+            observacionTextarea.style.display = "none";
+            accionCorrectivax.style.display = "none";
+            selectVerificacionx.style.display = "none";
+            h3accion.style.display = "none";
+            h3verifica.style.display = "none";
+          }
         });
+
         const obs = document.getElementById("postergacion");
 
         // if (task.NDIAS > 6 && task.POSTERGACION == "NO") {
@@ -397,6 +425,7 @@ $(function () {
         data: { accion: accion },
         success: function (data) {
           const datass = JSON.parse(data);
+          console.log(datass);
           mostrarAlertas(datass, 0);
         },
         error: function (jqXHR, textStatus, errorThrown) {

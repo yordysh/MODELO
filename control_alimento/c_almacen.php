@@ -458,7 +458,8 @@ if ($accion == 'insertar') {
     $codigoproduccion = trim($_POST['codigoproduccion']);
     $cantidad = trim($_POST['cantidad']);
     $codpersonal = trim($_POST['codpersonal']);
-    $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal);
+    $codoperario = trim($_POST['codoperario']);
+    $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal, $codoperario);
     echo $respuesta;
 } elseif ($accion == 'verificaregistromenorconproducto') {
     $codigoproductoverifica = trim($_POST['codigoproductoverifica']);
@@ -1035,6 +1036,7 @@ class c_almacen
             }
         } else {
             $codigozonaalerta = trim($_POST['codigozonaalerta']);
+
             $estado = $_POST['estado'];
             // var_dump($estado);
             $taskId = $_POST['taskId'];
@@ -1084,7 +1086,7 @@ class c_almacen
 
             if (isset($_POST['fechaPostergacion'])) {
 
-                $codigozona = $_POST['codigozona'];
+                $codigozona = trim($_POST['codigozona']);
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
@@ -1107,7 +1109,7 @@ class c_almacen
                     echo "Error en la inserción: ";
                 }
             } else {
-                $codigozona = $_POST['codigozona'];
+                $codigozona = trim($_POST['codigozona']);
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $FECHA_CREACION = $mostrar->c_horaserversql('F');
@@ -1132,7 +1134,7 @@ class c_almacen
         } else if ($taskNdias == 2) {
 
             if (isset($_POST['fechaPostergacion'])) {
-                $codigozona = $_POST['codigozona'];
+                $codigozona = trim($_POST['codigozona']);
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
@@ -1155,7 +1157,8 @@ class c_almacen
                     echo "Error en la inserción: ";
                 }
             } else {
-                $codigozona = $_POST['codigozona'];
+                $codigozona = trim($_POST['codigozona']);
+
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $FECHA_CREACION = $mostrar->c_horaserversql('F');
@@ -1169,7 +1172,7 @@ class c_almacen
                 }
 
                 $insert = $mostrar->InsertarAlerta($FECHA_CREACION, $codigozona, $codInfraestructura, $FECHA_TOTAL, $taskNdias);
-
+                var_dump("insertar2" . $insert);
                 if ($insert) {
                     echo "ok";
                 } else {
@@ -1179,7 +1182,7 @@ class c_almacen
         } elseif ($taskNdias == 7) {
 
             if (isset($_POST['fechaPostergacion'])) {
-                $codigozona = $_POST['codigozona'];
+                $codigozona = trim($_POST['codigozona']);
                 $codInfraestructura = $_POST['codInfraestructura'];
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
                 $fechaActual = $mostrar->c_horaserversql('F');
@@ -1201,7 +1204,7 @@ class c_almacen
                 }
             } else {
                 // $fechaCreacion = $_POST['fechaCreacion'];
-                $codigozona = $_POST['codigozona'];
+                $codigozona = trim($_POST['codigozona']);
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $FECHA_CREACION  = $mostrar->c_horaserversql('F');
@@ -1230,7 +1233,7 @@ class c_almacen
         } elseif ($taskNdias == 15) {
 
             if (isset($_POST['fechaPostergacion'])) {
-                $codigozona = $_POST['codigozona'];
+                $codigozona = trim($_POST['codigozona']);
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
@@ -1259,7 +1262,7 @@ class c_almacen
                 }
             } else {
                 // $fechaCreacion = $_POST['fechaCreacion'];
-                $codigozona = $_POST['codigozona'];
+                $codigozona = trim($_POST['codigozona']);
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $FECHA_CREACION  = $mostrar->c_horaserversql('F');
@@ -1288,7 +1291,7 @@ class c_almacen
         } elseif ($taskNdias == 30) {
 
             if (isset($_POST['fechaPostergacion'])) {
-                $codigozona = $_POST['codigozona'];
+                $codigozona = trim($_POST['codigozona']);
                 $codInfraestructura = $_POST['codInfraestructura'];
 
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
@@ -1315,7 +1318,7 @@ class c_almacen
                 }
             } else {
                 // $fechaCreacion = $_POST['fechaCreacion'];
-                $codigozona = $_POST['codigozona'];
+                $codigozona = trim($_POST['codigozona']);
                 $codInfraestructura = $_POST['codInfraestructura'];
 
 
@@ -1352,6 +1355,7 @@ class c_almacen
 
 
         $datos = $mostrar->MostrarAlerta();
+        // var_dump($datos);
         try {
             if (!$datos) {
                 // throw new Exception("Hubo un error en la consulta");
@@ -1368,9 +1372,9 @@ class c_almacen
                         "NOMBRE_AREA" => $row->NOMBRE_AREA,
                         "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
                         "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
-                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
-                        "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
-                        "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
+                        "FECHA_CREACION" =>  $row->FECHA_CREACION,
+                        "FECHA_TOTAL" =>  $row->FECHA_TOTAL,
+                        "FECHA_ACORDAR" =>  $row->FECHA_ACORDAR,
                         "N_DIAS_POS" =>  $row->N_DIAS_POS,
                         "POSTERGACION" =>  $row->POSTERGACION,
 
@@ -2931,12 +2935,12 @@ class c_almacen
     }
 
 
-    static function c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal)
+    static function c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal, $codoperario)
     {
         $m_formula = new m_almacen();
 
         if (isset($valoresCapturadosProduccion) && isset($codigoproducto) && isset($codigoproduccion) && isset($cantidad)) {
-            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal);
+            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal, $codoperario);
 
             if ($respuesta) {
                 return "ok";

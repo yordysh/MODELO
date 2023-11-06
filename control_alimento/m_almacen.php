@@ -666,7 +666,7 @@ class m_almacen
 
       $stm = $this->bd->prepare("SELECT T_ZONA_AREAS.COD_ZONA AS COD_ZONA, T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_AREA,T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,
       T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,T_INFRAESTRUCTURA.NDIAS AS NDIAS,T_ALERTA.COD_ALERTA AS COD_ALERTA,
-      T_ALERTA.FECHA_CREACION AS FECHA_CREACION,T_ALERTA.FECHA_TOTAL AS FECHA_TOTAL, T_ALERTA.FECHA_ACORDAR AS FECHA_ACORDAR,
+      CONVERT(DATE,T_ALERTA.FECHA_CREACION) AS FECHA_CREACION,CONVERT(DATE, T_ALERTA.FECHA_TOTAL) AS FECHA_TOTAL, CONVERT(DATE,T_ALERTA.FECHA_ACORDAR) AS FECHA_ACORDAR,
       T_ALERTA.ESTADO AS ESTADO, T_ALERTA.N_DIAS_POS AS N_DIAS_POS, T_ALERTA.POSTERGACION AS POSTERGACION FROM T_ALERTA INNER JOIN T_INFRAESTRUCTURA
       ON T_ALERTA.COD_INFRAESTRUCTURA= T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA inner join T_ZONA_AREAS ON
       T_ZONA_AREAS.COD_ZONA= T_INFRAESTRUCTURA.COD_ZONA
@@ -2800,6 +2800,19 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function  MostrarPersonal()
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT COD_PERSONAL,NOM_PERSONAL FROM T_PERSONAL");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 
 
 
@@ -2929,7 +2942,7 @@ class m_almacen
     $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
     return $codigoAumento;
   }
-  public function  InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad,  $codpersonal)
+  public function  InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad,  $codpersonal, $codoperario)
   {
     try {
       $this->bd->beginTransaction();
@@ -3004,8 +3017,8 @@ class m_almacen
         $stmActualizaproduccion = $this->bd->prepare("UPDATE T_TMPPRODUCCION SET CANTIDAD_PRODUCIDA='$updatetotal',ESTADO='A' WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
         $stmActualizaproduccion->execute();
 
-        $stmInsertarInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS(COD_AVANCE_INSUMOS,N_BACHADA,COD_PRODUCTO,COD_PRODUCCION,CANTIDAD,FEC_VENCIMIENTO)
-          VALUES ('$codigo_de_avance_insumo','$numero_generado_bachada','$codigoproducto','$codigoproduccion','$cantidad','$nueva_fecha_vencimiento')");
+        $stmInsertarInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS(COD_AVANCE_INSUMOS,N_BACHADA,COD_PRODUCTO,COD_PRODUCCION,CANTIDAD,FEC_VENCIMIENTO,COD_OPERARIO)
+          VALUES ('$codigo_de_avance_insumo','$numero_generado_bachada','$codigoproducto','$codigoproduccion','$cantidad','$nueva_fecha_vencimiento','$codoperario')");
 
         $stmInsertarInsumoAvance->execute();
 
@@ -3032,6 +3045,15 @@ class m_almacen
 
           $stmInsertarInsumo->execute();
           $suminsumos = $suminsumos + $resultadoformula;
+        }
+
+        for ($i = 0; $i < count($valoresCapturadosProduccioninsumo); $i += 3) {
+          $codProductoAvanceinsumo = trim($valoresCapturadosProduccioninsumo[$i]);
+          $cantidadcapturainsumo = trim($valoresCapturadosProduccioninsumo[$i + 1]);
+          $cantidadloteinsumo = ($valoresCapturadosProduccioninsumo[$i + 2]);
+
+          $stmactualizaitem = $this->bd->prepare("UPDATE T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM SET LOTE='$cantidadloteinsumo' WHERE COD_PRODUCTO='$codProductoAvanceinsumo' AND COD_AVANCE_INSUMOS='$codigo_de_avance_insumo'");
+          $stmactualizaitem->execute();
         }
 
         $stmContienevalor = $this->bd->prepare("SELECT NUM_LOTE FROM T_TMPPRODUCCION_BARRAS WHERE COD_PRODUCCION='$codigoproduccion'");

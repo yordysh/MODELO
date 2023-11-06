@@ -12,6 +12,7 @@ require_once "m_almacen.php";
 $mostrar = new m_almacen();
 $dataProducto = $mostrar->MostrarProductoRegistroEnvase();
 $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
+$dataPersonal = $mostrar->MostrarPersonal();
 
 ?>
 <!DOCTYPE html>
@@ -101,6 +102,18 @@ $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
                             <div class="btncalcular">
                                 <button class="custom-icon-calcular" name="calcular" id="botonCalcularregistros"><i class="icon-circle-with-plus"></i></button>
                                 <!-- <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-success">Insertar</button> -->
+                            </div>
+                            <div class="form-outline mb-4">
+                                <label class="form-label">Operario</label>
+                                <!-- <input type="hidden" id="hidden"> -->
+                                <select id="selectOperario" class="form-select selectProducto" aria-label="Default select example">
+                                    <option value="none" selected disabled>Seleccione operario</option>
+                                    <?php foreach ($dataPersonal as  $personal) { ?>
+                                        <option value="<?php echo $personal['COD_PERSONAL'] ?>" class="option"><?php echo $personal['NOM_PERSONAL']; ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
                         <!-- Crear PDF -->
