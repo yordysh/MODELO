@@ -391,7 +391,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
                 echo '<td class="cabecera">' . $fils['ACCION_CORRECTIVA'] . '</td>';
                 echo '<td class="cabecera">' . $fils['VERIFICACION_REALIZADA'] . '</td>';
-                echo '<td></td>';
+                echo '<td class="cabecera">' . $fils['VB'] . '</td>';
 
                 echo '</tr>';
             }

@@ -1,4 +1,12 @@
 $(function () {
+  window.onload = function () {
+    fadeout();
+  };
+
+  function fadeout() {
+    document.querySelector(".preloader").style.opacity = "0";
+    document.querySelector(".preloader").style.display = "none";
+  }
   async function executeAlerts() {
     try {
       await alertaMensaje();
@@ -108,6 +116,7 @@ $(function () {
 
         let accionCorrectiva;
         let selectVerificacion;
+        let selectVB;
 
         Swal.fire({
           title: "Información LBS-PHS-FR-01",
@@ -121,11 +130,12 @@ $(function () {
                         <input type="radio" name="estado-${task.COD_ALERTA}" value="NR"> No Realizado
                   </label> -->
                <label class='estilolabel'>
-                <input type="radio" name="estado-${task.COD_ALERTA}" value="OB"> Observación
+                <input type="radio" name="estado-${task.COD_ALERTA}" value="OB"> Observado
                </label>
                 <label class='estilolabel' id="postergacion">
                     <input type="radio" name="estado-${task.COD_ALERTA}" value="PO"> Pendiente
                 </label>
+                <h3 class='observaciontext' >Observación</h4>
                 <textarea class="form-control" id="observacion-${task.COD_ALERTA}" rows="3" style="display: none;"></textarea>
 
               <div>
@@ -140,6 +150,14 @@ $(function () {
                   <option value="2">No conforme</option>
                 </select>
               </div>
+              <div>
+              <h3 class='vb'>V°B°:</h3>
+               <select id="selectVB" class="form-select selectVerif" style="width:250px; margin-left:140px;" aria-label="Default select example">
+                  <option selected>Seleccione V°B°</option>
+                  <option value="1">J.A.C</option>
+                  <option value="2">A.A.C</option>
+                </select>
+              </div>
              `,
           icon: "info",
           width: 600,
@@ -149,9 +167,6 @@ $(function () {
             const realizadoRadio = document.querySelector(
               `input[name="estado-${task.COD_ALERTA}"][value="R"]`
             );
-            // const noRealizadoRadio = document.querySelector(
-            //   `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
-            // );
             const observacionButtonRadio = document.querySelector(
               `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
             );
@@ -161,15 +176,12 @@ $(function () {
 
             if (
               realizadoRadio.checked ||
-              // noRealizadoRadio.checked ||
               observacionButtonRadio.checked ||
               postergacionRadio.checked
             ) {
               const estado = realizadoRadio.checked
                 ? "R"
-                : // : noRealizadoRadio.checked
-                // ? "NR"
-                observacionButtonRadio.checked
+                : observacionButtonRadio.checked
                 ? "OB"
                 : "PO";
 
@@ -186,13 +198,15 @@ $(function () {
                 "#selectVerificacion option:selected"
               ).text();
 
+              selectVB = $("#selectVB option:selected").text();
+
               if (postergacionRadio.checked) {
                 $("#myModalExito").modal("show");
 
                 return Promise.resolve();
               }
               const accion = "actualizaalerta";
-              console.log(task.COD_ZONA);
+
               return $.ajax({
                 url: "../control_alimento/c_almacen.php",
                 // url: "./c_almacen.php",
@@ -205,6 +219,7 @@ $(function () {
                   observacionTextArea: observacionTextArea,
                   accionCorrectiva: accionCorrectiva,
                   selectVerificacion: selectVerificacion,
+                  selectVB: selectVB,
                   codigozonaalerta: task.COD_ZONA,
                 },
                 dataType: "json",
@@ -218,7 +233,6 @@ $(function () {
                   const accion = "insertaralertamix";
                   return $.ajax({
                     url: "../control_alimento/c_almacen.php",
-                    // url: "./c_almacen.php",
                     method: "POST",
                     data: {
                       accion: accion,
@@ -227,7 +241,15 @@ $(function () {
                       codInfraestructura: task.COD_INFRAESTRUCTURA,
                       taskNdias: task.NDIAS,
                     },
+                    beforeSend: function () {
+                      $(".preloader").css("opacity", "1");
+                      $(".preloader").css("display", "block");
+                    },
                     dataType: "json",
+                    complete: function () {
+                      $(".preloader").css("opacity", "0");
+                      $(".preloader").css("display", "none");
+                    },
                   });
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
@@ -278,6 +300,7 @@ $(function () {
                   console.log("fecha" + fechaPostergacion);
                   console.log("accionCorrectiva: " + accionCorrectiva);
                   console.log("selectVerificacion: " + selectVerificacion);
+                  console.log(selectVB);
 
                   const observacion = observacionTextarea.value;
                   const accion = "actualizaalerta";
@@ -296,6 +319,7 @@ $(function () {
                       fechaPostergacion: fechaPostergacion,
                       accionCorrectiva: accionCorrectiva,
                       selectVerificacion: selectVerificacion,
+                      selectVB: selectVB,
                       codigozonaalerta: task.COD_ZONA,
                     },
                     dataType: "json",
@@ -322,8 +346,17 @@ $(function () {
                           fechaPostergacion: fechaPostergacion,
                           accionCorrectiva: accionCorrectiva,
                           selectVerificacion: selectVerificacion,
+                          selectVB: selectVB,
+                        },
+                        beforeSend: function () {
+                          $(".preloader").css("opacity", "1");
+                          $(".preloader").css("display", "block");
                         },
                         dataType: "json",
+                        complete: function () {
+                          $(".preloader").css("opacity", "0");
+                          $(".preloader").css("display", "none");
+                        },
                       });
                     })
                     .fail(function (jqXHR, textStatus, errorThrown) {
@@ -338,44 +371,56 @@ $(function () {
           }
         });
 
-        // const noRealizadoRadio = document.querySelector(
-        //   `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
-        // );
-        // noRealizadoRadio.addEventListener("change", function () {
-        //   observacionTextarea.style.display = this.checked ? "block" : "none";
-        // });
-
         const accionCorrectivax = document.getElementById("accionCorrectiva");
         const selectVerificacionx =
           document.getElementById("selectVerificacion");
         const postergacionRadio = document.querySelector(
           `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
         );
+        const accionvb = document.getElementById("selectVB");
         const observacionButtonRadio = document.querySelector(
           `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
         );
 
         const h3accion = document.querySelector(".accioncorrectiva");
         const h3verifica = document.querySelector(".verificarealizada");
+        const h4obs = document.querySelector(".observaciontext");
+        const h3vb = document.querySelector(".vb");
 
         const observacionTextarea = document.querySelector(
           `#observacion-${task.COD_ALERTA}`
         );
 
+        observacionTextarea.style.display = "none";
+        observacionTextarea.style.display = "none";
+        accionCorrectivax.style.display = "none";
+        selectVerificacionx.style.display = "none";
+        accionvb.style.display = "none";
+        h3accion.style.display = "none";
+        h3verifica.style.display = "none";
+        h4obs.style.display = "none";
+        h3vb.style.display = "none";
+
         postergacionRadio.addEventListener("change", function () {
           observacionTextarea.style.display = this.checked ? "block" : "none";
           accionCorrectivax.style.display = this.checked ? "block" : "none";
           selectVerificacionx.style.display = this.checked ? "block" : "none";
+          accionvb.style.display = this.checked ? "block" : "none";
           h3accion.style.display = this.checked ? "block" : "none";
           h3verifica.style.display = this.checked ? "block" : "none";
+          h4obs.style.display = this.checked ? "block" : "none";
+          h3vb.style.display = this.checked ? "block" : "none";
         });
 
         observacionButtonRadio.addEventListener("change", function () {
           observacionTextarea.style.display = this.checked ? "block" : "none";
           accionCorrectivax.style.display = this.checked ? "block" : "none";
           selectVerificacionx.style.display = this.checked ? "block" : "none";
+          accionvb.style.display = this.checked ? "block" : "none";
           h3accion.style.display = this.checked ? "block" : "none";
           h3verifica.style.display = this.checked ? "block" : "none";
+          h4obs.style.display = this.checked ? "block" : "none";
+          h3vb.style.display = this.checked ? "block" : "none";
         });
 
         const realizadoRadio = document.querySelector(
@@ -387,46 +432,33 @@ $(function () {
             observacionTextarea.style.display = "none";
             accionCorrectivax.style.display = "none";
             selectVerificacionx.style.display = "none";
+            accionvb.style.display = "none";
             h3accion.style.display = "none";
             h3verifica.style.display = "none";
+            h4obs.style.display = "none";
+            h3vb.style.display = "none";
           }
         });
 
         const obs = document.getElementById("postergacion");
-
-        // if (task.NDIAS > 6 && task.POSTERGACION == "NO") {
-        //     postergacionRadio.style.display = "block";
-        //     realizadoRadio.addEventListener("change", function () {
-        //       observacionTextarea.style.display = "block";
-        //     });
-        //     noRealizadoRadio.addEventListener("change", function () {
-        //       observacionTextarea.style.display = "block";
-        //     });
-        //     console.log(task.POSTERGACION);
-        //   } else {
-        //     if (task.POSTERGACION == "SI") {
-        //       realizadoRadio.addEventListener("change", function () {
-        //         observacionTextarea.style.display = "block";
-        //       });
-        //       noRealizadoRadio.addEventListener("change", function () {
-        //         observacionTextarea.style.display = "block";
-        //       });
-        //     }
-        //     postergacionRadio.style.display = "none";
-        //     obs.style.visibility = "hidden";
-        //   }
       }
       const accion = "fechaalerta";
       $.ajax({
         url: "../control_alimento/c_almacen.php",
-        // url: "./c_almacen.php",
         method: "POST",
         dataType: "text",
         data: { accion: accion },
+        beforeSend: function () {
+          $(".preloader").css("opacity", "1");
+          $(".preloader").css("display", "block");
+        },
         success: function (data) {
           const datass = JSON.parse(data);
-          console.log(datass);
           mostrarAlertas(datass, 0);
+        },
+        complete: function () {
+          $(".preloader").css("opacity", "0");
+          $(".preloader").css("display", "none");
         },
         error: function (jqXHR, textStatus, errorThrown) {
           console.error("Error in alerta AJAX:", textStatus, errorThrown);
@@ -577,57 +609,7 @@ $(function () {
       });
     });
   }
-  // async function alertaOrdenCompra() {
-  //   const accion = "mostrarordencompraalmacenalerta";
-  //   var codrequerimiento, codordencompra;
-  //   $.ajax({
-  //     url: "../control_alimento/c_almacen.php",
-  //     // url: "./c_almacen.php",
-  //     type: "POST",
-  //     data: { accion: accion },
-  //     success: function (response) {
-  //       let task = JSON.parse(response);
-  //       console.log(task);
-  //       codrequerimiento = task[0].COD_TMPREQUERIMIENTO;
-  //       codordencompra = task[0].COD_ORDEN_COMPRA;
 
-  //       let htmlContent = "<h1>¡Listo para producción!</h1>";
-  //       htmlContent += "<ul>";
-  //       task.forEach(function (producto) {
-  //         htmlContent +=
-  //           "<li style='list-style:none;'>" + producto.ABR_PRODUCTO + "</li>";
-  //       });
-  //       htmlContent += "</ul>";
-  //       Swal.fire({
-  //         title: "Compra de insumos",
-  //         icon: "question",
-  //         html: htmlContent,
-  //         confirmButtonText: "Ok",
-  //         showCloseButton: true,
-  //       }).then((result) => {
-  //         if (result.isConfirmed) {
-  //           const accion = "actualizarrequerimientoitem";
-  //           $.ajax({
-  //             url: "../control_alimento/c_almacen.php",
-  //             // url: "./c_almacen.php",
-  //             type: "POST",
-  //             data: {
-  //               accion: accion,
-  //               codrequerimiento: codrequerimiento,
-  //               codordencompra: codordencompra,
-  //             },
-  //             success: function (response) {
-  //               console.log("se actualizo");
-  //             },
-  //           });
-  //         }
-  //       });
-  //     },
-  //     error: function (xhr, status, error) {
-  //       console.error("Error al cargar los datos de la tabla:", error);
-  //     },
-  //   });
-  // }
   async function alertaOrdenCompra() {
     return new Promise((resolve, reject) => {
       const accion = "mostrarordencompraalmacenalerta";

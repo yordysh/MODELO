@@ -73,9 +73,39 @@ $(function () {
   $("#boton").on("click", (e) => {
     e.preventDefault();
 
-    var selectInfra = document.getElementById("selectInfra");
+    // var selectInfra = document.getElementById("selectInfra");
+    let selectInfra = $("#selectInfra").val();
+    let seleccionzonainfraestructura = $("#seleccionzonainfraestructura").val();
+    let selectFrecuencia = $("#selectFrecuencia").val();
 
     // selectInfra.disabled = false;
+    if (!selectInfra) {
+      Swal.fire({
+        title: "<strong>Seleccione una zona</strong>",
+        icon: "info",
+        allowOutsideClick: false,
+        confirmButtonText: "Ok",
+      });
+      return;
+    }
+    if (!seleccionzonainfraestructura) {
+      Swal.fire({
+        title: "<strong>Seleccione una infraestructura</strong>",
+        icon: "info",
+        allowOutsideClick: false,
+        confirmButtonText: "Ok",
+      });
+      return;
+    }
+    if (!selectFrecuencia) {
+      Swal.fire({
+        title: "<strong>Seleccione una frecuencia</strong>",
+        icon: "info",
+        allowOutsideClick: false,
+        confirmButtonText: "Ok",
+      });
+      return;
+    }
 
     let accion = edit === false ? "insertarinfra" : "actualizarinfra";
 
@@ -164,6 +194,11 @@ $(function () {
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
+              $("#mostrarzonas").on("hidden.bs.modal", function () {
+                $("body").css("overflow", "auto");
+              });
+              $("#mostrarzonas").modal("hide");
+              $(".modal-backdrop").remove();
               $("#nombrezona").val("");
               // $("#mostrarzonas").modal("hide");
               actualizarCombo();
@@ -231,6 +266,11 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#nombreinfraestructura").val("");
+              $("#mostrarinfraestructura").on("hidden.bs.modal", function () {
+                $("body").css("overflow", "auto");
+              });
+              $("#mostrarinfraestructura").modal("hide");
+              $(".modal-backdrop").remove();
               actualizarComboInfraestructura(nombrezonain);
             }
           });
@@ -376,15 +416,14 @@ $(function () {
               frecuencia = "Mensual";
             }
             template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
-           
-            <!-- <td data-titulo="CODIGO" >${task.COD_INFRAESTRUCTURA}</td> -->
+          
             <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
             <td data-titulo="INFRAESTRUCTURA" class='NOMBRE_INFRAESTRUCTURA' >${task.NOMBRE_INFRAESTRUCTURA}</td>
             <td data-titulo="FRECUENCIA">${frecuencia}</td>
             <td data-titulo="FECHA" >${task.FECHA}</td>
 
 
-            <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_INFRAESTRUCTURA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
+            <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_ZONA="${task.COD_INFRAESTRUCTURA}"><i class="icon-edit"></i></button></td>
 
           </tr>`;
           });
@@ -402,7 +441,6 @@ $(function () {
 
   $(document).on("click", ".task-update", () => {
     var element = $(this)[0].activeElement.parentElement.parentElement;
-
     // var selectInfra = document.getElementById("selectInfra");
     // selectInfra.disabled = true;
 
@@ -422,20 +460,19 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               const task = JSON.parse(response);
+              console.log(task);
 
-              $("#selectInfra").prop("disabled", true);
-              $("#selectInfra")
-                .append(
-                  new Option(
-                    task.NOMBRE_T_ZONA_AREAS,
-                    task.NOMBRE_T_ZONA_AREAS,
-                    true,
-                    true
-                  )
-                )
-                .trigger("change");
-              $("#NOMBRE_INFRAESTRUCTURA").val(task.NOMBRE_INFRAESTRUCTURA);
-              $("#NDIAS").val(task.NDIAS);
+              // $("#selectInfra").append(
+              //   new Option(
+              //     task.NOMBRE_T_ZONA_AREAS,
+              //     task.NOMBRE_T_ZONA_AREAS,
+              //     true,
+              //     true
+              //   )
+              // ).trigger("change");
+
+              $("#selectInfra").val(task.COD_ZONA);
+              $("#selectFrecuencia").val(task.NDIAS);
               $("#taskId").val(task.COD_INFRAESTRUCTURA);
 
               edit = true;

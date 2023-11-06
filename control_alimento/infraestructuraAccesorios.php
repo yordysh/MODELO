@@ -2,7 +2,7 @@
 session_start();
 
 // $codusuario = $_SESSION["cod"];
-$codusuario = '0002';
+$codusuario = '00004';
 ?>
 <?php
 require_once "m_almacen.php";
@@ -98,7 +98,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                     <?php foreach ($dataInfra as $lis) {
                                         if ($lis->NOMBRE_T_ZONA_AREAS != "TRANSITO DE PERSONAL" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES Y VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES Y VARONES)") {
                                     ?>
-                                            <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
+                                            <option value="<?php echo trim($lis->COD_ZONA); ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
                                     <?php
                                         }
                                     }
@@ -149,6 +149,8 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                                 <input type="hidden" id="taskId">
                                 <button id="boton" type="submit" name="insert" class="btn btn-primary estiloboton">Guardar </button>
                             </div>
+                            <br>
+                            <hr style='font-weight: 800; background-color: black;'>
                             <div class="aniomes">
                                 <div class="styleanmes"><label for="mes">Seleccione el año:</label>
                                     <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
@@ -182,6 +184,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
         <?php
         require_once "modalzonas.php";
         require_once "modalinfraestructura.php";
+        require_once "modaleditarinfra.php";
         ?>
     </main>
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">

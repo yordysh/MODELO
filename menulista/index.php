@@ -28,6 +28,24 @@ $submenu2 = $_SESSION["subsub_c"];
 </head>
 
 <body>
+    <!-- preloader -->
+    <div class="preloader" style="display: none;">
+        <div class="loader">
+            <div class="ytp-spinner">
+                <div class="ytp-spinner-container">
+                    <div class="ytp-spinner-rotator">
+                        <div class="ytp-spinner-left">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                        <div class="ytp-spinner-right">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin -->
     <nav class="nav">
         <div class="wave"></div>
         <i class="icon-menu navOpenBtn"></i>
@@ -87,7 +105,7 @@ $submenu2 = $_SESSION["subsub_c"];
     <!-- <script src="../control_alimento/js/ajaxIndex.js"></script> -->
     <script src="../control_alimento/js/sweetalert2.all.min.js"></script>
     <script src="../control_alimento/js/jquery-3.7.0.min.js"></script>
-    <script src="../control_alimento/js/ajaxFechaAviso.js"></script>
+    <!-- <script src="../control_alimento/js/ajaxFechaAviso.js"></script> -->
 </body>
 
 </html>

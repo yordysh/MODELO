@@ -556,20 +556,36 @@ td {
     margin-left: 300px;
   }
 }
-@media screen and (max-width: 1240px) {
+@media screen and (max-width: 1275px) {
   .buttonzonas {
     position: absolute;
     padding: 0;
     height: 0;
     margin-top: -38px;
-    margin-left: 250px;
+    margin-left: 265px;
   }
   .buttonifraestructura {
     position: absolute;
     padding: 0;
     height: 0;
     margin-top: -38px;
-    margin-left: 250px;
+    margin-left: 260px;
+  }
+}
+@media screen and (max-width: 1240px) {
+  .buttonzonas {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 210px;
+  }
+  .buttonifraestructura {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -38px;
+    margin-left: 210px;
   }
 }
 @media screen and (max-width: 1120px) {
