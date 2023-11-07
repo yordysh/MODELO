@@ -68,7 +68,7 @@ $(function () {
     }
   });
 
-  //------------- Añadiendo con ajax InfraestructuraAccesorios----------------//
+  //------------- Añadiendo con ajax InfraestructuraAccesoriosAlerta----------------//
   // $("#formularioInfra").submit((e) => {
   $("#boton").on("click", (e) => {
     e.preventDefault();
@@ -77,7 +77,7 @@ $(function () {
     let selectInfra = $("#selectInfra").val();
     let seleccionzonainfraestructura = $("#seleccionzonainfraestructura").val();
     let selectFrecuencia = $("#selectFrecuencia").val();
-
+    console.log(selectInfra);
     // selectInfra.disabled = false;
     if (!selectInfra) {
       Swal.fire({
@@ -114,12 +114,10 @@ $(function () {
       url: "./c_almacen.php",
       data: {
         accion: accion,
-        // nombreinfraestructura: $("#NOMBRE_INFRAESTRUCTURA").val(),
         nombreinfraestructura: $("#seleccionzonainfraestructura").val(),
         ndias: $("#selectFrecuencia").val(),
-        // ndias: $("#NDIAS").val(),
         codinfra: $("#taskId").val(),
-        valorSeleccionado: $("#selectInfra").val(),
+        valorSeleccionado: selectInfra,
         codpersonal: $("#codpersonal").val(),
       },
       beforeSend: function () {
@@ -127,7 +125,6 @@ $(function () {
         $(".preloader").css("display", "block");
       },
       success: function (response) {
-        console.log(response);
         if (response === "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
@@ -136,7 +133,6 @@ $(function () {
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
-              // $("#formularioInfra").trigger("reset");
               $("#taskId").val("");
               $("#selectFrecuencia").val("0").trigger("change");
               $("#NOMBRE_INFRAESTRUCTURA").val("");
@@ -241,7 +237,9 @@ $(function () {
     e.preventDefault();
 
     let nombrezonain = $("#valordezonahidden").val();
-    let accion = "guardarinfraestructura";
+
+    const accion =
+      edit === false ? "guardarinfraestructura" : "actualizarinfraestructura";
     $.ajax({
       type: "POST",
       url: "./c_almacen.php",
@@ -441,8 +439,6 @@ $(function () {
 
   $(document).on("click", ".task-update", () => {
     var element = $(this)[0].activeElement.parentElement.parentElement;
-    // var selectInfra = document.getElementById("selectInfra");
-    // selectInfra.disabled = true;
 
     var COD_INFRAESTRUCTURA = $(element).attr("taskId");
     const accion = "editarinfra";
@@ -462,25 +458,20 @@ $(function () {
               const task = JSON.parse(response);
               console.log(task);
 
-              // $("#selectInfra").append(
-              //   new Option(
-              //     task.NOMBRE_T_ZONA_AREAS,
-              //     task.NOMBRE_T_ZONA_AREAS,
-              //     true,
-              //     true
-              //   )
-              // ).trigger("change");
+              $("#selectInfra").val(task.COD_ZONA);
 
-              // $("#selectInfra").val(task.COD_ZONA);
-              // $("#selectInfra").change(task.COD_ZONA);
-              var selectElement = document.getElementById("selectInfra");
-              var seleccione = selectElement.value(task.COD_ZONA);
+              $("#select2-selectInfra-container").text(
+                task.NOMBRE_T_ZONA_AREAS
+              );
 
-              var selected = seleccione.options[seleccione.selectedIndex].text;
-              console.log(selected);
+              // $("#seleccionzonainfraestructura").text(
+              //   task.NOMBRE_INFRAESTRUCTURA
+              // );
+              // actualizarNombreCombo(task.CODIGO);
+              actualizareditarcombo(task.COD_ZONA);
 
               $("#selectFrecuencia").val(task.NDIAS);
-              $("#taskId").val(task.COD_INFRAESTRUCTURA);
+              $("#taskId").val(task.CODIGO);
 
               edit = true;
             }
@@ -490,15 +481,55 @@ $(function () {
     });
   });
 
-  //   function mostrarSelectCmb(elemento, texto){
-  //     let valor = $("#"+elemento).find("option[value='']");
-  //     if (valor.length == 0) {
-  //        $("#"+elemento).prepend($("<option>", {value: "",text: texto, selected: "selected"}));
-  //     }else{
-  //        $('#'+elemento).val('');
-  //     }
-  //  }
-  //------------------------ Elimina un dato de mi tabla ----------------- //
+  // function actualizarNombreCombo(codigoalerta) {
+  //   const accion = "buscarporcodigoalertainf";
+  //   $.ajax({
+  //     url: "./c_almacen.php",
+  //     data: { accion: accion, codigoalerta: codigoalerta },
+  //     type: "POST",
+  //     success: function (response) {
+  //       if (!response.error) {
+  //         const datas = JSON.parse(response);
+  //         console.log(datas);
+  //         const codigoInfraestructura = datas.COD_INFRAESTRUCTURA;
+  //         const nombreInfraestructura = datas[0].NOMBRE_INFRAESTRUCTURA;
+
+  //         // Establecer el valor del elemento <select>
+  //         $("#seleccionzonainfraestructura").val(codigoInfraestructura);
+
+  //         // Cambiar el texto solo si se selecciona una opción válida
+  //         if (codigoInfraestructura !== "none") {
+  //           $(
+  //             "#seleccionzonainfraestructura option[value='" +
+  //               codigoInfraestructura +
+  //               "']"
+  //           ).text(nombreInfraestructura);
+  //         }
+  //       }
+  //     },
+  //   });
+  // }
+  function actualizareditarcombo(codzonainfraes) {
+    const accion = "buscarporcodzona";
+    $.ajax({
+      url: "./c_almacen.php",
+      data: { accion: accion, codzonainfraes: codzonainfraes },
+      type: "POST",
+      success: function (response) {
+        if (!response.error) {
+          const data = JSON.parse(response);
+
+          $.each(data, function (index, item) {
+            $("#seleccionzonainfraestructura").append(
+              new Option(item.NOMBRE_INFRAESTRUCTURA, item.COD_INFRAESTRUCTURA)
+            );
+          });
+        }
+      },
+    });
+  }
+
+  // ------------------------ Elimina un dato de mi tabla ----------------- //
 
   $(document).on("click", ".task-delete", function (e) {
     e.preventDefault();

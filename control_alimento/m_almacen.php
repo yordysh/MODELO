@@ -454,17 +454,45 @@ class m_almacen
   public function SelectInfra($COD_INFRAESTRUCTURA)
   {
     try {
-
-      $stm = $this->bd->prepare("SELECT T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA, T_ZONA_AREAS.COD_ZONA AS COD_ZONA,
-                                    T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,
-                                    T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,
-                                    T_INFRAESTRUCTURA.NDIAS AS NDIAS,T_INFRAESTRUCTURA.FECHA AS FECHA,
-                                    T_INFRAESTRUCTURA.USUARIO AS USUARIO  FROM T_INFRAESTRUCTURA
-                                    INNER JOIN T_ZONA_AREAS ON T_INFRAESTRUCTURA.COD_ZONA = T_ZONA_AREAS.COD_ZONA WHERE COD_INFRAESTRUCTURA = :COD_INFRAESTRUCTURA");
-      $stm->bindParam(':COD_INFRAESTRUCTURA', $COD_INFRAESTRUCTURA, PDO::PARAM_STR);
+      $stm = $this->bd->prepare("SELECT TA.CODIGO AS CODIGO, TI.COD_ZONA AS COD_ZONA,TI.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,TZ.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,TI.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,
+                                  TI.NDIAS AS NDIAS, TI.FECHA AS FECHA FROM T_ZONA_AREAS TZ 
+                                  INNER JOIN T_INFRAESTRUCTURA TI ON TI.COD_ZONA=TZ.COD_ZONA
+                                  INNER JOIN T_ALERTA TA ON TA.COD_INFRAESTRUCTURA=TI.COD_INFRAESTRUCTURA WHERE TI.COD_INFRAESTRUCTURA = '$COD_INFRAESTRUCTURA'");
       $stm->execute();
 
       return $stm;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function buscarPorCodZonaAler($codigoalerta)
+  {
+    try {
+      $stm = $this->bd->prepare("SELECT TA.CODIGO AS CODIGO, TI.COD_ZONA AS COD_ZONA,TI.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,TZ.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,TI.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,
+      TI.NDIAS AS NDIAS, TI.FECHA AS FECHA FROM T_ZONA_AREAS TZ 
+      INNER JOIN T_INFRAESTRUCTURA TI ON TI.COD_ZONA=TZ.COD_ZONA
+      INNER JOIN T_ALERTA TA ON TA.COD_INFRAESTRUCTURA=TI.COD_INFRAESTRUCTURA  WHERE TA.CODIGO='$codigoalerta'");
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function buscarPorCodZona($codzonainfraes)
+  {
+    try {
+      $stm = $this->bd->prepare("SELECT TA.CODIGO AS CODIGO, TI.COD_ZONA AS COD_ZONA,TI.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,TZ.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS,TI.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,
+      TI.NDIAS AS NDIAS, TI.FECHA AS FECHA FROM T_ZONA_AREAS TZ 
+      INNER JOIN T_INFRAESTRUCTURA TI ON TI.COD_ZONA=TZ.COD_ZONA
+      INNER JOIN T_ALERTA TA ON TA.COD_INFRAESTRUCTURA=TI.COD_INFRAESTRUCTURA  WHERE TI.COD_ZONA='$codzonainfraes'");
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
     } catch (Exception $e) {
       die($e->getMessage());
     }
@@ -504,7 +532,7 @@ class m_almacen
       $this->bd->beginTransaction();
       $cod = new m_almacen();
       $codigo = $cod->generarcodigoalerta();
-      // $VERSION = $cod->generarVersion();
+
       $repetir = $cod->contarRegistrosInfraestructuraZona($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado);
 
       $FECHA = $cod->c_horaserversql('F');
@@ -551,18 +579,41 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function consultasialertacambiaestado($task_id)
+  {
+    $repetir = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_ALERTA WHERE CODIGO='$task_id' AND ESTADO='P' ");
+    var_dump($repetir);
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['COUNT'];
 
-  public function editarInfraestructura($NOMBRE_INFRAESTRUCTURA, $NDIAS, $task_id)
+    return $count;
+  }
+  public function consultarduplicadodealerta($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado)
+  {
+
+    $repetir = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_ALERTA WHERE COD_INFRAESTRUCTURA='$NOMBRE_INFRAESTRUCTURA' AND COD_ZONA='$valorSeleccionado'");
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['COUNT'];
+    return $count;
+  }
+  public function editarInfraestructura($valorSeleccionado, $nombreinfraestructurax, $ndias, $codinfra)
   {
     try {
 
-      $stmt = $this->bd->prepare("UPDATE T_INFRAESTRUCTURA SET NOMBRE_INFRAESTRUCTURA = UPPER(:NOMBRE_INFRAESTRUCTURA), NDIAS = :NDIAS  WHERE COD_INFRAESTRUCTURA = :COD_INFRAESTRUCTURA");
-      $stmt->bindParam(':COD_INFRAESTRUCTURA', $task_id, PDO::PARAM_STR);
-      $stmt->bindParam(':NOMBRE_INFRAESTRUCTURA', $NOMBRE_INFRAESTRUCTURA, PDO::PARAM_STR);
-      $stmt->bindParam(':NDIAS', $NDIAS, PDO::PARAM_STR);
-      $update = $stmt->execute();
+      $cod = new m_almacen();
+      $verifica = $cod->consultasialertacambiaestado($codinfra);
+      $verificaduplica = $cod->consultarduplicadodealerta($nombreinfraestructurax, $valorSeleccionado);
 
-      return $update;
+      if ($verifica > 0) {
+        if ($verificaduplica == 0) {
+          $stmt = $this->bd->prepare("UPDATE T_ALERTA SET COD_ZONA='$valorSeleccionado',COD_INFRAESTRUCTURA='$nombreinfraestructurax',N_DIAS_POS='$ndias' WHERE CODIGO='$codinfra'");
+          $update = $stmt->execute();
+
+          return $update;
+        }
+      }
     } catch (Exception $e) {
       die($e->getMessage());
     }
