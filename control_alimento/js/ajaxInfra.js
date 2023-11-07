@@ -471,7 +471,14 @@ $(function () {
               //   )
               // ).trigger("change");
 
-              $("#selectInfra").val(task.COD_ZONA);
+              // $("#selectInfra").val(task.COD_ZONA);
+              // $("#selectInfra").change(task.COD_ZONA);
+              var selectElement = document.getElementById("selectInfra");
+              var seleccione = selectElement.value(task.COD_ZONA);
+
+              var selected = seleccione.options[seleccione.selectedIndex].text;
+              console.log(selected);
+
               $("#selectFrecuencia").val(task.NDIAS);
               $("#taskId").val(task.COD_INFRAESTRUCTURA);
 
@@ -483,6 +490,14 @@ $(function () {
     });
   });
 
+  //   function mostrarSelectCmb(elemento, texto){
+  //     let valor = $("#"+elemento).find("option[value='']");
+  //     if (valor.length == 0) {
+  //        $("#"+elemento).prepend($("<option>", {value: "",text: texto, selected: "selected"}));
+  //     }else{
+  //        $('#'+elemento).val('');
+  //     }
+  //  }
   //------------------------ Elimina un dato de mi tabla ----------------- //
 
   $(document).on("click", ".task-delete", function (e) {
