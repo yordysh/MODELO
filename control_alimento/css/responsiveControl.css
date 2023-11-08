@@ -521,6 +521,10 @@ td {
   margin-left: 350px;
 }
 
+button.custom-icon-zona {
+  margin-top: 25px;
+}
+
 /*-------------- Estilo de responsive ---------------------*/
 
 @media screen and (max-width: 1370px) {
@@ -782,6 +786,13 @@ td {
     width: 500px;
     padding: 5px;
   }
+  .buttonañadirinfra {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -88px;
+    margin-left: 540px;
+  }
 }
 /*-------------------------------------------------------------*/
 @media screen and (max-width: 950px) {
@@ -837,6 +848,22 @@ td {
     box-sizing: border-box;
     margin-bottom: 10px;
     margin-right: 70px;
+  }
+  .buttonañadirinfra {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -88px;
+    margin-left: 510px;
+  }
+}
+@media screen and (max-width: 873px) {
+  .buttonañadirinfra {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -88px;
+    margin-left: 440px;
   }
 }
 /*-------------------------------------------------------------*/
@@ -1000,6 +1027,13 @@ td {
     width: 460px;
     padding: 5px;
   }
+  .buttonañadirinfra {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -88px;
+    margin-left: 500px;
+  }
 }
 @media screen and (max-width: 480px) {
   .bt-guardar {
@@ -1046,6 +1080,13 @@ td {
   #selectInfra {
     font-size: 14px;
     width: 400px;
+  }
+  .buttonañadirinfra {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -88px;
+    margin-left: 410px;
   }
 }
 /*----------------------REDMI----------------------------*/
@@ -1128,6 +1169,13 @@ td {
   }
   #selectInfra {
     width: 95%;
+  }
+  .buttonañadirinfra {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -88px;
+    margin-left: 310px;
   }
 }
 

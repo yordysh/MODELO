@@ -1,11 +1,11 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+// if (session_status() == PHP_SESSION_NONE) {
+//     session_start();
+// }
 
-// require_once("../menulista/c_permisosmenu.php");
-// $controller = new c_permisosmenu();
-// $controller->c_permisos("9002");
+require_once("../menulista/c_permisosmenu.php");
+$controller = new c_permisosmenu();
+$controller->c_permisos("9002");
 /*--------------------------- */
 $menu = $_SESSION["menu_c"];
 $submenu = $_SESSION["submenu_c"];
@@ -105,6 +105,8 @@ $submenu2 = $_SESSION["subsub_c"];
     <!-- <script src="../control_alimento/js/ajaxIndex.js"></script> -->
     <script src="../control_alimento/js/sweetalert2.all.min.js"></script>
     <script src="../control_alimento/js/jquery-3.7.0.min.js"></script>
+    <!-- <script src="../librerias/jquery_ajax/js/jquery-3.7.0.js"></script> -->
+
     <!-- <script src="../control_alimento/js/ajaxFechaAviso.js"></script> -->
 </body>
 

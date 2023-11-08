@@ -75,7 +75,9 @@ class m_almacen
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
     $maxCodigo = intval($resultado['COD_INFRAESTRUCTURA']);
     $nuevoCodigo = $maxCodigo + 1;
-    $codigoAumento = str_pad($nuevoCodigo, 2, '0', STR_PAD_LEFT);
+    $codigoAumento = str_pad($nuevoCodigo, 3, '0', STR_PAD_LEFT);
+    var_dump($codigoAumento);
+    exit();
     return $codigoAumento;
   }
 
@@ -242,9 +244,8 @@ class m_almacen
   }
   public function contarRegistrosInfraestructura($NOMBRE_INFRAESTRUCTURA, $valorSeleccionado)
   {
-    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_INFRAESTRUCTURA WHERE NOMBRE_INFRAESTRUCTURA = :NOMBRE_INFRAESTRUCTURA AND COD_ZONA = :COD_ZONA");
-    $repetir->bindParam(':NOMBRE_INFRAESTRUCTURA', $NOMBRE_INFRAESTRUCTURA, PDO::PARAM_STR);
-    $repetir->bindParam(':COD_ZONA', $valorSeleccionado, PDO::PARAM_STR);
+    $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_INFRAESTRUCTURA WHERE NOMBRE_INFRAESTRUCTURA = '$NOMBRE_INFRAESTRUCTURA' AND COD_ZONA = '$valorSeleccionado'");
+
     $repetir->execute();
     $result = $repetir->fetch(PDO::FETCH_ASSOC);
     $count = $result['count'];
@@ -582,7 +583,6 @@ class m_almacen
   public function consultasialertacambiaestado($task_id)
   {
     $repetir = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_ALERTA WHERE CODIGO='$task_id' AND ESTADO='P' ");
-    var_dump($repetir);
     $repetir->execute();
     $result = $repetir->fetch(PDO::FETCH_ASSOC);
     $count = $result['COUNT'];
@@ -1172,7 +1172,18 @@ class m_almacen
     }
   }
 
+  public function MostrarControlMaquina()
+  {
+    try {
+      $stm = $this->bd->prepare("SELECT * FROM T_CONTROL_MAQUINA");
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function MostrarControlMaquinasBusqueda($search)
   {
     try {
@@ -1190,7 +1201,42 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function insertarControl($valorSeleccionado, $NOMBRE_CONTROL_MAQUINA, $N_DIAS_CONTROL)
+  public function contarnombrecontrol($nombrecontrolmaquina)
+  {
+    $repetir = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_CONTROL_MAQUINA WHERE NOMBRE_CONTROL_MAQUINA='$nombrecontrolmaquina'");
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = $result['COUNT'];
+
+    return $count;
+  }
+  public function insertarControlMaquina($nombrecontrolmaquina)
+  {
+    try {
+      $this->bd->beginTransaction();
+      $cod = new m_almacen();
+      $COD_CONTROL_MAQUINA = $cod->generarCodigoControlMaquina();
+
+
+      $repetir = $cod->contarnombrecontrol($nombrecontrolmaquina);
+
+      if ($repetir == 0) {
+
+        $stm = $this->bd->prepare("INSERT INTO T_CONTROL_MAQUINA(COD_CONTROL_MAQUINA, NOMBRE_CONTROL_MAQUINA)
+                                  VALUES ('$COD_CONTROL_MAQUINA','$nombrecontrolmaquina')");
+
+        $insert = $stm->execute();
+
+        $insert = $this->bd->commit();
+        return $insert;
+      }
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+
+  public function insertarControl($NOMBRE_CONTROL_MAQUINA, $N_DIAS_CONTROL)
   {
     try {
 
@@ -1199,48 +1245,47 @@ class m_almacen
       $COD_CONTROL_MAQUINA = $cod->generarCodigoControlMaquina();
       $nombre = 'LBS-PHS-FR-03';
 
-      $repetir = $cod->contarRegistrosControl($NOMBRE_CONTROL_MAQUINA, $valorSeleccionado);
+      // $repetir = $cod->contarRegistrosControl($NOMBRE_CONTROL_MAQUINA);
 
       $FECHA = $cod->c_horaserversql('F');
       // $FECHA = date('Y-m-d');
       // $FECHA = '24/07/2023';
       // var_dump($FECHA);
 
-      if ($repetir == 0) {
-        $VERSION = $cod->generarVersionGeneral($nombre);
-        $stm = $this->bd->prepare("INSERT INTO T_CONTROL_MAQUINA(COD_CONTROL_MAQUINA, COD_ZONA,NOMBRE_CONTROL_MAQUINA ,N_DIAS_CONTROL, FECHA,VERSION)
-                                  VALUES ('$COD_CONTROL_MAQUINA','$valorSeleccionado', '$NOMBRE_CONTROL_MAQUINA','$N_DIAS_CONTROL', '$FECHA', '$VERSION')");
+      // if ($repetir == 0) {
+      $VERSION = $cod->generarVersionGeneral($nombre);
+      $stm = $this->bd->prepare("UPDATE T_CONTROL_MAQUINA SET COD_ZONA");
 
-        $insert = $stm->execute();
-        // $fechaDHoy = date('Y-m-d');
-        // $fechaDHoy = '24/07/2023';
-        $fechaDHoy  = $cod->c_horaserversql('F');
-        $cod->generarVersionGeneral($nombre);
-
-
-        $DIAS_DESCUENTO = 2;
-
-        $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA);
-        $FECHA_TOTAL = $FECHA_FORMATO->modify("+$N_DIAS_CONTROL days")->format('d-m-Y');
-        // $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA . '+ ' . $N_DIAS_CONTROL));
-        // Verificar si la fecha total cae en domingo
-        if (date('N', strtotime($FECHA_TOTAL)) == 7) {
-          $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA_TOTAL . '+1 day'));
-        }
-
-        if (!($N_DIAS_CONTROL == 1 || $N_DIAS_CONTROL == 2)) {
-          $FECHA_ACORDAR = date('d-m-Y', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days'));
-          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) values('$COD_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$N_DIAS_CONTROL')");
-        } else {
-          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) values('$COD_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$N_DIAS_CONTROL')");
-        }
+      $insert = $stm->execute();
+      // $fechaDHoy = date('Y-m-d');
+      // $fechaDHoy = '24/07/2023';
+      $fechaDHoy  = $cod->c_horaserversql('F');
+      $cod->generarVersionGeneral($nombre);
 
 
+      $DIAS_DESCUENTO = 2;
 
-        $stm1->execute();
-        $insert = $this->bd->commit();
-        return $insert;
+      $FECHA_FORMATO = DateTime::createFromFormat('d/m/Y', $FECHA);
+      $FECHA_TOTAL = $FECHA_FORMATO->modify("+$N_DIAS_CONTROL days")->format('d-m-Y');
+      // $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA . '+ ' . $N_DIAS_CONTROL));
+      // Verificar si la fecha total cae en domingo
+      if (date('N', strtotime($FECHA_TOTAL)) == 7) {
+        $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA_TOTAL . '+1 day'));
       }
+
+      if (!($N_DIAS_CONTROL == 1 || $N_DIAS_CONTROL == 2)) {
+        $FECHA_ACORDAR = date('d-m-Y', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days'));
+        $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) values('$COD_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$N_DIAS_CONTROL')");
+      } else {
+        $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) values('$COD_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$N_DIAS_CONTROL')");
+      }
+
+
+
+      $stm1->execute();
+      $insert = $this->bd->commit();
+      return $insert;
+      // }
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());

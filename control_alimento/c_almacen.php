@@ -187,13 +187,24 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_buscar_control($buscarcontrol);
     echo $respuesta;
+} elseif ($accion == 'insertarcontrolmaquina') {
+
+    $nombrecontrolmaquina = strtoupper(trim($_POST['nombrecontrolmaquina']));
+    $respuesta = c_almacen::c_insertar_control_maquina($nombrecontrolmaquina);
+
+    echo $respuesta;
+} elseif ($accion == 'actualizarcombocontrol') {
+
+    $respuesta = c_almacen::c_mostrar_combo_control();
+
+    echo $respuesta;
 } elseif ($accion == 'insertarcontrol') {
 
-    $nombrecontrol = strtoupper(trim($_POST['nombrecontrol']));
+    $nombrecontrol = trim($_POST['nombrecontrol']);
     $ndiascontrol = trim($_POST['ndiascontrol']);
-    $valorSeleccionado = trim($_POST['valorSeleccionado']);
 
-    $respuesta = c_almacen::c_insertar_control($valorSeleccionado, $nombrecontrol, $ndiascontrol);
+
+    $respuesta = c_almacen::c_insertar_control($nombrecontrol, $ndiascontrol);
 
     echo $respuesta;
 } elseif ($accion == 'editarcontrolmaquina') {
@@ -1742,12 +1753,48 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function c_insertar_control($valorSeleccionado, $nombrecontrol, $ndiascontrol)
+    static function c_insertar_control_maquina($nombrecontrolmaquina)
     {
         $mostrar = new m_almacen();
-        if (isset($nombrecontrol) && isset($ndiascontrol) && isset($valorSeleccionado)) {
+        if (isset($nombrecontrolmaquina)) {
 
-            $respuesta = $mostrar->insertarControl($valorSeleccionado, $nombrecontrol, $ndiascontrol);
+            $respuesta = $mostrar->insertarControlMaquina($nombrecontrolmaquina);
+            if ($respuesta) {
+
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+    static function c_mostrar_combo_control()
+    {
+        try {
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarControlMaquina();
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
+                    "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_insertar_control($nombrecontrol, $ndiascontrol)
+    {
+        $mostrar = new m_almacen();
+        if (isset($nombrecontrol)) {
+
+            $respuesta = $mostrar->insertarControl($nombrecontrol, $ndiascontrol);
             if ($respuesta) {
 
                 return "ok";

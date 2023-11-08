@@ -6,6 +6,10 @@ img {
   width: 50px;
   border-radius: 60px;
 }
+a {
+  text-decoration: none !important;
+  color: #ffffff !important;
+}
 /*----- Estilo de submenu al poner el mouse ----- */
 .phsStyle,
 .bpmStyle {

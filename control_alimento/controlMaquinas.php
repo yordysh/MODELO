@@ -2,7 +2,7 @@
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
-$dataZona = $mostrar->MostrarAlmacenMuestra();
+$datacontrol = $mostrar->MostrarControlMaquina();
 
 ?>
 <!DOCTYPE html>
@@ -82,23 +82,20 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
 
                             <!--Combo zona areas -->
                             <div class="form-outline mb-4 custom-input">
-                                <label class="form-label">Zona/Areas</label>
+                                <label class="form-label">Nombre máquina, equipo</label>
                                 <select id="selectControl" class="form-select" aria-label="Default select example">
-                                    <option value="none" selected disabled>Seleccione Zona/Areas</option>
+                                    <option value="none" selected disabled>Seleccione máquina</option>
                                     <?php
-                                    foreach ($dataZona as $lis) { ?>
-                                        <option value="<?php echo $lis->COD_ZONA; ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
+                                    foreach ($datacontrol as $lis) { ?>
+                                        <option value="<?php echo $lis->COD_CONTROL_MAQUINA; ?>" class="option"><?php echo $lis->NOMBRE_CONTROL_MAQUINA; ?></option>
                                     <?php
                                     }
                                     ?>
                                 </select>
 
                             </div>
-
-                            <!-- Text input nombre -->
-                            <div class="form-outline mb-4 custom-input">
-                                <label class="form-label">Nombre máquina, equipo</label>
-                                <input type="text" id="NOMBRE_CONTROL_MAQUINA" class="form-control" name="NOMBRE_CONTROL_MAQUINA" required>
+                            <div class="buttonañadirinfra">
+                                <button type='button' class="custom-icon-zona" data-bs-toggle="modal" data-bs-target="#mostrarinfraestructuracontrol"><i class="icon-circle-with-plus"></i></button>
                             </div>
                             <!-- Text input dias-->
                             <div class="form-outline mb-4 custom-input">
@@ -106,10 +103,8 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                                 <!-- <input type="text" id="N_DIAS_CONTROL" class="form-control" name="N_DIAS_CONTROL" required> -->
                                 <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
                                     <option value="0" selected disabled>Seleccione frecuencia</option>
-                                    <option value="1">Diario</option>
-                                    <option value="2">Inter-diario</option>
                                     <option value="7">Semanal</option>
-                                    <option value="15">Quincenal</option>
+                                    <!-- <option value="15">Quincenal</option> -->
                                     <option value="30">Mensual</option>
                                 </select>
                             </div>
@@ -118,7 +113,7 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                         <div class="contenedorgeneral">
                             <div class="btonguardar">
                                 <input type="hidden" id="taskId">
-                                <button id="boton" type="submit" name="insert" class="btn btn-primary estiloboton">Guardar </button>
+                                <button id="botoncontrolmaquina" type="submit" name="insert" class="btn btn-primary estiloboton">Guardar </button>
                             </div>
                             <div class="aniomes">
                                 <div class="styleanmes"><label for="mes">Seleccione el año:</label>
@@ -150,6 +145,9 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                 </div>
             </div>
         </section>
+        <?php
+        require_once "modalinfraestructuracontrol.php";
+        ?>
     </main>
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
         Covifarma-2023

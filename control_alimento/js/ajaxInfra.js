@@ -190,11 +190,11 @@ $(function () {
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
-              $("#mostrarzonas").on("hidden.bs.modal", function () {
-                $("body").css("overflow", "auto");
-              });
-              $("#mostrarzonas").modal("hide");
-              $(".modal-backdrop").remove();
+              // $("#mostrarzonas").on("hidden.bs.modal", function () {
+              //   $("body").css("overflow", "auto");
+              // });
+              // $("#mostrarzonas").modal("hide");
+              // $(".modal-backdrop").remove();
               $("#nombrezona").val("");
               // $("#mostrarzonas").modal("hide");
               actualizarCombo();
@@ -264,11 +264,11 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               $("#nombreinfraestructura").val("");
-              $("#mostrarinfraestructura").on("hidden.bs.modal", function () {
-                $("body").css("overflow", "auto");
-              });
-              $("#mostrarinfraestructura").modal("hide");
-              $(".modal-backdrop").remove();
+              // $("#mostrarinfraestructura").on("hidden.bs.modal", function () {
+              //   $("body").css("overflow", "auto");
+              // });
+              // $("#mostrarinfraestructura").modal("hide");
+              // $(".modal-backdrop").remove();
               actualizarComboInfraestructura(nombrezonain);
             }
           });

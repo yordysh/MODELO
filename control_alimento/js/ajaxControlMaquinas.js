@@ -70,23 +70,25 @@ $(function () {
     }
   });
 
-  //------------- Añadiendo con ajax InfraestructuraAccesorios----------------//
-  $("#formularioControl").submit((e) => {
+  //------------- Añadiendo alerta control maquina ----------------//
+  // $("#formularioControl").submit((e) => {
+  $(document).on("click", "#botoncontrolmaquina", (e) => {
     e.preventDefault();
 
-    var selectControl = document.getElementById("selectControl");
-    selectControl.disabled = false;
-
-    const accion = edit === false ? "insertarcontrol" : "actualizarcontrol";
+    // var selectControl = document.getElementById("selectControl");
+    // selectControl.disabled = false;
+    let selectControl = $("#selectControl").val();
+    let selectFrecuencia = $("#selectFrecuencia").val();
+    // const accion = edit === false ? "insertarcontrol" : "actualizarcontrol";
+    const accion = "insertarcontrol";
 
     $.ajax({
       url: "./c_almacen.php",
       data: {
         accion: accion,
-        nombrecontrol: $("#NOMBRE_CONTROL_MAQUINA").val(),
-        ndiascontrol: $("#selectFrecuencia").val(),
+        nombrecontrol: selectControl,
+        ndiascontrol: selectFrecuencia,
         codcontrol: $("#taskId").val(),
-        valorSeleccionado: $("#selectControl").val(),
       },
       type: "POST",
       beforeSend: function () {
@@ -127,7 +129,66 @@ $(function () {
       },
     });
   });
+  /*------------------- Insertar un nueva maquina control------------------- */
+  $(document).on("click", "#guardarcontrol", (e) => {
+    e.preventDefault();
+    let nombrecontrolmaquina = $("#nombrecontrol").val();
+    console.log(nombrecontrolmaquina);
+    const accion = "insertarcontrolmaquina";
+
+    $.ajax({
+      url: "./c_almacen.php",
+      data: {
+        accion: accion,
+        nombrecontrolmaquina: nombrecontrolmaquina,
+      },
+      type: "POST",
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
+      success: function (response) {
+        if (response == "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#nombrecontrol").val("");
+              // $("#mostrarinfraestructuracontrol").on(
+              //   "hidden.bs.modal",
+              //   function () {
+              //     $("body").css("overflow", "auto");
+              //   }
+              // );
+              // $("#mostrarinfraestructuracontrol").modal("hide");
+              // $(".modal-backdrop").remove();
+              actualizarcombocontrol();
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Duplicado!",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#nombrecontrol").val("");
+            }
+          });
+        }
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
+      },
+    });
+  });
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
+
   // Cargar registros ZONA AREA
 
   function fetchTasks() {
@@ -261,4 +322,38 @@ $(function () {
       }
     });
   });
+
+  /*------------------------------ Crgar datos en combo------------------------- */
+  function actualizarcombocontrol() {
+    const accion = "actualizarcombocontrol";
+    $.ajax({
+      url: "./c_almacen.php",
+      data: { accion: accion },
+      type: "POST",
+      success: function (response) {
+        let data = JSON.parse(response);
+        $("#selectControl").empty();
+        $("#selectControl").append(
+          $("<option>", {
+            value: "none",
+            text: "Seleccione máquina",
+            disabled: true,
+            selected: true,
+          })
+        );
+        data.forEach((item) => {
+          $("#selectControl").append(
+            $("<option>", {
+              value: item.COD_CONTROL_MAQUINA,
+              text: item.NOMBRE_CONTROL_MAQUINA,
+            })
+          );
+        });
+      },
+      error: function (error) {
+        console.error("Error fetching data:", error);
+      },
+    });
+  }
+  /*--------------------------------------------------------------------------- */
 });
