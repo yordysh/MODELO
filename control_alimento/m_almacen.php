@@ -70,14 +70,14 @@ class m_almacen
 
   public function generarCodigoInfraestructura()
   {
-    $stm = $this->bd->prepare("SELECT MAX(COD_INFRAESTRUCTURA) as COD_INFRAESTRUCTURA FROM T_INFRAESTRUCTURA");
+    $stm = $this->bd->prepare("SELECT MAX(CAST(COD_INFRAESTRUCTURA AS int)) as COD_INFRAESTRUCTURA FROM T_INFRAESTRUCTURA");
     $stm->execute();
     $resultado = $stm->fetch(PDO::FETCH_ASSOC);
     $maxCodigo = intval($resultado['COD_INFRAESTRUCTURA']);
+
     $nuevoCodigo = $maxCodigo + 1;
     $codigoAumento = str_pad($nuevoCodigo, 3, '0', STR_PAD_LEFT);
-    var_dump($codigoAumento);
-    exit();
+
     return $codigoAumento;
   }
 
