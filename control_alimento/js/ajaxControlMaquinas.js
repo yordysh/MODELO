@@ -75,12 +75,10 @@ $(function () {
   $(document).on("click", "#botoncontrolmaquina", (e) => {
     e.preventDefault();
 
-    // var selectControl = document.getElementById("selectControl");
-    // selectControl.disabled = false;
     let selectControl = $("#selectControl").val();
     let selectFrecuencia = $("#selectFrecuencia").val();
-    // const accion = edit === false ? "insertarcontrol" : "actualizarcontrol";
-    const accion = "insertarcontrol";
+    const accion = edit === false ? "insertarcontrol" : "actualizarcontrol";
+    // const accion = "insertarcontrol";
 
     $.ajax({
       url: "./c_almacen.php",
@@ -106,6 +104,7 @@ $(function () {
             if (result.isConfirmed) {
               fetchTasks();
               $("#selectControl").val("none").trigger("change");
+              $("#selectFrecuencia").val("0").trigger("change");
               $("#formularioControl").trigger("reset");
             }
           });
@@ -118,6 +117,8 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               fetchTasks();
+              $("#selectControl").val("none").trigger("change");
+              $("#selectFrecuencia").val("0").trigger("change");
               $("#formularioControl").trigger("reset");
             }
           });
@@ -189,8 +190,6 @@ $(function () {
   });
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
 
-  // Cargar registros ZONA AREA
-
   function fetchTasks() {
     const accion = "buscarcontrol";
     const search = "";
@@ -205,25 +204,23 @@ $(function () {
           let template = ``;
           tasks.forEach((task) => {
             let frecuencia;
-            if (task.N_DIAS_CONTROL == 1) {
+            if (task.N_DIAS_POS == 1) {
               frecuencia = "Diario";
-            } else if (task.N_DIAS_CONTROL == 2) {
+            } else if (task.N_DIAS_POS == 2) {
               frecuencia = "InterDiario";
-            } else if (task.N_DIAS_CONTROL == 7) {
+            } else if (task.N_DIAS_POS == 7) {
               frecuencia = "Semanal";
-            } else if (task.N_DIAS_CONTROL == 15) {
+            } else if (task.N_DIAS_POS == 15) {
               frecuencia = "Quincenal";
-            } else if (task.N_DIAS_CONTROL == 30) {
+            } else if (task.N_DIAS_POS == 30) {
               frecuencia = "Mensual";
             }
 
-            template += `<tr taskId="${task.COD_CONTROL_MAQUINA}">
-  
-              <!-- <td data-titulo="CODIGO" >${task.COD_CONTROL_MAQUINA}</td> -->
-              <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
+            template += `<tr taskId="${task.CODIGO}">
+      
               <td data-titulo="CONTROL DE MAQUINAS" class='NOMBRE_CONTROL_MAQUINA' >${task.NOMBRE_CONTROL_MAQUINA}</td>
               <td data-titulo="FRECUENCIA">${frecuencia}</td>
-              <td data-titulo="FECHA" >${task.FECHA}</td>
+              <td data-titulo="FECHA" >${task.FECHA_CREACION}</td>
   
               <td style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_CONTROL_MAQUINA="${task.COD_CONTROL_MAQUINA}"><i class="icon-edit"></i></button></td>
   
@@ -244,6 +241,7 @@ $(function () {
   $(document).on("click", ".task-update", () => {
     var element = $(this)[0].activeElement.parentElement.parentElement;
     var cod_control_maquina = $(element).attr("taskId");
+
     const accion = "editarcontrolmaquina";
 
     $.ajax({
@@ -252,31 +250,41 @@ $(function () {
       type: "POST",
       success: function (response) {
         if (!response.error) {
-          const task = JSON.parse(response);
+          Swal.fire({
+            icon: "success",
+            title: "Correcto",
+            text: "Se añadio correctamente.",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const task = JSON.parse(response);
+              // $("#selectControl").prop("disabled", true);
 
-          $("#selectControl").prop("disabled", true);
+              // if (task.NOMBRE_T_ZONA_AREAS) {
+              //   selectControl.val(
+              //     selectControl
+              //       .find("option:contains('" + task.NOMBRE_T_ZONA_AREAS + "')")
+              //       .val()
+              //   );
+              // }
+              // $("#selectControl").append(
+              //   new Option(
+              //     task.NOMBRE_T_ZONA_AREAS,
+              //     task.NOMBRE_T_ZONA_AREAS,
+              //     true,
+              //     true
+              //   )
+              // );
 
-          // if (task.NOMBRE_T_ZONA_AREAS) {
-          //   selectControl.val(
-          //     selectControl
-          //       .find("option:contains('" + task.NOMBRE_T_ZONA_AREAS + "')")
-          //       .val()
-          //   );
-          // }
-          $("#selectControl").append(
-            new Option(
-              task.NOMBRE_T_ZONA_AREAS,
-              task.NOMBRE_T_ZONA_AREAS,
-              true,
-              true
-            )
-          );
+              $("#selectControl").val(task.COD_CONTROL_MAQUINA);
+              $("#select2-selectControl-container").text(
+                task.NOMBRE_CONTROL_MAQUINA
+              );
+              $("#selectFrecuencia").val(task.N_DIAS_POS);
+              $("#taskId").val(task.COD_CONTROL_MAQUINA);
 
-          $("#NOMBRE_CONTROL_MAQUINA").val(task.NOMBRE_CONTROL_MAQUINA);
-          $("#N_DIAS_CONTROL").val(task.N_DIAS_CONTROL);
-          $("#taskId").val(task.COD_CONTROL_MAQUINA);
-
-          edit = true;
+              edit = true;
+            }
+          });
         }
       },
     });

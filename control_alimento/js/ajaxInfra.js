@@ -70,6 +70,7 @@ $(function () {
 
   //------------- Añadiendo con ajax InfraestructuraAccesoriosAlerta----------------//
   // $("#formularioInfra").submit((e) => {
+  /*------------Si llega a borrar ZONA AREAS verificar control maquina ya que se insertar valor estatico OTROS */
   $("#boton").on("click", (e) => {
     e.preventDefault();
 
@@ -413,7 +414,7 @@ $(function () {
             } else if (task.NDIAS == 30) {
               frecuencia = "Mensual";
             }
-            template += `<tr taskId="${task.COD_INFRAESTRUCTURA}">
+            template += `<tr taskId="${task.CODIGO}">
           
             <td data-titulo="ZONA" >${task.NOMBRE_T_ZONA_AREAS}</td>
             <td data-titulo="INFRAESTRUCTURA" class='NOMBRE_INFRAESTRUCTURA' >${task.NOMBRE_INFRAESTRUCTURA}</td>
@@ -464,9 +465,16 @@ $(function () {
                 task.NOMBRE_T_ZONA_AREAS
               );
 
-              // $("#seleccionzonainfraestructura").text(
-              //   task.NOMBRE_INFRAESTRUCTURA
-              // );
+              let select = $("#seleccionzonainfraestructura");
+              select.text(
+                select.find(
+                  "option:contains('" + task.NOMBRE_INFRAESTRUCTURA + "')"
+                )
+              );
+              let optionByValue = select.find(
+                "option[value='" + task.COD_INFRAESTRUCTURA + "']"
+              );
+              console.log(optionByValue);
               // actualizarNombreCombo(task.CODIGO);
               actualizareditarcombo(task.COD_ZONA);
 
@@ -521,7 +529,10 @@ $(function () {
 
           $.each(data, function (index, item) {
             $("#seleccionzonainfraestructura").append(
-              new Option(item.NOMBRE_INFRAESTRUCTURA, item.COD_INFRAESTRUCTURA)
+              new Option(
+                (text = item.NOMBRE_INFRAESTRUCTURA),
+                (value = item.COD_INFRAESTRUCTURA)
+              )
             );
           });
         }

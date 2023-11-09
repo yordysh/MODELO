@@ -58,6 +58,8 @@ if ($accion == 'insertar') {
     $nombreinfraestructurax = trim($_POST['nombreinfraestructura']);
 
     $ndias = trim($_POST['ndias']);
+    var_dump("codinfra" . $codinfra . "valorsele" . $valorSeleccionado . "nombre" . $nombreinfraestructura);
+    exit();
 
     $respuesta = c_almacen::c_actualizar_infra($valorSeleccionado, $nombreinfraestructurax, $ndias, $codinfra);
     echo $respuesta;
@@ -977,14 +979,10 @@ class c_almacen
             if (!empty($buscarinfra)) {
                 $mostrar = new m_almacen();
                 $datos = $mostrar->MostrarInfraestructuraBusqueda($buscarinfra);
-
-                if (!$datos) {
-                    throw new Exception("Hubo un error en la consulta");
-                }
-
                 $json = array();
                 foreach ($datos as $row) {
                     $json[] = array(
+                        "CODIGO" => $row->CODIGO,
                         "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
                         "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
                         "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
@@ -1001,6 +999,7 @@ class c_almacen
                 $json = array();
                 foreach ($datos as $row) {
                     $json[] = array(
+                        "CODIGO" => $row->CODIGO,
                         "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
                         "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
                         "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
@@ -1212,6 +1211,7 @@ class c_almacen
 
                 $fechaPostergacion =  convFecSistema($_POST['fechaPostergacion']);
 
+
                 $fechaActual = $mostrar->c_horaserversql('F');
 
                 $DIAS_DESCUENTO = 1;
@@ -1236,14 +1236,21 @@ class c_almacen
                 $FECHA_CREACION  = $mostrar->c_horaserversql('F');
 
 
-                $conversionfecha = strtotime(str_replace('/', '-',  $FECHA_CREACION));
-                $fechasumadias = strtotime("+$taskNdias days", $conversionfecha);
-                $fechadomingo = date('w', $fechasumadias);
 
-                if ($fechadomingo == 0) {
-                    $fechasumadias = strtotime('+1 day', $fechasumadias);
+                $conversionfecha = strtotime(str_replace('/', '-',  $FECHA_CREACION));
+                if (date('N', $conversionfecha) == 6) {
+                    $timestamp = strtotime('+3 days', $conversionfecha);
+                    $FECHA_TOTAL = date("d/m/Y", $timestamp);
+                } else {
+                    $fechasumadias = strtotime("+$taskNdias days", $conversionfecha);
+                    $fechadomingo = date('w', $fechasumadias);
+
+                    if ($fechadomingo == 0) {
+                        $fechasumadias = strtotime('+1 day', $fechasumadias);
+                    }
+                    $FECHA_TOTAL = date("d/m/Y", $fechasumadias);
                 }
-                $FECHA_TOTAL = date("d/m/Y", $fechasumadias);
+
 
                 $insert = $mostrar->InsertarAlerta($codigozona, $codInfraestructura, $FECHA_CREACION, $FECHA_TOTAL, $taskNdias);
                 if ($insert) {
@@ -1719,12 +1726,9 @@ class c_almacen
                 foreach ($datos as $row) {
                     $json[] = array(
                         "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
-                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
                         "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
-                        "N_DIAS_CONTROL" => $row->N_DIAS_CONTROL,
-                        "FECHA" =>  convFecSistema($row->FECHA),
-                        "OBSERVACION" => $row->OBSERVACION,
-                        "ACCION_CORRECTIVA" => $row->ACCION_CORRECTIVA,
+                        "N_DIAS_POS" => $row->N_DIAS_POS,
+                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
                     );
                 }
                 $jsonstring = json_encode($json);
@@ -1735,13 +1739,13 @@ class c_almacen
                 $json = array();
                 foreach ($datos as $row) {
                     $json[] = array(
+                        "CODIGO" => $row->CODIGO,
                         "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
-                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
                         "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
-                        "N_DIAS_CONTROL" => $row->N_DIAS_CONTROL,
-                        "FECHA" =>  convFecSistema($row->FECHA),
-                        "OBSERVACION" => $row->OBSERVACION,
-                        "ACCION_CORRECTIVA" => $row->ACCION_CORRECTIVA,
+                        "N_DIAS_POS" => $row->N_DIAS_POS,
+                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                        // "OBSERVACION" => $row->OBSERVACION,
+                        // "ACCION_CORRECTIVA" => $row->ACCION_CORRECTIVA,
                     );
                 }
                 $jsonstring = json_encode($json);
@@ -1814,9 +1818,8 @@ class c_almacen
             foreach ($select as $row) {
                 $json[] = array(
                     "COD_CONTROL_MAQUINA" => $row['COD_CONTROL_MAQUINA'],
-                    "NOMBRE_T_ZONA_AREAS" => $row['NOMBRE_T_ZONA_AREAS'],
                     "NOMBRE_CONTROL_MAQUINA" => $row['NOMBRE_CONTROL_MAQUINA'],
-                    "N_DIAS_CONTROL" => $row['N_DIAS_CONTROL']
+                    "N_DIAS_POS" => $row['N_DIAS_POS']
 
                 );
             }
@@ -1829,7 +1832,7 @@ class c_almacen
     {
         $m_formula = new m_almacen();
 
-        if (isset($nombrecontrol) && isset($ndiascontrol) && isset($codcontrol)) {
+        if (isset($codcontrol)) {
             $resultado = $m_formula->editarControlMaquina($nombrecontrol, $ndiascontrol,  $codcontrol);
 
             if ($resultado) {

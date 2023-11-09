@@ -58,8 +58,6 @@ $datacontrol = $mostrar->MostrarControlMaquina();
                         <table id="tbControl" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
-                                    <!-- <th class="thtitulo" scope="col">CODIGO</th> -->
-                                    <th class="thtitulo" scope="col">ZONA</th>
                                     <th class="thtitulo" scope="col">CONTROL DE MAQUINAS</th>
                                     <th class="thtitulo" scope="col">FRECUENCIA</th>
                                     <th class="thtitulo" scope="col">FECHA</th>
