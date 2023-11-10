@@ -48,7 +48,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="http://192.168.1.102/SISTEMA/control_alimento/images/icon/covifarma-ico.ico" type="images/png">
-    <title>COVIFARMA</title>
+    <title>LABSABELL</title>
 </head>
 
 <body>
@@ -142,8 +142,10 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             height: 30px;
         }
 
+
         body {
-            margin: 50mm 8mm 2mm 8mm;
+            margin: 35mm 8mm 2mm 8mm;
+
         }
 
         header {
@@ -152,6 +154,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             left: 0;
             right: 0;
         }
+
 
         /* .tablaSeparada {
             page-break-inside: avoid;
@@ -165,7 +168,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
             <tr>
                 <td rowspan="4" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td>
-                <!-- <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
+
                 <td rowspan="4" style="text-align: center; font-size:25px; font-weigth:200;">MONITOREO DE L & D DE ESTRUCTURAS FISICAS Y ACCESORIOS - MES DE <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                 <td>LBS-PHS-FR-01</th>
             </tr>
@@ -183,7 +186,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
     </header>
 
     <!-- Table calendario-->
-    <table style="margin-top: 10px;">
+    <table style="margin-top: 50px">
 
         <?php
 
@@ -248,10 +251,12 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         echo '</thead>';
 
         $contadorF = 0;
-        echo '<tbody>';
+
+        echo '<tbody >';
         foreach ($grupos as $nombreZona => $valores) {
             $contadorF++;
-            echo '<tr>';
+
+            echo '<tr style="page-break-inside: avoid;">';
             echo '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
 
             foreach ($valores as $index => $valor) {
@@ -321,7 +326,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
             echo '</tr>';
             if ($contadorF % 24 == 0) {
-                echo '<tr>';
+                echo '<tr style="page-break-inside: avoid;">';
                 for ($i = 0; $i < 30; $i++) {
                     echo '<td style="text-align:center;height:10.5rem;border-left:none; border:rght:none;"></td>';
                 }
@@ -419,6 +424,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
         </tr>
     </table>
+
 </body>
 
 </html>

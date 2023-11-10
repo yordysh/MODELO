@@ -103,7 +103,7 @@ $dataPersonal = $mostrar->MostrarPersonal();
                                 <button class="custom-icon-calcular" name="calcular" id="botonCalcularregistros"><i class="icon-circle-with-plus"></i></button>
                                 <!-- <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-success">Insertar</button> -->
                             </div>
-                            <div class="form-outline mb-4">
+                            <div class="form-outline mb-4 operario">
                                 <label class="form-label">Operario</label>
                                 <!-- <input type="hidden" id="hidden"> -->
                                 <select id="selectOperario" class="form-select selectProducto" aria-label="Default select example">
@@ -117,35 +117,36 @@ $dataPersonal = $mostrar->MostrarPersonal();
                             </div>
                         </div>
                         <!-- Crear PDF -->
-                        <div class="contenedorpdf">
-                            <div class="pdfContent">
-                                <div class="contentaniomes">
-                                    <label for="mes">Seleccione el año:</label>
-                                    <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
-                                </div>
-                                <div class="">
-                                    <label for="mes">Seleccione el mes:</label>
-                                    <select id="mes" name="mes">
-                                        <option value="" selected disabled>Seleccione...</option>
-                                        <option value="01">Enero</option>
-                                        <option value="02">Febrero</option>
-                                        <option value="03">Marzo</option>
-                                        <option value="04">Abril</option>
-                                        <option value="05">Mayo</option>
-                                        <option value="06">Junio</option>
-                                        <option value="07">Julio</option>
-                                        <option value="08">Agosto</option>
-                                        <option value="09">Septiembre</option>
-                                        <option value="10">Octubre</option>
-                                        <option value="11">Noviembre</option>
-                                        <option value="12">Diciembre</option>
-                                    </select>
-                                </div>
+                        <div class="contenedorpdfverificar">
+                            <div class="separacion">
+                                <label for="mes">Seleccione el año:</label>
+                                <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
                             </div>
+                            <div class="separacion">
+                                <label for="mes">Seleccione el mes:</label>
+                                <select id="mes" name="mes">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    <option value="01">Enero</option>
+                                    <option value="02">Febrero</option>
+                                    <option value="03">Marzo</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Mayo</option>
+                                    <option value="06">Junio</option>
+                                    <option value="07">Julio</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
+                            </div>
+
                             <div class="botonpdfregistro">
                                 <a class="btn btn-primary estilopdfregistro" href="#" onclick="generarPDF()">Generar PDF</a>
                             </div>
-
+                            <div class="container">
+                                <button id="generarPDF" class="btn btn-primary">DOSIMETRIA</button>
+                            </div>
                         </div>
 
                         <div id="tablaRE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">

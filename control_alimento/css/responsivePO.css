@@ -464,11 +464,31 @@ td {
   box-sizing: border-box;
   margin-top: 25px;
 }
-.contenedorpdf,
-.pdfContent {
+/* .contenedorpdf {
   display: flex;
+} */
+.contenedorpdfverificar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.separacion {
+  flex: 1;
+  margin-right: 10px;
 }
 
+.botonpdfregistro {
+  flex: 1;
+  text-align: right;
+}
+.form-outline.mb-4.operario {
+  padding-top: 30px;
+  padding-left: 10px;
+}
+/* .separacion {
+  margin-right: 25px;
+  margin-top: 5px;
+} */
 /*-------------- Estilo de responsive ---------------------*/
 
 @media screen and (max-width: 1370px) {
@@ -659,6 +679,10 @@ td {
     width: 190px;
     background-image: linear-gradient(to bottom, #7b5185, #4587de);
     padding-left: 15px;
+  }
+  .form-outline.mb-4.operario {
+    padding-top: 0px;
+    padding-left: 0px;
   }
 }
 /*-------------------------------------------------------------*/

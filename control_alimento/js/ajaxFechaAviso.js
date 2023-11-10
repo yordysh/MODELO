@@ -8,11 +8,11 @@ $(function () {
     document.querySelector(".preloader").style.display = "none";
   }
   async function executeAlerts() {
-    try {
-      await alertaMensaje();
-    } catch (error) {
-      console.error("Error executing alertaMensaje():");
-    }
+    // try {
+    //   await alertaMensaje();
+    // } catch (error) {
+    //   console.error("Error executing alertaMensaje():");
+    // }
 
     try {
       await alerta();
