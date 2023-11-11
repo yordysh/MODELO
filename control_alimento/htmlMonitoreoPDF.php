@@ -10,7 +10,7 @@ $mesNumerico = intval($mesSeleccionado);
 $mostrar = new m_almacen();
 
 $nombre = 'LBS-PHS-FR-01';
-$versionMuestraFecha = $mostrar->MostrarVersionGeneralFecha($nombre);
+// $versionMuestraFecha = $mostrar->MostrarVersionGeneralFecha($nombre);
 $fechaDateTime = new DateTime($versionMuestraFecha);
 $anio = $fechaDateTime->format('Y');
 $mesExtra = intval($fechaDateTime->format('m'));
@@ -144,7 +144,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
 
         body {
-            margin: 35mm 8mm 2mm 8mm;
+            margin: 40mm 8mm 2mm 8mm;
 
         }
 
@@ -173,7 +173,8 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 <td>LBS-PHS-FR-01</th>
             </tr>
             <tr>
-                <td>Versión: <?php echo $versionMuestra ?> </td>
+                <!-- <td>Versión: <?php echo $versionMuestra ?> </td> -->
+                <td>Version:</td>
             </tr>
             <tr>
                 <td>Página:</td>
@@ -186,7 +187,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
     </header>
 
     <!-- Table calendario-->
-    <table style="margin-top: 50px">
+    <table style="margin-top: 50px;">
 
         <?php
 
@@ -251,20 +252,26 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         echo '</thead>';
 
         $contadorF = 0;
-
+        $filavacio = '';
         echo '<tbody >';
         foreach ($grupos as $nombreZona => $valores) {
             $contadorF++;
+            if ($contadorF % 4 == 0) {
+                $filavacio = "style='page-break-before: always;'";
+            }
 
-            echo '<tr style="page-break-inside: avoid;">';
-            echo '<td rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
+            echo '<tr style="min-height:15px;">';
+            echo '<td rowspan="' . count($valores) . '"><div style="height: 100%; background-color:yellow;">' . $nombreZona . '</div></td>';
 
             foreach ($valores as $index => $valor) {
                 if ($index !== 0) {
                     echo '<tr>';
                 }
+                // if ($index == 0) {
+                //     continue;
+                // }
 
-                echo '<td class="cabecera">' . $valor['nombreInfraestructura'] . '</td>';
+                echo '<td class="cabecera">' . $index . '</td>';
                 if ($valor['ndiaspos'] == 1) {
                     echo '<td class="cabecera">Diaria</td>';
                 } elseif ($valor['ndiaspos'] == 2) {
@@ -319,19 +326,19 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 }
                 //Colocar este td para que rellene de responsable de ejecucion
                 echo '<td></td>';
-                if ($index !== 0) {
-                    echo '</tr>';
-                }
+                // if ($index !== 0) {
+                echo '</tr>';
+                // }
             }
 
-            echo '</tr>';
-            if ($contadorF % 24 == 0) {
-                echo '<tr style="page-break-inside: avoid;">';
-                for ($i = 0; $i < 30; $i++) {
-                    echo '<td style="text-align:center;height:10.5rem;border-left:none; border:rght:none;"></td>';
-                }
-                echo '</tr>';
-            }
+            // echo '</tr>';
+            // if ($contadorF % 24 == 0) {
+            //     echo '<tr">';
+            //     for ($i = 0; $i < 30; $i++) {
+            //         echo '<td style="text-align:center;height:10.5rem;border-left:none; border:rght:none;"></td>';
+            //     }
+            //     echo '</tr>';
+            // }
         }
         echo '</tbody>';
         ?>
