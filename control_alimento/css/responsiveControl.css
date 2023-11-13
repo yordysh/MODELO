@@ -517,8 +517,15 @@ td {
   position: absolute;
   padding: 0;
   height: 0;
-  margin-top: -38px;
-  margin-left: 350px;
+  margin-top: 30px;
+  margin-left: 430px;
+}
+.buttonañadircontrolmaquina {
+  position: absolute;
+  padding: 0;
+  height: 0;
+  margin-top: 30px;
+  margin-left: 420px;
 }
 
 /*-------------- Estilo de responsive ---------------------*/
@@ -586,6 +593,13 @@ td {
     margin-top: 30px;
     margin-left: 390px;
   }
+  .buttonañadircontrolmaquina {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: 30px;
+    margin-left: 410px;
+  }
 }
 @media screen and (max-width: 1240px) {
   .buttonzonas {
@@ -645,6 +659,13 @@ td {
     height: 0;
     margin-top: -38px;
     margin-left: 400px;
+  }
+  .buttonañadircontrolmaquina {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: 30px;
+    margin-left: 330px;
   }
 }
 @media screen and (max-width: 1105px) {
@@ -804,6 +825,13 @@ td {
     margin-top: -88px;
     margin-left: 540px;
   }
+  .buttonañadircontrolmaquina {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -60px;
+    margin-left: 520px;
+  }
 }
 /*-------------------------------------------------------------*/
 @media screen and (max-width: 950px) {
@@ -875,6 +903,13 @@ td {
     height: 0;
     margin-top: -88px;
     margin-left: 440px;
+  }
+  .buttonañadircontrolmaquina {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -60px;
+    margin-left: 430px;
   }
 }
 /*-------------------------------------------------------------*/
@@ -1045,6 +1080,13 @@ td {
     margin-top: -60px;
     margin-left: 500px;
   }
+  .buttonañadircontrolmaquina {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -60px;
+    margin-left: 480px;
+  }
 }
 @media screen and (max-width: 480px) {
   .bt-guardar {
@@ -1098,6 +1140,13 @@ td {
     height: 0;
     margin-top: -88px;
     margin-left: 410px;
+  }
+  .buttonañadircontrolmaquina {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -60px;
+    margin-left: 390px;
   }
 }
 /*----------------------REDMI----------------------------*/
@@ -1187,6 +1236,13 @@ td {
     height: 0;
     margin-top: -88px;
     margin-left: 310px;
+  }
+  .buttonañadircontrolmaquina {
+    position: absolute;
+    padding: 0;
+    height: 0;
+    margin-top: -60px;
+    margin-left: 320px;
   }
 }
 

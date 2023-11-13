@@ -31,4 +31,8 @@ $canvas = $dompdf->getCanvas();
 $font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
 $canvas->page_text(1325, 80, "{PAGE_NUM}/{PAGE_COUNT}", $font, 15, array(0, 0, 0));
 
-$dompdf->stream('Registro-envases.pdf', array('Attachment' => 0));
+if ($dompdf) {
+    $dompdf->stream('Registro-envases.pdf', array('Attachment' => 0));
+} else {
+    $dompdf->stream('Registro-envases.pdf', array('Attachment' => false));
+}

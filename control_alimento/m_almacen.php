@@ -1269,7 +1269,7 @@ class m_almacen
         $VERSION = $cod->generarVersionGeneral($nombre);
         // $fechaDHoy = '24/07/2023';
 
-        $cod->generarVersionGeneral($nombre);
+        // $cod->generarVersionGeneral($nombre);
 
 
         $DIAS_DESCUENTO = 2;
@@ -1284,14 +1284,14 @@ class m_almacen
 
         if (!($N_DIAS_CONTROL == 1 || $N_DIAS_CONTROL == 2)) {
           $FECHA_ACORDAR = date('d-m-Y', strtotime($FECHA_TOTAL . '-' . $DIAS_DESCUENTO . 'days'));
-          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS,CODIGO) values('$NOMBRE_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$N_DIAS_CONTROL','$generarcodigo')");
+          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS,CODIGO,COD_ZONA) values('$NOMBRE_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$FECHA_ACORDAR','$N_DIAS_CONTROL','$generarcodigo','16')");
         } else {
-          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS) values('$NOMBRE_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$N_DIAS_CONTROL')");
+          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS,COD_ZONA) values('$NOMBRE_CONTROL_MAQUINA','$FECHA','$FECHA_TOTAL','$N_DIAS_CONTROL','16')");
         }
 
         $insert = $stm1->execute();
 
-        $updatecontrolmaquina = $this->bd->prepare("UPDATE T_CONTROL_MAQUINA SET N_DIAS_CONTROL='$N_DIAS_CONTROL' WHERE COD_CONTROL_MAQUINA='$NOMBRE_CONTROL_MAQUINA'");
+        $updatecontrolmaquina = $this->bd->prepare("UPDATE T_CONTROL_MAQUINA SET N_DIAS_CONTROL='$N_DIAS_CONTROL',VERSION='$VERSION' WHERE COD_CONTROL_MAQUINA='$NOMBRE_CONTROL_MAQUINA'");
         $updatecontrolmaquina->execute();
 
         $insert = $this->bd->commit();
@@ -1378,18 +1378,47 @@ class m_almacen
       die("Error al eliminar los datos: " . $e->getMessage());
     }
   }
+  public function actualizarFrecuenciaControl($valorcapturadocontrol)
+  {
+    try {
+      $cod = new m_almacen();
+      $fechaactualfrecuencia = $cod->c_horaserversql('F');
+      // var_dump($valorcapturadocontrol);
+      // exit();
+      foreach ($valorcapturadocontrol as $row) {
+        $codigocontrol = $row['codcontrol'];
+        $frecuencia = $row['frecuenciavalor'];
 
+        if ($frecuencia == 'true') {
+          $frecuenciaestado = 'R';
+        } else {
+          $frecuenciaestado = 'P';
+        };
+
+        $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='$frecuenciaestado' WHERE COD_CONTROL_MAQUINA='$codigocontrol'");
+        $actualizarfrecuencia = $stm->execute();
+      }
+
+      return $actualizarfrecuencia;
+    } catch (Exception $e) {
+      die("Error al actualizar los datos: " . $e->getMessage());
+    }
+  }
   public function MostrarAlertaControl()
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS, C.COD_CONTROL_MAQUINA AS  COD_CONTROL_MAQUINA, C.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
-      A.COD_ALERTA_CONTROL_MAQUINA AS COD_ALERTA_CONTROL_MAQUINA, A.N_DIAS_POS AS N_DIAS_POS, A.FECHA_TOTAL, 
-      A.FECHA_CREACION AS FECHA_CREACION,A.FECHA_ACORDAR AS FECHA_ACORDAR, A.ESTADO AS ESTADO, A.OBSERVACION AS OBSERVACION,
-      A.ACCION_CORRECTIVA AS ACCION_CORRECTIVA  FROM T_ALERTA_CONTROL_MAQUINA AS A 
-      INNER JOIN T_CONTROL_MAQUINA AS C ON A.COD_CONTROL_MAQUINA = C.COD_CONTROL_MAQUINA
-      INNER JOIN T_ZONA_AREAS AS Z ON C.COD_ZONA = Z.COD_ZONA
-      WHERE  ESTADO='P' AND CAST(FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE)");
+      // $stm = $this->bd->prepare("SELECT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS, C.COD_CONTROL_MAQUINA AS  COD_CONTROL_MAQUINA, C.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
+      // A.COD_ALERTA_CONTROL_MAQUINA AS COD_ALERTA_CONTROL_MAQUINA, A.N_DIAS_POS AS N_DIAS_POS, A.FECHA_TOTAL, 
+      // A.FECHA_CREACION AS FECHA_CREACION,A.FECHA_ACORDAR AS FECHA_ACORDAR, A.ESTADO AS ESTADO, A.OBSERVACION AS OBSERVACION,
+      // A.ACCION_CORRECTIVA AS ACCION_CORRECTIVA  FROM T_ALERTA_CONTROL_MAQUINA AS A 
+      // INNER JOIN T_CONTROL_MAQUINA AS C ON A.COD_CONTROL_MAQUINA = C.COD_CONTROL_MAQUINA
+      // INNER JOIN T_ZONA_AREAS AS Z ON C.COD_ZONA = Z.COD_ZONA
+      // WHERE  ESTADO='P' AND CAST(FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE)");
+      $stm = $this->bd->prepare("SELECT TCM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA,TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
+                                TCM.FECHA_CREACION AS FECHA_CREACION, TCM.FECHA_TOTAL AS FECHA_TOTAL, TCM.FECHA_ACORDAR,
+                                TCM.ESTADO AS ESTADO, TCM.N_DIAS_POS AS N_DIAS_POS FROM T_ALERTA_CONTROL_MAQUINA TCM 
+                                INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA=TCM.COD_CONTROL_MAQUINA WHERE TCM.ESTADO='P' AND TCM.N_DIAS_POS!='1' AND CAST(FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE)");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
@@ -1420,17 +1449,17 @@ class m_almacen
   public function MostrarControlMaquinaPDF($anioSeleccionado, $mesSeleccionado)
   {
     try {
-
-
       $stm = $this->bd->prepare(
-        " SELECT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS, C.COD_CONTROL_MAQUINA AS  COD_CONTROL_MAQUINA, C.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
-        A.COD_ALERTA_CONTROL_MAQUINA AS COD_ALERTA_CONTROL_MAQUINA, A.N_DIAS_POS AS N_DIAS_POS, A.FECHA_TOTAL, 
-        A.FECHA_CREACION AS FECHA_CREACION,A.FECHA_ACORDAR AS FECHA_ACORDAR, A.ESTADO AS ESTADO, A.OBSERVACION AS OBSERVACION,
-        A.ACCION_CORRECTIVA AS ACCION_CORRECTIVA  FROM T_ALERTA_CONTROL_MAQUINA AS A 
-        INNER JOIN T_CONTROL_MAQUINA AS C ON A.COD_CONTROL_MAQUINA = C.COD_CONTROL_MAQUINA
-        INNER JOIN T_ZONA_AREAS AS Z ON C.COD_ZONA = Z.COD_ZONA
-        WHERE  ESTADO='R'
-        AND MONTH(FECHA_TOTAL) = :mesSeleccionado AND YEAR(FECHA_TOTAL) = :anioSeleccionado"
+        "SELECT TCM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA, TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
+          TCM.FECHA_TOTAL AS FECHA_TOTAL,TCM.ESTADO AS ESTADO,
+          CASE
+            WHEN TCM.N_DIAS_POS = 1 THEN 'Diario*'
+            WHEN TCM.N_DIAS_POS = 7 THEN 'Semanal'
+            WHEN TCM.N_DIAS_POS = 30 THEN 'Mensual'
+            ELSE 'Otro'
+          END AS FRECUENCIA FROM T_ALERTA_CONTROL_MAQUINA TCM
+             INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA = TCM.COD_CONTROL_MAQUINA
+             WHERE TCM.ESTADO='R' AND MONTH(FECHA_TOTAL) = :mesSeleccionado AND YEAR(FECHA_TOTAL) = :anioSeleccionado"
       );
       $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
       $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
@@ -1443,6 +1472,21 @@ class m_almacen
     }
   }
 
+  public function controlmaquinapdfmodal()
+  {
+    try {
+      $stm = $this->bd->prepare("SELECT TACM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA, TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
+      TACM.N_DIAS_POS AS N_DIAS_POS FROM T_ALERTA_CONTROL_MAQUINA TACM
+      INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA=TACM.COD_CONTROL_MAQUINA WHERE TACM.N_DIAS_POS='1'");
+
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function MostrarZonaCombo($term)
   {
     try {

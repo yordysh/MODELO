@@ -13,6 +13,7 @@ $mostrar = new m_almacen();
 $dataProducto = $mostrar->MostrarProductoRegistroEnvase();
 $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
 $dataPersonal = $mostrar->MostrarPersonal();
+$datoControl = $mostrar->controlmaquinapdfmodal();
 
 ?>
 <!DOCTYPE html>
@@ -144,8 +145,11 @@ $dataPersonal = $mostrar->MostrarPersonal();
                             <div class="botonpdfregistro">
                                 <a class="btn btn-primary estilopdfregistro" href="#" onclick="generarPDF()">Generar PDF</a>
                             </div>
-                            <div class="container">
+                            <div class="">
                                 <button id="generarPDF" class="btn btn-primary">DOSIMETRIA</button>
+                            </div>
+                            <div class="">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mostrarmaquinapdf">Control</button>
                             </div>
                         </div>
 
@@ -195,6 +199,9 @@ $dataPersonal = $mostrar->MostrarPersonal();
             </div>
             </div>
         </section>
+        <?php
+        require 'modalmostrarmaquina.php';
+        ?>
     </main>
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
         Covifarma-2023

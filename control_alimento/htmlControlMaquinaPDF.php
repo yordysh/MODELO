@@ -33,6 +33,7 @@ $mesversion = $mesesEnLetras[$mesExtra];
 
 
 $dataControl = $mostrar->MostrarControlMaquinaPDF($anioSeleccionado, $mesSeleccionado);
+$fecha = $anioSeleccionado . '-' . $mesSeleccionado;
 
 // $versionMuestra = $mostrar->VersionMostrar();
 $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
@@ -155,91 +156,133 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
     <table style="margin-bottom: 70px;">
 
         <?php
-        $grupos = array();
-        $fechasEliminadas = array();
+        // $grupos = array();
+        // $fechasEliminadas = array();
 
-        foreach ($dataControl  as $filas) {
-            $nombreZona = $filas['NOMBRE_T_ZONA_AREAS'];
-            $nombreControl = $filas['NOMBRE_CONTROL_MAQUINA'];
-            $fecha = $filas['FECHA_TOTAL'];
+        // foreach ($dataControl  as $filas) {
+        //     $nombreZona = $filas['NOMBRE_T_ZONA_AREAS'];
+        //     $nombreControl = $filas['NOMBRE_CONTROL_MAQUINA'];
+        //     $fecha = $filas['FECHA_TOTAL'];
 
-            if (!isset($grupos[$nombreZona][$nombreControl])) {
-                $grupos[$nombreZona][$nombreControl] = array();
-            }
+        //     if (!isset($grupos[$nombreZona][$nombreControl])) {
+        //         $grupos[$nombreZona][$nombreControl] = array();
+        //     }
 
-            if (in_array($fecha, $grupos[$nombreZona][$nombreControl])) {
-                $fechasEliminadas[] = $fecha;
-            } else {
-                $grupos[$nombreZona][$nombreControl][] = $fecha;
-            }
-        }
-        echo "<thead>";
+        //     if (in_array($fecha, $grupos[$nombreZona][$nombreControl])) {
+        //         $fechasEliminadas[] = $fecha;
+        //     } else {
+        //         $grupos[$nombreZona][$nombreControl][] = $fecha;
+        //     }
+        // }
+        // echo "<thead>";
+        // $numeroDiasMes = date('t', strtotime($fecha));
+        // echo "<tr>";
+        // echo "<th class='cabecera-fila' rowspan='2'>N°</th>";
+        // echo "<th class='cabecera-fila' rowspan='2'>Máquinas,equipos y utensilios de trabajo</th>";
+        // echo "<th class='cabecera-fila' colspan='$numeroDiasMes'>Días</th>";
+        // echo "</tr>";
+
+        // echo "<tr>";
+
+        // for ($i = 1; $i <= $numeroDiasMes; $i++) {
+        //     echo "<th style='text-align:center; width: 10px;'>" . $i . "</th>";
+        // }
+        // echo "</tr>";
+        // echo "</thead>";
+        // echo "<tbody>";
+        // $nContador = 1;
+        // foreach ($grupos as $nombreZona => $controles) {
+
+        //     echo "<tr>";
+
+        //     $numFilas = count($controles);
+        //     // echo '<td rowspan="' . $numFilas . '">' . $nombreZona . '</td>';
+
+        //     $firstRow = true;
+
+        //     foreach ($controles as $nombreControl => $fechas) {
+        //         if (!$firstRow) {
+        //             echo '<tr>';
+        //         }
+        //         echo '<td style="text-align:center;">' . $nContador . '</td>';
+        //         $nContador++;
+
+        //         echo "<td >" . $nombreControl  . "</td>";
+
+
+        //         if (!empty($fechas)) {
+        //             $fecha = reset($fechas);
+        //             $numDias = date('t', strtotime($fecha));
+        //             $fechasArray = [];
+
+        //             foreach ($fechas as $fecha) {
+        //                 $dias = date('d', strtotime($fecha));
+        //                 $diasConver = intval($dias);
+        //                 $fechasArray[] = $diasConver;
+        //             }
+
+        //             for ($i = 1; $i <= $numDias; $i++) {
+        //                 if (in_array($i, $fechasArray)) {
+        //                     echo '<td style="text-align: center; max-width: 10px;"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt="" width="25"></td>';
+        //                     // echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt="" width="25"></td>';
+        //                 } else {
+        //                     echo "<td></td>";
+        //                 }
+        //             }
+        //         } else {
+        //             echo "<td>No hay fechas</td>";
+        //         }
+
+        //         $firstRow = false;
+        //     }
+
+        //     echo "</tr>";
+        // }
+
+
+        // echo "</tbody>";
+        echo '<thead>';
+        echo '<tr>';
         $numeroDiasMes = date('t', strtotime($fecha));
-        echo "<tr>";
-        echo "<th class='cabecera-fila' rowspan='2'>N°</th>";
-        echo "<th class='cabecera-fila' rowspan='2'>Máquinas,equipos y utensilios de trabajo</th>";
-        echo "<th class='cabecera-fila' colspan='$numeroDiasMes'>Días</th>";
-        echo "</tr>";
 
+        echo '<th rowspan="2">N°</td>';
+        echo '<th rowspan="2">Máquina,equipos y utensilios de trabajo</td>';
+        echo '<th rowspan="2">Frecuencia</th>';
+        echo "<th colspan='$numeroDiasMes'>Dias</th>";
+        echo "<th rowspan='2'>Responsable de ejecución</th>";
+        echo '</tr>';
         echo "<tr>";
-
         for ($i = 1; $i <= $numeroDiasMes; $i++) {
             echo "<th style='text-align:center; width: 10px;'>" . $i . "</th>";
         }
         echo "</tr>";
-        echo "</thead>";
-        echo "<tbody>";
-        $nContador = 1;
-        foreach ($grupos as $nombreZona => $controles) {
+        echo '</thead>';
 
+        echo '<tbody>';
+        $con = 1;
+        // var_dump($dataControl);
+        foreach ($dataControl as $row) {
             echo "<tr>";
+            echo "<td>$con</td>";
+            echo '<td>' . $row['NOMBRE_CONTROL_MAQUINA'] . '</td>';
+            echo '<td>' . $row['FRECUENCIA'] . '</td>';
+            $valordias = $row['FECHA_TOTAL'];
+            $dia = date('d', strtotime($valordias));
 
-            $numFilas = count($controles);
-            // echo '<td rowspan="' . $numFilas . '">' . $nombreZona . '</td>';
-
-            $firstRow = true;
-
-            foreach ($controles as $nombreControl => $fechas) {
-                if (!$firstRow) {
-                    echo '<tr>';
-                }
-                echo '<td style="text-align:center;">' . $nContador . '</td>';
-                $nContador++;
-
-                echo "<td >" . $nombreControl  . "</td>";
-
-
-                if (!empty($fechas)) {
-                    $fecha = reset($fechas);
-                    $numDias = date('t', strtotime($fecha));
-                    $fechasArray = [];
-
-                    foreach ($fechas as $fecha) {
-                        $dias = date('d', strtotime($fecha));
-                        $diasConver = intval($dias);
-                        $fechasArray[] = $diasConver;
-                    }
-
-                    for ($i = 1; $i <= $numDias; $i++) {
-                        if (in_array($i, $fechasArray)) {
-                            echo '<td style="text-align: center; max-width: 10px;"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt="" width="25"></td>';
-                            // echo '<td style="text-align:center; max-width: 10px;"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/check.png" alt="" width="25"></td>';
-                        } else {
-                            echo "<td></td>";
-                        }
-                    }
+            for ($i = 1; $i <= $numeroDiasMes; $i++) {
+                if ($i == $dia) {
+                    $pintarcheck = '<img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt="">';
                 } else {
-                    echo "<td>No hay fechas</td>";
-                }
+                    $pintarcheck = '';
+                };
 
-                $firstRow = false;
+                echo "<td style='text-align:center; width: 10px;'>$pintarcheck</td>";
             }
-
+            echo "<td></td>";
+            $con++;
             echo "</tr>";
         }
-
-
-        echo "</tbody>";
+        echo '</tbody>';
         ?>
 
 
@@ -260,15 +303,15 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         <tbody>
             <tr>
                 <?php
-                foreach ($dataControl as $row) {
-                    echo '<tr>';
-                    echo '<td style="text-align: center;">' . convFecSistema($row['FECHA_TOTAL']) . '</td>';
-                    echo '<td style="text-align: center;">' . $row['NOMBRE_T_ZONA_AREAS'] . '</td>';
-                    echo '<td style="text-align: center;">' . $row['OBSERVACION'] . '</td>';
-                    echo '<td style="text-align: center;">' . $row['ACCION_CORRECTIVA'] . '</td>';
-                    echo '<td></td>';
-                    echo '</tr>';
-                }
+                // foreach ($dataControl as $row) {
+                //     echo '<tr>';
+                //     echo '<td style="text-align: center;">' . convFecSistema($row['FECHA_TOTAL']) . '</td>';
+                //     echo '<td style="text-align: center;">' . $row['NOMBRE_T_ZONA_AREAS'] . '</td>';
+                //     echo '<td style="text-align: center;">' . $row['OBSERVACION'] . '</td>';
+                //     echo '<td style="text-align: center;">' . $row['ACCION_CORRECTIVA'] . '</td>';
+                //     echo '<td></td>';
+                //     echo '</tr>';
+                // }
                 ?>
             </tr>
         </tbody>

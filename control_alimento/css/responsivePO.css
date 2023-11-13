@@ -684,6 +684,9 @@ td {
     padding-top: 0px;
     padding-left: 0px;
   }
+  .form-check.form-switch {
+    padding-left: 15rem !important;
+  }
 }
 /*-------------------------------------------------------------*/
 

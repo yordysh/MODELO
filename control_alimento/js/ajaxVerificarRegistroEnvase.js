@@ -389,6 +389,65 @@ $(function () {
       },
     });
   }
+
+  /*---------------- actualizar control maquinas el pdf ------------------------ */
+  $("#guardarcontrolmaquinapdf").click((e) => {
+    e.preventDefault();
+    // let fre = $("#frecuenciamarca").val();
+    // console.log(fre);
+    let valorcapturadocontrol = [];
+    $("#tablaControlModal tr").each(function () {
+      let codcontrol = $(this).find("td:eq(0)").attr("idcontrolmaquina");
+
+      let frecuenciavalor = $(this)
+        .find("td:eq(1)")
+        .find("input[type='checkbox']")
+        .prop("checked");
+      valorcapturadocontrol.push({
+        codcontrol: codcontrol,
+        frecuenciavalor: frecuenciavalor,
+      });
+    });
+    let accioncontrol = "actualizardatoscontrolpdf";
+    $.ajax({
+      type: "POST",
+      url: "./c_almacen.php",
+      data: {
+        accion: accioncontrol,
+        valorcapturadocontrol: valorcapturadocontrol,
+      },
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
+      success: function (response) {
+        if (response == "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            allowOutsideClick: false,
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#tablaControlModal tr").each(function () {
+                let checkboxdesactiva = $(this).find("#frecuenciamarca");
+                checkboxdesactiva.prop("checked", false);
+              });
+            }
+          });
+        }
+      },
+      error: function (error) {
+        console.log("ERROR " + error);
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
+      },
+    });
+  });
+  /*--------------------------------------------------------------------------- */
 });
 function isJSON(str) {
   try {

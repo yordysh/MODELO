@@ -22,4 +22,8 @@ $dompdf->setPaper('A4', 'portrait');
 
 $dompdf->render();
 
-$dompdf->stream('Factura.pdf', ['Attachment' => 0]);
+if ($dompdf) {
+    $dompdf->stream('Factura.pdf', ['Attachment' => 0]);
+} else {
+    $dompdf->stream('Factura.pdf', ['Attachment' => false]);
+}

@@ -92,7 +92,7 @@ $datacontrol = $mostrar->MostrarControlMaquina();
                                 </select>
 
                             </div>
-                            <div class="buttonañadirinfra">
+                            <div class="buttonañadircontrolmaquina">
                                 <button type='button' class="custom-icon-zona" data-bs-toggle="modal" data-bs-target="#mostrarinfraestructuracontrol"><i class="icon-circle-with-plus"></i></button>
                             </div>
                             <!-- Text input dias-->

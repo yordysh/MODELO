@@ -25,5 +25,8 @@ $canvas = $dompdf->getCanvas();
 $font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
 $canvas->page_text(1468, 81, "{PAGE_NUM}/{PAGE_COUNT}", $font, 12, array(0, 0, 0));
 
-
-$dompdf->stream('LimpiezayDesinfeccion.pdf', array('Attachment' => 0));
+if ($dompdf) {
+    $dompdf->stream('LimpiezayDesinfeccion.pdf', array('Attachment' => 0));
+} else {
+    $dompdf->stream('LimpiezayDesinfeccion.pdf', array('Attachment' => false));
+}

@@ -228,6 +228,12 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_eliminar_control_maquina($codcontrolmaquina);
     echo $respuesta;
+} elseif ($accion == 'actualizardatoscontrolpdf') {
+
+    $valorcapturadocontrol = $_POST['valorcapturadocontrol'];
+
+    $respuesta = c_almacen::c_actualizar_frecuencia_control($valorcapturadocontrol);
+    echo $respuesta;
 } elseif ($accion == 'fechaalertacontrol') {
     $respuesta = c_almacen::c_fecha_alerta_control();
     echo $respuesta;
@@ -1828,6 +1834,20 @@ class c_almacen
             echo $jsonstring;
         }
     }
+    static function c_actualizar_frecuencia_control($valorcapturadocontrol)
+    {
+        $m_formula = new m_almacen();
+
+        // if (isset($codcontrol)) {
+        $resultado = $m_formula->actualizarFrecuenciaControl($valorcapturadocontrol);
+
+        if ($resultado) {
+            return "ok";
+        } else {
+            return "error";
+        };
+        // }
+    }
     static function c_actualizar_control_maquina($nombrecontrol, $ndiascontrol,  $codcontrol)
     {
         $m_formula = new m_almacen();
@@ -1856,6 +1876,7 @@ class c_almacen
             };
         }
     }
+
     static function c_fecha_alerta_control()
     {
         $mostrar = new m_almacen();
@@ -1872,17 +1893,21 @@ class c_almacen
                 foreach ($datos as $row) {
                     $json[] = array(
 
-                        "COD_ALERTA_CONTROL_MAQUINA" => $row->COD_ALERTA_CONTROL_MAQUINA,
-                        "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                        // "COD_ALERTA_CONTROL_MAQUINA" => $row->COD_ALERTA_CONTROL_MAQUINA,
+                        // "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
+                        // "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
+                        // "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
+                        // "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
+                        // "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
+                        // "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
+                        // "N_DIAS_POS" =>  $row->N_DIAS_POS,
+                        // "ACCION_CORRECTIVA" =>  $row->ACCION_CORRECTIVA,
                         "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
                         "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
                         "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
                         "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
                         "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
                         "N_DIAS_POS" =>  $row->N_DIAS_POS,
-                        "ACCION_CORRECTIVA" =>  $row->ACCION_CORRECTIVA,
-
-
                     );
                 }
 
