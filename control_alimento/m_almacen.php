@@ -814,6 +814,20 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
+  public function Mostraralertainfrapdf($anioSeleccionado, $mesSeleccionado)
+  {
+    try {
+      $stm = $this->bd->prepare("SELECT * FROM T_ WHERE MONTH(FECHA_TOTAL) = '$mesSeleccionado' AND YEAR(FECHA_TOTAL) = '$anioSeleccionado'");
+
+      $stm->execute();
+      $datos = $stm->fetchAll();
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
   public function MostrarInfraestructuraEstadoPDF($anioSeleccionado, $mesSeleccionado)
   {
     try {

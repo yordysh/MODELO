@@ -38,7 +38,8 @@ $data = $mostrar->MostrarInfraestructuraEstadoPDF($anioSeleccionado, $mesSelecci
 $versionMuestra = $mostrar->VersionMostrar();
 
 $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
-
+$fecham = $anioSeleccionado . '-' . $mesSeleccionado;
+//$alertapdf = $mostrar->Mostraralertainfrapdf($anioSeleccionado, $mesSeleccionado);
 ?>
 
 <!DOCTYPE html>
@@ -144,7 +145,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
 
         body {
-            margin: 37mm 8mm 80mm 8mm;
+            margin: 38mm 8mm 37mm 8mm;
 
         }
 
@@ -155,6 +156,11 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             right: 0;
         }
 
+        /* .salto {
+            page-break-inside: avoid;
+            page-break-before: auto;
+            height: 15px;
+        } */
 
 
 
@@ -228,7 +234,8 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
         $numeroDiasMe = date('t', strtotime($fechaTotal));
         $columnasFechaTotales = $numeroDiasMe;
-
+        // $numeroDiasMe = date('t', strtotime($fecham));
+        // $columnasFechaTotales = $numeroDiasMe;
 
         echo '<thead>';
         echo '<tr>';
@@ -252,22 +259,30 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         echo '</tr>';
         echo '</thead>';
 
-        $contadorF = 0;
+        $contadorF = -1;
         $filavacio = '';
         echo '<tbody >';
 
         foreach ($grupos as $nombreZona => $valores) {
             $contadorF++;
-            // if ($contadorF % 2 == 0) {
-            //     $filavacio = "style='page-break-before: always;'";
-            // }
+            // echo "<script>console.log(" . $contadorF . ");</script>";
+            if ($contadorF == 4) {
+                echo '<tr style="page-break-before: always;">';
 
-            echo '<tr style="min-height:15px; ">';
+                // $filavacio = "style='page-break-before: always;'";
+
+            } elseif ($contadorF > 4 && $contadorF % 4 == 0) {
+                echo '<tr style="page-break-before: always;">';
+            } else {
+                echo '<tr>';
+            }
+            // echo "<script>console.log( " . ($contadorF % 3) . ")</script>";
+
             echo '<td  rowspan="' . count($valores) . '"><div style=" background-color:yellow;">' . $nombreZona . '</div></td>';
 
             foreach ($valores as $index => $valor) {
                 if ($index !== 0) {
-                    echo '<tr >';
+                    echo '<tr>';
                 }
 
 
@@ -330,15 +345,6 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 echo '</tr>';
                 // }
             }
-
-            // echo '</tr>';
-            // if ($contadorF % 24 == 0) {
-            //     echo '<tr">';
-            //     for ($i = 0; $i < 30; $i++) {
-            //         echo '<td style="text-align:center;height:10.5rem;border-left:none; border:rght:none;"></td>';
-            //     }
-            //     echo '</tr>';
-            // }
         }
         echo '</tbody>';
         ?>
