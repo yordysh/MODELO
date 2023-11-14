@@ -80,7 +80,7 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                         <!-- <input type="hidden" id="vroficina" name="vroficina" value="<?php echo $codoficina; ?>"> -->
 
                         <div class="row g-4 top-div">
-                            <center><label class="title_table">CONTROL DE RECEPCIÓN</label></center>
+                            <center><label class="title_table">LBS-BPM-FR-09</label></center>
                         </div>
 
 

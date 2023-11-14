@@ -1395,27 +1395,64 @@ class m_almacen
   public function actualizarFrecuenciaControl($valorcapturadocontrol)
   {
     try {
+      $this->bd->beginTransaction();
       $cod = new m_almacen();
       $fechaactualfrecuencia = $cod->c_horaserversql('F');
-      // var_dump($valorcapturadocontrol);
-      // exit();
+
       foreach ($valorcapturadocontrol as $row) {
+        $codigoalertacontrol = $row['codigoalertacontrol'];
         $codigocontrol = $row['codcontrol'];
         $frecuencia = $row['frecuenciavalor'];
 
+
         if ($frecuencia == 'true') {
           $frecuenciaestado = 'R';
+          $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='$frecuenciaestado' WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
         } else {
-          $frecuenciaestado = 'P';
-        };
+          $vb = $row['vb'];
+          $accioncorrectiva = $row['accioncorrectiva'];
+          $observacion = $row['observacion'];
+          if ($vb == '1') {
+            $vbvalor = 'J.A.C';
+          } else {
+            $vbvalor = 'A.A.C';
+          }
+          $estado = $row['estado'];
+          if ($estado == 'PO') {
+            $fechaConvertida = DateTime::createFromFormat('d/m/Y', $fechaactualfrecuencia);
+            $fechaConvertida->modify('+1 day');
+            $fechatotal = $fechaConvertida->format('d/m/Y');
 
-        $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='$frecuenciaestado' WHERE COD_CONTROL_MAQUINA='$codigocontrol'");
+            $repetir = $this->bd->prepare("SELECT MAX(CODIGO) AS CODIGO FROM T_ALERTA_CONTROL_MAQUINA WHERE COD_CONTROL_MAQUINA='$codigocontrol' AND ESTADO='P'");
+            $repetir->execute();
+            $result = $repetir->fetch(PDO::FETCH_ASSOC);
+            $valordecodigo = $result['CODIGO'];
+
+
+            $stminsrt = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,ESTADO,N_DIAS_POS,COD_ZONA,CODIGO)VALUES('$codigocontrol','$fechatotal','PE','1','16','$valordecodigo')");
+            $stminsrt->execute();
+
+            // $actualiza = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET ESTADO='PO' WHERE COD_ALERTA_CNTROL_MAQUINA='$codigoalertacontrol'");
+            // $actualiza->execute();
+            // } else {
+            //   $fechatotal = $fechaactualfrecuencia;
+          }
+
+
+          $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='$estado',ACCION_CORRECTIVA='$accioncorrectiva',
+                                        OBSERVACION='$observacion', VB='$vbvalor'
+                                        WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
+        };
+        $stminsrtuno = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,ESTADO,N_DIAS_POS,COD_ZONA)VALUES('$codigocontrol','$fechatotal','P','1','16')");
+        $stminsrtuno->execute();
+
         $actualizarfrecuencia = $stm->execute();
       }
-
+      $actualizarfrecuencia = $this->bd->commit();
       return $actualizarfrecuencia;
     } catch (Exception $e) {
-      die("Error al actualizar los datos: " . $e->getMessage());
+      $this->bd->rollBack();
+      die($e->getMessage());
     }
   }
   public function MostrarAlertaControl()
@@ -1489,9 +1526,9 @@ class m_almacen
   public function controlmaquinapdfmodal()
   {
     try {
-      $stm = $this->bd->prepare("SELECT TACM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA, TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
+      $stm = $this->bd->prepare("SELECT TACM.COD_ALERTA_CONTROL_MAQUINA AS COD_ALERTA_CONTROL_MAQUINA,TACM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA, TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
       TACM.N_DIAS_POS AS N_DIAS_POS FROM T_ALERTA_CONTROL_MAQUINA TACM
-      INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA=TACM.COD_CONTROL_MAQUINA WHERE TACM.N_DIAS_POS='1'");
+      INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA=TACM.COD_CONTROL_MAQUINA WHERE TACM.N_DIAS_POS='1' AND TACM.ESTADO='P'");
 
       $stm->execute();
       $datos = $stm->fetchAll();

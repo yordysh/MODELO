@@ -1,5 +1,5 @@
 <div class="modal fade" id="mostrarmaquinapdf" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">CONTROL DE MÁQUINAS,EQUIPOS Y UTENSILIOS DE TRABAJO</h5>
@@ -13,14 +13,18 @@
                                 <tr>
                                     <th class="thtitulo" scope="col">MÁQUINA,EQUIPOS Y UTENSILIOS</th>
                                     <th class="thtitulo" scope="col">ACTIVAR</th>
+                                    <th class="thtitulo" scope="col">OBSERVACÓN</th>
+                                    <th class="thtitulo" scope="col">ACCIÓN CORRECTIVA</th>
+                                    <th class="thtitulo" scope="col">V°b° SUPERVISOR</th>
+                                    <th class="thtitulo" scope="col">PROCESO</th>
                                 </tr>
                             </thead>
                             <tbody id="tablaControlModal">
                                 <?php foreach ($datoControl as $row) {
-                                    echo '<tr>';
+                                    echo '<tr idcontrol=' . $row['COD_ALERTA_CONTROL_MAQUINA'] . '>';
                                     echo '<td idcontrolmaquina=' . $row['COD_CONTROL_MAQUINA'] . '>' . $row['NOMBRE_CONTROL_MAQUINA'] . '</td>';
                                     echo '<td><div class="form-check form-switch" style="padding-left:8.5rem;">
-                                                <input class="form-check-input" type="checkbox" id="frecuenciamarca">
+                                                <input class="form-check-input inputcheck" type="checkbox" id="frecuenciamarca" checked>
                                           </div></td>';
                                     echo '</tr>';
                                 } ?>

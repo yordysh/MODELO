@@ -42,13 +42,16 @@ body {
   font-weight: 600;
 }
 .title_table {
-  font-weight: 500;
+  font-weight: 800;
   margin-bottom: 10px;
+  font-size: 20px;
+  color: #2011f5;
 }
 
 .thtitulo {
   text-align: center !important;
 }
+
 .table .hoverable:hover {
   background-color: #928ac1;
   color: #fff;

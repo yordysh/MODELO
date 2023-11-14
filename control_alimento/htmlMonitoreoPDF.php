@@ -265,20 +265,15 @@ $fecham = $anioSeleccionado . '-' . $mesSeleccionado;
 
         foreach ($grupos as $nombreZona => $valores) {
             $contadorF++;
-            // echo "<script>console.log(" . $contadorF . ");</script>";
             if ($contadorF == 4) {
                 echo '<tr style="page-break-before: always;">';
-
-                // $filavacio = "style='page-break-before: always;'";
-
             } elseif ($contadorF > 4 && $contadorF % 4 == 0) {
                 echo '<tr style="page-break-before: always;">';
             } else {
                 echo '<tr>';
             }
-            // echo "<script>console.log( " . ($contadorF % 3) . ")</script>";
 
-            echo '<td  rowspan="' . count($valores) . '"><div style=" background-color:yellow;">' . $nombreZona . '</div></td>';
+            echo '<td  rowspan="' . count($valores) . '">' . $nombreZona . '</td>';
 
             foreach ($valores as $index => $valor) {
                 if ($index !== 0) {
@@ -340,7 +335,7 @@ $fecham = $anioSeleccionado . '-' . $mesSeleccionado;
                     //echo '<td class="' . $estadoClass . '">' . $columna . '</td>';
                 }
                 //Colocar este td para que rellene de responsable de ejecucion
-                echo '<td>Operario</td>';
+                echo '<td style="text-align:center;">Operario</td>';
                 // if ($index !== 0) {
                 echo '</tr>';
                 // }
