@@ -101,6 +101,7 @@ $submenu2 = $_SESSION["subsub_c"];
         </div>
     </nav>
     <?php require_once("../control_alimento/modal.php"); ?>
+    <?php require_once("../control_alimento/modalcontrolalerta.php"); ?>
     <script src="../control_alimento/js/bootstrap.min.js"></script>
     <!-- <script src="../control_alimento/js/ajaxIndex.js"></script> -->
     <script src="../control_alimento/js/sweetalert2.all.min.js"></script>

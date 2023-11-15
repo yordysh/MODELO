@@ -1404,14 +1404,25 @@ class m_almacen
         $codigocontrol = $row['codcontrol'];
         $frecuencia = $row['frecuenciavalor'];
 
+        $repetir = $this->bd->prepare("SELECT MAX(CODIGO) AS CODIGO FROM T_ALERTA_CONTROL_MAQUINA WHERE COD_CONTROL_MAQUINA='$codigocontrol' AND ESTADO='P'");
+        $repetir->execute();
+        $result = $repetir->fetch(PDO::FETCH_ASSOC);
+        $valordecodigo = $result['CODIGO'];
+
+        $fechaConvertida = DateTime::createFromFormat('d/m/Y', $fechaactualfrecuencia);
+        $fechaConvertida->modify('+1 day');
+        $fechatotal = $fechaConvertida->format('d/m/Y');
+
+        $stminsrtuno = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,ESTADO,N_DIAS_POS,COD_ZONA,CODIGO)VALUES('$codigocontrol','$fechatotal','P','1','16','$valordecodigo')");
+        $stminsrtuno->execute();
 
         if ($frecuencia == 'true') {
           $frecuenciaestado = 'R';
           $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='$frecuenciaestado' WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
         } else {
           $vb = $row['vb'];
-          $accioncorrectiva = $row['accioncorrectiva'];
-          $observacion = $row['observacion'];
+          $accioncorrectiva = strtoupper($row['accioncorrectiva']);
+          $observacion = strtoupper($row['observacion']);
           if ($vb == '1') {
             $vbvalor = 'J.A.C';
           } else {
@@ -1419,32 +1430,18 @@ class m_almacen
           }
           $estado = $row['estado'];
           if ($estado == 'PO') {
-            $fechaConvertida = DateTime::createFromFormat('d/m/Y', $fechaactualfrecuencia);
-            $fechaConvertida->modify('+1 day');
-            $fechatotal = $fechaConvertida->format('d/m/Y');
 
-            $repetir = $this->bd->prepare("SELECT MAX(CODIGO) AS CODIGO FROM T_ALERTA_CONTROL_MAQUINA WHERE COD_CONTROL_MAQUINA='$codigocontrol' AND ESTADO='P'");
-            $repetir->execute();
-            $result = $repetir->fetch(PDO::FETCH_ASSOC);
-            $valordecodigo = $result['CODIGO'];
-
-
-            $stminsrt = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,ESTADO,N_DIAS_POS,COD_ZONA,CODIGO)VALUES('$codigocontrol','$fechatotal','PE','1','16','$valordecodigo')");
-            $stminsrt->execute();
-
-            // $actualiza = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET ESTADO='PO' WHERE COD_ALERTA_CNTROL_MAQUINA='$codigoalertacontrol'");
-            // $actualiza->execute();
-            // } else {
-            //   $fechatotal = $fechaactualfrecuencia;
+            $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='PE',ACCION_CORRECTIVA='$accioncorrectiva',
+            OBSERVACION='$observacion', VB='$vbvalor'
+            WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
+          } elseif ($estado == 'OB') {
+            $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='$estado',ACCION_CORRECTIVA='$accioncorrectiva',
+            OBSERVACION='$observacion', VB='$vbvalor'
+            WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
           }
-
-
-          $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='$estado',ACCION_CORRECTIVA='$accioncorrectiva',
-                                        OBSERVACION='$observacion', VB='$vbvalor'
-                                        WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
         };
-        $stminsrtuno = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,ESTADO,N_DIAS_POS,COD_ZONA)VALUES('$codigocontrol','$fechatotal','P','1','16')");
-        $stminsrtuno->execute();
+
+
 
         $actualizarfrecuencia = $stm->execute();
       }
@@ -1458,18 +1455,12 @@ class m_almacen
   public function MostrarAlertaControl()
   {
     try {
-
-      // $stm = $this->bd->prepare("SELECT Z.NOMBRE_T_ZONA_AREAS AS NOMBRE_T_ZONA_AREAS, C.COD_CONTROL_MAQUINA AS  COD_CONTROL_MAQUINA, C.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
-      // A.COD_ALERTA_CONTROL_MAQUINA AS COD_ALERTA_CONTROL_MAQUINA, A.N_DIAS_POS AS N_DIAS_POS, A.FECHA_TOTAL, 
-      // A.FECHA_CREACION AS FECHA_CREACION,A.FECHA_ACORDAR AS FECHA_ACORDAR, A.ESTADO AS ESTADO, A.OBSERVACION AS OBSERVACION,
-      // A.ACCION_CORRECTIVA AS ACCION_CORRECTIVA  FROM T_ALERTA_CONTROL_MAQUINA AS A 
-      // INNER JOIN T_CONTROL_MAQUINA AS C ON A.COD_CONTROL_MAQUINA = C.COD_CONTROL_MAQUINA
-      // INNER JOIN T_ZONA_AREAS AS Z ON C.COD_ZONA = Z.COD_ZONA
-      // WHERE  ESTADO='P' AND CAST(FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE)");
-      $stm = $this->bd->prepare("SELECT TCM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA,TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
-                                TCM.FECHA_CREACION AS FECHA_CREACION, TCM.FECHA_TOTAL AS FECHA_TOTAL, TCM.FECHA_ACORDAR,
-                                TCM.ESTADO AS ESTADO, TCM.N_DIAS_POS AS N_DIAS_POS FROM T_ALERTA_CONTROL_MAQUINA TCM 
-                                INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA=TCM.COD_CONTROL_MAQUINA WHERE TCM.ESTADO='P' AND TCM.N_DIAS_POS!='1' AND CAST(FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE)");
+      $stm = $this->bd->prepare("SELECT TCM.COD_ALERTA_CONTROL_MAQUINA AS COD_ALERTA_CONTROL_MAQUINA ,TCM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA,TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
+                                  TCM.FECHA_CREACION AS FECHA_CREACION, TCM.FECHA_TOTAL AS FECHA_TOTAL, TCM.FECHA_ACORDAR,
+                                  TCM.ESTADO AS ESTADO, TCM.N_DIAS_POS AS N_DIAS_POS FROM T_ALERTA_CONTROL_MAQUINA TCM 
+                                  INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA=TCM.COD_CONTROL_MAQUINA 
+                                  WHERE TCM.ESTADO='P' AND TCM.N_DIAS_POS!='1' OR (TCM.ESTADO='PE' AND TCM.N_DIAS_POS='1') 
+                                  AND CAST(FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE)");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
@@ -1478,11 +1469,47 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function actualizarAlertaCheckControl($estado, $taskId, $observacion, $accionCorrectiva)
+  public function actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB)
   {
-    $stmt = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET ESTADO = '$estado', OBSERVACION = '$observacion', ACCION_CORRECTIVA ='$accionCorrectiva' WHERE COD_ALERTA_CONTROL_MAQUINA = '$taskId'");
-    $stmt->execute();
-    return $stmt;
+    try {
+      $this->bd->beginTransaction();
+      $cod = new m_almacen();
+
+      $actualiza = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET ESTADO='PO', OBSERVACION='$observacion',FECHA_POSTERGACION='$FECHA_POSTERGACION',FECHA_TOTAL='$FECHA_ACTUALIZA',ACCION_CORRECTIVA='$accionCorrectiva',VB='$selectVB' WHERE COD_ALERTA_CONTROL_MAQUINA='$taskId'");
+      $actualizaralertacontrol = $actualiza->execute();
+
+      $insertar = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,N_DIAS_POS) 
+                                      VALUES('$codigocontrolmaquina','$FECHA_POSTERGACION',$ndiaspos) ");
+      $insertar->execute();
+
+      $actualizaralertacontrol = $this->bd->commit();
+      return $actualizaralertacontrol;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+  public function actualizarAlertaControlCheckBox($codigocontrolmaquina, $estado, $ndiaspos, $taskId,  $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB)
+  {
+    try {
+      $this->bd->beginTransaction();
+      $cod = new m_almacen();
+
+      $actualiza = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET ESTADO='$estado', OBSERVACION='$observacionTextArea',FECHA_TOTAL='$FECHA_ACTUALIZA',ACCION_CORRECTIVA='$accionCorrectiva',VB='$selectVB' WHERE COD_ALERTA_CONTROL_MAQUINA='$taskId'");
+      $actualizaralertacontrol = $actualiza->execute();
+      if ($ndiaspos != '1') {
+        $insertar = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,N_DIAS_POS) 
+                                        VALUES('$codigocontrolmaquina','$FECHA_ACTUALIZA',$ndiaspos) ");
+        $insertar->execute();
+      }
+
+
+      $actualizaralertacontrol = $this->bd->commit();
+      return $actualizaralertacontrol;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
   }
   public function InsertarAlertaControlMaquina($FECHA_CREACION,  $codControlMaquina, $FECHA_TOTAL, $taskNdias)
   {

@@ -1838,7 +1838,6 @@ class c_almacen
     {
         $m_formula = new m_almacen();
 
-        // if (isset($codcontrol)) {
         $resultado = $m_formula->actualizarFrecuenciaControl($valorcapturadocontrol);
 
         if ($resultado) {
@@ -1846,7 +1845,6 @@ class c_almacen
         } else {
             return "error";
         };
-        // }
     }
     static function c_actualizar_control_maquina($nombrecontrol, $ndiascontrol,  $codcontrol)
     {
@@ -1902,6 +1900,7 @@ class c_almacen
                         // "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
                         // "N_DIAS_POS" =>  $row->N_DIAS_POS,
                         // "ACCION_CORRECTIVA" =>  $row->ACCION_CORRECTIVA,
+                        "COD_ALERTA_CONTROL_MAQUINA" => $row->COD_ALERTA_CONTROL_MAQUINA,
                         "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
                         "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
                         "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
@@ -1922,32 +1921,90 @@ class c_almacen
     {
         $mostrar = new m_almacen();
 
-        $estado = $_POST['estado'];
-        $taskId = $_POST['taskId'];
-        $observacionTextArea = $_POST['observacionTextArea'];
-        $accionCorrectiva = $_POST['accionCorrectiva'];
+        if (isset($_POST['fechapostergacioncontrol'])) {
+            // var_dump("if");
+            // exit();
+            $estado = $_POST['estado'];
+            $codigocontrolmaquina = $_POST['codigocontrolmaquina'];
+            $taskId = $_POST['taskId'];
+            $ndiaspos = $_POST['ndiaspos'];
+            $observacion = $_POST['observacionTextArea'];
+            $fechaPostergacontrol = $_POST['fechapostergacioncontrol'];
+            $FECHA_POSTERGACION =  convFecSistema($fechaPostergacontrol);
 
-        $fechadHoy  = $mostrar->c_horaserversql('F');
+            $FECHA_TOTAL = $_POST['taskFecha'];
 
-        $alert = $mostrar->actualizarAlertaCheckControl($estado, $taskId, $observacionTextArea, $accionCorrectiva);
+            $accionCorrectiva = $_POST['accionCorrectiva'];
+
+            $selectVB = $_POST['selectVB'];
+
+            $fechadHoy  = $mostrar->c_horaserversql('F');
+
+            $nombreDia = date('l', strtotime($FECHA_TOTAL));
+            // var_dump("a" . $codigocontrolmaquina);
+            // var_dump("b" . $taskId);
+            // var_dump("c" . $ndiaspos);
+            // var_dump("d" . $observacion);
+            // var_dump("e" . $FECHA_POSTERGACION);
+            // var_dump("f" . $FECHA_TOTAL);
+            // var_dump("g" . $accionCorrectiva);
+            // var_dump("h" . $selectVB);
+            // exit();
 
 
-        $alert->execute();
-        return $alert;
+            if ($nombreDia  != 'Saturday') {
 
-        // if ($insert2) {
-        //     $response = array(
-        //         'success' => true,
-        //         'message' => 'Estado actualizado correctamente'
-        //     );
-        // } else {
-        //     $response = array(
-        //         'success' => false,
-        //         // 'message' => 'Error al actualizar el estado: ' . $conn->error
-        //     );
-        // }
 
-        echo json_encode($alert);
+                $FECHA_ACTUALIZA = $fechadHoy;
+                $alert = $mostrar->actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+            } elseif ($nombreDia  == 'Saturday') {
+                // var_dump("sabado");
+                // exit();
+                $FECHA_ACTUALIZA = $FECHA_TOTAL;
+                $alert = $mostrar->actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+            }
+        } else {
+
+            $estado = $_POST['estado'];
+
+            $codigocontrolmaquina = $_POST['codigocontrolmaquina'];
+            $taskId = $_POST['taskId'];
+            $ndiaspos = $_POST['ndiaspos'];
+            $observacionTextArea = $_POST['observacionTextArea'];
+            $FECHA_TOTAL = $_POST['taskFecha'];
+            $accionCorrectiva = $_POST['accionCorrectiva'];
+
+            $selectVB = $_POST['selectVB'];
+
+            $nombreDia = date('l', strtotime($FECHA_TOTAL));
+
+            $fechadHoy  = $mostrar->c_horaserversql('F');
+            // $fechaActual = new DateTime();
+            // $fechadHoy = $fechaActual->format('d/m/Y');
+            if ($FECHA_TOTAL != $fechadHoy) {
+                $FECHA_ACTUALIZA = $fechadHoy;
+                $alert = $mostrar->actualizarAlertaControlCheckBox($codigocontrolmaquina, $estado, $ndiaspos, $taskId,  $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+            } elseif ($nombreDia  == 'Saturday' || $FECHA_TOTAL == $fechadHoy) {
+                $FECHA_ACTUALIZA = $FECHA_TOTAL;
+                $alert = $mostrar->actualizarAlertaControlCheckBox($codigocontrolmaquina, $estado, $ndiaspos, $taskId,  $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+            }
+        }
+
+        $insert2 = $alert->execute();
+
+        if ($insert2) {
+            $response = array(
+                'success' => true,
+                'message' => 'Estado actualizado correctamente'
+            );
+        } else {
+            $response = array(
+                'success' => false,
+                // 'message' => 'Error al actualizar el estado: ' . $conn->error
+            );
+        }
+
+        echo json_encode($response);
     }
     static function c_insertar_alertamix_control_maquina()
     {
