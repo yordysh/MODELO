@@ -45,53 +45,6 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
         </div>
     </div>
     <!-- fin -->
-    <!-- <nav class="nav">
-        <div class="wave"></div>
-        <i class="icon-menu navOpenBtn"></i>
-        <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
-        <ul class="nav-links">
-            <div class="icon-cross navCloseBtn"></div>
-            <li>
-                <a class="activo" href="#">Formulación</a>
-            </li>
-            <li>
-                <a class="" href="requerimientoProducto.php">Requerimiento</a>
-            </li>
-            <li>
-                <a class="" href="pedidoRequerimiento.php">Confirmación de requerimiento</a>
-            </li>
-            <li>
-                <a class="">Compras realizar</a>
-                <ul class="menu-vertical">
-                    <li>
-                        <a class="" href="solicitaCompra.php">Solicitar compra</a>
-                    </li>
-                    <li>
-                        <a class="" href="ordenCompra.php">Orden de compra</a>
-                    </li>
-                    <li>
-                        <a class="" href="generarComprobante.php">Generar comprobante</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a class="" href="cantidadMinimaProducto.php">Cantidad mínima</a>
-            </li>
-            <li>
-                <a class="" href="produccionRequerimiento.php">Producción</a>
-            </li>
-            <li>
-                <a class="" href="verificarRegistroEnvase.php">Avance producción</a>
-            </li>
-        </ul>
-
-        <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
-        <div class="search-box">
-            <i class="icon-magnifying-glass search-icon"></i>
-            <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
-        </div>
-    </nav> -->
-
     <?php
     require_once('../menulista/index.php');
     ?>
@@ -124,7 +77,8 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                         </div>
                         <!-- Text input cantidad -->
                         <div class="form-outline mb-4">
-                            <label class="form-label">Cantidad producto</label>
+                            <!-- <label class="form-label">Cantidad producto</label> -->
+                            <label class="form-label">Cantidad por kilosgramos</label>
                             <input type="number" id="cantidadTotal" class="form-control" name="cantidadTotal" required>
                         </div>
 
@@ -144,7 +98,8 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                         <!-- Text input cantidad insumos-->
                         <div class="contenedorcantidadcalculo">
                             <div class="form-outline mb-4">
-                                <label class="form-label">Cantidad insumos</label>
+                                <!-- <label class="form-label">Cantidad insumos</label> -->
+                                <label class="form-label">Cantidad insumos x kilogramos</label>
                                 <input type="number" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
                             </div>
                             <!-- <button id="botonCalcularInsumos" name="insert" class="btn btn-success bt-Total">Insertar insumos </button> -->
@@ -156,7 +111,6 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                             <table id="tbInsum" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-
                                         <th class="" scope="col">INSUMOS</th>
                                         <th class="" scope="col">CANTIDAD</th>
                                     </tr>
@@ -195,7 +149,6 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                             <table id="tbEnvaseProducto" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-
                                         <th class="" scope="col">ENVASES</th>
                                         <th class="" scope="col">CANTIDAD</th>
                                     </tr>

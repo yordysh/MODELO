@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-$codusuario = $_SESSION["cod"];
-// $codusuario = 'Raul';
+// $codusuario = $_SESSION["cod"];
+$codusuario = '0004';
 
 ?>
 
@@ -82,16 +82,24 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
 
                         <!-- Text input cantidad -->
-                        <div class="contenedorcantidadcalculo">
-                            <div class="form-outline mb-4">
-                                <label class="form-label">Cantidad</label>
-                                <input type="number" id="cantidadInsumoEnvase" class="form-control" name="cantidadProducto" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
+                        <div class="row">
+                            <!-- <div class="contenedorcantidadcalculo"> -->
+                            <!-- <div class="form-outline mb-4"> -->
+                            <div class="col-md-4">
+                                <!-- <label class="form-label">Cantidad</label> -->
+                                <label class="form-label">Catidad en Kg</label>
+                                <input type="number" id="cantidadInsumoEnvase" class="form-control form-control-sm" name="cantidadProducto" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
                             </div>
-                            <div class="btncalcular">
+                            <div class="col-md-4">
+                                <label class="form-label">Total producto</label>
+                                <input type="text" class="form-control form-control-sm" id="txtcantidadproductos" name="txtcantidadproductos" readonly />
+                            </div>
+                            <!-- <div class="btncalcular"> -->
+                            <div class="col-md-4">
                                 <button class="custom-icon-calcular" name="calcular" id="botonCalcularInsumoEnvase"><i class="icon-circle-with-plus"></i></button>
                             </div>
+                            <!-- </div> -->
                         </div>
-
                         <!-- Tabla de total de productos-->
                         <div id="tablaTotal" class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:20px;">
                             <div class="row g-4 top-div">
@@ -100,8 +108,11 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <table class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
+                                        <!-- <th class="" scope="col">PRODUCTOS</th>
+                                        <th class="" scope="col">CANTIDAD TOTAL</th> -->
                                         <th class="" scope="col">PRODUCTOS</th>
-                                        <th class="" scope="col">CANTIDAD TOTAL</th>
+                                        <th class="" scope="col">Kilogramos</th>
+                                        <th class="" scope="col">Total productos</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablainsumoenvasetotal">
@@ -112,7 +123,6 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <!-- Tabla de insumos-->
                         <div class="table-responsive" style="overflow-x: hidden;height: 300px; margin-top:20px;">
-
                             <table id="tinsumo" class="table table-sm mb-3 table-hover">
                                 <div class="row g-4 top-div">
                                     <label class="title_table">TOTAL DE INSUMOS POR PRODUCTO</label>
@@ -131,7 +141,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
 
 
-                        <!-- Tabla de insumos-->
+                        <!-- Tabla de insumos suma total-->
                         <div class="table-responsive totalinsumo" style="overflow-x: hidden;height: 100px!important; margin-top:10px;margin-left:600px;">
                             <table id="tsumatotal" class="table table-sm mb-3 table-hover">
                                 <thead>

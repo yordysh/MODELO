@@ -37,7 +37,13 @@ $(function () {
     });
   });
   /*-------------------------------------------------------------------------------------- */
-
+  /*--------------Al poner un valor de kilogramos me pone total de enmvases totales */
+  $("#cantidad").keyup((e) => {
+    e.preventDefault();
+    let totalproducto = ($("#cantidad").val() * 100) / 60;
+    $("#txtcantidadproductos").val(Math.trunc(totalproducto));
+  });
+  /*------------------------------------------------------------------------------ */
   /*---------Verficar si el producto seleccionado es menor a productos iguales-------------- */
   $("#selectProductoCombo").on("change", (e) => {
     e.preventDefault();
@@ -82,6 +88,8 @@ $(function () {
     $("#hiddenproduccion").val(codigoproduccion);
     let cantidad = $("#cantidad").val();
     $("#hiddencantidad").val(cantidad);
+    // let txtcantidadproductos = $("#txtcantidadproductos").val();
+    // $("#productocod").val(txtcantidadproductos);
 
     if (!codigoproducto) {
       Swal.fire({
@@ -145,6 +153,7 @@ $(function () {
             $("#selectProductoCombo").val("none").trigger("change");
             $("#selectNumProduccion").val("none").trigger("change");
             $("#cantidad").val("");
+            // $("#txtcantidadproductos").val("");
           } else {
             console.log(tasks);
             Swal.fire({

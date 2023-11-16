@@ -36,7 +36,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CERRAR</button>
-                <button type="button" class="btn btn-primary" id='guardarcontrolmaquinapdf'>GUARDAR</button>
+                <!-- <button type="button" class="btn btn-primary" id='guardarcontrolmaquinapdf'>GUARDAR</button> -->
+                <button type="button" class="btn btn-primary" id='botonguardarregistro'>GUARDAR</button>
             </div>
         </div>
     </div>

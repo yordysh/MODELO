@@ -2370,9 +2370,7 @@ class m_almacen
   public function VerificarProductoFormula($selectinsumoenvase)
   {
     try {
-
       $repetir = $this->bd->prepare("SELECT COUNT(*) as count FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$selectinsumoenvase'");
-
       $repetir->execute();
       $result = $repetir->fetch(PDO::FETCH_ASSOC);
       $count = $result['count'];
@@ -2384,7 +2382,10 @@ class m_almacen
   public function InsertarInsumEnvas($codpersonal, $union, $unionEnvase, $unionItem)
   {
     try {
-
+      // var_dump($union);
+      // var_dump($unionEnvase);
+      // var_dump($unionItem);
+      // exit();
       $this->bd->beginTransaction();
       $cod = new m_almacen();
       $codRequerimiento = $cod->generarCodigoRequerimientoProducto();
@@ -2397,31 +2398,41 @@ class m_almacen
 
       $stmRequerimiento = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO(COD_REQUERIMIENTO,COD_PERSONAL,HORA)
       VALUES ('$codRequerimiento','$codpersonal','$horaMinutosSegundosRequerimiento')");
-      // var_dump($stmRequerimiento);
       $insert = $stmRequerimiento->execute();
 
+      // $sumaTotalInEn = 0;
+      // for ($i = 0; $i < count($unionItem); $i += 2) {
+
+      //   $codProductoTotal = $unionItem[$i];
+      //   $canInsuTotal = $unionItem[$i + 1];
+      //   $sumaTotalInEn =  $sumaTotalInEn + $canInsuTotal;
+
+
+      //   $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ITEM(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
+      //   VALUES ('$codRequerimiento', '$codProductoTotal', '$canInsuTotal')");
+      //   $stmRequeItem->execute();
+      // }
       $sumaTotalInEn = 0;
-      for ($i = 0; $i < count($unionItem); $i += 2) {
-
-        $codProductoTotal = $unionItem[$i];
-        $canInsuTotal = $unionItem[$i + 1];
-        $sumaTotalInEn =  $sumaTotalInEn + $canInsuTotal;
-
-
-        $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ITEM(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
-        VALUES ('$codRequerimiento', '$codProductoTotal', '$canInsuTotal')");
+      $totalprod = 0;
+      foreach ($unionItem->valoresCapturadosTotalEnvase as $dato) {
+        $codProductoTotal = $dato[0];
+        $canInsuTotal = $dato[1];
+        $sumaTotalInEn += $dato[1];
+        $totalprod += $dato[2];
+        $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ITEM(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD,TOTAL_PRODUCTO)
+        VALUES ('$codRequerimiento', '$codProductoTotal', '$canInsuTotal','$dato[2]')");
         $stmRequeItem->execute();
       }
-      $stmSumRequerimiento = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET CANTIDAD='$sumaTotalInEn' WHERE COD_REQUERIMIENTO='$codRequerimiento'");
+      // $stmSumRequerimiento = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET CANTIDAD='$sumaTotalInEn' WHERE COD_REQUERIMIENTO='$codRequerimiento'");
+      // $stmSumRequerimiento->execute();
+      $stmSumRequerimiento = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET CANTIDAD='$sumaTotalInEn',
+      TOTAL_PRODUCTO = '$totalprod' WHERE COD_REQUERIMIENTO='$codRequerimiento'");
       $stmSumRequerimiento->execute();
-
-
 
 
       for ($i = 0; $i < count($union); $i += 2) {
         $codProducto = ($union[$i]);
         $canInsu = $union[$i + 1];
-        // $cod_producto_item = $union[$i + 2];
 
         $stmRequeInsumo = $this->bd->prepare("INSERT  INTO T_TMPREQUERIMIENTO_INSUMO(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
         VALUES ('$codRequerimiento','$codProducto', '$canInsu')");
@@ -2429,21 +2440,16 @@ class m_almacen
         $stmRequeInsumo->execute();
       }
 
+
       for ($j = 0; $j < count($unionEnvase); $j += 2) {
 
         $codProductoEnvase = trim($unionEnvase[$j]);
         $canEnvase = $unionEnvase[$j + 1];
-        // $cod_producto_item_envase = $unionEnvase[$j + 2];
 
         $stmRequeEnvase = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ENVASE(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
         VALUES ('$codRequerimiento', '$codProductoEnvase', '$canEnvase')");
         $stmRequeEnvase->execute();
       }
-
-
-
-
-
 
       $insert = $this->bd->commit();
 

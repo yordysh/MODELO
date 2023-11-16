@@ -363,7 +363,8 @@ if ($accion == 'insertar') {
     $codpersonal = ($_POST['codpersonal']);
     $union = ($_POST['union']);
     $unionEnvase = ($_POST['unionEnvase']);
-    $unionItem = ($_POST['unionItem']);
+    // $unionItem = ($_POST['unionItem']); 
+    $unionItem = json_decode($_POST['unionItem']);
 
 
     $respuesta = c_almacen::c_guardar_InsumoEnvase($codpersonal, $union, $unionEnvase, $unionItem);
@@ -2522,8 +2523,6 @@ class c_almacen
     static function c_vista_producto_formulacion($selectinsumoenvase)
     {
         try {
-
-
             $mostrar = new m_almacen();
             $datos = $mostrar->VerificarProductoFormula($selectinsumoenvase);
             if ($datos) {
@@ -2579,7 +2578,6 @@ class c_almacen
                 $calculo = ($row->CANTIDA * $cantidadesinsumoenvases) / $row->CAN_FORMULACION;
                 $total = ceil($calculo);
                 // $total =  bcdiv($calculo, '1', 3);
-
                 $json[] = array(
                     "COD_FORMULACIONES" => $row->COD_FORMULACIONES,
                     "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
@@ -2587,7 +2585,6 @@ class c_almacen
                     "TOTAL_ENVASE" => $total,
                 );
             }
-
 
             $jsonstring = json_encode($json);
             echo $jsonstring;

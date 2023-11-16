@@ -94,17 +94,25 @@ $datoControl = $mostrar->controlmaquinapdfmodal();
                         </div>
 
                         <!-- Text input canti -->
-                        <div class="contenedorcantidadcalculo">
-                            <div class="form-outline mb-4">
-                                <label class="form-label">Cantidad</label>
+                        <!-- <div class="contenedorcantidadcalculo"> -->
+                        <!-- <div class="form-outline mb-4"> -->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="form-label">Cantidad kilogramosgramos</label>
                                 <input type="hidden" id='hiddencantidad'>
                                 <input type="text" id="cantidad" class="form-control" name="cantidad" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
                             </div>
-                            <div class="btncalcular">
+                            <div class="col-md-4">
+                                <label class="form-label">Total producto</label>
+                                <input type="text" class="form-control form-control-sm" id="txtcantidadproductos" name="txtcantidadproductos" readonly />
+                                <!-- <input type="text" id='productocod'> -->
+                            </div>
+                            <!-- <div class="btncalcular"> -->
+                            <div class="col-md-4">
                                 <button class="custom-icon-calcular" name="calcular" id="botonCalcularregistros"><i class="icon-circle-with-plus"></i></button>
                                 <!-- <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-success">Insertar</button> -->
                             </div>
-                            <div class="form-outline mb-4 operario">
+                            <div class="col-md-4 operario">
                                 <label class="form-label">Operario</label>
                                 <!-- <input type="hidden" id="hidden"> -->
                                 <select id="selectOperario" class="form-select selectProducto" aria-label="Default select example">
@@ -148,9 +156,9 @@ $datoControl = $mostrar->controlmaquinapdfmodal();
                             <div class="">
                                 <button id="generarPDF" class="btn btn-primary">DOSIMETRIA</button>
                             </div>
-                            <div class="">
+                            <!-- <div class="">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mostrarmaquinapdf">Control</button>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div id="tablaRE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
@@ -189,7 +197,10 @@ $datoControl = $mostrar->controlmaquinapdfmodal();
                             </table>
                         </div>
                         <div class="estiloguardar">
-                            <button id="botonguardarregistro" type="submit" name="insert" class="btn btn-primary estiloguardar">Guardar </button>
+                            <!-- <button id="botonguardarregistro" type="submit" name="insert" class="btn btn-primary estiloguardar">Guardar </button> -->
+                            <div class="">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mostrarmaquinapdf">Control</button>
+                            </div>
                         </div>
                     </form>
 
