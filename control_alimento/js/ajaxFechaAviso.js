@@ -551,9 +551,7 @@ $(function () {
 
                 return Promise.resolve();
               }
-              // console.log(observacionTextArea);
-              // console.log(accionCorrectiva);
-              // console.log(selectVB);
+
               const accion = "actualizaalertacontrol";
               $.ajax({
                 url: "../control_alimento/c_almacen.php",
@@ -592,10 +590,6 @@ $(function () {
                   const fechaPostergacionControl = $(
                     "#fecha_postergacion_control"
                   ).val();
-                  // console.log(fechaPostergacionControl);
-                  // console.log(observacionTextArea);
-                  // console.log(accionCorrectiva);
-                  // console.log(selectVB);
 
                   const accion = "actualizaalertacontrol";
 
@@ -615,7 +609,15 @@ $(function () {
                       codigocontrolmaquina: task.COD_CONTROL_MAQUINA,
                       fechapostergacioncontrol: fechaPostergacionControl,
                     },
+                    beforeSend: function () {
+                      $(".preloader").css("opacity", "1");
+                      $(".preloader").css("display", "block");
+                    },
                     dataType: "json",
+                    complete: function () {
+                      $(".preloader").css("opacity", "0");
+                      $(".preloader").css("display", "none");
+                    },
                   });
                 });
               });

@@ -1459,8 +1459,8 @@ class m_almacen
                                   TCM.FECHA_CREACION AS FECHA_CREACION, TCM.FECHA_TOTAL AS FECHA_TOTAL, TCM.FECHA_ACORDAR,
                                   TCM.ESTADO AS ESTADO, TCM.N_DIAS_POS AS N_DIAS_POS FROM T_ALERTA_CONTROL_MAQUINA TCM 
                                   INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA=TCM.COD_CONTROL_MAQUINA 
-                                  WHERE TCM.ESTADO='P' AND TCM.N_DIAS_POS!='1' OR (TCM.ESTADO='PE' AND TCM.N_DIAS_POS='1') 
-                                  AND CAST(FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE)");
+                                  WHERE TCM.ESTADO='P' AND TCM.N_DIAS_POS!='1'  AND CAST(TCM.FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE)
+                                  OR (TCM.ESTADO='PE' AND TCM.N_DIAS_POS='1' AND CAST(TCM.FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE))");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
@@ -1498,8 +1498,20 @@ class m_almacen
       $actualiza = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET ESTADO='$estado', OBSERVACION='$observacionTextArea',FECHA_TOTAL='$FECHA_ACTUALIZA',ACCION_CORRECTIVA='$accionCorrectiva',VB='$selectVB' WHERE COD_ALERTA_CONTROL_MAQUINA='$taskId'");
       $actualizaralertacontrol = $actualiza->execute();
       if ($ndiaspos != '1') {
-        $insertar = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,N_DIAS_POS) 
-                                        VALUES('$codigocontrolmaquina','$FECHA_ACTUALIZA',$ndiaspos) ");
+
+        $conversionfecha = strtotime(str_replace('/', '-',  $FECHA_ACTUALIZA));
+        $fechasumadias = strtotime("+$ndiaspos days", $conversionfecha);
+        $fechadomingo = date('w', $fechasumadias);
+
+        if ($fechadomingo == 0) {
+          $fechasumadias = strtotime('+1 day', $fechasumadias);
+        }
+        $FECHA_TOTAL = date("d/m/Y", $fechasumadias);
+        $fechamenosdias = strtotime("-2 days", $fechasumadias);
+        $FECHA_ACORDAR = date("d/m/Y", $fechamenosdias);
+
+        $insertar = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,FECHA_ACORDAR,N_DIAS_POS) 
+                                        VALUES('$codigocontrolmaquina','$FECHA_TOTAL','$FECHA_ACORDAR','$ndiaspos') ");
         $insertar->execute();
       }
 
@@ -4172,7 +4184,7 @@ class m_almacen
   {
     try {
 
-      $mostrarvalorcomprobante = $this->bd->prepare("SELECT OC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, OC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TCOMP.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE, TCOMI.FECHA_EMISION AS FECHA_EMISION, TCI.COD_PRODUCTO AS COD_PRODUCTO, TPRO.DES_PRODUCTO AS DES_PRODUCTO, 
+      $mostrarvalorcomprobante = $this->bd->prepare("SELECT OC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, OC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TCOMP.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE,  CONVERT(VARCHAR, TCOMI.FECHA_EMISION, 103) FECHA_EMISION, TCI.COD_PRODUCTO AS COD_PRODUCTO, TPRO.DES_PRODUCTO AS DES_PRODUCTO, 
                                                         TCOMP.COD_PROVEEDOR AS COD_PROVEEDOR, TPV.NOM_PROVEEDOR AS NOM_PROVEEDOR, TCOMI.SERIE AS SERIE, TCOMI.CORRELATIVO AS CORRELATIVO, TCI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA, TCITEM.HORA AS HORA FROM T_TMPORDEN_COMPRA_ITEM TCI 
                                                         INNER JOIN T_TMPCOMPROBANTE_ITEM TCOMI ON TCI.COD_TMPCOMPROBANTE=TCOMI.COD_TMPCOMPROBANTE
                                                         INNER JOIN T_TMPORDEN_COMPRA OC ON OC.COD_ORDEN_COMPRA=TCI.COD_ORDEN_COMPRA

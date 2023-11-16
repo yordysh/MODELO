@@ -1941,28 +1941,22 @@ class c_almacen
             $fechadHoy  = $mostrar->c_horaserversql('F');
 
             $nombreDia = date('l', strtotime($FECHA_TOTAL));
-            // var_dump("a" . $codigocontrolmaquina);
-            // var_dump("b" . $taskId);
-            // var_dump("c" . $ndiaspos);
-            // var_dump("d" . $observacion);
-            // var_dump("e" . $FECHA_POSTERGACION);
-            // var_dump("f" . $FECHA_TOTAL);
-            // var_dump("g" . $accionCorrectiva);
-            // var_dump("h" . $selectVB);
-            // exit();
 
 
             if ($nombreDia  != 'Saturday') {
-
-
                 $FECHA_ACTUALIZA = $fechadHoy;
-                $alert = $mostrar->actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+                $alertif = $mostrar->actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
             } elseif ($nombreDia  == 'Saturday') {
                 // var_dump("sabado");
                 // exit();
                 $FECHA_ACTUALIZA = $FECHA_TOTAL;
-                $alert = $mostrar->actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+                $alertif = $mostrar->actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
             }
+            if ($alertif) {
+                return "ok";
+            } else {
+                return "error";
+            };
         } else {
 
             $estado = $_POST['estado'];
@@ -1979,32 +1973,45 @@ class c_almacen
             $nombreDia = date('l', strtotime($FECHA_TOTAL));
 
             $fechadHoy  = $mostrar->c_horaserversql('F');
-            // $fechaActual = new DateTime();
-            // $fechadHoy = $fechaActual->format('d/m/Y');
-            if ($FECHA_TOTAL != $fechadHoy) {
+            // var_dump($FECHA_TOTAL);
+            // var_dump($nombreDia);
+            // exit();
+
+            if ($nombreDia != 'Saturday') {
                 $FECHA_ACTUALIZA = $fechadHoy;
                 $alert = $mostrar->actualizarAlertaControlCheckBox($codigocontrolmaquina, $estado, $ndiaspos, $taskId,  $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
-            } elseif ($nombreDia  == 'Saturday' || $FECHA_TOTAL == $fechadHoy) {
+                if ($alert) {
+                    return "ok";
+                } else {
+                    return "error";
+                };
+            } elseif ($nombreDia  == 'Saturday') {
                 $FECHA_ACTUALIZA = $FECHA_TOTAL;
-                $alert = $mostrar->actualizarAlertaControlCheckBox($codigocontrolmaquina, $estado, $ndiaspos, $taskId,  $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+                $alert1 = $mostrar->actualizarAlertaControlCheckBox($codigocontrolmaquina, $estado, $ndiaspos, $taskId,  $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+                if ($alert1) {
+                    return "ok";
+                } else {
+                    return "error";
+                };
             }
         }
 
-        $insert2 = $alert->execute();
+        // $insert2 = $alert->execute();
 
-        if ($insert2) {
-            $response = array(
-                'success' => true,
-                'message' => 'Estado actualizado correctamente'
-            );
-        } else {
-            $response = array(
-                'success' => false,
-                // 'message' => 'Error al actualizar el estado: ' . $conn->error
-            );
-        }
+        // if ($insert2) {
+        //     $response = array(
+        //         'success' => true,
+        //         'message' => 'Estado actualizado correctamente'
+        //     );
+        // } else {
+        //     $response = array(
+        //         'success' => false,
+        //         // 'message' => 'Error al actualizar el estado: ' . $conn->error
+        //     );
+        // }
 
-        echo json_encode($response);
+        // echo json_encode($response);
+
     }
     static function c_insertar_alertamix_control_maquina()
     {
