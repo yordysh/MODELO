@@ -232,7 +232,7 @@ if ($accion == 'insertar') {
 
     $valorcapturadocontrol = $_POST['valorcapturadocontrol'];
 
-    $respuesta = c_almacen::c_actualizar_frecuencia_control($valorcapturadocontrol);
+    $respuesta = c_almacen::c_guardar_control_pdf_diario($valorcapturadocontrol);
     echo $respuesta;
 } elseif ($accion == 'fechaalertacontrol') {
     $respuesta = c_almacen::c_fecha_alerta_control();
@@ -481,7 +481,9 @@ if ($accion == 'insertar') {
     $codigoproduccion = trim($_POST['codigoproduccion']);
     $codigoproducto = trim($_POST['codigoproducto']);
     $cantidad = trim($_POST['cantidad']);
-    $respuesta = c_almacen::c_mostrar_insumos_totales_avance($codigoproducto, $codigoproduccion, $cantidad);
+    $cantidadinsumo = trim($_POST['cantidadinsumo']);
+
+    $respuesta = c_almacen::c_mostrar_insumos_totales_avance($codigoproducto, $codigoproduccion, $cantidad, $cantidadinsumo);
     echo $respuesta;
 } elseif ($accion == 'guardarvalordeinsumosporregistro') {
     $valoresCapturadosProduccion = ($_POST['valoresCapturadosProduccion']);
@@ -491,6 +493,7 @@ if ($accion == 'insertar') {
     $cantidad = trim($_POST['cantidad']);
     $codpersonal = trim($_POST['codpersonal']);
     $codoperario = trim($_POST['codoperario']);
+
     $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal, $codoperario);
     echo $respuesta;
 } elseif ($accion == 'verificaregistromenorconproducto') {
@@ -1835,18 +1838,7 @@ class c_almacen
             echo $jsonstring;
         }
     }
-    static function c_actualizar_frecuencia_control($valorcapturadocontrol)
-    {
-        $m_formula = new m_almacen();
 
-        $resultado = $m_formula->actualizarFrecuenciaControl($valorcapturadocontrol);
-
-        if ($resultado) {
-            return "ok";
-        } else {
-            return "error";
-        };
-    }
     static function c_actualizar_control_maquina($nombrecontrol, $ndiascontrol,  $codcontrol)
     {
         $m_formula = new m_almacen();
@@ -1875,7 +1867,20 @@ class c_almacen
             };
         }
     }
+    static function c_guardar_control_pdf_diario($valorcapturadocontrol)
+    {
+        $mostrar = new m_almacen();
 
+        // if (isset($codcontrolmaquina)) {
+
+        $resultado = $mostrar->guardarControlPdfDiario($valorcapturadocontrol);
+        if ($resultado) {
+            return "ok";
+        } else {
+            return "error";
+        };
+        // }
+    }
     static function c_fecha_alerta_control()
     {
         $mostrar = new m_almacen();
@@ -3066,6 +3071,7 @@ class c_almacen
                     $json['respuesta'] = array(
                         "COD_PRODUCCION" => $row->COD_PRODUCCION,
                         "CANTIDAD_PRODUCIDA" => $row->CANTIDAD_PRODUCIDA,
+                        "VALOR_KG" => $row->VALOR_KG,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
 
                     );
@@ -3080,7 +3086,7 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function  c_mostrar_insumos_totales_avance($codigoproducto, $codigoproduccion, $cantidad)
+    static function  c_mostrar_insumos_totales_avance($codigoproducto, $codigoproduccion, $cantidad, $cantidadinsumo)
     {
         try {
 
@@ -3095,7 +3101,7 @@ class c_almacen
                         "COD_PRODUCTO" => $row->COD_PRODUCTO,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
 
-                        $resultado = (($row->CAN_FORMULACION * $cantidad) / $row->CANTIDAD_FORMULACION),
+                        $resultado = (($row->CAN_FORMULACION * $cantidadinsumo) / $row->CANTIDAD_FORMULACION),
                         $CANTIDAD_TOTAL = number_format($resultado, 4),
                         "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
 

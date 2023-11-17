@@ -20,11 +20,11 @@
                                 </tr>
                             </thead>
                             <tbody id="tablaControlModal">
-                                <?php foreach ($datoControl as $row) {
+                                <?php foreach ($datomaquina as $row) {
                                     echo '<tr idcontrol=' . $row['COD_ALERTA_CONTROL_MAQUINA'] . '>';
                                     echo '<td idcontrolmaquina=' . $row['COD_CONTROL_MAQUINA'] . '>' . $row['NOMBRE_CONTROL_MAQUINA'] . '</td>';
-                                    echo '<td><div class="form-check form-switch" style="padding-left:8.5rem;">
-                                                <input class="form-check-input inputcheck" type="checkbox" id="frecuenciamarca" checked>
+                                    echo '<td style="background-color: #cbcdf2"><div class="form-check form-switch" style="padding-left:8.5rem;">
+                                                <input class="form-check-input inputcheck" type="checkbox" id="frecuenciamarca" >
                                           </div></td>';
                                     echo '</tr>';
                                 } ?>
@@ -37,7 +37,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CERRAR</button>
                 <!-- <button type="button" class="btn btn-primary" id='guardarcontrolmaquinapdf'>GUARDAR</button> -->
-                <button type="button" class="btn btn-primary" id='botonguardarregistro'>GUARDAR</button>
+                <button type="button" class="btn btn-primary" id='guardarcontrolmaquinapdf'>GUARDAR</button>
             </div>
         </div>
     </div>

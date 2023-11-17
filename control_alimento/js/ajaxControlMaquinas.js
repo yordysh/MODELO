@@ -364,4 +364,224 @@ $(function () {
     });
   }
   /*--------------------------------------------------------------------------- */
+
+  /*---------------- actualizar control maquinas el pdf ------------------------ */
+  $("#guardarcontrolmaquinapdf").click((e) => {
+    e.preventDefault();
+
+    if ($(".inputcheck:checked").length === 0) {
+      Swal.fire({
+        icon: "info",
+        title: "Activar máquina",
+        text: "Debe de activar alguna máquina.",
+      });
+
+      return false;
+    }
+    // let alertobs = false;
+    // let alertacc = false;
+    // let alertvb = false;
+    // let alertestado = false;
+
+    // $("#tablaControlModal tr").each(function () {
+    //   let frecuenciavalor = $(this)
+    //     .find("td:eq(1)")
+    //     .find("input[type='checkbox']")
+    //     .prop("checked");
+    //   let observacion = $(this).find("td:eq(2)").find(".observacion").val();
+    //   let accioncorrectiva = $(this)
+    //     .find("td:eq(3)")
+    //     .find(".acccioncorrectiva")
+    //     .val();
+    //   let vb = $(this).find("td:eq(4)").find(".selectVerif").val();
+    //   let estado = $(this).find("td:eq(5)").find(".selectEstado").val();
+
+    //   if (!frecuenciavalor && observacion == "") {
+    //     alertobs = true;
+    //     return false;
+    //   }
+    //   if (!frecuenciavalor && accioncorrectiva == "") {
+    //     alertacc = true;
+    //     return false;
+    //   }
+    //   if (!frecuenciavalor && vb != "1" && vb != "2") {
+    //     alertvb = true;
+    //     return false;
+    //   }
+    //   if (
+    //     frecuenciavalor &&
+    //     estado != "R" &&
+    //     estado != "PO" &&
+    //     estado != "OB"
+    //   ) {
+    //     alertestado = true;
+    //     return false;
+    //   }
+    // });
+    // if (alertobs) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     title: "Observación vacia",
+    //     text: "Debe de escribir una observación.",
+    //   });
+    //   return;
+    // }
+    // if (alertacc) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     title: "Accion correctiva vacia",
+    //     text: "Debe de escribir una acción correctiva.",
+    //   });
+    //   return;
+    // }
+    // if (alertvb) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     title: "V°B vacio",
+    //     text: "Seleccione una opcion de V°B°.",
+    //   });
+    //   return;
+    // }
+    // if (alertestado) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     title: "Proceso vacio",
+    //     text: "Seleccione una opcion del proceso.",
+    //   });
+    //   return;
+    // }
+
+    let valorcapturadocontrol = [];
+    $("#tablaControlModal tr").each(function () {
+      let codigoalertacontrol = $(this).attr("idcontrol");
+      let codcontrol = $(this).find("td:eq(0)").attr("idcontrolmaquina");
+
+      let frecuenciavalor = $(this)
+        .find("td:eq(1)")
+        .find("input[type='checkbox']")
+        .prop("checked");
+
+      let observacion = $(this).find("td:eq(2)").find(".observacion").val();
+      let accioncorrectiva = $(this)
+        .find("td:eq(3)")
+        .find(".acccioncorrectiva")
+        .val();
+      let vb = $(this).find("td:eq(4)").find(".selectVerif").val();
+      let estado = $(this).find("td:eq(5)").find(".selectEstado").val();
+
+      valorcapturadocontrol.push({
+        codigoalertacontrol: codigoalertacontrol,
+        codcontrol: codcontrol,
+        frecuenciavalor: frecuenciavalor,
+        observacion: observacion,
+        accioncorrectiva: accioncorrectiva,
+        vb: vb,
+        estado: estado,
+      });
+    });
+    console.log(valorcapturadocontrol);
+    let accioncontrol = "actualizardatoscontrolpdf";
+    $.ajax({
+      type: "POST",
+      url: "./c_almacen.php",
+      data: {
+        accion: accioncontrol,
+        valorcapturadocontrol: valorcapturadocontrol,
+      },
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
+      success: function (response) {
+        if (response == "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            allowOutsideClick: false,
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#tablaControlModal tr").each(function () {
+                let checkboxdesactiva = $(this).find("#frecuenciamarca");
+                checkboxdesactiva.prop("checked", false);
+              });
+            }
+          });
+        }
+      },
+      error: function (error) {
+        console.log("ERROR " + error);
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
+      },
+    });
+  });
+  /*--------------------------------------------------------------------------- */
+
+  /*---------------- Darle click en switch y me añada textarea----------------- */
+
+  $(".inputcheck").change(function () {
+    var fila = $(this).closest("tr");
+
+    if ($(this).is(":checked")) {
+      var columnaobservacion = $(
+        `<td><textarea class="form-control observacion" id="observacion" rows="2" style="margin:5px 80px"></textarea></td>`
+      );
+      var columnaaccioncorrectiva = $(
+        `<td><textarea class="form-control acccioncorrectiva" id="acccioncorrectiva" rows="2" style="margin:5px 80px"></textarea></td>`
+      );
+      var vb = $(
+        `<td>    <select id="selectVB" class="form-select selectVerif" style="margin:5px 80px" >
+                        <option value="none" selected>Seleccione V°B°</option>
+                        <option value="1">J.A.C</option>
+                         <option value="2">A.A.C</option>
+                </select>
+        </td>`
+      );
+      var estado = $(
+        `<td>    <select id="selectEstado" class="form-select selectEstado" style="margin:5px 80px" >
+                        <option selected>Seleccione proceso</option>
+                        <option value="R">Realizado</option>
+                        <option value="PO">Pendiente</option>
+                         <option value="OB">Observado</option>
+                </select>
+        </td>`
+      );
+
+      /*----------------------------Al darle click en opcion realizado ------------*/
+      estado.find("select").change(function () {
+        var selectedValue = $(this).val();
+        if (selectedValue === "R") {
+          columnaobservacion.find("textarea").prop("disabled", true).val("");
+          columnaaccioncorrectiva
+            .find("textarea")
+            .prop("disabled", true)
+            .val("");
+          vb.find("select")
+            .prop("disabled", true)
+            .val("none")
+            .trigger("change");
+        } else if (selectedValue === "PO") {
+          columnaobservacion.find("textarea").prop("disabled", false);
+          vb.find("select").prop("disabled", false);
+        } else if (selectedValue === "OB") {
+          columnaobservacion.find("textarea").prop("disabled", false);
+          columnaaccioncorrectiva.find("textarea").prop("disabled", false);
+          vb.find("select").prop("disabled", false);
+        }
+      });
+
+      /*------------------------------------------------------------------------- */
+      fila.append(columnaobservacion, columnaaccioncorrectiva, vb, estado);
+    } else {
+      fila.find(".observacion").parent().remove();
+      fila.find(".acccioncorrectiva").parent().remove();
+      fila.find(".selectVerif").parent().remove();
+      fila.find(".selectEstado").parent().remove();
+    }
+  });
+  /*-------------------------------------------------------------------------- */
 });

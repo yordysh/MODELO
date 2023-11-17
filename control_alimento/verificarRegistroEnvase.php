@@ -13,7 +13,6 @@ $mostrar = new m_almacen();
 $dataProducto = $mostrar->MostrarProductoRegistroEnvase();
 $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
 $dataPersonal = $mostrar->MostrarPersonal();
-$datoControl = $mostrar->controlmaquinapdfmodal();
 
 ?>
 <!DOCTYPE html>
@@ -77,7 +76,7 @@ $datoControl = $mostrar->controlmaquinapdfmodal();
                             <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
                                 <?php foreach ($dataProducto as  $lis) { ?>
-                                    <option id_reque="<?php echo $lis['COD_REQUERIMIENTO'] ?>" value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['COD_REQUERIMIENTO'] . " "; ?><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                    <option id_reque="<?php echo $lis['COD_REQUERIMIENTO'] ?>" value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['COD_REQUERIMIENTO'] . " "; ?><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO'] . " "; ?><?php echo ($lis['PESO_NETO'] / 1000) . " KG" ?></option>
                                 <?php
                                 }
                                 ?>
@@ -197,10 +196,10 @@ $datoControl = $mostrar->controlmaquinapdfmodal();
                             </table>
                         </div>
                         <div class="estiloguardar">
-                            <!-- <button id="botonguardarregistro" type="submit" name="insert" class="btn btn-primary estiloguardar">Guardar </button> -->
-                            <div class="">
+                            <button id="botonguardarregistro" type="submit" name="insert" class="btn btn-primary estiloguardar">Guardar </button>
+                            <!-- <div class="">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mostrarmaquinapdf">Control</button>
-                            </div>
+                            </div> -->
                         </div>
                     </form>
 

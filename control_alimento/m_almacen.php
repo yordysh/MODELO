@@ -1392,17 +1392,21 @@ class m_almacen
       die("Error al eliminar los datos: " . $e->getMessage());
     }
   }
-  public function actualizarFrecuenciaControl($valorcapturadocontrol)
+  public function  guardarControlPdfDiario($valorcapturadocontrol)
   {
     try {
+
       $this->bd->beginTransaction();
-      $cod = new m_almacen();
-      $fechaactualfrecuencia = $cod->c_horaserversql('F');
+
+      $codigo = new m_almacen();
+      $fechaactualfrecuencia = $codigo->c_horaserversql('F');
 
       foreach ($valorcapturadocontrol as $row) {
+
         $codigoalertacontrol = $row['codigoalertacontrol'];
         $codigocontrol = $row['codcontrol'];
         $frecuencia = $row['frecuenciavalor'];
+
 
         $repetir = $this->bd->prepare("SELECT MAX(CODIGO) AS CODIGO FROM T_ALERTA_CONTROL_MAQUINA WHERE COD_CONTROL_MAQUINA='$codigocontrol' AND ESTADO='P'");
         $repetir->execute();
@@ -1412,41 +1416,63 @@ class m_almacen
         $fechaConvertida = DateTime::createFromFormat('d/m/Y', $fechaactualfrecuencia);
         $fechaConvertida->modify('+1 day');
         $fechatotal = $fechaConvertida->format('d/m/Y');
+        if (isset($row['estado'])) {
+          $estado = $row['estado'];
 
-        $stminsrtuno = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,ESTADO,N_DIAS_POS,COD_ZONA,CODIGO)VALUES('$codigocontrol','$fechatotal','P','1','16','$valordecodigo')");
-        $stminsrtuno->execute();
-
-        if ($frecuencia == 'true') {
-          $frecuenciaestado = 'R';
-          $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='$frecuenciaestado' WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
-        } else {
           $vb = $row['vb'];
           $accioncorrectiva = strtoupper($row['accioncorrectiva']);
           $observacion = strtoupper($row['observacion']);
+
           if ($vb == '1') {
             $vbvalor = 'J.A.C';
           } else {
             $vbvalor = 'A.A.C';
           }
-          $estado = $row['estado'];
-          if ($estado == 'PO') {
+
+
+          $repetircontrolmaquina = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_ALERTA_CONTROL_MAQUINA WHERE N_DIAS_POS='1' AND ESTADO='P'");
+          $repetircontrolmaquina->execute();
+          $repet = $repetircontrolmaquina->fetch(PDO::FETCH_ASSOC);
+          $valordecodigocontrolduplicado = $repet['COUNT'];
+          if ($valordecodigocontrolduplicado > 0) {
+            $stminsrtuno = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,ESTADO,N_DIAS_POS,COD_ZONA,CODIGO)VALUES('$codigocontrol','$fechatotal','P','1','16','$valordecodigo')");
+            $stminsrtuno->execute();
+          }
+
+          // if ($frecuencia == 'true') {
+          if ($estado == 'R') {
+            $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='$estado' WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
+          } elseif ($estado == 'OB') {
+
+            $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='$estado',ACCION_CORRECTIVA='$accioncorrectiva',
+              OBSERVACION='$observacion', VB='$vbvalor'
+              WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
+          } elseif ($estado == 'PO') {
 
             $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='PE',ACCION_CORRECTIVA='$accioncorrectiva',
-            OBSERVACION='$observacion', VB='$vbvalor'
-            WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
-          } elseif ($estado == 'OB') {
-            $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='$estado',ACCION_CORRECTIVA='$accioncorrectiva',
-            OBSERVACION='$observacion', VB='$vbvalor'
-            WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
+                OBSERVACION='$observacion', VB='$vbvalor'
+                WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
           }
-        };
+        } else {
+          $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='DE' WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
 
+          $repetircontrolmaquina = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_ALERTA_CONTROL_MAQUINA WHERE N_DIAS_POS='1' AND ESTADO='P'");
+          $repetircontrolmaquina->execute();
+          $repet = $repetircontrolmaquina->fetch(PDO::FETCH_ASSOC);
+          $valordecodigocontrolduplicado = $repet['COUNT'];
+          if ($valordecodigocontrolduplicado > 0) {
+            $stminsrtuno = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,ESTADO,N_DIAS_POS,COD_ZONA,CODIGO)VALUES('$codigocontrol','$fechatotal','P','1','16','$valordecodigo')");
+            $stminsrtuno->execute();
+          }
+        }
 
-
-        $actualizarfrecuencia = $stm->execute();
+        $stm->execute();
       }
-      $actualizarfrecuencia = $this->bd->commit();
-      return $actualizarfrecuencia;
+
+      $insert = $stm->execute();
+
+      $insert = $this->bd->commit();
+      return $insert;
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());
@@ -3054,7 +3080,7 @@ class m_almacen
     try {
 
       $stm = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TP.ABR_PRODUCTO AS ABR_PRODUCTO, 
-                                  TRI.ESTADO AS ESTADO FROM T_TMPREQUERIMIENTO_ITEM TRI INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO WHERE TRI.ESTADO='T'");
+                                  TP.PESO_NETO AS PESO_NETO, TRI.ESTADO AS ESTADO FROM T_TMPREQUERIMIENTO_ITEM TRI INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO WHERE TRI.ESTADO='T'");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -3105,10 +3131,12 @@ class m_almacen
       $consultacodigoformula = $stmCodigoFormula->fetch(PDO::FETCH_ASSOC);
       $resultadoformula = $consultacodigoformula['COD_FORMULACION'];
 
+
       $stmverificardatos = $this->bd->prepare("SELECT MAX(CANTIDAD_PRODUCIDA) AS CANTIDAD_PRODUCIDA FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
       $stmverificardatos->execute();
       $consultacodigoformulacion = $stmverificardatos->fetch(PDO::FETCH_ASSOC);
       $resultadoCantidadFormulacion = intval($consultacodigoformulacion['CANTIDAD_PRODUCIDA']);
+
 
       if ($cantidad <= $resultadoCantidadFormulacion) {
         $stmformulacionenvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, 
@@ -3116,12 +3144,24 @@ class m_almacen
                                                       INNER JOIN T_PRODUCTO TP ON TFE.COD_PRODUCTO=TP.COD_PRODUCTO
                                                       INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFE.COD_FORMULACION
                                                       WHERE TFE.COD_FORMULACION='$resultadoformula'");
+
         $stmformulacionenvase->execute();
         $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
         $respuesta['tipo'] = 0;
       } else {
 
-        $stmformulacionenvase = $this->bd->prepare("SELECT TPRO.COD_PRODUCCION AS COD_PRODUCCION, TPRO.CANTIDAD_PRODUCIDA AS CANTIDAD_PRODUCIDA, TP.DES_PRODUCTO AS DES_PRODUCTO FROM T_TMPPRODUCCION TPRO 
+        $valorderequerimiento = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) AS COD_REQUERIMIENTO FROM T_TMPPRODUCCION WHERE COD_PRODUCCION='$codigoproduccion'");
+        $valorderequerimiento->execute();
+        $resultadoreuqerimiento = $valorderequerimiento->fetch(PDO::FETCH_ASSOC);
+        $valorrequerimientoprod = $resultadoreuqerimiento['COD_REQUERIMIENTO'];
+
+        $consultarcantidadkg = $this->bd->prepare("SELECT MAX(TOTAL_PRODUCTO) AS TOTAL_PRODUCTO FROM T_TMPREQUERIMIENTO_ITEM WHERE COD_PRODUCTO='$codigoproducto' AND COD_REQUERIMIENTO='$valorrequerimientoprod '");
+        $consultarcantidadkg->execute();
+        $resultadokg = $consultarcantidadkg->fetch(PDO::FETCH_ASSOC);
+        $valorkg = $resultadokg['TOTAL_PRODUCTO'];
+
+
+        $stmformulacionenvase = $this->bd->prepare("SELECT TPRO.COD_PRODUCCION AS COD_PRODUCCION, TPRO.CANTIDAD_PRODUCIDA AS CANTIDAD_PRODUCIDA,'$valorkg' AS VALOR_KG ,TP.DES_PRODUCTO AS DES_PRODUCTO FROM T_TMPPRODUCCION TPRO 
         INNER JOIN T_PRODUCTO TP ON TPRO.COD_PRODUCTO=TP.COD_PRODUCTO
         WHERE TPRO.COD_PRODUCCION='$codigoproduccion' AND TPRO.COD_PRODUCTO='$codigoproducto'");
         $stmformulacionenvase->execute();
@@ -3153,6 +3193,7 @@ class m_almacen
       $stmverificardatos->execute();
       $consultacodigoformulacion = $stmverificardatos->fetch(PDO::FETCH_ASSOC);
       $resultadoCantidadFormulacion = intval($consultacodigoformulacion['CANTIDAD_PRODUCIDA']);
+
 
       if ($cantidad <= $resultadoCantidadFormulacion) {
         $stmformulacionenvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, 
@@ -3222,6 +3263,7 @@ class m_almacen
   public function  InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad,  $codpersonal, $codoperario)
   {
     try {
+
       $this->bd->beginTransaction();
 
       $codigoInsumosAvances = new m_almacen();
@@ -3643,9 +3685,6 @@ class m_almacen
         $actualizarRequerimientoItem = $this->bd->prepare("UPDATE T_TMPPRODUCCION SET ESTADO='C' WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
         $actualizarRequerimientoItem->execute();
       }
-
-
-
 
       $insert = $this->bd->commit();
       return $insert;

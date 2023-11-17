@@ -3,7 +3,7 @@ require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
 $datacontrol = $mostrar->MostrarControlMaquina();
-
+$datomaquina = $mostrar->controlmaquinapdfmodal();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -112,6 +112,9 @@ $datacontrol = $mostrar->MostrarControlMaquina();
                             <div class="btonguardar">
                                 <input type="hidden" id="taskId">
                                 <button id="botoncontrolmaquina" type="submit" name="insert" class="btn btn-primary estiloboton">Guardar </button>
+                                <div class="">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mostrarmaquinapdf">Control</button>
+                                </div>
                             </div>
                             <div class="aniomes">
                                 <div class="styleanmes"><label for="mes">Seleccione el año:</label>
@@ -145,6 +148,9 @@ $datacontrol = $mostrar->MostrarControlMaquina();
         </section>
         <?php
         require_once "modalinfraestructuracontrol.php";
+        ?>
+        <?php
+        require 'modalmostrarmaquina.php';
         ?>
     </main>
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
