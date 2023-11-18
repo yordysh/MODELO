@@ -13,10 +13,10 @@
                                 <tr>
                                     <th class="thtitulo" scope="col">MÁQUINA,EQUIPOS Y UTENSILIOS</th>
                                     <th class="thtitulo" scope="col">ACTIVAR</th>
+                                    <th class="thtitulo" scope="col">PROCESO</th>
                                     <th class="thtitulo" scope="col">OBSERVACÓN</th>
                                     <th class="thtitulo" scope="col">ACCIÓN CORRECTIVA</th>
                                     <th class="thtitulo" scope="col">V°b° SUPERVISOR</th>
-                                    <th class="thtitulo" scope="col">PROCESO</th>
                                 </tr>
                             </thead>
                             <tbody id="tablaControlModal">

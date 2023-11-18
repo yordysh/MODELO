@@ -1208,11 +1208,16 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT CM.CODIGO AS CODIGO,CM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA, TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,CM.N_DIAS_POS AS N_DIAS_POS,
-                                        CM.FECHA_CREACION AS FECHA_CREACION FROM T_ALERTA_CONTROL_MAQUINA CM 
-                                        INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA=CM.COD_CONTROL_MAQUINA
-                                        WHERE CM.CODIGO IS NOT NULL AND TC.NOMBRE_CONTROL_MAQUINA LIKE '$search%' ORDER BY CM.CODIGO DESC");
-
+      // $stm = $this->bd->prepare("SELECT CM.CODIGO AS CODIGO,CM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA, TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,CM.N_DIAS_POS AS N_DIAS_POS,
+      //                                   CM.FECHA_CREACION AS FECHA_CREACION FROM T_ALERTA_CONTROL_MAQUINA CM 
+      //                                   INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA=CM.COD_CONTROL_MAQUINA
+      //                                   WHERE CM.CODIGO IS NOT NULL AND TC.NOMBRE_CONTROL_MAQUINA LIKE '$search%' ORDER BY CM.CODIGO DESC");
+      $stm = $this->bd->prepare("SELECT CM.CODIGO AS CODIGO, CM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA,
+                                  TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA, CM.N_DIAS_POS AS N_DIAS_POS,
+                                  CM.FECHA_CREACION AS FECHA_CREACION FROM T_ALERTA_CONTROL_MAQUINA CM
+                                  INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA = CM.COD_CONTROL_MAQUINA
+                                  WHERE TC.NOMBRE_CONTROL_MAQUINA LIKE '$search%' AND CM.ESTADO = 'P'
+                                  ORDER BY CM.CODIGO DESC");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
@@ -1430,14 +1435,14 @@ class m_almacen
           }
 
 
-          $repetircontrolmaquina = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_ALERTA_CONTROL_MAQUINA WHERE N_DIAS_POS='1' AND ESTADO='P'");
-          $repetircontrolmaquina->execute();
-          $repet = $repetircontrolmaquina->fetch(PDO::FETCH_ASSOC);
-          $valordecodigocontrolduplicado = $repet['COUNT'];
-          if ($valordecodigocontrolduplicado > 0) {
-            $stminsrtuno = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,ESTADO,N_DIAS_POS,COD_ZONA,CODIGO)VALUES('$codigocontrol','$fechatotal','P','1','16','$valordecodigo')");
-            $stminsrtuno->execute();
-          }
+          // $repetircontrolmaquina = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_ALERTA_CONTROL_MAQUINA WHERE N_DIAS_POS='1' AND ESTADO='P'");
+          // $repetircontrolmaquina->execute();
+          // $repet = $repetircontrolmaquina->fetch(PDO::FETCH_ASSOC);
+          // $valordecodigocontrolduplicado = $repet['COUNT'];
+          // if ($valordecodigocontrolduplicado > 0) {
+          $stminsrtuno = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,ESTADO,N_DIAS_POS,COD_ZONA,CODIGO)VALUES('$codigocontrol','$fechatotal','P','1','16','$valordecodigo')");
+          $stminsrtuno->execute();
+          // }
 
           // if ($frecuencia == 'true') {
           if ($estado == 'R') {
@@ -1449,21 +1454,15 @@ class m_almacen
               WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
           } elseif ($estado == 'PO') {
 
-            $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='PE',ACCION_CORRECTIVA='$accioncorrectiva',
+            $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechatotal',ESTADO='PE',ACCION_CORRECTIVA='$accioncorrectiva',
                 OBSERVACION='$observacion', VB='$vbvalor'
                 WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
           }
         } else {
           $stm = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualfrecuencia',ESTADO='DE' WHERE COD_ALERTA_CONTROL_MAQUINA='$codigoalertacontrol'");
 
-          $repetircontrolmaquina = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_ALERTA_CONTROL_MAQUINA WHERE N_DIAS_POS='1' AND ESTADO='P'");
-          $repetircontrolmaquina->execute();
-          $repet = $repetircontrolmaquina->fetch(PDO::FETCH_ASSOC);
-          $valordecodigocontrolduplicado = $repet['COUNT'];
-          if ($valordecodigocontrolduplicado > 0) {
-            $stminsrtuno = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,ESTADO,N_DIAS_POS,COD_ZONA,CODIGO)VALUES('$codigocontrol','$fechatotal','P','1','16','$valordecodigo')");
-            $stminsrtuno->execute();
-          }
+          $stminsrtuno = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,FECHA_TOTAL,ESTADO,N_DIAS_POS,COD_ZONA,CODIGO)VALUES('$codigocontrol','$fechatotal','P','1','16','$valordecodigo')");
+          $stminsrtuno->execute();
         }
 
         $stm->execute();

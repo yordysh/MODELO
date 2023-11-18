@@ -505,6 +505,18 @@ $(function () {
               $("#tablaControlModal tr").each(function () {
                 let checkboxdesactiva = $(this).find("#frecuenciamarca");
                 checkboxdesactiva.prop("checked", false);
+
+                let observacion = $(this).find(".observacion");
+                observacion.parent().remove();
+
+                let accioncorrectiva = $(this).find(".acccioncorrectiva");
+                accioncorrectiva.parent().remove();
+
+                let vb = $(this).find(".selectVerif");
+                vb.parent().remove();
+
+                let estado = $(this).find(".selectEstado");
+                estado.parent().remove();
               });
             }
           });
@@ -525,8 +537,17 @@ $(function () {
 
   $(".inputcheck").change(function () {
     var fila = $(this).closest("tr");
-
+    let codigocontrolmaquina = fila.find("td:eq(0)").attr("idcontrolmaquina");
     if ($(this).is(":checked")) {
+      var estado = $(
+        `<td>    <select id="selectEstado" class="form-select selectEstado" style="margin:5px 80px" >
+                        <option selected>Seleccione proceso</option>
+                        <option value="R">Realizado</option>
+                        <option value="PO">Pendiente</option>
+                         <option value="OB">Observado</option>
+                </select>
+        </td>`
+      );
       var columnaobservacion = $(
         `<td><textarea class="form-control observacion" id="observacion" rows="2" style="margin:5px 80px"></textarea></td>`
       );
@@ -538,15 +559,6 @@ $(function () {
                         <option value="none" selected>Seleccione V°B°</option>
                         <option value="1">J.A.C</option>
                          <option value="2">A.A.C</option>
-                </select>
-        </td>`
-      );
-      var estado = $(
-        `<td>    <select id="selectEstado" class="form-select selectEstado" style="margin:5px 80px" >
-                        <option selected>Seleccione proceso</option>
-                        <option value="R">Realizado</option>
-                        <option value="PO">Pendiente</option>
-                         <option value="OB">Observado</option>
                 </select>
         </td>`
       );
@@ -564,18 +576,37 @@ $(function () {
             .prop("disabled", true)
             .val("none")
             .trigger("change");
-        } else if (selectedValue === "PO") {
-          columnaobservacion.find("textarea").prop("disabled", false);
-          vb.find("select").prop("disabled", false);
-        } else if (selectedValue === "OB") {
-          columnaobservacion.find("textarea").prop("disabled", false);
-          columnaaccioncorrectiva.find("textarea").prop("disabled", false);
-          vb.find("select").prop("disabled", false);
+        }
+        if (selectedValue === "PO") {
+          columnaaccioncorrectiva
+            .find("textarea")
+            .prop("disabled", true)
+            .val("");
+          columnaobservacion.find("textarea").prop("disabled", false).val("");
+          vb.find("select")
+            .prop("disabled", false)
+            .val("none")
+            .trigger("change");
+        }
+        if (selectedValue === "OB") {
+          columnaobservacion.find("textarea").prop("disabled", false).val("");
+          columnaaccioncorrectiva
+            .find("textarea")
+            .prop("disabled", false)
+            .val("");
+          vb.find("select")
+            .prop("disabled", false)
+            .val("none")
+            .trigger("change");
         }
       });
 
       /*------------------------------------------------------------------------- */
-      fila.append(columnaobservacion, columnaaccioncorrectiva, vb, estado);
+      fila.append(estado, columnaobservacion, columnaaccioncorrectiva, vb);
+      if (codigocontrolmaquina === "001") {
+        // $(".inputcheck").prop("checked", true).trigger("change");
+        console.log("object");
+      }
     } else {
       fila.find(".observacion").parent().remove();
       fila.find(".acccioncorrectiva").parent().remove();
@@ -584,4 +615,11 @@ $(function () {
     }
   });
   /*-------------------------------------------------------------------------- */
+  // $("#tablaControlModal tr").each(function () {
+  //   let codigocontrolmaquina = fila.find("td:eq(0)").attr("idcontrolmaquina");
+  //   if (codigocontrolmaquina === "001" || codigocontrolmaquina === "002") {
+
+  //     console.log("object");
+  //   }
+  // });
 });
