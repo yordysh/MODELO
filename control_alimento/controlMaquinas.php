@@ -13,7 +13,7 @@ $datomaquina = $mostrar->controlmaquinapdfmodal();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/responsiveControl.css">
+    <link rel="stylesheet" href="./css/responsiveControlMaquina.css">
     <!--====== Favicon Icon ======-->
     <link rel="stylesheet" href="./css/select2.min.css">
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
@@ -93,7 +93,7 @@ $datomaquina = $mostrar->controlmaquinapdfmodal();
 
                             </div>
                             <div class="buttonañadircontrolmaquina">
-                                <button type='button' class="custom-icon-zona" data-bs-toggle="modal" data-bs-target="#mostrarinfraestructuracontrol"><i class="icon-circle-with-plus"></i></button>
+                                <button type='button' class="custom-icon-control-maquina" data-bs-toggle="modal" data-bs-target="#mostrarinfraestructuracontrol"><i class="icon-circle-with-plus"></i></button>
                             </div>
                             <!-- Text input dias-->
                             <div class="form-outline mb-4 custom-input">
@@ -112,9 +112,8 @@ $datomaquina = $mostrar->controlmaquinapdfmodal();
                             <div class="btonguardar">
                                 <input type="hidden" id="taskId">
                                 <button id="botoncontrolmaquina" type="submit" name="insert" class="btn btn-primary estiloboton">Guardar </button>
-                                <div class="">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mostrarmaquinapdf">Control</button>
-                                </div>
+                                <button type="button" class="btn btn-primary estilocontrol" data-bs-toggle="modal" data-bs-target="#mostrarmaquinapdf">Control</button>
+
                             </div>
                             <div class="aniomes">
                                 <div class="styleanmes"><label for="mes">Seleccione el año:</label>

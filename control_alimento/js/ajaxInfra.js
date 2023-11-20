@@ -476,7 +476,7 @@ $(function () {
               );
               console.log(optionByValue);
               // actualizarNombreCombo(task.CODIGO);
-              actualizareditarcombo(task.COD_ZONA);
+              actualizareditarcombo(task.COD_ZONA, task.COD_INFRAESTRUCTURA);
 
               $("#selectFrecuencia").val(task.NDIAS);
               $("#taskId").val(task.CODIGO);
@@ -517,7 +517,9 @@ $(function () {
   //     },
   //   });
   // }
-  function actualizareditarcombo(codzonainfraes) {
+
+  // ------------------------ Elimina un dato de mi tabla ----------------- //
+  function actualizareditarcombo(codzonainfraes, codigoInfraestructura) {
     const accion = "buscarporcodzona";
     $.ajax({
       url: "./c_almacen.php",
@@ -526,7 +528,8 @@ $(function () {
       success: function (response) {
         if (!response.error) {
           const data = JSON.parse(response);
-
+          // let estado = false;
+          $("#seleccionzonainfraestructura").empty();
           $.each(data, function (index, item) {
             $("#seleccionzonainfraestructura").append(
               new Option(
@@ -535,13 +538,15 @@ $(function () {
               )
             );
           });
+          $(
+            "#seleccionzonainfraestructura option[value='" +
+              codigoInfraestructura +
+              "']"
+          ).attr("selected", "true");
         }
       },
     });
   }
-
-  // ------------------------ Elimina un dato de mi tabla ----------------- //
-
   $(document).on("click", ".task-delete", function (e) {
     e.preventDefault();
     var COD_INFRAESTRUCTURA = $(this).attr("data-COD_INFRAESTRUCTURA");

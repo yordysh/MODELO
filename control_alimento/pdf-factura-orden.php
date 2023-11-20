@@ -6,7 +6,7 @@ include "htmlFacturaPlantilla.php";
 
 $html = ob_get_clean();
 
-require_once 'DomPDF/autoload.inc.php';
+require_once '../DomPDF/autoload.inc.php';
 
 use Dompdf\Dompdf;
 use Dompdf\Options;

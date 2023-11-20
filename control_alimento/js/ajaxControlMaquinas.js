@@ -537,7 +537,7 @@ $(function () {
 
   $(".inputcheck").change(function () {
     var fila = $(this).closest("tr");
-    let codigocontrolmaquina = fila.find("td:eq(0)").attr("idcontrolmaquina");
+    let codigoactual = fila.find("td:eq(0)").attr("idcontrolmaquina");
     if ($(this).is(":checked")) {
       var estado = $(
         `<td>    <select id="selectEstado" class="form-select selectEstado" style="margin:5px 80px" >
@@ -603,11 +603,83 @@ $(function () {
 
       /*------------------------------------------------------------------------- */
       fila.append(estado, columnaobservacion, columnaaccioncorrectiva, vb);
-      if (codigocontrolmaquina === "001") {
-        // $(".inputcheck").prop("checked", true).trigger("change");
-        console.log("object");
-      }
+
+      $("#tablaControlModal tr").each(function () {
+        let codigocontrolmaquina = $(this)
+          .find("td:eq(0)")
+          .attr("idcontrolmaquina");
+
+        if (
+          codigocontrolmaquina == "001" &&
+          $(this).find(".inputcheck").prop("checked")
+        ) {
+          if (
+            codigoactual == "002" &&
+            $(this).find(".inputcheck").prop("checked")
+          ) {
+            $("#tablaControlModal tr").each(function () {
+              let codigocontrolmaquina03 = $(this)
+                .find("td:eq(0)")
+                .attr("idcontrolmaquina");
+              if (codigocontrolmaquina03 == "003") {
+                $(this).find(".inputcheck").prop("checked", true);
+              }
+            });
+          }
+        } else if (
+          codigocontrolmaquina == "002" &&
+          $(this).find(".inputcheck").prop("checked")
+        ) {
+          if (
+            codigoactual == "001" &&
+            $(this).find(".inputcheck").prop("checked")
+          ) {
+            $("#tablaControlModal tr").each(function () {
+              let codigocontrolifmaquina03 = $(this)
+                .find("td:eq(0)")
+                .attr("idcontrolmaquina");
+              if (codigocontrolifmaquina03 == "003") {
+                $(this).find(".inputcheck").prop("checked", true);
+              }
+            });
+          }
+        }
+      });
     } else {
+      $("#tablaControlModal tr").each(function () {
+        let codigomaquina = $(this).find("td:eq(0)").attr("idcontrolmaquina");
+
+        if (
+          codigomaquina == "001" &&
+          $(this).find(".inputcheck").prop("checked")
+        ) {
+          if (codigoactual == "002") {
+            $("#tablaControlModal tr").each(function () {
+              let codigomaquina03 = $(this)
+                .find("td:eq(0)")
+                .attr("idcontrolmaquina");
+              if (codigomaquina03 == "003") {
+                $(this).find(".inputcheck").prop("checked", false);
+              }
+            });
+          }
+        } else if (
+          codigomaquina == "002" &&
+          $(this).find(".inputcheck").prop("checked")
+        ) {
+          if (codigoactual == "001") {
+            $("#tablaControlModal tr").each(function () {
+              let codigomaquinaelse03 = $(this)
+                .find("td:eq(0)")
+                .attr("idcontrolmaquina");
+              if (codigomaquinaelse03 == "003") {
+                $(this).find(".inputcheck").prop("checked", false);
+              }
+            });
+          }
+        }
+      });
+
       fila.find(".observacion").parent().remove();
       fila.find(".acccioncorrectiva").parent().remove();
       fila.find(".selectVerif").parent().remove();
@@ -615,11 +687,4 @@ $(function () {
     }
   });
   /*-------------------------------------------------------------------------- */
-  // $("#tablaControlModal tr").each(function () {
-  //   let codigocontrolmaquina = fila.find("td:eq(0)").attr("idcontrolmaquina");
-  //   if (codigocontrolmaquina === "001" || codigocontrolmaquina === "002") {
-
-  //     console.log("object");
-  //   }
-  // });
 });

@@ -568,7 +568,15 @@ $(function () {
                   selectVB: selectVB,
                   codigocontrolmaquina: task.COD_CONTROL_MAQUINA,
                 },
+                beforeSend: function () {
+                  $(".preloader").css("opacity", "1");
+                  $(".preloader").css("display", "block");
+                },
                 dataType: "json",
+                complete: function () {
+                  $(".preloader").css("opacity", "0");
+                  $(".preloader").css("display", "none");
+                },
               });
             }
           },
@@ -617,15 +625,19 @@ $(function () {
                     complete: function () {
                       $(".preloader").css("opacity", "0");
                       $(".preloader").css("display", "none");
+                      $("#modalcontrolalertas").modal("hide");
+                      mostrarAlertasControl(dato, index + 1);
                     },
                   });
                 });
               });
             } else {
+              console.log("Entering else block");
               mostrarAlertasControl(dato, index + 1);
             }
           }
         });
+
         const realizadoRadio = document.querySelector(
           `input[name="estado-${task.COD_ALERTA_CONTROL_MAQUINA}"][value="R"]`
         );

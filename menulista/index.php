@@ -24,7 +24,7 @@ $submenu2 = $_SESSION["subsub_c"];
     <link rel="stylesheet" href="../control_alimento/styleIcons/style.css">
     <link rel="stylesheet" href="../control_alimento/css/bootstrap.min.css">
     <link rel="stylesheet" href="../control_alimento/css/sweetalert2.min.css">
-    <link rel="stylesheet" href="../control_alimento/css/responsiveControl.css">
+    <!-- <link rel="stylesheet" href="../control_alimento/css/responsiveControl.css"> -->
 </head>
 
 <body>

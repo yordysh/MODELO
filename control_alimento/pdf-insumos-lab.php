@@ -4,7 +4,7 @@ include "htmlInsumosLabPDF.php";
 
 $html = ob_get_clean();
 
-require_once 'DomPDF/autoload.inc.php';
+require_once '../DomPDF/autoload.inc.php';
 
 $dompdf = new Dompdf\Dompdf();
 $options = $dompdf->getOptions();
