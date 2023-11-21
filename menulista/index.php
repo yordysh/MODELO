@@ -1,7 +1,7 @@
 <?php
-// if (session_status() == PHP_SESSION_NONE) {
-//     session_start();
-// }
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once("../menulista/c_permisosmenu.php");
 $controller = new c_permisosmenu();

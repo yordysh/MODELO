@@ -124,41 +124,7 @@ $dataPersonal = $mostrar->MostrarPersonal();
                                 </select>
                             </div>
                         </div>
-                        <!-- Crear PDF -->
-                        <div class="contenedorpdfverificar">
-                            <div class="separacion">
-                                <label for="mes">Seleccione el año:</label>
-                                <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
-                            </div>
-                            <div class="separacion">
-                                <label for="mes">Seleccione el mes:</label>
-                                <select id="mes" name="mes">
-                                    <option value="" selected disabled>Seleccione...</option>
-                                    <option value="01">Enero</option>
-                                    <option value="02">Febrero</option>
-                                    <option value="03">Marzo</option>
-                                    <option value="04">Abril</option>
-                                    <option value="05">Mayo</option>
-                                    <option value="06">Junio</option>
-                                    <option value="07">Julio</option>
-                                    <option value="08">Agosto</option>
-                                    <option value="09">Septiembre</option>
-                                    <option value="10">Octubre</option>
-                                    <option value="11">Noviembre</option>
-                                    <option value="12">Diciembre</option>
-                                </select>
-                            </div>
 
-                            <div class="botonpdfregistro">
-                                <a class="btn btn-primary estilopdfregistro" href="#" onclick="generarPDF()">Generar PDF</a>
-                            </div>
-                            <div class="">
-                                <button id="generarPDF" class="btn btn-primary">DOSIMETRIA</button>
-                            </div>
-                            <!-- <div class="">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mostrarmaquinapdf">Control</button>
-                            </div> -->
-                        </div>
 
                         <div id="tablaRE" class="table-responsive " style="overflow: scroll;height: 600px; margin-top:20px;">
                             <table id="tbRE" class="table table-sm mb-3 table-hover">
@@ -195,6 +161,43 @@ $dataPersonal = $mostrar->MostrarPersonal();
                                 </tbody>
                             </table>
                         </div>
+
+                        <!-- Crear PDF -->
+                        <div class="contenedorpdfverificar">
+                            <div class="separacion">
+                                <label for="mes">Seleccione el año:</label>
+                                <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
+                            </div>
+                            <div class="separacion">
+                                <label for="mes">Seleccione el mes:</label>
+                                <select id="mes" name="mes">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    <option value="01">Enero</option>
+                                    <option value="02">Febrero</option>
+                                    <option value="03">Marzo</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Mayo</option>
+                                    <option value="06">Junio</option>
+                                    <option value="07">Julio</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
+                            </div>
+
+                            <div class="botonpdfregistro">
+                                <a class="btn btn-primary estilopdfregistro" href="#" onclick="generarPDF()">Generar PDF</a>
+                            </div>
+                            <div class="">
+                                <button id="generarPDF" class="btn btn-primary">DOSIMETRIA</button>
+                            </div>
+                            <!-- <div class="">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mostrarmaquinapdf">Control</button>
+                            </div> -->
+                        </div>
+
                         <div class="estiloguardar">
                             <button id="botonguardarregistro" type="submit" name="insert" class="btn btn-primary estiloguardar">Guardar </button>
                             <!-- <div class="">

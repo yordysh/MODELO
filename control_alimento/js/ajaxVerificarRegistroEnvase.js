@@ -250,6 +250,7 @@ $(function () {
     // let produccioncombo = $("#selectNumProduccion").val();
     let codigoproduccion = $("#hiddenproduccion").val();
     let cantidad = $("#hiddencantidad").val();
+    let cantidadtotalenvases = $("#txtcantidadproductos").val();
     let codpersonal = $("#codpersonal").val();
     let codoperario = $("#selectOperario").val();
 
@@ -322,6 +323,7 @@ $(function () {
         codigoproducto: codigoproducto,
         codigoproduccion: codigoproduccion,
         cantidad: cantidad,
+        cantidadtotalenvases: cantidadtotalenvases,
         codpersonal: codpersonal,
         codoperario: codoperario,
       },

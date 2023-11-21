@@ -491,10 +491,11 @@ if ($accion == 'insertar') {
     $codigoproducto = trim($_POST['codigoproducto']);
     $codigoproduccion = trim($_POST['codigoproduccion']);
     $cantidad = trim($_POST['cantidad']);
+    $cantidadtotalenvases = trim($_POST['cantidadtotalenvases']);
     $codpersonal = trim($_POST['codpersonal']);
     $codoperario = trim($_POST['codoperario']);
 
-    $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal, $codoperario);
+    $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $cantidadtotalenvases, $codpersonal, $codoperario);
     echo $respuesta;
 } elseif ($accion == 'verificaregistromenorconproducto') {
     $codigoproductoverifica = trim($_POST['codigoproductoverifica']);
@@ -3130,12 +3131,12 @@ class c_almacen
     }
 
 
-    static function c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal, $codoperario)
+    static function c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $cantidadtotalenvases, $codpersonal, $codoperario)
     {
         $m_formula = new m_almacen();
 
         if (isset($valoresCapturadosProduccion) && isset($codigoproducto) && isset($codigoproduccion) && isset($cantidad)) {
-            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $codpersonal, $codoperario);
+            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $cantidadtotalenvases, $codpersonal, $codoperario);
 
             if ($respuesta) {
                 return "ok";
