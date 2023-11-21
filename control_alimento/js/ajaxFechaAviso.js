@@ -626,13 +626,13 @@ $(function () {
                       $(".preloader").css("opacity", "0");
                       $(".preloader").css("display", "none");
                       $("#modalcontrolalertas").modal("hide");
-                      mostrarAlertasControl(dato, index + 1);
+                      // mostrarAlertasControl(dato, index + 1);
                     },
                   });
+                  mostrarAlertasControl(dato, index + 1);
                 });
               });
             } else {
-              console.log("Entering else block");
               mostrarAlertasControl(dato, index + 1);
             }
           }

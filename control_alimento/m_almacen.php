@@ -1565,7 +1565,7 @@ class m_almacen
   {
     try {
       $stm = $this->bd->prepare(
-        "SELECT TCM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA, TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
+        "SELECT TCM.COD_ZONA AS COD_ZONA,TCM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA, TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
           TCM.FECHA_TOTAL AS FECHA_TOTAL,TCM.ESTADO AS ESTADO,
           CASE
             WHEN TCM.N_DIAS_POS = 1 THEN 'Diario*'
@@ -1574,7 +1574,7 @@ class m_almacen
             ELSE 'Otro'
           END AS FRECUENCIA FROM T_ALERTA_CONTROL_MAQUINA TCM
              INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA = TCM.COD_CONTROL_MAQUINA
-             WHERE TCM.ESTADO='R' AND MONTH(FECHA_TOTAL) = :mesSeleccionado AND YEAR(FECHA_TOTAL) = :anioSeleccionado"
+             WHERE TCM.ESTADO !='P' AND TCM.ESTADO !='PE'  AND MONTH(FECHA_TOTAL) = :mesSeleccionado AND YEAR(FECHA_TOTAL) = :anioSeleccionado"
       );
       $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
       $stm->bindParam(':anioSeleccionado', $anioSeleccionado);

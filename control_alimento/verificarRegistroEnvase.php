@@ -22,6 +22,7 @@ $dataPersonal = $mostrar->MostrarPersonal();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../librerias/jquery_ajax/js/ajax_libs_jquery_3.3.1_jquery.min.js"></script>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/responsivePO.css">
     <!--====== Favicon Icon ======-->
@@ -31,6 +32,10 @@ $dataPersonal = $mostrar->MostrarPersonal();
     <link rel="stylesheet" href="./styleIcons/style.css">
     <link rel="stylesheet" href="./css/select2.min.css">
     <title>Covifarma</title>
+    <!-- Agregar la librería jsPDF -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="./js/jsdosimetria.js"></script>
 
 </head>
 
@@ -223,6 +228,7 @@ $dataPersonal = $mostrar->MostrarPersonal();
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxVerificarRegistroEnvase.js?v=0.001"></script>
+    <!-- <script src="./js/jsdosimetria.js"></script> -->
     <script src="../js/menu_a.js"></script>
     <script src="./js/select2.min.js"></script>
     <script>
