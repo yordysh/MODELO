@@ -1486,6 +1486,7 @@ class m_almacen
                                   INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA=TCM.COD_CONTROL_MAQUINA 
                                   WHERE TCM.ESTADO='P' AND TCM.N_DIAS_POS!='1'  AND CAST(TCM.FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE)
                                   OR (TCM.ESTADO='PE' AND TCM.N_DIAS_POS='1' AND CAST(TCM.FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE))");
+
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 

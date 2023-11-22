@@ -1910,9 +1910,9 @@ class c_almacen
                         "COD_ALERTA_CONTROL_MAQUINA" => $row->COD_ALERTA_CONTROL_MAQUINA,
                         "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
                         "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
-                        "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
-                        "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
-                        "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
+                        "FECHA_CREACION" =>  $row->FECHA_CREACION,
+                        "FECHA_TOTAL" => $row->FECHA_TOTAL,
+                        "FECHA_ACORDAR" =>  $row->FECHA_ACORDAR,
                         "N_DIAS_POS" =>  $row->N_DIAS_POS,
                     );
                 }

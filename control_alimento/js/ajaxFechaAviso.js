@@ -1,3 +1,4 @@
+var valor;
 $(function () {
   window.onload = function () {
     fadeout();
@@ -31,6 +32,9 @@ $(function () {
     //   console.error("Error executing alertaORdenCompra");
     // }
 
+    if (valor == 1) {
+      swal.close();
+    }
     console.log("All alert functions executed!");
   }
 
@@ -471,6 +475,8 @@ $(function () {
   async function alertaControl() {
     return new Promise(function (resolve, reject) {
       function mostrarAlertasControl(dato, index) {
+        console.log(dato.length);
+        console.log(index);
         if (index >= dato.length) {
           resolve();
           return;
@@ -539,6 +545,7 @@ $(function () {
                 : observacionButtonRadio.checked
                 ? "OB"
                 : "PO";
+              valor = postergacionRadio.checked ? 1 : 0;
               observacionTextArea = document.getElementById(
                 `observacion-${task.COD_ALERTA_CONTROL_MAQUINA}`
               ).value;
@@ -629,6 +636,11 @@ $(function () {
                       // mostrarAlertasControl(dato, index + 1);
                     },
                   });
+                  if (index >= dato.length - 1) {
+                    resolve();
+                    return;
+                  }
+
                   mostrarAlertasControl(dato, index + 1);
                 });
               });
