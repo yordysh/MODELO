@@ -636,10 +636,6 @@ $(function () {
                       // mostrarAlertasControl(dato, index + 1);
                     },
                   });
-                  if (index >= dato.length - 1) {
-                    resolve();
-                    return;
-                  }
 
                   mostrarAlertasControl(dato, index + 1);
                 });

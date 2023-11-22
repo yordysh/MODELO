@@ -1567,7 +1567,7 @@ class m_almacen
     try {
       $stm = $this->bd->prepare(
         "SELECT TCM.COD_ZONA AS COD_ZONA,TCM.COD_CONTROL_MAQUINA AS COD_CONTROL_MAQUINA, TC.NOMBRE_CONTROL_MAQUINA AS NOMBRE_CONTROL_MAQUINA,
-          TCM.FECHA_TOTAL AS FECHA_TOTAL,TCM.ESTADO AS ESTADO,
+         CONVERT(VARCHAR, TCM.FECHA_TOTAL, 103) AS FECHA_TOTAL,TCM.ESTADO AS ESTADO,
           CASE
             WHEN TCM.N_DIAS_POS = 1 THEN 'Diario*'
             WHEN TCM.N_DIAS_POS = 7 THEN 'Semanal'
@@ -1587,7 +1587,23 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function MostrarControlMaquinaOBPDF($anioSeleccionado, $mesSeleccionado)
+  {
+    try {
+      $stm = $this->bd->prepare(
+        "SELECT  CONVERT(VARCHAR, FECHA_TOTAL, 103) AS FECHA_TOTAL, OBSERVACION , ACCION_CORRECTIVA, VB, ESTADO FROM T_ALERTA_CONTROL_MAQUINA
+             WHERE (ESTADO ='OB' OR ESTADO ='PO') AND MONTH(FECHA_TOTAL) = :mesSeleccionado AND YEAR(FECHA_TOTAL) = :anioSeleccionado"
+      );
+      $stm->bindParam(':mesSeleccionado', $mesSeleccionado);
+      $stm->bindParam(':anioSeleccionado', $anioSeleccionado);
+      $stm->execute();
+      $datos = $stm->fetchAll();
 
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function controlmaquinapdfmodal()
   {
     try {
