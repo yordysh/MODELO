@@ -1911,7 +1911,7 @@ class c_almacen
                         "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
                         "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
                         "FECHA_CREACION" =>  $row->FECHA_CREACION,
-                        "FECHA_TOTAL" => $row->FECHA_TOTAL,
+                        "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
                         "FECHA_ACORDAR" =>  $row->FECHA_ACORDAR,
                         "N_DIAS_POS" =>  $row->N_DIAS_POS,
                     );
@@ -1953,17 +1953,28 @@ class c_almacen
             if ($nombreDia  != 'Saturday') {
                 $FECHA_ACTUALIZA = $fechadHoy;
                 $alertif = $mostrar->actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+                // header('Content-Type: application/json');
+                if ($alertif) {
+                    return "ok";
+                    // echo json_encode(['status' => 'ok']);
+                } else {
+                    return "error";
+                    // echo json_encode(['status' => 'error']);
+                };
             } elseif ($nombreDia  == 'Saturday') {
                 // var_dump("sabado");
                 // exit();
                 $FECHA_ACTUALIZA = $FECHA_TOTAL;
                 $alertif = $mostrar->actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+                // header('Content-Type: application/json');
+                if ($alertif) {
+                    return "ok";
+                    // echo json_encode(['status' => 'ok']);
+                } else {
+                    return "error";
+                    // echo json_encode(['status' => 'error']);
+                };
             }
-            if ($alertif) {
-                return "ok";
-            } else {
-                return "error";
-            };
         } else {
 
             $estado = $_POST['estado'];
@@ -1987,18 +1998,23 @@ class c_almacen
             if ($nombreDia != 'Saturday') {
                 $FECHA_ACTUALIZA = $fechadHoy;
                 $alert = $mostrar->actualizarAlertaControlCheckBox($codigocontrolmaquina, $estado, $ndiaspos, $taskId,  $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+                // header('Content-Type: application/json');
                 if ($alert) {
                     return "ok";
+                    // echo json_encode(['status' => 'ok']);
                 } else {
                     return "error";
+                    // echo json_encode(['status' => 'error']);
                 };
             } elseif ($nombreDia  == 'Saturday') {
                 $FECHA_ACTUALIZA = $FECHA_TOTAL;
                 $alert1 = $mostrar->actualizarAlertaControlCheckBox($codigocontrolmaquina, $estado, $ndiaspos, $taskId,  $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
                 if ($alert1) {
                     return "ok";
+                    // echo json_encode(['status' => 'ok']);
                 } else {
                     return "error";
+                    // echo json_encode(['status' => 'error']);
                 };
             }
         }

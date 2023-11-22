@@ -472,10 +472,10 @@ td {
   flex-direction: row;
   justify-content: space-between;
 }
-.separacion {
+/* .separacion {
   flex: 1;
   margin-right: 10px;
-}
+} */
 
 .botonpdfregistro {
   flex: 1;
@@ -511,6 +511,7 @@ td {
   .totalinsumo {
     margin-left: 380px !important;
   }
+
   /* #tablasumatotalinsumo {
       margin-left: 35px !important;
     } */

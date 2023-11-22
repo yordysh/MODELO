@@ -393,6 +393,10 @@ $fecham = $anioSeleccionado . '-' . $mesSeleccionado;
 
 
             foreach ($data as $fils) {
+                $vb = $fils['VB'];
+                if ($vb == "Seleccione V°B°") {
+                    $vb = '';
+                }
 
                 echo '<tr>';
 
@@ -404,7 +408,7 @@ $fecham = $anioSeleccionado . '-' . $mesSeleccionado;
                 echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
                 echo '<td class="cabecera">' . $fils['ACCION_CORRECTIVA'] . '</td>';
                 echo '<td class="cabecera">' . $fils['VERIFICACION_REALIZADA'] . '</td>';
-                echo '<td class="cabecera">' . $fils['VB'] . '</td>';
+                echo '<td class="cabecera">' . $vb . '</td>';
 
                 echo '</tr>';
             }
