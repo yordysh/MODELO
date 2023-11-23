@@ -240,6 +240,10 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'actualizaalertacontrol') {
     $respuesta = c_almacen::c_checkbox_confirma_control();
     echo $respuesta;
+} elseif ($accion == 'actualizaalertacontrolpos') {
+
+    $respuesta = c_almacen::c_checkbox_confirma_control_pos();
+    echo $respuesta;
 } elseif ($accion == 'insertaralertamixcontrolmaquina') {
     $respuesta = c_almacen::c_insertar_alertamix_control_maquina();
     echo $respuesta;
@@ -1929,8 +1933,7 @@ class c_almacen
         $mostrar = new m_almacen();
 
         if (isset($_POST['fechapostergacioncontrol'])) {
-            // var_dump("if");
-            // exit();
+
             $estado = $_POST['estado'];
             $codigocontrolmaquina = $_POST['codigocontrolmaquina'];
             $taskId = $_POST['taskId'];
@@ -1976,7 +1979,6 @@ class c_almacen
                 };
             }
         } else {
-
             $estado = $_POST['estado'];
 
             $codigocontrolmaquina = $_POST['codigocontrolmaquina'];
@@ -2010,6 +2012,76 @@ class c_almacen
                 $FECHA_ACTUALIZA = $FECHA_TOTAL;
                 $alert1 = $mostrar->actualizarAlertaControlCheckBox($codigocontrolmaquina, $estado, $ndiaspos, $taskId,  $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
                 if ($alert1) {
+                    return "ok";
+                    // echo json_encode(['status' => 'ok']);
+                } else {
+                    return "error";
+                    // echo json_encode(['status' => 'error']);
+                };
+            }
+        }
+
+        // $insert2 = $alert->execute();
+
+        // if ($insert2) {
+        //     $response = array(
+        //         'success' => true,
+        //         'message' => 'Estado actualizado correctamente'
+        //     );
+        // } else {
+        //     $response = array(
+        //         'success' => false,
+        //         // 'message' => 'Error al actualizar el estado: ' . $conn->error
+        //     );
+        // }
+
+        // echo json_encode($response);
+
+    }
+    static function c_checkbox_confirma_control_pos()
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($_POST['fechapostergacioncontrol'])) {
+            // var_dump("if");
+            // exit();
+            $estado = $_POST['estado'];
+            $codigocontrolmaquina = $_POST['codigocontrolmaquina'];
+            $taskId = $_POST['taskId'];
+            $ndiaspos = $_POST['ndiaspos'];
+            $observacion = $_POST['observacionTextArea'];
+            $fechaPostergacontrol = $_POST['fechapostergacioncontrol'];
+            $FECHA_POSTERGACION =  convFecSistema($fechaPostergacontrol);
+
+            $FECHA_TOTAL = $_POST['taskFecha'];
+
+            $accionCorrectiva = $_POST['accionCorrectiva'];
+
+            $selectVB = $_POST['selectVB'];
+
+            $fechadHoy  = $mostrar->c_horaserversql('F');
+
+            $nombreDia = date('l', strtotime($FECHA_TOTAL));
+
+
+            if ($nombreDia  != 'Saturday') {
+                $FECHA_ACTUALIZA = $fechadHoy;
+                $alertif = $mostrar->actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+                // header('Content-Type: application/json');
+                if ($alertif) {
+                    return "ok";
+                    // echo json_encode(['status' => 'ok']);
+                } else {
+                    return "error";
+                    // echo json_encode(['status' => 'error']);
+                };
+            } elseif ($nombreDia  == 'Saturday') {
+                // var_dump("sabado");
+                // exit();
+                $FECHA_ACTUALIZA = $FECHA_TOTAL;
+                $alertif = $mostrar->actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+                // header('Content-Type: application/json');
+                if ($alertif) {
                     return "ok";
                     // echo json_encode(['status' => 'ok']);
                 } else {
