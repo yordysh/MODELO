@@ -1463,7 +1463,7 @@ class c_almacen
                         "FECHA_ACORDAR" =>  $row->FECHA_ACORDAR,
                         "N_DIAS_POS" =>  $row->N_DIAS_POS,
                         "POSTERGACION" =>  $row->POSTERGACION,
-
+                        "ESTADO" =>  trim($row->ESTADO),
                     );
                 }
 
@@ -1932,8 +1932,7 @@ class c_almacen
     {
         $mostrar = new m_almacen();
 
-        if (isset($_POST['fechapostergacioncontrol'])) {
-
+        if ($_POST['fechapostergacioncontrol'] != "") {
             $estado = $_POST['estado'];
             $codigocontrolmaquina = $_POST['codigocontrolmaquina'];
             $taskId = $_POST['taskId'];
@@ -1993,13 +1992,13 @@ class c_almacen
             $nombreDia = date('l', strtotime($FECHA_TOTAL));
 
             $fechadHoy  = $mostrar->c_horaserversql('F');
-            // var_dump($FECHA_TOTAL);
             // var_dump($nombreDia);
             // exit();
 
             if ($nombreDia != 'Saturday') {
                 $FECHA_ACTUALIZA = $fechadHoy;
                 $alert = $mostrar->actualizarAlertaControlCheckBox($codigocontrolmaquina, $estado, $ndiaspos, $taskId,  $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
+                var_dump($alert);
                 // header('Content-Type: application/json');
                 if ($alert) {
                     return "ok";

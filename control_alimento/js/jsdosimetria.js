@@ -33,7 +33,7 @@ function exportardosimetria(obj) {
       }
       limitleft = 6;
       var logo = new Image();
-      logo.src = "../imagen/labsabel.png";
+      logo.src = "../imagenes/labsabel.png";
       doc.setFont(undefined, "normal");
       doc.setFontSize(12);
       doc.line(6, 6.5, 6, 26); //linea vertical

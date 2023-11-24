@@ -100,8 +100,8 @@ $submenu2 = $_SESSION["subsub_c"];
             <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
         </div>
     </nav>
-    <?php require_once("../control_alimento/modal.php"); ?>
-    <?php require_once("../control_alimento/modalcontrolalerta.php"); ?>
+
+    <?php require_once("../control_alimento/modalalertaaviso.php"); ?>
     <script src="../control_alimento/js/bootstrap.min.js"></script>
     <!-- <script src="../control_alimento/js/ajaxIndex.js"></script> -->
     <script src="../control_alimento/js/sweetalert2.all.min.js"></script>

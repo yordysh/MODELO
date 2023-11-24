@@ -218,7 +218,9 @@ body {
 .thtitulo {
   text-align: center !important;
 }
-
+.separacion {
+  width: 200px;
+}
 /*-------------- Cambios de estilo nabvar ---------------------*/
 /* .bar-color {
   background-color: #5b8ccc !important;

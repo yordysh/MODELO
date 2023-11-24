@@ -126,6 +126,36 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             left: 0;
             right: 0;
         }
+
+        .estado-R {
+            background-color: blue;
+            /* color: #f2f2f2; */
+            text-align: center;
+            height: 30px;
+        }
+
+        .estado-OB {
+            background-color: yellow;
+            text-align: center;
+            height: 30px;
+        }
+
+        .estado-PO {
+            background-color: red;
+            text-align: center;
+            height: 30px;
+        }
+
+        .ancho {
+            padding-left: 20px;
+            padding-right: 40px;
+            border: none;
+        }
+
+        .anchol {
+            padding-left: 20px;
+            border: none;
+        }
     </style>
     <!-- Table titulo-->
     <header>
@@ -245,6 +275,29 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
 
 
+    </table>
+
+    <!-- Table colores-->
+    <table style="margin-top: 50px; border:none;margin-bottom: 50px;">
+        <tbody>
+            <tr>
+                <td class="ancho"></td>
+                <td class="ancho"></td>
+                <td class="" style="border: none;">(*)Diario y/o cada vez que sea utilizadopara el proceso de elaboración</td>
+                <td class="ancho"></td>
+                <td class="ancho"></td>
+                <td class="ancho"></td>
+                <td class="ancho"></td>
+                <td class="ancho"></td>
+                <td class="estado-R anchol"></td>
+                <td class="mover-derecha anchol">L&D realizada</td>
+
+                <td class="estado-PO anchol"></td>
+                <td class="mover-derecha anchol">L&D pendiente</td>
+                <td class="estado-OB anchol"></td>
+                <td class="mover-derecha anchol">L&D observado</td>
+            </tr>
+        </tbody>
     </table>
 
     <!-- Table observacion-->
