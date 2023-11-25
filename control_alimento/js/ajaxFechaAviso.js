@@ -442,29 +442,29 @@ $(function () {
 
     //     const obs = document.getElementById("postergacion");
     //   }
-    // const accion = "fechaalerta";
-    // $.ajax({
-    //   url: "../control_alimento/c_almacen.php",
-    //   method: "POST",
-    //   dataType: "text",
-    //   data: { accion: accion },
-    //   beforeSend: function () {
-    //     $(".preloader").css("opacity", "1");
-    //     $(".preloader").css("display", "block");
-    //   },
-    //   success: function (data) {
-    //     const datass = JSON.parse(data);
-    //     mostrarAlertas(datass, 0);
-    //   },
-    //   complete: function () {
-    //     $(".preloader").css("opacity", "0");
-    //     $(".preloader").css("display", "none");
-    //   },
-    //   error: function (jqXHR, textStatus, errorThrown) {
-    //     console.error("Error in alerta AJAX:", textStatus, errorThrown);
-    //     reject(errorThrown);
-    //   },
-    // });
+    //   const accion = "fechaalerta";
+    //   $.ajax({
+    //     url: "../control_alimento/c_almacen.php",
+    //     method: "POST",
+    //     dataType: "text",
+    //     data: { accion: accion },
+    //     beforeSend: function () {
+    //       $(".preloader").css("opacity", "1");
+    //       $(".preloader").css("display", "block");
+    //     },
+    //     success: function (data) {
+    //       const datass = JSON.parse(data);
+    //       mostrarAlertas(datass, 0);
+    //     },
+    //     complete: function () {
+    //       $(".preloader").css("opacity", "0");
+    //       $(".preloader").css("display", "none");
+    //     },
+    //     error: function (jqXHR, textStatus, errorThrown) {
+    //       console.error("Error in alerta AJAX:", textStatus, errorThrown);
+    //       reject(errorThrown);
+    //     },
+    //   });
     // });
     return new Promise(function (resolve, reject) {
       const accion = "fechaalerta";
@@ -484,7 +484,7 @@ $(function () {
           let tableHeader =
             "<thead><tr><th rowspan='2'>Nombre de Área</th><th rowspan='2'>Nombre de Infraestructura</th><th colspan='";
 
-          const diamesactual = new Date(
+          let diamesactual = new Date(
             new Date().getFullYear(),
             new Date().getMonth() + 1,
             0
@@ -540,11 +540,24 @@ $(function () {
               const rowData = areaData[key];
               const rowspan = rowData.INFRAESTRUCTURAS.length;
 
+              const nombre = rowData.INFRAESTRUCTURAS[0].NDIAS;
+              let nombredia = "";
+              if (nombre == "1") {
+                nombredia = "Diario";
+              } else if (nombre == "2") {
+                nombredia = "Inter-diario";
+              } else if (nombre == "7") {
+                nombredia = "Semanal";
+              } else if (nombre == "15") {
+                nombredia = "Quincenal";
+              } else if (nombre == "30") {
+                nombredia = "Mensual";
+              }
               const fecha = rowData.INFRAESTRUCTURAS[0].FECHA_TOTAL;
               var fechaconv = new Date(fecha);
               var diaif = fechaconv.getDate() + 1;
 
-              const tableRow =
+              let tableRow =
                 "<tr><td rowspan='" +
                 rowspan +
                 "' style='border: 1px solid black;'>" +
@@ -552,31 +565,72 @@ $(function () {
                 "</td><td style='border: 1px solid black;'>" +
                 rowData.INFRAESTRUCTURAS[0].NOMBRE_INFRAESTRUCTURA +
                 "</td><td style='border: 1px solid black;'>" +
-                rowData.INFRAESTRUCTURAS[0].NDIAS +
-                "</td><td style='border: 1px solid black;'>" +
-                // rowData.INFRAESTRUCTURAS[0].FECHA_TOTAL
-                diaif +
-                "</td></tr>";
+                // rowData.INFRAESTRUCTURAS[0].NDIAS
+                nombredia +
+                "</td>";
+              for (let col = 4; col <= diamesactual + 4; col++) {
+                let diasum = diaif + 4;
+                if (col == diasum) {
+                  tableRow += "<td style='border: 1px solid black;'></td>";
+                } else {
+                  tableRow +=
+                    "<td style='border: 1px solid black;width:15px;'>" +
+                    col +
+                    "</td>";
+                }
+              }
+              tableRow += "</tr>";
+              // tableRow +=
+              //   "<td style='border: 1px solid black;'>" + diaif + "</td></tr>";
+              // "</td><td style='border: 1px solid black;'>" +
+              // // rowData.INFRAESTRUCTURAS[0].FECHA_TOTAL
+              // diaif +
+              // "</td></tr>";
 
               $("#tablaavisoalerta").append(tableRow);
 
               for (let i = 1; i < rowspan; i++) {
                 var fechaString = rowData.INFRAESTRUCTURAS[i].FECHA_TOTAL;
 
-                // Crear un objeto Date a partir de la cadena de fecha
-                var fechaObjeto = new Date(fechaString);
+                const nombree = rowData.INFRAESTRUCTURAS[i].NDIAS;
+                let nombrediaa = "";
+                if (nombree == "1") {
+                  nombrediaa = "Diario";
+                } else if (nombree == "2") {
+                  nombrediaa = "Inter-diario";
+                } else if (nombree == "7") {
+                  nombrediaa = "Semanal";
+                } else if (nombree == "15") {
+                  nombrediaa = "Quincenal";
+                } else if (nombree == "30") {
+                  nombrediaa = "Mensual";
+                }
 
-                // Obtener el día del mes (del 1 al 31)
+                var fechaObjeto = new Date(fechaString);
                 var dia = fechaObjeto.getDate() + 1;
 
-                const additionalRow =
+                let additionalRow =
                   "<tr><td style='border: 1px solid black;'>" +
                   rowData.INFRAESTRUCTURAS[i].NOMBRE_INFRAESTRUCTURA +
                   "</td><td style='border: 1px solid black;'>" +
-                  rowData.INFRAESTRUCTURAS[i].NDIAS +
-                  "</td><td style='border: 1px solid black;'>" +
-                  dia +
-                  "</td></tr>";
+                  // rowData.INFRAESTRUCTURAS[i].NDIAS
+                  nombrediaa +
+                  "</td>";
+                // "<td style='border: 1px solid black;'>" +
+                // dia +
+                // "</td>";
+                for (let a = 4; a <= diamesactual + 4; a++) {
+                  let sum = dia + 4;
+                  if (a == sum) {
+                    additionalRow +=
+                      "<td style='border: 1px solid black;'>a</td>";
+                  } else {
+                    additionalRow +=
+                      "<td style='border: 1px solid black;'></td>";
+                  }
+                }
+                additionalRow += "</tr>";
+                // "</td></tr>";
 
                 $("#tablaavisoalerta").append(additionalRow);
               }
