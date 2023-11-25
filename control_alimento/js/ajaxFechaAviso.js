@@ -571,7 +571,8 @@ $(function () {
               for (let col = 4; col <= diamesactual + 4; col++) {
                 let diasum = diaif + 4;
                 if (col == diasum) {
-                  tableRow += "<td style='border: 1px solid black;'></td>";
+                  tableRow +=
+                    "<td style='border: 1px solid black;background-color:#bda2fa;'><input type='checkbox'/></td>";
                 } else {
                   tableRow +=
                     "<td style='border: 1px solid black;width:15px;'>" +
