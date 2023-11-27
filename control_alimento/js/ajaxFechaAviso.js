@@ -110,363 +110,338 @@ $(function () {
   }
 
   async function alerta() {
-    // return new Promise(function (resolve, reject) {
-    //   function mostrarAlertas(datass, index) {
-    //     if (index >= datass.length) {
-    //       resolve();
-    //       return;
-    //     }
-
-    //     const task = datass[index];
-
-    //     let accionCorrectiva;
-    //     let selectVerificacion;
-    //     let selectVB;
-
-    //     Swal.fire({
-    //       title: "Información LBS-PHS-FR-01",
-    //       html: `
-    //           <div><h2 class="nombre_area">Nombre del área:</h2> <p>${task.NOMBRE_AREA}</p></div>
-    //           <div><h2 class="nombre_infra">Nombre de la infraestructura:</h2> <p>${task.NOMBRE_INFRAESTRUCTURA}</p></div>
-    //             <label class='estilolabel'>
-    //                  <input type="radio" name="estado-${task.COD_ALERTA}" value="R"> Realizado
-    //             </label>
-    //                <!-- <label class='estilolabel'>
-    //                     <input type="radio" name="estado-${task.COD_ALERTA}" value="NR"> No Realizado
-    //               </label> -->
-    //            <label class='estilolabel'>
-    //             <input type="radio" name="estado-${task.COD_ALERTA}" value="OB"> Observado
-    //            </label>
-    //             <label class='estilolabel' id="postergacion">
-    //                 <input type="radio" name="estado-${task.COD_ALERTA}" value="PO"> Pendiente
-    //             </label>
-    //             <h3 class='observaciontext' >Observación</h4>
-    //             <textarea class="form-control" id="observacion-${task.COD_ALERTA}" rows="3" style="display: none;"></textarea>
-
-    //           <div>
-    //           <h3 class='accioncorrectiva'>Accion correctiva:</h3>
-    //           <textarea class="form-control" id="accionCorrectiva" rows='3' "></textarea>
-    //           </div>
-    //           <div>
-    //           <h3 class='verificarealizada'>Verificacion realizada:</h3>
-    //            <select id="selectVerificacion" class="form-select selectVerif" style="width:250px; margin-left:140px;" aria-label="Default select example">
-    //               <option selected>Seleccione una verificacion</option>
-    //               <option value="1">Conforme</option>
-    //               <option value="2">No conforme</option>
-    //             </select>
-    //           </div>
-    //           <div>
-    //           <h3 class='vb'>V°B°:</h3>
-    //            <select id="selectVB" class="form-select selectVerif" style="width:250px; margin-left:140px;" aria-label="Default select example">
-    //               <option selected>Seleccione V°B°</option>
-    //               <option value="1">J.A.C</option>
-    //               <option value="2">A.A.C</option>
-    //             </select>
-    //           </div>
-    //          `,
-    //       icon: "info",
-    //       width: 600,
-    //       allowOutsideClick: false,
-    //       confirmButtonText: "Aceptar",
-    //       preConfirm: () => {
-    //         const realizadoRadio = document.querySelector(
-    //           `input[name="estado-${task.COD_ALERTA}"][value="R"]`
-    //         );
-    //         const observacionButtonRadio = document.querySelector(
-    //           `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
-    //         );
-    //         const postergacionRadio = document.querySelector(
-    //           `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
-    //         );
-
-    //         if (
-    //           realizadoRadio.checked ||
-    //           observacionButtonRadio.checked ||
-    //           postergacionRadio.checked
-    //         ) {
-    //           const estado = realizadoRadio.checked
-    //             ? "R"
-    //             : observacionButtonRadio.checked
-    //             ? "OB"
-    //             : "PO";
-
-    //           const postergacion = postergacionRadio.checked
-    //             ? document.querySelector(`#observacion-${task.COD_ALERTA}`)
-    //                 .value
-    //             : "";
-    //           const observacionTextArea = observacionTextarea.value;
-
-    //           accionCorrectiva =
-    //             document.getElementById("accionCorrectiva").value;
-
-    //           selectVerificacion = $(
-    //             "#selectVerificacion option:selected"
-    //           ).text();
-
-    //           selectVB = $("#selectVB option:selected").text();
-
-    //           if (postergacionRadio.checked) {
-    //             $("#myModalExito").modal("show");
-
-    //             return Promise.resolve();
-    //           }
-    //           const accion = "actualizaalerta";
-
-    //           return $.ajax({
-    //             url: "../control_alimento/c_almacen.php",
-    //             // url: "./c_almacen.php",
-    //             method: "POST",
-    //             data: {
-    //               accion: accion,
-    //               estado: estado,
-    //               taskId: task.COD_ALERTA,
-    //               taskFecha: task.FECHA_TOTAL,
-    //               observacionTextArea: observacionTextArea,
-    //               accionCorrectiva: accionCorrectiva,
-    //               selectVerificacion: selectVerificacion,
-    //               selectVB: selectVB,
-    //               codigozonaalerta: task.COD_ZONA,
-    //             },
-    //             dataType: "json",
-    //           })
-    //             .done(function (response) {
-    //               // console.log(response);
-    //               mostrarAlertas(datass, index + 1);
-
-    //               // Crea una nueva alerta con la fecha total
-    //               const nuevaFechaTotal = new Date();
-    //               const accion = "insertaralertamix";
-    //               return $.ajax({
-    //                 url: "../control_alimento/c_almacen.php",
-    //                 method: "POST",
-    //                 data: {
-    //                   accion: accion,
-    //                   fechaCreacion: nuevaFechaTotal.toISOString(),
-    //                   codigozona: task.COD_ZONA,
-    //                   codInfraestructura: task.COD_INFRAESTRUCTURA,
-    //                   taskNdias: task.NDIAS,
-    //                 },
-    //                 beforeSend: function () {
-    //                   $(".preloader").css("opacity", "1");
-    //                   $(".preloader").css("display", "block");
-    //                 },
-    //                 dataType: "json",
-    //                 complete: function () {
-    //                   $(".preloader").css("opacity", "0");
-    //                   $(".preloader").css("display", "none");
-    //                 },
-    //               });
-    //             })
-    //             .fail(function (jqXHR, textStatus, errorThrown) {
-    //               console.error(textStatus, errorThrown);
-    //             });
-    //         } else {
-    //           Swal.showValidationMessage(
-    //             "Selecciona si la tarea se realizó o no."
-    //           );
-    //           return false;
-    //         }
-    //       },
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
-    //         const postergacionRadio = document.querySelector(
-    //           `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
-    //         );
-    //         const observacionTextarea = document.querySelector(
-    //           `#observacion-${task.COD_ALERTA}`
-    //         );
-
-    //         if (postergacionRadio.checked) {
-    //           /*abrir modal al darle aceptar */
-    //           $("#myModalExito").modal("show");
-    //           // Resolves the promise to confirm the action
-    //           Promise.resolve().then(() => {
-    //             observacionTextarea.style.display = "block";
-    //             const realizadoRadio = document.querySelector(
-    //               `input[name="estado-${task.COD_ALERTA}"][value="R"]`
-    //             );
-    //             // const noRealizadoRadio = document.querySelector(
-    //             //   `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
-    //             // );
-
-    //             realizadoRadio.checked = false;
-    //             // noRealizadoRadio.checked = false;
-
-    //             // Agregar evento de clic al botón de confirmación dentro del modal
-    //             const modalConfirmButton = document.querySelector(
-    //               "#myModalExito .confirm-button"
-    //             );
-    //             modalConfirmButton.addEventListener("click", function () {
-    //               // const fechaPostergacion = document.querySelector(
-    //               //   "input[name='fecha_postergacion']"
-    //               // ).value;
-    //               const fechaPostergacion = $("#fecha_postergacion").val();
-
-    //               const observacion = observacionTextarea.value;
-    //               const accion = "actualizaalerta";
-
-    //               // Realizar la actualización del estado con "PO" utilizando una solicitud AJAX
-    //               $.ajax({
-    //                 url: "../control_alimento/c_almacen.php",
-    //                 method: "POST",
-    //                 data: {
-    //                   accion: accion,
-    //                   estado: "PO",
-    //                   codigozonaalerta: task.COD_ZONA,
-    //                   taskId: task.COD_ALERTA,
-    //                   taskFecha: task.FECHA_TOTAL,
-    //                   observacion: observacion,
-    //                   fechaPostergacion: fechaPostergacion,
-    //                   accionCorrectiva: accionCorrectiva,
-    //                   selectVerificacion: selectVerificacion,
-    //                   selectVB: selectVB,
-    //                   codigozonaalerta: task.COD_ZONA,
-    //                 },
-    //                 dataType: "json",
-    //               })
-    //                 .done(function (response) {
-    //                   // console.log(response);
-    //                   $("#myModalExito").modal("hide");
-    //                   mostrarAlertas(datass, index + 1);
-
-    //                   // Crea una nueva alerta con la fecha total
-    //                   const nuevaFechaTotal = new Date();
-    //                   const accion = "insertaralertamix";
-    //                   // Insertar nueva alerta con la fecha total utilizando una solicitud AJAX
-    //                   $.ajax({
-    //                     url: "../control_alimento/c_almacen.php",
-    //                     // url: "./c_almacen.php",
-    //                     method: "POST",
-    //                     data: {
-    //                       accion: accion,
-    //                       fechaCreacion: nuevaFechaTotal.toISOString(),
-    //                       codigozona: task.COD_ZONA,
-    //                       codInfraestructura: task.COD_INFRAESTRUCTURA,
-    //                       taskNdias: task.NDIAS,
-    //                       fechaPostergacion: fechaPostergacion,
-    //                       accionCorrectiva: accionCorrectiva,
-    //                       selectVerificacion: selectVerificacion,
-    //                       selectVB: selectVB,
-    //                     },
-    //                     beforeSend: function () {
-    //                       $(".preloader").css("opacity", "1");
-    //                       $(".preloader").css("display", "block");
-    //                     },
-    //                     dataType: "json",
-    //                     complete: function () {
-    //                       $(".preloader").css("opacity", "0");
-    //                       $(".preloader").css("display", "none");
-    //                     },
-    //                   });
-    //                 })
-    //                 .fail(function (jqXHR, textStatus, errorThrown) {
-    //                   console.error(textStatus, errorThrown);
-    //                 });
-    //             });
-    //           });
-    //         } else {
-    //           observacionTextarea.style.display = "none";
-    //           mostrarAlertas(datass, index + 1);
-    //         }
-    //       }
-    //     });
-
-    //     const accionCorrectivax = document.getElementById("accionCorrectiva");
-    //     const selectVerificacionx =
-    //       document.getElementById("selectVerificacion");
-    //     const postergacionRadio = document.querySelector(
-    //       `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
-    //     );
-    //     const accionvb = document.getElementById("selectVB");
-    //     const observacionButtonRadio = document.querySelector(
-    //       `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
-    //     );
-
-    //     const h3accion = document.querySelector(".accioncorrectiva");
-    //     const h3verifica = document.querySelector(".verificarealizada");
-    //     const h4obs = document.querySelector(".observaciontext");
-    //     const h3vb = document.querySelector(".vb");
-
-    //     const observacionTextarea = document.querySelector(
-    //       `#observacion-${task.COD_ALERTA}`
-    //     );
-
-    //     observacionTextarea.style.display = "none";
-    //     observacionTextarea.style.display = "none";
-    //     accionCorrectivax.style.display = "none";
-    //     selectVerificacionx.style.display = "none";
-    //     accionvb.style.display = "none";
-    //     h3accion.style.display = "none";
-    //     h3verifica.style.display = "none";
-    //     h4obs.style.display = "none";
-    //     h3vb.style.display = "none";
-
-    //     postergacionRadio.addEventListener("change", function () {
-    //       observacionTextarea.style.display = this.checked ? "block" : "none";
-    //       accionCorrectivax.style.display = this.checked ? "block" : "none";
-    //       selectVerificacionx.style.display = this.checked ? "block" : "none";
-    //       accionvb.style.display = this.checked ? "block" : "none";
-    //       h3accion.style.display = this.checked ? "block" : "none";
-    //       h3verifica.style.display = this.checked ? "block" : "none";
-    //       h4obs.style.display = this.checked ? "block" : "none";
-    //       h3vb.style.display = this.checked ? "block" : "none";
-    //     });
-
-    //     observacionButtonRadio.addEventListener("change", function () {
-    //       observacionTextarea.style.display = this.checked ? "block" : "none";
-    //       accionCorrectivax.style.display = this.checked ? "block" : "none";
-    //       selectVerificacionx.style.display = this.checked ? "block" : "none";
-    //       accionvb.style.display = this.checked ? "block" : "none";
-    //       h3accion.style.display = this.checked ? "block" : "none";
-    //       h3verifica.style.display = this.checked ? "block" : "none";
-    //       h4obs.style.display = this.checked ? "block" : "none";
-    //       h3vb.style.display = this.checked ? "block" : "none";
-    //     });
-
-    //     const realizadoRadio = document.querySelector(
-    //       `input[name="estado-${task.COD_ALERTA}"][value="R"]`
-    //     );
-
-    //     realizadoRadio.addEventListener("click", function () {
-    //       if (this.checked) {
-    //         observacionTextarea.style.display = "none";
-    //         accionCorrectivax.style.display = "none";
-    //         selectVerificacionx.style.display = "none";
-    //         accionvb.style.display = "none";
-    //         h3accion.style.display = "none";
-    //         h3verifica.style.display = "none";
-    //         h4obs.style.display = "none";
-    //         h3vb.style.display = "none";
-    //       }
-    //     });
-
-    //     const obs = document.getElementById("postergacion");
-    //   }
-    //   const accion = "fechaalerta";
-    //   $.ajax({
-    //     url: "../control_alimento/c_almacen.php",
-    //     method: "POST",
-    //     dataType: "text",
-    //     data: { accion: accion },
-    //     beforeSend: function () {
-    //       $(".preloader").css("opacity", "1");
-    //       $(".preloader").css("display", "block");
-    //     },
-    //     success: function (data) {
-    //       const datass = JSON.parse(data);
-    //       mostrarAlertas(datass, 0);
-    //     },
-    //     complete: function () {
-    //       $(".preloader").css("opacity", "0");
-    //       $(".preloader").css("display", "none");
-    //     },
-    //     error: function (jqXHR, textStatus, errorThrown) {
-    //       console.error("Error in alerta AJAX:", textStatus, errorThrown);
-    //       reject(errorThrown);
-    //     },
-    //   });
-    // });
     return new Promise(function (resolve, reject) {
+      function mostrarAlertas(datass, index) {
+        if (index >= datass.length) {
+          resolve();
+          return;
+        }
+
+        const task = datass[index];
+
+        let accionCorrectiva;
+        let selectVerificacion;
+        let selectVB;
+
+        Swal.fire({
+          title: "Información LBS-PHS-FR-01",
+          html: `
+              <div><h2 class="nombre_area">Nombre del área:</h2> <p>${task.NOMBRE_AREA}</p></div>
+              <div><h2 class="nombre_infra">Nombre de la infraestructura:</h2> <p>${task.NOMBRE_INFRAESTRUCTURA}</p></div>
+                <label class='estilolabel'>
+                     <input type="radio" name="estado-${task.COD_ALERTA}" value="R"> Realizado
+                </label>
+                   <!-- <label class='estilolabel'>
+                        <input type="radio" name="estado-${task.COD_ALERTA}" value="NR"> No Realizado
+                  </label> -->
+               <label class='estilolabel'>
+                <input type="radio" name="estado-${task.COD_ALERTA}" value="OB"> Observado
+               </label>
+                <label class='estilolabel' id="postergacion">
+                    <input type="radio" name="estado-${task.COD_ALERTA}" value="PO"> Pendiente
+                </label>
+                <h3 class='observaciontext' >Observación</h4>
+                <textarea class="form-control" id="observacion-${task.COD_ALERTA}" rows="3" style="display: none;"></textarea>
+
+              <div>
+              <h3 class='accioncorrectiva'>Accion correctiva:</h3>
+              <textarea class="form-control" id="accionCorrectiva" rows='3' "></textarea>
+              </div>
+              <div>
+              <h3 class='verificarealizada'>Verificacion realizada:</h3>
+               <select id="selectVerificacion" class="form-select selectVerif" style="width:250px; margin-left:140px;" aria-label="Default select example">
+                  <option selected>Seleccione una verificacion</option>
+                  <option value="1">Conforme</option>
+                  <option value="2">No conforme</option>
+                </select>
+              </div>
+              <div>
+              <h3 class='vb'>V°B°:</h3>
+               <select id="selectVB" class="form-select selectVerif" style="width:250px; margin-left:140px;" aria-label="Default select example">
+                  <option selected>Seleccione V°B°</option>
+                  <option value="1">J.A.C</option>
+                  <option value="2">A.A.C</option>
+                </select>
+              </div>
+             `,
+          icon: "info",
+          width: 600,
+          allowOutsideClick: false,
+          confirmButtonText: "Aceptar",
+          preConfirm: () => {
+            const realizadoRadio = document.querySelector(
+              `input[name="estado-${task.COD_ALERTA}"][value="R"]`
+            );
+            const observacionButtonRadio = document.querySelector(
+              `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
+            );
+            const postergacionRadio = document.querySelector(
+              `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
+            );
+
+            if (
+              realizadoRadio.checked ||
+              observacionButtonRadio.checked ||
+              postergacionRadio.checked
+            ) {
+              const estado = realizadoRadio.checked
+                ? "R"
+                : observacionButtonRadio.checked
+                ? "OB"
+                : "PO";
+
+              const postergacion = postergacionRadio.checked
+                ? document.querySelector(`#observacion-${task.COD_ALERTA}`)
+                    .value
+                : "";
+              const observacionTextArea = observacionTextarea.value;
+
+              accionCorrectiva =
+                document.getElementById("accionCorrectiva").value;
+
+              selectVerificacion = $(
+                "#selectVerificacion option:selected"
+              ).text();
+
+              selectVB = $("#selectVB option:selected").text();
+
+              if (postergacionRadio.checked) {
+                $("#myModalExito").modal("show");
+
+                return Promise.resolve();
+              }
+              const accion = "actualizaalerta";
+
+              return $.ajax({
+                url: "../control_alimento/c_almacen.php",
+                // url: "./c_almacen.php",
+                method: "POST",
+                data: {
+                  accion: accion,
+                  estado: estado,
+                  taskId: task.COD_ALERTA,
+                  taskFecha: task.FECHA_TOTAL,
+                  observacionTextArea: observacionTextArea,
+                  accionCorrectiva: accionCorrectiva,
+                  selectVerificacion: selectVerificacion,
+                  selectVB: selectVB,
+                  codigozonaalerta: task.COD_ZONA,
+                },
+                dataType: "json",
+              })
+                .done(function (response) {
+                  // console.log(response);
+                  mostrarAlertas(datass, index + 1);
+
+                  // Crea una nueva alerta con la fecha total
+                  const nuevaFechaTotal = new Date();
+                  const accion = "insertaralertamix";
+                  return $.ajax({
+                    url: "../control_alimento/c_almacen.php",
+                    method: "POST",
+                    data: {
+                      accion: accion,
+                      fechaCreacion: nuevaFechaTotal.toISOString(),
+                      codigozona: task.COD_ZONA,
+                      codInfraestructura: task.COD_INFRAESTRUCTURA,
+                      taskNdias: task.NDIAS,
+                    },
+                    beforeSend: function () {
+                      $(".preloader").css("opacity", "1");
+                      $(".preloader").css("display", "block");
+                    },
+                    dataType: "json",
+                    complete: function () {
+                      $(".preloader").css("opacity", "0");
+                      $(".preloader").css("display", "none");
+                    },
+                  });
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                  console.error(textStatus, errorThrown);
+                });
+            } else {
+              Swal.showValidationMessage(
+                "Selecciona si la tarea se realizó o no."
+              );
+              return false;
+            }
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const postergacionRadio = document.querySelector(
+              `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
+            );
+            const observacionTextarea = document.querySelector(
+              `#observacion-${task.COD_ALERTA}`
+            );
+
+            if (postergacionRadio.checked) {
+              /*abrir modal al darle aceptar */
+              $("#myModalExito").modal("show");
+              // Resolves the promise to confirm the action
+              Promise.resolve().then(() => {
+                observacionTextarea.style.display = "block";
+                const realizadoRadio = document.querySelector(
+                  `input[name="estado-${task.COD_ALERTA}"][value="R"]`
+                );
+                // const noRealizadoRadio = document.querySelector(
+                //   `input[name="estado-${task.COD_ALERTA}"][value="NR"]`
+                // );
+
+                realizadoRadio.checked = false;
+                // noRealizadoRadio.checked = false;
+
+                // Agregar evento de clic al botón de confirmación dentro del modal
+                const modalConfirmButton = document.querySelector(
+                  "#myModalExito .confirm-button"
+                );
+                modalConfirmButton.addEventListener("click", function () {
+                  // const fechaPostergacion = document.querySelector(
+                  //   "input[name='fecha_postergacion']"
+                  // ).value;
+                  const fechaPostergacion = $("#fecha_postergacion").val();
+
+                  const observacion = observacionTextarea.value;
+                  const accion = "actualizaalerta";
+
+                  // Realizar la actualización del estado con "PO" utilizando una solicitud AJAX
+                  $.ajax({
+                    url: "../control_alimento/c_almacen.php",
+                    method: "POST",
+                    data: {
+                      accion: accion,
+                      estado: "PO",
+                      codigozonaalerta: task.COD_ZONA,
+                      taskId: task.COD_ALERTA,
+                      taskFecha: task.FECHA_TOTAL,
+                      observacion: observacion,
+                      fechaPostergacion: fechaPostergacion,
+                      accionCorrectiva: accionCorrectiva,
+                      selectVerificacion: selectVerificacion,
+                      selectVB: selectVB,
+                      codigozonaalerta: task.COD_ZONA,
+                    },
+                    dataType: "json",
+                  })
+                    .done(function (response) {
+                      // console.log(response);
+                      $("#myModalExito").modal("hide");
+                      mostrarAlertas(datass, index + 1);
+
+                      // Crea una nueva alerta con la fecha total
+                      const nuevaFechaTotal = new Date();
+                      const accion = "insertaralertamix";
+                      // Insertar nueva alerta con la fecha total utilizando una solicitud AJAX
+                      $.ajax({
+                        url: "../control_alimento/c_almacen.php",
+                        // url: "./c_almacen.php",
+                        method: "POST",
+                        data: {
+                          accion: accion,
+                          fechaCreacion: nuevaFechaTotal.toISOString(),
+                          codigozona: task.COD_ZONA,
+                          codInfraestructura: task.COD_INFRAESTRUCTURA,
+                          taskNdias: task.NDIAS,
+                          fechaPostergacion: fechaPostergacion,
+                          accionCorrectiva: accionCorrectiva,
+                          selectVerificacion: selectVerificacion,
+                          selectVB: selectVB,
+                        },
+                        beforeSend: function () {
+                          $(".preloader").css("opacity", "1");
+                          $(".preloader").css("display", "block");
+                        },
+                        dataType: "json",
+                        complete: function () {
+                          $(".preloader").css("opacity", "0");
+                          $(".preloader").css("display", "none");
+                        },
+                      });
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                      console.error(textStatus, errorThrown);
+                    });
+                });
+              });
+            } else {
+              observacionTextarea.style.display = "none";
+              mostrarAlertas(datass, index + 1);
+            }
+          }
+        });
+
+        const accionCorrectivax = document.getElementById("accionCorrectiva");
+        const selectVerificacionx =
+          document.getElementById("selectVerificacion");
+        const postergacionRadio = document.querySelector(
+          `input[name="estado-${task.COD_ALERTA}"][value="PO"]`
+        );
+        const accionvb = document.getElementById("selectVB");
+        const observacionButtonRadio = document.querySelector(
+          `input[name="estado-${task.COD_ALERTA}"][value="OB"]`
+        );
+
+        const h3accion = document.querySelector(".accioncorrectiva");
+        const h3verifica = document.querySelector(".verificarealizada");
+        const h4obs = document.querySelector(".observaciontext");
+        const h3vb = document.querySelector(".vb");
+
+        const observacionTextarea = document.querySelector(
+          `#observacion-${task.COD_ALERTA}`
+        );
+
+        observacionTextarea.style.display = "none";
+        observacionTextarea.style.display = "none";
+        accionCorrectivax.style.display = "none";
+        selectVerificacionx.style.display = "none";
+        accionvb.style.display = "none";
+        h3accion.style.display = "none";
+        h3verifica.style.display = "none";
+        h4obs.style.display = "none";
+        h3vb.style.display = "none";
+
+        postergacionRadio.addEventListener("change", function () {
+          observacionTextarea.style.display = this.checked ? "block" : "none";
+          accionCorrectivax.style.display = this.checked ? "block" : "none";
+          selectVerificacionx.style.display = this.checked ? "block" : "none";
+          accionvb.style.display = this.checked ? "block" : "none";
+          h3accion.style.display = this.checked ? "block" : "none";
+          h3verifica.style.display = this.checked ? "block" : "none";
+          h4obs.style.display = this.checked ? "block" : "none";
+          h3vb.style.display = this.checked ? "block" : "none";
+        });
+
+        observacionButtonRadio.addEventListener("change", function () {
+          observacionTextarea.style.display = this.checked ? "block" : "none";
+          accionCorrectivax.style.display = this.checked ? "block" : "none";
+          selectVerificacionx.style.display = this.checked ? "block" : "none";
+          accionvb.style.display = this.checked ? "block" : "none";
+          h3accion.style.display = this.checked ? "block" : "none";
+          h3verifica.style.display = this.checked ? "block" : "none";
+          h4obs.style.display = this.checked ? "block" : "none";
+          h3vb.style.display = this.checked ? "block" : "none";
+        });
+
+        const realizadoRadio = document.querySelector(
+          `input[name="estado-${task.COD_ALERTA}"][value="R"]`
+        );
+
+        realizadoRadio.addEventListener("click", function () {
+          if (this.checked) {
+            observacionTextarea.style.display = "none";
+            accionCorrectivax.style.display = "none";
+            selectVerificacionx.style.display = "none";
+            accionvb.style.display = "none";
+            h3accion.style.display = "none";
+            h3verifica.style.display = "none";
+            h4obs.style.display = "none";
+            h3vb.style.display = "none";
+          }
+        });
+
+        const obs = document.getElementById("postergacion");
+      }
       const accion = "fechaalerta";
       $.ajax({
         url: "../control_alimento/c_almacen.php",
@@ -479,166 +454,7 @@ $(function () {
         },
         success: function (data) {
           const datass = JSON.parse(data);
-          console.log(datass);
-
-          let tableHeader =
-            "<thead><tr><th rowspan='2'>Nombre de Área</th><th rowspan='2'>Nombre de Infraestructura</th><th colspan='";
-
-          let diamesactual = new Date(
-            new Date().getFullYear(),
-            new Date().getMonth() + 1,
-            0
-          ).getDate();
-
-          tableHeader += diamesactual + "'>Días</th></tr><tr>";
-
-          for (let i = 1; i <= diamesactual; i++) {
-            tableHeader += "<th>" + i + "</th>";
-          }
-
-          tableHeader += "</tr></thead>";
-          $("#tbavisoalerta").append(tableHeader);
-          // const datosAgrupados = {};
-
-          for (let i = 0; i < datass.length; i++) {
-            const rowData = datass[i];
-            const tableRow =
-              "<tr><td  style='border: 1px solid black;'>" +
-              rowData.NOMBRE_AREA +
-              "</td><td style='border: 1px solid black;'>" +
-              rowData.NOMBRE_INFRAESTRUCTURA +
-              "</td><td style='border: 1px solid black;'>" +
-              rowData.NDIAS +
-              "</td><td style='border: 1px solid black;'>" +
-              rowData.FECHA_TOTAL +
-              "</td></tr>";
-
-            $("#tablaavisoalerta").append(tableRow);
-          }
-
-          // const areaData = {};
-
-          // for (let i = 0; i < datass.length; i++) {
-          //   const rowData = datass[i];
-
-          //   if (!areaData[rowData.NOMBRE_AREA]) {
-          //     areaData[rowData.NOMBRE_AREA] = {
-          //       NOMBRE_AREA: rowData.NOMBRE_AREA,
-          //       INFRAESTRUCTURAS: [],
-          //     };
-          //   }
-
-          //   areaData[rowData.NOMBRE_AREA].INFRAESTRUCTURAS.push({
-          //     NOMBRE_INFRAESTRUCTURA: rowData.NOMBRE_INFRAESTRUCTURA,
-          //     NDIAS: rowData.NDIAS,
-          //     FECHA_TOTAL: rowData.FECHA_TOTAL,
-          //   });
-          // }
-
-          // for (const key in areaData) {
-          //   if (areaData.hasOwnProperty(key)) {
-          //     const rowData = areaData[key];
-          //     const rowspan = rowData.INFRAESTRUCTURAS.length;
-
-          //     const nombre = rowData.INFRAESTRUCTURAS[0].NDIAS;
-          //     let nombredia = "";
-          //     if (nombre == "1") {
-          //       nombredia = "Diario";
-          //     } else if (nombre == "2") {
-          //       nombredia = "Inter-diario";
-          //     } else if (nombre == "7") {
-          //       nombredia = "Semanal";
-          //     } else if (nombre == "15") {
-          //       nombredia = "Quincenal";
-          //     } else if (nombre == "30") {
-          //       nombredia = "Mensual";
-          //     }
-          //     const fecha = rowData.INFRAESTRUCTURAS[0].FECHA_TOTAL;
-          //     var fechaconv = new Date(fecha);
-          //     var diaif = fechaconv.getDate() + 1;
-
-          //     let tableRow =
-          //       "<tr><td rowspan='" +
-          //       rowspan +
-          //       "' style='border: 1px solid black;'>" +
-          //       rowData.NOMBRE_AREA +
-          //       "</td><td style='border: 1px solid black;'>" +
-          //       rowData.INFRAESTRUCTURAS[0].NOMBRE_INFRAESTRUCTURA +
-          //       "</td><td style='border: 1px solid black;'>" +
-          //       // rowData.INFRAESTRUCTURAS[0].NDIAS
-          //       nombredia +
-          //       "</td>";
-          //     for (let col = 4; col <= diamesactual + 4; col++) {
-          //       let diasum = diaif + 4;
-          //       if (col == diasum) {
-          //         tableRow +=
-          //           "<td style='border: 1px solid black;background-color:#bda2fa;'><input type='checkbox'/></td>";
-          //       } else {
-          //         tableRow +=
-          //           "<td style='border: 1px solid black;width:15px;'>" +
-          //           col +
-          //           "</td>";
-          //       }
-          //     }
-          //     tableRow += "</tr>";
-          //     // tableRow +=
-          //     //   "<td style='border: 1px solid black;'>" + diaif + "</td></tr>";
-          //     // "</td><td style='border: 1px solid black;'>" +
-          //     // // rowData.INFRAESTRUCTURAS[0].FECHA_TOTAL
-          //     // diaif +
-          //     // "</td></tr>";
-
-          //     $("#tablaavisoalerta").append(tableRow);
-
-          //     for (let i = 1; i < rowspan; i++) {
-          //       var fechaString = rowData.INFRAESTRUCTURAS[i].FECHA_TOTAL;
-
-          //       const nombree = rowData.INFRAESTRUCTURAS[i].NDIAS;
-          //       let nombrediaa = "";
-          //       if (nombree == "1") {
-          //         nombrediaa = "Diario";
-          //       } else if (nombree == "2") {
-          //         nombrediaa = "Inter-diario";
-          //       } else if (nombree == "7") {
-          //         nombrediaa = "Semanal";
-          //       } else if (nombree == "15") {
-          //         nombrediaa = "Quincenal";
-          //       } else if (nombree == "30") {
-          //         nombrediaa = "Mensual";
-          //       }
-
-          //       var fechaObjeto = new Date(fechaString);
-          //       var dia = fechaObjeto.getDate() + 1;
-
-          //       let additionalRow =
-          //         "<tr><td style='border: 1px solid black;'>" +
-          //         rowData.INFRAESTRUCTURAS[i].NOMBRE_INFRAESTRUCTURA +
-          //         "</td><td style='border: 1px solid black;'>" +
-          //         // rowData.INFRAESTRUCTURAS[i].NDIAS
-          //         nombrediaa +
-          //         "</td>";
-          //       // "<td style='border: 1px solid black;'>" +
-          //       // dia +
-          //       // "</td>";
-          //       for (let a = 4; a <= diamesactual + 4; a++) {
-          //         let sum = dia + 4;
-          //         if (a == sum) {
-          //           additionalRow +=
-          //             "<td style='border: 1px solid black;'>a</td>";
-          //         } else {
-          //           additionalRow +=
-          //             "<td style='border: 1px solid black;'></td>";
-          //         }
-          //       }
-          //       additionalRow += "</tr>";
-          //       // "</td></tr>";
-
-          //       $("#tablaavisoalerta").append(additionalRow);
-          //     }
-          //   }
-          // }
-
-          $("#modalalertaaviso").modal("show");
+          mostrarAlertas(datass, 0);
         },
         complete: function () {
           $(".preloader").css("opacity", "0");
@@ -650,6 +466,190 @@ $(function () {
         },
       });
     });
+    // return new Promise(function (resolve, reject) {
+    //   const accion = "fechaalerta";
+    //   $.ajax({
+    //     url: "../control_alimento/c_almacen.php",
+    //     method: "POST",
+    //     dataType: "text",
+    //     data: { accion: accion },
+    //     beforeSend: function () {
+    //       $(".preloader").css("opacity", "1");
+    //       $(".preloader").css("display", "block");
+    //     },
+    //     success: function (data) {
+    //       const datass = JSON.parse(data);
+    //       console.log(datass);
+
+    //       let tableHeader =
+    //         "<thead><tr><th rowspan='2'>Nombre de Área</th><th rowspan='2'>Nombre de Infraestructura</th><th colspan='";
+
+    //       let diamesactual = new Date(
+    //         new Date().getFullYear(),
+    //         new Date().getMonth() + 1,
+    //         0
+    //       ).getDate();
+
+    //       tableHeader += diamesactual + "'>Días</th></tr><tr>";
+
+    //       for (let i = 1; i <= diamesactual; i++) {
+    //         tableHeader += "<th>" + i + "</th>";
+    //       }
+
+    //       tableHeader += "</tr></thead>";
+    //       $("#tbavisoalerta").append(tableHeader);
+    //       // const datosAgrupados = {};
+
+    //       for (let i = 0; i < datass.length; i++) {
+    //         const rowData = datass[i];
+    //         const tableRow =
+    //           "<tr><td  style='border: 1px solid black;'>" +
+    //           rowData.NOMBRE_AREA +
+    //           "</td><td style='border: 1px solid black;'>" +
+    //           rowData.NOMBRE_INFRAESTRUCTURA +
+    //           "</td><td style='border: 1px solid black;'>" +
+    //           rowData.NDIAS +
+    //           "</td><td style='border: 1px solid black;'>" +
+    //           rowData.FECHA_TOTAL +
+    //           "</td></tr>";
+
+    //         $("#tablaavisoalerta").append(tableRow);
+    //       }
+
+    //       // const areaData = {};
+
+    //       // for (let i = 0; i < datass.length; i++) {
+    //       //   const rowData = datass[i];
+
+    //       //   if (!areaData[rowData.NOMBRE_AREA]) {
+    //       //     areaData[rowData.NOMBRE_AREA] = {
+    //       //       NOMBRE_AREA: rowData.NOMBRE_AREA,
+    //       //       INFRAESTRUCTURAS: [],
+    //       //     };
+    //       //   }
+
+    //       //   areaData[rowData.NOMBRE_AREA].INFRAESTRUCTURAS.push({
+    //       //     NOMBRE_INFRAESTRUCTURA: rowData.NOMBRE_INFRAESTRUCTURA,
+    //       //     NDIAS: rowData.NDIAS,
+    //       //     FECHA_TOTAL: rowData.FECHA_TOTAL,
+    //       //   });
+    //       // }
+
+    //       // for (const key in areaData) {
+    //       //   if (areaData.hasOwnProperty(key)) {
+    //       //     const rowData = areaData[key];
+    //       //     const rowspan = rowData.INFRAESTRUCTURAS.length;
+
+    //       //     const nombre = rowData.INFRAESTRUCTURAS[0].NDIAS;
+    //       //     let nombredia = "";
+    //       //     if (nombre == "1") {
+    //       //       nombredia = "Diario";
+    //       //     } else if (nombre == "2") {
+    //       //       nombredia = "Inter-diario";
+    //       //     } else if (nombre == "7") {
+    //       //       nombredia = "Semanal";
+    //       //     } else if (nombre == "15") {
+    //       //       nombredia = "Quincenal";
+    //       //     } else if (nombre == "30") {
+    //       //       nombredia = "Mensual";
+    //       //     }
+    //       //     const fecha = rowData.INFRAESTRUCTURAS[0].FECHA_TOTAL;
+    //       //     var fechaconv = new Date(fecha);
+    //       //     var diaif = fechaconv.getDate() + 1;
+
+    //       //     let tableRow =
+    //       //       "<tr><td rowspan='" +
+    //       //       rowspan +
+    //       //       "' style='border: 1px solid black;'>" +
+    //       //       rowData.NOMBRE_AREA +
+    //       //       "</td><td style='border: 1px solid black;'>" +
+    //       //       rowData.INFRAESTRUCTURAS[0].NOMBRE_INFRAESTRUCTURA +
+    //       //       "</td><td style='border: 1px solid black;'>" +
+    //       //       // rowData.INFRAESTRUCTURAS[0].NDIAS
+    //       //       nombredia +
+    //       //       "</td>";
+    //       //     for (let col = 4; col <= diamesactual + 4; col++) {
+    //       //       let diasum = diaif + 4;
+    //       //       if (col == diasum) {
+    //       //         tableRow +=
+    //       //           "<td style='border: 1px solid black;background-color:#bda2fa;'><input type='checkbox'/></td>";
+    //       //       } else {
+    //       //         tableRow +=
+    //       //           "<td style='border: 1px solid black;width:15px;'>" +
+    //       //           col +
+    //       //           "</td>";
+    //       //       }
+    //       //     }
+    //       //     tableRow += "</tr>";
+    //       //     // tableRow +=
+    //       //     //   "<td style='border: 1px solid black;'>" + diaif + "</td></tr>";
+    //       //     // "</td><td style='border: 1px solid black;'>" +
+    //       //     // // rowData.INFRAESTRUCTURAS[0].FECHA_TOTAL
+    //       //     // diaif +
+    //       //     // "</td></tr>";
+
+    //       //     $("#tablaavisoalerta").append(tableRow);
+
+    //       //     for (let i = 1; i < rowspan; i++) {
+    //       //       var fechaString = rowData.INFRAESTRUCTURAS[i].FECHA_TOTAL;
+
+    //       //       const nombree = rowData.INFRAESTRUCTURAS[i].NDIAS;
+    //       //       let nombrediaa = "";
+    //       //       if (nombree == "1") {
+    //       //         nombrediaa = "Diario";
+    //       //       } else if (nombree == "2") {
+    //       //         nombrediaa = "Inter-diario";
+    //       //       } else if (nombree == "7") {
+    //       //         nombrediaa = "Semanal";
+    //       //       } else if (nombree == "15") {
+    //       //         nombrediaa = "Quincenal";
+    //       //       } else if (nombree == "30") {
+    //       //         nombrediaa = "Mensual";
+    //       //       }
+
+    //       //       var fechaObjeto = new Date(fechaString);
+    //       //       var dia = fechaObjeto.getDate() + 1;
+
+    //       //       let additionalRow =
+    //       //         "<tr><td style='border: 1px solid black;'>" +
+    //       //         rowData.INFRAESTRUCTURAS[i].NOMBRE_INFRAESTRUCTURA +
+    //       //         "</td><td style='border: 1px solid black;'>" +
+    //       //         // rowData.INFRAESTRUCTURAS[i].NDIAS
+    //       //         nombrediaa +
+    //       //         "</td>";
+    //       //       // "<td style='border: 1px solid black;'>" +
+    //       //       // dia +
+    //       //       // "</td>";
+    //       //       for (let a = 4; a <= diamesactual + 4; a++) {
+    //       //         let sum = dia + 4;
+    //       //         if (a == sum) {
+    //       //           additionalRow +=
+    //       //             "<td style='border: 1px solid black;'>a</td>";
+    //       //         } else {
+    //       //           additionalRow +=
+    //       //             "<td style='border: 1px solid black;'></td>";
+    //       //         }
+    //       //       }
+    //       //       additionalRow += "</tr>";
+    //       //       // "</td></tr>";
+
+    //       //       $("#tablaavisoalerta").append(additionalRow);
+    //       //     }
+    //       //   }
+    //       // }
+
+    //       $("#modalalertaaviso").modal("show");
+    //     },
+    //     complete: function () {
+    //       $(".preloader").css("opacity", "0");
+    //       $(".preloader").css("display", "none");
+    //     },
+    //     error: function (jqXHR, textStatus, errorThrown) {
+    //       console.error("Error in alerta AJAX:", textStatus, errorThrown);
+    //       reject(errorThrown);
+    //     },
+    //   });
+    // });
   }
 
   async function alertaControl() {

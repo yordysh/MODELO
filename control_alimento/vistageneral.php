@@ -6,8 +6,11 @@ require_once "m_almacen.php";
 $mostrar = new m_almacen();
 $data = $mostrar->MostrarAlerta();
 
-$fechaactual = date("d-m-Y");
-$diastotales = date('t', strtotime($fechaactual));
+$fechaactualservidor = $mostrar->c_horaserversql('F');
+
+
+// $fechaactual = date("d-m-Y");
+// $diastotales = date('t', strtotime($fechaactual));
 
 ?>
 <!DOCTYPE html>
@@ -25,36 +28,37 @@ $diastotales = date('t', strtotime($fechaactual));
 
 <body>
     <main>
-        <div id="tablaalerta" class="table-responsive " style="overflow: scroll;height: 800px; margin-top:20px; margin-bottom:30px;">
+        <div id="tablaalerta" class="">
             <table id="tbalerta" class="table table-sm mb-3 table-hover">
                 <?php
                 echo '<thead>';
                 echo '<tr>';
-                echo '<th class="thtitulo" scope="col" rowspan="2">ZONA</th>';
-                echo '<th class="thtitulo" scope="col" rowspan="2">INFRAESTRUCTURA</th>';
-                echo '<th class="thtitulo" scope="col" rowspan="2">FRECUENCIA</th>';
-                echo '<th class="thtitulo" scope="col" colspan="' . $diastotales . '">Dias</th>';
+                echo '<th class="thtitulo" scope="col">ZONA</th>';
+                echo '<th class="thtitulo" scope="col">INFRAESTRUCTURA</th>';
+                echo '<th class="thtitulo" scope="col">FRECUENCIA</th>';
+                echo '<th class="thtitulo" scope="col">FECHA ANTERIOR</th>';
+                echo '<th class="thtitulo" scope="col">' . $fechaactualservidor . '</th>';
+                echo '<th class="thtitulo" scope="col">OBSERVACION</th>';
+                echo '<th class="thtitulo" scope="col">ACCION CORRECTIVA</th>';
+                echo '<th class="thtitulo" scope="col">V°B°</th>';
                 echo '</tr>';
-                echo '<tr>';
-                for ($d = 1; $d <= $diastotales; $d++) {
-                    echo '<th style="witdh:10px;">' . $d . '</th>';
-                }
-                echo '</tr>';
+
                 echo '</thead>';
                 echo '<tbody id="tablaalerta">';
 
-                // Creamos un array para almacenar los datos agrupados por zona
-                $datos_por_zona = array();
+
 
                 foreach ($data as $datostotales) {
+                    $codigoalerta = $datostotales->COD_ALERTA;
                     $codigozona = $datostotales->COD_ZONA;
                     $zona = $datostotales->NOMBRE_AREA;
                     $codigoinfra = $datostotales->COD_INFRAESTRUCTURA;
                     $infraestructura = $datostotales->NOMBRE_INFRAESTRUCTURA;
                     $frecuencia = $datostotales->NDIAS;
+                    $frecuenciadias = $datostotales->NDIAS;
+                    $fechacreacion = $datostotales->FECHA_CREACION;
                     $fecha = $datostotales->FECHA_TOTAL;
-                    $timestamp = strtotime($fecha);
-                    $dia = date("d", $timestamp);
+                    $estadoverifica = $datostotales->ESTADO;
 
                     if ($frecuencia == '1') {
                         $frecuencianombre = 'Diario';
@@ -70,45 +74,60 @@ $diastotales = date('t', strtotime($fechaactual));
 
 
                     if (isset($datos_por_zona[$zona])) {
-                        // Si existe, simplemente agregamos los datos a la zona existente
-                        $datos_por_zona[$zona][] = array('codigozona' => $codigozona, 'codigoinfra' => $codigoinfra, 'infraestructura' => $infraestructura, 'frecuencia' => $frecuencianombre, 'dia' => $dia);
+                        $datos_por_zona[$zona][] = array('codigozona' => $codigozona, 'codigoinfra' => $codigoinfra, 'infraestructura' => $infraestructura, 'frecuencia' => $frecuencianombre, 'fechacreacion' => $fechacreacion, 'codigoalerta' => $codigoalerta, 'frecuenciadias' => $frecuenciadias, 'estadoverifica' => $estadoverifica);
                     } else {
 
-                        $datos_por_zona[$zona] = array(array('codigozona' => $codigozona, 'codigoinfra' => $codigoinfra, 'infraestructura' => $infraestructura, 'frecuencia' => $frecuencianombre, 'dia' => $dia));
+                        $datos_por_zona[$zona] = array(array('codigozona' => $codigozona, 'codigoinfra' => $codigoinfra, 'infraestructura' => $infraestructura, 'frecuencia' => $frecuencianombre, 'fechacreacion' => $fechacreacion, 'codigoalerta' => $codigoalerta, 'frecuenciadias' => $frecuenciadias, 'estadoverifica' => $estadoverifica));
                     }
                 }
 
-                // Generamos la tabla a partir de los datos almacenados
                 foreach ($datos_por_zona as $zona => $datos) {
                     echo '<tr>';
+                    echo '<td ><input class="codigozona" type="text" value="' . $datos[0]['codigozona'] . '" /></td>';
+                    echo '<td ><input class="codigoinfra" type="text" value="' . $datos[0]['codigoinfra'] . '" /></td>';
+                    echo '<td ><input class="codigoalerta" type="text" value="' . $datos[0]['codigoalerta'] . '" /></td>';
+                    echo '<td ><input class="frecuenciadias" type="text" value="' . $datos[0]['frecuenciadias'] . '" /></td>';
+                    echo '<td ><input class="estadoverifica" type="text" value="' . $datos[0]['estadoverifica'] . '" /></td>';
+
                     echo '<td rowspan="' . count($datos) . '">' . $zona . '</td>';
-
-                    // Imprimimos la primera fila de datos para la zona
-                    echo '<td codigozona="' . $datos[0]['codigozona'] . '" codigoinfra="' . $datos[0]['codigoinfra'] . '">' . $datos[0]['infraestructura'] . '</td>';
+                    echo '<td >' . $datos[0]['infraestructura'] . '</td>';
                     echo '<td>' . $datos[0]['frecuencia'] . '</td>';
-
-                    for ($c = 1; $c <= $diastotales; $c++) {
-                        if ($c == $datos[0]['dia']) {
-                            echo '<td><input type="checkbox"/></td>';
-                        } else {
-                            echo '<td></td>';
-                        }
-                    }
+                    echo '<td>' . $datos[0]['fechacreacion'] . '</td>';
+                    echo '<td><input class="check" type="checkbox"/></td>';
+                    echo '<td><textarea class="form-control observacion" id="observacion" rows="2"></textarea></td>';
+                    echo '<td><textarea class="form-control accioncorrectiva" id="accioncorrectiva" rows="2"></textarea></td>';
+                    echo '<td>
+                    <select id="selectVerificacion" class="form-select selectVerificacion" style="width:150px;" aria-label="Default select example">
+                            <option selected>Seleccione V°B</option>
+                            <option value="1">J.A.C</option>
+                            <option value="2">A.A.C</option>
+                    </select></td>';
 
                     echo '</tr>';
 
-                    // Imprimimos las filas restantes para la zona (si las hay)
                     for ($i = 1; $i < count($datos); $i++) {
                         echo '<tr>';
-                        echo '<td codigozona="' . $datos[0]['codigozona'] . '" codigoinfra="' . $datos[0]['codigoinfra'] . '">' . $datos[$i]['infraestructura'] . '</td>';
+                        echo '<td ><input class="codigozona" type="text" value="' . $datos[$i]['codigozona'] . '" /></td>';
+                        echo '<td ><input class="codigoinfra" type="text" value="' . $datos[$i]['codigoinfra'] . '" /></td>';
+                        echo '<td ><input class="codigoalerta" type="text" value="' . $datos[$i]['codigoalerta'] . '" /></td>';
+                        echo '<td ><input class="frecuenciadias" type="text" value="' . $datos[$i]['frecuenciadias'] . '" /></td>';
+                        echo '<td ><input class="estadoverifica" type="text" value="' . $datos[$i]['estadoverifica'] . '" /></td>';
+
+
+                        echo '<td style="visibility:collapse; display:none;"></td>';
+                        echo '<td>' . $datos[$i]['infraestructura'] . '</td>';
+
                         echo '<td>' . $datos[$i]['frecuencia'] . '</td>';
-                        for ($c = 1; $c <= $diastotales; $c++) {
-                            if ($c == $datos[$i]['dia']) {
-                                echo '<td><input type="checkbox"/></td>';
-                            } else {
-                                echo '<td>' . $c . '</td>';
-                            }
-                        }
+                        echo '<td>' . $datos[$i]['fechacreacion'] . '</td>';
+                        echo '<td><input class="check" type="checkbox"/></td>';
+                        echo '<td><textarea class="form-control observacion" id="observacion" rows="2"></textarea></td>';
+                        echo '<td><textarea class="form-control accioncorrectiva" id="accioncorrectiva" rows="2"></textarea></td>';
+                        echo '<td>
+                                 <select id="selectVerificacion" class="form-select selectVerificacion" style="width:150px;" aria-label="Default select example">
+                                     <option selected>Seleccione V°B°</option>
+                                     <option value="1">J.A.C</option>
+                                     <option value="2">A.A.C</option>
+                                 </select></td>';
                         echo '</tr>';
                     }
                 }

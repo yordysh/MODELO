@@ -682,6 +682,12 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_guardar_control_recepcion($datos, $datosTabla, $idrequerimiento, $codpersonal);
     echo $respuesta;
+} elseif ($accion == 'insertaryactualizaralerta') {
+
+    $capturavalor = $_POST['capturavalor'];
+
+    $respuesta = c_almacen::c_guardar_actualizar_alerta($capturavalor);
+    echo $respuesta;
 }
 
 
@@ -3752,5 +3758,20 @@ class c_almacen
             return "error";
         };
         // }
+    }
+
+
+    static function c_guardar_actualizar_alerta($capturavalor)
+    {
+        $m_formula = new m_almacen();
+
+
+        $respuesta = $m_formula->InsertarActualizarAlerta($capturavalor);
+
+        if ($respuesta) {
+            return "ok";
+        } else {
+            return "error";
+        };
     }
 }

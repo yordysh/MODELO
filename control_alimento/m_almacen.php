@@ -727,7 +727,7 @@ class m_almacen
       T_ALERTA.ESTADO AS ESTADO, T_ALERTA.N_DIAS_POS AS N_DIAS_POS, T_ALERTA.POSTERGACION AS POSTERGACION FROM T_ALERTA INNER JOIN T_INFRAESTRUCTURA
       ON T_ALERTA.COD_INFRAESTRUCTURA= T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA inner join T_ZONA_AREAS ON
       T_ZONA_AREAS.COD_ZONA= T_INFRAESTRUCTURA.COD_ZONA
-      WHERE CAST(FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE) AND ESTADO='P'");
+      WHERE CAST(FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE) AND ESTADO='P' OR (ESTADO='OB' AND POSTERGACION='SI' AND  (CAST(FECHA_TOTAL AS DATE)   = CAST(GETDATE() AS DATE)))");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
@@ -4672,6 +4672,92 @@ class m_almacen
 
       return $datos;
     } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function InsertarActualizarAlerta($capturavalor)
+  {
+    try {
+      $this->bd->beginTransaction();
+
+      $codigo = new m_almacen();
+      $fechaactualalerta = $codigo->c_horaserversql('F');
+
+      // var_dump($capturavalor);
+      foreach ($capturavalor as $valor) {
+        $codigozona = trim($valor['idzona']);
+        $codigoinfra = trim($valor['idinfra']);
+        $codigoalerta = trim($valor['idalerta']);
+        $ndias = trim($valor['frecuenciadias']);
+        $estado = $valor['check'];
+        $observacion = strtoupper($valor['obs']);
+        $accioncorrectiva = strtoupper($valor['accioncorrecto']);
+        $selectvb = $valor['selectvb'];
+        $estadoverifica = $valor['estadoverifica'];
+
+        if ($estado === 'false') {
+          $fechacreacion = $codigo->c_horaserversql('F');
+
+          $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO='PO', OBSERVACION='$observacion',ACCION_CORRECTIVA='$accioncorrectiva', VB='$selectvb' WHERE COD_ALERTA='$codigoalerta'");
+          $insertaractualizar = $actualizarestado->execute();
+
+          $fechaformato = DateTime::createFromFormat('d/m/Y', $fechaactualalerta);
+          $fechaformato->modify('+1 day');
+
+          if ($fechaformato->format('N') == 6) {
+            $fechaformato->modify('+2 days');
+          }
+          $fechatotal = $fechaformato->format('d/m/Y');
+
+          $insertarfalse = $this->bd->prepare("INSERT INTO T_ALERTA(COD_ZONA,COD_INFRAESTRUCTURA,N_DIAS_POS,FECHA_CREACION,FECHA_TOTAL,ESTADO,POSTERGACION) VALUES('$codigozona','$codigoinfra','$ndias','$fechacreacion','$fechatotal','OB','SI')");
+          $insertarfalse->execute();
+        } else if ($estado === 'true') {
+          // if ($estadoverifica == 'OB') {
+          //   $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA SET OBSERVACION='$observacion',ACCION_CORRECTIVA='$accioncorrectiva' WHERE COD_ALERTA='$codigoalerta'");
+          //   $insertaractualizar = $actualizarestado->execute();
+          // }
+          $fecha_creacion = $codigo->c_horaserversql('F');
+
+
+          $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA SET ESTADO='R' WHERE COD_ALERTA='$codigoalerta'");
+          $insertaractualizar = $actualizarestado->execute();
+
+
+
+          if ($ndias == '2') {
+            $conversionfecha = strtotime(str_replace('/', '-',  $fecha_creacion));
+            if (date('N', $conversionfecha) == 6) {
+              $timestamp = strtotime('+3 days', $conversionfecha);
+              $fechatotal = date("d/m/Y", $timestamp);
+            } else {
+              $fechasumadias = strtotime("+$ndias days", $conversionfecha);
+              $fechadomingo = date('w', $fechasumadias);
+
+              if ($fechadomingo == 0) {
+                $fechasumadias = strtotime('+1 day', $fechasumadias);
+              }
+              $fechatotal = date("d/m/Y", $fechasumadias);
+            }
+          } else {
+            $conversionfecha = strtotime(str_replace('/', '-',  $fecha_creacion));
+            $fechasumadias = strtotime("+$ndias days", $conversionfecha);
+            $fechadomingo = date('w', $fechasumadias);
+
+            if ($fechadomingo == 0) {
+              $fechasumadias = strtotime('+1 day', $fechasumadias);
+            }
+            $fechatotal = date("d/m/Y", $fechasumadias);
+          }
+          $insertartrue = $this->bd->prepare("INSERT INTO T_ALERTA(COD_ZONA,COD_INFRAESTRUCTURA,N_DIAS_POS,FECHA_CREACION,FECHA_TOTAL) VALUES('$codigozona','$codigoinfra','$ndias','$fecha_creacion','$fechatotal')");
+          $insertartrue->execute();
+        }
+      }
+
+      $insertaractualizar = $this->bd->commit();
+      return $insertaractualizar;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
       die($e->getMessage());
     }
   }
