@@ -108,7 +108,7 @@ $submenu2 = $_SESSION["subsub_c"];
     <script src="../control_alimento/js/jquery-3.7.0.min.js"></script>
     <!-- <script src="../librerias/jquery_ajax/js/jquery-3.7.0.js"></script> -->
 
-    <script src="../control_alimento/js/ajaxFechaAviso.js"></script>
+    <!-- <script src="../control_alimento/js/ajaxFechaAviso.js"></script> -->
 </body>
 
 </html>

@@ -500,143 +500,143 @@ $(function () {
           $("#tbavisoalerta").append(tableHeader);
           // const datosAgrupados = {};
 
-          // for (let i = 0; i < datass.length; i++) {
-          //   const rowData = datass[i];
-          //   const tableRow =
-          //     "<tr><td  style='border: 1px solid black;'>" +
-          //     rowData.NOMBRE_AREA +
-          //     "</td><td style='border: 1px solid black;'>" +
-          //     rowData.NOMBRE_INFRAESTRUCTURA +
-          //     "</td><td style='border: 1px solid black;'>" +
-          //     rowData.NDIAS +
-          //     "</td><td style='border: 1px solid black;'>" +
-          //     rowData.FECHA_TOTAL +
-          //     "</td></tr>";
-
-          //   $("#tablaavisoalerta").append(tableRow);
-          // }
-
-          const areaData = {};
-
           for (let i = 0; i < datass.length; i++) {
             const rowData = datass[i];
+            const tableRow =
+              "<tr><td  style='border: 1px solid black;'>" +
+              rowData.NOMBRE_AREA +
+              "</td><td style='border: 1px solid black;'>" +
+              rowData.NOMBRE_INFRAESTRUCTURA +
+              "</td><td style='border: 1px solid black;'>" +
+              rowData.NDIAS +
+              "</td><td style='border: 1px solid black;'>" +
+              rowData.FECHA_TOTAL +
+              "</td></tr>";
 
-            if (!areaData[rowData.NOMBRE_AREA]) {
-              areaData[rowData.NOMBRE_AREA] = {
-                NOMBRE_AREA: rowData.NOMBRE_AREA,
-                INFRAESTRUCTURAS: [],
-              };
-            }
-
-            areaData[rowData.NOMBRE_AREA].INFRAESTRUCTURAS.push({
-              NOMBRE_INFRAESTRUCTURA: rowData.NOMBRE_INFRAESTRUCTURA,
-              NDIAS: rowData.NDIAS,
-              FECHA_TOTAL: rowData.FECHA_TOTAL,
-            });
+            $("#tablaavisoalerta").append(tableRow);
           }
 
-          for (const key in areaData) {
-            if (areaData.hasOwnProperty(key)) {
-              const rowData = areaData[key];
-              const rowspan = rowData.INFRAESTRUCTURAS.length;
+          // const areaData = {};
 
-              const nombre = rowData.INFRAESTRUCTURAS[0].NDIAS;
-              let nombredia = "";
-              if (nombre == "1") {
-                nombredia = "Diario";
-              } else if (nombre == "2") {
-                nombredia = "Inter-diario";
-              } else if (nombre == "7") {
-                nombredia = "Semanal";
-              } else if (nombre == "15") {
-                nombredia = "Quincenal";
-              } else if (nombre == "30") {
-                nombredia = "Mensual";
-              }
-              const fecha = rowData.INFRAESTRUCTURAS[0].FECHA_TOTAL;
-              var fechaconv = new Date(fecha);
-              var diaif = fechaconv.getDate() + 1;
+          // for (let i = 0; i < datass.length; i++) {
+          //   const rowData = datass[i];
 
-              let tableRow =
-                "<tr><td rowspan='" +
-                rowspan +
-                "' style='border: 1px solid black;'>" +
-                rowData.NOMBRE_AREA +
-                "</td><td style='border: 1px solid black;'>" +
-                rowData.INFRAESTRUCTURAS[0].NOMBRE_INFRAESTRUCTURA +
-                "</td><td style='border: 1px solid black;'>" +
-                // rowData.INFRAESTRUCTURAS[0].NDIAS
-                nombredia +
-                "</td>";
-              for (let col = 4; col <= diamesactual + 4; col++) {
-                let diasum = diaif + 4;
-                if (col == diasum) {
-                  tableRow +=
-                    "<td style='border: 1px solid black;background-color:#bda2fa;'><input type='checkbox'/></td>";
-                } else {
-                  tableRow +=
-                    "<td style='border: 1px solid black;width:15px;'>" +
-                    col +
-                    "</td>";
-                }
-              }
-              tableRow += "</tr>";
-              // tableRow +=
-              //   "<td style='border: 1px solid black;'>" + diaif + "</td></tr>";
-              // "</td><td style='border: 1px solid black;'>" +
-              // // rowData.INFRAESTRUCTURAS[0].FECHA_TOTAL
-              // diaif +
-              // "</td></tr>";
+          //   if (!areaData[rowData.NOMBRE_AREA]) {
+          //     areaData[rowData.NOMBRE_AREA] = {
+          //       NOMBRE_AREA: rowData.NOMBRE_AREA,
+          //       INFRAESTRUCTURAS: [],
+          //     };
+          //   }
 
-              $("#tablaavisoalerta").append(tableRow);
+          //   areaData[rowData.NOMBRE_AREA].INFRAESTRUCTURAS.push({
+          //     NOMBRE_INFRAESTRUCTURA: rowData.NOMBRE_INFRAESTRUCTURA,
+          //     NDIAS: rowData.NDIAS,
+          //     FECHA_TOTAL: rowData.FECHA_TOTAL,
+          //   });
+          // }
 
-              for (let i = 1; i < rowspan; i++) {
-                var fechaString = rowData.INFRAESTRUCTURAS[i].FECHA_TOTAL;
+          // for (const key in areaData) {
+          //   if (areaData.hasOwnProperty(key)) {
+          //     const rowData = areaData[key];
+          //     const rowspan = rowData.INFRAESTRUCTURAS.length;
 
-                const nombree = rowData.INFRAESTRUCTURAS[i].NDIAS;
-                let nombrediaa = "";
-                if (nombree == "1") {
-                  nombrediaa = "Diario";
-                } else if (nombree == "2") {
-                  nombrediaa = "Inter-diario";
-                } else if (nombree == "7") {
-                  nombrediaa = "Semanal";
-                } else if (nombree == "15") {
-                  nombrediaa = "Quincenal";
-                } else if (nombree == "30") {
-                  nombrediaa = "Mensual";
-                }
+          //     const nombre = rowData.INFRAESTRUCTURAS[0].NDIAS;
+          //     let nombredia = "";
+          //     if (nombre == "1") {
+          //       nombredia = "Diario";
+          //     } else if (nombre == "2") {
+          //       nombredia = "Inter-diario";
+          //     } else if (nombre == "7") {
+          //       nombredia = "Semanal";
+          //     } else if (nombre == "15") {
+          //       nombredia = "Quincenal";
+          //     } else if (nombre == "30") {
+          //       nombredia = "Mensual";
+          //     }
+          //     const fecha = rowData.INFRAESTRUCTURAS[0].FECHA_TOTAL;
+          //     var fechaconv = new Date(fecha);
+          //     var diaif = fechaconv.getDate() + 1;
 
-                var fechaObjeto = new Date(fechaString);
-                var dia = fechaObjeto.getDate() + 1;
+          //     let tableRow =
+          //       "<tr><td rowspan='" +
+          //       rowspan +
+          //       "' style='border: 1px solid black;'>" +
+          //       rowData.NOMBRE_AREA +
+          //       "</td><td style='border: 1px solid black;'>" +
+          //       rowData.INFRAESTRUCTURAS[0].NOMBRE_INFRAESTRUCTURA +
+          //       "</td><td style='border: 1px solid black;'>" +
+          //       // rowData.INFRAESTRUCTURAS[0].NDIAS
+          //       nombredia +
+          //       "</td>";
+          //     for (let col = 4; col <= diamesactual + 4; col++) {
+          //       let diasum = diaif + 4;
+          //       if (col == diasum) {
+          //         tableRow +=
+          //           "<td style='border: 1px solid black;background-color:#bda2fa;'><input type='checkbox'/></td>";
+          //       } else {
+          //         tableRow +=
+          //           "<td style='border: 1px solid black;width:15px;'>" +
+          //           col +
+          //           "</td>";
+          //       }
+          //     }
+          //     tableRow += "</tr>";
+          //     // tableRow +=
+          //     //   "<td style='border: 1px solid black;'>" + diaif + "</td></tr>";
+          //     // "</td><td style='border: 1px solid black;'>" +
+          //     // // rowData.INFRAESTRUCTURAS[0].FECHA_TOTAL
+          //     // diaif +
+          //     // "</td></tr>";
 
-                let additionalRow =
-                  "<tr><td style='border: 1px solid black;'>" +
-                  rowData.INFRAESTRUCTURAS[i].NOMBRE_INFRAESTRUCTURA +
-                  "</td><td style='border: 1px solid black;'>" +
-                  // rowData.INFRAESTRUCTURAS[i].NDIAS
-                  nombrediaa +
-                  "</td>";
-                // "<td style='border: 1px solid black;'>" +
-                // dia +
-                // "</td>";
-                for (let a = 4; a <= diamesactual + 4; a++) {
-                  let sum = dia + 4;
-                  if (a == sum) {
-                    additionalRow +=
-                      "<td style='border: 1px solid black;'>a</td>";
-                  } else {
-                    additionalRow +=
-                      "<td style='border: 1px solid black;'></td>";
-                  }
-                }
-                additionalRow += "</tr>";
-                // "</td></tr>";
+          //     $("#tablaavisoalerta").append(tableRow);
 
-                $("#tablaavisoalerta").append(additionalRow);
-              }
-            }
-          }
+          //     for (let i = 1; i < rowspan; i++) {
+          //       var fechaString = rowData.INFRAESTRUCTURAS[i].FECHA_TOTAL;
+
+          //       const nombree = rowData.INFRAESTRUCTURAS[i].NDIAS;
+          //       let nombrediaa = "";
+          //       if (nombree == "1") {
+          //         nombrediaa = "Diario";
+          //       } else if (nombree == "2") {
+          //         nombrediaa = "Inter-diario";
+          //       } else if (nombree == "7") {
+          //         nombrediaa = "Semanal";
+          //       } else if (nombree == "15") {
+          //         nombrediaa = "Quincenal";
+          //       } else if (nombree == "30") {
+          //         nombrediaa = "Mensual";
+          //       }
+
+          //       var fechaObjeto = new Date(fechaString);
+          //       var dia = fechaObjeto.getDate() + 1;
+
+          //       let additionalRow =
+          //         "<tr><td style='border: 1px solid black;'>" +
+          //         rowData.INFRAESTRUCTURAS[i].NOMBRE_INFRAESTRUCTURA +
+          //         "</td><td style='border: 1px solid black;'>" +
+          //         // rowData.INFRAESTRUCTURAS[i].NDIAS
+          //         nombrediaa +
+          //         "</td>";
+          //       // "<td style='border: 1px solid black;'>" +
+          //       // dia +
+          //       // "</td>";
+          //       for (let a = 4; a <= diamesactual + 4; a++) {
+          //         let sum = dia + 4;
+          //         if (a == sum) {
+          //           additionalRow +=
+          //             "<td style='border: 1px solid black;'>a</td>";
+          //         } else {
+          //           additionalRow +=
+          //             "<td style='border: 1px solid black;'></td>";
+          //         }
+          //       }
+          //       additionalRow += "</tr>";
+          //       // "</td></tr>";
+
+          //       $("#tablaavisoalerta").append(additionalRow);
+          //     }
+          //   }
+          // }
 
           $("#modalalertaaviso").modal("show");
         },
