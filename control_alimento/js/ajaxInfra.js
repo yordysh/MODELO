@@ -478,6 +478,7 @@ $(function () {
               // actualizarNombreCombo(task.CODIGO);
               actualizareditarcombo(task.COD_ZONA, task.COD_INFRAESTRUCTURA);
 
+              $("#selectFrecuencia").prop("disabled", true);
               $("#selectFrecuencia").val(task.NDIAS);
               $("#taskId").val(task.CODIGO);
 

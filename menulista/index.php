@@ -3,6 +3,14 @@
 //     session_start();
 // }
 
+require_once "../control_alimento/m_almacen.php";
+
+$mostrar = new m_almacen();
+$data = $mostrar->MostrarAlerta();
+$datacontroles = $mostrar->MostrarAlertaControl();
+
+$fechaactualservidor = $mostrar->c_horaserversql('F');
+/*------comentar para el servidor */
 require_once("../menulista/c_permisosmenu.php");
 $controller = new c_permisosmenu();
 $controller->c_permisos("9002");
@@ -101,14 +109,18 @@ $submenu2 = $_SESSION["subsub_c"];
         </div>
     </nav>
 
-    <?php require_once("../control_alimento/modalalertaaviso.php"); ?>
+    <?php
+    require_once("../control_alimento/modalalertaaviso.php");
+    require_once("../control_alimento/modalcontrolalertas.php");
+    ?>
     <script src="../control_alimento/js/bootstrap.min.js"></script>
     <!-- <script src="../control_alimento/js/ajaxIndex.js"></script> -->
     <script src="../control_alimento/js/sweetalert2.all.min.js"></script>
     <script src="../control_alimento/js/jquery-3.7.0.min.js"></script>
     <!-- <script src="../librerias/jquery_ajax/js/jquery-3.7.0.js"></script> -->
 
-    <!-- <script src="../control_alimento/js/ajaxFechaAviso.js"></script> -->
+    <script src="../control_alimento/js/ajaxFechaAviso.js"></script>
+    <!-- <script src="../control_alimento/js/alerta.js"></script> -->
 </body>
 
 </html>

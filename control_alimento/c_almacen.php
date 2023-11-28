@@ -58,8 +58,6 @@ if ($accion == 'insertar') {
     $nombreinfraestructurax = trim($_POST['nombreinfraestructura']);
 
     $ndias = trim($_POST['ndias']);
-    var_dump("codinfra" . $codinfra . "valorsele" . $valorSeleccionado . "nombre" . $nombreinfraestructura);
-    exit();
 
     $respuesta = c_almacen::c_actualizar_infra($valorSeleccionado, $nombreinfraestructurax, $ndias, $codinfra);
     echo $respuesta;
@@ -1447,32 +1445,15 @@ class c_almacen
 
 
         $datos = $mostrar->MostrarAlerta();
+
         // var_dump($datos);
         try {
             if (!$datos) {
-                // throw new Exception("Hubo un error en la consulta");
-                $json = array();
+                $json = "datosno";
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
             } else {
-                $json = array();
-                foreach ($datos as $row) {
-                    $json[] = array(
-                        "COD_ALERTA" => $row->COD_ALERTA,
-                        "NDIAS" => $row->NDIAS,
-                        "COD_ZONA" => $row->COD_ZONA,
-                        "NOMBRE_AREA" => $row->NOMBRE_AREA,
-                        "COD_INFRAESTRUCTURA" => $row->COD_INFRAESTRUCTURA,
-                        "NOMBRE_INFRAESTRUCTURA" => $row->NOMBRE_INFRAESTRUCTURA,
-                        "FECHA_CREACION" =>  $row->FECHA_CREACION,
-                        "FECHA_TOTAL" =>  $row->FECHA_TOTAL,
-                        "FECHA_ACORDAR" =>  $row->FECHA_ACORDAR,
-                        "N_DIAS_POS" =>  $row->N_DIAS_POS,
-                        "POSTERGACION" =>  $row->POSTERGACION,
-                        "ESTADO" =>  trim($row->ESTADO),
-                    );
-                }
-
+                $json = "datossi";
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
             }
@@ -1899,34 +1880,12 @@ class c_almacen
         $datos = $mostrar->MostrarAlertaControl();
         try {
             if (!$datos) {
-                $json = array();
+                $json = "controlno";
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
                 // throw new Exception("Hubo un error en la consulta");
             } else {
-                $json = array();
-                foreach ($datos as $row) {
-                    $json[] = array(
-
-                        // "COD_ALERTA_CONTROL_MAQUINA" => $row->COD_ALERTA_CONTROL_MAQUINA,
-                        // "NOMBRE_T_ZONA_AREAS" => $row->NOMBRE_T_ZONA_AREAS,
-                        // "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
-                        // "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
-                        // "FECHA_CREACION" =>  convFecSistema($row->FECHA_CREACION),
-                        // "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
-                        // "FECHA_ACORDAR" =>  convFecSistema($row->FECHA_ACORDAR),
-                        // "N_DIAS_POS" =>  $row->N_DIAS_POS,
-                        // "ACCION_CORRECTIVA" =>  $row->ACCION_CORRECTIVA,
-                        "COD_ALERTA_CONTROL_MAQUINA" => $row->COD_ALERTA_CONTROL_MAQUINA,
-                        "COD_CONTROL_MAQUINA" => $row->COD_CONTROL_MAQUINA,
-                        "NOMBRE_CONTROL_MAQUINA" => $row->NOMBRE_CONTROL_MAQUINA,
-                        "FECHA_CREACION" =>  $row->FECHA_CREACION,
-                        "FECHA_TOTAL" =>  convFecSistema($row->FECHA_TOTAL),
-                        "FECHA_ACORDAR" =>  $row->FECHA_ACORDAR,
-                        "N_DIAS_POS" =>  $row->N_DIAS_POS,
-                    );
-                }
-
+                $json = "controlsi";
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
             }
