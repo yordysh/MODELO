@@ -625,7 +625,6 @@ $(function () {
   }
 
   async function alertaControl() {
-    console.log("alerta2");
     // return new Promise(async function (resolve, reject) {
     //   function mostrarAlertasControl(datacontroles, index) {
     //     if (index >= datacontroles.length) {
@@ -983,12 +982,23 @@ $(function () {
 
   function alertax() {
     $("#botonalertaguardar").click(function () {
+      let alertaLanzada = false;
+
       $("#tablaalerta tr").each(function (index) {
         if (index !== 0) {
           let check = $(this).find(".check").prop("checked");
           let obs = $(this).find(".observacion").val();
           let accioncorrectox = $(this).find(".accioncorrectiva").val();
           let selectvb = $(this).find(".selectVerificacion").val();
+
+          if (!check && accioncorrectox.trim() === "" && obs.trim() === "") {
+            if (!alertaLanzada) {
+              alert(
+                "¡La observación está vacía cuando la casilla no está marcada!"
+              );
+              alertaLanzada = true;
+            }
+          }
         }
       });
 
@@ -1025,40 +1035,40 @@ $(function () {
       });
       console.log(capturavalor);
 
-      const accion = "insertaryactualizaralerta";
-      $.ajax({
-        url: "./c_almacen.php",
-        type: "POST",
-        beforeSend: function () {
-          $(".preloader").css("opacity", "1");
-          $(".preloader").css("display", "block");
-        },
-        data: { accion: accion, capturavalor: capturavalor },
-        success: function (response) {
-          if (response == "ok") {
-            Swal.fire({
-              title: "¡Guardado exitoso!",
-              text: "Los datos se han guardado correctamente.",
-              icon: "success",
-              confirmButtonText: "Aceptar",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                $("#modalalertaaviso").modal("hide");
-                alertaControl();
-                // $("#formularioZona").trigger("reset");
-              }
-            });
-          }
-        },
-        complete: function () {
-          $(".preloader").css("opacity", "0");
-          $(".preloader").css("display", "none");
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-          console.error("Error in alerta AJAX:", textStatus, errorThrown);
-          reject(errorThrown);
-        },
-      });
+      // const accion = "insertaryactualizaralerta";
+      // $.ajax({
+      //   url: "./c_almacen.php",
+      //   type: "POST",
+      //   beforeSend: function () {
+      //     $(".preloader").css("opacity", "1");
+      //     $(".preloader").css("display", "block");
+      //   },
+      //   data: { accion: accion, capturavalor: capturavalor },
+      //   success: function (response) {
+      //     if (response == "ok") {
+      //       Swal.fire({
+      //         title: "¡Guardado exitoso!",
+      //         text: "Los datos se han guardado correctamente.",
+      //         icon: "success",
+      //         confirmButtonText: "Aceptar",
+      //       }).then((result) => {
+      //         if (result.isConfirmed) {
+      //           $("#modalalertaaviso").modal("hide");
+      //           alertaControl();
+      //           // $("#formularioZona").trigger("reset");
+      //         }
+      //       });
+      //     }
+      //   },
+      //   complete: function () {
+      //     $(".preloader").css("opacity", "0");
+      //     $(".preloader").css("display", "none");
+      //   },
+      //   error: function (jqXHR, textStatus, errorThrown) {
+      //     console.error("Error in alerta AJAX:", textStatus, errorThrown);
+      //     reject(errorThrown);
+      //   },
+      // });
     });
 
     /*-----------------------Para deshabilitar cajas de texto al darle check------------ */
