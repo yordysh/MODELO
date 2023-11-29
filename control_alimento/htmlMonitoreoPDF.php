@@ -397,6 +397,10 @@ $fecham = $anioSeleccionado . '-' . $mesSeleccionado;
                 if ($vb == "Seleccione V°B°") {
                     $vb = '';
                 }
+                $vr = $fils['VERIFICACION_REALIZADA'];
+                if ($vr == "Seleccione una verificacion") {
+                    $vr = '';
+                }
 
                 echo '<tr>';
 
@@ -407,7 +411,7 @@ $fecham = $anioSeleccionado . '-' . $mesSeleccionado;
                 echo '<td class="cabecera">' . $fils['NOMBRE_T_ZONA_AREAS'] . '</td>';
                 echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
                 echo '<td class="cabecera">' . $fils['ACCION_CORRECTIVA'] . '</td>';
-                echo '<td class="cabecera">' . $fils['VERIFICACION_REALIZADA'] . '</td>';
+                echo '<td class="cabecera">' . $vr . '</td>';
                 echo '<td class="cabecera">' . $vb . '</td>';
 
                 echo '</tr>';

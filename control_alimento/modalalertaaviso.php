@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-xl modal-fullscreen">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">MONITOREO DE L & D DE ESTRUCTURAS</h5>
+                <h5 class="modal-title monitoreo">MONITOREO DE L & D DE ESTRUCTURAS</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -12,6 +12,7 @@
                             <?php
                             echo '<thead>';
                             echo '<tr>';
+
                             echo '<th class="thtitulo" scope="col">ZONA</th>';
                             echo '<th class="thtitulo" scope="col">INFRAESTRUCTURA</th>';
                             echo '<th class="thtitulo" scope="col">FRECUENCIA</th>';
@@ -24,8 +25,6 @@
 
                             echo '</thead>';
                             echo '<tbody id="tablaalerta">';
-
-
 
                             foreach ($data as $datostotales) {
                                 $codigoalerta = $datostotales->COD_ALERTA;
@@ -51,7 +50,6 @@
                                     $frecuencianombre = 'Mensual';
                                 }
 
-
                                 if (isset($datos_por_zona[$zona])) {
                                     $datos_por_zona[$zona][] = array('codigozona' => $codigozona, 'codigoinfra' => $codigoinfra, 'infraestructura' => $infraestructura, 'frecuencia' => $frecuencianombre, 'fechacreacion' => $fechacreacion, 'codigoalerta' => $codigoalerta, 'frecuenciadias' => $frecuenciadias, 'estadoverifica' => $estadoverifica, 'fecha' => $fecha);
                                 } else {
@@ -59,7 +57,7 @@
                                     $datos_por_zona[$zona] = array(array('codigozona' => $codigozona, 'codigoinfra' => $codigoinfra, 'infraestructura' => $infraestructura, 'frecuencia' => $frecuencianombre, 'fechacreacion' => $fechacreacion, 'codigoalerta' => $codigoalerta, 'frecuenciadias' => $frecuenciadias, 'estadoverifica' => $estadoverifica, 'fecha' => $fecha));
                                 }
                             }
-
+                            $contador = 1;
                             foreach ($datos_por_zona as $zona => $datos) {
                                 echo '<tr>';
                                 echo '<td style="visibility:collapse; display:none;"><input class="codigozona" type="text" value="' . $datos[0]['codigozona'] . '" /></td>';
@@ -69,13 +67,14 @@
                                 echo '<td style="visibility:collapse; display:none;"><input class="estadoverifica" type="text" value="' . $datos[0]['estadoverifica'] . '" /></td>';
                                 echo '<td style="visibility:collapse; display:none;"><input class="fecha" type="text" value="' . $datos[0]['fecha'] . '" /></td>';
 
-                                echo '<td rowspan="' . count($datos) . '">' . $zona . '</td>';
-                                echo '<td >' . $datos[0]['infraestructura'] . '</td>';
-                                echo '<td>' . $datos[0]['frecuencia'] . '</td>';
-                                echo '<td>' . $datos[0]['fechacreacion'] . '</td>';
-                                echo '<td><input class="check" type="checkbox"/></td>';
-                                echo '<td><textarea class="form-control observacion" id="observacion" rows="2"></textarea></td>';
-                                echo '<td><textarea class="form-control accioncorrectiva" id="accioncorrectiva" rows="2"></textarea></td>';
+
+                                echo '<td class="titulotd" rowspan="' . count($datos) . '">' . $zona . '</td>';
+                                echo '<td class="titulotd">' . $datos[0]['infraestructura'] . '</td>';
+                                echo '<td class="titulotd">' . $datos[0]['frecuencia'] . '</td>';
+                                echo '<td class="titulotd">' . $datos[0]['fechacreacion'] . '</td>';
+                                echo '<td class="titulotd"><input class="check" type="checkbox"/></td>';
+                                echo '<td ><textarea class="form-control observacion" id="observacion" rows="2"></textarea></td>';
+                                echo '<td ><textarea class="form-control accioncorrectiva" id="accioncorrectiva" rows="2"></textarea></td>';
                                 echo '<td>
                                             <select id="selectVerificacion" class="form-select selectVerificacion" style="width:150px;" aria-label="Default select example">
                                                     <option selected>Seleccione V°B</option>
@@ -97,11 +96,12 @@
 
 
                                     echo '<td style="visibility:collapse; display:none;"></td>';
-                                    echo '<td>' . $datos[$i]['infraestructura'] . '</td>';
 
-                                    echo '<td>' . $datos[$i]['frecuencia'] . '</td>';
-                                    echo '<td>' . $datos[$i]['fechacreacion'] . '</td>';
-                                    echo '<td><input class="check" type="checkbox"/></td>';
+                                    echo '<td class="titulotd">' . $datos[$i]['infraestructura'] . '</td>';
+
+                                    echo '<td class="titulotd">' . $datos[$i]['frecuencia'] . '</td>';
+                                    echo '<td class="titulotd">' . $datos[$i]['fechacreacion'] . '</td>';
+                                    echo '<td class="titulotd"><input class="check" type="checkbox"/></td>';
                                     echo '<td><textarea class="form-control observacion" id="observacion" rows="2"></textarea></td>';
                                     echo '<td><textarea class="form-control accioncorrectiva" id="accioncorrectiva" rows="2"></textarea></td>';
                                     echo '<td>
@@ -112,20 +112,16 @@
                                  </select></td>';
                                     echo '</tr>';
                                 }
+                                $contador++;
                             }
 
                             echo '</tbody>';
                             ?>
                         </table>
                     </div>
-                    <!-- <div class="btonguardar">
-                        <input type="hidden" id="task">
-                        <button id="botonalertaguardar" type="submit" name="insert" class="btn btn-primary estiloboton">Guardar </button>
-                    </div> -->
                 </main>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CERRAR</button>
                 <button type="button" class="btn btn-primary" id="botonalertaguardar">GUARDAR</button>
             </div>
         </div>

@@ -1,7 +1,7 @@
 <?php
 
 require_once("../funciones/DataBaseA.php");
-require_once("./maquina.php");
+require_once("../control_alimento/maquina.php");
 
 class m_almacen
 {
@@ -724,7 +724,7 @@ class m_almacen
 
       $stm = $this->bd->prepare("SELECT T_ZONA_AREAS.COD_ZONA AS COD_ZONA, T_ZONA_AREAS.NOMBRE_T_ZONA_AREAS AS NOMBRE_AREA,T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA AS COD_INFRAESTRUCTURA,
       T_INFRAESTRUCTURA.NOMBRE_INFRAESTRUCTURA AS NOMBRE_INFRAESTRUCTURA,T_INFRAESTRUCTURA.NDIAS AS NDIAS,T_ALERTA.COD_ALERTA AS COD_ALERTA,
-      CONVERT(DATE,T_ALERTA.FECHA_CREACION) AS FECHA_CREACION,CONVERT(DATE, T_ALERTA.FECHA_TOTAL) AS FECHA_TOTAL, CONVERT(DATE,T_ALERTA.FECHA_ACORDAR) AS FECHA_ACORDAR,
+      CONVERT(VARCHAR, T_ALERTA.FECHA_CREACION, 103) AS FECHA_CREACION,CONVERT(DATE, T_ALERTA.FECHA_TOTAL) AS FECHA_TOTAL, CONVERT(DATE,T_ALERTA.FECHA_ACORDAR) AS FECHA_ACORDAR,
       T_ALERTA.ESTADO AS ESTADO, T_ALERTA.N_DIAS_POS AS N_DIAS_POS, T_ALERTA.POSTERGACION AS POSTERGACION FROM T_ALERTA INNER JOIN T_INFRAESTRUCTURA
       ON T_ALERTA.COD_INFRAESTRUCTURA= T_INFRAESTRUCTURA.COD_INFRAESTRUCTURA INNER JOIN T_ZONA_AREAS ON
       T_ZONA_AREAS.COD_ZONA= T_INFRAESTRUCTURA.COD_ZONA
@@ -1485,7 +1485,9 @@ class m_almacen
                                   TCM.FECHA_CREACION AS FECHA_CREACION, TCM.FECHA_TOTAL AS FECHA_TOTAL, TCM.FECHA_ACORDAR,
                                   TCM.ESTADO AS ESTADO, TCM.N_DIAS_POS AS N_DIAS_POS FROM T_ALERTA_CONTROL_MAQUINA TCM 
                                   INNER JOIN T_CONTROL_MAQUINA TC ON TC.COD_CONTROL_MAQUINA=TCM.COD_CONTROL_MAQUINA 
-                                  WHERE CAST(TCM.FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE) AND (TCM.ESTADO='P' AND TCM.N_DIAS_POS!='1') OR (TCM.ESTADO='PE' AND TCM.N_DIAS_POS='1')");
+                                  WHERE CAST(TCM.FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE) AND (TCM.ESTADO='P' AND TCM.N_DIAS_POS!='1')
+                                  OR (TCM.ESTADO='PE' AND TCM.N_DIAS_POS='1') OR (CAST(TCM.FECHA_TOTAL AS DATE)   <= CAST(GETDATE() AS DATE) AND TCM.ESTADO='OB' AND TCM.POSTERGACION='SI')
+");
 
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
@@ -4722,11 +4724,15 @@ class m_almacen
             $fechaForma = DateTime::createFromFormat('Y-m-d', $fecha);
             $fechaForma->format('d/m/Y');
 
+            // $timestamp = strtotime($fechatotalcontrol);
+            // $fechaFormatos = date('d/m/Y', $timestamp);
+            // $dia_semana = date('w', $timestamp);
+
             if ($fechaForma->format('N') == 6) {
               $fechatotalsabado = $fechaForma->format('d/m/Y');
               $conversionfechasabado = strtotime(str_replace('/', '-',  $fechatotalsabado));
 
-              $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA SET FECHA_TOTAL='$fechatotalsabado',ESTADO='R' WHERE COD_ALERTA='$codigoalerta'");
+              $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA SET FECHA_TOTAL='$fechatotalsabado',ESTADO='OB' WHERE COD_ALERTA='$codigoalerta'");
               $insertaractualizar = $actualizarestado->execute();
 
               if ($ndias == '2') {
@@ -4746,7 +4752,7 @@ class m_almacen
               $insertartrue = $this->bd->prepare("INSERT INTO T_ALERTA(COD_ZONA,COD_INFRAESTRUCTURA,N_DIAS_POS,FECHA_CREACION,FECHA_TOTAL) VALUES('$codigozona','$codigoinfra','$ndias','$fechatotalsabado','$fechamodificadainsertar')");
               $insertartrue->execute();
             } else {
-              $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA SET FECHA_TOTAL='$fechaactualalerta',ESTADO='R' WHERE COD_ALERTA='$codigoalerta'");
+              $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA SET FECHA_TOTAL='$fechaactualalerta',ESTADO='OB' WHERE COD_ALERTA='$codigoalerta'");
               $insertaractualizar = $actualizarestado->execute();
 
               $conversionfecha = strtotime(str_replace('/', '-',  $fechaactualalerta));
@@ -4783,6 +4789,115 @@ class m_almacen
 
       $insertaractualizar = $this->bd->commit();
       return $insertaractualizar;
+    } catch (Exception $e) {
+      $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+  public function  InsertarActualizarAlertaControl($capturavalorcontrol)
+  {
+    try {
+      $this->bd->beginTransaction();
+
+      $alerta = new m_almacen();
+      $fechaactualalertacontrol = $alerta->c_horaserversql('F');
+
+      foreach ($capturavalorcontrol as $valorcontrol) {
+        $idcontrolmaquina = trim($valorcontrol['idcontrolalerta']);
+        $codigocontrolmaquina = trim($valorcontrol['codigomaquinacontrol']);
+        $estadocontrol = $valorcontrol['checkcontro'];
+        $ndiascontrol = $valorcontrol['frecuenciacontrol'];
+        $observacioncontrol = strtoupper($valorcontrol['obscontrol']);
+        $accioncorrectivacontrol = strtoupper($valorcontrol['accioncorrectocontrol']);
+        $selectvbcontrol = $valorcontrol['selectvbcontrol'];
+        $estadoverificacontrol = trim($valorcontrol['estadoverificacontrol']);
+        $fechatotalcontrol = $valorcontrol['fechacontrol'];
+
+        if ($estadocontrol === 'false') {
+          $fechacreacioncontrol = $alerta->c_horaserversql('F');
+
+          $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET ESTADO='PO', OBSERVACION='$observacioncontrol',ACCION_CORRECTIVA='$accioncorrectivacontrol', VB='$selectvbcontrol' WHERE COD_ALERTA_CONTROL_MAQUINA='$idcontrolmaquina'");
+          $insertaractualizarcontrol = $actualizarestado->execute();
+
+          $fechaformatocontrol = DateTime::createFromFormat('d/m/Y', $fechaactualalertacontrol);
+          $fechaformatocontrol->modify('+1 day');
+
+
+          $fechatotalcontro = $fechaformatocontrol->format('d/m/Y');
+
+          $insertarfalse = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,N_DIAS_POS,FECHA_CREACION,FECHA_TOTAL,ESTADO,POSTERGACION)
+                                                               VALUES('$codigocontrolmaquina','$ndiascontrol','$fechacreacioncontrol','$fechatotalcontro','OB','SI')");
+          $insertarfalse->execute();
+        } else if ($estadocontrol === 'true') {
+
+          $fecha_creacion_control = $alerta->c_horaserversql('F');
+
+          if ($estadoverificacontrol == 'OB') {
+
+            // $fechaFormatos = DateTime::createFromFormat('Y-m-d', $fechatotalcontrol);
+            // $fechs = $fechaFormatos->format('d/m/Y');
+            $timestamp = strtotime($fechatotalcontrol);
+            $fechaFormatos = date('d/m/Y', $timestamp);
+            $dia_semana = date('w', $timestamp);
+
+            if ($dia_semana  == 6) {
+              $fechatotalsabado = $fechaFormatos;
+              $conversionfechasabado = strtotime(str_replace('/', '-',  $fechatotalsabado));
+
+              $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechatotalsabado',ESTADO='OB' WHERE COD_ALERTA_CONTROL_MAQUINA='$idcontrolmaquina'");
+              $insertaractualizarcontrol = $actualizarestado->execute();
+
+              $fechatotalinsertar = strtotime("+$ndiascontrol days", $conversionfechasabado);
+
+
+              $fechadomingo = date('w', $fechatotalinsertar);
+
+              if ($fechadomingo == 0) {
+                $fechatotalinsertar = strtotime('+1 day', $fechatotalinsertar);
+              }
+
+              $fechamodificadainsertar = date("d/m/Y", $fechatotalinsertar);
+
+              $insertartrue = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,N_DIAS_POS,FECHA_CREACION,FECHA_TOTAL) VALUES('$codigocontrolmaquina','$ndiascontrol','$fechatotalsabado','$fechamodificadainsertar')");
+              $insertartrue->execute();
+            } else {
+              $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualalertacontrol',ESTADO='OB' WHERE COD_ALERTA_CONTROL_MAQUINA='$idcontrolmaquina'");
+              $insertaractualizarcontrol = $actualizarestado->execute();
+
+              $conversionfecha = strtotime(str_replace('/', '-',  $fechaactualalertacontrol));
+              $fechasumadias = strtotime("+$ndiascontrol days", $conversionfecha);
+
+              $fechadomingo = date('w', $fechasumadias);
+
+              if ($fechadomingo == 0) {
+                $fechasumadias = strtotime('+1 day', $fechasumadias);
+              }
+              $fechasumarelse = date("d/m/Y", $fechasumadias);
+
+              $insertartrue = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,N_DIAS_POS,FECHA_CREACION,FECHA_TOTAL) VALUES('$codigocontrolmaquina','$ndiascontrol','$fecha_creacion_control','$fechasumarelse')");
+              $insertartrue->execute();
+            }
+          } else {
+            $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET ESTADO='R' WHERE COD_ALERTA_CONTROL_MAQUINA='$idcontrolmaquina'");
+            $insertaractualizarcontrol = $actualizarestado->execute();
+
+            $conversionfecha = strtotime(str_replace('/', '-',  $fecha_creacion_control));
+            $fechasumadias = strtotime("+$ndiascontrol days", $conversionfecha);
+            $fechadomingo = date('w', $fechasumadias);
+
+            if ($fechadomingo == 0) {
+              $fechasumadias = strtotime('+1 day', $fechasumadias);
+            }
+            $fechatotalrealizado = date("d/m/Y", $fechasumadias);
+
+            $insertartrue = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,N_DIAS_POS,FECHA_CREACION,FECHA_TOTAL) VALUES('$codigocontrolmaquina','$ndiascontrol','$fecha_creacion_control','$fechatotalrealizado')");
+            $insertartrue->execute();
+          }
+        }
+      }
+
+      $insertaractualizarcontrol = $this->bd->commit();
+      return $insertaractualizarcontrol;
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());

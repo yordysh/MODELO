@@ -686,6 +686,12 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_guardar_actualizar_alerta($capturavalor);
     echo $respuesta;
+} elseif ($accion == 'insertaryactualizaralertacontrol') {
+
+    $capturavalorcontrol = $_POST['capturavalorcontrol'];
+
+    $respuesta = c_almacen::c_guardar_actualizar_alerta_control($capturavalorcontrol);
+    echo $respuesta;
 }
 
 
@@ -3726,6 +3732,19 @@ class c_almacen
 
 
         $respuesta = $m_formula->InsertarActualizarAlerta($capturavalor);
+
+        if ($respuesta) {
+            return "ok";
+        } else {
+            return "error";
+        };
+    }
+    static function c_guardar_actualizar_alerta_control($capturavalorcontrol)
+    {
+        $m_formula = new m_almacen();
+
+
+        $respuesta = $m_formula->InsertarActualizarAlertaControl($capturavalorcontrol);
 
         if ($respuesta) {
             return "ok";

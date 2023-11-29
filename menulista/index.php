@@ -2,14 +2,6 @@
 // if (session_status() == PHP_SESSION_NONE) {
 //     session_start();
 // }
-
-require_once "../control_alimento/m_almacen.php";
-
-$mostrar = new m_almacen();
-$data = $mostrar->MostrarAlerta();
-$datacontroles = $mostrar->MostrarAlertaControl();
-
-$fechaactualservidor = $mostrar->c_horaserversql('F');
 /*------comentar para el servidor */
 require_once("../menulista/c_permisosmenu.php");
 $controller = new c_permisosmenu();
@@ -19,6 +11,12 @@ $menu = $_SESSION["menu_c"];
 $submenu = $_SESSION["submenu_c"];
 $submenu2 = $_SESSION["subsub_c"];
 
+require_once "../control_alimento/m_almacen.php";
+
+$mostrar = new m_almacen();
+$data = $mostrar->MostrarAlerta();
+$datacontroles = $mostrar->MostrarAlertaControl();
+$fechaactualservidor = $mostrar->c_horaserversql('F');
 ?>
 
 
@@ -32,7 +30,6 @@ $submenu2 = $_SESSION["subsub_c"];
     <link rel="stylesheet" href="../control_alimento/styleIcons/style.css">
     <link rel="stylesheet" href="../control_alimento/css/bootstrap.min.css">
     <link rel="stylesheet" href="../control_alimento/css/sweetalert2.min.css">
-    <!-- <link rel="stylesheet" href="../control_alimento/css/responsiveControl.css"> -->
 </head>
 
 <body>
@@ -75,8 +72,6 @@ $submenu2 = $_SESSION["subsub_c"];
                             if ($submenu[$l][2] != '') {
 
                                 echo "<a class='activo'  href='" . $submenu[$l][2] . "'>" . $submenu[$l][1] . "</a>";
-
-                                // echo "<li><a href='" . $submenu[$l][2] . "' class='submenulista font'>" . $submenu[$l][1] . "<span class='icon-dot'></span></a>";
                             } else {
                                 echo "<a>" . $submenu[$l][1] . "</a>";
                             }
@@ -114,10 +109,8 @@ $submenu2 = $_SESSION["subsub_c"];
     require_once("../control_alimento/modalcontrolalertas.php");
     ?>
     <script src="../control_alimento/js/bootstrap.min.js"></script>
-    <!-- <script src="../control_alimento/js/ajaxIndex.js"></script> -->
     <script src="../control_alimento/js/sweetalert2.all.min.js"></script>
     <script src="../control_alimento/js/jquery-3.7.0.min.js"></script>
-    <!-- <script src="../librerias/jquery_ajax/js/jquery-3.7.0.js"></script> -->
 
     <script src="../control_alimento/js/ajaxFechaAviso.js"></script>
     <!-- <script src="../control_alimento/js/alerta.js"></script> -->
