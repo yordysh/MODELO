@@ -12,14 +12,14 @@
                             <?php
                             echo '<thead>';
                             echo '<tr>';
-                            echo '<th class="thtitulo" scope="col">#</th>';
-                            echo '<th class="thtitulo">MAQUINAS,EQUIPOS Y UTENSILIOS DE TRABAJO</th>';
-                            echo '<th class="thtitulo">FRECUENCIA</th>';
-                            echo '<th class="thtitulo">FECHA ANTERIOR</th>';
-                            echo '<th class="thtitulo">' . $fechaactualservidor . '</th>';
-                            echo '<th class="thtitulo" scope="col">OBSERVACION</th>';
-                            echo '<th class="thtitulo" scope="col">ACCION CORRECTIVA</th>';
-                            echo '<th class="thtitulo" scope="col">V°B°</th>';
+                            echo '<th class="thtituloa" scope="col">ITEM</th>';
+                            echo '<th class="thtituloa">MAQUINAS,EQUIPOS Y UTENSILIOS DE TRABAJO</th>';
+                            echo '<th class="thtituloa">FRECUENCIA</th>';
+                            echo '<th class="thtituloa">FECHA ANTERIOR</th>';
+                            echo '<th class="thtituloa">' . $fechaactualservidor . '</th>';
+                            echo '<th class="thtituloa" scope="col">OBSERVACION</th>';
+                            echo '<th class="thtituloa" scope="col">ACCION CORRECTIVA</th>';
+                            echo '<th class="thtituloa" scope="col">V°B°</th>';
                             echo '</tr>';
                             echo '</thead>';
 
@@ -48,16 +48,16 @@
                                 echo '<td style="visibility:collapse; display:none;"><input class="estadoverificacontrol" type="text" value="' . $estadoverificacontrol . '" /></td>';
                                 echo '<td style="visibility:collapse; display:none;"><input class="fechatotal" type="text" value="' . $fechatotal . '" /></td>';
 
-                                echo '<td class="titulotd">' . $s . '</td>';
+                                echo '<td class="titulotd idcons" idcontadorcontrol="' . $s . '">' . $s . '</td>';
                                 echo '<td class="nombremaquina titulotd" idcontrol="' . $codigomaquina . '">' . $nombremaquina . '</td>';
                                 echo '<td class="nombrefrecuencia titulotd" frecuencia="' . $frecuencia . '">' . $nombrefrecuencia . '</td>';
                                 echo '<td class="formatofecha titulotd" >' . $formatofecha . '</td>';
                                 echo '<td class="titulotd"><input class="checkcontrol" type="checkbox"/></td>';
                                 echo '<td><textarea class="form-control observacioncontrol" id="observacioncontrol" rows="2"></textarea></td>';
                                 echo '<td><textarea class="form-control accioncorrectivacontrol" id="accioncorrectivacontrol" rows="2"></textarea></td>';
-                                echo '<td>
+                                echo '<td class="titulotd">
                                             <select id="selectVerificacionControl" class="form-select selectVerificacionControl" style="width:150px;" aria-label="Default select example">
-                                                    <option selected>Seleccione V°B</option>
+                                                    <option selected value="0">Seleccione V°B</option>
                                                     <option value="1">J.A.C</option>
                                                     <option value="2">A.A.C</option>
                                             </select></td>';

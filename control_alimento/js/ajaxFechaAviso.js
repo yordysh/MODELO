@@ -987,17 +987,23 @@ $(function () {
       $("#tablaalerta tr").each(function (index) {
         if (index !== 0) {
           let check = $(this).find(".check").prop("checked");
+          let idcon = $(this).find(".id").attr("idcontador");
           let obs = $(this).find(".observacion").val();
           let accioncorrectox = $(this).find(".accioncorrectiva").val();
           let selectvb = $(this).find(".selectVerificacion").val();
           let estadoverifica = $(this).find(".estadoverifica").val();
 
-          if (!check && accioncorrectox.trim() === "" && obs.trim() === "") {
+          if (
+            !check &&
+            (accioncorrectox.trim() === "" ||
+              obs.trim() === "" ||
+              selectvb.trim() === "0")
+          ) {
             if (!alertaLanzada) {
               Swal.fire({
                 icon: "info",
                 title: "Rellenar campos",
-                text: "Necesita llenar campo observacion o accion correctiva.",
+                html: `<p>Necesita llenar campo observacion o accion correctiva del item ${idcon}</p>`,
               });
               alertaLanzada = true;
             }
@@ -1005,14 +1011,15 @@ $(function () {
 
           if (
             estadoverifica == "OB" &&
-            accioncorrectox.trim() === "" &&
-            obs.trim() === ""
+            (accioncorrectox.trim() === "" ||
+              obs.trim() === "" ||
+              selectvb.trim() === "0")
           ) {
             if (!alertaLanzada) {
               Swal.fire({
                 icon: "info",
                 title: "Rellenar campos",
-                text: "Necesita llenar campo observacion o accion correctiva.",
+                html: `<p>Necesita llenar campo observacion o accion correctiva del item ${idcon}</p>`,
               });
               alertaLanzada = true;
             }
@@ -1101,6 +1108,9 @@ $(function () {
         observacion.prop("disabled", isChecked);
         accionCorrectiva.prop("disabled", isChecked);
         selectVerificacion.prop("disabled", isChecked);
+        observacion.val("");
+        accionCorrectiva.val("");
+        selectVerificacion.val("0").trigger("change");
       });
     });
     /*------------------------------------------------------------------------------- */
@@ -1138,7 +1148,7 @@ $(function () {
           .find(".estadoverificacontrol")
           .val();
 
-        if (!checkc && accioncorrectoc.trim() === "" && obsc.trim() === "") {
+        if (!checkc || accioncorrectoc.trim() === "" || obsc.trim() === "") {
           if (!alertaLanzadacontrol) {
             Swal.fire({
               icon: "info",
@@ -1150,7 +1160,7 @@ $(function () {
         }
         if (
           (estadoverificacontrolr =
-            "OB" && accioncorrectoc.trim() === "" && obsc.trim() === "")
+            ("OB" && accioncorrectoc.trim() === "") || obsc.trim() === "")
         ) {
           if (!alertaLanzadacontrol) {
             Swal.fire({
@@ -1162,9 +1172,8 @@ $(function () {
           }
         }
       });
-
       let capturavalorcontrol = [];
-      $("#tablacontrolalerta tr").each(function (index) {
+      $("#tablacontrolalerta tr").each(function () {
         let checkcontro = $(this).find(".checkcontrol").prop("checked");
         let idcontrolalerta = $(this).find(".codigocontrolalerta").val();
         let codigomaquinacontrol = $(this)
@@ -1249,6 +1258,9 @@ $(function () {
         observacioncontrol.prop("disabled", isChecked);
         accionCorrectivacontrol.prop("disabled", isChecked);
         selectVerificacioncontrol.prop("disabled", isChecked);
+        observacioncontrol.val("");
+        accionCorrectivacontrol.val("");
+        selectVerificacioncontrol.val("0").trigger("change");
       });
     });
     /*------------------------------------------------------------------------------- */

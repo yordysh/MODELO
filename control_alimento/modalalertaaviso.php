@@ -12,15 +12,15 @@
                             <?php
                             echo '<thead>';
                             echo '<tr>';
-
-                            echo '<th class="thtitulo" scope="col">ZONA</th>';
-                            echo '<th class="thtitulo" scope="col">INFRAESTRUCTURA</th>';
-                            echo '<th class="thtitulo" scope="col">FRECUENCIA</th>';
-                            echo '<th class="thtitulo" scope="col">FECHA ANTERIOR</th>';
-                            echo '<th class="thtitulo" scope="col">' . $fechaactualservidor . '</th>';
-                            echo '<th class="thtitulo" scope="col">OBSERVACION</th>';
-                            echo '<th class="thtitulo" scope="col">ACCION CORRECTIVA</th>';
-                            echo '<th class="thtitulo" scope="col">V°B°</th>';
+                            echo '<th class="thtituloa" scope="col">ITEM</th>';
+                            echo '<th class="thtituloa" scope="col">ZONA</th>';
+                            echo '<th class="thtituloa" scope="col">INFRAESTRUCTURA</th>';
+                            echo '<th class="thtituloa" scope="col">FRECUENCIA</th>';
+                            echo '<th class="thtituloa" scope="col">FECHA ANTERIOR</th>';
+                            echo '<th class="thtituloa" scope="col">' . $fechaactualservidor . '</th>';
+                            echo '<th class="thtituloa" scope="col">OBSERVACION</th>';
+                            echo '<th class="thtituloa" scope="col">ACCION CORRECTIVA</th>';
+                            echo '<th class="thtituloa" scope="col">V°B°</th>';
                             echo '</tr>';
 
                             echo '</thead>';
@@ -60,6 +60,7 @@
                             $contador = 1;
                             foreach ($datos_por_zona as $zona => $datos) {
                                 echo '<tr>';
+                                echo '<td class="titulotd id" idcontador="' . $contador . '">' . $contador . '</td>';
                                 echo '<td style="visibility:collapse; display:none;"><input class="codigozona" type="text" value="' . $datos[0]['codigozona'] . '" /></td>';
                                 echo '<td style="visibility:collapse; display:none;"><input class="codigoinfra" type="text" value="' . $datos[0]['codigoinfra'] . '" /></td>';
                                 echo '<td style="visibility:collapse; display:none;"><input class="codigoalerta" type="text" value="' . $datos[0]['codigoalerta'] . '" /></td>';
@@ -75,9 +76,9 @@
                                 echo '<td class="titulotd"><input class="check" type="checkbox"/></td>';
                                 echo '<td ><textarea class="form-control observacion" id="observacion" rows="2"></textarea></td>';
                                 echo '<td ><textarea class="form-control accioncorrectiva" id="accioncorrectiva" rows="2"></textarea></td>';
-                                echo '<td>
+                                echo '<td class="titulotd">
                                             <select id="selectVerificacion" class="form-select selectVerificacion" style="width:150px;" aria-label="Default select example">
-                                                    <option selected>Seleccione V°B</option>
+                                                    <option selected value="0">Seleccione V°B</option>
                                                     <option value="1">J.A.C</option>
                                                     <option value="2">A.A.C</option>
                                             </select></td>';
@@ -86,6 +87,7 @@
 
                                 for ($i = 1; $i < count($datos); $i++) {
                                     echo '<tr>';
+                                    echo '<td class="id" idcontador="' . $contador . '"></td>';
                                     echo '<td style="visibility:collapse; display:none;"><input class="codigozona" type="text" value="' . $datos[$i]['codigozona'] . '" /></td>';
                                     echo '<td style="visibility:collapse; display:none;"><input class="codigoinfra" type="text" value="' . $datos[$i]['codigoinfra'] . '" /></td>';
                                     echo '<td style="visibility:collapse; display:none;"><input class="codigoalerta" type="text" value="' . $datos[$i]['codigoalerta'] . '" /></td>';
@@ -106,7 +108,7 @@
                                     echo '<td><textarea class="form-control accioncorrectiva" id="accioncorrectiva" rows="2"></textarea></td>';
                                     echo '<td>
                                  <select id="selectVerificacion" class="form-select selectVerificacion" style="width:150px;" aria-label="Default select example">
-                                     <option selected>Seleccione V°B°</option>
+                                     <option selected value="0">Seleccione V°B°</option>
                                      <option value="1">J.A.C</option>
                                      <option value="2">A.A.C</option>
                                  </select></td>';

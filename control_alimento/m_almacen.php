@@ -3395,6 +3395,35 @@ class m_almacen
           $cantidadcaptura = trim($valoresCapturadosProduccion[$i + 1]);
           $cantidadlote = ($valoresCapturadosProduccion[$i + 2]);
 
+          if ($valoresCapturadosProduccion[$i + 2] == '0') {
+            $this->bd->rollBack();
+            return false;
+          }
+          $rptalt = $this->stocklote($valoresCapturadosProduccion[$i + 2], $cantidadcaptura);
+          $loterpa = '';
+          $hora_actual = $codigoInsumosAvances->c_horaserversql('H');
+          for ($j = 0; $j < count($rptalt); $j++) {
+
+            $saldo = $this->m_saldolote(trim($rptalt[$j][0]));
+            $ltproducto = $saldo[0][1];
+            $ltabr = $saldo[0][4];
+            $ltlote = $saldo[0][2];
+            $canlote = ($rptalt[$j][1] < 0) ? ($rptalt[$j][1] * -1) : $rptalt[$j][1];
+            $ltresta = ($saldo[0][3] - $canlote);
+            $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigo_de_avance_insumo;
+            $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(COD_PRODUCTO,ABR_PRODUCTO,LOTE,
+            DESCRIPCION,COD_EGRESO,CANT_EGRESO,SALDO,USU_REGISTRO,HORA_REGISTRO) VALUES('$ltproducto','$ltabr','$ltlote',
+            '$descripcion','$codigo_de_avance_insumo','$canlote','$ltresta','$codpersonal','$hora_actual')");
+            $querylote->execute();
+            if ($querylote->errorCode() > 0) {
+              $this->bd->rollBack();
+              return 0;
+              break;
+            }
+            $loterpa .= $ltlote . "-" . $canlote . "/";
+          }
+
+
           $stmInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ENVASES(COD_AVANCE_INSUMOS,COD_PRODUCTO,CANTIDAD,LOTE)
                                                       VALUES ('$codigo_de_avance_insumo','$codProductoAvance','$cantidadcaptura','$cantidadlote')");
           $stmInsumoAvance->execute();
@@ -4247,7 +4276,7 @@ class m_almacen
   {
     try {
 
-      $mostrarrequerimiento = $this->bd->prepare("SELECT COD_REQUERIMIENTO FROM T_TMPORDEN_COMPRA");
+      $mostrarrequerimiento = $this->bd->prepare("SELECT COD_REQUERIMIENTO FROM T_TMPORDEN_COMPRA WHERE ESTADO='C'");
       $mostrarrequerimiento->execute();
       $datosrequerimiento = $mostrarrequerimiento->fetchAll(PDO::FETCH_OBJ);
 
@@ -4463,6 +4492,44 @@ class m_almacen
                                     VALUES('$codigorecepcion','$idcomprobante','$fechaingreso','$hora','$codigolote','$producto','$fechavencimiento','$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
 
           $insertarrecepcion->execute();
+
+          /*FUNCION PARA AGREGAR A LA TABLA T_TMPKARDEX_PRODUCCION*/
+
+
+          $hora_actual = $codigo->c_horaserversql('H');
+          $saldo = $this->m_saldolote($codigolote, $producto);
+          $valores = 0;
+          if (count($saldo) != 0) {
+            $valores = $saldo[0][3];
+          }
+
+
+          $ltresta = number_format($valores + $cantidadminima, 3);
+          $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigorecepcion; //descripcion de la compra cambiar la descripcion
+
+
+          $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(
+            COD_PRODUCTO,
+            ABR_PRODUCTO,
+            LOTE,
+            DESCRIPCION,
+            COD_INGRESO,
+            CANT_INGRESO,
+            SALDO,
+            USU_REGISTRO,
+            HORA_REGISTRO) 
+            VALUES(
+            '$producto',
+            '$ltabr',
+            '$ltlote',
+            '$descripcion'
+            ,'$codigorecepcion', 
+            '$cantidadminima'
+            ,'$ltresta'
+            ,'$codpersonal'
+            ,'$hora_actual'
+            )");
+          $querylote->execute();
         }
 
         foreach ($datosTabla as $datot) {
@@ -4619,6 +4686,44 @@ class m_almacen
                                                     VALUES('$codigorecepcion','$idcomprobante','$fechaingreso','$hora','$codigolote','$producto','$fechavencimiento','$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
 
           $insertarrecepcion->execute();
+
+          /*FUNCION PARA AGREGAR A LA TABLA T_TMPKARDEX_PRODUCCION*/
+
+          $hora_actual = $codigo->c_horaserversql('H');
+          $saldo = $this->m_saldolote(trim($producto));
+
+          $saldo = $this->m_saldolote(trim($producto));
+
+          $ltproducto = $saldo[0][1]; //codigo del producto
+          $ltabr = $saldo[0][4]; // abreviatura del producto
+          $ltlote = $saldo[0][2];  //lote del producto (cambia el valor)
+
+          $ltresta = number_format($saldo[0][3] + $cantidadminima, 3);
+          $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigorecepcion; //descripcion de la compra cambiar la descripcion
+
+
+          $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(
+             COD_PRODUCTO,
+             ABR_PRODUCTO,
+             LOTE,
+             DESCRIPCION,
+             COD_INGRESO,
+             CANT_INGRESO,
+             SALDO,
+             USU_REGISTRO,
+             HORA_REGISTRO) 
+             VALUES(
+             '$ltproducto',
+             '$ltabr',
+             '$ltlote',
+             '$descripcion'
+             ,'$codigorecepcion', 
+             '$cantidadminima'
+             ,'$ltresta'
+             ,'$codpersonal'
+             ,'$hora_actual'
+             )");
+          $querylote->execute();
         }
       }
 
@@ -4844,7 +4949,7 @@ class m_almacen
               $fechatotalsabado = $fechaFormatos;
               $conversionfechasabado = strtotime(str_replace('/', '-',  $fechatotalsabado));
 
-              $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechatotalsabado',ESTADO='OB' WHERE COD_ALERTA_CONTROL_MAQUINA='$idcontrolmaquina'");
+              $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechatotalsabado',ESTADO='OB',POSTERGACION='NO' WHERE COD_ALERTA_CONTROL_MAQUINA='$idcontrolmaquina'");
               $insertaractualizarcontrol = $actualizarestado->execute();
 
               $fechatotalinsertar = strtotime("+$ndiascontrol days", $conversionfechasabado);
@@ -4861,7 +4966,7 @@ class m_almacen
               $insertartrue = $this->bd->prepare("INSERT INTO T_ALERTA_CONTROL_MAQUINA(COD_CONTROL_MAQUINA,N_DIAS_POS,FECHA_CREACION,FECHA_TOTAL) VALUES('$codigocontrolmaquina','$ndiascontrol','$fechatotalsabado','$fechamodificadainsertar')");
               $insertartrue->execute();
             } else {
-              $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualalertacontrol',ESTADO='OB' WHERE COD_ALERTA_CONTROL_MAQUINA='$idcontrolmaquina'");
+              $actualizarestado = $this->bd->prepare("UPDATE T_ALERTA_CONTROL_MAQUINA SET FECHA_TOTAL='$fechaactualalertacontrol',ESTADO='OB',POSTERGACION='NO' WHERE COD_ALERTA_CONTROL_MAQUINA='$idcontrolmaquina'");
               $insertaractualizarcontrol = $actualizarestado->execute();
 
               $conversionfecha = strtotime(str_replace('/', '-',  $fechaactualalertacontrol));
@@ -4901,6 +5006,129 @@ class m_almacen
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());
+    }
+  }
+
+  /*funcion agregadas */
+  public function m_lotes_producto($codproducto)
+  {
+    try {
+      $saldo = 0;
+      $query = $this->bd->prepare("SELECT * FROM V_LOTES_PRODUCTO
+      where COD_PRODUCTO = ? AND SALDO != ?
+      order by LOTE ASC");
+      $query->bindParam(1, $codproducto, PDO::PARAM_STR);
+      $query->bindParam(2, $saldo, PDO::PARAM_STR);
+      $query->execute();
+      return $query->fetchAll();
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function stocklote($dato, $cantidad)
+  {
+    $array = [];
+    $lote = explode('/', $dato);
+    for ($i = 0; $i < count($lote); $i++) {
+      if (trim($lote[$i]) != '') {
+        if ($cantidad > 0) {
+          $lote1 = explode('-', $lote[$i]);
+          $can = floatval(trim($lote1[1]));
+          $usado = ($cantidad > $can) ? $can : (($cantidad - $can) * -1) - $can;
+          $cantidad = $cantidad - $can;
+          array_push($array, [$lote1[0], floatval(trim($usado))]);
+        }
+      }
+      if ($i + 1 == count($lote)) {
+        return $array;
+      }
+    }
+  }
+
+  public function m_saldolote($lote, $producto)
+  {
+    try {
+      $query = $this->bd->prepare("SELECT * FROM V_LOTES_PRODUCTO
+      where LOTE = ? AND COD_PRODUCTO=? order by LOTE ASC");
+      $query->bindParam(1, $lote, PDO::PARAM_STR);
+      $query->bindParam(2, $producto, PDO::PARAM_STR);
+      $query->execute();
+      return $query->fetchAll();
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function m_reportekardex($codproducto, $fecini, $fecfin, $lote)
+  {
+    try {
+      $fecini = retunrFechaSqlphp($fecini);
+      $fecfin = retunrFechaSqlphp($fecfin);
+      $consulta = '';
+      if (strlen(trim($lote)) != 0) {
+        $consulta = " AND LOTE = ? ";
+      }
+      $query = $this->bd->prepare("SELECT * FROM V_KARDES_PRODUCCION
+      where CAST(FEC_REGISTRO as date) >= ? AND CAST(FEC_REGISTRO as date) <= ?
+      AND COD_PRODUCTO = ? $consulta  order by LOTE,FEC_REGISTRO asc");
+      $query->bindParam(1, $fecini, PDO::PARAM_STR);
+      $query->bindParam(2, $fecfin, PDO::PARAM_STR);
+      $query->bindParam(3, $codproducto, PDO::PARAM_STR);
+      if (strlen(trim($lote)) != 0) {
+        $query->bindParam(4, $lote, PDO::PARAM_STR);
+      }
+      $query->execute();
+      return $query->fetchAll(PDO::FETCH_NUM);
+    } catch (Exception $e) {
+      print_r("Error al obtener el kardex" . $e->getMessage());
+    }
+  }
+
+  public function m_productos()
+  {
+    try {
+      $query = $this->bd->prepare("SELECT * FROM V_PRODUCTO_KARDEX");
+      $query->execute();
+      return $query->fetchAll(PDO::FETCH_NUM);
+    } catch (Exception $e) {
+      print_r("Error al buscar productos" . $e->getMessage());
+    }
+  }
+
+  public function m_loteproducto($producto)
+  {
+    try {
+      $query = $this->bd->prepare("SELECT LOTE FROM V_KARDES_PRODUCCION
+    WHERE COD_PRODUCTO = ?
+    group by LOTE");
+      $query->bindParam(1, $producto, PDO::PARAM_STR);
+      $query->execute();
+      return $query->fetchAll(PDO::FETCH_NUM);
+    } catch (Exception $e) {
+      print_r("Error al buscar lotes del producto" . $e->getMessage());
+    }
+  }
+
+  public function m_total_x_lote($producto, $lote)
+  {
+    try {
+      $saldo = 0;
+      $consulta = '';
+      if (strlen($lote) != '') {
+        $consulta = ' AND LOTE = ? ';
+      }
+      $query = $this->bd->prepare("SELECT ISNULL(SUM(SALDO),0) as TOTAL FROM V_LOTES_PRODUCTO
+    where COD_PRODUCTO = ? AND SALDO != ? $consulta");
+      $query->bindParam(1, $producto, PDO::PARAM_STR);
+      $query->bindParam(2, $saldo, PDO::PARAM_STR);
+      if (strlen($lote) != '') {
+        $query->bindParam(3, $lote, PDO::PARAM_STR);
+      }
+      $query->execute();
+      return $query->fetchAll(PDO::FETCH_NUM);
+    } catch (Exception $e) {
+      print_r("Error al buscar lotes del producto" . $e->getMessage());
     }
   }
 }

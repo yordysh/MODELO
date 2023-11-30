@@ -692,7 +692,19 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_guardar_actualizar_alerta_control($capturavalorcontrol);
     echo $respuesta;
+} else if ($accion == "reportekardex") {
+    $producto = $_POST['producto'];
+    $fechaini = $_POST['fechaini'];
+    $fechafin = $_POST['fechafin'];
+    $lote = $_POST['lote'];
+    c_almacen::c_reportekardex($producto, $fechaini, $fechafin, $lote);
+} else if ($accion == 'productoselect') {
+    c_almacen::c_producto();
+} else if ($accion == 'slclotes') {
+    $producto = $_POST['producto'];
+    c_almacen::c_lotesproducto($producto);
 }
+
 
 
 
@@ -3120,7 +3132,7 @@ class c_almacen
 
                         $CANTIDAD_TOTAL = ceil(($row->CANTIDA * $cantidad) / $row->CANTIDAD_FORMULACION),
                         "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
-
+                        "LOTES" => c_almacen::c_producto_lote($row->COD_PRODUCTO, $CANTIDAD_TOTAL),
                     );
                 }
                 $json['tipo'] = 0;
@@ -3163,7 +3175,7 @@ class c_almacen
                         $resultado = (($row->CAN_FORMULACION * $cantidadinsumo) / $row->CANTIDAD_FORMULACION),
                         $CANTIDAD_TOTAL = number_format($resultado, 4),
                         "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
-
+                        "LOTES" => c_almacen::c_producto_lote($row->COD_PRODUCTO, $CANTIDAD_TOTAL),
                     );
                 }
                 $json['tipo'] = 0;
@@ -3194,8 +3206,15 @@ class c_almacen
         $m_formula = new m_almacen();
 
         if (isset($valoresCapturadosProduccion) && isset($codigoproducto) && isset($codigoproduccion) && isset($cantidad)) {
-            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $cantidadtotalenvases, $codpersonal, $codoperario);
+            if (c_almacen::m_verificarstock($valoresCapturadosProduccion) == 0) {
+                return "Error stock insuficiente de plasticos";
+            }
 
+            if (c_almacen::m_verificarstock($valoresCapturadosProduccioninsumo) == 0) {
+                return "Error stock insuficiente de insumos";
+            }
+
+            $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $cantidadtotalenvases, $codpersonal, $codoperario);
             if ($respuesta) {
                 return "ok";
             } else {
@@ -3751,5 +3770,98 @@ class c_almacen
         } else {
             return "error";
         };
+    }
+
+    /*funciones agregadas */
+    static function c_reportekardex($producto, $fechaini, $fechafin, $lote)
+    {
+        $m_formula = new m_almacen();
+        $mensaje = '';
+
+        if (strlen(trim($producto)) == 0) {
+            $mensaje = 'Seleccione el producto';
+        } else if (strlen(trim($fechaini)) == 0) {
+            $mensaje = 'Seleccione la fecha inicio';
+        } else if (strlen(trim($fechafin)) == 0) {
+            $mensaje = 'Seleccione la fecha fin';
+        }
+
+        if (strlen(trim($mensaje)) == 0) {
+            $rpta = $m_formula->m_reportekardex($producto, $fechaini, $fechafin, $lote);
+            $totallote = $m_formula->m_total_x_lote($producto, $lote);
+            for ($i = 0; $i < count($rpta); $i++) {
+                $rpta[$i][8] = convFecSistema($rpta[$i][8]);
+                $rpta[$i][5] = (is_null($rpta[$i][5])) ? 0 : $rpta[$i][5];
+                $rpta[$i][6] = (is_null($rpta[$i][6])) ? 0 : $rpta[$i][6];
+                array_push($rpta[$i], $totallote[0][0]);
+            }
+
+            $dato = array('m' => $mensaje, 'c' => count($rpta), 'd' => $rpta);
+        } else {
+            $dato = array('m' => $mensaje, 'c' => 0);
+        }
+        echo json_encode($dato, JSON_PRETTY_PRINT);
+    }
+
+    static function c_producto()
+    {
+        $m_formula = new m_almacen();
+        $rpta = $m_formula->m_productos();
+        $dato = array(
+            'd' => $rpta,
+            'c' => count($rpta),
+        );
+        echo json_encode($dato, JSON_FORCE_OBJECT);
+    }
+
+    static function c_lotesproducto($producto)
+    {
+        $m_formula = new m_almacen();
+        $rpta = $m_formula->m_loteproducto($producto);
+        $dato = array(
+            'd' => $rpta,
+            'c' => count($rpta),
+        );
+        echo json_encode($dato, JSON_FORCE_OBJECT);
+    }
+
+
+    static function c_producto_lote($codproducto, $cantidad)
+    {
+        $array = array();
+        $mostrar = new m_almacen();
+        $rpta = $mostrar->m_lotes_producto($codproducto);
+        $suma = 0;
+        for ($i = 0; $i < count($rpta); $i++) {
+            $suma += $rpta[$i][3];
+            array_push($array, [$rpta[$i][1], $rpta[$i][2], $rpta[$i][3]]);
+            if ($suma >= $cantidad) {
+                return $array;
+                break;
+            }
+        }
+    }
+
+    static function m_verificarstock($valoresCapturadosProduccion)
+    {
+        for ($i = 0; $i < count($valoresCapturadosProduccion); $i += 3) {
+            $cantidadcaptura = trim($valoresCapturadosProduccion[$i + 1]);
+            $cantidadlote = ($valoresCapturadosProduccion[$i + 2]);
+            if ($cantidadlote == '0') {
+                return 0;
+            }
+            $total = 0;
+            $separa = explode("/", $cantidadlote);
+            for ($j = 0; $j < count($separa); $j++) {
+                $cant = explode("-", $separa[$j]);
+                if (trim($cant[0]) != '') {
+                    $total += floatval($cant[1]);
+                }
+            }
+            if ($cantidadcaptura > $total) {
+                return 0;
+                break;
+            }
+        }
     }
 }

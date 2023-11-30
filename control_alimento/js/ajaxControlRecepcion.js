@@ -200,7 +200,6 @@ $(function () {
         iscodigoloteEmpty = true;
       }
 
-      // Check if fechavencimiento is empty and set the flag
       if (fechavencimiento === "") {
         isFechavencimientoEmpty = true;
       }

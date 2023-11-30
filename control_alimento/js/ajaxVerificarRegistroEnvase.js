@@ -140,11 +140,18 @@ $(function () {
 
             let template = ``;
             tasks["respuesta"].forEach((task) => {
+              let lotes = task.LOTES;
               template += `<tr taskId="${task.COD_FORMULACION}">
 
-                          <td data-titulo="MATERIALES" taskcodigoproducto=${task.COD_PRODUCTO}>${task.DES_PRODUCTO}</td>
-                          <td data-titulo="CANTIDAD" >${task.CANTIDAD_TOTAL}</td>
-                          <td data-titulo="LOTE" ><input type='text'/></td>
+                          <td data-titulo="MATERIALES" taskcodigoproducto=${
+                            task.COD_PRODUCTO
+                          }>${task.DES_PRODUCTO}</td>
+                          <td data-titulo="CANTIDAD" >${
+                            task.CANTIDAD_TOTAL
+                          }</td>
+                          <td data-titulo="LOTE" ><input type='text' readonly value="${lote(
+                            lotes
+                          )}"/></td>
 
                 </tr>`;
             });
@@ -204,36 +211,27 @@ $(function () {
 
             let template = ``;
             tasks["respuesta"].forEach((task) => {
+              let lotes = task.LOTES;
               template += `<tr taskId="${task.COD_FORMULACION}">
 
-                          <td data-titulo="MATERIALES" insumocodigoproducto=${task.COD_PRODUCTO}>${task.DES_PRODUCTO}</td>
-                          <td data-titulo="CANTIDAD" >${task.CANTIDAD_TOTAL}</td>
-                          <td data-titulo="LOTE" ><input type='text'/></td>
+                          <td data-titulo="MATERIALES" insumocodigoproducto=${
+                            task.COD_PRODUCTO
+                          }>${task.DES_PRODUCTO}</td>
+                          <td data-titulo="CANTIDAD" >${
+                            task.CANTIDAD_TOTAL
+                          }</td>
+                          <td data-titulo="LOTE" ><input type='text' readonly value="${lote(
+                            lotes
+                          )}"/></td>
 
                 </tr>`;
             });
 
             $("#tablainsumosavancetotal").html(template);
-            // $("#selectProductoCombo").val("none").trigger("change");
             $("#selectNumProduccion").val("none").trigger("change");
             $("#cantidad").val("");
           } else {
             console.log(tasks);
-            // Swal.fire({
-            //   title: "¡Supero cantidad!",
-            //   text: "Cantidad supero lo que hay en producción.",
-            //   html: `<p>La cantidad minima de ${tasks["respuesta"].COD_PRODUCCION} ${tasks["respuesta"].DES_PRODUCTO} es ${tasks["respuesta"].CANTIDAD_PRODUCIDA}</p>`,
-            //   icon: "error",
-            //   confirmButtonText: "Aceptar",
-            // }).then((result) => {
-            //   if (result.isConfirmed) {
-            //     $("#cantidad").val("");
-            //     $("#selectProductoCombo").val("none").trigger("change");
-            //     $("#selectNumProduccion").val("none").trigger("change");
-            //     $("#tablacalculoregistroenvase").empty();
-            //   }
-            // });
-            // $("#tablacalculoregistroenvase").empty();
           }
         }
       },
@@ -372,7 +370,6 @@ $(function () {
       data: { accion: accion },
       type: "POST",
       success: function (response) {
-        // console.log(JSON.parse(response));
         let data = JSON.parse(response);
         $("#selectProductoCombo").empty();
         $("#selectProductoCombo").append(
