@@ -1981,7 +1981,7 @@ class c_almacen
             if ($nombreDia != 'Saturday') {
                 $FECHA_ACTUALIZA = $fechadHoy;
                 $alert = $mostrar->actualizarAlertaControlCheckBox($codigocontrolmaquina, $estado, $ndiaspos, $taskId,  $observacionTextArea, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
-                var_dump($alert);
+
                 // header('Content-Type: application/json');
                 if ($alert) {
                     return "ok";
@@ -3152,8 +3152,6 @@ class c_almacen
             $jsonstring = json_encode($json);
             echo $jsonstring;
         } catch (Exception $e) {
-
-
             echo "Error: " . $e->getMessage();
         }
     }
@@ -3831,6 +3829,7 @@ class c_almacen
         $array = array();
         $mostrar = new m_almacen();
         $rpta = $mostrar->m_lotes_producto($codproducto);
+
         $suma = 0;
         for ($i = 0; $i < count($rpta); $i++) {
             $suma += $rpta[$i][3];
@@ -3847,7 +3846,9 @@ class c_almacen
         for ($i = 0; $i < count($valoresCapturadosProduccion); $i += 3) {
             $cantidadcaptura = trim($valoresCapturadosProduccion[$i + 1]);
             $cantidadlote = ($valoresCapturadosProduccion[$i + 2]);
+
             if ($cantidadlote == '0') {
+
                 return 0;
             }
             $total = 0;
@@ -3858,10 +3859,12 @@ class c_almacen
                     $total += floatval($cant[1]);
                 }
             }
+
             if ($cantidadcaptura > $total) {
                 return 0;
                 break;
             }
         }
+        return 1;
     }
 }

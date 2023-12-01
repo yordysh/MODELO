@@ -3154,7 +3154,8 @@ class m_almacen
       $stmverificardatos->execute();
       $consultacodigoformulacion = $stmverificardatos->fetch(PDO::FETCH_ASSOC);
       $resultadoCantidadFormulacion = intval($consultacodigoformulacion['CANTIDAD_PRODUCIDA']);
-
+      // var_dump($resultadoCantidadFormulacion);
+      // var_dump("cantidad" . $cantidad);
 
       if ($cantidad <= $resultadoCantidadFormulacion) {
         $stmformulacionenvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, 
@@ -3163,7 +3164,7 @@ class m_almacen
                                                       INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFE.COD_FORMULACION
                                                       WHERE TFE.COD_FORMULACION='$resultadoformula'");
 
-        $stmformulacionenvase->execute();
+        $respuesta = $stmformulacionenvase->execute();
         $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
         $respuesta['tipo'] = 0;
       } else {
@@ -3186,8 +3187,6 @@ class m_almacen
         $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
         $respuesta['tipo'] = 1;
       }
-
-
 
       $this->bd->commit();
 
@@ -3232,8 +3231,6 @@ class m_almacen
         $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
         $respuesta['tipo'] = 1;
       }
-
-
 
       $this->bd->commit();
 
@@ -3404,7 +3401,9 @@ class m_almacen
           $hora_actual = $codigoInsumosAvances->c_horaserversql('H');
           for ($j = 0; $j < count($rptalt); $j++) {
 
-            $saldo = $this->m_saldolote(trim($rptalt[$j][0]));
+            // $saldo = $this->m_saldolote(trim($rptalt[$j][0]));
+            $saldo = $this->m_saldolote(trim($rptalt[$j][0]), $codProductoAvance);
+
             $ltproducto = $saldo[0][1];
             $ltabr = $saldo[0][4];
             $ltlote = $saldo[0][2];
@@ -3425,7 +3424,7 @@ class m_almacen
 
 
           $stmInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ENVASES(COD_AVANCE_INSUMOS,COD_PRODUCTO,CANTIDAD,LOTE)
-                                                      VALUES ('$codigo_de_avance_insumo','$codProductoAvance','$cantidadcaptura','$cantidadlote')");
+                                                      VALUES ('$codigo_de_avance_insumo','$codProductoAvance','$cantidadcaptura','$loterpa')"); //$cantidadlote
           $stmInsumoAvance->execute();
         }
 
@@ -3449,7 +3448,37 @@ class m_almacen
           $cantidadcapturainsumo = trim($valoresCapturadosProduccioninsumo[$i + 1]);
           $cantidadloteinsumo = ($valoresCapturadosProduccioninsumo[$i + 2]);
 
-          $stmactualizaitem = $this->bd->prepare("UPDATE T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM SET LOTE='$cantidadloteinsumo' WHERE COD_PRODUCTO='$codProductoAvanceinsumo' AND COD_AVANCE_INSUMOS='$codigo_de_avance_insumo'");
+
+          if ($valoresCapturadosProduccioninsumo[$i + 2] == '0') {
+            $this->bd->rollBack();
+            return false;
+          }
+          $rptalt = $this->stocklote($valoresCapturadosProduccioninsumo[$i + 2], $cantidadcapturainsumo);
+          $loterpa = '';
+          $hora_actual = $codigoInsumosAvances->c_horaserversql('H');
+          for ($j = 0; $j < count($rptalt); $j++) {
+            // $saldo = $this->m_saldolote(trim($rptalt[$j][0]));
+            $saldo = $this->m_saldolote(trim($rptalt[$j][0]), $codProductoAvanceinsumo);
+            $ltproducto = $saldo[0][1];
+            $ltabr = $saldo[0][4];
+            $ltlote = $saldo[0][2];
+            $canlote = ($rptalt[$j][1] < 0) ? ($rptalt[$j][1] * -1) : $rptalt[$j][1];
+            $ltresta = number_format($saldo[0][3] - $canlote, 3);
+            $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigo_de_avance_insumo;
+            $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(COD_PRODUCTO,ABR_PRODUCTO,LOTE,
+            DESCRIPCION,COD_EGRESO,CANT_EGRESO,SALDO,USU_REGISTRO,HORA_REGISTRO) VALUES('$ltproducto','$ltabr','$ltlote',
+            '$descripcion','$codigo_de_avance_insumo','$canlote','$ltresta','$codpersonal','$hora_actual')");
+            $querylote->execute();
+            if ($querylote->errorCode() > 0) {
+              $this->bd->rollBack();
+              return 0;
+              break;
+            }
+            $loterpa .= $ltlote . "-" . $canlote . "/";
+          }
+
+
+          $stmactualizaitem = $this->bd->prepare("UPDATE T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM SET LOTE='$loterpa' WHERE COD_PRODUCTO='$codProductoAvanceinsumo' AND COD_AVANCE_INSUMOS='$codigo_de_avance_insumo'"); //$codigo_de_avance_insumo
           $stmactualizaitem->execute();
         }
 
@@ -4343,11 +4372,7 @@ class m_almacen
   {
     try {
       $this->bd->beginTransaction();
-      //var_dump($datos);
-      //var_dump($datosTabla);
-      // var_dump($idrequerimiento);
-      // var_dump($codpersonal);
-      //exit();
+
       $codigo = new m_almacen();
       $codigorecepcion = $codigo->generarcodigocontrolrecepcion();
       $nombre = 'LBS-BPM-FR-09';
@@ -4493,14 +4518,20 @@ class m_almacen
 
           $insertarrecepcion->execute();
 
-          /*FUNCION PARA AGREGAR A LA TABLA T_TMPKARDEX_PRODUCCION*/
+          $abrproducto = $this->bd->prepare("SELECT ABR_PRODUCTO  FROM T_PRODUCTO WHERE COD_PRODUCTO='$producto'");
+          $abrproducto->execute();
+          $abrprod = $abrproducto->fetch(PDO::FETCH_ASSOC);
+          $valorabrprod = $abrprod['ABR_PRODUCTO'];
 
+          /*FUNCION PARA AGREGAR A LA TABLA T_TMPKARDEX_PRODUCCION*/
 
           $hora_actual = $codigo->c_horaserversql('H');
           $saldo = $this->m_saldolote($codigolote, $producto);
           $valores = 0;
           if (count($saldo) != 0) {
             $valores = $saldo[0][3];
+          } else {
+            $valores = 0;
           }
 
 
@@ -4520,8 +4551,8 @@ class m_almacen
             HORA_REGISTRO) 
             VALUES(
             '$producto',
-            '$ltabr',
-            '$ltlote',
+            '$valorabrprod',
+            '$codigolote',
             '$descripcion'
             ,'$codigorecepcion', 
             '$cantidadminima'
@@ -4687,42 +4718,48 @@ class m_almacen
 
           $insertarrecepcion->execute();
 
+          $abrproducto = $this->bd->prepare("SELECT ABR_PRODUCTO  FROM T_PRODUCTO WHERE COD_PRODUCTO='$producto'");
+          $abrproducto->execute();
+          $abrprod = $abrproducto->fetch(PDO::FETCH_ASSOC);
+          $valorabrprod = $abrprod['ABR_PRODUCTO'];
+
           /*FUNCION PARA AGREGAR A LA TABLA T_TMPKARDEX_PRODUCCION*/
-
           $hora_actual = $codigo->c_horaserversql('H');
-          $saldo = $this->m_saldolote(trim($producto));
+          $saldo = $this->m_saldolote($codigolote, $producto);
+          $valores = 0;
+          if (count($saldo) != 0) {
+            $valores = $saldo[0][3];
+          } else {
+            $valores = 0;
+          }
 
-          $saldo = $this->m_saldolote(trim($producto));
 
-          $ltproducto = $saldo[0][1]; //codigo del producto
-          $ltabr = $saldo[0][4]; // abreviatura del producto
-          $ltlote = $saldo[0][2];  //lote del producto (cambia el valor)
-
-          $ltresta = number_format($saldo[0][3] + $cantidadminima, 3);
+          $ltresta = number_format($valores + $cantidadminima, 3);
           $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigorecepcion; //descripcion de la compra cambiar la descripcion
 
 
           $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(
-             COD_PRODUCTO,
-             ABR_PRODUCTO,
-             LOTE,
-             DESCRIPCION,
-             COD_INGRESO,
-             CANT_INGRESO,
-             SALDO,
-             USU_REGISTRO,
-             HORA_REGISTRO) 
-             VALUES(
-             '$ltproducto',
-             '$ltabr',
-             '$ltlote',
-             '$descripcion'
-             ,'$codigorecepcion', 
-             '$cantidadminima'
-             ,'$ltresta'
-             ,'$codpersonal'
-             ,'$hora_actual'
-             )");
+            COD_PRODUCTO,
+            ABR_PRODUCTO,
+            LOTE,
+            DESCRIPCION,
+            COD_INGRESO,
+            CANT_INGRESO,
+            SALDO,
+            USU_REGISTRO,
+            HORA_REGISTRO) 
+            VALUES(
+            '$producto',
+            '$valorabrprod',
+            '$codigolote',
+            '$descripcion'
+            ,'$codigorecepcion', 
+            '$cantidadminima'
+            ,'$ltresta'
+            ,'$codpersonal'
+            ,'$hora_actual'
+            )");
+
           $querylote->execute();
         }
       }
