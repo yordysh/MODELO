@@ -3139,7 +3139,7 @@ class m_almacen
 
 
 
-  public function  MostrarEnvasesPorProduccion($codigoproducto, $codigoproduccion, $cantidad)
+  public function  MostrarEnvasesPorProduccion($codigoproducto, $codigoproduccion, $cantidadenvase, $cantidadinsumo)
   {
     try {
       $this->bd->beginTransaction();
@@ -3157,16 +3157,18 @@ class m_almacen
       // var_dump($resultadoCantidadFormulacion);
       // var_dump("cantidad" . $cantidad);
 
-      if ($cantidad <= $resultadoCantidadFormulacion) {
+      if ($cantidadinsumo <= $resultadoCantidadFormulacion) {
+
         $stmformulacionenvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, 
                                                       TFE.CANTIDA AS CANTIDA, TF.CAN_FORMULACION AS CANTIDAD_FORMULACION FROM T_TMPFORMULACION_ENVASE TFE 
                                                       INNER JOIN T_PRODUCTO TP ON TFE.COD_PRODUCTO=TP.COD_PRODUCTO
                                                       INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFE.COD_FORMULACION
                                                       WHERE TFE.COD_FORMULACION='$resultadoformula'");
 
-        $respuesta = $stmformulacionenvase->execute();
-        $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
-        $respuesta['tipo'] = 0;
+        $stmformulacionenvase->execute();
+        $respuesta['respuestae'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+
+        $respuesta['tipoe'] = 0;
       } else {
 
         $valorderequerimiento = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) AS COD_REQUERIMIENTO FROM T_TMPPRODUCCION WHERE COD_PRODUCCION='$codigoproduccion'");
@@ -3184,8 +3186,8 @@ class m_almacen
         INNER JOIN T_PRODUCTO TP ON TPRO.COD_PRODUCTO=TP.COD_PRODUCTO
         WHERE TPRO.COD_PRODUCCION='$codigoproduccion' AND TPRO.COD_PRODUCTO='$codigoproducto'");
         $stmformulacionenvase->execute();
-        $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
-        $respuesta['tipo'] = 1;
+        $respuesta['respuestae'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+        $respuesta['tipoe'] = 1;
       }
 
       $this->bd->commit();
@@ -3196,7 +3198,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function MostrarInsumosTotalesAvance($codigoproducto, $codigoproduccion, $cantidad)
+  public function MostrarInsumosTotalesAvance($codigoproducto, $codigoproduccion, $cantidadinsumo)
   {
     try {
       $this->bd->beginTransaction();
@@ -3212,7 +3214,8 @@ class m_almacen
       $resultadoCantidadFormulacion = intval($consultacodigoformulacion['CANTIDAD_PRODUCIDA']);
 
 
-      if ($cantidad <= $resultadoCantidadFormulacion) {
+      if ($cantidadinsumo <= $resultadoCantidadFormulacion) {
+
         $stmformulacionenvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, 
                                                       TFE.CAN_FORMULACION AS CAN_FORMULACION, TF.CAN_FORMULACION AS CANTIDAD_FORMULACION FROM T_TMPFORMULACION_ITEM TFE 
                                                       INNER JOIN T_PRODUCTO TP ON TFE.COD_PRODUCTO=TP.COD_PRODUCTO

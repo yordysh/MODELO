@@ -476,16 +476,17 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'mostrarregistrosporenvases') {
     $codigoproduccion = trim($_POST['codigoproduccion']);
     $codigoproducto = trim($_POST['codigoproducto']);
-    $cantidad = trim($_POST['cantidad']);
-    $respuesta = c_almacen::c_mostrar_envases_por_produccion($codigoproducto, $codigoproduccion, $cantidad);
+    $cantidadenvase = trim($_POST['cantidadenvase']);
+    $cantidadinsumo = trim($_POST['cantidadinsumo']);
+    $respuesta = c_almacen::c_mostrar_envases_por_produccion($codigoproducto, $codigoproduccion, $cantidadenvase, $cantidadinsumo);
     echo $respuesta;
 } elseif ($accion == 'mostrarinsumostotales') {
     $codigoproduccion = trim($_POST['codigoproduccion']);
     $codigoproducto = trim($_POST['codigoproducto']);
-    $cantidad = trim($_POST['cantidad']);
+    $cantidadenvase = trim($_POST['cantidadenvase']);
     $cantidadinsumo = trim($_POST['cantidadinsumo']);
 
-    $respuesta = c_almacen::c_mostrar_insumos_totales_avance($codigoproducto, $codigoproduccion, $cantidad, $cantidadinsumo);
+    $respuesta = c_almacen::c_mostrar_insumos_totales_avance($codigoproducto, $codigoproduccion, $cantidadenvase, $cantidadinsumo);
     echo $respuesta;
 } elseif ($accion == 'guardarvalordeinsumosporregistro') {
     $valoresCapturadosProduccion = ($_POST['valoresCapturadosProduccion']);
@@ -3115,31 +3116,32 @@ class c_almacen
 
 
 
-    static function c_mostrar_envases_por_produccion($codigoproducto, $codigoproduccion, $cantidad)
+    static function c_mostrar_envases_por_produccion($codigoproducto, $codigoproduccion, $cantidadenvase, $cantidadinsumo)
     {
         try {
 
             $mostrar = new m_almacen();
-            $datos = $mostrar->MostrarEnvasesPorProduccion($codigoproducto, $codigoproduccion, $cantidad);
+            $datos = $mostrar->MostrarEnvasesPorProduccion($codigoproducto, $codigoproduccion, $cantidadenvase, $cantidadinsumo);
 
-            if ($datos['tipo'] == 0) {
+            if ($datos['tipoe'] == 0) {
+
                 $json = array();
-                foreach ($datos['respuesta'] as $row) {
-                    $json['respuesta'][] = array(
+                foreach ($datos['respuestae'] as $row) {
+                    $json['respuestae'][] = array(
                         "COD_COD_FORMULACION" => $row->COD_FORMULACION,
                         "COD_PRODUCTO" => $row->COD_PRODUCTO,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
 
-                        $CANTIDAD_TOTAL = ceil(($row->CANTIDA * $cantidad) / $row->CANTIDAD_FORMULACION),
+                        $CANTIDAD_TOTAL = ceil(($row->CANTIDA * $cantidadenvase) / $row->CANTIDAD_FORMULACION),
                         "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
                         "LOTES" => c_almacen::c_producto_lote($row->COD_PRODUCTO, $CANTIDAD_TOTAL),
                     );
                 }
-                $json['tipo'] = 0;
+                $json['tipoe'] = 0;
             } else {
                 $json = array();
-                foreach ($datos['respuesta'] as $row) {
-                    $json['respuesta'] = array(
+                foreach ($datos['respuestae'] as $row) {
+                    $json['respuestae'] = array(
                         "COD_PRODUCCION" => $row->COD_PRODUCCION,
                         "CANTIDAD_PRODUCIDA" => $row->CANTIDAD_PRODUCIDA,
                         "VALOR_KG" => $row->VALOR_KG,
@@ -3147,7 +3149,7 @@ class c_almacen
 
                     );
                 }
-                $json['tipo'] = 1;
+                $json['tipoe'] = 1;
             }
             $jsonstring = json_encode($json);
             echo $jsonstring;
@@ -3155,12 +3157,12 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function  c_mostrar_insumos_totales_avance($codigoproducto, $codigoproduccion, $cantidad, $cantidadinsumo)
+    static function  c_mostrar_insumos_totales_avance($codigoproducto, $codigoproduccion, $cantidadenvase, $cantidadinsumo)
     {
         try {
 
             $mostrar = new m_almacen();
-            $datos = $mostrar->MostrarInsumosTotalesAvance($codigoproducto, $codigoproduccion, $cantidad);
+            $datos = $mostrar->MostrarInsumosTotalesAvance($codigoproducto, $codigoproduccion, $cantidadinsumo);
 
             if ($datos['tipo'] == 0) {
                 $json = array();

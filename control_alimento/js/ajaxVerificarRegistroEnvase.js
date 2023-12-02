@@ -125,15 +125,16 @@ $(function () {
         accion: accion,
         codigoproduccion: codigoproduccion,
         codigoproducto: codigoproducto,
-        cantidad: $("#txtcantidadproductos").val(),
+        cantidadenvase: $("#txtcantidadproductos").val(),
+        cantidadinsumo: cantidad,
       },
       success: function (response) {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
 
-          if (tasks["tipo"] == 0) {
+          if (tasks["tipoe"] == 0) {
             let template = ``;
-            tasks["respuesta"].forEach((task) => {
+            tasks["respuestae"].forEach((task) => {
               let lotes = task.LOTES;
               template += `<tr taskId="${task.COD_FORMULACION}">
 
@@ -174,7 +175,7 @@ $(function () {
         accion: accioninsumos,
         codigoproduccion: codigoproduccion,
         codigoproducto: codigoproducto,
-        cantidad: $("#txtcantidadproductos").val(),
+        cantidadenvase: $("#txtcantidadproductos").val(),
         cantidadinsumo: cantidad,
       },
       success: function (response) {
