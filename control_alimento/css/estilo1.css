@@ -1,3 +1,135 @@
 #contenido_pdf {
-  padding-top: 100px;
+  margin-top: 100px;
+}
+/* Estilos para la tabla con el ID específico */
+#tablaEvaluacionSensorial {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+/* Estilos para las celdas del encabezado */
+#tablaEvaluacionSensorial th {
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Estilos para las celdas de datos */
+#tablaEvaluacionSensorial td {
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+/* Estilos específicos para las filas de encabezado */
+#tablaEvaluacionSensorial .table-header th {
+  background-color: #e0e0e0;
+  font-size: 16px;
+}
+
+/* Estilos para el primer contenedor */
+#contenedor_control_mezclado {
+  background-color: #f0f0f0;
+  /* Cambia el color de fondo */
+  border: 1px solid #ccc;
+  /* Agrega un borde */
+  padding: 20px;
+  /* Añade espacio interno */
+  margin-bottom: 20px;
+  /* Espacio entre contenedores */
+}
+
+/* Estilos para el segundo contenedor */
+#contenedor_sensorial {
+  background-color: #e0e0e0;
+  /* Cambia el color de fondo */
+  border: 1px solid #999;
+  /* Agrega un borde */
+  padding: 20px;
+  /* Añade espacio interno */
+}
+
+/* Estilo para filas pares */
+#tablaDatosPendientes tbody tr:nth-child(even) {
+  background-color: #f4f4f4;
+}
+
+/* Estilo para resaltar al pasar el cursor */
+#tablaDatosPendientes tbody tr:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+
+/* Alineación del contenido */
+#tablaDatosPendientes th,
+#tablaDatosPendientes td {
+  text-align: center;
+  padding: 5px;
+  /* Ajustar el espaciado interno según sea necesario */
+}
+
+/* Otros estilos (puedes ajustar según tu preferencia) */
+#tablaDatosPendientes {
+  border-collapse: collapse;
+  /* Fusionar bordes de celda */
+  width: 100%;
+}
+
+#tablaDatosPendientes th {
+  background-color: #f8f8f8;
+  color: #333;
+  font-weight: bold;
+  border: 1px solid #ddd;
+  /* Agregar borde a los encabezados */
+}
+
+#tablaDatosPendientes td {
+  border: 1px solid #ddd;
+}
+
+#contenido {
+  overflow-x: auto;
+}
+
+/*  BACHADA   */
+/* Estilo para filas pares */
+#tablaDatosPendientes_Bachadas tbody tr:nth-child(even) {
+  background-color: #f4f4f4;
+}
+
+/* Estilo para resaltar al pasar el cursor */
+#tablaDatosPendientes_Bachadas tbody tr:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+
+/* Alineación del contenido */
+#tablaDatosPendientes_Bachadas th,
+#tablaDatosPendientes_Bachadas td {
+  text-align: center;
+  padding: 5px;
+  /* Ajustar el espaciado interno según sea necesario */
+}
+
+/* Otros estilos (puedes ajustar según tu preferencia) */
+#tablaDatosPendientes_Bachadas {
+  border-collapse: collapse;
+  /* Fusionar bordes de celda */
+  width: 100%;
+}
+
+#tablaDatosPendientes_Bachadas th {
+  background-color: #f8f8f8;
+  color: #333;
+  font-weight: bold;
+  border: 1px solid #ddd;
+  /* Agregar borde a los encabezados */
+}
+
+#tablaDatosPendientes_Bachadas td {
+  border: 1px solid #ddd;
 }

@@ -103,7 +103,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                                 <input type="number" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
                             </div>
                             <!-- <button id="botonCalcularInsumos" name="insert" class="btn btn-success bt-Total">Insertar insumos </button> -->
-                            <div class="btncalcular">
+                            <div class="btncalcularformula">
                                 <button class="custom-icon-calcular" name="insert" id="botonCalcularInsumos"><i class="icon-circle-with-plus"></i></button>
                             </div>
                         </div>

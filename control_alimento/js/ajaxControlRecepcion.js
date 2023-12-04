@@ -1,4 +1,15 @@
 $(function () {
+  //===== Prealoder
+
+  window.onload = function () {
+    fadeout();
+  };
+
+  function fadeout() {
+    document.querySelector(".preloader").style.opacity = "0";
+    document.querySelector(".preloader").style.display = "none";
+  }
+  //----------------------------------------------------------------//
   $("#selectrequerimiento").change(function () {
     let selectrequerimiento = $("#selectrequerimiento").val();
 
@@ -279,6 +290,10 @@ $(function () {
         codpersonal: codpersonal,
       },
       type: "POST",
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       success: function (response) {
         if (response == "ok") {
           Swal.fire({
@@ -295,6 +310,10 @@ $(function () {
             }
           });
         }
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
       },
     });
   });

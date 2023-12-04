@@ -999,6 +999,7 @@ $(function () {
               obs.trim() === "" ||
               selectvb.trim() === "0")
           ) {
+            console.log(alertaLanzada);
             if (!alertaLanzada) {
               Swal.fire({
                 icon: "info",

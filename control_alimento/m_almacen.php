@@ -2906,12 +2906,40 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function ValorFormula($cantidadinsumo)
+  {
+    try {
+      $this->bd->beginTransaction();
+      $resultadofinal = ($cantidadinsumo * 100 / 60);
+      $resultadofinal = $this->bd->commit();
+      return $resultadofinal;
+      return $resultadofinal;
+    } catch (Exception $e) {
+
+      die($e->getMessage());
+    }
+  }
+
+
+  public function ConsultaValorCantidadRequerimiento($codrequerimientoproduccion, $codproductoproduccion)
+  {
+    try {
+      $cantidadenvase = $this->bd->prepare("SELECT MAX(TOTAL_PRODUCTO) AS TOTAL_PRODUCTO FROM T_TMPREQUERIMIENTO_ITEM WHERE COD_PRODUCTO='$codproductoproduccion' AND COD_REQUERIMIENTO='$codrequerimientoproduccion'");
+      $cantidadenvase->execute();
+      $consultacantidad = $cantidadenvase->fetch(PDO::FETCH_ASSOC);
+      $resultadofinal = $consultacantidad['TOTAL_PRODUCTO'];
+      return $resultadofinal;
+    } catch (Exception $e) {
+
+      die($e->getMessage());
+    }
+  }
   public function InsertarProduccionTotalRequerimiento($codpersonal, $codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja)
   {
     try {
       $this->bd->beginTransaction();
 
-
+      $produccion = new m_almacen();
       // $dateTInicio = $fechainicio;
       // $dateTVencimiento = $fechavencimiento;
       $fechaFormateadaIncio = DateTime::createFromFormat('Y-m-d', $fechainicio);
@@ -2975,6 +3003,7 @@ class m_almacen
       $consultaprodbarras = $stmprodbarras->fetch(PDO::FETCH_ASSOC);
       $resultadoProdBarras = $consultaprodbarras['BARRA_INICIO'];
 
+      $valor_total = $produccion->ConsultaValorCantidadRequerimiento($codrequerimientoproduccion, $codproductoproduccion);
       if ($resultadoProdBarras == null) {
         $stmBarraI = $this->bd->prepare("SELECT MAX(NUM_LOTE) AS NUM_LOTE FROM T_ALMACEN_PRODUCTOS WHERE COD_PRODUCTO='$codproductoproduccion'");
         $stmBarraI->execute();
@@ -2984,9 +3013,8 @@ class m_almacen
         $barraSumaI = ($BarraExtracI + 1);
         $barraI = str_pad($barraSumaI, 6, '0', STR_PAD_LEFT);
 
-
         // $barraF = $barraSumaI + ($cantidadtotalproduccion - 1);
-        $barraF = $barraSumaI + ($cantidadtotalproduccion - 1);
+        $barraF = $barraSumaI + ($valor_total - 1);
         $resultadoF = str_pad($barraF, 6, '0', STR_PAD_LEFT);
 
         $resultadoFinalI = trim($resultadoabrevia . $barraI);
@@ -3001,7 +3029,8 @@ class m_almacen
         $barraI = str_pad($barraSumafn, 6, '0', STR_PAD_LEFT);
 
 
-        $barraFin = $barraSumafn + ($cantidadtotalproduccion - 1);
+        // $barraFin = $barraSumafn + ($cantidadtotalproduccion - 1);
+        $barraFin = $barraSumafn + ($valor_total - 1);
         $resultadoFin = str_pad($barraFin, 6, '0', STR_PAD_LEFT);
 
         $resultadoFinalI = trim($resultadoabrevia . $barraI);
@@ -3137,8 +3166,6 @@ class m_almacen
 
 
 
-
-
   public function  MostrarEnvasesPorProduccion($codigoproducto, $codigoproduccion, $cantidadenvase, $cantidadinsumo)
   {
     try {
@@ -3227,7 +3254,24 @@ class m_almacen
         $respuesta['tipo'] = 0;
       } else {
 
-        $stmformulacionenvase = $this->bd->prepare("SELECT TPRO.COD_PRODUCCION AS COD_PRODUCCION, TPRO.CANTIDAD_PRODUCIDA AS CANTIDAD_PRODUCIDA, TP.DES_PRODUCTO AS DES_PRODUCTO FROM T_TMPPRODUCCION TPRO 
+        // $stmformulacionenvase = $this->bd->prepare("SELECT TPRO.COD_PRODUCCION AS COD_PRODUCCION, TPRO.CANTIDAD_PRODUCIDA AS CANTIDAD_PRODUCIDA, TP.DES_PRODUCTO AS DES_PRODUCTO FROM T_TMPPRODUCCION TPRO 
+        // INNER JOIN T_PRODUCTO TP ON TPRO.COD_PRODUCTO=TP.COD_PRODUCTO
+        // WHERE TPRO.COD_PRODUCCION='$codigoproduccion' AND TPRO.COD_PRODUCTO='$codigoproducto'");
+        // $stmformulacionenvase->execute();
+        // $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+        // $respuesta['tipo'] = 1;
+        $valorderequerimiento = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) AS COD_REQUERIMIENTO FROM T_TMPPRODUCCION WHERE COD_PRODUCCION='$codigoproduccion'");
+        $valorderequerimiento->execute();
+        $resultadoreuqerimiento = $valorderequerimiento->fetch(PDO::FETCH_ASSOC);
+        $valorrequerimientoprod = $resultadoreuqerimiento['COD_REQUERIMIENTO'];
+
+        $consultarcantidadkg = $this->bd->prepare("SELECT MAX(TOTAL_PRODUCTO) AS TOTAL_PRODUCTO FROM T_TMPREQUERIMIENTO_ITEM WHERE COD_PRODUCTO='$codigoproducto' AND COD_REQUERIMIENTO='$valorrequerimientoprod '");
+        $consultarcantidadkg->execute();
+        $resultadokg = $consultarcantidadkg->fetch(PDO::FETCH_ASSOC);
+        $valorkg = $resultadokg['TOTAL_PRODUCTO'];
+
+
+        $stmformulacionenvase = $this->bd->prepare("SELECT TPRO.COD_PRODUCCION AS COD_PRODUCCION, TPRO.CANTIDAD_PRODUCIDA AS CANTIDAD_PRODUCIDA,'$valorkg' AS VALOR_KG ,TP.DES_PRODUCTO AS DES_PRODUCTO FROM T_TMPPRODUCCION TPRO 
         INNER JOIN T_PRODUCTO TP ON TPRO.COD_PRODUCTO=TP.COD_PRODUCTO
         WHERE TPRO.COD_PRODUCCION='$codigoproduccion' AND TPRO.COD_PRODUCTO='$codigoproducto'");
         $stmformulacionenvase->execute();

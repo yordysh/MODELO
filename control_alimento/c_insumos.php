@@ -2,14 +2,15 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-require_once("./m_insumos.php");
-require_once("./m_basedinamica.php");
+require_once("m_insumos.php");
+require_once("m_basedinamica.php");
 date_default_timezone_set('America/Lima');
 
 if (isset($_POST['action']) && $_POST['action'] == 'trae_nombre_personal_mezclado1') {
     $dato1 = new controlador_seguimiento();
     $dato1->trae_nombre_personal_mezclado();
-} else if (isset($_POST['action']) && $_POST['action'] == 'GuardarDatosMaqueta1') {
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'GuardarDatosMaqueta1') {
     $dato1 = new controlador_seguimiento();
     $dato1->GuardarDatosMaqueta();
 }
@@ -17,16 +18,26 @@ if (isset($_POST['action']) && $_POST['action'] == 'trae_nombre_personal_mezclad
 else if (isset($_POST['action']) && $_POST['action'] == 'pre_carga_datos_pendientes1') {
     $dato1 = new controlador_seguimiento();
     $dato1->pre_carga_datos_pendientes1();
-} else if (isset($_POST['action']) && $_POST['action'] == 'traer_dato_maqueta_1') {
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'traer_dato_maqueta_1') {
     $dato1 = new controlador_seguimiento();
     $dato1->traer_dato_maqueta_1();
-} else if (isset($_POST['action']) && $_POST['action'] == 'traer_datos_cod_producto_produccion1') {
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'traer_datos_cod_producto_produccion1') {
     $dato1 = new controlador_seguimiento();
     $dato1->traer_datos_cod_producto_produccion();
-} else if (isset($_POST['action']) && $_POST['action'] == 'traer_datos_reporte_pdf1') {
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'traer_datos_reporte_pdf1') {
     $dato1 = new controlador_seguimiento();
     $dato1->traer_datos_reporte_pdf();
-} else {
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'traer_datos_reporte_pdf_sensorial1') {
+    $dato1 = new controlador_seguimiento();
+    $dato1->traer_datos_reporte_pdf_sensorial();
+}
+
+
+else {
 }
 
 class controlador_seguimiento
@@ -93,11 +104,11 @@ class controlador_seguimiento
             exit;
         }
 
-        $regex_peso = "/^\d{1,4}(\.\d{0,2})?$/";
+        $regex_peso = "/^\d{1,4}(\.\d{0,3})?$/";
 
         if (isset($_POST['contadorFilas'])) {
             $contadorFilas = $_POST['contadorFilas'];
-
+        
             // Definir mensajes personalizados para cada campo
             $mensajesPersonalizados = [
                 'codigo_interno' => 'Código Interno',
@@ -107,10 +118,10 @@ class controlador_seguimiento
                 'observaciones' => 'Observaciones',
                 'acciones_correctivas' => 'Acciones correctivas',
             ];
-
+        
             $arrayValidar = array_keys($mensajesPersonalizados);
             $errores = [];
-
+        
             foreach ($arrayValidar as $campo) {
                 if (!isset($_POST[$campo]) || !is_array($_POST[$campo])) {
                     $errores[] = "El campo '{$mensajesPersonalizados[$campo]}' no está completo o está ausente para todas las filas.";
@@ -120,9 +131,10 @@ class controlador_seguimiento
 
                         if ($campo === 'peso') {
                             if (!preg_match($regex_peso, $valor)) {
-                                $errores[] = "El campo '{$mensajesPersonalizados[$campo]}' en el item $numFila debe ser un numero de maximo 4 digitos y 2 decimales.";
+                                $errores[] = "El campo '{$mensajesPersonalizados[$campo]}' en el item $numFila debe ser un numero de maximo 4 digitos y 3 decimales.";
                             }
-                        } elseif ($campo === 'observaciones') {
+                        }
+                        elseif ($campo === 'observaciones') {
                             // Validación para el campo 'observaciones'
                             if (!empty($valor)) {
                                 $accionesCorrectivas = $_POST['acciones_correctivas'][$indice];
@@ -130,20 +142,22 @@ class controlador_seguimiento
                                     $errores[] = "El campo '{$mensajesPersonalizados['acciones_correctivas']}' en el item $numFila es obligatorio cuando existe '{$mensajesPersonalizados['observaciones']}' .";
                                 }
                             }
-                        } elseif ($campo === 'hora_inicial') {
+                        }
+                        elseif ($campo === 'hora_inicial') {
                             $horaInicial = $_POST['hora_inicial'][$indice];
                             $horaFinal = $_POST['hora_final'][$indice];
-
+        
                             if (empty($horaInicial)) {
                                 $errores[] = "Debes llenar la 'Hora Inicial' en el ítem $numFila.";
-                            }
+                            } 
                             if (empty($horaFinal)) {
                                 $errores[] = "Debes llenar la 'Hora Final' en el ítem $numFila.";
-                            } else {
+                            }
+                            else {
                                 if (!empty($horaInicial) && !empty($horaFinal)) {
                                     $horaInicialObj = DateTime::createFromFormat('H:i', $horaInicial);
                                     $horaFinalObj = DateTime::createFromFormat('H:i', $horaFinal);
-
+        
                                     if ($horaFinalObj < $horaInicialObj) {
                                         $errores[] = "La 'Hora Final' en el ítem $numFila no puede ser menor que la 'Hora Inicial'.";
                                     }
@@ -157,7 +171,7 @@ class controlador_seguimiento
                     }
                 }
             }
-
+        
             if (count($errores) > 0) {
                 $mensajeError = implode("<br>", $errores);
                 echo json_encode(['status' => 'error', 'message' => $mensajeError]);
@@ -184,10 +198,10 @@ class controlador_seguimiento
         $observaciones = isset($_POST['observaciones']) ? array_map('strtoupper', $_POST['observaciones']) : array_fill(0, count($contadorFilas), null);
         $acciones_correctivas = isset($_POST['acciones_correctivas']) ? array_map('strtoupper', $_POST['acciones_correctivas']) : array_fill(0, count($contadorFilas), null);
         // Reemplaza valores vacíos con null
-        $observaciones = array_map(function ($value) {
+        $observaciones = array_map(function($value) {
             return ($value === "") ? null : $value;
         }, $observaciones);
-        $acciones_correctivas = array_map(function ($value) {
+        $acciones_correctivas = array_map(function($value) {
             return ($value === "") ? null : $value;
         }, $acciones_correctivas);
 
@@ -206,8 +220,104 @@ class controlador_seguimiento
             exit;
         }
 
+        $sumatotalespesomezcla = floatval($totalMezcla) + floatval($totalMerma);
+        //var_dump($sumatotalespesomezcla);
+        $peso_mezcla1 = floatval($peso_mezcla);
+        //var_dump($peso_mezcla1);
+
+        if ($sumatotalespesomezcla != $peso_mezcla1){
+            echo json_encode(['status' => 'error', 'message' => 'La suma del total de mezcla y total de merma no corresponden al peso de mezcla.']);
+            exit;
+        }
+
+        $eva_pol_col = (isset($_POST["EVA_POL_COL"])) ? '1' : '0';
+        $eva_pol_olo = (isset($_POST["EVA_POL_OLO"])) ? '1' : '0';
+        $eva_pol_apa = (isset($_POST["EVA_POL_APA"])) ? '1' : '0';
+
+        $eva_rec_col = (isset($_POST["EVA_REC_COL"])) ? '1' : '0';
+        $eva_rec_olo = (isset($_POST["EVA_REC_OLO"])) ? '1' : '0';
+        $eva_rec_sab = (isset($_POST["EVA_REC_SAB"])) ? '1' : '0';
+        $eva_rec_apa = (isset($_POST["EVA_REC_APA"])) ? '1' : '0';
+        $eva_rec_tex = (isset($_POST["EVA_REC_TEX"])) ? '1' : '0';
+
+        $fecha_sensorial = $_POST['fecha_sensorial'];
+        if (empty($fecha_sensorial)) {
+            echo json_encode(['status' => 'error', 'message' => 'No se obtuvo la fecha de evaluación sensorial.']);
+            exit;
+        }
+        $hora_analisis_sensorial = $_POST['hora_analisis_sensorial'];
+        if (empty($hora_analisis_sensorial)) {
+            echo json_encode(['status' => 'error', 'message' => 'Falta la hora de evaluación sensorial.']);
+            exit;
+        }
+        $txt_acetado_rechazado = strtoupper($_POST['txt_acetado_rechazado']);
+        if (empty($txt_acetado_rechazado)) {
+            echo json_encode(['status' => 'error', 'message' => 'Falta que ponga "A" o "R".']);
+            exit;
+        }
+        $txt_analista = strtoupper($_POST['txt_analista']);
+        if (empty($txt_analista)) {
+            echo json_encode(['status' => 'error', 'message' => 'Falta analista de evaluación sensorial']);
+            exit;
+        }
+
+        $observaciones_sensorial = strtoupper($_POST['observaciones_sensorial']);
+        $acc_correctiva_sensorial = strtoupper($_POST['acc_correctiva_sensorial']);
+        
+        if (!empty($observaciones_sensorial)) {
+            // Si hay observaciones, la acción correctiva es obligatoria
+            if (empty($acc_correctiva_sensorial)) {
+                echo json_encode(['status' => 'error', 'message' => 'Acción correctiva es obligatorio cuando existe una observación.']);
+                exit;
+            }
+        } else {
+            //$acc_correctiva_sensorial = null;
+            if (empty($observaciones_sensorial)) {
+                $observaciones_sensorial = null;
+            }
+            if (empty($acc_correctiva_sensorial)) {
+                $acc_correctiva_sensorial = null;
+            }
+        }
+
+        //Datos a la nueva tabla kardex
+        $cod_produccion = $_POST['txt_cod_produccion'];
+        $fecha_produccion = $_POST['txt_fecha_produccion'];
+        $cod_producto = $_POST['txt_cod_producto'];
+        $fecha_vencimiento = $_POST['txt_fecha_vencimiento'];
+
+        //$total_item_bolsas = $_POST['txt_filas_total_item_bolsas'];
+        $total_item_bolsas = count($contadorFilas);
+        //$ingreso = '20';
+        
+        //$stock = '20';
+
+        if (empty($cod_produccion) || empty($fecha_produccion) || empty($cod_producto) || empty($fecha_vencimiento)) {
+            echo json_encode(['status' => 'error', 'message' => 'No se obtuvieron algunos datos.']);
+            exit;
+        }
+        
         $modelo = new m_seguimiento();
-        $modelo->GuardarDatosMaqueta($codigo_avance_insumo, $cod_encargado, $totalMerma, $codigo_interno, $hora_inicial, $hora_final, $peso, $observaciones, $acciones_correctivas, $contadorFilas, $totalMezcla);
+
+        $resultadoStock = $modelo->traer_datos_envase_kardex($cod_producto);
+        if (empty($resultadoStock)){
+            $ingreso = $totalMezcla;
+            $stock = $totalMezcla;
+            $egreso = '0';
+            $saldo = $totalMezcla;
+        }else {
+            $ingreso = $totalMezcla;
+            $stock = floatval($resultadoStock['STOCK']) + floatval($totalMezcla);
+            $egreso = '0';
+            $saldo = $totalMezcla;
+        }
+
+
+        $modelo->GuardarDatosMaqueta($codigo_avance_insumo, $cod_encargado, $totalMerma, $codigo_interno, $hora_inicial, $hora_final, $peso, $observaciones,
+         $acciones_correctivas, $contadorFilas, $totalMezcla, $hora_analisis_sensorial, $eva_pol_col, $eva_pol_olo, $eva_pol_apa, $eva_rec_col, $eva_rec_olo,
+          $eva_rec_sab, $eva_rec_apa, $eva_rec_tex, $txt_acetado_rechazado, $txt_analista, $observaciones_sensorial, $acc_correctiva_sensorial
+          , $cod_produccion, $fecha_produccion, $cod_producto, $fecha_vencimiento, $total_item_bolsas, $lote, $numero_bachada, floatval($ingreso), floatval($egreso), floatval($stock),
+           floatval($saldo));
         echo json_encode(array('status' => 'success', 'message' => 'Registro guardado correctamente.'));
     }
 
@@ -216,28 +326,28 @@ class controlador_seguimiento
         $modelo = new m_seguimiento();
         $resultados = $modelo->traer_datos_cod_producto_produccion();
         //var_dump($resultados);
-
+    
         $response = [];
         foreach ($resultados as $resultado) {
             $cod_producto = $resultado['COD_PRODUCTO'];
             $cod_produccion = $resultado['COD_PRODUCCION'];
-
+    
             $datosproducto = $modelo->buscar_producto($cod_producto);
             $datosproduccion = $modelo->buscar_produccion($cod_produccion);
-
+    
             // Aquí combina los resultados de ambos métodos en un array de respuesta
             $response[] = [
                 'datos_producto' => $datosproducto,
                 'datos_produccion' => $datosproduccion
             ];
         }
-
+    
         header('Content-Type: application/json');
         echo json_encode($response, JSON_PRETTY_PRINT);
         exit;
     }
 
-    public function traer_datos_reporte_pdf()
+    public function traer_datos_reporte_pdf() //primer reporte control de mezclado
     {
         $modelo = new m_seguimiento();
         $modeloDinamico = new M_BaseDinamica('SMP2');
@@ -245,7 +355,9 @@ class controlador_seguimiento
         $cod_producto = $_POST['cod_producto_pdf'];
         $cod_produccion = $_POST['cod_lote_pdf'];
 
-        $resultadosgenerales = $modelo->traer_datos_generales_insumo($cod_producto, $cod_produccion);
+        $numero_bachada = $_POST['numero_bachada_pdf']; //a
+
+        $resultadosgenerales = $modelo->traer_datos_generales_insumo($cod_producto, $cod_produccion, $numero_bachada);
 
         $meses_ingles_espanol = array(
             "January" => "ENERO",
@@ -260,7 +372,7 @@ class controlador_seguimiento
             "October" => "OCTUBRE",
             "November" => "NOVIEMBRE",
             "December" => "DICIEMBRE"
-        );
+        );        
 
         foreach ($resultadosgenerales as &$resultado) {
             $cod_personal = $resultado['COD_PERSONAL'];
@@ -282,10 +394,70 @@ class controlador_seguimiento
 
             $resultado['NOMBRE_MES'] = $nombre_mes_espanol;
             $resultado['ANIO'] = $anio;
+
         }
 
         header('Content-Type: application/json');
         echo json_encode($resultadosgenerales, JSON_PRETTY_PRINT);
         exit;
     }
+
+
+
+
+    public function traer_datos_reporte_pdf_sensorial() //segundo reporte evaluacion sensorial
+    {
+        $modelo = new m_seguimiento();
+        $modeloDinamico = new M_BaseDinamica('SMP2');
+
+        $cod_producto = $_POST['cod_producto_pdf'];
+        $cod_produccion = $_POST['cod_lote_pdf'];
+
+        $numero_bachada = $_POST['numero_bachada_pdf']; //a
+
+        $resultadosgenerales = $modelo->traer_datos_generales_sensorial($cod_producto, $cod_produccion, $numero_bachada);
+
+        $meses_ingles_espanol = array(
+            "January" => "ENERO",
+            "February" => "FEBRERO",
+            "March" => "MARZO",
+            "April" => "ABRIL",
+            "May" => "MAYO",
+            "June" => "JUNIO",
+            "July" => "JULIO",
+            "August" => "AGOSTO",
+            "September" => "SEPTIEMBRE",
+            "October" => "OCTUBRE",
+            "November" => "NOVIEMBRE",
+            "December" => "DICIEMBRE"
+        );        
+
+        foreach ($resultadosgenerales as &$resultado) {
+
+            $cod_avance_insumo = $resultado['COD_AVANCE_INSUMOS'];
+            $resultadositem = $modelo->traer_datos_item_sensorial($cod_avance_insumo);
+            $resultado['items'] = $resultadositem; // Detalles
+
+            $dato_version = $modelo->traer_datos_sensorial_version();
+            $resultado['DATO_VERSION'] = $dato_version;
+
+            $fecha_prueba = $dato_version['FECHA_VERSION'];
+            $nombre_mes_ingles = date("F", strtotime($fecha_prueba)); // Obtiene el nombre del mes
+            $nombre_mes_espanol = $meses_ingles_espanol[$nombre_mes_ingles];
+
+            $anio = date("Y", strtotime($fecha_prueba)); // Obtiene el año
+
+            $resultado['NOMBRE_MES'] = $nombre_mes_espanol;
+            $resultado['ANIO'] = $anio;
+
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($resultadosgenerales, JSON_PRETTY_PRINT);
+        exit;
+    }
+
+
+
 }
+?>

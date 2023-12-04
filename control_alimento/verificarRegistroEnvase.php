@@ -1,18 +1,21 @@
 <?php
 session_start();
 
-$codusuario = $_SESSION["cod"];
-// $codusuario = 'Raul';
-
+// $codusuario = $_SESSION["cod"];
+// $oficina = $_SESSION["ofi"];
+$codusuario = '0002';
+$oficina = 'SMP2';
 ?>
 
 <?php
 require_once "m_almacen.php";
+require_once "m_consulta_personal.php";
 
 $mostrar = new m_almacen();
+$personal = new m_almacen_consulta($oficina);
 $dataProducto = $mostrar->MostrarProductoRegistroEnvase();
 $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
-$dataPersonal = $mostrar->MostrarPersonal();
+$dataPersonal = $personal->MostrarDatosPersonal();
 
 ?>
 <!DOCTYPE html>
@@ -112,7 +115,7 @@ $dataPersonal = $mostrar->MostrarPersonal();
                                 <!-- <input type="text" id='productocod'> -->
                             </div>
                             <!-- <div class="btncalcular"> -->
-                            <div class="col-md-4">
+                            <div class="col-md-4 botoncalculo">
                                 <button class="custom-icon-calcular" name="calcular" id="botonCalcularregistros"><i class="icon-circle-with-plus"></i></button>
                                 <!-- <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-success">Insertar</button> -->
                             </div>
@@ -122,7 +125,7 @@ $dataPersonal = $mostrar->MostrarPersonal();
                                 <select id="selectOperario" class="form-select selectProducto" aria-label="Default select example">
                                     <option value="none" selected disabled>Seleccione operario</option>
                                     <?php foreach ($dataPersonal as  $personal) { ?>
-                                        <option value="<?php echo $personal['COD_PERSONAL'] ?>" class="option"><?php echo $personal['NOM_PERSONAL']; ?></option>
+                                        <option value="<?php echo $personal->COD_PERSONAL ?>" class="option"><?php echo $personal->NOM_PERSONAL1; ?></option>
                                     <?php
                                     }
                                     ?>
@@ -171,11 +174,11 @@ $dataPersonal = $mostrar->MostrarPersonal();
                         <div class="contenedorpdfverificar">
                             <div class="separacion">
                                 <label for="mes">Seleccione el año:</label>
-                                <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
+                                <input class="aniov" type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
                             </div>
                             <div class="separacion">
                                 <label for="mes">Seleccione el mes:</label>
-                                <select id="mes" name="mes">
+                                <select class="mesv" id="mes" name="mes">
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="01">Enero</option>
                                     <option value="02">Febrero</option>
@@ -193,21 +196,15 @@ $dataPersonal = $mostrar->MostrarPersonal();
                             </div>
 
                             <div class="botonpdfregistro">
-                                <a class="btn btn-primary estilopdfregistro" href="#" onclick="generarPDF()">Generar PDF</a>
+                                <a class="btn btn-danger estilopdfregistro" href="#" onclick="generarPDF()">AVANCE</a>
                             </div>
-                            <div class="">
-                                <button id="generarPDF" class="btn btn-primary">DOSIMETRIA</button>
+                            <div class="dosimetria">
+                                <button id="generarPDF" class="btn btn-success estilodosimetria">DOSIMETRIA</button>
                             </div>
-                            <!-- <div class="">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mostrarmaquinapdf">Control</button>
-                            </div> -->
                         </div>
 
                         <div class="estiloguardar">
                             <button id="botonguardarregistro" type="submit" name="insert" class="btn btn-primary estiloguardar">Guardar </button>
-                            <!-- <div class="">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mostrarmaquinapdf">Control</button>
-                            </div> -->
                         </div>
                     </form>
 

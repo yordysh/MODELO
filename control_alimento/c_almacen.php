@@ -498,6 +498,7 @@ if ($accion == 'insertar') {
     $codpersonal = trim($_POST['codpersonal']);
     $codoperario = trim($_POST['codoperario']);
 
+
     $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $cantidadtotalenvases, $codpersonal, $codoperario);
     echo $respuesta;
 } elseif ($accion == 'verificaregistromenorconproducto') {
@@ -3183,10 +3184,13 @@ class c_almacen
                 $json = array();
                 foreach ($datos['respuesta'] as $row) {
                     $json['respuesta'] = array(
+                        // "COD_PRODUCCION" => $row->COD_PRODUCCION,
+                        // "CANTIDAD_PRODUCIDA" => $row->CANTIDAD_PRODUCIDA,
+                        // "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "COD_PRODUCCION" => $row->COD_PRODUCCION,
                         "CANTIDAD_PRODUCIDA" => $row->CANTIDAD_PRODUCIDA,
+                        "VALOR_KG" => $row->VALOR_KG,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
-
                     );
                 }
                 $json['tipo'] = 1;

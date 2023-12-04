@@ -3,8 +3,8 @@ date_default_timezone_set('America/Lima');
 require_once('../funciones/DataDinamicaA.php');
 
 
-class M_BaseDinamica
-{
+    class M_BaseDinamica
+    { 
     private $db;
 
     public function __construct($bd)
@@ -34,4 +34,9 @@ class M_BaseDinamica
         $resultados = $query->fetch(PDO::FETCH_ASSOC);
         return $resultados;
     }
+
+    
+    
+
 }
+?>

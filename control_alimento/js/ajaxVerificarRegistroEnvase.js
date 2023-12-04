@@ -282,6 +282,19 @@ $(function () {
     }
 
     $("#tablacalculoregistroenvase tr").each(function () {
+      let valorcodigolote = $(this).find("td:eq(2) input").val();
+      if (valorcodigolote.trim() === "") {
+        // Muestra una alerta
+        alertas(
+          "Rellenar datos de lote",
+          "Es necesario rellenar el kardex.",
+          "error"
+        );
+        return false;
+      }
+    });
+
+    $("#tablacalculoregistroenvase tr").each(function () {
       let valorProducto = $(this).find("td:eq(0)").attr("taskcodigoproducto");
       let valorCan = $(this).find("td:eq(1)").text();
       let valorLote = $(this).find("td:eq(2) input").val();

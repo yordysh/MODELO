@@ -18,7 +18,20 @@ class m_almacen_consulta
     {
         try {
 
-            $stm = $this->bd_dinamica->prepare("SELECT NOM_PERSONAL1 AS NOM_PERSONAL1 FROM T_PERSONAL WHERE COD_PERSONAL='$codigopersonalsmp2'");
+            $stm = $this->bd_dinamica->prepare("SELECT NOM_PERSONAL1 AS NOM_PERSONAL1, COD_PERSONAL AS COD_PERSONAL FROM T_PERSONAL WHERE COD_PERSONAL='$codigopersonalsmp2'");
+            $stm->execute();
+            $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+            return $datos;
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+    public function MostrarDatosPersonal()
+    {
+        try {
+
+            $stm = $this->bd_dinamica->prepare("SELECT * FROM T_PERSONAL");
             $stm->execute();
             $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
