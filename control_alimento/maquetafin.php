@@ -6,15 +6,9 @@ date_default_timezone_set('America/Lima');
 
 ?>
 <?php
-// if (session_status() == PHP_SESSION_NONE) {
-//   session_start();
-// }
-// $anexo = $_SESSION['ane'];
-// $codusuario = $_SESSION['cod'];
-// $nombre = $_SESSION['usu'];
-// $oficina = $_SESSION['ofi'];
-// $zona = $_SESSION['zon'];
+require_once('../menulista/index.php');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -75,9 +69,6 @@ date_default_timezone_set('America/Lima');
   <input type="hidden" class="form-control" name="vrcodpersonal" id="vrcodpersonal" value="<?php echo $codusuario ?>" readonly>
   <input type="hidden" class="form-control" name="vroficina" id="vroficina" value="<?php echo $oficina ?>" readonly>
 
-  <?php
-  require_once('../menulista/index.php');
-  ?>
   <div class="container report-container" id="contenido_pdf">
     <h5 class="report-title" style="text-align: center;">Reporte de control de mezclado y cernido</h5>
     <div class="row mt-3 align-items-end">

@@ -3156,7 +3156,7 @@ class m_almacen
 
       $stm = $this->bd->prepare("SELECT COD_PERSONAL,NOM_PERSONAL FROM T_PERSONAL");
       $stm->execute();
-      $datos = $stm->fetchAll();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
       return $datos;
     } catch (Exception $e) {

@@ -73,7 +73,15 @@
                                 echo '<td class="titulotd">' . $datos[0]['infraestructura'] . '</td>';
                                 echo '<td class="titulotd">' . $datos[0]['frecuencia'] . '</td>';
                                 echo '<td class="titulotd">' . $datos[0]['fechacreacion'] . '</td>';
-                                echo '<td class="titulotd"><input class="check" type="checkbox"/></td>';
+                                // echo '<td class="titulotd"><input class="check" type="checkbox"/></td>';
+                                echo '<td class="titulotd">
+                                                    <select id="seleccionestado" class="form-select seleccionestado" style="width:80px;" aria-label="Default select example">
+                                                          <option selected value="0">Seleccione</option>
+                                                          <option value="R">R</option>
+                                                          <option value="O">O</option>
+                                                          <option value="PE">PE</option>
+                                                    </select>
+                                     </td>';
                                 echo '<td ><textarea class="form-control observacion" id="observacion" rows="2"></textarea></td>';
                                 echo '<td ><textarea class="form-control accioncorrectiva" id="accioncorrectiva" rows="2"></textarea></td>';
                                 echo '<td class="titulotd">
@@ -103,7 +111,15 @@
 
                                     echo '<td class="titulotd">' . $datos[$i]['frecuencia'] . '</td>';
                                     echo '<td class="titulotd">' . $datos[$i]['fechacreacion'] . '</td>';
-                                    echo '<td class="titulotd"><input class="check" type="checkbox"/></td>';
+                                    // echo '<td class="titulotd"><input class="check" type="checkbox"/></td>';
+                                    echo '<td class="titulotd">
+                                                <select id="seleccionestado" class="form-select seleccionestado" style="width:80px;" aria-label="Default select example">
+                                                    <option selected value="0">Seleccione</option>
+                                                    <option value="R">R</option>
+                                                    <option value="O">O</option>
+                                                    <option value="PE">PE</option>
+                                                </select>
+                                          </td>';
                                     echo '<td><textarea class="form-control observacion" id="observacion" rows="2"></textarea></td>';
                                     echo '<td><textarea class="form-control accioncorrectiva" id="accioncorrectiva" rows="2"></textarea></td>';
                                     echo '<td>

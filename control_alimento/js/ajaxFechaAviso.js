@@ -982,52 +982,51 @@ $(function () {
 
   function alertax() {
     $("#botonalertaguardar").click(function () {
-      let alertaLanzada = false;
+      // let alertaLanzada = false;
+      // $("#tablaalerta tr").each(function (index) {
+      //   if (index !== 0) {
+      //     let check = $(this).find(".check").prop("checked");
+      //     let idcon = $(this).find(".id").attr("idcontador");
+      //     let obs = $(this).find(".observacion").val();
+      //     let accioncorrectox = $(this).find(".accioncorrectiva").val();
+      //     let selectvb = $(this).find(".selectVerificacion").val();
+      //     let estadoverifica = $(this).find(".estadoverifica").val();
 
-      $("#tablaalerta tr").each(function (index) {
-        if (index !== 0) {
-          let check = $(this).find(".check").prop("checked");
-          let idcon = $(this).find(".id").attr("idcontador");
-          let obs = $(this).find(".observacion").val();
-          let accioncorrectox = $(this).find(".accioncorrectiva").val();
-          let selectvb = $(this).find(".selectVerificacion").val();
-          let estadoverifica = $(this).find(".estadoverifica").val();
-
-          if (
-            !check &&
-            (accioncorrectox.trim() === "" ||
-              obs.trim() === "" ||
-              selectvb.trim() === "0")
-          ) {
-            console.log(alertaLanzada);
-            if (!alertaLanzada) {
-              Swal.fire({
-                icon: "info",
-                title: "Rellenar campos",
-                html: `<p>Necesita llenar campo observacion o accion correctiva del item ${idcon}</p>`,
-              });
-              alertaLanzada = true;
-            }
-          }
-
-          if (
-            estadoverifica == "OB" &&
-            (accioncorrectox.trim() === "" ||
-              obs.trim() === "" ||
-              selectvb.trim() === "0")
-          ) {
-            if (!alertaLanzada) {
-              Swal.fire({
-                icon: "info",
-                title: "Rellenar campos",
-                html: `<p>Necesita llenar campo observacion o accion correctiva del item ${idcon}</p>`,
-              });
-              alertaLanzada = true;
-            }
-          }
-        }
-      });
-
+      //     // if (
+      //     //   !check &&
+      //     //   (accioncorrectox.length == "" ||
+      //     //     obs.length == "" ||
+      //     //     selectvb.length == "0")
+      //     // ) {
+      //     //   if (!alertaLanzada) {
+      //     //     Swal.fire({
+      //     //       icon: "info",
+      //     //       title: "Rellenar campos",
+      //     //       html: `<p>Necesita llenar campo observacion o accion correctiva del item ${idcon}</p>`,
+      //     //     });
+      //     //     alertaLanzada = true;
+      //     //   }
+      //     //   return;
+      //     // }
+      //     if (
+      //       !check &&
+      //       (obs === "" || accioncorrectox === "" || selectvb === "")
+      //     ) {
+      //       if (!alertaLanzada) {
+      //         Swal.fire({
+      //           icon: "info",
+      //           title: "Rellenar campos",
+      //           html: `<p>Necesita llenar campo observacion o accion correctiva del item ${idcon}</p>`,
+      //         });
+      //         alertaLanzada = true;
+      //       }
+      //       return false;
+      //     }
+      //   }
+      // });
+      // if (alertaLanzada) {
+      //   return false;
+      // }
       let capturavalor = [];
       $("#tablaalerta tr").each(function (index) {
         if (index !== 0) {
@@ -1035,7 +1034,8 @@ $(function () {
           let idinfra = $(this).find(".codigoinfra").val();
           let idalerta = $(this).find(".codigoalerta").val();
           let frecuenciadias = $(this).find(".frecuenciadias").val();
-          let check = $(this).find(".check").prop("checked");
+          // let check = $(this).find(".check").prop("checked");
+          let estadoseleccion = $(this).find(".seleccionestado").val();
           let obs = $(this).find(".observacion").val();
           let accioncorrecto = $(this).find(".accioncorrectiva").val();
           let selectvb = $(this)
@@ -1050,7 +1050,8 @@ $(function () {
             idinfra: idinfra,
             idalerta: idalerta,
             frecuenciadias: frecuenciadias,
-            check: check,
+            estadoseleccion: estadoseleccion,
+            // check: check,
             obs: obs,
             accioncorrecto: accioncorrecto,
             selectvb: selectvb,
@@ -1061,58 +1062,72 @@ $(function () {
       });
       console.log(capturavalor);
 
-      const accion = "insertaryactualizaralerta";
-      $.ajax({
-        url: "../control_alimento/c_almacen.php",
-        type: "POST",
-        data: { accion: accion, capturavalor: capturavalor },
-        beforeSend: function () {
-          $(".preloader").css("opacity", "1");
-          $(".preloader").css("display", "block");
-        },
-        success: function (response) {
-          if (response == "ok") {
-            Swal.fire({
-              title: "¡Guardado exitoso!",
-              text: "Los datos se han guardado correctamente.",
-              icon: "success",
-              confirmButtonText: "Aceptar",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                $("#modalalertaaviso").modal("hide");
-                alertaControl();
-                // $("#formularioZona").trigger("reset");
-              }
-            });
-          }
-        },
-        complete: function () {
-          $(".preloader").css("opacity", "0");
-          $(".preloader").css("display", "none");
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-          console.error("Error in alerta AJAX:", textStatus, errorThrown);
-          reject(errorThrown);
-        },
-      });
+      // const accion = "insertaryactualizaralerta";
+      // $.ajax({
+      //   url: "../control_alimento/c_almacen.php",
+      //   type: "POST",
+      //   data: { accion: accion, capturavalor: capturavalor },
+      //   beforeSend: function () {
+      //     $(".preloader").css("opacity", "1");
+      //     $(".preloader").css("display", "block");
+      //   },
+      //   success: function (response) {
+      //     if (response == "ok") {
+      //       Swal.fire({
+      //         title: "¡Guardado exitoso!",
+      //         text: "Los datos se han guardado correctamente.",
+      //         icon: "success",
+      //         confirmButtonText: "Aceptar",
+      //       }).then((result) => {
+      //         if (result.isConfirmed) {
+      //           $("#modalalertaaviso").modal("hide");
+      //           alertaControl();
+      //           // $("#formularioZona").trigger("reset");
+      //         }
+      //       });
+      //     } else {
+      //       console.log("error");
+      //     }
+      //   },
+      //   complete: function () {
+      //     $(".preloader").css("opacity", "0");
+      //     $(".preloader").css("display", "none");
+      //   },
+      //   error: function (jqXHR, textStatus, errorThrown) {
+      //     console.error("Error in alerta AJAX:", textStatus, errorThrown);
+      //     reject(errorThrown);
+      //   },
+      // });
     });
 
     /*-----------------------Para deshabilitar cajas de texto al darle check------------ */
     $("#tablaalerta tr").each(function () {
-      let checkbox = $(this).find("input[type='checkbox']");
-      let observacion = $(this).find("#observacion");
+      // let checkbox = $(this).find("input[type='checkbox']");
+      // let observacion = $(this).find("#observacion");
       let accionCorrectiva = $(this).find("#accioncorrectiva");
-      let selectVerificacion = $(this).find("#selectVerificacion");
+      // let selectVerificacion = $(this).find("#selectVerificacion");
+      $(this)
+        .find(".seleccionestado")
+        .on("change", function () {
+          let valorSeleccionado = $(this).val();
+          console.log(valorSeleccionado);
+          if (valorSeleccionado == "R") {
+            console.log("object");
+            $("#observacion").prop("disabled", false);
+            accionCorrectiva.prop("disabled", false);
+            $("#selectVerificacion").prop("disabled", false);
+          }
+        });
 
-      checkbox.on("click", function () {
-        let isChecked = $(this).prop("checked");
-        observacion.prop("disabled", isChecked);
-        accionCorrectiva.prop("disabled", isChecked);
-        selectVerificacion.prop("disabled", isChecked);
-        observacion.val("");
-        accionCorrectiva.val("");
-        selectVerificacion.val("0").trigger("change");
-      });
+      // checkbox.on("click", function () {
+      //   let isChecked = $(this).prop("checked");
+      //   observacion.prop("disabled", isChecked);
+      //   accionCorrectiva.prop("disabled", isChecked);
+      //   selectVerificacion.prop("disabled", isChecked);
+      //   observacion.val("");
+      //   accionCorrectiva.val("");
+      //   selectVerificacion.val("0").trigger("change");
+      // });
     });
     /*------------------------------------------------------------------------------- */
     /*-----------------------Poner check si es estado OB------------ */

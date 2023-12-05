@@ -260,7 +260,7 @@ $dataProveedores = $mostrar->MostrarProveedores();
                                 <input id="idrequerimientotemp" type="number" class="form-control" name="id" />
                             </div>
                             <div>
-                                <a class="btn btn-success" href="#" onclick="generarPDF()">Generar PDF</a>
+                                <a class="btn btn-success" href="#" onclick="generarPDF()">VISUALIZAR ORDEN COMPRA</a>
                             </div>
                         </div>
                 </div>

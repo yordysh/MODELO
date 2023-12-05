@@ -144,7 +144,7 @@ $(function () {
                           <td data-titulo="CANTIDAD" >${
                             task.CANTIDAD_TOTAL
                           }</td>
-                          <td data-titulo="LOTE" ><input type='text' readonly value="${lote(
+                          <td data-titulo="LOTE"><input  class='lotesx' type='text' readonly value="${lote(
                             lotes
                           )}"/></td>
 
@@ -236,6 +236,7 @@ $(function () {
 
   $("#botonguardarregistro").click((e) => {
     e.preventDefault();
+
     let productocombo = $("#selectProductoCombo").val();
     let codigoproducto = $("#hiddenproducto").val();
     // let produccioncombo = $("#selectNumProduccion").val();
@@ -281,18 +282,13 @@ $(function () {
       return;
     }
 
-    $("#tablacalculoregistroenvase tr").each(function () {
-      let valorcodigolote = $(this).find("td:eq(2) input").val();
-      if (valorcodigolote.trim() === "") {
-        // Muestra una alerta
-        alertas(
-          "Rellenar datos de lote",
-          "Es necesario rellenar el kardex.",
-          "error"
-        );
-        return false;
-      }
-    });
+    // if (hayCampoVacio) {
+    //   let titulo = "Error de lote vacio";
+    //   let texto = "Necesita insertar una cantidad de lote en el kardex.";
+    //   let icon = "info";
+    //   alertas(titulo, texto, icon);
+    //   // alert("error");
+    // }
 
     $("#tablacalculoregistroenvase tr").each(function () {
       let valorProducto = $(this).find("td:eq(0)").attr("taskcodigoproducto");
@@ -313,6 +309,30 @@ $(function () {
         valorCaninsumo,
         valorLoteinsumo
       );
+    });
+
+    $("#tablacalculoregistroenvase tr").each(function () {
+      let valorcodigolote = $(this).find("td:eq(2) input").val();
+      if (valorcodigolote.length == "") {
+        let titulo = "Error de lote vacio";
+        let texto =
+          "Necesita insertar una cantidad de lote de envases en el kardex.";
+        let icon = "info";
+        alertas(titulo, texto, icon);
+        return;
+      }
+    });
+
+    $("#tablainsumosavancetotal tr").each(function () {
+      let valorcodigolote = $(this).find("td:eq(2) input").val();
+      if (valorcodigolote.length == "") {
+        let titulo = "Error de lote vacio";
+        let texto =
+          "Necesita insertar una cantidad de lote de insumos en el kardex.";
+        let icon = "info";
+        alertas(titulo, texto, icon);
+        return;
+      }
     });
 
     let accion = "guardarvalordeinsumosporregistro";
@@ -358,18 +378,10 @@ $(function () {
           });
         } else {
           console.log(response);
-          let titulo = "Error al ser mayor la cantidad";
-          let texto = "Necesita una cantidad menor al insertar";
-          let icon = "error";
-          alertas(titulo, texto, icon);
         }
       },
       error: function (error) {
-        console.log("object");
-        let titulo = "Error al ser mayor la cantidad";
-        let texto = "Necesita una cantidad menor al insertar";
-        let icon = "error";
-        alertas(titulo, texto, icon);
+        console.log("error");
       },
       complete: function () {
         $(".preloader").css("opacity", "0");

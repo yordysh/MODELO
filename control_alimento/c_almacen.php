@@ -3217,7 +3217,7 @@ class c_almacen
             if (c_almacen::m_verificarstock($valoresCapturadosProduccioninsumo) == 0) {
                 return "Error stock insuficiente de insumos";
             }
-
+            exit();
             $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $cantidadtotalenvases, $codpersonal, $codoperario);
             if ($respuesta) {
                 return "ok";

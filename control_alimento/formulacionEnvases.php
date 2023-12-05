@@ -52,7 +52,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
         <section>
             <div class="container g-4 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">FORMULACION DE ENVASES</label></center>
+                    <center><label class="title">FORMULACION PATRON</label></center>
                 </div>
                 <div class="main">
                     <form method="post" action="" id="formularioEnvasesFormula">
@@ -98,8 +98,8 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                         <!-- Text input cantidad insumos-->
                         <div class="contenedorcantidadcalculo">
                             <div class="form-outline mb-4">
-                                <!-- <label class="form-label">Cantidad insumos</label> -->
-                                <label class="form-label">Cantidad insumos x kilogramos</label>
+
+                                <label class="form-label">Cantidad por kilogramos</label>
                                 <input type="number" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
                             </div>
                             <!-- <button id="botonCalcularInsumos" name="insert" class="btn btn-success bt-Total">Insertar insumos </button> -->

@@ -310,6 +310,196 @@ class m_seguimiento
     }
 
 
+    //BACHADA
+    //
+    public function EnviarDatosProductosYLotesBusqueda()
+    {
+        $query = $this->db->prepare("SELECT T_ENV_KA.COD_PRODUCTO, T_PRODUCTO.DES_PRODUCTO, T_ENV_KA.LOTE
+        FROM T_ENVASE_KARDEX T_ENV_KA
+        JOIN T_PRODUCTO ON T_ENV_KA.COD_PRODUCTO = T_PRODUCTO.COD_PRODUCTO
+        WHERE ESTADO = 'P'
+        GROUP BY T_ENV_KA.COD_PRODUCTO, T_PRODUCTO.DES_PRODUCTO, T_ENV_KA.LOTE
+        ORDER BY T_ENV_KA.COD_PRODUCTO ASC");
+        $query->execute();
+
+        $results = $query->fetchAll(PDO::FETCH_ASSOC);
+        $formattedResults = [];
+        foreach ($results as $result) {
+            $formattedResults[] = ['label' => $result['DES_PRODUCTO'], 'cod_producto' => $result['COD_PRODUCTO'], 'lote_b' => $result['LOTE']];
+        }
+        return $formattedResults;
+    }
+
+    public function pre_carga_datos_pendientes_bachada($cod_producto_busca, $cod_lote_busca)
+    {
+        $query = $this->db->prepare("SELECT T_ENV_KA.ID, T_ENV_KA.COD_AVANCE_INSUMO, T_ENV_KA.COD_PRODUCCION, T_ENV_KA.TOTAL_MEZCLA_PESO, T_ENV_KA.TOTAL_ITEM_BOLSAS,
+        T_ENV_KA.COD_PRODUCTO, T_ENV_KA.FECHA_MEZCLADO, T_ENV_KA.LOTE, T_ENV_KA.BACHADA, T_ENV_KA.FECHA_PRODUCCION, T_ENV_KA.FECHA_VENCIMIENTO,
+         T_ENV_KA.INGRESO, T_ENV_KA.EGRESO, T_ENV_KA.STOCK, T_ENV_KA.SALDO, T_ENV_KA.ESTADO, T_PRODUCTO.DES_PRODUCTO,
+          T_PRODUCTO.ABR_PRODUCTO, T_PRODUCTO.PESO_NETO
+         FROM T_ENVASE_KARDEX T_ENV_KA
+        JOIN T_PRODUCTO ON T_ENV_KA.COD_PRODUCTO = T_PRODUCTO.COD_PRODUCTO WHERE ESTADO = 'P' AND T_ENV_KA.COD_PRODUCTO = :cod_producto AND T_ENV_KA.LOTE = :lote ORDER BY ID ASC");
+        $query->bindParam(':cod_producto', $cod_producto_busca);
+        $query->bindParam(':lote', $cod_lote_busca);
+        $query->execute();
+        $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $resultados;
+    }
+
+    public function traer_dato_maqueta_bachada($id_bachada)
+    {
+        $query = $this->db->prepare("SELECT T_ENV_KA.ID, T_ENV_KA.COD_AVANCE_INSUMO, T_ENV_KA.COD_PRODUCCION, T_ENV_KA.TOTAL_MEZCLA_PESO, T_ENV_KA.TOTAL_ITEM_BOLSAS,
+        T_ENV_KA.COD_PRODUCTO, T_ENV_KA.FECHA_MEZCLADO, T_ENV_KA.LOTE, T_ENV_KA.BACHADA, T_ENV_KA.FECHA_PRODUCCION, T_ENV_KA.FECHA_VENCIMIENTO,
+         T_ENV_KA.INGRESO, T_ENV_KA.EGRESO, T_ENV_KA.STOCK, T_ENV_KA.SALDO, T_ENV_KA.ESTADO, T_PRODUCTO.DES_PRODUCTO,
+          T_PRODUCTO.ABR_PRODUCTO, T_PRODUCTO.PESO_NETO
+        FROM T_ENVASE_KARDEX T_ENV_KA
+       JOIN T_PRODUCTO ON T_ENV_KA.COD_PRODUCTO = T_PRODUCTO.COD_PRODUCTO
+        WHERE T_ENV_KA.ID = :id_bachada AND ESTADO = 'P' ORDER BY ID ASC
+        ");
+        $query->bindParam(':id_bachada', $id_bachada);
+        $query->execute();
+        $resultados = $query->fetch(PDO::FETCH_ASSOC);
+        return $resultados;
+    }
+
+    public function traer_dato_restantes_id($id_bachada)
+    {
+        $query = $this->db->prepare("SELECT * FROM T_ENVASE_KARDEX WHERE ID = :id
+        ");
+        $query->bindParam(':id', $id_bachada);
+        $query->execute();
+        $resultados = $query->fetch(PDO::FETCH_ASSOC);
+        return $resultados;
+    }
+
+    public function GuardarDatosBachada($codigo_id_kardex, $cod_avance_insumo, $cod_produccion, $total_mezcla_peso, $total_item_bolsas, $cod_producto, $fecha_mezclado, $lote,
+    $numero_bachada, $fecha_produccion, $fecha_vencimiento, $ingreso, $egreso, $stock, $saldo, $estado, $cant_programada_unidades, 
+    $peso_estimado_kg, $can_bol_select, $peso_total_select, $mezcla_select_bol_inco, $mezcla_sobrante, $mezcla_env_total, $cant_estimada_unidad, $cant_bol_sobrante, $peso_total_bol_sobrante, 
+    $cod_personal, $observaciones_envasado, $acc_correctiva_envasado)
+    {
+        try {
+            $this->db->beginTransaction();
+    
+            $query3 = $this->db->prepare("UPDATE T_ENVASE_KARDEX SET ESTADO = 'F' WHERE ID = :id");
+            $query3->bindParam(':id', $codigo_id_kardex);
+            $query3->execute();
+
+            $query5 = $this->db->prepare("INSERT INTO T_ENVASE_KARDEX (COD_AVANCE_INSUMO, COD_PRODUCCION, TOTAL_MEZCLA_PESO, TOTAL_ITEM_BOLSAS, COD_PRODUCTO, FECHA_MEZCLADO, LOTE, 
+            BACHADA, FECHA_PRODUCCION, FECHA_VENCIMIENTO, INGRESO, EGRESO, STOCK, SALDO, ESTADO)
+            VALUES (:cod_avance_insumo, :cod_produccion, :total_mezcla_peso, :total_item_bolsas, :cod_producto, CONVERT(DATE, :fecha_mezclado), :lote, :bachada,
+             CONVERT(DATE, :fecha_produccion), CONVERT(DATE, :fecha_vencimiento), :ingreso, :egreso, :stock, :saldo, 'P')
+            ");
+            $query5->bindParam(':cod_avance_insumo', $cod_avance_insumo);
+            $query5->bindParam(':cod_produccion', $cod_produccion);
+            $query5->bindParam(':total_mezcla_peso', $total_mezcla_peso);
+            $query5->bindParam(':total_item_bolsas', $total_item_bolsas);
+            $query5->bindParam(':cod_producto', $cod_producto);
+            $query5->bindParam(':fecha_mezclado', $fecha_mezclado);
+            $query5->bindParam(':lote', $lote);
+            $query5->bindParam(':bachada', $numero_bachada);
+            $query5->bindParam(':fecha_produccion', $fecha_produccion);
+            $query5->bindParam(':fecha_vencimiento', $fecha_vencimiento);
+            $query5->bindParam(':ingreso', $ingreso);
+            $query5->bindParam(':egreso', $egreso);
+            $query5->bindParam(':stock', $stock);
+            $query5->bindParam(':saldo', $saldo);
+            
+            $query5->execute();
+
+
+            $query6 = $this->db->prepare("INSERT INTO T_CONTROL_BACHADAS_REPORTE (FECHA_MEZCLADO, NUMERO_BACHADA, PESO_TOTAL_OBTENIDO, CANT_BOLSAS, CANT_PROGRAMADA_UNIDADES, 
+            PESO_ESTIMADO, CANT_BOL_SELECT, PESO_TOTAL_SELECT, MEZCLA_SELECT_BOL_INCO, MEZCLA_SOBRANTE, MEZCLA_ENV_TOTAL, CANT_ESTIMADA, CANT_BOL_SOBRANTE, PESO_TOTAL_BOL_SOBRANTE, 
+            LOTE, FECHA_PRODUCCION, FECHA_VENCIMIENTO, COD_PRODUCTO, COD_PERSONAL, OBSERVACIONES_ENV, ACCION_CORRECTIVA_ENV)
+            VALUES (:fecha_mezclado, :numero_bachada, :peso_total_obtenido, :cant_bolsas, :cant_programada_unidades, :peso_estimado, :cant_bol_select, :peso_total_select,
+             :mezcla_select_bol_inco, :mezcla_sobrante, :mezcla_env_total, :cant_estimada, :cant_bol_sobrante, :peso_total_bol_sobrante, :lote, CONVERT(DATE, :fecha_produccion), 
+             CONVERT(DATE, :fecha_vencimiento), :cod_producto, :cod_personal, :observaciones_envasado, :acc_correctiva_envasado)
+            ");
+            $query6->bindParam(':fecha_mezclado', $fecha_mezclado);
+            $query6->bindParam(':numero_bachada', $numero_bachada);
+            $query6->bindParam(':peso_total_obtenido', $total_mezcla_peso);
+            $query6->bindParam(':cant_bolsas', $total_item_bolsas);
+            $query6->bindParam(':cant_programada_unidades', $cant_programada_unidades);
+            $query6->bindParam(':peso_estimado', $peso_estimado_kg);
+            $query6->bindParam(':cant_bol_select', $can_bol_select);
+            $query6->bindParam(':peso_total_select', $peso_total_select);
+            $query6->bindParam(':mezcla_select_bol_inco', $mezcla_select_bol_inco);
+            $query6->bindParam(':mezcla_sobrante', $mezcla_sobrante);
+            $query6->bindParam(':mezcla_env_total', $mezcla_env_total);
+            $query6->bindParam(':cant_estimada', $cant_estimada_unidad);
+            $query6->bindParam(':cant_bol_sobrante', $cant_bol_sobrante);
+            $query6->bindParam(':peso_total_bol_sobrante', $peso_total_bol_sobrante);
+            $query6->bindParam(':lote', $lote);
+            $query6->bindParam(':fecha_produccion', $fecha_produccion);
+            $query6->bindParam(':fecha_vencimiento', $fecha_vencimiento);
+            $query6->bindParam(':cod_producto', $cod_producto);
+            $query6->bindParam(':cod_personal', $cod_personal);
+            $query6->bindParam(':observaciones_envasado', $observaciones_envasado);
+            $query6->bindParam(':acc_correctiva_envasado', $acc_correctiva_envasado);
+            
+            $query6->execute();
+
+            $this->db->commit();
+            return true;
+        }   catch (Exception $e) {
+            $this->db->rollBack();
+            echo "Error: " . $e->getMessage();
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public function traer_datos_generales_envasado($cod_producto, $cod_produccion, $numero_bachada)
+    {
+        $query = $this->db->prepare("
+        ");
+
+        $query->bindParam(':cod_producto', $cod_producto);
+        $query->bindParam(':cod_produccion', $cod_produccion);
+
+        $query->bindParam(':numero_bachada', $numero_bachada);
+
+        $query->execute();
+        $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $resultados;
+    }
+
+    public function traer_datos_envasado_version()
+    {
+        $query = $this->db->prepare("SELECT * FROM T_VERSION_GENERAL WHERE NOMBRE = 'LBS-OP-FR-04'");
+        $query->execute();
+        $resultados = $query->fetch(PDO::FETCH_ASSOC);
+        return $resultados;
+    }
+
+
+    public function TraerDatosProducto_lote_envasado()
+    {
+        $query = $this->db->prepare("SELECT MAX(T_PRODUCTO.COD_PRODUCTO) AS COD_PRODUCTO, MAX(T_PRODUCTO.DES_PRODUCTO) AS DES_PRODUCTO, MAX(T_CO_BAC.LOTE) AS LOTE,
+         MAX(T_CO_BAC.NUMERO_BACHADA) AS NUMERO_BACHADA
+        FROM T_CONTROL_BACHADAS_REPORTE
+        T_CO_BAC JOIN T_PRODUCTO ON T_CO_BAC.COD_PRODUCTO = T_PRODUCTO.COD_PRODUCTO
+        GROUP BY T_CO_BAC.COD_PRODUCTO");
+        $query->execute();
+
+        $results = $query->fetchAll(PDO::FETCH_ASSOC);
+        $formattedResults = [];
+        foreach ($results as $result) {
+            $formattedResults[] = ['label' => $result['DES_PRODUCTO'], 'cod_producto' => $result['COD_PRODUCTO'], 'lote_b' => $result['LOTE']];
+        }
+        return $formattedResults;
+    }
+
+    public function ValorFormula($cantidadinsumo)
+    {
+        try {
+        $this->db->beginTransaction();
+        $resultadofinal = ($cantidadinsumo * 100 / 60);
+        $resultadofinal = $this->db->commit();
+        return $resultadofinal;
+        } catch (Exception $e) {
+
+        die($e->getMessage());
+        }
+    }
 
 
 }

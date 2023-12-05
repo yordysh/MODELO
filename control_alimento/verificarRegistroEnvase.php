@@ -3,8 +3,8 @@ session_start();
 
 // $codusuario = $_SESSION["cod"];
 // $oficina = $_SESSION["ofi"];
-$codusuario = '0002';
-$oficina = 'SMP2';
+$codusuario = "00004";
+
 ?>
 
 <?php
@@ -15,7 +15,8 @@ $mostrar = new m_almacen();
 $personal = new m_almacen_consulta($oficina);
 $dataProducto = $mostrar->MostrarProductoRegistroEnvase();
 $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
-$dataPersonal = $personal->MostrarDatosPersonal();
+// $dataPersonal = $personal->MostrarDatosPersonal();
+$dataPersonal = $mostrar->MostrarPersonal();
 
 ?>
 <!DOCTYPE html>
@@ -67,7 +68,7 @@ $dataPersonal = $personal->MostrarDatosPersonal();
         <section>
             <div class="container g-4 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">AVANCE</label></center>
+                    <center><label class="title">REGISTRO DE REQUERIMIENTO</label></center>
                 </div>
                 <div class="main">
                     <form method="post" action="" id="formularioRegistroProduccion" class="formSpaceVerificar">
@@ -100,19 +101,15 @@ $dataPersonal = $personal->MostrarDatosPersonal();
                             </select>
                         </div>
 
-                        <!-- Text input canti -->
-                        <!-- <div class="contenedorcantidadcalculo"> -->
-                        <!-- <div class="form-outline mb-4"> -->
                         <div class="row">
                             <div class="col-md-4">
-                                <label class="form-label">Cantidad kilogramosgramos</label>
+                                <label class="form-label">Cantidad en kilogramos</label>
                                 <input type="hidden" id='hiddencantidad'>
                                 <input type="text" id="cantidad" class="form-control" name="cantidad" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Total producto</label>
+                                <label class="form-label">Total unidades estimada</label>
                                 <input type="text" class="form-control form-control-sm" id="txtcantidadproductos" name="txtcantidadproductos" readonly />
-                                <!-- <input type="text" id='productocod'> -->
                             </div>
                             <!-- <div class="btncalcular"> -->
                             <div class="col-md-4 botoncalculo">
@@ -125,7 +122,7 @@ $dataPersonal = $personal->MostrarDatosPersonal();
                                 <select id="selectOperario" class="form-select selectProducto" aria-label="Default select example">
                                     <option value="none" selected disabled>Seleccione operario</option>
                                     <?php foreach ($dataPersonal as  $personal) { ?>
-                                        <option value="<?php echo $personal->COD_PERSONAL ?>" class="option"><?php echo $personal->NOM_PERSONAL1; ?></option>
+                                        <option value="<?php echo $personal->COD_PERSONAL ?>" class="option"><?php echo $personal->NOM_PERSONAL; ?></option>
                                     <?php
                                     }
                                     ?>

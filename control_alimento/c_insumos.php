@@ -35,8 +35,28 @@ else if (isset($_POST['action']) && $_POST['action'] == 'traer_datos_reporte_pdf
     $dato1 = new controlador_seguimiento();
     $dato1->traer_datos_reporte_pdf_sensorial();
 }
-
-
+//BACHADA
+//
+else if (isset($_POST['action']) && $_POST['action'] == 'EnviarDatosProductosYLotesBusqueda1') {
+    $dato1 = new controlador_seguimiento();
+    $dato1->EnviarDatosProductosYLotesBusqueda();
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'pre_carga_datos_pendientes_bachada1') {
+    $dato1 = new controlador_seguimiento();
+    $dato1->pre_carga_datos_pendientes_bachada();
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'traer_dato_maqueta_bachada_1') {
+    $dato1 = new controlador_seguimiento();
+    $dato1->traer_dato_maqueta_bachada();
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'GuardarDatosBachada1') {
+    $dato1 = new controlador_seguimiento();
+    $dato1->GuardarDatosBachada();
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'TraerDatosProducto_lote_envasado1') {
+    $dato1 = new controlador_seguimiento();
+    $dato1->TraerDatosProducto_lote_envasado();
+}
 else {
 }
 
@@ -458,6 +478,184 @@ class controlador_seguimiento
     }
 
 
+    //BACHADA
+    //
+    public function EnviarDatosProductosYLotesBusqueda()
+    {
+        $modelo = new m_seguimiento();
+
+        $data = $modelo->EnviarDatosProductosYLotesBusqueda();
+        header('Content-Type: application/json');
+        echo json_encode($data, JSON_PRETTY_PRINT);
+        exit;
+    }
+    public function pre_carga_datos_pendientes_bachada()
+    {
+        $modelo = new m_seguimiento();
+
+        $cod_producto_busca = $_POST['cod_producto_busca'];
+        $cod_lote_busca = $_POST['cod_lote_busca'];
+
+        $data = $modelo->pre_carga_datos_pendientes_bachada($cod_producto_busca, $cod_lote_busca);
+        header('Content-Type: application/json');
+        echo json_encode($data, JSON_PRETTY_PRINT);
+        exit;
+    }
+    
+    public function traer_dato_maqueta_bachada()
+    {
+        $modelo = new m_seguimiento();
+        $id_bachada = $_POST['id_bachada'];
+        $data = $modelo->traer_dato_maqueta_bachada($id_bachada);
+        header('Content-Type: application/json');
+        echo json_encode($data, JSON_PRETTY_PRINT);
+        exit;
+    }
+
+    public function GuardarDatosBachada()
+    {
+        $modelo = new m_seguimiento();
+        $codigo_id_kardex = $_POST['codigo_id_kardex'];
+
+        $resultadodatos = $modelo->traer_dato_restantes_id($codigo_id_kardex);
+        $cod_avance_insumo = $resultadodatos['COD_AVANCE_INSUMO'];
+        $cod_produccion = $resultadodatos['COD_PRODUCCION'];
+        $total_mezcla_peso = $resultadodatos['TOTAL_MEZCLA_PESO'];
+        $total_item_bolsas = $resultadodatos['TOTAL_ITEM_BOLSAS'];
+        $cod_producto = $resultadodatos['COD_PRODUCTO'];
+        $fecha_mezclado = $resultadodatos['FECHA_MEZCLADO'];
+        $lote = $resultadodatos['LOTE'];
+        $numero_bachada = $resultadodatos['BACHADA'];
+        $fecha_produccion = $resultadodatos['FECHA_PRODUCCION'];
+        $fecha_vencimiento = $resultadodatos['FECHA_VENCIMIENTO'];
+        //$ingreso = $resultadodatos['INGRESO'];
+        //$egreso = $resultadodatos['EGRESO'];
+        //$stock = $resultadodatos['STOCK'];
+        //$saldo = $resultadodatos['SALDO'];
+        $estado = NULL;
+
+        $egreso = $_POST['mezcla_total_envasar'];
+        
+        $cant_programada_unidades = $_POST['cantidad_programada_unidades'];
+        $peso_estimado_kg = $_POST['peso_estimado_kg'];
+        $can_bol_select = $_POST['bolsas_seleccionadas_cantidad'];
+        $peso_total_select = $_POST['bolsas_seleccionadas_peso_total_kg'];
+        $mezcla_select_bol_inco = $_POST['bolsa_incompleta_mezcla_seleccionada'];
+        $mezcla_sobrante = $_POST['mezcla_sobrante'];
+        $mezcla_env_total = $_POST['mezcla_total_envasar'];
+        $cant_estimada_unidad = $_POST['cantidad_estimada_unidad'];
+        $cant_bol_sobrante = $_POST['bolsas_sobrantes_cantidad'];
+        $peso_total_bol_sobrante = $_POST['bolsas_sobrante_peso_total'];
+
+        $cod_personal = $_POST['codigo_encargado'];
+
+        $observaciones_envasado = strtoupper($_POST['observaciones_envasado']);
+        $acc_correctiva_envasado = strtoupper($_POST['acc_correctiva_envasado']);
+        
+        if (!empty($observaciones_envasado)) {
+            // Si hay observaciones, la acción correctiva es obligatoria
+            if (empty($acc_correctiva_envasado)) {
+                echo json_encode(['status' => 'error', 'message' => 'Acción correctiva es obligatorio cuando existe una observación.']);
+                exit;
+            }
+        } else {
+            //$acc_correctiva_sensorial = null;
+            if (empty($observaciones_envasado)) {
+                $observaciones_envasado = null;
+            }
+            if (empty($acc_correctiva_envasado)) {
+                $acc_correctiva_envasado = null;
+            }
+        }
+
+        $resultadoStock = $modelo->traer_datos_envase_kardex($cod_producto);
+
+        //if (!empty($resultadodatos)){
+            $ingreso = '0';
+
+            $stock = floatval($resultadoStock['STOCK']) - floatval($egreso);
+            $saldo = floatval($resultadodatos['STOCK']) - floatval($egreso);
+            $egreso = floatval($egreso);
+        //}
+
+
+
+
+        $modelo->GuardarDatosBachada($codigo_id_kardex, $cod_avance_insumo, $cod_produccion, $total_mezcla_peso, $total_item_bolsas, $cod_producto, $fecha_mezclado, $lote,
+         $numero_bachada, $fecha_produccion, $fecha_vencimiento, floatval($ingreso), floatval($egreso), floatval($stock), floatval($saldo), $estado, $cant_programada_unidades, 
+         $peso_estimado_kg, $can_bol_select, $peso_total_select, $mezcla_select_bol_inco, $mezcla_sobrante, $mezcla_env_total, $cant_estimada_unidad, $cant_bol_sobrante, $peso_total_bol_sobrante, 
+        $cod_personal, $observaciones_envasado, $acc_correctiva_envasado);
+        echo json_encode(array('status' => 'success', 'message' => 'Registro guardado correctamente.'));
+    }
+
+    public function TraerDatosProducto_lote_envasado()
+    {
+        $modelo = new m_seguimiento();
+
+        $data = $modelo->TraerDatosProducto_lote_envasado();
+        header('Content-Type: application/json');
+        echo json_encode($data, JSON_PRETTY_PRINT);
+        exit;
+    }
+
+
+
+/*
+    public function traer_datos_reporte_envasado_pdf()
+    {
+        $modelo = new m_seguimiento();
+        $modeloDinamico = new M_BaseDinamica('SMP2');
+
+        $cod_producto = $_POST['cod_producto_pdf'];
+        $cod_produccion = $_POST['cod_lote_pdf'];
+
+        $numero_bachada = $_POST['numero_bachada_pdf']; //a
+
+        $resultadosgenerales = $modelo->traer_datos_generales_envasado($cod_producto, $cod_produccion, $numero_bachada);
+
+        $meses_ingles_espanol = array(
+            "January" => "ENERO",
+            "February" => "FEBRERO",
+            "March" => "MARZO",
+            "April" => "ABRIL",
+            "May" => "MAYO",
+            "June" => "JUNIO",
+            "July" => "JULIO",
+            "August" => "AGOSTO",
+            "September" => "SEPTIEMBRE",
+            "October" => "OCTUBRE",
+            "November" => "NOVIEMBRE",
+            "December" => "DICIEMBRE"
+        );        
+
+        foreach ($resultadosgenerales as &$resultado) {
+            $cod_personal = $resultado['COD_PERSONAL'];
+            $nombre_personal = $modeloDinamico->obtener_nombre_personal($cod_personal);
+            $resultado['NOM_PERSONAL'] = $nombre_personal; // Agrega el nombre al resultado general
+
+            $cod_avance_insumo = $resultado['COD_AVANCE_INSUMOS'];
+            $resultadositem = $modelo->traer_datos_item_insumo($cod_avance_insumo);
+            $resultado['items'] = $resultadositem; // Agregar los detalles de los ítems al resultado general
+
+            $dato_version = $modelo->traer_datos_insumo_version();
+            $resultado['DATO_VERSION'] = $dato_version;
+
+            $fecha_prueba = $dato_version['FECHA_VERSION'];
+            $nombre_mes_ingles = date("F", strtotime($fecha_prueba)); // Obtiene el nombre del mes
+            $nombre_mes_espanol = $meses_ingles_espanol[$nombre_mes_ingles];
+
+            $anio = date("Y", strtotime($fecha_prueba)); // Obtiene el año
+
+            $resultado['NOMBRE_MES'] = $nombre_mes_espanol;
+            $resultado['ANIO'] = $anio;
+
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($resultadosgenerales, JSON_PRETTY_PRINT);
+        exit;
+    }
+    */
 
 }
 ?>

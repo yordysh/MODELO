@@ -91,7 +91,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 <input type="number" id="cantidadInsumoEnvase" class="form-control form-control-sm" name="cantidadProducto" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Total producto</label>
+                                <label class="form-label">Total unidades estimada</label>
                                 <input type="text" class="form-control form-control-sm" id="txtcantidadproductos" name="txtcantidadproductos" readonly />
                             </div>
                             <!-- <div class="btncalcular"> -->
@@ -108,11 +108,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <table class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <!-- <th class="" scope="col">PRODUCTOS</th>
-                                        <th class="" scope="col">CANTIDAD TOTAL</th> -->
                                         <th class="" scope="col">PRODUCTOS</th>
-                                        <th class="" scope="col">Kilogramos</th>
-                                        <th class="" scope="col">Total productos</th>
+                                        <th class="" scope="col">KILOGRAMOS</th>
+                                        <th class="" scope="col">TOTAL PRODUCTOS</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablainsumoenvasetotal">
@@ -125,7 +123,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <div class="table-responsive" style="overflow-x: hidden;height: 300px; margin-top:20px;">
                             <table id="tinsumo" class="table table-sm mb-3 table-hover">
                                 <div class="row g-4 top-div">
-                                    <label class="title_table">TOTAL DE INSUMOS POR PRODUCTO</label>
+                                    <label class="title_table">TOTAL DE INSUMOS PARA REQUERIMIENTO</label>
                                 </div>
                                 <thead>
 
@@ -159,7 +157,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <div id="tablaE" class="table-responsive " style="overflow-x: hidden;height: 600px; margin-top:20px;">
                             <table class="table table-sm mb-3 table-hover">
                                 <div class="row g-4 top-div">
-                                    <label class="title_table">TOTAL DE ENVASES POR PRODUCTO</label>
+                                    <label class="title_table">TOTAL DE ENVASES PARA REQUERIMIENTO</label>
                                 </div>
                                 <thead>
                                     <tr>
