@@ -51,22 +51,22 @@ $(function () {
   //-------------------------------------------------------------------------//
   $("#cantidadInsumoEnvase").keyup((e) => {
     e.preventDefault();
-    let cantidadescrita = $("#cantidadInsumoEnvase").val();
-    const regex = /\d+\./;
-    let totalproducto = ($("#cantidadInsumoEnvase").val() * 100) / 60;
-    $("#txtcantidadproductos").val(Math.trunc(totalproducto));
-    if (regex.test(cantidadescrita)) {
+    var selectedValue = document.getElementById("selectInsumoEnvase").value;
+    if (selectedValue === "none") {
       Swal.fire({
         icon: "error",
-        title: "Valor decimal",
-        text: "Por favor, ingresa valores enteros en cantidad",
+        title: "Valor no seleccionado",
+        text: "Por favor, seleccione un producto antes de ingresar la cantidad.",
       }).then((resultado) => {
         if (resultado.isConfirmed || resultado.isDismissed) {
           $("#cantidadInsumoEnvase").val("");
         }
       });
-      return;
+      return false;
     }
+    const regex = /\d+\./;
+    let totalproducto = ($("#cantidadInsumoEnvase").val() * 100) / 60;
+    $("#txtcantidadproductos").val(Math.trunc(totalproducto));
   });
 
   //--------------------- Insertar los valores insumos y envases ------------//

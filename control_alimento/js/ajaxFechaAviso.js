@@ -982,51 +982,6 @@ $(function () {
 
   function alertax() {
     $("#botonalertaguardar").click(function () {
-      // let alertaLanzada = false;
-      // $("#tablaalerta tr").each(function (index) {
-      //   if (index !== 0) {
-      //     let check = $(this).find(".check").prop("checked");
-      //     let idcon = $(this).find(".id").attr("idcontador");
-      //     let obs = $(this).find(".observacion").val();
-      //     let accioncorrectox = $(this).find(".accioncorrectiva").val();
-      //     let selectvb = $(this).find(".selectVerificacion").val();
-      //     let estadoverifica = $(this).find(".estadoverifica").val();
-
-      //     // if (
-      //     //   !check &&
-      //     //   (accioncorrectox.length == "" ||
-      //     //     obs.length == "" ||
-      //     //     selectvb.length == "0")
-      //     // ) {
-      //     //   if (!alertaLanzada) {
-      //     //     Swal.fire({
-      //     //       icon: "info",
-      //     //       title: "Rellenar campos",
-      //     //       html: `<p>Necesita llenar campo observacion o accion correctiva del item ${idcon}</p>`,
-      //     //     });
-      //     //     alertaLanzada = true;
-      //     //   }
-      //     //   return;
-      //     // }
-      //     if (
-      //       !check &&
-      //       (obs === "" || accioncorrectox === "" || selectvb === "")
-      //     ) {
-      //       if (!alertaLanzada) {
-      //         Swal.fire({
-      //           icon: "info",
-      //           title: "Rellenar campos",
-      //           html: `<p>Necesita llenar campo observacion o accion correctiva del item ${idcon}</p>`,
-      //         });
-      //         alertaLanzada = true;
-      //       }
-      //       return false;
-      //     }
-      //   }
-      // });
-      // if (alertaLanzada) {
-      //   return false;
-      // }
       let capturavalor = [];
       $("#tablaalerta tr").each(function (index) {
         if (index !== 0) {
@@ -1062,94 +1017,102 @@ $(function () {
       });
       console.log(capturavalor);
 
-      // const accion = "insertaryactualizaralerta";
-      // $.ajax({
-      //   url: "../control_alimento/c_almacen.php",
-      //   type: "POST",
-      //   data: { accion: accion, capturavalor: capturavalor },
-      //   beforeSend: function () {
-      //     $(".preloader").css("opacity", "1");
-      //     $(".preloader").css("display", "block");
-      //   },
-      //   success: function (response) {
-      //     if (response == "ok") {
-      //       Swal.fire({
-      //         title: "¡Guardado exitoso!",
-      //         text: "Los datos se han guardado correctamente.",
-      //         icon: "success",
-      //         confirmButtonText: "Aceptar",
-      //       }).then((result) => {
-      //         if (result.isConfirmed) {
-      //           $("#modalalertaaviso").modal("hide");
-      //           alertaControl();
-      //           // $("#formularioZona").trigger("reset");
-      //         }
-      //       });
-      //     } else {
-      //       console.log("error");
-      //     }
-      //   },
-      //   complete: function () {
-      //     $(".preloader").css("opacity", "0");
-      //     $(".preloader").css("display", "none");
-      //   },
-      //   error: function (jqXHR, textStatus, errorThrown) {
-      //     console.error("Error in alerta AJAX:", textStatus, errorThrown);
-      //     reject(errorThrown);
-      //   },
-      // });
-    });
+      let entraajax = true;
+      $("#tablaalerta tr").each(function (index) {
+        if (index !== 0) {
+          let estadoseleccionado = $(this).find(".seleccionestado").val();
+          let idcon = $(this).find(".id").attr("idcontador");
+          let obs = $(this).find(".observacion").val();
+          let accioncorrectox = $(this).find(".accioncorrectiva").val();
+          let selectvb = $(this).find(".selectVerificacion").val();
 
-    /*-----------------------Para deshabilitar cajas de texto al darle check------------ */
-    $("#tablaalerta tr").each(function () {
-      // let checkbox = $(this).find("input[type='checkbox']");
-      // let observacion = $(this).find("#observacion");
-      let accionCorrectiva = $(this).find("#accioncorrectiva");
-      // let selectVerificacion = $(this).find("#selectVerificacion");
-      $(this)
-        .find(".seleccionestado")
-        .on("change", function () {
-          let valorSeleccionado = $(this).val();
-          console.log(valorSeleccionado);
-          if (valorSeleccionado == "R") {
-            console.log("object");
-            $("#observacion").prop("disabled", false);
-            accionCorrectiva.prop("disabled", false);
-            $("#selectVerificacion").prop("disabled", false);
+          let estadoverifica = $(this).find(".estadoverifica").val();
+
+          if (estadoseleccionado == "PE" || estadoseleccionado == "OB") {
+            if (obs === "" || accioncorrectox === "" || selectvb == null) {
+              Swal.fire({
+                title: "¡Necesita llenar campos!",
+                text: "Verifique el item " + idcon + "",
+                icon: "info",
+                confirmButtonText: "Aceptar",
+              });
+              entraajax = false;
+              return false;
+            }
+          } else if (estadoseleccionado == null) {
+            Swal.fire({
+              title: "¡Necesita seleccionar un estado!",
+              text: "Verifique el estado" + idcon + "",
+              icon: "info",
+              confirmButtonText: "Aceptar",
+            });
+            entraajax = false;
+            return false;
           }
-        });
-
-      // checkbox.on("click", function () {
-      //   let isChecked = $(this).prop("checked");
-      //   observacion.prop("disabled", isChecked);
-      //   accionCorrectiva.prop("disabled", isChecked);
-      //   selectVerificacion.prop("disabled", isChecked);
-      //   observacion.val("");
-      //   accionCorrectiva.val("");
-      //   selectVerificacion.val("0").trigger("change");
-      // });
-    });
-    /*------------------------------------------------------------------------------- */
-    /*-----------------------Poner check si es estado OB------------ */
-
-    $("#tablaalerta tr").each(function () {
-      let checkbox = $(this).find("input[type='checkbox']");
-      let observacion = $(this).find("#observacion");
-      let accionCorrectiva = $(this).find("#accioncorrectiva");
-      let selectVerificacion = $(this).find("#selectVerificacion");
-      let estadoverifica = $(this).find(".estadoverifica").val();
-
-      if (estadoverifica === "OB") {
-        $(this).find("input[type='checkbox']").prop("checked", true);
-        checkbox.on("click", function () {
-          observacion.prop("disabled", false);
-          accionCorrectiva.prop("disabled", false);
-          selectVerificacion.prop("disabled", false);
+        }
+      });
+      if (entraajax) {
+        const accion = "insertaryactualizaralerta";
+        $.ajax({
+          url: "../control_alimento/c_almacen.php",
+          type: "POST",
+          data: { accion: accion, capturavalor: capturavalor },
+          beforeSend: function () {
+            $(".preloader").css("opacity", "1");
+            $(".preloader").css("display", "block");
+          },
+          success: function (response) {
+            if (response == "ok") {
+              Swal.fire({
+                title: "¡Guardado exitoso!",
+                text: "Los datos se han guardado correctamente.",
+                icon: "success",
+                confirmButtonText: "Aceptar",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  $("#modalalertaaviso").modal("hide");
+                  alertaControl();
+                  // $("#formularioZona").trigger("reset");
+                }
+              });
+            } else {
+              console.log("error");
+            }
+          },
+          complete: function () {
+            $(".preloader").css("opacity", "0");
+            $(".preloader").css("display", "none");
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error in alerta AJAX:", textStatus, errorThrown);
+            reject(errorThrown);
+          },
         });
       }
     });
 
-    /*------------------------------------------------------------- */
+    /*-----------------------Para deshabilitar cajas de texto al darle check------------ */
+    $("#tablaalerta .seleccionestado").on("change", function () {
+      let valorSeleccionado = $(this).val();
+      let currentRow = $(this).closest("tr");
+
+      if (valorSeleccionado == "R") {
+        currentRow
+          .find("#observacion, #accioncorrectiva")
+          .prop("disabled", true)
+          .val("");
+        currentRow.find("#selectVerificacion").prop("disabled", true);
+        currentRow.find("#selectVerificacion").val("0").trigger("change");
+      } else {
+        currentRow
+          .find("#observacion, #accioncorrectiva")
+          .prop("disabled", false)
+          .val("");
+        currentRow.find("#selectVerificacion").prop("disabled", false);
+        currentRow.find("#selectVerificacion").val("0").trigger("change");
+      }
+    });
+    /*------------------------------------------------------------------------------- */
   }
   function alertacontrolaviso() {
     $("#botoncontrolalerta").click(function () {

@@ -63,48 +63,50 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                         </div>
 
                         <!--Combo Productos -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Producto</label>
-                            <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example" required>
-                                <option value="none" selected disabled>Seleccione producto</option>
-                                <?php foreach ($dataProductoTerminado as  $lis) { ?>
-                                    <option value="<?php echo ($lis['COD_PRODUCTO']); ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
-                                <?php
-                                }
+                        <div class="row">
+                            <div class="form-outline mb-4 col-md-6">
+                                <label class="form-label">Producto</label>
+                                <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example" required>
+                                    <option value="none" selected disabled>Seleccione producto</option>
+                                    <?php foreach ($dataProductoTerminado as  $lis) { ?>
+                                        <option value="<?php echo ($lis['COD_PRODUCTO']); ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                    <?php
+                                    }
 
-                                ?>
-                            </select>
-                        </div>
-                        <!-- Text input cantidad -->
-                        <div class="form-outline mb-4">
-                            <!-- <label class="form-label">Cantidad producto</label> -->
-                            <label class="form-label">Cantidad por kilosgramos</label>
-                            <input type="number" id="cantidadTotal" class="form-control" name="cantidadTotal" required>
-                        </div>
-
-                        <!--Combo Insumos -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Insumos</label>
-                            <select id="selectInsumosCombo" class="form-select selectInsumos" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione insumos</option>
-                                <?php foreach ($dataProductoInsumos as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
-                                <?php
-                                }
-                                ?>
-                            </select>
-                        </div>
-
-                        <!-- Text input cantidad insumos-->
-                        <div class="contenedorcantidadcalculo">
-                            <div class="form-outline mb-4">
-
-                                <label class="form-label">Cantidad por kilogramos</label>
-                                <input type="number" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
+                                    ?>
+                                </select>
                             </div>
-                            <!-- <button id="botonCalcularInsumos" name="insert" class="btn btn-success bt-Total">Insertar insumos </button> -->
-                            <div class="btncalcularformula">
-                                <button class="custom-icon-calcular" name="insert" id="botonCalcularInsumos"><i class="icon-circle-with-plus"></i></button>
+                            <!-- Text input cantidad -->
+                            <div class="form-outline mb-4 col-md-6">
+                                <label class="form-label">Cantidad por kilosgramos</label>
+                                <input type="number" id="cantidadTotal" class="form-control" name="cantidadTotal" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!--Combo Insumos -->
+                            <div class="form-outline mb-4 col-md-6">
+                                <label class="form-label">Insumos</label>
+                                <select id="selectInsumosCombo" class="form-select selectInsumos" aria-label="Default select example">
+                                    <option value="none" selected disabled>Seleccione insumos</option>
+                                    <?php foreach ($dataProductoInsumos as  $lis) { ?>
+                                        <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <!-- Text input cantidad insumos-->
+                            <div class="contenedorcantidadcalculo col-md-6">
+                                <div class="form-outline mb-4">
+
+                                    <label class="form-label">Cantidad por kilogramos</label>
+                                    <input type="number" id="cantidadInsumos" class="form-control" name="cantidadInsumos" required>
+                                </div>
+                                <!-- <button id="botonCalcularInsumos" name="insert" class="btn btn-success bt-Total">Insertar insumos </button> -->
+                                <div class="btncalcularformula">
+                                    <button class="custom-icon-calcular" name="insert" id="botonCalcularInsumos"><i class="icon-circle-with-plus"></i></button>
+                                </div>
                             </div>
                         </div>
                         <div class="table-responsive " style="height: 300px; margin-top:20px;margin-bottom:50px!important;">
@@ -121,28 +123,30 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                             </table>
                         </div>
 
-                        <!--Combo Envases por producto -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Envases</label>
-                            <select id="selectEnvasesProductoCombo" class="form-select selectEnvasesProducto" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione envases</option>
-                                <?php foreach ($dataProductoEnvases as  $lis) { ?>
-                                    <option value="<?php echo ($lis['COD_PRODUCTO']); ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
-                                <?php
-                                }
-                                ?>
-                            </select>
-                        </div>
-
-                        <!-- Text input cantidad envases-->
-                        <div class="contenedorcantidadcalculo">
-                            <div class="form-outline mb-4">
-                                <label class="form-label">Cantidad envases</label>
-                                <input type="number" id="cantidadEnvaseProducto" class="form-control" name="cantidadEnvaseProductos" required>
+                        <div class="row">
+                            <!--Combo Envases por producto -->
+                            <div class="form-outline mb-4 col-md-6">
+                                <label class="form-label">Envases</label>
+                                <select id="selectEnvasesProductoCombo" class="form-select selectEnvasesProducto" aria-label="Default select example">
+                                    <option value="none" selected disabled>Seleccione envases</option>
+                                    <?php foreach ($dataProductoEnvases as  $lis) { ?>
+                                        <option value="<?php echo ($lis['COD_PRODUCTO']); ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
                             </div>
-                            <!-- <button id="botonCalcularEnvasesProducto" name="insert" class="btn btn-success bt-Total">Insertar envases </button> -->
-                            <div class="btncalcular">
-                                <button class="custom-icon-calcular" name="insert" id="botonCalcularEnvasesProducto"><i class="icon-circle-with-plus"></i></button>
+
+                            <!-- Text input cantidad envases-->
+                            <div class="contenedorcantidadcalculo col-md-6">
+                                <div class="form-outline mb-4">
+                                    <label class="form-label">Cantidad envases</label>
+                                    <input type="number" id="cantidadEnvaseProducto" class="form-control" name="cantidadEnvaseProductos" required>
+                                </div>
+                                <!-- <button id="botonCalcularEnvasesProducto" name="insert" class="btn btn-success bt-Total">Insertar envases </button> -->
+                                <div class="btncalcular">
+                                    <button class="custom-icon-calcular" name="insert" id="botonCalcularEnvasesProducto"><i class="icon-circle-with-plus"></i></button>
+                                </div>
                             </div>
                         </div>
                         <div class="table-responsive" style="height: 300px; margin-top:20px;">
@@ -159,6 +163,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                             </table>
                         </div>
                         <button id="botonCalcularProductosEnvases" type="submit" name="insert" class="btn btn-primary bt-Total">Total de productos</button>
+                        <a class="btn btn-success estilopdf" href="#" onclick="generarPDF()"> Lista maestra</a>
                         <div class="table-responsive " style="height: 200px !important; margin-top:20px;margin-bottom:100px;">
                             <table id="tbProEnVa" class="table table-sm mb-3 table-hover">
                                 <thead>
@@ -188,6 +193,15 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
     <script src="./js/ajaxEnvaseFormulacion.js"></script>
     <script src="../js/menu_a.js"></script>
     <script src="./js/select2.min.js"></script>
+    <script>
+        function generarPDF() {
+
+
+            // Enviar los valores a tu script de generación de PDF
+            var url = "pdf-valores.php";
+            window.open(url, "_blank");
+        }
+    </script>
 </body>
 
 </html>

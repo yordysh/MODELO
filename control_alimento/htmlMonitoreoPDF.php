@@ -394,7 +394,7 @@ $fecham = $anioSeleccionado . '-' . $mesSeleccionado;
 
             foreach ($data as $fils) {
                 $vb = $fils['VB'];
-                if ($vb == "Seleccione V°B°") {
+                if ($vb == "Seleccione V°B") {
                     $vb = '';
                 }
                 $vr = $fils['VERIFICACION_REALIZADA'];

@@ -75,10 +75,10 @@
                                 echo '<td class="titulotd">' . $datos[0]['fechacreacion'] . '</td>';
                                 // echo '<td class="titulotd"><input class="check" type="checkbox"/></td>';
                                 echo '<td class="titulotd">
-                                                    <select id="seleccionestado" class="form-select seleccionestado" style="width:80px;" aria-label="Default select example">
-                                                          <option selected value="0">Seleccione</option>
+                                                    <select id="seleccionestado" class="form-select seleccionestado" style="width:100px;" aria-label="Default select example">
+                                                          <option selected value="0" disabled>Estado</option>
                                                           <option value="R">R</option>
-                                                          <option value="O">O</option>
+                                                          <option value="OB">O</option>
                                                           <option value="PE">PE</option>
                                                     </select>
                                      </td>';
@@ -86,7 +86,7 @@
                                 echo '<td ><textarea class="form-control accioncorrectiva" id="accioncorrectiva" rows="2"></textarea></td>';
                                 echo '<td class="titulotd">
                                             <select id="selectVerificacion" class="form-select selectVerificacion" style="width:150px;" aria-label="Default select example">
-                                                    <option selected value="0">Seleccione V°B</option>
+                                                    <option selected value="0" disabled>Seleccione V°B</option>
                                                     <option value="1">J.A.C</option>
                                                     <option value="2">A.A.C</option>
                                             </select></td>';
@@ -113,10 +113,10 @@
                                     echo '<td class="titulotd">' . $datos[$i]['fechacreacion'] . '</td>';
                                     // echo '<td class="titulotd"><input class="check" type="checkbox"/></td>';
                                     echo '<td class="titulotd">
-                                                <select id="seleccionestado" class="form-select seleccionestado" style="width:80px;" aria-label="Default select example">
-                                                    <option selected value="0">Seleccione</option>
+                                                <select id="seleccionestado" class="form-select seleccionestado" style="width:100px;" aria-label="Default select example">
+                                                    <option selected value="0" disabled>Estado</option>
                                                     <option value="R">R</option>
-                                                    <option value="O">O</option>
+                                                    <option value="OB">O</option>
                                                     <option value="PE">PE</option>
                                                 </select>
                                           </td>';
@@ -124,7 +124,7 @@
                                     echo '<td><textarea class="form-control accioncorrectiva" id="accioncorrectiva" rows="2"></textarea></td>';
                                     echo '<td>
                                  <select id="selectVerificacion" class="form-select selectVerificacion" style="width:150px;" aria-label="Default select example">
-                                     <option selected value="0">Seleccione V°B°</option>
+                                     <option selected value="0" disabled>Seleccione V°B°</option>
                                      <option value="1">J.A.C</option>
                                      <option value="2">A.A.C</option>
                                  </select></td>';
