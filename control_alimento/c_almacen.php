@@ -489,6 +489,7 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_insumos_totales_avance($codigoproducto, $codigoproduccion, $cantidadenvase, $cantidadinsumo);
     echo $respuesta;
 } elseif ($accion == 'guardarvalordeinsumosporregistro') {
+
     $valoresCapturadosProduccion = ($_POST['valoresCapturadosProduccion']);
     $valoresCapturadosProduccioninsumo = ($_POST['valoresCapturadosProduccioninsumo']);
     $codigoproducto = trim($_POST['codigoproducto']);
@@ -497,7 +498,6 @@ if ($accion == 'insertar') {
     $cantidadtotalenvases = trim($_POST['cantidadtotalenvases']);
     $codpersonal = trim($_POST['codpersonal']);
     $codoperario = trim($_POST['codoperario']);
-
 
     $respuesta = c_almacen::c_guardar_valor_insumo_registro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $cantidadtotalenvases, $codpersonal, $codoperario);
     echo $respuesta;
@@ -3133,12 +3133,21 @@ class c_almacen
 
                 $json = array();
                 foreach ($datos['respuestae'] as $row) {
+
+                    if (trim($row->COD_PRODUCTO) == "00161") {
+                        $CANTIDAD_TOTAL = ceil($cantidadenvase / $row->CANTIDA);
+                    } else {
+                        $CANTIDAD_TOTAL = $cantidadenvase;
+                    }
+
                     $json['respuestae'][] = array(
+
                         "COD_COD_FORMULACION" => $row->COD_FORMULACION,
-                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                        "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
 
-                        $CANTIDAD_TOTAL = ceil(($row->CANTIDA * $cantidadenvase) / $row->CANTIDAD_FORMULACION),
+                        // $CANTIDAD_TOTAL = ceil(($row->CANTIDA * $cantidadenvase) / $row->CANTIDAD_FORMULACION),
+
                         "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
                         "LOTES" => c_almacen::c_producto_lote($row->COD_PRODUCTO, $CANTIDAD_TOTAL),
                     );
@@ -3179,7 +3188,7 @@ class c_almacen
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
 
                         $resultado = (($row->CAN_FORMULACION * $cantidadinsumo) / $row->CANTIDAD_FORMULACION),
-                        $CANTIDAD_TOTAL = number_format($resultado, 4),
+                        $CANTIDAD_TOTAL = number_format($resultado, 3),
                         "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
                         "LOTES" => c_almacen::c_producto_lote($row->COD_PRODUCTO, $CANTIDAD_TOTAL),
                     );
@@ -3222,8 +3231,10 @@ class c_almacen
             if (c_almacen::m_verificarstock($valoresCapturadosProduccioninsumo) == 0) {
                 return "Error stock insuficiente de insumos";
             }
-            exit();
+
             $respuesta = $m_formula->InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $cantidadtotalenvases, $codpersonal, $codoperario);
+
+
             if ($respuesta) {
                 return "ok";
             } else {

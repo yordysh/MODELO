@@ -3368,7 +3368,8 @@ class m_almacen
   public function  InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $cantidadtotalenvases,  $codpersonal, $codoperario)
   {
     try {
-
+      var_dump($valoresCapturadosProduccion);
+      exit();
       $this->bd->beginTransaction();
 
       $codigoInsumosAvances = new m_almacen();
@@ -3421,6 +3422,7 @@ class m_almacen
       $maquina = os_info();
 
       if ($insert  > 0) {
+
         $cantidadrestar = $cantidadtotalenvases;
         $calculofecha = $this->bd->prepare("SELECT FEC_GENERADO,FEC_VENCIMIENTO FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
         $calculofecha->execute();
@@ -3839,7 +3841,6 @@ class m_almacen
           $actualizarRequerimientoItem->execute();
         }
       } else {
-
         $stmVerificaCodReque = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) AS COD_REQUERIMIENTO FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
         $stmVerificaCodReque->execute();
         $consultarequerimientocod = $stmVerificaCodReque->fetch(PDO::FETCH_ASSOC);
@@ -3865,7 +3866,7 @@ class m_almacen
   {
     try {
       $stmMostrar = $this->bd->prepare("SELECT TAI.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS,TAI.N_BACHADA AS N_BACHADA,TPRO.NUM_PRODUCION_LOTE AS NUM_PRODUCION_LOTE,
-                                          TP.DES_PRODUCTO AS DES_PRODUCTO, TAI.CANTIDAD AS CANTIDAD,  CONVERT(varchar, TAI.FECHA, 103) AS FECHA
+                                          TP.DES_PRODUCTO AS DES_PRODUCTO, TAI.CANTIDAD AS CANTIDAD,TAI.CANT_INSUMOS AS CANT_INSUMOS,  CONVERT(varchar, TAI.FECHA, 103) AS FECHA
                                           FROM T_TMPAVANCE_INSUMOS_PRODUCTOS TAI 
                                           INNER JOIN T_PRODUCTO TP ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO
                                           INNER JOIN T_TMPPRODUCCION TPRO ON TPRO.COD_PRODUCCION=TAI.COD_PRODUCCION WHERE MONTH(FECHA) = '$mesSeleccionado' AND YEAR(FECHA) = '$anioSeleccionado'");
@@ -3882,7 +3883,7 @@ class m_almacen
   public function MostrarRegistroProduccionPDF()
   {
     try {
-      $stmMostrar = $this->bd->prepare("SELECT TAIP.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS, TP.DES_PRODUCTO AS DES_PRODUCTO,
+      $stmMostrar = $this->bd->prepare("SELECT TAIP.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS,TP.ABR_PRODUCTO AS ABR_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO,
                                           TAIP.CANTIDAD AS CANTIDAD, TAIP.LOTE AS LOTE FROM T_TMPAVANCE_INSUMOS_PRODUCTOS_ENVASES TAIP 
                                           INNER JOIN T_PRODUCTO TP ON TAIP.COD_PRODUCTO=TP.COD_PRODUCTO");
       $stmMostrar->execute();

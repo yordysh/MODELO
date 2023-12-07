@@ -139,24 +139,28 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         echo '<td class="tdcentrado">' . $filas->DES_PRODUCTO . '</td>';
         echo '<td class="tdcentrado">CANTIDAD(Unid.)</td>';
         echo '<td class="tdcentrado">' . $filas->CANTIDAD . '</td>';
-        echo '<td class="tdcentrado">RECIBIDO POR</td>';
-        echo '<td class="tdcentrado">FIRMA</td>';
+        echo '<td class="tdcentrado">PESO TOTAL:</td>';
+        echo '<td class="tdcentrado">' . $filas->CANT_INSUMOS . '</td>';
+
         echo '</tr>';
         echo '<tr>';
-        echo '<td colspan="2" class="tdcentrado">MATERIALES ENVASES/OTROS</td>';
+        echo '<td colspan="3" class="tdcentrado">MATERIALES ENVASES/OTROS</td>';
         echo '<td colspan="2" class="tdcentrado">CANTIDAD(Unid.)</td>';
-        echo '<td  colspan="2" class="tdcentrado">LOTE</td>';
-        echo '<td style="border-bottom:none; border-right:none;"></td>';
-        echo '<td style="border-bottom:none; "></td>';
+        echo '<td  class="tdcentrado">LOTE</td>';
+        echo '<td class="tdcentrado">RECIBIDO POR</td>';
+        echo '<td class="tdcentrado">FIRMA</td>';
+        // echo '<td style="border-bottom:none; border-right:none;"></td>';
+        // echo '<td style="border-bottom:none; "></td>';
         echo '</tr>';
 
 
         foreach ($datos as $filadata) {
             if ($filadata->COD_AVANCE_INSUMOS == $filas->COD_AVANCE_INSUMOS) {
                 echo '<tr>';
-                echo '<td colspan="2" class="tdcentrado-bold">' . $filadata->DES_PRODUCTO . '</td>';
-                echo '<td colspan="2" class="tdcentrado-bold">' . $filadata->CANTIDAD . '</td>';
-                echo '<td colspan="2" class="tdcentrado-bold">' . $filadata->LOTE . '</td>';
+                echo '<td class="tdcentrado-bold">' . $filadata->DES_PRODUCTO . '</td>';
+                echo '<td  class="tdcentrado-bold" style="background-color:#60fc60;font-weight:600;">' . $filadata->ABR_PRODUCTO . '</td>';
+                echo '<td colspan="3" class="tdcentrado-bold">' . $filadata->CANTIDAD . '</td>';
+                echo '<td  class="tdcentrado-bold">' . $filadata->LOTE . '</td>';
                 echo '<td style="border-bottom:none; border-top:none;"></td>';
                 echo '<td style="border-bottom:none; border-top:none;"></td>';
                 echo '</tr>';

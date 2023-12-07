@@ -117,7 +117,6 @@ $(function () {
     }
 
     let accion = "mostrarregistrosporenvases";
-
     $.ajax({
       type: "POST",
       url: "./c_almacen.php",
