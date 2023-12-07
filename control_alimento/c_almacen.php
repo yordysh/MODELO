@@ -2653,8 +2653,13 @@ class c_almacen
             }
             $json = array();
             foreach ($datos as $row) {
-                $calculo = ($row->CANTIDA * $cantidadesinsumoenvases) / $row->CAN_FORMULACION;
-                $total = ceil($calculo);
+                // $calculo = ($row->CANTIDA * $cantidadesinsumoenvases) / $row->CAN_FORMULACION;
+                // $total = ceil($calculo);
+                if (trim($row->COD_PRODUCTO) == '00161') {
+                    $total = ceil($cantidadesinsumoenvases / $row->CANTIDA);
+                } else {
+                    $total = $cantidadesinsumoenvases;
+                }
                 // $total =  bcdiv($calculo, '1', 3);
                 $json[] = array(
                     "COD_FORMULACIONES" => $row->COD_FORMULACIONES,

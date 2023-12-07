@@ -99,7 +99,7 @@ $datalista = $mostrar->MostrarListaMaestraPDF();
             <tbody>
                 <tr>
                     <td class="cabecera-rigth">LISTA MAESTRA DE ENVASES Y EMBALAJES</td>
-                    <td class="cabecera-version">VERSIÓN 2
+                    <td class="cabecera-version">VERSIÓN 03
                     </td>
                 </tr>
 

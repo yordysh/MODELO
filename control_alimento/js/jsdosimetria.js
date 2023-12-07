@@ -8,14 +8,18 @@ $(document).ready(function () {
 });
 
 function exportardosimetria(obj) {
+  console.log(obj);
   var doc = new jsPDF({
     orientation: "landscape",
   });
   let can = obj["c"] - 1;
   let hojbla = 0;
+  console.log(obj);
   $.each(obj["d"], function (i, l) {
     let nombre = l[7].split(" ");
+
     let operario = nombre[0] + " " + nombre[1];
+
     let cantidad = l[3];
     let bachada = l[4];
     let producto = l[2];
@@ -259,7 +263,7 @@ function buscarimgguardada() {
       });
     },
     success: function (re) {
-      //  console.log(re)
+      console.log(re);
       try {
         obj = JSON.parse(re);
         console.log(obj["m"]);

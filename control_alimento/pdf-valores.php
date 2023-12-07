@@ -16,7 +16,7 @@ $options = new Options();
 
 $options->setIsRemoteEnabled(true);
 $options->set('isPhpEnabled', true);
-$dompdf->set_option('isHtml5ParserEnabled', true);
+// $dompdf->set_option('isHtml5ParserEnabled', true);
 $dompdf->setOptions($options);
 
 $dompdf->loadHtml($html);

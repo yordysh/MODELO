@@ -3,11 +3,14 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require_once("m_reporte_docimetria.php");
+require_once "m_consulta_personal.php";
+
 
 $accion = $_POST['accion'];
 if ($accion == 'reporte') {
     c_reporte_docimetria::c_reporte();
 }
+
 
 
 class c_reporte_docimetria
@@ -22,8 +25,18 @@ class c_reporte_docimetria
         $mes =  explode("-", $fecha[0]);
         $nommes = c_reporte_docimetria::obtenerNombreMes($mes[2]);
 
+        $oficina = 'SMP2';
+        $personal = new m_almacen_consulta($oficina);
+
         for ($i = 0; $i < count($cab); $i++) {
             $cab[$i][5] = convFecSistema($cab[$i][5]);
+            $valor = $personal->MostrarNomPersonalCodigo($cab[$i][7]);
+
+            if (count($valor) > 0) {
+                $cab[$i][7] = $valor[0][0];
+            } else {
+                $cab[$i][7] = '';
+            }
             $item = $m_docimetria->m_reporte_item($cab[$i][0]);
             array_push($cab[$i], $item);
         }
@@ -35,6 +48,7 @@ class c_reporte_docimetria
             'v' => $version[0][1],
             'n' => $version[0][2],
         );
+
         echo json_encode($dato, JSON_FORCE_OBJECT);
     }
 

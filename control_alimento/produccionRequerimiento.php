@@ -138,7 +138,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
                         <!-- Text input numero de produccion-->
                         <div class="form-outline mb-4">
-                            <label class="form-label">N° produccion</label>
+                            <label class="form-label">Lote produccion</label>
                             <input type="text" id="numeroproduccion" class="form-control" name="" required>
                         </div>
 

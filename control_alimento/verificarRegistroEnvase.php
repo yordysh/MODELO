@@ -3,6 +3,7 @@ session_start();
 
 // $codusuario = $_SESSION["cod"];
 // $oficina = $_SESSION["ofi"];
+$oficina = 'SMP2';
 $codusuario = "00004";
 
 ?>
@@ -15,8 +16,8 @@ $mostrar = new m_almacen();
 $personal = new m_almacen_consulta($oficina);
 $dataProducto = $mostrar->MostrarProductoRegistroEnvase();
 $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
-// $dataPersonal = $personal->MostrarDatosPersonal();
-$dataPersonal = $mostrar->MostrarPersonal();
+$dataPersonal = $personal->MostrarDatosPersonal();
+// $dataPersonal = $mostrar->MostrarPersonal();
 
 ?>
 <!DOCTYPE html>
@@ -79,28 +80,29 @@ $dataPersonal = $mostrar->MostrarPersonal();
                         </div>
 
                         <!--Combo Productos -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Producto</label>
-                            <input type="hidden" id="hiddenproducto">
-                            <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione producto</option>
-                                <?php foreach ($dataProducto as  $lis) { ?>
-                                    <option id_reque="<?php echo $lis['COD_REQUERIMIENTO'] ?>" value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['COD_REQUERIMIENTO'] . " "; ?><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO'] . " "; ?><?php echo ($lis['PESO_NETO'] / 1000) . " KG" ?></option>
-                                <?php
-                                }
-                                ?>
-                            </select>
-                        </div>
+                        <div class="row">
+                            <div class="form-outline mb-4 col-md-6">
+                                <label class="form-label">Producto</label>
+                                <input type="hidden" id="hiddenproducto">
+                                <select id="selectProductoCombo" class="form-select selectProducto" aria-label="Default select example">
+                                    <option value="none" selected disabled>Seleccione producto</option>
+                                    <?php foreach ($dataProducto as  $lis) { ?>
+                                        <option id_reque="<?php echo $lis['COD_REQUERIMIENTO'] ?>" value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo $lis['COD_REQUERIMIENTO'] . " "; ?><?php echo $lis['ABR_PRODUCTO']; ?><?php echo $lis['DES_PRODUCTO'] . " "; ?><?php echo ($lis['PESO_NETO'] / 1000) . " KG" ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
 
-                        <!--Combo Produccion -->
-                        <div class="form-outline mb-4 ">
-                            <label class="form-label">N° produccion</label>
-                            <input type="hidden" id="hiddenproduccion">
-                            <select id="selectNumProduccion" class="form-select selectNumProduccion" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione produccion</option>
-                            </select>
+                            <!--Combo Produccion -->
+                            <div class="form-outline mb-4 col-md-6">
+                                <label class="form-label">Lote produccion</label>
+                                <input type="hidden" id="hiddenproduccion">
+                                <select id="selectNumProduccion" class="form-select selectNumProduccion" aria-label="Default select example">
+                                    <option value="none" selected disabled>Seleccione produccion</option>
+                                </select>
+                            </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-4">
                                 <label class="form-label">Cantidad en kilogramos</label>
@@ -116,13 +118,13 @@ $dataPersonal = $mostrar->MostrarPersonal();
                                 <button class="custom-icon-calcular" name="calcular" id="botonCalcularregistros"><i class="icon-circle-with-plus"></i></button>
                                 <!-- <button id="botonCalcularInsumoEnvase" name="calcular" class="btn btn-success">Insertar</button> -->
                             </div>
-                            <div class="col-md-4 operario">
+                            <div class="col-md-6 operario">
                                 <label class="form-label">Operario</label>
                                 <!-- <input type="hidden" id="hidden"> -->
                                 <select id="selectOperario" class="form-select selectProducto" aria-label="Default select example">
                                     <option value="none" selected disabled>Seleccione operario</option>
                                     <?php foreach ($dataPersonal as  $personal) { ?>
-                                        <option value="<?php echo $personal->COD_PERSONAL ?>" class="option"><?php echo $personal->NOM_PERSONAL; ?></option>
+                                        <option value="<?php echo $personal->COD_PERSONAL ?>" class="option"><?php echo $personal->NOM_PERSONAL1; ?></option>
                                     <?php
                                     }
                                     ?>

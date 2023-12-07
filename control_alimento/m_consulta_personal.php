@@ -40,4 +40,17 @@ class m_almacen_consulta
             die($e->getMessage());
         }
     }
+    public function MostrarNomPersonalCodigo($codigopersonalsmp2)
+    {
+        try {
+
+            $stm = $this->bd_dinamica->prepare("SELECT NOM_PERSONAL1 AS NOM_PERSONAL1 FROM T_PERSONAL WHERE COD_PERSONAL='$codigopersonalsmp2'");
+            $stm->execute();
+            $datos = $stm->fetchAll(PDO::FETCH_NUM);
+
+            return $datos;
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }

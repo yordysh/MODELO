@@ -66,24 +66,24 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <div class="form-outline mb-4">
                             <input id="id" type="hidden" class="form-control" name="id" />
                         </div>
-
-                        <!--Combo Productos -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Producto</label>
-                            <select id="selectInsumoEnvase" class="form-select selectProducto" aria-label="Default select example">
-                                <option value="none" selected disabled>Seleccione producto</option>
-                                <?php foreach ($dataProductoTerminado as  $lis) { ?>
-                                    <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
-                                <?php
-                                }
-
-                                ?>
-                            </select>
-                        </div>
-
-                        <!-- Text input cantidad -->
                         <div class="row">
-                            <div class="col-md-4">
+                            <!--Combo Productos -->
+                            <div class="form-outline mb-4 col-md-4">
+                                <label class="form-label">Producto</label>
+                                <select id="selectInsumoEnvase" class="form-select selectProducto" aria-label="Default select example">
+                                    <option value="none" selected disabled>Seleccione producto</option>
+                                    <?php foreach ($dataProductoTerminado as  $lis) { ?>
+                                        <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                    <?php
+                                    }
+
+                                    ?>
+                                </select>
+                            </div>
+
+                            <!-- Text input cantidad -->
+
+                            <div class="col-md-2">
                                 <label class="form-label">Cantidad en Kg</label>
                                 <input type="number" id="cantidadInsumoEnvase" class="form-control form-control-sm" name="cantidadProducto" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
                             </div>
@@ -92,7 +92,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 <input type="text" class="form-control form-control-sm" id="txtcantidadproductos" name="txtcantidadproductos" readonly />
                             </div>
                             <!-- <div class="btncalcular"> -->
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <button class="custom-icon-calcular" name="calcular" id="botonCalcularInsumoEnvase"><i class="icon-circle-with-plus"></i></button>
                             </div>
                             <!-- </div> -->

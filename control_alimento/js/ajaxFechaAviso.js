@@ -1042,7 +1042,7 @@ $(function () {
           } else if (estadoseleccionado == null) {
             Swal.fire({
               title: "¡Necesita seleccionar un estado!",
-              text: "Verifique el estado" + idcon + "",
+              text: "Verifique el estado del item " + idcon + "",
               icon: "info",
               confirmButtonText: "Aceptar",
             });
