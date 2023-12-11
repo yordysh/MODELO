@@ -319,6 +319,26 @@ $(function () {
               $("#cantidadcaja").val("20");
             }
           });
+        } else if (response == "error") {
+          Swal.fire({
+            title: "¡Ordenes de compra!",
+            text: "Se necesita hacer las ordenes de compra.",
+            icon: "info",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              mostrarProduccionRequerimiento();
+              $("#idhiddencodrequerimiento").val("");
+              $("#idhiddenproducto").val("");
+              $("#productorequerimientoitem").val("");
+              $("#numeroproduccion").val("");
+              $("#cantidadhiddentotalrequerimiento").val("");
+              $("#fechainicio").val("");
+              $("#fechavencimiento").val("");
+              $("#textAreaObservacion").val("");
+              $("#cantidadcaja").val("20");
+            }
+          });
         }
       },
       error: function (error) {

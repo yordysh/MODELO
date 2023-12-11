@@ -607,8 +607,8 @@ class m_almacen
   public function editarInfraestructura($valorSeleccionado, $nombreinfraestructurax, $ndias, $codinfra)
   {
     try {
-      var_dump($codinfra);
-      exit();
+      // var_dump($codinfra);
+      // exit();
       $cod = new m_almacen();
       $verifica = $cod->consultasialertacambiaestado($codinfra);
       $verificaduplica = $cod->consultarduplicadodealerta($nombreinfraestructurax, $valorSeleccionado);
@@ -2439,10 +2439,6 @@ class m_almacen
   public function InsertarInsumEnvas($codpersonal, $union, $unionEnvase, $unionItem)
   {
     try {
-      // var_dump($union);
-      // var_dump($unionEnvase);
-      // var_dump($unionItem);
-      // exit();
       $this->bd->beginTransaction();
       $cod = new m_almacen();
       $codRequerimiento = $cod->generarCodigoRequerimientoProducto();
@@ -3050,51 +3046,54 @@ class m_almacen
         $resultadoFinalFin = trim($resultadoabrevia . ($resultadoFin));
       }
 
+      $ordencompraexiste = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPREQUERIMIENTO_ITEM WHERE ESTADO='C'");
+      $ordencompraexiste->execute();
+      $valororden = $ordencompraexiste->fetch(PDO::FETCH_ASSOC);
+      $contarordencompra = $valororden['COUNT'];
 
       $maquina = os_info();
-      // $maquina = 'user';
 
-      $stmProducciontototal = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION(COD_PRODUCCION, COD_REQUERIMIENTO, COD_CATEGORIA, COD_PRODUCTO, NUM_PRODUCION_LOTE, CAN_PRODUCCION,CANTIDAD_PRODUCIDA, FEC_GENERADO,HOR_GENERADO,FEC_VENCIMIENTO, OBSERVACION,UNI_MEDIDA,BARRA_INICIO,BARRA_FIN, USU_REGISTRO,MAQUINA, COD_ALMACEN,CAN_CAJA)
-      VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$cantidadtotalproduccion','$dateTInicio','$horaMinutosSegundos','$dateTVencimiento','$textAreaObservacion','UNIDAD','$resultadoFinalI','$resultadoFinalFin','$codpersonal','$maquina','00017','$cantidadcaja')");
+      if ($contarordencompra == 0) {
+        $stmProducciontototal = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION(COD_PRODUCCION, COD_REQUERIMIENTO, COD_CATEGORIA, COD_PRODUCTO, NUM_PRODUCION_LOTE, CAN_PRODUCCION,CANTIDAD_PRODUCIDA, FEC_GENERADO,HOR_GENERADO,FEC_VENCIMIENTO, OBSERVACION,UNI_MEDIDA,BARRA_INICIO,BARRA_FIN, USU_REGISTRO,MAQUINA, COD_ALMACEN,CAN_CAJA)
+        VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$cantidadtotalproduccion','$dateTInicio','$horaMinutosSegundos','$dateTVencimiento','$textAreaObservacion','UNIDAD','$resultadoFinalI','$resultadoFinalFin','$codpersonal','$maquina','00017','$cantidadcaja')");
 
-      $insert = $stmProducciontototal->execute();
-
-
+        $insert = $stmProducciontototal->execute();
 
 
-      foreach ($consulta as $row) {
+        foreach ($consulta as $row) {
 
-        $codProductoitem = $row->COD_PRODUCTO;
-        $cantidadInsumos = $row->CAN_FORMULACION;
-        $cantidadformulacion = $row->CANTIDAD_FORMULACION;
-        $totalInsumos =  round((($cantidadInsumos * $cantidadtotalproduccion) / $cantidadformulacion), 3);
+          $codProductoitem = $row->COD_PRODUCTO;
+          $cantidadInsumos = $row->CAN_FORMULACION;
+          $cantidadformulacion = $row->CANTIDAD_FORMULACION;
+          $totalInsumos =  round((($cantidadInsumos * $cantidadtotalproduccion) / $cantidadformulacion), 3);
 
-        $stmProduccionitem = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_ITEM(COD_PRODUCCION, COD_PRODUCTO,  CAN_PRODUCCION)
-                                                  VALUES ('$codigo_de_produccion_generado','$codProductoitem','$totalInsumos')");
+          $stmProduccionitem = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_ITEM(COD_PRODUCCION, COD_PRODUCTO,  CAN_PRODUCCION)
+                                                    VALUES ('$codigo_de_produccion_generado','$codProductoitem','$totalInsumos')");
 
-        $stmProduccionitem->execute();
+          $stmProduccionitem->execute();
+        }
+
+        foreach ($consultaEnvase as $rowEnvase) {
+
+          $codProductoenvase = $rowEnvase->COD_PRODUCTO;
+          $cantidadEnvases = $rowEnvase->CANTIDA;
+          $cantidadformulacion = $row->CANTIDAD_FORMULACION;
+          $totalEnvases =  ceil(($cantidadEnvases * $cantidadtotalproduccion) / $cantidadformulacion);
+
+          $stmProduccionenvases = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_ENVASE(COD_PRODUCCION, COD_PRODUCTO,  CAN_PRODUCCION_ENVASE)
+                                                    VALUES ('$codigo_de_produccion_generado','$codProductoenvase','$totalEnvases')");
+
+          $stmProduccionenvases->execute();
+        }
+
+        $stmActualiza = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='T' WHERE COD_REQUERIMIENTO='$codrequerimientoproduccion' AND COD_PRODUCTO='$codproductoproduccion'");
+        $stmActualiza->execute();
+
+
+
+        $insert = $this->bd->commit();
+        return $insert;
       }
-
-      foreach ($consultaEnvase as $rowEnvase) {
-
-        $codProductoenvase = $rowEnvase->COD_PRODUCTO;
-        $cantidadEnvases = $rowEnvase->CANTIDA;
-        $cantidadformulacion = $row->CANTIDAD_FORMULACION;
-        $totalEnvases =  ceil(($cantidadEnvases * $cantidadtotalproduccion) / $cantidadformulacion);
-
-        $stmProduccionenvases = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_ENVASE(COD_PRODUCCION, COD_PRODUCTO,  CAN_PRODUCCION_ENVASE)
-                                                  VALUES ('$codigo_de_produccion_generado','$codProductoenvase','$totalEnvases')");
-
-        $stmProduccionenvases->execute();
-      }
-
-      $stmActualiza = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='T' WHERE COD_REQUERIMIENTO='$codrequerimientoproduccion' AND COD_PRODUCTO='$codproductoproduccion'");
-      $stmActualiza->execute();
-
-
-
-      $insert = $this->bd->commit();
-      return $insert;
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());
@@ -3194,8 +3193,6 @@ class m_almacen
       $stmverificardatos->execute();
       $consultacodigoformulacion = $stmverificardatos->fetch(PDO::FETCH_ASSOC);
       $resultadoCantidadFormulacion = intval($consultacodigoformulacion['CANTIDAD_PRODUCIDA']);
-      // var_dump($resultadoCantidadFormulacion);
-      // var_dump("cantidad" . $cantidad);
 
       if ($cantidadinsumo <= $resultadoCantidadFormulacion) {
 
@@ -3327,8 +3324,6 @@ class m_almacen
       $resultadofecha = $stmfecha->fetch(PDO::FETCH_ASSOC);
       $fechaobtenida = $resultadofecha['FECHA'];
 
-      // var_dump($fechaobtenida);
-      // var_dump($fechadehoy);
 
       if ($fechadehoy == $fechaobtenida) {
         $stm = $this->bd->prepare("SELECT MAX(N_BACHADA) as N_BACHADA FROM T_TMPAVANCE_INSUMOS_PRODUCTOS 
@@ -3337,20 +3332,14 @@ class m_almacen
         $resultado = $stm->fetch(PDO::FETCH_ASSOC);
         $maxCodigo = intval($resultado['N_BACHADA']);
         $nuevoCodigo = $maxCodigo + 1;
-        // var_dump($nuevoCodigo);
       } else {
 
         $maxCodigo = 0;
         $nuevoCodigo = $maxCodigo + 1;
-        // var_dump($nuevoCodigo . "else");
       }
 
-
-
-      // $nuevoCodigo = $this->bd->commit();
       return $nuevoCodigo;
     } catch (Exception $e) {
-      // $this->bd->rollBack();
       die($e->getMessage());
     }
   }
@@ -3368,8 +3357,8 @@ class m_almacen
   public function  InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $cantidadtotalenvases,  $codpersonal, $codoperario)
   {
     try {
-      var_dump($valoresCapturadosProduccion);
-      exit();
+      // var_dump($valoresCapturadosProduccion);
+      // exit();
       $this->bd->beginTransaction();
 
       $codigoInsumosAvances = new m_almacen();
@@ -3754,7 +3743,7 @@ class m_almacen
             $stmcodigoAumEls->execute();
             $codigogenEls = $stmcodigoAumEls->fetch(PDO::FETCH_ASSOC);
             $valorpuestoEls = $codigogenEls['NUM_LOTE'];
-            // var_dump($valorpuestoEls);
+
             $extraccionvalor = intval(substr($valorpuestoEls, 4));
 
             $sum = $extraccionvalor + 1;
@@ -4099,8 +4088,6 @@ class m_almacen
       $this->bd->beginTransaction();
       $codigo = new m_almacen();
 
-
-
       $fechaFormateada = DateTime::createFromFormat('Y-m-d', $fecha);
       $fechaformato = $fechaFormateada->format('d/m/Y');
       // $fechaformato = $fecha;
@@ -4109,7 +4096,6 @@ class m_almacen
       $stmexisteproveedor->execute();
       $resultadoExisteProveedor = $stmexisteproveedor->fetch(PDO::FETCH_ASSOC);
       $count = $resultadoExisteProveedor['COUNT'];
-
 
 
       $stmMaxProveedor = $this->bd->prepare("SELECT MAX(COD_PROVEEDOR) AS COD_PROVEEDOR FROM T_PROVEEDOR");
@@ -4439,21 +4425,26 @@ class m_almacen
       $nombre = 'LBS-BPM-FR-09';
 
       if ($datosTabla) {
+
         $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, CODIGO_REQUERIMIENTO)
                                                         VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
         $insertarecepcioncompras->execute();
+
 
 
         foreach ($datos as $dato) {
           $idcomprobante = $dato["idcomprobante"];
           $fechaingresoC = $dato["fechaingreso"];
           $fechaConvertida = date_create($fechaingresoC);
-          $fechaingreso = $fechaConvertida->format('Y-m-d');
+          $fechaingreso = $fechaConvertida->format('Y/m/d');
+
 
           $hora = $dato["hora"];
           $producto = trim($dato["producto"]);
           $codigolote = $dato["codigolote"];
-          $fechavencimiento = $dato["fechavencimiento"];
+          $fechav = $dato["fechavencimiento"];
+          $fechaConvertidaven = date_create($fechav);
+          $fechavencimiento = $fechaConvertidaven->format('Y/m/d');
           $proveedor = $dato["proveedor"];
           $remision = $dato["remision"];
           $boleta = $dato["boleta"];
@@ -4638,9 +4629,13 @@ class m_almacen
                             VALUES('$codigorecepcion','$fecha','$codproductos','$accioncorrectivaobs','$observacion','$idcheck')");
           $insertarobs->execute();
         }
+
+        $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='F'");
+        $actualizo->execute();
       } else {
+        // var_dump($datos);
         $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, CODIGO_REQUERIMIENTO)
-                                                          VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
+                                                          VALUES('0000001','0004','00017')");
         $insertarecepcioncompras->execute();
 
 
@@ -4651,9 +4646,13 @@ class m_almacen
           $fechaingreso = $fechaConvertida->format('Y-m-d');
 
           $hora = $dato["hora"];
+
           $producto = trim($dato["producto"]);
-          $codigolote = $dato["codigolote"];
-          $fechavencimiento = $dato["fechavencimiento"];
+          $codigolote = trim($dato["codigolote"]);
+          $fechaven = $dato["fechavencimiento"];
+          $fechaConvertidaven = date_create($fechaven);
+          $fechavencimiento = $fechaConvertidaven->format('Y-m-d');
+
           $proveedor = $dato["proveedor"];
           $remision = $dato["remision"];
           $boleta = $dato["boleta"];
@@ -4775,7 +4774,7 @@ class m_almacen
 
 
           $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE,FECHA_INGRESO, HORA, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO,COD_PROVEEDOR, GUIA, BOLETA, FACTURA, GBF, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, CANTIDAD_MINIMA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
-                                                    VALUES('$codigorecepcion','$idcomprobante','$fechaingreso','$hora','$codigolote','$producto','$fechavencimiento','$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
+                                                    VALUES('$codigorecepcion','$idcomprobante',CONVERT(DATE,'$fechaingreso'),'$hora','$codigolote','$producto',CONVERT(DATE,'$fechavencimiento'),'$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
 
           $insertarrecepcion->execute();
 
@@ -4823,6 +4822,9 @@ class m_almacen
 
           $querylote->execute();
         }
+
+        $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='F'");
+        $actualizo->execute();
       }
 
       $codigo->generarVersionGeneral($nombre);
@@ -4833,6 +4835,7 @@ class m_almacen
     } catch (Exception $e) {
       $this->bd->rollBack();
       die($e->getMessage());
+      echo $e->getLine();
     }
   }
   public function MostrarControlRecepcionPDF($anioSeleccionado, $mesSeleccionado)
@@ -4887,8 +4890,6 @@ class m_almacen
       $this->bd->beginTransaction();
 
       $codigo = new m_almacen();
-      // var_dump($capturavalor);
-
 
       foreach ($capturavalor as $valor) {
         $codigozona = trim($valor['idzona']);

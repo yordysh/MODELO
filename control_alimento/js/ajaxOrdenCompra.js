@@ -289,7 +289,7 @@ $(function () {
     let proveedordni = $("#dni_principal").val();
     let formapago = $("#selectformapago").val();
     let moneda = $("#selectmoneda").val();
-    let observacion = $("#observacion").val();
+    let observacion = $("#observacionorden").val();
     let idcompraaprobada = $("#tmostrarordencompraaprobado tr:eq(1)").attr(
       "id_orden_compra_aprobada"
     );
@@ -431,7 +431,7 @@ $(function () {
               $("#direccion").val("");
               $("#ruc_principal").val("");
               $("#dni_principal").val("");
-              $("#observacion").val("");
+              $("#observacionorden").val("");
               $("#selectformapago").val("E").trigger("change");
               $("#selectmoneda").val("S").trigger("change");
               $("#tablainsumoscomprar").empty();

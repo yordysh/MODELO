@@ -57,6 +57,10 @@ else if (isset($_POST['action']) && $_POST['action'] == 'TraerDatosProducto_lote
     $dato1 = new controlador_seguimiento();
     $dato1->TraerDatosProducto_lote_envasado();
 }
+else if (isset($_POST['action']) && $_POST['action'] == 'traer_datos_reporte_bachada_pdf1') {
+    $dato1 = new controlador_seguimiento();
+    $dato1->traer_datos_reporte_bachada_pdf();
+}
 else {
 }
 
@@ -306,11 +310,7 @@ class controlador_seguimiento
         $cod_producto = $_POST['txt_cod_producto'];
         $fecha_vencimiento = $_POST['txt_fecha_vencimiento'];
 
-        //$total_item_bolsas = $_POST['txt_filas_total_item_bolsas'];
         $total_item_bolsas = count($contadorFilas);
-        //$ingreso = '20';
-        
-        //$stock = '20';
 
         if (empty($cod_produccion) || empty($fecha_produccion) || empty($cod_producto) || empty($fecha_vencimiento)) {
             echo json_encode(['status' => 'error', 'message' => 'No se obtuvieron algunos datos.']);
@@ -512,46 +512,104 @@ class controlador_seguimiento
         exit;
     }
 
+    //$ingreso = $resultadodatos['INGRESO'];
+    //$egreso = $resultadodatos['EGRESO'];
+    //$stock = $resultadodatos['STOCK'];
+    //$saldo = $resultadodatos['SALDO'];
+
+/*
+        
+
+*/
+
     public function GuardarDatosBachada()
     {
         $modelo = new m_seguimiento();
         $codigo_id_kardex = $_POST['codigo_id_kardex'];
 
-        $resultadodatos = $modelo->traer_dato_restantes_id($codigo_id_kardex);
-        $cod_avance_insumo = $resultadodatos['COD_AVANCE_INSUMO'];
-        $cod_produccion = $resultadodatos['COD_PRODUCCION'];
-        $total_mezcla_peso = $resultadodatos['TOTAL_MEZCLA_PESO'];
-        $total_item_bolsas = $resultadodatos['TOTAL_ITEM_BOLSAS'];
-        $cod_producto = $resultadodatos['COD_PRODUCTO'];
-        $fecha_mezclado = $resultadodatos['FECHA_MEZCLADO'];
-        $lote = $resultadodatos['LOTE'];
-        $numero_bachada = $resultadodatos['BACHADA'];
-        $fecha_produccion = $resultadodatos['FECHA_PRODUCCION'];
-        $fecha_vencimiento = $resultadodatos['FECHA_VENCIMIENTO'];
-        //$ingreso = $resultadodatos['INGRESO'];
-        //$egreso = $resultadodatos['EGRESO'];
-        //$stock = $resultadodatos['STOCK'];
-        //$saldo = $resultadodatos['SALDO'];
+        $resultado_bachada_actual = $modelo->traer_dato_restantes_id($codigo_id_kardex);
+        $cod_avance_insumo = $resultado_bachada_actual['COD_AVANCE_INSUMO'];
+        $cod_produccion = $resultado_bachada_actual['COD_PRODUCCION'];
+        $total_mezcla_peso = $resultado_bachada_actual['TOTAL_MEZCLA_PESO'];
+        //$total_item_bolsas = $resultado_bachada_actual['TOTAL_ITEM_BOLSAS'];
+        $cod_producto = $resultado_bachada_actual['COD_PRODUCTO'];
+        $fecha_mezclado = $resultado_bachada_actual['FECHA_MEZCLADO'];
+        $lote = $resultado_bachada_actual['LOTE'];
+        $numero_bachada = $resultado_bachada_actual['BACHADA'];
+        $fecha_produccion = $resultado_bachada_actual['FECHA_PRODUCCION'];
+        $fecha_vencimiento = $resultado_bachada_actual['FECHA_VENCIMIENTO'];
+
         $estado = NULL;
 
-        $egreso = $_POST['mezcla_total_envasar'];
-        
-        $cant_programada_unidades = $_POST['cantidad_programada_unidades'];
-        $peso_estimado_kg = $_POST['peso_estimado_kg'];
-        $can_bol_select = $_POST['bolsas_seleccionadas_cantidad'];
-        $peso_total_select = $_POST['bolsas_seleccionadas_peso_total_kg'];
-        $mezcla_select_bol_inco = $_POST['bolsa_incompleta_mezcla_seleccionada'];
-        $mezcla_sobrante = $_POST['mezcla_sobrante'];
-        $mezcla_env_total = $_POST['mezcla_total_envasar'];
-        $cant_estimada_unidad = $_POST['cantidad_estimada_unidad'];
-        $cant_bol_sobrante = $_POST['bolsas_sobrantes_cantidad'];
-        $peso_total_bol_sobrante = $_POST['bolsas_sobrante_peso_total'];
+        $total_item_bolsas = $_POST['cantidad_de_bolsas'];
 
         $cod_personal = $_POST['codigo_encargado'];
+        if (empty($cod_personal)) {
+            echo json_encode(['status' => 'error', 'message' => 'Falta seleccionar un personal.']);
+            exit;
+        }
+        $regex_numero_entero = '/^\d+$/';
+        $cant_programada_unidades = $_POST['cantidad_programada_unidades'];
+        if (empty($cant_programada_unidades) || !preg_match($regex_numero_entero, $cant_programada_unidades)) {
+            echo json_encode(['status' => 'error', 'message' => 'Cantidad programada de unidades no es válido, debe ser un número entero.']);
+            exit;
+        }
+        $regex_peso_es_kg = "/^\d{1,6}(\.\d{0,3})?$/";
+        $peso_estimado_kg = $_POST['peso_estimado_kg'];
+        if (empty($peso_estimado_kg) || !preg_match($regex_peso_es_kg, $peso_estimado_kg)) {
+            echo json_encode(['status' => 'error', 'message' => 'Peso estimado(Kg) no es válido.']);
+            exit;
+        }
+        $can_bol_select = $_POST['bolsas_seleccionadas_cantidad'];
+        if (empty($can_bol_select) || !preg_match($regex_numero_entero, $can_bol_select)) {
+            echo json_encode(['status' => 'error', 'message' => 'Cantidad de bolsas seleccionadas no es válido, debe ser un número entero.']);
+            exit;
+        }
+        if ($can_bol_select > $total_item_bolsas) {
+            echo json_encode(['status' => 'error', 'message' => 'La cantidad de bolsas seleccionadas no puede ser mayor al total de cantidad de bolsas']);
+            exit;
+        }
+        $peso_total_select = $_POST['bolsas_seleccionadas_peso_total_kg'];
+        if (empty($peso_total_select) || !preg_match($regex_peso_es_kg, $peso_total_select)) {
+            echo json_encode(['status' => 'error', 'message' => 'Peso total (Kg) de bolsas seleccionadas no es válido.']);
+            exit;
+        }
+        $mezcla_select_bol_inco = $_POST['bolsa_incompleta_mezcla_seleccionada'];
+        if (empty($mezcla_select_bol_inco)) {
+            echo json_encode(['status' => 'error', 'message' => 'Falta bolsa incompleta (mezcla seleccionada)']);
+            exit;
+        }
+        $mezcla_sobrante = $_POST['mezcla_sobrante'];
+        if (empty($mezcla_sobrante) || $mezcla_sobrante < 0) {
+            echo json_encode(['status' => 'error', 'message' => 'Mezcla sobrante no es válido']);
+            exit;
+        }
+        $mezcla_env_total = $_POST['mezcla_total_envasar'];
+        if (empty($mezcla_env_total)) {
+            echo json_encode(['status' => 'error', 'message' => 'Mezcla total a envasar no es válido']);
+            exit;
+        }
+        $cant_estimada_unidad = $_POST['cantidad_estimada_unidad'];
+        if (empty($cant_estimada_unidad)) {
+            echo json_encode(['status' => 'error', 'message' => 'Falta cantidad estimada(Unidades)']);
+            exit;
+        }
+        $cant_bol_sobrante = $_POST['bolsas_sobrantes_cantidad'];
+        if ($cant_bol_sobrante < 0) {
+            echo json_encode(['status' => 'error', 'message' => 'Bolsas sobrantes(cantidad) no es válido']);
+            exit;
+        }
+
+        $egreso = $_POST['mezcla_total_envasar'];
+        $peso_total_bol_sobrante = $_POST['bolsas_sobrante_peso_total'];
+        if (empty($egreso) || empty($peso_total_bol_sobrante)) {
+            echo json_encode(['status' => 'error', 'message' => 'Algunos campos no son válidos']);
+            exit;
+        }
 
         $observaciones_envasado = strtoupper($_POST['observaciones_envasado']);
         $acc_correctiva_envasado = strtoupper($_POST['acc_correctiva_envasado']);
-        
+
         if (!empty($observaciones_envasado)) {
             // Si hay observaciones, la acción correctiva es obligatoria
             if (empty($acc_correctiva_envasado)) {
@@ -568,23 +626,39 @@ class controlador_seguimiento
             }
         }
 
-        $resultadoStock = $modelo->traer_datos_envase_kardex($cod_producto);
 
+        $resultadoStock = $modelo->traer_datos_envase_kardex($cod_producto);
         //if (!empty($resultadodatos)){
             $ingreso = '0';
 
             $stock = floatval($resultadoStock['STOCK']) - floatval($egreso);
-            $saldo = floatval($resultadodatos['STOCK']) - floatval($egreso);
+            //var_dump(floatval($resultadodatos['STOCK']));
+            $saldo = floatval($resultado_bachada_actual['STOCK']) - floatval($egreso);
+            //var_dump($saldo);
+
             $egreso = floatval($egreso);
         //}
 
+        $codigo_id_kardex_sobrante = $_POST['codigo_id_kardex_sobrante'];
+        if (!empty($codigo_id_kardex_sobrante)) {
+            $bachada_anterior = $_POST['bachada_anterior'];
 
+            $saldo = $_POST['mezcla_sobrante'];
+        }else {
+            $bachada_anterior = '0';
+            
+        }
 
+        $valida_bachada_obligatoria = $_POST['valida_bachada_obligatoria'];
+        if ($valida_bachada_obligatoria == 'OB' && empty($codigo_id_kardex_sobrante)){
+            echo json_encode(['status' => 'error', 'message' => 'Es obligatorio seleccionar la bachada anterior']);
+            exit;
+        }
 
         $modelo->GuardarDatosBachada($codigo_id_kardex, $cod_avance_insumo, $cod_produccion, $total_mezcla_peso, $total_item_bolsas, $cod_producto, $fecha_mezclado, $lote,
          $numero_bachada, $fecha_produccion, $fecha_vencimiento, floatval($ingreso), floatval($egreso), floatval($stock), floatval($saldo), $estado, $cant_programada_unidades, 
          $peso_estimado_kg, $can_bol_select, $peso_total_select, $mezcla_select_bol_inco, $mezcla_sobrante, $mezcla_env_total, $cant_estimada_unidad, $cant_bol_sobrante, $peso_total_bol_sobrante, 
-        $cod_personal, $observaciones_envasado, $acc_correctiva_envasado);
+        $cod_personal, $observaciones_envasado, $acc_correctiva_envasado, $codigo_id_kardex_sobrante, $bachada_anterior);
         echo json_encode(array('status' => 'success', 'message' => 'Registro guardado correctamente.'));
     }
 
@@ -599,19 +673,15 @@ class controlador_seguimiento
     }
 
 
-
-/*
-    public function traer_datos_reporte_envasado_pdf()
+    public function traer_datos_reporte_bachada_pdf()
     {
         $modelo = new m_seguimiento();
         $modeloDinamico = new M_BaseDinamica('SMP2');
 
         $cod_producto = $_POST['cod_producto_pdf'];
-        $cod_produccion = $_POST['cod_lote_pdf'];
+        $cod_lote = $_POST['cod_lote_pdf'];
 
-        $numero_bachada = $_POST['numero_bachada_pdf']; //a
-
-        $resultadosgenerales = $modelo->traer_datos_generales_envasado($cod_producto, $cod_produccion, $numero_bachada);
+        $resultadosgenerales = $modelo->traer_datos_reporte_bachada_pdf($cod_producto, $cod_lote);
 
         $meses_ingles_espanol = array(
             "January" => "ENERO",
@@ -633,11 +703,7 @@ class controlador_seguimiento
             $nombre_personal = $modeloDinamico->obtener_nombre_personal($cod_personal);
             $resultado['NOM_PERSONAL'] = $nombre_personal; // Agrega el nombre al resultado general
 
-            $cod_avance_insumo = $resultado['COD_AVANCE_INSUMOS'];
-            $resultadositem = $modelo->traer_datos_item_insumo($cod_avance_insumo);
-            $resultado['items'] = $resultadositem; // Agregar los detalles de los ítems al resultado general
-
-            $dato_version = $modelo->traer_datos_insumo_version();
+            $dato_version = $modelo->traer_datos_envasado_version();
             $resultado['DATO_VERSION'] = $dato_version;
 
             $fecha_prueba = $dato_version['FECHA_VERSION'];
@@ -650,12 +716,12 @@ class controlador_seguimiento
             $resultado['ANIO'] = $anio;
 
         }
-
+        
         header('Content-Type: application/json');
         echo json_encode($resultadosgenerales, JSON_PRETTY_PRINT);
         exit;
     }
-    */
+    
 
 }
 ?>

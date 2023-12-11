@@ -601,10 +601,6 @@ if ($accion == 'insertar') {
     $observacion = trim($_POST['observacion']);
 
 
-    // var_dump($empresa);
-    // var_dump($_FILES['foto']);
-    // exit();
-
     if (isset($_FILES['foto'])) {
         // Validar que se haya seleccionado una imagen
         if (empty($_FILES['foto']['name'])) {
@@ -673,6 +669,7 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'insertardatoscontrolrecepcion') {
     $datos = $_POST['datos'];
     if (isset($_POST['datosTabla'])) {
+
         $datosTabla = $_POST['datosTabla'];
     } else {
         $datosTabla = null;
@@ -1149,7 +1146,6 @@ class c_almacen
             $codigozonaalerta = trim($_POST['codigozonaalerta']);
 
             $estado = $_POST['estado'];
-            // var_dump($estado);
             $taskId = $_POST['taskId'];
             $observacionTextArea = $_POST['observacionTextArea'];
             $FECHA_TOTAL = $_POST['taskFecha'];
@@ -1466,7 +1462,6 @@ class c_almacen
 
         $datos = $mostrar->MostrarAlerta();
 
-        // var_dump($datos);
         try {
             if (!$datos) {
                 $json = "datosno";
@@ -1949,8 +1944,8 @@ class c_almacen
                     // echo json_encode(['status' => 'error']);
                 };
             } elseif ($nombreDia  == 'Saturday') {
-                // var_dump("sabado");
-                // exit();
+
+
                 $FECHA_ACTUALIZA = $FECHA_TOTAL;
                 $alertif = $mostrar->actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
                 // header('Content-Type: application/json');
@@ -1977,8 +1972,6 @@ class c_almacen
             $nombreDia = date('l', strtotime($FECHA_TOTAL));
 
             $fechadHoy  = $mostrar->c_horaserversql('F');
-            // var_dump($nombreDia);
-            // exit();
 
             if ($nombreDia != 'Saturday') {
                 $FECHA_ACTUALIZA = $fechadHoy;
@@ -2027,8 +2020,7 @@ class c_almacen
         $mostrar = new m_almacen();
 
         if (isset($_POST['fechapostergacioncontrol'])) {
-            // var_dump("if");
-            // exit();
+
             $estado = $_POST['estado'];
             $codigocontrolmaquina = $_POST['codigocontrolmaquina'];
             $taskId = $_POST['taskId'];
@@ -2060,8 +2052,7 @@ class c_almacen
                     // echo json_encode(['status' => 'error']);
                 };
             } elseif ($nombreDia  == 'Saturday') {
-                // var_dump("sabado");
-                // exit();
+
                 $FECHA_ACTUALIZA = $FECHA_TOTAL;
                 $alertif = $mostrar->actualizarAlertaCheckControlPos($codigocontrolmaquina, $ndiaspos, $taskId, $observacion, $FECHA_POSTERGACION, $FECHA_ACTUALIZA, $accionCorrectiva,  $selectVB);
                 // header('Content-Type: application/json');
@@ -2132,8 +2123,6 @@ class c_almacen
             $FECHA_TOTAL = $FECHA_FORMATO->modify("+$taskNdias days")->format('d-m-Y');
             $FECHA_TOTAL = date('d/m/Y', strtotime($FECHA_TOTAL));
 
-
-            // var_dump($FECHA_TOTAL);
 
             // Verificar si la fecha total cae en domingo
             if (date('N', strtotime($FECHA_TOTAL)) == 7) {
@@ -2518,7 +2507,7 @@ class c_almacen
         $COD_PRODUCTO = filter_input(INPUT_POST, 'codProducto');
 
         $datos = $consulta->MostrarProduccion($COD_PRODUCTO);
-        // var_dump($datos);
+
         if (count($datos) == 0) {
             echo '<option value="0">No hay registros en soluciones</option>';
         }
@@ -3042,7 +3031,6 @@ class c_almacen
 
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarProductoInsumoPorRequerimiento($cod_formulacion);
-            // var_dump($datos);
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
             }
@@ -3334,7 +3322,6 @@ class c_almacen
             $datos = $mostrar->MostrarOrdenDeCompraAlerta();
 
             if (!$datos) {
-                // throw new Exception("Hubo un error en la consulta");
                 $json = array();
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
@@ -3755,7 +3742,6 @@ class c_almacen
 
         // if (isset($datos)) {
         $respuesta = $m_formula->InsertarControlRecepcion($datos, $datosTabla, $idrequerimiento, $codpersonal);
-
         if ($respuesta) {
             return "ok";
         } else {

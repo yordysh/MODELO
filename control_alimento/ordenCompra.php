@@ -230,7 +230,7 @@ $dataProveedores = $mostrar->MostrarProveedores();
                         <!-- Text observacion-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Observación</label>
-                            <textarea class="form-control" id="observacion" rows="3"></textarea>
+                            <textarea class="form-control" id="observacionorden" rows="3"></textarea>
                         </div>
                         <!-- Tabla total insumos por comprar-->
                         <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">

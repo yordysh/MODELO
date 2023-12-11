@@ -92,21 +92,38 @@ $datalista = $mostrar->MostrarListaMaestraPDF();
             padding: 5px 28px 5px 0;
             border-left: none;
         }
+
+        body {
+            margin: 30mm 8mm 30mm 8mm;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
     </style>
     <!-- Table titulo-->
     <header>
         <table>
-            <tbody>
-                <tr>
-                    <td class="cabecera-rigth">LISTA MAESTRA DE ENVASES Y EMBALAJES</td>
-                    <td class="cabecera-version">VERSIÓN 03
-                    </td>
-                </tr>
 
-            </tbody>
+            <tr>
+                <td rowspan="3" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/img_lab.jpg')); ?>" alt="" width="100" height="50"></td>
+
+                <td rowspan="3" style="text-align: center; font-size:15px; font-weight:200; width:400px;">LISTA MAESTRA DE ENVASES Y ACCESORIOS COMPLEMENTARIOS</td>
+                <td>LBS-OP-FR-02</th>
+            </tr>
+            <tr>
+                <td>Versión: 03</td>
+            </tr>
+            </tr>
+            <tr>
+                <td>Fecha: Agosto 2023</td>
+            </tr>
+
         </table>
     </header>
-
     <!-- Table INSUMOS LABSABELL -->
     <table>
 

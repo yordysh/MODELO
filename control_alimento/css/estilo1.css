@@ -1,5 +1,6 @@
-#contenido_pdf {
-  margin-top: 100px;
+#contenido_pdf,
+#contenido_pdf_control_bachada2 {
+  margin-top: 140px;
 }
 /* Estilos para la tabla con el ID específico */
 #tablaEvaluacionSensorial {
@@ -132,4 +133,8 @@
 
 #tablaDatosPendientes_Bachadas td {
   border: 1px solid #ddd;
+}
+
+#contenido1 {
+  overflow-x: auto;
 }

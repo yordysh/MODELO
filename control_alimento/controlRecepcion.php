@@ -68,7 +68,16 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
 
         td {
             width: 150px !important;
+        }
 
+
+        .theadborder {
+            border-bottom: 2px solid #000;
+        }
+
+        .thborder {
+            border: 1px solid #000;
+            /* padding: 10px; */
         }
     </style>
     <main>
@@ -117,44 +126,44 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                         </div>
                         <div id="tablarecepcion" class="" style="overflow: scroll;height: 400px; margin-top:20px;">
                             <table id="tbrecepcion" class="table table-sm mb-3 table-hover">
-                                <thead>
+                                <thead class="theadborder">
                                     <tr>
-                                        <th class="encabezado-especial" rowspan="2">FECHA DE INGRESO</th>
-                                        <th rowspan="2">HORA</th>
-                                        <th rowspan="2">PRODUCTO</th>
-                                        <th rowspan="2">CÓDIGO DE LOTE</th>
-                                        <th rowspan="2">F.V</th>
-                                        <th rowspan="2">PROVEEDOR</th>
-                                        <th colspan="3" style="width: 30px;">GUÍA/BOLETA/FACTURA</th>
-                                        <th rowspan="2">N° GUÍA,BOLETA O FACTURA</th>
-                                        <th colspan="2">Empaque</th>
-                                        <th colspan="4">Presentación</th>
-                                        <th rowspan="2">CANTIDAD (kg)</th>
-                                        <th colspan="3">CONTROL DEL PRODUCTO</th>
-                                        <th colspan="3">DEL PERSONAL DE TRANSPORTE</th>
-                                        <th colspan="4">CONDICIONES DEL TRANSPORTE</th>
-                                        <th rowspan="2">V°B°</th>
+                                        <th class="encabezado-especial thborder" rowspan="2" style="padding:40px 0;">FECHA DE INGRESO</th>
+                                        <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">HORA</th>
+                                        <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">PRODUCTO</th>
+                                        <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">CÓDIGO DE LOTE</th>
+                                        <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">F.V</th>
+                                        <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">PROVEEDOR</th>
+                                        <th colspan="3" style="width: 30px;" class="thborder">GUÍA/BOLETA/FACTURA</th>
+                                        <th rowspan="2" class="thborder">N° GUÍA,BOLETA O FACTURA</th>
+                                        <th colspan="2" class="thborder">Empaque</th>
+                                        <th colspan="4" class="thborder">Presentación</th>
+                                        <th rowspan="2" class="thborder">CANTIDAD (kg)</th>
+                                        <th colspan="3" class="thborder">CONTROL DEL PRODUCTO</th>
+                                        <th colspan="3" class="thborder">DEL PERSONAL DE TRANSPORTE</th>
+                                        <th colspan="4" class="thborder">CONDICIONES DEL TRANSPORTE</th>
+                                        <!-- <th rowspan="2" class="thborder">V°B°</th> -->
                                     </tr>
                                     <tr>
-                                        <th rowspan="2" class="vertical-text">G.Remisión</th>
-                                        <th class="vertical-text">Boleta</th>
-                                        <th class="vertical-text">Factura</th>
-                                        <th class="vertical-text">Primario</th>
-                                        <th class="vertical-text">Secundario</th>
-                                        <th class="vertical-text">Saco</th>
-                                        <th class="vertical-text">Caja</th>
-                                        <th class="vertical-text">Cilindro</th>
-                                        <th class="vertical-text">bolsa</th>
-                                        <th class="vertical-text">Envase integro/ hermético</th>
-                                        <th class="vertical-text">Certificado de calidad</th>
-                                        <th class="vertical-text">Rotulación conforme</th>
-                                        <th class="vertical-text">Aplicación de las BPD</th>
-                                        <th class="vertical-text">Higiene & salud</th>
-                                        <th class="vertical-text">Indumentaria completa y limpia</th>
-                                        <th class="vertical-text">Limpio</th>
-                                        <th class="vertical-text">Exclusivo</th>
-                                        <th class="vertical-text">Hermético</th>
-                                        <th class="vertical-text">Ausencia de plagas</th>
+                                        <th rowspan="2" class="vertical-text thborder">G.Remisión</th>
+                                        <th class="vertical-text thborder">Boleta</th>
+                                        <th class="vertical-text thborder">Factura</th>
+                                        <th class="vertical-text thborder" class="thborder">Primario</th>
+                                        <th class="vertical-text thborder" class="thborder">Secundario</th>
+                                        <th class="vertical-text thborder">Saco</th>
+                                        <th class="vertical-text thborder">Caja</th>
+                                        <th class="vertical-text thborder">Cilindro</th>
+                                        <th class="vertical-text thborder">bolsa</th>
+                                        <th class="vertical-text thborder">Envase integro/ hermético</th>
+                                        <th class="vertical-text thborder">Certificado de calidad</th>
+                                        <th class="vertical-text thborder">Rotulación conforme</th>
+                                        <th class="vertical-text thborder">Aplicación de las BPD</th>
+                                        <th class="vertical-text thborder">Higiene & salud</th>
+                                        <th class="vertical-text thborder">Indumentaria completa y limpia</th>
+                                        <th class="vertical-text thborder">Limpio</th>
+                                        <th class="vertical-text thborder">Exclusivo</th>
+                                        <th class="vertical-text thborder">Hermético</th>
+                                        <th class="vertical-text thborder">Ausencia de plagas</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablacontrolrecepcion">

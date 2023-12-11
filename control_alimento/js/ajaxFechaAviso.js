@@ -15,22 +15,22 @@ $(function () {
     //   console.error("Error executing alertaMensaje():");
     // }
 
-    try {
-      await alerta();
-    } catch (error) {
-      console.error("Error executing alerta():");
-    }
-
-    try {
-      await alertaControl();
-    } catch (error) {
-      console.error("Error executing alertaControl():");
-    }
     // try {
-    //   await alertaOrdenCompra();
+    //   await alerta();
     // } catch (error) {
-    //   console.error("Error executing alertaORdenCompra");
+    //   console.error("Error executing alerta():");
     // }
+
+    // try {
+    //   await alertaControl();
+    // } catch (error) {
+    //   console.error("Error executing alertaControl():");
+    // }
+    try {
+      await alertaOrdenCompra();
+    } catch (error) {
+      console.error("Error executing alertaORdenCompra");
+    }
 
     // if (valor == 1) {
     //   swal.close();
@@ -913,67 +913,68 @@ $(function () {
 
   async function alertaOrdenCompra() {
     return new Promise((resolve, reject) => {
-      //   const accion = "mostrarordencompraalmacenalerta";
-      //   var codrequerimiento, codordencompra;
-      //   $.ajax({
-      //     url: "../control_alimento/c_almacen.php",
-      //     type: "POST",
-      //     data: { accion: accion },
-      //     success: function (response) {
-      //       if (response > 0) {
-      //         let task = JSON.parse(response);
-      //         codrequerimiento = task[0].COD_TMPREQUERIMIENTO;
-      //         codordencompra = task[0].COD_ORDEN_COMPRA;
-      //         let htmlContent = "<h1>¡Listo para producción!</h1>";
-      //         htmlContent += "<ul>";
-      //         task.forEach(function (producto) {
-      //           htmlContent +=
-      //             "<li style='list-style:none;'>" +
-      //             producto.ABR_PRODUCTO +
-      //             "</li>";
-      //         });
-      //         htmlContent += "</ul";
-      //         Swal.fire({
-      //           title: "Compra de insumos",
-      //           icon: "question",
-      //           html: htmlContent,
-      //           confirmButtonText: "Ok",
-      //           showCloseButton: true,
-      //         }).then((result) => {
-      //           if (result.isConfirmed) {
-      //             const accion = "actualizarrequerimientoitem";
-      //             $.ajax({
-      //               url: "../control_alimento/c_almacen.php",
-      //               type: "POST",
-      //               data: {
-      //                 accion: accion,
-      //                 codrequerimiento: codrequerimiento,
-      //                 codordencompra: codordencompra,
-      //               },
-      //               success: function (response) {
-      //                 resolve("La actualización se realizó con éxito");
-      //               },
-      //               error: function (xhr, status, error) {
-      //                 console.error(
-      //                   "Error al cargar los datos de la tabla:",
-      //                   error
-      //                 );
-      //                 reject("Error al actualizar");
-      //               },
-      //             });
-      //           } else {
-      //             reject("El usuario no confirmó la acción");
-      //           }
-      //         });
-      //       } else {
-      //         console.log("vacio");
-      //       }
-      //     },
-      //     error: function (xhr, status, error) {
-      //       console.error("Error al cargar los datos de la tabla:", error);
-      //       reject("Error al cargar datos de la tabla");
-      //     },
-      //   });
+      const accion = "mostrarordencompraalmacenalerta";
+      var codrequerimiento, codordencompra;
+      $.ajax({
+        url: "../control_alimento/c_almacen.php",
+        type: "POST",
+        data: { accion: accion },
+        success: function (response) {
+          let task = JSON.parse(response);
+          if (task.length > 0) {
+            // let task = JSON.parse(response);
+            codrequerimiento = task[0].COD_TMPREQUERIMIENTO;
+            codordencompra = task[0].COD_ORDEN_COMPRA;
+            let htmlContent = "<h1>¡Listo para producción!</h1>";
+            htmlContent += "<ul>";
+            task.forEach(function (producto) {
+              htmlContent +=
+                "<li style='list-style:none;'>" +
+                producto.ABR_PRODUCTO +
+                "</li>";
+            });
+            htmlContent += "</ul";
+            Swal.fire({
+              title: "Compra de insumos",
+              icon: "question",
+              html: htmlContent,
+              confirmButtonText: "Ok",
+              showCloseButton: true,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                const accion = "actualizarrequerimientoitem";
+                $.ajax({
+                  url: "../control_alimento/c_almacen.php",
+                  type: "POST",
+                  data: {
+                    accion: accion,
+                    codrequerimiento: codrequerimiento,
+                    codordencompra: codordencompra,
+                  },
+                  success: function (response) {
+                    resolve("La actualización se realizó con éxito");
+                  },
+                  error: function (xhr, status, error) {
+                    console.error(
+                      "Error al cargar los datos de la tabla:",
+                      error
+                    );
+                    reject("Error al actualizar");
+                  },
+                });
+              } else {
+                reject("El usuario no confirmó la acción");
+              }
+            });
+          } else {
+            console.log("vacio");
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error al cargar los datos de la tabla:", error);
+          reject("Error al cargar datos de la tabla");
+        },
+      });
     });
   }
   alertax();

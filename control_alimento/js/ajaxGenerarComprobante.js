@@ -290,7 +290,7 @@ $(function () {
     formData.append("selectformapago", $("#selectformapago").val());
     formData.append("selectmoneda", $("#selectmoneda").val());
     formData.append("tipocambio", $("#tipocambio").val());
-    formData.append("observacion", $("#observacion").val());
+    formData.append("observacion", $("#observacioncomprobante").val());
 
     const fileInput = document.getElementById("foto");
     const file = fileInput.files[0];
@@ -298,7 +298,7 @@ $(function () {
 
     let serieform = $("#serie").val();
     let correlativoform = $("#correlativo").val();
-    let observacionform = $("#observacion").val();
+    let observacionform = $("#observacioncomprobante").val();
     let idcomprobantecapturaform = $("#codigoorden").val();
     let tipoform = $("#selecttipocompro").val();
 
@@ -394,7 +394,7 @@ $(function () {
               $("#selectmoneda").val("S");
               $("#tipocambio").prop("disabled", true);
               $("#tipocambio").val("");
-              $("#observacion").val("");
+              $("#observacioncomprobante").val("");
               $("#codigoorden").val("");
               $("#tablainsumoscomprarfactura").empty();
               $("#foto").val("");

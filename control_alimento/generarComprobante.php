@@ -166,21 +166,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 <input type="text" id="correlativo" class="form-control" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57">
                             </div>
                         </div>
-                        <!-- Text input oficina-->
-                        <!-- <div class="form-outline mb-4">
-                            <label class="form-label">Oficina</label>
-                            <select id="selectoficina" class="form-select" aria-label="Default select example">
-                                <option value="00011">SMP</option>
-                                <option value="00026" selected>SMP2</option>
-                                <option value="00029">SMP4</option>
-                                <option value="00030">SMP5</option>
-                                <option value="00031">SMP6</option>
-                                <option value="00038">SMP7</option>
-                                <option value="00039">SMP8</option>
-                                <option value="00040">SMP9</option>
-                                <option value="00041">SMP10</option>
-                            </select>
-                        </div> -->
+
                         <div class="estiloordencompra">
                             <!-- Text input FORMA DE PAGO-->
                             <div class="form-outline mb-4 custom-input">
@@ -244,7 +230,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Text observacion-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Observación</label>
-                            <textarea class="form-control" id="observacion" rows="3"></textarea>
+                            <textarea class="form-control" id="observacioncomprobante" rows="3"></textarea>
                         </div>
 
                         <!-- Tabla total insumos por comprar-->
