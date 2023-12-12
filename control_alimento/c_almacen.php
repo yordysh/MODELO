@@ -3840,6 +3840,7 @@ class c_almacen
 
         $suma = 0;
         for ($i = 0; $i < count($rpta); $i++) {
+            // var_dump($rpta[$i]);
             $suma += $rpta[$i][3];
             array_push($array, [$rpta[$i][1], $rpta[$i][2], $rpta[$i][3]]);
             if ($suma >= $cantidad) {

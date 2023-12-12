@@ -3450,8 +3450,8 @@ class m_almacen
           $rptalt = $this->stocklote($valoresCapturadosProduccion[$i + 2], $cantidadcaptura);
           $loterpa = '';
           $hora_actual = $codigoInsumosAvances->c_horaserversql('H');
-          for ($j = 0; $j < count($rptalt); $j++) {
 
+          for ($j = 0; $j < count($rptalt); $j++) {
             // $saldo = $this->m_saldolote(trim($rptalt[$j][0]));
             $saldo = $this->m_saldolote(trim($rptalt[$j][0]), $codProductoAvance);
 
@@ -3460,10 +3460,27 @@ class m_almacen
             $ltlote = $saldo[0][2];
             $canlote = ($rptalt[$j][1] < 0) ? ($rptalt[$j][1] * -1) : $rptalt[$j][1];
             $ltresta = ($saldo[0][3] - $canlote);
+
+            $calcularkardexenvase = $this->bd->prepare("SELECT MAX(CODIGO) AS CODIGO FROM T_TMPKARDEX_PRODUCCION WHERE LOTE='$cantidadlote' AND COD_PRODUCTO='$codProductoAvance'");
+            $calcularkardexenvase->execute();
+            $valorkardexenvase = $calcularkardexenvase->fetch(PDO::FETCH_ASSOC);
+            $resultadocodigokardexenvase = $valorkardexenvase['CODIGO'];
+
+            $calcularkardex = $this->bd->prepare("SELECT KARDEX FROM T_TMPKARDEX_PRODUCCION WHERE CODIGO='$resultadocodigokardexenvase'");
+            $calcularkardex->execute();
+            $valorrest = $calcularkardex->fetch(PDO::FETCH_ASSOC);
+            $resultadokardex = $valorrest['KARDEX'];
+
+            $sumakardexenvase =  $resultadokardex - $canlote;
+            if ($sumakardexenvase != null) {
+              $sumakardexresta = $sumakardexenvase;
+            } else {
+              $sumakardexresta = $ltresta;
+            }
             $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigo_de_avance_insumo;
             $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(COD_PRODUCTO,ABR_PRODUCTO,LOTE,
-            DESCRIPCION,COD_EGRESO,CANT_EGRESO,SALDO,USU_REGISTRO,HORA_REGISTRO) VALUES('$ltproducto','$ltabr','$ltlote',
-            '$descripcion','$codigo_de_avance_insumo','$canlote','$ltresta','$codpersonal','$hora_actual')");
+            DESCRIPCION,COD_EGRESO,CANT_EGRESO,SALDO,USU_REGISTRO,HORA_REGISTRO,KARDEX) VALUES('$ltproducto','$ltabr','$ltlote',
+            '$descripcion','$codigo_de_avance_insumo','$canlote',CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1),'$codpersonal','$hora_actual',CONVERT(numeric(9,2), REPLACE('$sumakardexenvase', ',', ''), 1))");
             $querylote->execute();
             if ($querylote->errorCode() > 0) {
               $this->bd->rollBack();
@@ -3507,6 +3524,10 @@ class m_almacen
           $rptalt = $this->stocklote($valoresCapturadosProduccioninsumo[$i + 2], $cantidadcapturainsumo);
           $loterpa = '';
           $hora_actual = $codigoInsumosAvances->c_horaserversql('H');
+
+
+
+
           for ($j = 0; $j < count($rptalt); $j++) {
             // $saldo = $this->m_saldolote(trim($rptalt[$j][0]));
             $saldo = $this->m_saldolote(trim($rptalt[$j][0]), $codProductoAvanceinsumo);
@@ -3515,10 +3536,26 @@ class m_almacen
             $ltlote = $saldo[0][2];
             $canlote = ($rptalt[$j][1] < 0) ? ($rptalt[$j][1] * -1) : $rptalt[$j][1];
             $ltresta = number_format($saldo[0][3] - $canlote, 3);
+
+            $calcularkardex = $this->bd->prepare("SELECT MAX(CODIGO) AS CODIGO FROM T_TMPKARDEX_PRODUCCION WHERE LOTE='$ltlote' AND COD_PRODUCTO='$codProductoAvanceinsumo'");
+            $calcularkardex->execute();
+            $valorkardex = $calcularkardex->fetch(PDO::FETCH_ASSOC);
+            $resultadocodigokardex = $valorkardex['CODIGO'];
+
+            $calcularkardexvalor = $this->bd->prepare("SELECT KARDEX FROM T_TMPKARDEX_PRODUCCION WHERE CODIGO='$resultadocodigokardex'");
+            $calcularkardexvalor->execute();
+            $valorrest = $calcularkardexvalor->fetch(PDO::FETCH_ASSOC);
+            $resultadokardexrest = $valorrest['KARDEX'];
+
+            if ($resultadokardexrest  != null) {
+              $sumakardexresta =    $resultadokardexrest - $canlote;
+            } else {
+              $sumakardexresta = $ltresta;
+            }
             $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigo_de_avance_insumo;
             $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(COD_PRODUCTO,ABR_PRODUCTO,LOTE,
-            DESCRIPCION,COD_EGRESO,CANT_EGRESO,SALDO,USU_REGISTRO,HORA_REGISTRO) VALUES('$ltproducto','$ltabr','$ltlote',
-            '$descripcion','$codigo_de_avance_insumo','$canlote','$ltresta','$codpersonal','$hora_actual')");
+            DESCRIPCION,COD_EGRESO,CANT_EGRESO,SALDO,USU_REGISTRO,HORA_REGISTRO,KARDEX) VALUES('$ltproducto','$ltabr','$ltlote',
+            '$descripcion','$codigo_de_avance_insumo','$canlote',CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1),'$codpersonal','$hora_actual',CONVERT(numeric(9,2), REPLACE('$sumakardexresta', ',', ''), 1))");
             $querylote->execute();
             if ($querylote->errorCode() > 0) {
               $this->bd->rollBack();
@@ -4608,7 +4645,7 @@ class m_almacen
             '$descripcion'
             ,'$codigorecepcion', 
             '$cantidadminima'
-            ,'$ltresta'
+            ,CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1)
             ,'$codpersonal'
             ,'$hora_actual'
             )");
@@ -4633,9 +4670,9 @@ class m_almacen
         $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='F'");
         $actualizo->execute();
       } else {
-        // var_dump($datos);
+
         $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, CODIGO_REQUERIMIENTO)
-                                                          VALUES('0000001','0004','00017')");
+                                                          VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
         $insertarecepcioncompras->execute();
 
 
@@ -4774,7 +4811,7 @@ class m_almacen
 
 
           $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE,FECHA_INGRESO, HORA, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO,COD_PROVEEDOR, GUIA, BOLETA, FACTURA, GBF, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, CANTIDAD_MINIMA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
-                                                    VALUES('$codigorecepcion','$idcomprobante',CONVERT(DATE,'$fechaingreso'),'$hora','$codigolote','$producto',CONVERT(DATE,'$fechavencimiento'),'$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
+                                                    VALUES('$codigorecepcion','$idcomprobante','$fechaingreso','$hora','$codigolote','$producto','$fechavencimiento','$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
 
           $insertarrecepcion->execute();
 
@@ -4815,11 +4852,10 @@ class m_almacen
             '$descripcion'
             ,'$codigorecepcion', 
             '$cantidadminima'
-            ,'$ltresta'
+            ,CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1)
             ,'$codpersonal'
             ,'$hora_actual'
             )");
-
           $querylote->execute();
         }
 
@@ -5230,7 +5266,7 @@ class m_almacen
       $saldo = 0;
       $query = $this->bd->prepare("SELECT * FROM V_LOTES_PRODUCTO
       where COD_PRODUCTO = ? AND SALDO != ?
-      order by LOTE ASC");
+      order by SALDO ASC");
       $query->bindParam(1, $codproducto, PDO::PARAM_STR);
       $query->bindParam(2, $saldo, PDO::PARAM_STR);
       $query->execute();

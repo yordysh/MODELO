@@ -173,7 +173,7 @@ function exportardosimetria(obj) {
       doc.text(lote, 250, 45);
       doc.line(232, 46, 290, 46); //linea horizontal/**/
 
-      doc.setFontSize(9);
+      doc.setFontSize(7);
       doc.setFont("helvetica", "bold");
 
       /*--------------SEGUNDA TABLA */
