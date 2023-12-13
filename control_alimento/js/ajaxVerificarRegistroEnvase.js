@@ -177,6 +177,10 @@ $(function () {
         cantidadenvase: $("#txtcantidadproductos").val(),
         cantidadinsumo: cantidad,
       },
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       success: function (response) {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
@@ -229,6 +233,10 @@ $(function () {
       },
       error: function (error) {
         console.log("ERROR " + error);
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
       },
     });
   });

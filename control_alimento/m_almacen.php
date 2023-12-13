@@ -3443,6 +3443,11 @@ class m_almacen
           $cantidadcaptura = trim($valoresCapturadosProduccion[$i + 1]);
           $cantidadlote = ($valoresCapturadosProduccion[$i + 2]);
 
+          $partes = explode("-", $cantidadlote);
+
+          // Obtener el primer elemento del array resultante (los números antes del guion)
+          $codigoconvertido = trim($partes[0]);
+
           if ($valoresCapturadosProduccion[$i + 2] == '0') {
             $this->bd->rollBack();
             return false;
@@ -3450,6 +3455,7 @@ class m_almacen
           $rptalt = $this->stocklote($valoresCapturadosProduccion[$i + 2], $cantidadcaptura);
           $loterpa = '';
           $hora_actual = $codigoInsumosAvances->c_horaserversql('H');
+
 
           for ($j = 0; $j < count($rptalt); $j++) {
             // $saldo = $this->m_saldolote(trim($rptalt[$j][0]));
@@ -3459,28 +3465,30 @@ class m_almacen
             $ltabr = $saldo[0][4];
             $ltlote = $saldo[0][2];
             $canlote = ($rptalt[$j][1] < 0) ? ($rptalt[$j][1] * -1) : $rptalt[$j][1];
-            $ltresta = ($saldo[0][3] - $canlote);
+            $ltresta = number_format($saldo[0][3] - $canlote);
 
-            $calcularkardexenvase = $this->bd->prepare("SELECT MAX(CODIGO) AS CODIGO FROM T_TMPKARDEX_PRODUCCION WHERE LOTE='$cantidadlote' AND COD_PRODUCTO='$codProductoAvance'");
+            $calcularkardexenvase = $this->bd->prepare("SELECT MAX(CODIGO) AS CODIGO FROM T_TMPKARDEX_PRODUCCION WHERE COD_PRODUCTO='$ltproducto'");
             $calcularkardexenvase->execute();
             $valorkardexenvase = $calcularkardexenvase->fetch(PDO::FETCH_ASSOC);
             $resultadocodigokardexenvase = $valorkardexenvase['CODIGO'];
+
+
 
             $calcularkardex = $this->bd->prepare("SELECT KARDEX FROM T_TMPKARDEX_PRODUCCION WHERE CODIGO='$resultadocodigokardexenvase'");
             $calcularkardex->execute();
             $valorrest = $calcularkardex->fetch(PDO::FETCH_ASSOC);
             $resultadokardex = $valorrest['KARDEX'];
 
-            $sumakardexenvase =  $resultadokardex - $canlote;
-            if ($sumakardexenvase != null) {
-              $sumakardexresta = $sumakardexenvase;
+            // $sumakardexenvase =  $resultadokardex - $canlote;
+            if ($resultadokardex != null) {
+              $sumakardexresta = $resultadokardex - $canlote;;
             } else {
               $sumakardexresta = $ltresta;
             }
             $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigo_de_avance_insumo;
             $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(COD_PRODUCTO,ABR_PRODUCTO,LOTE,
             DESCRIPCION,COD_EGRESO,CANT_EGRESO,SALDO,USU_REGISTRO,HORA_REGISTRO,KARDEX) VALUES('$ltproducto','$ltabr','$ltlote',
-            '$descripcion','$codigo_de_avance_insumo','$canlote',CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1),'$codpersonal','$hora_actual',CONVERT(numeric(9,2), REPLACE('$sumakardexenvase', ',', ''), 1))");
+            '$descripcion','$codigo_de_avance_insumo','$canlote',CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1),'$codpersonal','$hora_actual',CONVERT(numeric(9,2), REPLACE('$sumakardexresta', ',', ''), 1))");
             $querylote->execute();
             if ($querylote->errorCode() > 0) {
               $this->bd->rollBack();
@@ -3516,6 +3524,10 @@ class m_almacen
           $cantidadcapturainsumo = trim($valoresCapturadosProduccioninsumo[$i + 1]);
           $cantidadloteinsumo = ($valoresCapturadosProduccioninsumo[$i + 2]);
 
+          // $partes = explode("-", $cantidadloteinsumo);
+
+          // $codigoconvertido = trim($partes[0]);
+
 
           if ($valoresCapturadosProduccioninsumo[$i + 2] == '0') {
             $this->bd->rollBack();
@@ -3526,10 +3538,7 @@ class m_almacen
           $hora_actual = $codigoInsumosAvances->c_horaserversql('H');
 
 
-
-
           for ($j = 0; $j < count($rptalt); $j++) {
-            // $saldo = $this->m_saldolote(trim($rptalt[$j][0]));
             $saldo = $this->m_saldolote(trim($rptalt[$j][0]), $codProductoAvanceinsumo);
             $ltproducto = $saldo[0][1];
             $ltabr = $saldo[0][4];
@@ -3537,7 +3546,9 @@ class m_almacen
             $canlote = ($rptalt[$j][1] < 0) ? ($rptalt[$j][1] * -1) : $rptalt[$j][1];
             $ltresta = number_format($saldo[0][3] - $canlote, 3);
 
-            $calcularkardex = $this->bd->prepare("SELECT MAX(CODIGO) AS CODIGO FROM T_TMPKARDEX_PRODUCCION WHERE LOTE='$ltlote' AND COD_PRODUCTO='$codProductoAvanceinsumo'");
+
+
+            $calcularkardex = $this->bd->prepare("SELECT MAX(CODIGO) AS CODIGO FROM T_TMPKARDEX_PRODUCCION WHERE COD_PRODUCTO='$ltproducto'");
             $calcularkardex->execute();
             $valorkardex = $calcularkardex->fetch(PDO::FETCH_ASSOC);
             $resultadocodigokardex = $valorkardex['CODIGO'];
@@ -3547,11 +3558,13 @@ class m_almacen
             $valorrest = $calcularkardexvalor->fetch(PDO::FETCH_ASSOC);
             $resultadokardexrest = $valorrest['KARDEX'];
 
-            if ($resultadokardexrest  != null) {
+            if ($resultadokardexrest != null) {
               $sumakardexresta =    $resultadokardexrest - $canlote;
             } else {
               $sumakardexresta = $ltresta;
             }
+
+
             $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigo_de_avance_insumo;
             $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(COD_PRODUCTO,ABR_PRODUCTO,LOTE,
             DESCRIPCION,COD_EGRESO,CANT_EGRESO,SALDO,USU_REGISTRO,HORA_REGISTRO,KARDEX) VALUES('$ltproducto','$ltabr','$ltlote',
@@ -4463,11 +4476,8 @@ class m_almacen
 
       if ($datosTabla) {
 
-        $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, CODIGO_REQUERIMIENTO)
-                                                        VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
+        $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, CODIGO_REQUERIMIENTO)                                                       VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
         $insertarecepcioncompras->execute();
-
-
 
         foreach ($datos as $dato) {
           $idcomprobante = $dato["idcomprobante"];
@@ -4614,30 +4624,56 @@ class m_almacen
 
           /*FUNCION PARA AGREGAR A LA TABLA T_TMPKARDEX_PRODUCCION*/
 
+          $respuestacodigokardex = $this->bd->prepare("SELECT MAX(CODIGO) AS CODIGO  FROM T_TMPKARDEX_PRODUCCION WHERE COD_PRODUCTO='$producto' ORDER BY CODIGO ASC");
+          $respuestacodigokardex->execute();
+          $codigokardex = $respuestacodigokardex->fetch(PDO::FETCH_ASSOC);
+          $valorcodigokar = $codigokardex['CODIGO'];
+
+          $cantidadkardex = $this->bd->prepare("SELECT KARDEX FROM T_TMPKARDEX_PRODUCCION WHERE CODIGO='$valorcodigokar'");
+          $cantidadkardex->execute();
+          $kardexcantidad = $cantidadkardex->fetch(PDO::FETCH_ASSOC);
+          $valorkardexnuevo = $kardexcantidad['KARDEX'];
+
+
           $hora_actual = $codigo->c_horaserversql('H');
           $saldo = $this->m_saldolote($codigolote, $producto);
           $valores = 0;
+          $kardex = 0;
           if (count($saldo) != 0) {
             $valores = $saldo[0][3];
           } else {
             $valores = 0;
           }
 
+          if ($valorkardexnuevo > 0) {
+            $kardex = $valorkardexnuevo;
+          } else {
+            $kardex = 0;
+          }
 
           $ltresta = number_format($valores + $cantidadminima, 3);
+          $lkardex = number_format($kardex + $cantidadminima, 3);
+
+          $kardexegresos = $this->bd->prepare("SELECT CANT_EGRESO  FROM T_TMPKARDEX_PRODUCCION WHERE CODIGO='$valorcodigokar'");
+          $kardexegresos->execute();
+          $valoregresos = $kardexegresos->fetch(PDO::FETCH_ASSOC);
+          $egresos = $valoregresos['CANT_EGRESO'];
+          if ($egresos != NULL) {
+            $actualizarkardex = $this->bd->prepare("UPDATE T_TMPKARDEX_PRODUCCION SET KARDEX=CONVERT(numeric(9,2), REPLACE('$lkardex', ',', ''), 1) WHERE CODIGO='$valorcodigokar'");
+            $actualizarkardex->execute();
+          }
+
           $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigorecepcion; //descripcion de la compra cambiar la descripcion
 
-
-          $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(
-            COD_PRODUCTO,
-            ABR_PRODUCTO,
+          $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(COD_PRODUCTO,ABR_PRODUCTO,
             LOTE,
             DESCRIPCION,
             COD_INGRESO,
             CANT_INGRESO,
             SALDO,
             USU_REGISTRO,
-            HORA_REGISTRO) 
+            HORA_REGISTRO,
+            KARDEX) 
             VALUES(
             '$producto',
             '$valorabrprod',
@@ -4648,6 +4684,7 @@ class m_almacen
             ,CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1)
             ,'$codpersonal'
             ,'$hora_actual'
+            ,CONVERT(numeric(9,2), REPLACE('$lkardex', ',', ''), 1)
             )");
           $querylote->execute();
         }
@@ -4821,17 +4858,48 @@ class m_almacen
           $valorabrprod = $abrprod['ABR_PRODUCTO'];
 
           /*FUNCION PARA AGREGAR A LA TABLA T_TMPKARDEX_PRODUCCION*/
+
+          $respuestacodigokardex = $this->bd->prepare("SELECT MAX(CODIGO) AS CODIGO  FROM T_TMPKARDEX_PRODUCCION WHERE COD_PRODUCTO='$producto' ORDER BY CODIGO ASC");
+          $respuestacodigokardex->execute();
+          $codigokardex = $respuestacodigokardex->fetch(PDO::FETCH_ASSOC);
+          $valorcodigokar = $codigokardex['CODIGO'];
+
+          $cantidadkardex = $this->bd->prepare("SELECT KARDEX FROM T_TMPKARDEX_PRODUCCION WHERE CODIGO='$valorcodigokar'");
+          $cantidadkardex->execute();
+          $kardexcantidad = $cantidadkardex->fetch(PDO::FETCH_ASSOC);
+          $valorkardexnuevo = $kardexcantidad['KARDEX'];
+          // $valorkardexsaldo = $kardexcantidad['SALDO'];
+
+
           $hora_actual = $codigo->c_horaserversql('H');
           $saldo = $this->m_saldolote($codigolote, $producto);
           $valores = 0;
+          $kardex = 0;
           if (count($saldo) != 0) {
+
             $valores = $saldo[0][3];
           } else {
+
             $valores = 0;
+          }
+          if ($valorkardexnuevo > 0) {
+            $kardex = $valorkardexnuevo;
+          } else {
+            $kardex = 0;
           }
 
 
           $ltresta = number_format($valores + $cantidadminima, 3);
+          $lkardex = number_format($kardex + $cantidadminima, 3);
+
+          $kardexegresos = $this->bd->prepare("SELECT CANT_EGRESO  FROM T_TMPKARDEX_PRODUCCION WHERE CODIGO='$valorcodigokar'");
+          $kardexegresos->execute();
+          $valoregresos = $kardexegresos->fetch(PDO::FETCH_ASSOC);
+          $egresos = $valoregresos['CANT_EGRESO'];
+          if ($egresos != NULL) {
+            $actualizarkardex = $this->bd->prepare("UPDATE T_TMPKARDEX_PRODUCCION SET KARDEX=CONVERT(numeric(9,2), REPLACE('$lkardex', ',', ''), 1) WHERE CODIGO='$valorcodigokar'");
+            $actualizarkardex->execute();
+          }
           $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigorecepcion; //descripcion de la compra cambiar la descripcion
 
 
@@ -4844,7 +4912,8 @@ class m_almacen
             CANT_INGRESO,
             SALDO,
             USU_REGISTRO,
-            HORA_REGISTRO) 
+            HORA_REGISTRO,
+            KARDEX) 
             VALUES(
             '$producto',
             '$valorabrprod',
@@ -4855,6 +4924,7 @@ class m_almacen
             ,CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1)
             ,'$codpersonal'
             ,'$hora_actual'
+            ,CONVERT(numeric(9,2), REPLACE('$lkardex', ',', ''), 1)
             )");
           $querylote->execute();
         }
