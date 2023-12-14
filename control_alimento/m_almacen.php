@@ -1861,6 +1861,19 @@ class m_almacen
     }
   }
 
+  public function MostrarListaMaestraEnvasesPDF()
+  {
+    try {
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO,ABR_PRODUCTO,DES_PRODUCTO FROM T_PRODUCTO WHERE COD_PRODUCCION  IS NOT NULL AND COD_CATEGORIA='00008'");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
 
 
 
@@ -3007,14 +3020,15 @@ class m_almacen
       $consultaabrevia =  $stmabrevia->fetch(PDO::FETCH_ASSOC);
       $resultadoabrevia = trim($consultaabrevia['ABR_PRODUCTO']);
 
-      $stmprodbarras = $this->bd->prepare("SELECT MAX(BARRA_INICIO) AS BARRA_INICIO FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codproductoproduccion'");
+      $stmprodbarras = $this->bd->prepare("SELECT MAX(NUM_LOTE) AS NUM_LOTE FROM T_TMPPRODUCCION_BARRAS WHERE COD_PRODUCTO='$codproductoproduccion'");
       $stmprodbarras->execute();
       $consultaprodbarras = $stmprodbarras->fetch(PDO::FETCH_ASSOC);
-      $resultadoProdBarras = $consultaprodbarras['BARRA_INICIO'];
+      // $resultadoProdBarras = $consultaprodbarras['BARRA_INICIO'];
+      $resultadoProdBarras = $consultaprodbarras['NUM_LOTE'];
 
       $valor_total = $produccion->ConsultaValorCantidadRequerimiento($codrequerimientoproduccion, $codproductoproduccion);
       if ($resultadoProdBarras == null) {
-        $stmBarraI = $this->bd->prepare("SELECT MAX(NUM_LOTE) AS NUM_LOTE FROM T_ALMACEN_PRODUCTOS WHERE COD_PRODUCTO='$codproductoproduccion'");
+        $stmBarraI = $this->bd->prepare("SELECT MAX(NUM_LOTE) AS NUM_LOTE FROM T_PRODUCCION_BARRAS_ITEM WHERE COD_PRODUCTO='$codproductoproduccion'");
         $stmBarraI->execute();
         $consultaBarraI = $stmBarraI->fetch(PDO::FETCH_ASSOC);
         $resultadoBarraI = $consultaBarraI['NUM_LOTE'];
@@ -3036,7 +3050,6 @@ class m_almacen
         $BarraExtracfn = intval(substr($resultadoProdBarrasfn, 3));
         $barraSumafn = ($BarraExtracfn + 1);
         $barraI = str_pad($barraSumafn, 6, '0', STR_PAD_LEFT);
-
 
         // $barraFin = $barraSumafn + ($cantidadtotalproduccion - 1);
         $barraFin = $barraSumafn + ($valor_total - 1);
@@ -3357,8 +3370,7 @@ class m_almacen
   public function  InsertarValorInsumoRegistro($valoresCapturadosProduccion, $valoresCapturadosProduccioninsumo, $codigoproducto, $codigoproduccion, $cantidad, $cantidadtotalenvases,  $codpersonal, $codoperario)
   {
     try {
-      // var_dump($valoresCapturadosProduccion);
-      // exit();
+
       $this->bd->beginTransaction();
 
       $codigoInsumosAvances = new m_almacen();
@@ -3575,6 +3587,7 @@ class m_almacen
               return 0;
               break;
             }
+
             $loterpa .= $ltlote . "-" . $canlote . "/";
           }
 
@@ -4482,16 +4495,17 @@ class m_almacen
         foreach ($datos as $dato) {
           $idcomprobante = $dato["idcomprobante"];
           $fechaingresoC = $dato["fechaingreso"];
-          $fechaConvertida = date_create($fechaingresoC);
-          $fechaingreso = $fechaConvertida->format('Y/m/d');
+          // $fechaConvertida = date_create($fechaingresoC);
+          // var_dump($fechaingresoC);
+          // $fechaingreso = $fechaConvertida->format('Y/m/d');
 
 
           $hora = $dato["hora"];
           $producto = trim($dato["producto"]);
           $codigolote = $dato["codigolote"];
           $fechav = $dato["fechavencimiento"];
-          $fechaConvertidaven = date_create($fechav);
-          $fechavencimiento = $fechaConvertidaven->format('Y/m/d');
+          // $fechaConvertidaven = date_create($fechav);
+          // $fechavencimiento = $fechaConvertidaven->format('Y/m/d');
           $proveedor = $dato["proveedor"];
           $remision = $dato["remision"];
           $boleta = $dato["boleta"];
@@ -4613,7 +4627,7 @@ class m_almacen
 
 
           $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE,FECHA_INGRESO, HORA, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO,COD_PROVEEDOR, GUIA, BOLETA, FACTURA, GBF, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, CANTIDAD_MINIMA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
-                                    VALUES('$codigorecepcion','$idcomprobante','$fechaingreso','$hora','$codigolote','$producto','$fechavencimiento','$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
+                                    VALUES('$codigorecepcion','$idcomprobante',CAST('$fechav' AS DATE),'$hora','$codigolote','$producto',CAST('$fechaingresoC' AS DATE),'$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
 
           $insertarrecepcion->execute();
 
@@ -4716,16 +4730,16 @@ class m_almacen
         foreach ($datos as $dato) {
           $idcomprobante = $dato["idcomprobante"];
           $fechaingresoC = $dato["fechaingreso"];
-          $fechaConvertida = date_create($fechaingresoC);
-          $fechaingreso = $fechaConvertida->format('Y-m-d');
+          // $fechaConvertida = date_create($fechaingresoC);
+          // $fechaingreso = $fechaConvertida->format('Y-m-d');
 
           $hora = $dato["hora"];
 
           $producto = trim($dato["producto"]);
           $codigolote = trim($dato["codigolote"]);
           $fechaven = $dato["fechavencimiento"];
-          $fechaConvertidaven = date_create($fechaven);
-          $fechavencimiento = $fechaConvertidaven->format('Y-m-d');
+          // $fechaConvertidaven = date_create($fechaven);
+          // $fechavencimiento = $fechaConvertidaven->format('Y-m-d');
 
           $proveedor = $dato["proveedor"];
           $remision = $dato["remision"];
@@ -4848,7 +4862,7 @@ class m_almacen
 
 
           $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE,FECHA_INGRESO, HORA, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO,COD_PROVEEDOR, GUIA, BOLETA, FACTURA, GBF, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, CANTIDAD_MINIMA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
-                                                    VALUES('$codigorecepcion','$idcomprobante','$fechaingreso','$hora','$codigolote','$producto','$fechavencimiento','$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
+                                                    VALUES('$codigorecepcion','$idcomprobante',CAST('$fechaingresoC' AS DATE),'$hora','$codigolote','$producto',CAST('$fechaven' AS DATE),'$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
 
           $insertarrecepcion->execute();
 
@@ -5356,8 +5370,9 @@ class m_almacen
           $lote1 = explode('-', $lote[$i]);
           $can = floatval(trim($lote1[1]));
           $usado = ($cantidad > $can) ? $can : (($cantidad - $can) * -1) - $can;
+
           $cantidad = $cantidad - $can;
-          array_push($array, [$lote1[0], floatval(trim($usado))]);
+          array_push($array, [$lote1[0], round(trim($usado), 3)]);
         }
       }
       if ($i + 1 == count($lote)) {

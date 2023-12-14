@@ -120,12 +120,19 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
     </header>
     <!--------------------------------------- Table registro de envases----------------------->
     <?php
-    foreach ($dataCod as $filas) {
+    $divCount = -1;
 
+    foreach ($dataCod as $filas) {
+        $divCount++;
+        if ($divCount == 3) {
+            echo '<div style="page-break-before: always;">';
+        } elseif ($divCount > 3 && $divCount % 3 == 0) {
+            echo '<div style="page-break-before: always;">';
+        } else {
+            echo '<div>';
+        }
 
         echo '<table style="margin-top: 50px;">';
-        echo '<tbody>';
-
         echo '<tr>';
         echo '<td colspan="2" class="tdcentrado">FECHA:</td>';
         echo '<td colspan="2" class="tdcentrado">' . $filas->FECHA . '</td>';
@@ -141,16 +148,14 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         echo '<td class="tdcentrado">' . $filas->CANTIDAD . '</td>';
         echo '<td class="tdcentrado">PESO TOTAL:</td>';
         echo '<td class="tdcentrado">' . $filas->CANT_INSUMOS . '</td>';
-
         echo '</tr>';
+
         echo '<tr>';
         echo '<td colspan="3" class="tdcentrado">MATERIALES ENVASES/OTROS</td>';
         echo '<td colspan="2" class="tdcentrado">CANTIDAD(Unid.)</td>';
         echo '<td  class="tdcentrado">LOTE</td>';
         echo '<td class="tdcentrado">RECIBIDO POR</td>';
         echo '<td class="tdcentrado">FIRMA</td>';
-        // echo '<td style="border-bottom:none; border-right:none;"></td>';
-        // echo '<td style="border-bottom:none; "></td>';
         echo '</tr>';
 
 
@@ -174,7 +179,6 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         echo '<td style="border-bottom:none; border-left:none; border-right:none;"></td>';
         echo '<td style="border-bottom:none; border-left:none; border-right:none;"></td>';
         echo '</tr>';
-        echo '</tbody>';
         echo '</table>';
         echo '<table style="margin-top:30px;">';
         echo '<tr>';
@@ -199,6 +203,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         echo '<td style="padding-left:300px; padding-rigth:80px;border-right:none;border-left:none;"></td>';
         echo '</tr>';
         echo '</table>';
+        echo '</div>';
     }
     ?>
     <div class="footer">
