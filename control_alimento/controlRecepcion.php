@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-// $codusuario = $_SESSION["cod"];
+$codusuario = $_SESSION["cod"];
 // $codoficina = $_SESSION["ofi"];
 
 // $codanexo=$_SESSION["ane"];
-$codusuario = '0002';
+// $codusuario = '0002';
 // $codoficina = 'SMP2';
 
 ?>

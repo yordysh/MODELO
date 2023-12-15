@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-// $codusuario = $_SESSION["cod"];
-// $codoficina = $_SESSION["ofi"];
+$codusuario = $_SESSION["cod"];
+$codoficina = $_SESSION["ofi"];
 
 // $codanexo=$_SESSION["ane"];
-$codusuario = '0002';
-$codoficina = 'SMP2';
+// $codusuario = '0002';
+// $codoficina = 'SMP2';
 
 ?>
 <?php
@@ -157,7 +157,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <!-- Text input serie-->
                             <div class="form-outline mb-4 custom-input">
                                 <label class="form-label">Serie</label>
-                                <input type="text" id="serie" class="form-control">
+                                <input type="text" id="serie" class="form-control" maxlength="4">
                             </div>
 
                             <!-- Text input correlativo-->

@@ -6,9 +6,9 @@ class m_seguimiento
 {
 
     private $db;
-    public function __construct(){
-        $this->db=DataBase::Conectar();
-
+    public function __construct()
+    {
+        $this->db = DataBase::Conectar();
     }
 
     public function pre_carga_datos_pendientes()
@@ -23,7 +23,7 @@ class m_seguimiento
         $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
         return $resultados;
     }
-/*
+    /*
     public function traer_dato_maqueta_1($codigo_avance_insumo)
     {
         $query = $this->db->prepare("SELECT T_PRODUCTO.DES_PRODUCTO, T_INS.N_BACHADA, T_INS.CANT_INSUMOS, T_INS.ESTADO, T_TMPPRODUCCION.NUM_PRODUCION_LOTE, T_INS.COD_AVANCE_INSUMOS, T_INS.FECHA
@@ -54,20 +54,52 @@ class m_seguimiento
         return $resultados;
     }
 
-//////////////////////
-    public function GuardarDatosMaqueta($codigo_avance_insumo, $cod_encargado, $totalMerma, $codigo_interno, $hora_inicial, $hora_final, $peso,
-     $observaciones, $acciones_correctivas, $contadorFilas, $totalMezcla, $hora_analisis_sensorial, $eva_pol_col, $eva_pol_olo, $eva_pol_apa, $eva_rec_col, $eva_rec_olo,
-     $eva_rec_sab, $eva_rec_apa, $eva_rec_tex, $txt_acetado_rechazado, $txt_analista, $observaciones_sensorial, $acc_correctiva_sensorial
-     , $cod_produccion, $fecha_produccion, $cod_producto, $fecha_vencimiento, $total_item_bolsas, $lote , $numero_bachada, $ingreso, $egreso, $stock, $saldo)
-    {
+    //////////////////////
+    public function GuardarDatosMaqueta(
+        $codigo_avance_insumo,
+        $cod_encargado,
+        $totalMerma,
+        $codigo_interno,
+        $hora_inicial,
+        $hora_final,
+        $peso,
+        $observaciones,
+        $acciones_correctivas,
+        $contadorFilas,
+        $totalMezcla,
+        $hora_analisis_sensorial,
+        $eva_pol_col,
+        $eva_pol_olo,
+        $eva_pol_apa,
+        $eva_rec_col,
+        $eva_rec_olo,
+        $eva_rec_sab,
+        $eva_rec_apa,
+        $eva_rec_tex,
+        $txt_acetado_rechazado,
+        $txt_analista,
+        $observaciones_sensorial,
+        $acc_correctiva_sensorial,
+        $cod_produccion,
+        $fecha_produccion,
+        $cod_producto,
+        $fecha_vencimiento,
+        $total_item_bolsas,
+        $lote,
+        $numero_bachada,
+        $ingreso,
+        $egreso,
+        $stock,
+        $saldo
+    ) {
         try {
             $this->db->beginTransaction();
-    
+
             $query1 = $this->db->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ENVASADOS (COD_AVANCE_INSUMO, COD_PERSONAL, MERMA, FECHA, HORA, TOTAL_MEZCLA)
             VALUES (:cod_avance_insumo, :cod_personal, :merma, GETDATE(), CAST(GETDATE() AS TIME), :total_mezcla)
                 
             ");
-    
+
             $query1->bindParam(':cod_avance_insumo', $codigo_avance_insumo);
             $query1->bindParam(':cod_personal', $cod_encargado);
             $query1->bindParam(':merma', $totalMerma);
@@ -103,7 +135,7 @@ class m_seguimiento
                 $query2->bindParam(':observaciones', $observaciones[$i]);
                 $query2->bindParam(':accion_correctiva', $acciones_correctivas[$i]);
                 $query2->execute();
-                }
+            }
 
             $query3 = $this->db->prepare("UPDATE T_TMPAVANCE_INSUMOS_PRODUCTOS SET ESTADO = '1' WHERE COD_AVANCE_INSUMOS = :cod_avance_insumo");
             $query3->bindParam(':cod_avance_insumo', $codigo_avance_insumo);
@@ -114,7 +146,7 @@ class m_seguimiento
             VALUES (:codigo, :cod_avance_insumo, GETDATE(), :hora_sensorial, :eva_pol_col, :eva_pol_olo, :eva_pol_apa, :eva_rec_col, :eva_rec_olo,
              :eva_rec_sab, :eva_rec_apa, :eva_rec_tex, :est_sensorial, :analista, :observacion_se, :accion_correctiva_se)
             ");
-    
+
             $query4->bindParam(':codigo', $id_codigo_envasados);
             $query4->bindParam(':cod_avance_insumo', $codigo_avance_insumo);
             $query4->bindParam(':hora_sensorial', $hora_analisis_sensorial);
@@ -153,12 +185,12 @@ class m_seguimiento
             $query5->bindParam(':egreso', $egreso);
             $query5->bindParam(':stock', $stock);
             $query5->bindParam(':saldo', $saldo);
-            
+
             $query5->execute();
 
             $this->db->commit();
             return true;
-        }   catch (Exception $e) {
+        } catch (Exception $e) {
             $this->db->rollBack();
             echo "Error: " . $e->getMessage();
             error_log($e->getMessage());
@@ -371,14 +403,42 @@ class m_seguimiento
         return $resultados;
     }
 
-    public function GuardarDatosBachada($codigo_id_kardex, $cod_avance_insumo, $cod_produccion, $total_mezcla_peso, $total_item_bolsas, $cod_producto, $fecha_mezclado, $lote,
-    $numero_bachada, $fecha_produccion, $fecha_vencimiento, $ingreso, $egreso, $stock, $saldo, $estado, $cant_programada_unidades, 
-    $peso_estimado_kg, $can_bol_select, $peso_total_select, $mezcla_select_bol_inco, $mezcla_sobrante, $mezcla_env_total, $cant_estimada_unidad, $cant_bol_sobrante, $peso_total_bol_sobrante, 
-    $cod_personal, $observaciones_envasado, $acc_correctiva_envasado, $codigo_id_kardex_sobrante, $bachada_anterior)
-    {
+    public function GuardarDatosBachada(
+        $codigo_id_kardex,
+        $cod_avance_insumo,
+        $cod_produccion,
+        $total_mezcla_peso,
+        $total_item_bolsas,
+        $cod_producto,
+        $fecha_mezclado,
+        $lote,
+        $numero_bachada,
+        $fecha_produccion,
+        $fecha_vencimiento,
+        $ingreso,
+        $egreso,
+        $stock,
+        $saldo,
+        $estado,
+        $cant_programada_unidades,
+        $peso_estimado_kg,
+        $can_bol_select,
+        $peso_total_select,
+        $mezcla_select_bol_inco,
+        $mezcla_sobrante,
+        $mezcla_env_total,
+        $cant_estimada_unidad,
+        $cant_bol_sobrante,
+        $peso_total_bol_sobrante,
+        $cod_personal,
+        $observaciones_envasado,
+        $acc_correctiva_envasado,
+        $codigo_id_kardex_sobrante,
+        $bachada_anterior
+    ) {
         try {
             $this->db->beginTransaction();
-    
+
             $query3 = $this->db->prepare("UPDATE T_ENVASE_KARDEX SET ESTADO = 'F' WHERE ID = :id");
             $query3->bindParam(':id', $codigo_id_kardex);
             $query3->execute();
@@ -387,28 +447,27 @@ class m_seguimiento
             $query1->bindParam(':id_sobrante', $codigo_id_kardex_sobrante);
             $query1->execute();
 
-            if ($mezcla_sobrante == '0'){
-            $query5 = $this->db->prepare("INSERT INTO T_ENVASE_KARDEX (COD_AVANCE_INSUMO, COD_PRODUCCION, TOTAL_MEZCLA_PESO, TOTAL_ITEM_BOLSAS, COD_PRODUCTO, FECHA_MEZCLADO, LOTE, 
+            if ($mezcla_sobrante == '0') {
+                $query5 = $this->db->prepare("INSERT INTO T_ENVASE_KARDEX (COD_AVANCE_INSUMO, COD_PRODUCCION, TOTAL_MEZCLA_PESO, TOTAL_ITEM_BOLSAS, COD_PRODUCTO, FECHA_MEZCLADO, LOTE, 
             BACHADA, FECHA_PRODUCCION, FECHA_VENCIMIENTO, INGRESO, EGRESO, STOCK, SALDO, ESTADO)
             VALUES (:cod_avance_insumo, :cod_produccion, :total_mezcla_peso, :total_item_bolsas, :cod_producto, CONVERT(DATE, :fecha_mezclado), :lote, :bachada,
              CONVERT(DATE, :fecha_produccion), CONVERT(DATE, :fecha_vencimiento), :ingreso, :egreso, :stock, :saldo, 'N')
             ");
-            $query5->bindParam(':cod_avance_insumo', $cod_avance_insumo);
-            $query5->bindParam(':cod_produccion', $cod_produccion);
-            $query5->bindParam(':total_mezcla_peso', $total_mezcla_peso);
-            $query5->bindParam(':total_item_bolsas', $total_item_bolsas);
-            $query5->bindParam(':cod_producto', $cod_producto);
-            $query5->bindParam(':fecha_mezclado', $fecha_mezclado);
-            $query5->bindParam(':lote', $lote);
-            $query5->bindParam(':bachada', $numero_bachada);
-            $query5->bindParam(':fecha_produccion', $fecha_produccion);
-            $query5->bindParam(':fecha_vencimiento', $fecha_vencimiento);
-            $query5->bindParam(':ingreso', $ingreso);
-            $query5->bindParam(':egreso', $egreso);
-            $query5->bindParam(':stock', $stock);
-            $query5->bindParam(':saldo', $saldo);
-            $query5->execute();
-
+                $query5->bindParam(':cod_avance_insumo', $cod_avance_insumo);
+                $query5->bindParam(':cod_produccion', $cod_produccion);
+                $query5->bindParam(':total_mezcla_peso', $total_mezcla_peso);
+                $query5->bindParam(':total_item_bolsas', $total_item_bolsas);
+                $query5->bindParam(':cod_producto', $cod_producto);
+                $query5->bindParam(':fecha_mezclado', $fecha_mezclado);
+                $query5->bindParam(':lote', $lote);
+                $query5->bindParam(':bachada', $numero_bachada);
+                $query5->bindParam(':fecha_produccion', $fecha_produccion);
+                $query5->bindParam(':fecha_vencimiento', $fecha_vencimiento);
+                $query5->bindParam(':ingreso', $ingreso);
+                $query5->bindParam(':egreso', $egreso);
+                $query5->bindParam(':stock', $stock);
+                $query5->bindParam(':saldo', $saldo);
+                $query5->execute();
             } else {
                 $query5 = $this->db->prepare("INSERT INTO T_ENVASE_KARDEX (COD_AVANCE_INSUMO, COD_PRODUCCION, TOTAL_MEZCLA_PESO, TOTAL_ITEM_BOLSAS, COD_PRODUCTO, FECHA_MEZCLADO, LOTE, 
                 BACHADA, FECHA_PRODUCCION, FECHA_VENCIMIENTO, INGRESO, EGRESO, STOCK, SALDO, ESTADO)
@@ -431,47 +490,47 @@ class m_seguimiento
                 $query5->bindParam(':saldo', $saldo);
                 $query5->execute();
             }
-            
-                $query6 = $this->db->prepare("INSERT INTO T_CONTROL_BACHADAS_REPORTE (FECHA_MEZCLADO, NUMERO_BACHADA, PESO_TOTAL_OBTENIDO, CANT_BOLSAS, CANT_PROGRAMADA_UNIDADES, 
+
+            $query6 = $this->db->prepare("INSERT INTO T_CONTROL_BACHADAS_REPORTE (FECHA_MEZCLADO, NUMERO_BACHADA, PESO_TOTAL_OBTENIDO, CANT_BOLSAS, CANT_PROGRAMADA_UNIDADES, 
                 PESO_ESTIMADO, CANT_BOL_SELECT, PESO_TOTAL_SELECT, MEZCLA_SELECT_BOL_INCO, MEZCLA_SOBRANTE, MEZCLA_ENV_TOTAL, CANT_ESTIMADA, CANT_BOL_SOBRANTE, PESO_TOTAL_BOL_SOBRANTE, 
                 LOTE, FECHA_PRODUCCION, FECHA_VENCIMIENTO, COD_PRODUCTO, COD_PERSONAL, OBSERVACIONES_ENV, ACCION_CORRECTIVA_ENV, BACHADA_ANTERIOR)
-                VALUES (:fecha_mezclado, :numero_bachada, :peso_total_obtenido, :cant_bolsas, :cant_programada_unidades, :peso_estimado, :cant_bol_select, :peso_total_select,
+                VALUES (CONVERT(DATE,:fecha_mezclado), :numero_bachada, :peso_total_obtenido, :cant_bolsas, :cant_programada_unidades, :peso_estimado, :cant_bol_select, :peso_total_select,
                  :mezcla_select_bol_inco, :mezcla_sobrante, :mezcla_env_total, :cant_estimada, :cant_bol_sobrante, :peso_total_bol_sobrante, :lote, CONVERT(DATE, :fecha_produccion), 
                  CONVERT(DATE, :fecha_vencimiento), :cod_producto, :cod_personal, :observaciones_envasado, :acc_correctiva_envasado, :bachada_anterior)
                 ");
-                $query6->bindParam(':fecha_mezclado', $fecha_mezclado);
-                $query6->bindParam(':numero_bachada', $numero_bachada);
-                $query6->bindParam(':peso_total_obtenido', $total_mezcla_peso);
-                $query6->bindParam(':cant_bolsas', $total_item_bolsas);
-                $query6->bindParam(':cant_programada_unidades', $cant_programada_unidades);
-                $query6->bindParam(':peso_estimado', $peso_estimado_kg);
-                $query6->bindParam(':cant_bol_select', $can_bol_select);
-                $query6->bindParam(':peso_total_select', $peso_total_select);
-                $query6->bindParam(':mezcla_select_bol_inco', $mezcla_select_bol_inco);
-                $query6->bindParam(':mezcla_sobrante', $mezcla_sobrante);
-                $query6->bindParam(':mezcla_env_total', $mezcla_env_total);
-                $query6->bindParam(':cant_estimada', $cant_estimada_unidad);
-                $query6->bindParam(':cant_bol_sobrante', $cant_bol_sobrante);
-                $query6->bindParam(':peso_total_bol_sobrante', $peso_total_bol_sobrante);
-                $query6->bindParam(':lote', $lote);
-                $query6->bindParam(':fecha_produccion', $fecha_produccion);
-                $query6->bindParam(':fecha_vencimiento', $fecha_vencimiento);
-                $query6->bindParam(':cod_producto', $cod_producto);
-                $query6->bindParam(':cod_personal', $cod_personal);
-                $query6->bindParam(':observaciones_envasado', $observaciones_envasado);
-                $query6->bindParam(':acc_correctiva_envasado', $acc_correctiva_envasado);
+            $query6->bindParam(':fecha_mezclado', $fecha_mezclado);
+            $query6->bindParam(':numero_bachada', $numero_bachada);
+            $query6->bindParam(':peso_total_obtenido', $total_mezcla_peso);
+            $query6->bindParam(':cant_bolsas', $total_item_bolsas);
+            $query6->bindParam(':cant_programada_unidades', $cant_programada_unidades);
+            $query6->bindParam(':peso_estimado', $peso_estimado_kg);
+            $query6->bindParam(':cant_bol_select', $can_bol_select);
+            $query6->bindParam(':peso_total_select', $peso_total_select);
+            $query6->bindParam(':mezcla_select_bol_inco', $mezcla_select_bol_inco);
+            $query6->bindParam(':mezcla_sobrante', $mezcla_sobrante);
+            $query6->bindParam(':mezcla_env_total', $mezcla_env_total);
+            $query6->bindParam(':cant_estimada', $cant_estimada_unidad);
+            $query6->bindParam(':cant_bol_sobrante', $cant_bol_sobrante);
+            $query6->bindParam(':peso_total_bol_sobrante', $peso_total_bol_sobrante);
+            $query6->bindParam(':lote', $lote);
+            $query6->bindParam(':fecha_produccion', $fecha_produccion);
+            $query6->bindParam(':fecha_vencimiento', $fecha_vencimiento);
+            $query6->bindParam(':cod_producto', $cod_producto);
+            $query6->bindParam(':cod_personal', $cod_personal);
+            $query6->bindParam(':observaciones_envasado', $observaciones_envasado);
+            $query6->bindParam(':acc_correctiva_envasado', $acc_correctiva_envasado);
 
-                $query6->bindParam(':bachada_anterior', $bachada_anterior);
-                
-                $query6->execute();
-            
-            
+            $query6->bindParam(':bachada_anterior', $bachada_anterior);
+
+            $query6->execute();
+
+
 
             $this->db->commit();
             return true;
-        }   catch (Exception $e) {
+        } catch (Exception $e) {
             $this->db->rollBack();
-            echo "Error: " . $e->getMessage();
+            echo "Error: " . $e->getMessage() . " linea " . $e->getLine() . " arch " . $e->getFile();
             error_log($e->getMessage());
             return false;
         }
@@ -549,18 +608,13 @@ class m_seguimiento
     public function ValorFormula($cantidadinsumo)
     {
         try {
-        $this->db->beginTransaction();
-        $resultadofinal = ($cantidadinsumo * 100 / 60);
-        $resultadofinal = $this->db->commit();
-        return $resultadofinal;
+            $this->db->beginTransaction();
+            $resultadofinal = ($cantidadinsumo * 100 / 60);
+            $resultadofinal = $this->db->commit();
+            return $resultadofinal;
         } catch (Exception $e) {
 
-        die($e->getMessage());
+            die($e->getMessage());
         }
     }
-
-
 }
-
-
-?>

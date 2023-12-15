@@ -3455,10 +3455,6 @@ class m_almacen
           $cantidadcaptura = trim($valoresCapturadosProduccion[$i + 1]);
           $cantidadlote = ($valoresCapturadosProduccion[$i + 2]);
 
-          $partes = explode("-", $cantidadlote);
-
-          // Obtener el primer elemento del array resultante (los números antes del guion)
-          $codigoconvertido = trim($partes[0]);
 
           if ($valoresCapturadosProduccion[$i + 2] == '0') {
             $this->bd->rollBack();
@@ -3493,7 +3489,7 @@ class m_almacen
 
             // $sumakardexenvase =  $resultadokardex - $canlote;
             if ($resultadokardex != null) {
-              $sumakardexresta = $resultadokardex - $canlote;;
+              $sumakardexresta = $resultadokardex - $canlote;
             } else {
               $sumakardexresta = $ltresta;
             }
@@ -3507,29 +3503,28 @@ class m_almacen
               return 0;
               break;
             }
-            $loterpa .= $ltlote . "-" . $canlote . "/";
+            // $loterpa .= $ltlote . "-" . $canlote . "/";
+            $loterpa .= $ltlote;
+            $stmInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ENVASES(COD_AVANCE_INSUMOS,COD_PRODUCTO,CANTIDAD,LOTE)
+            VALUES ('$codigo_de_avance_insumo','$ltproducto','$canlote','$loterpa')"); //$cantidadlote
+            $stmInsumoAvance->execute();
           }
-
-
-          $stmInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ENVASES(COD_AVANCE_INSUMOS,COD_PRODUCTO,CANTIDAD,LOTE)
-                                                      VALUES ('$codigo_de_avance_insumo','$codProductoAvance','$cantidadcaptura','$loterpa')"); //$cantidadlote
-          $stmInsumoAvance->execute();
         }
 
         $suminsumos = 0;
-        foreach ($cantidadformula as $insumos) {
-          $codProducto = $insumos['COD_PRODUCTO'];
-          $canFormulacion = $insumos['CAN_FORMULACION'];
+        // foreach ($cantidadformula as $insumos) {
+        //   $codProducto = $insumos['COD_PRODUCTO'];
+        //   $canFormulacion = $insumos['CAN_FORMULACION'];
 
-          $resultadoformula = round((($cantidad * $canFormulacion) / $cantidadformulait), 3);
+        //   $resultadoformula = round((($cantidad * $canFormulacion) / $cantidadformulait), 3);
 
 
-          $stmInsertarInsumo = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM(COD_AVANCE_INSUMOS,COD_PRODUCTO,CANTIDAD)
-          VALUES ('$codigo_de_avance_insumo','$codProducto','$resultadoformula')");
+        //   $stmInsertarInsumo = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM(COD_AVANCE_INSUMOS,COD_PRODUCTO,CANTIDAD)
+        //   VALUES ('$codigo_de_avance_insumo','$codProducto','$resultadoformula')");
 
-          $stmInsertarInsumo->execute();
-          $suminsumos = $suminsumos + $resultadoformula;
-        }
+        //   $stmInsertarInsumo->execute();
+        //   $suminsumos = $suminsumos + $resultadoformula;
+        // }
 
         for ($i = 0; $i < count($valoresCapturadosProduccioninsumo); $i += 3) {
           $codProductoAvanceinsumo = trim($valoresCapturadosProduccioninsumo[$i]);
@@ -3588,12 +3583,16 @@ class m_almacen
               break;
             }
 
-            $loterpa .= $ltlote . "-" . $canlote . "/";
+            // $loterpa .= $ltlote . "-" . $canlote . "/";
+            $loterpa .= $ltlote;
+            $stmInsertarInsumo = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM(COD_AVANCE_INSUMOS,COD_PRODUCTO,CANTIDAD,LOTE)
+            VALUES ('$codigo_de_avance_insumo','$ltproducto','$canlote','$loterpa')");
+            $stmInsertarInsumo->execute();
+            $suminsumos = $suminsumos + $canlote;
           }
+          // $stmactualizaitem = $this->bd->prepare("UPDATE T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM SET LOTE='$loterpa' WHERE COD_PRODUCTO='$codProductoAvanceinsumo' AND COD_AVANCE_INSUMOS='$codigo_de_avance_insumo'"); //$codigo_de_avance_insumo
+          // $stmactualizaitem->execute();
 
-
-          $stmactualizaitem = $this->bd->prepare("UPDATE T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM SET LOTE='$loterpa' WHERE COD_PRODUCTO='$codProductoAvanceinsumo' AND COD_AVANCE_INSUMOS='$codigo_de_avance_insumo'"); //$codigo_de_avance_insumo
-          $stmactualizaitem->execute();
         }
 
         $stmContienevalor = $this->bd->prepare("SELECT NUM_LOTE FROM T_TMPPRODUCCION_BARRAS WHERE COD_PRODUCCION='$codigoproduccion'");

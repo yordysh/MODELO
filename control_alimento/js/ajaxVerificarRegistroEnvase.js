@@ -41,7 +41,7 @@ $(function () {
   $("#cantidad").keyup((e) => {
     e.preventDefault();
     let totalproducto = ($("#cantidad").val() * 100) / 60;
-    $("#txtcantidadproductos").val(Math.trunc(totalproducto));
+    $("#txtcantidadproductos").val(Math.round(totalproducto));
   });
   /*------------------------------------------------------------------------------ */
   /*---------Verficar si el producto seleccionado es menor a productos iguales-------------- */

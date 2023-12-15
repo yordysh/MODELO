@@ -66,7 +66,7 @@ $(function () {
     }
     const regex = /\d+\./;
     let totalproducto = ($("#cantidadInsumoEnvase").val() * 100) / 60;
-    $("#txtcantidadproductos").val(Math.trunc(totalproducto));
+    $("#txtcantidadproductos").val(Math.round(totalproducto));
   });
 
   //--------------------- Insertar los valores insumos y envases ------------//
