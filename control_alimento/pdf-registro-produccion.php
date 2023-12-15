@@ -20,7 +20,7 @@ $dompdf->set_option('isHtml5ParserEnabled', true);
 $dompdf->setOptions($options);
 
 $dompdf->loadHtml($html);
-$dompdf->setPaper('A2', 'landscape');
+$dompdf->setPaper('A4', 'portrait');
 // $options->set('margin-top', '10mm');
 // $options->set('margin-right', '10mm');
 // $options->set('margin-bottom', '80mm');
@@ -29,7 +29,7 @@ $dompdf->setPaper('A2', 'landscape');
 $dompdf->render();
 $canvas = $dompdf->getCanvas();
 $font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
-$canvas->page_text(1325, 80, "{PAGE_NUM}/{PAGE_COUNT}", $font, 15, array(0, 0, 0));
+$canvas->page_text(440, 59, "{PAGE_NUM}/{PAGE_COUNT}", $font, 8, array(0, 0, 0));
 
 if ($dompdf) {
     $dompdf->stream('Registro-envases.pdf', array('Attachment' => 0));

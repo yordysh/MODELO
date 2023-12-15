@@ -3916,11 +3916,10 @@ class m_almacen
   public function MostrarRegistroProduccionPorCodInsumoPDF($anioSeleccionado, $mesSeleccionado)
   {
     try {
-      $stmMostrar = $this->bd->prepare("SELECT TAI.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS,TAI.N_BACHADA AS N_BACHADA,TPRO.NUM_PRODUCION_LOTE AS NUM_PRODUCION_LOTE,
-                                          TP.DES_PRODUCTO AS DES_PRODUCTO, TAI.CANTIDAD AS CANTIDAD,TAI.CANT_INSUMOS AS CANT_INSUMOS,  CONVERT(varchar, TAI.FECHA, 103) AS FECHA
+      $stmMostrar = $this->bd->prepare("SELECT TAI.COD_AVANCE_INSUMOS AS COD_AVANCE_INSUMOS,TAI.N_BACHADA AS N_BACHADA,TP.ABR_PRODUCTO AS ABR_PRODUCTO,
+                                          TP.PESO_NETO AS PESO_NETO, TAI.CANTIDAD AS CANTIDAD,TAI.CANT_INSUMOS AS CANT_INSUMOS,  CONVERT(varchar, TAI.FECHA, 103) AS FECHA
                                           FROM T_TMPAVANCE_INSUMOS_PRODUCTOS TAI 
-                                          INNER JOIN T_PRODUCTO TP ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO
-                                          INNER JOIN T_TMPPRODUCCION TPRO ON TPRO.COD_PRODUCCION=TAI.COD_PRODUCCION WHERE MONTH(FECHA) = '$mesSeleccionado' AND YEAR(FECHA) = '$anioSeleccionado'");
+                                          INNER JOIN T_PRODUCTO TP ON TAI.COD_PRODUCTO=TP.COD_PRODUCTO WHERE MONTH(FECHA) = '$mesSeleccionado' AND YEAR(FECHA) = '$anioSeleccionado'");
       $stmMostrar->execute();
       $datos = $stmMostrar->fetchAll(PDO::FETCH_OBJ);
 

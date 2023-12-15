@@ -60,7 +60,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
         /* 40mm bottom, 8mm right, 8mm left, 2mm top*/
         body {
-            margin: 40mm 8mm 2mm 8mm;
+            margin: 10mm 5mm 2mm 2mm;
         }
 
         header {
@@ -72,17 +72,19 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
         .estilotd {
             font-weight: 400;
-            font-size: 20px;
+            font-size: 10px;
         }
 
         .tdcentrado {
             text-align: center;
-            font-weight: 300;
+            font-weight: 250;
+            font-size: 9px;
         }
 
         .tdcentrado-bold {
             text-align: center;
             font-weight: 400;
+            font-size: 8px;
         }
 
 
@@ -92,6 +94,20 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             left: 0;
             right: 0;
         }
+
+        /* .column-1:nth-child(1) {
+            width: 100px;
+        }
+
+        .column-2:nth-child(5) {
+            width: 200px;
+
+        }
+
+        .column-3:nth-child(6) {
+            width: 500px;
+
+        } */
     </style>
     <!--------------------------------------- Titulo header --------------------------------------->
     <header>
@@ -100,8 +116,8 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 <tr>
                     <!-- <td rowspan="4" style="text-align: center;"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MODELO/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
                     <!-- <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
-                    <td rowspan="4" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td>
-                    <td rowspan="4" style="text-align: center; font-size:30px; font-weigth:200;">REGISTRO DE ENVASES - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
+                    <td rowspan="4" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/img_lab.jpg')); ?>" style="width: 80px; height: 50px;" alt=""></td>
+                    <td rowspan="4" style="text-align: center; font-size:10px; font-weigth:400;">REGISTRO DE ENVASES - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                     <td class="estilotd">LBS-OP-FR-01</td>
 
                 </tr>
@@ -124,15 +140,15 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
 
     foreach ($dataCod as $filas) {
         $divCount++;
-        if ($divCount == 3) {
+        if ($divCount == 4) {
             echo '<div style="page-break-before: always;">';
-        } elseif ($divCount > 3 && $divCount % 3 == 0) {
+        } elseif ($divCount > 4 && $divCount % 4 == 0) {
             echo '<div style="page-break-before: always;">';
         } else {
             echo '<div>';
         }
 
-        echo '<table style="margin-top: 50px;">';
+        echo '<table style="margin-top: 40px;">';
         echo '<tr>';
         echo '<td colspan="2" class="tdcentrado">FECHA:</td>';
         echo '<td colspan="2" class="tdcentrado">' . $filas->FECHA . '</td>';
@@ -141,9 +157,9 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         echo '</tr>';
         echo '<tr>';
         echo '<td class="tdcentrado">PRODUCTO</td>';
-        echo '<td class="tdcentrado">' . $filas->NUM_PRODUCION_LOTE . '</td>';
+        echo '<td class="tdcentrado">' . $filas->ABR_PRODUCTO . '</td>';
         echo '<td class="tdcentrado">PRESENTACION</td>';
-        echo '<td class="tdcentrado">' . $filas->DES_PRODUCTO . '</td>';
+        echo '<td class="tdcentrado">' . $filas->PESO_NETO . ' gr' . '</td>';
         echo '<td class="tdcentrado">CANTIDAD(Unid.)</td>';
         echo '<td class="tdcentrado">' . $filas->CANTIDAD . '</td>';
         echo '<td class="tdcentrado">PESO TOTAL:</td>';
@@ -151,10 +167,10 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         echo '</tr>';
 
         echo '<tr>';
-        echo '<td colspan="3" class="tdcentrado">MATERIALES ENVASES/OTROS</td>';
-        echo '<td colspan="2" class="tdcentrado">CANTIDAD(Unid.)</td>';
+        echo '<td colspan="4" class="tdcentrado">MATERIALES ENVASES/OTROS</td>';
+        echo '<td  class="tdcentrado">CANTIDAD(Unid.)</td>';
         echo '<td  class="tdcentrado">LOTE</td>';
-        echo '<td class="tdcentrado">RECIBIDO POR</td>';
+        echo '<td class="tdcentrado" >RECIBIDO POR</td>';
         echo '<td class="tdcentrado">FIRMA</td>';
         echo '</tr>';
 
@@ -162,70 +178,74 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         foreach ($datos as $filadata) {
             if ($filadata->COD_AVANCE_INSUMOS == $filas->COD_AVANCE_INSUMOS) {
                 echo '<tr>';
-                echo '<td class="tdcentrado-bold">' . $filadata->DES_PRODUCTO . '</td>';
-                echo '<td  class="tdcentrado-bold" style="background-color:#60fc60;font-weight:600;">' . $filadata->ABR_PRODUCTO . '</td>';
-                echo '<td colspan="3" class="tdcentrado-bold">' . $filadata->CANTIDAD . '</td>';
-                echo '<td  class="tdcentrado-bold">' . $filadata->LOTE . '</td>';
-                echo '<td style="border-bottom:none; border-top:none;"></td>';
-                echo '<td style="border-bottom:none; border-top:none;"></td>';
+                echo '<td class="tdcentrado-bold" style="width:200px;">' . $filadata->DES_PRODUCTO . '</td>';
+                echo '<td  class="tdcentrado-bold" colspan="3" style="background-color:#60fc60;font-weight:600;">' . $filadata->ABR_PRODUCTO . '</td>';
+                echo '<td class="tdcentrado-bold">' . $filadata->CANTIDAD . '</td>';
+                echo '<td  class="tdcentrado-bold" style="width:100px;">' . $filadata->LOTE . '</td>';
+                // echo '<td style="border-bottom:none; border-top:none;"></td>';
+                echo '<td></td>';
+                echo '<td style="width:90px;"></td>';
                 echo '</tr>';
             }
         }
         echo '<tr>';
-        echo '<td colspan="2" style="border-bottom:none; border-left:none; border-right:none;"></td>';
-        echo '<td colspan="2" style="border-bottom:none; border-left:none; border-right:none;"></td>';
-        echo '<td colspan="2" style="border-bottom:none; border-left:none; border-right:none;"></td>';
-        echo '< style="border-bottom:none; border-left:none; border-right:none:none;"></td>';
-        echo '<td style="border-bottom:none; border-left:none; border-right:none;"></td>';
-        echo '<td style="border-bottom:none; border-left:none; border-right:none;"></td>';
+        echo '<td style="border-left:none; border-right:none; border-bottom:none;"></td>';
+        echo '<td style="border-left:none; border-right:none; border-bottom:none;"></td>';
+        echo '<td style="border-left:none; border-right:none; border-bottom:none;"></td>';
+        echo '<td style="border-left:none; border-right:none; border-bottom:none;"></td>';
+        echo '<td style="border-left:none; border-right:none; border-bottom:none;"></td>';
+        echo '<td style="border-left:none; border-right:none; border-bottom:none;"></td>';
+        echo '<td style="border-left:none; border-right:none; border-bottom:none;"></td>';
+        echo '<td style="border-left:none; border-right:none; border-bottom:none;"></td>';
         echo '</tr>';
         echo '</table>';
-        echo '<table style="margin-top:30px;">';
+        echo '<table style="margin-top:20px;">';
         echo '<tr>';
-        echo '<td style="padding-left:180px;border:none; font-size:20px;">Observaciones:</td>';
-        echo '<td style="padding-left:400px;padding-right:50px; border-right:none; border-left:none; border-top:none;"></td>';
-        echo '<td style="border:none; padding-left:600px;"></td>';
-        echo '<td style="padding-left:200px;border:none; font-size:20px;">Acciones correctivas:</td>';
-        echo '<td style="padding-left:300px; padding-rigth:80px; border-right:none; border-left:none; border-top:none;"></td>';
+        echo '<td style="font-size: 9px; border:none;">Observaciones:</td>';
+        echo '<td style="padding-left:120px; border-right:none; border-left:none; border-top:none;"></td>';
+        echo '<td style="padding-left:30px; border:none;"></td>';
+        echo '<td style="font-size: 9px; border:none;">Acciones correctivas:</td>';
+        echo '<td style="padding-left:120px; border-right:none; border-left:none; border-top:none;"></td>';
         echo '</tr>';
         echo '<tr>';
-        echo '<td style="padding-left:180px;padding-top:20px;border-right:none;border-left:none; border-top:none;"></td>';
-        echo '<td style="padding-left:400px;padding-rigth:50px;border-right:none;border-left:none;"></td>';
-        echo '<td style="border:none; padding-left:600px;"></td>';
-        echo '<td style="padding-left:300px;border-right:none;border-left:none; border-top:none;"></td>';
-        echo '<td style="padding-left:300px; padding-rigth:80px;border-right:none;border-left:none;"></td>';
+        echo '<td style="padding-top:5px; padding-bottom:5px; border-right:none; border-left:none; border-top:none;"></td>';
+        echo '<td style="border-right:none; border-left:none;"></td>';
+        echo '<td style="border:none;"></td>';
+        echo '<td style="border-right:none; border-left:none; border-top:none;"></td>';
+        echo '<td style="border-right:none; border-left:none;"></td>';
         echo '</tr>';
         echo '<tr>';
-        echo '<td style="padding-left:180px;padding-top:20px;border-right:none;border-left:none;"></td>';
-        echo '<td style="padding-left:400px;padding-rigth:50px;border-right:none;border-left:none;"></td>';
-        echo '<td style="border:none; padding-left:600px;"></td>';
-        echo '<td style="padding-left:300px;border-right:none;border-left:none;"></td>';
-        echo '<td style="padding-left:300px; padding-rigth:80px;border-right:none;border-left:none;"></td>';
+        echo '<td style="padding-top:5px; padding-bottom:5px; border-right:none; border-left:none;"></td>';
+        echo '<td style="border-right:none;border-left:none;"></td>';
+        echo '<td style="border:none;"></td>';
+        echo '<td style="border-right:none; border-left:none;"></td>';
+        echo '<td style="border-right:none; border-left:none;"></td>';
+        echo '</tr>';
+        echo '</table>';
+        echo '</div>';
+        echo '<div class="footer">';
+        echo '<table>';
+        echo '<tr>';
+        echo '<td style="border:none; font-size:8px;">Donde ME: Material de envase(bolsas,frascos);Otros:cucharitas,etiquetas,alupol,etc.</td>';
+        echo '<td style="padding-left: 100px; padding-right:100px;border:none;"></td>';
+        echo '<td style="padding-left: 100px; padding-right:100px;border:none;"></td>';
+        echo '</tr>';
+
+        echo '<tr>';
+        echo '<td style="padding-top:30px; border-top:none;border-left:none;border-right:none;"></td>';
+        echo '<td style="padding-left: 400px; padding-right:400px;border:none;"></td>';
+        echo '<td style="padding-left: 100px; padding-right:100px;border-top:none;border-left:none;border-right:none;"></td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td style="padding-top:10px; border-left:none;border-right:none;border-bottom:none;text-align:center; font-size:8px;">Firma del Asistente de calidad</td>';
+        echo '<td style="padding-left: 100px; padding-right:100px;border:none;"></td>';
+        echo '<td style="padding-left: 100px; padding-right:100px;border-left:none;border-right:none;border-bottom:none; font-size:8px;">Jefe de Aseguramiento de la calidad</td>';
         echo '</tr>';
         echo '</table>';
         echo '</div>';
     }
     ?>
-    <div class="footer">
-        <table>
-            <tr>
-                <td style="border:none;">Donde ME: Material de envase(bolsas,frascos);Otros:cucharitas,etiquetas,alupol,etc.</td>
-                <td style="padding-left: 100px; padding-right:100px;border:none;"></td>
-                <td style="padding-left: 100px; padding-right:100px;border:none;"></td>
-            </tr>
 
-            <tr>
-                <td style="padding-top:30px; border-top:none;border-left:none;border-right:none;"></td>
-                <td style="padding-left: 400px; padding-right:400px;border:none;"></td>
-                <td style="padding-left: 100px; padding-right:100px;border-top:none;border-left:none;border-right:none;"></td>
-            </tr>
-            <tr>
-                <td style="padding-top:10px; border-left:none;border-right:none;border-bottom:none;text-align:center;">Firma del Asistente de calidad</td>
-                <td style="padding-left: 100px; padding-right:100px;border:none;"></td>
-                <td style="padding-left: 100px; padding-right:100px;border-left:none;border-right:none;border-bottom:none;">Jefe de Aseguramiento de la calidad</td>
-            </tr>
-        </table>
-    </div>
 </body>
 
 
