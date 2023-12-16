@@ -12,7 +12,7 @@ require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
 $dataProveedores = $mostrar->MostrarProveedores();
-
+$mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -257,7 +257,14 @@ $dataProveedores = $mostrar->MostrarProveedores();
                                 <button id="insertarOrdenCompraInsumos" class="btn btn-primary boton-insertar">Guardar</button>
                             </div>
                             <div class="estilorequerimiento">
-                                <input id="idrequerimientotemp" type="number" class="form-control" name="id" />
+                                <!-- <input id="idrequerimientotemp" type="number" class="form-control" name="id" /> -->
+                                <select class="form-select" aria-label="Default select example" id="idrequerimientotemp">
+                                    <option value="none" selected>Seleccione un codigo</option>
+                                    <?php
+                                    foreach ($mostrarrequerimiento as $reque) { ?>
+                                        <option><?php echo $reque->COD_REQUERIMIENTO; ?></option>
+                                    <?php } ?>
+                                </select>
                             </div>
                             <div>
                                 <a class="btn btn-success" href="#" onclick="generarPDF()">VISUALIZAR ORDEN COMPRA</a>

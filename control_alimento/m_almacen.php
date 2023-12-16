@@ -4103,7 +4103,19 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function MostrarCodRequerimientoTEMP()
+  {
+    try {
 
+      $stmInsumosCompras = $this->bd->prepare("SELECT TOP 5 *FROM T_REQUERIMIENTOTEMP ORDER BY COD_REQUERIMIENTO DESC;");
+      $stmInsumosCompras->execute();
+      $datos = $stmInsumosCompras->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function   MostrarProveedores()
   {
     try {
