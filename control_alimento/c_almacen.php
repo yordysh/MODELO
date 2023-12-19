@@ -320,7 +320,6 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_insertar_producto_combo($selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
     echo $respuesta;
 } elseif ($accion == 'buscarenvaseproducto') {
-    // $selectProductoCombo = $_POST['selectProductoCombo'];
     $respuesta = c_almacen::c_buscar_producto_envase();
     echo $respuesta;
 } elseif ($accion == 'seleccionarProduccion') {
@@ -350,6 +349,7 @@ if ($accion == 'insertar') {
     $selectinsumoenvase = trim($_POST['selectinsumoenvase']);
     $cantidadinsumoenvase = intval(trim($_POST['cantidadinsumoenvase']));
 
+
     $respuesta = c_almacen::c_mostrar_insumo($selectinsumoenvase, $cantidadinsumoenvase);
     echo $respuesta;
 } elseif ($accion == 'mostrardatosenvases') {
@@ -357,8 +357,9 @@ if ($accion == 'insertar') {
     $seleccionadoinsumoenvases = trim($_POST['seleccionadoinsumoenvases']);
 
     $cantidadesinsumoenvases = intval(trim($_POST['cantidadesinsumoenvases']));
+    $cantidadkg = intval(trim($_POST['cantidadkg']));
 
-    $respuesta = c_almacen::c_mostrar_envase($seleccionadoinsumoenvases, $cantidadesinsumoenvases);
+    $respuesta = c_almacen::c_mostrar_envase($seleccionadoinsumoenvases, $cantidadesinsumoenvases, $cantidadkg);
     echo $respuesta;
 } elseif ($accion == 'guardarvalorescapturadosinsumos') {
 
@@ -2631,12 +2632,11 @@ class c_almacen
         }
     }
 
-    static function c_mostrar_envase($seleccionadoinsumoenvases, $cantidadesinsumoenvases)
+    static function c_mostrar_envase($seleccionadoinsumoenvases, $cantidadesinsumoenvases, $cantidadkg)
     {
         try {
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarDatosEnvases($seleccionadoinsumoenvases);
-
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
             }
@@ -2646,6 +2646,8 @@ class c_almacen
                 // $total = ceil($calculo);
                 if (trim($row->COD_PRODUCTO) == '00161') {
                     $total = ceil($cantidadesinsumoenvases / $row->CANTIDA);
+                } else if (trim($row->COD_PRODUCTO) == '00061') {
+                    $total = ceil($cantidadkg / 30);
                 } else {
                     $total = $cantidadesinsumoenvases;
                 }
@@ -3115,32 +3117,46 @@ class c_almacen
         try {
 
             $mostrar = new m_almacen();
+
             $datos = $mostrar->MostrarEnvasesPorProduccion($codigoproducto, $codigoproduccion, $cantidadenvase, $cantidadinsumo);
+
 
             if ($datos['tipoe'] == 0) {
 
                 $json = array();
                 foreach ($datos['respuestae'] as $row) {
-
+                    $dataalmacen = $mostrar->MostrarAlmaceninsumos(trim($row->COD_PRODUCTO));
+                    $valor_numerico = floatval($dataalmacen);
                     if (trim($row->COD_PRODUCTO) == "00161") {
                         $CANTIDAD_TOTAL = ceil($cantidadenvase / $row->CANTIDA);
+                    } else if (trim($row->COD_PRODUCTO) == '00061') {
+                        $CANTIDAD_TOTAL = ceil($cantidadinsumo / 30);
                     } else {
                         $CANTIDAD_TOTAL = $cantidadenvase;
                     }
+                    $valor_envase = floatval($CANTIDAD_TOTAL);
+                    // var_dump($valor_numerico);
 
-                    $json['respuestae'][] = array(
+                    if ($valor_numerico >= $valor_envase) {
+                        $json['respuestae'][] = array(
 
-                        "COD_COD_FORMULACION" => $row->COD_FORMULACION,
-                        "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
-                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
-
-                        // $CANTIDAD_TOTAL = ceil(($row->CANTIDA * $cantidadenvase) / $row->CANTIDAD_FORMULACION),
-
-                        "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
-                        "LOTES" => c_almacen::c_producto_lote($row->COD_PRODUCTO, $CANTIDAD_TOTAL),
-                    );
+                            "COD_COD_FORMULACION" => $row->COD_FORMULACION,
+                            "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
+                            "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                            // $CANTIDAD_TOTAL = ceil(($row->CANTIDA * $cantidadenvase) / $row->CANTIDAD_FORMULACION),
+                            "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
+                            "LOTES" => c_almacen::c_producto_lote($row->COD_PRODUCTO, $CANTIDAD_TOTAL),
+                        );
+                        $json['tipoe'] = 0;
+                        $jsonstring = json_encode($json);
+                        echo $jsonstring;
+                    }
+                    // else {
+                    //     $json = "controlno";
+                    //     $jsonstring = json_encode($json);
+                    //     echo $jsonstring;
+                    // }
                 }
-                $json['tipoe'] = 0;
             } else {
                 $json = array();
                 foreach ($datos['respuestae'] as $row) {
@@ -3154,8 +3170,6 @@ class c_almacen
                 }
                 $json['tipoe'] = 1;
             }
-            $jsonstring = json_encode($json);
-            echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }

@@ -3,7 +3,6 @@ session_start();
 
 $codusuario = $_SESSION["cod"];
 // $codusuario = '0004';
-
 ?>
 
 <?php
@@ -73,14 +72,14 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 <select id="selectInsumoEnvase" class="form-select selectProducto" aria-label="Default select example">
                                     <option value="none" selected disabled>Seleccione producto</option>
                                     <?php foreach ($dataProductoTerminado as  $lis) { ?>
-                                        <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                        <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option" peso_neto="<?php echo $lis['PESO_NETO']; ?>"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
                                     <?php
                                     }
 
                                     ?>
                                 </select>
                             </div>
-
+                            <input type="hidden" id="valorneto">
                             <!-- Text input cantidad -->
 
                             <div class="col-md-2">

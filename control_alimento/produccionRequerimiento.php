@@ -2,7 +2,7 @@
 session_start();
 
 $codusuario = $_SESSION["cod"];
-// $codusuario = 'Raul';
+// $codusuario = '00002';
 
 ?>
 <?php

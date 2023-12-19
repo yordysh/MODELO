@@ -65,10 +65,17 @@ $(function () {
       return false;
     }
     const regex = /\d+\./;
-    let totalproducto = ($("#cantidadInsumoEnvase").val() * 100) / 60;
+    let valorneto = $("#valorneto").val() / 10;
+    console.log(valorneto);
+    let totalproducto = ($("#cantidadInsumoEnvase").val() * 100) / valorneto;
     $("#txtcantidadproductos").val(Math.round(totalproducto));
   });
-
+  /*-----------Al seleccionar un producto me pongue su peso neto------------------ */
+  $("#selectInsumoEnvase").on("change", function () {
+    var peso_neto = $(this).find("option:selected").attr("peso_neto");
+    $("#valorneto").val(peso_neto);
+  });
+  /*----------------------------------------------------------------------------- */
   //--------------------- Insertar los valores insumos y envases ------------//
 
   // $("#botonCalcularInsumoEnvase").click((e) => {
@@ -573,6 +580,7 @@ $(function () {
       data: {
         accion: accionEnvase,
         seleccionadoinsumoenvases: selectinsumoenvase,
+        cantidadkg: cantidadinsumoenvase,
         cantidadesinsumoenvases: $("#txtcantidadproductos").val(),
       },
       type: "POST",
@@ -782,6 +790,7 @@ $(function () {
             if (result.isConfirmed) {
               $("#selectInsumoEnvase").val("none").trigger("change");
               $("#cantidadInsumoEnvase").val("");
+              $("#valorneto").val("");
               tablaReqInsumo.empty();
               tablaReqEnv.empty();
               tablatotalInEn.empty();

@@ -2075,7 +2075,19 @@ class m_almacen
 
 
 
+  public function  MostrarProductoFormulacion()
+  {
+    try {
 
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00004'");
+      $stm->execute();
+      $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 
 
 
@@ -2083,7 +2095,9 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00004'");
+      // $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00004'");
+      $stm = $this->bd->prepare("SELECT TF.COD_FORMULACION AS COD_FORMULACION,TF.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,TP.ABR_PRODUCTO AS ABR_PRODUCTO,
+      TP.COD_PRODUCCION AS COD_PRODUCCION, TP.PESO_NETO AS PESO_NETO FROM T_TMPFORMULACION TF  INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TF.COD_PRODUCTO");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -2190,9 +2204,6 @@ class m_almacen
 
 
       $fecha_generado = $codigoform->c_horaserversql('F');
-      // $fecha_actual = '01/09/2023';
-      //echo $fecha_generado;
-      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
       $codigo_formulacion = $codigoform->generarCodigoFormulacion();
       $codigo_categoria = $codigoform->generarCodigoCategoriaProducto($selectProductoCombo);
@@ -2246,7 +2257,19 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function MostrarPesoNeto($codigoproductoneto)
+  {
+    try {
 
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO,PESO_NETO FROM T_PRODUCTO WHERE COD_PRODUCTO='$codigoproductoneto'");
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 
 
 
@@ -3190,7 +3213,20 @@ class m_almacen
   }
 
 
+  public function MostrarAlmaceninsumos($codigoproducto)
+  {
+    try {
 
+      $stm = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$codigoproducto'");
+      $stm->execute();
+      $consulta = $stm->fetch(PDO::FETCH_ASSOC);
+      $datos = intval($consulta['STOCK_ACTUAL']);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function  MostrarEnvasesPorProduccion($codigoproducto, $codigoproduccion, $cantidadenvase, $cantidadinsumo)
   {
     try {
@@ -3552,6 +3588,8 @@ class m_almacen
             $ltlote = $saldo[0][2];
             $canlote = ($rptalt[$j][1] < 0) ? ($rptalt[$j][1] * -1) : $rptalt[$j][1];
             $ltresta = number_format($saldo[0][3] - $canlote, 3);
+
+
 
 
 
@@ -5398,6 +5436,7 @@ class m_almacen
       where LOTE = ? AND COD_PRODUCTO=? order by LOTE ASC");
       $query->bindParam(1, $lote, PDO::PARAM_STR);
       $query->bindParam(2, $producto, PDO::PARAM_STR);
+
       $query->execute();
       return $query->fetchAll();
     } catch (Exception $e) {

@@ -15,11 +15,11 @@ $(function () {
     //   console.error("Error executing alertaMensaje():");
     // }
 
-    try {
-      await alerta();
-    } catch (error) {
-      console.error("Error executing alerta():");
-    }
+    // try {
+    //   await alerta();
+    // } catch (error) {
+    //   console.error("Error executing alerta():");
+    // }
 
     // try {
     //   await alertaControl();

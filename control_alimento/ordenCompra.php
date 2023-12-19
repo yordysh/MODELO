@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-// $codusuario = $_SESSION["cod"];
-// $codoficina = $_SESSION["ofi"];
-$codusuario = '0002';
-$codoficina = 'SMP2';
+$codusuario = $_SESSION["cod"];
+$codoficina = $_SESSION["ofi"];
+// $codusuario = '0002';
+// $codoficina = 'SMP2';
 
 ?>
 <?php
@@ -257,14 +257,23 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                                 <button id="insertarOrdenCompraInsumos" class="btn btn-primary boton-insertar">Guardar</button>
                             </div>
                             <div class="estilorequerimiento">
-                                <!-- <input id="idrequerimientotemp" type="number" class="form-control" name="id" /> -->
-                                <select class="form-select" aria-label="Default select example" id="idrequerimientotemp">
-                                    <option value="none" selected>Seleccione un codigo</option>
+                                <select name="select_requerimiento" id="idrequerimientotemp">
                                     <?php
-                                    foreach ($mostrarrequerimiento as $reque) { ?>
-                                        <option><?php echo $reque->COD_REQUERIMIENTO; ?></option>
-                                    <?php } ?>
+                                    $primerRequerimiento = reset($mostrarrequerimiento);
+                                    foreach ($mostrarrequerimiento as $reque) {
+                                        echo '<option value="' . $reque->COD_REQUERIMIENTO . '"';
+                                        if ((int)$reque->COD_REQUERIMIENTO === (int)$primerRequerimiento->COD_REQUERIMIENTO) {
+                                            echo ' selected';
+                                        }
+                                        echo '>';
+                                        echo $reque->COD_REQUERIMIENTO;
+                                        echo '</option>';
+                                    }
+                                    ?>
                                 </select>
+
+
+
                             </div>
                             <div>
                                 <a class="btn btn-success" href="#" onclick="generarPDF()">VISUALIZAR ORDEN COMPRA</a>

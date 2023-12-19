@@ -128,7 +128,8 @@ $(function () {
         cantidadinsumo: cantidad,
       },
       success: function (response) {
-        if (isJSON(response)) {
+        console.log(response);
+        if (response) {
           let tasks = JSON.parse(response);
 
           if (tasks["tipoe"] == 0) {
@@ -155,9 +156,12 @@ $(function () {
             $("#selectNumProduccion").val("none").trigger("change");
             $("#cantidad").val("");
             // $("#txtcantidadproductos").val("");
-          } else {
-            console.log("error");
           }
+          // else {
+          //   console.log("error");
+          // }
+        } else if (response == "controlno") {
+          console.log("object");
         }
       },
       error: function (error) {

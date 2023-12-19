@@ -4,7 +4,7 @@ session_start();
 // $codusuario = $_SESSION["cod"];
 // $oficina = $_SESSION["ofi"];
 $oficina = 'SMP2';
-$codusuario = "00004";
+$codusuario = "0356";
 
 ?>
 

@@ -3,7 +3,7 @@ require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
 
-$dataProductoTerminado = $mostrar->MostrarProductoTerminado();
+$dataProductoTerminado = $mostrar->MostrarProductoFormulacion();
 $dataProductoInsumos = $mostrar->MostrarProductoInsumos();
 $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
 ?>
