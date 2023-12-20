@@ -57,7 +57,7 @@ function exportardosimetria(obj) {
       /*primera columna-------------------------------------- */
       doc.text("OPERARIO: " + operario, 6, 31);
       doc.line(24, 32, 66, 32); //linea horizontal
-      doc.text("CANTIDA DE PRODUCTO:", 6, 38);
+      doc.text("CANTIDAD DE MESCLA:", 6, 38);
       doc.text(cantidad, 53, 38);
       doc.line(46, 39, 66, 39); //linea horizontal
       doc.text("N° DE BACHADAS: ", 6, 45);

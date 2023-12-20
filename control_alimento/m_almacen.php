@@ -3220,10 +3220,83 @@ class m_almacen
       $stm = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$codigoproducto'");
       $stm->execute();
       $consulta = $stm->fetch(PDO::FETCH_ASSOC);
-      $datos = intval($consulta['STOCK_ACTUAL']);
-
-      return $datos;
+      $resultadoformula = $consulta['STOCK_ACTUAL'];
+      return $resultadoformula;
     } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function CodigoFormulacionVerificacion($codigoproducto)
+  {
+    try {
+      $stmCodigoFormula = $this->bd->prepare("SELECT MAX(COD_FORMULACION) AS COD_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codigoproducto'");
+      $stmCodigoFormula->execute();
+      $consultacodigoformula = $stmCodigoFormula->fetch(PDO::FETCH_ASSOC);
+      $resultadoformula = $consultacodigoformula['COD_FORMULACION'];
+
+
+      return $resultadoformula;
+    } catch (Exception $e) {
+
+      die($e->getMessage());
+    }
+  }
+
+  public function ValorProduccionCantidad($codigoproducto, $codigoproduccion)
+  {
+    try {
+      $stmverificardatos = $this->bd->prepare("SELECT MAX(CANTIDAD_PRODUCIDA) AS CANTIDAD_PRODUCIDA FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
+      $stmverificardatos->execute();
+      $consultacodigoformulacion = $stmverificardatos->fetch(PDO::FETCH_ASSOC);
+
+
+
+      return $consultacodigoformulacion;
+    } catch (Exception $e) {
+
+      die($e->getMessage());
+    }
+  }
+
+  public function ValoresEnvases($codigoproducto)
+  {
+    try {
+      $mostrar = new m_almacen();
+      $codigoformulacion = $mostrar->CodigoFormulacionVerificacion($codigoproducto);
+
+      $stmformulacionenvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, 
+      TFE.CANTIDA AS CANTIDA, TF.CAN_FORMULACION AS CANTIDAD_FORMULACION FROM T_TMPFORMULACION_ENVASE TFE 
+      INNER JOIN T_PRODUCTO TP ON TFE.COD_PRODUCTO=TP.COD_PRODUCTO
+      INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFE.COD_FORMULACION
+      WHERE TFE.COD_FORMULACION='$codigoformulacion'");
+
+      $stmformulacionenvase->execute();
+      $resultadoCantidad = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+
+      return $resultadoCantidad;
+    } catch (Exception $e) {
+
+      die($e->getMessage());
+    }
+  }
+
+  public function ValoresInsumos($codigoproducto)
+  {
+    try {
+      $mostrar = new m_almacen();
+      $resultadoformula = $mostrar->CodigoFormulacionVerificacion($codigoproducto);
+      $stmformulacionenvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, 
+                                                      TFE.CAN_FORMULACION AS CAN_FORMULACION, TF.CAN_FORMULACION AS CANTIDAD_FORMULACION FROM T_TMPFORMULACION_ITEM TFE 
+                                                      INNER JOIN T_PRODUCTO TP ON TFE.COD_PRODUCTO=TP.COD_PRODUCTO
+                                                      INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFE.COD_FORMULACION
+                                                      WHERE TFE.COD_FORMULACION='$resultadoformula'");
+      $stmformulacionenvase->execute();
+
+      $resultadoCantidad = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
+
+      return $resultadoCantidad;
+    } catch (Exception $e) {
+
       die($e->getMessage());
     }
   }
@@ -3231,25 +3304,19 @@ class m_almacen
   {
     try {
       $this->bd->beginTransaction();
-
-      $stmCodigoFormula = $this->bd->prepare("SELECT MAX(COD_FORMULACION) AS COD_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codigoproducto'");
-      $stmCodigoFormula->execute();
-      $consultacodigoformula = $stmCodigoFormula->fetch(PDO::FETCH_ASSOC);
-      $resultadoformula = $consultacodigoformula['COD_FORMULACION'];
+      $mostrar = new m_almacen();
+      $codigoformulacion = $mostrar->CodigoFormulacionVerificacion($codigoproducto);
 
 
-      $stmverificardatos = $this->bd->prepare("SELECT MAX(CANTIDAD_PRODUCIDA) AS CANTIDAD_PRODUCIDA FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
-      $stmverificardatos->execute();
-      $consultacodigoformulacion = $stmverificardatos->fetch(PDO::FETCH_ASSOC);
-      $resultadoCantidadFormulacion = intval($consultacodigoformulacion['CANTIDAD_PRODUCIDA']);
+      $cantidadproduccion = $mostrar->ValorProduccionCantidad($codigoproducto, $codigoproduccion);
 
-      if ($cantidadinsumo <= $resultadoCantidadFormulacion) {
+      if ($cantidadinsumo <= $cantidadproduccion) {
 
         $stmformulacionenvase = $this->bd->prepare("SELECT TFE.COD_FORMULACION AS COD_FORMULACION, TFE.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, 
                                                       TFE.CANTIDA AS CANTIDA, TF.CAN_FORMULACION AS CANTIDAD_FORMULACION FROM T_TMPFORMULACION_ENVASE TFE 
                                                       INNER JOIN T_PRODUCTO TP ON TFE.COD_PRODUCTO=TP.COD_PRODUCTO
                                                       INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFE.COD_FORMULACION
-                                                      WHERE TFE.COD_FORMULACION='$resultadoformula'");
+                                                      WHERE TFE.COD_FORMULACION='$codigoformulacion'");
 
         $stmformulacionenvase->execute();
         $respuesta['respuestae'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
