@@ -91,30 +91,30 @@ $(function () {
     // let txtcantidadproductos = $("#txtcantidadproductos").val();
     // $("#productocod").val(txtcantidadproductos);
 
-    // if (!codigoproducto) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Seleccione un producto",
-    //     text: "Debe de seleccionar un producto.",
-    //   });
-    //   return;
-    // }
-    // if (!codigoproduccion) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Seleccione una produccion",
-    //     text: "Debe de seleccionar una produccion.",
-    //   });
-    //   return;
-    // }
-    // if (cantidad == "") {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Inserte una cantidad",
-    //     text: "Debe de escribir una cantidad.",
-    //   });
-    //   return;
-    // }
+    if (!codigoproducto) {
+      Swal.fire({
+        icon: "error",
+        title: "Seleccione un producto",
+        text: "Debe de seleccionar un producto.",
+      });
+      return;
+    }
+    if (!codigoproduccion) {
+      Swal.fire({
+        icon: "error",
+        title: "Seleccione una produccion",
+        text: "Debe de seleccionar una produccion.",
+      });
+      return;
+    }
+    if (cantidad == "") {
+      Swal.fire({
+        icon: "error",
+        title: "Inserte una cantidad",
+        text: "Debe de escribir una cantidad.",
+      });
+      return;
+    }
     let accioncantidad = "convalidocantidadproduccion";
     $.ajax({
       type: "POST",
@@ -126,9 +126,131 @@ $(function () {
         cantidadenvase: $("#txtcantidadproductos").val(),
         cantidadinsumo: cantidad,
       },
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
       success: function (response) {
-        console.log("object");
-        console.log(response);
+        // console.log(response);
+        let tasks = JSON.parse(response);
+        if (tasks.estado === "estado1") {
+          var valorunicoproduccion = tasks.valorunicoproduccion;
+          var valorcantidad = tasks.cantidad;
+          // console.log(tasks.valorunicoproduccion);
+          Swal.fire({
+            icon: "error",
+            title: "¡La cantidad superada de la producción!",
+            text:
+              "La cantidad ingresada " +
+              valorcantidad +
+              "kg es mayor a la cantidad de la producción " +
+              valorunicoproduccion +
+              "kg.",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#cantidad").val("");
+              $("#txtcantidadproductos").val("");
+              $("#tablainsumosavancetotal").empty();
+              $("#tablacalculoregistroenvase").empty();
+            }
+          });
+
+          // alert("estado1");
+        } else if (tasks.estado === "estado2") {
+          var descripcionenvase = tasks.descripcionenvase;
+          var cantidadenvase = tasks.cantidadenvase;
+          // console.log(descripcionenvase + "aa" + cantidadenvase);
+          Swal.fire({
+            icon: "error",
+            title: "¡La cantidad de envases supera al stock!",
+            text:
+              "La cantidad ingresada de " +
+              descripcionenvase +
+              " es mayor a la cantidad del stock que hay " +
+              cantidadenvase +
+              " " +
+              descripcionenvase,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#cantidad").val("");
+              $("#txtcantidadproductos").val("");
+              $("#tablainsumosavancetotal").empty();
+              $("#tablacalculoregistroenvase").empty();
+            }
+          });
+          // alert("estado2");
+        } else if (tasks.estado === "estado3") {
+          var descripcioninsumo = tasks.descripcioninsumo;
+          var cantidaddeinsumo = tasks.cantidaddeinsumo;
+          // console.log(descripcionenvase + "aa" + cantidadenvase);
+          Swal.fire({
+            icon: "error",
+            title: "¡La cantidad de insumos supera al stock!",
+            text:
+              "La cantidad ingresada de " +
+              descripcioninsumo +
+              " es mayor a la cantidad del stock que hay " +
+              cantidaddeinsumo +
+              "kg " +
+              descripcioninsumo +
+              ".",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#cantidad").val("");
+              $("#txtcantidadproductos").val("");
+              $("#tablainsumosavancetotal").empty();
+              $("#tablacalculoregistroenvase").empty();
+            }
+          });
+          // alert("estado3");
+        } else if (tasks.json1 && tasks.json2) {
+          let dataenvase = tasks.json1;
+          let datainsumo = tasks.json2;
+          // console.log("json1 json2");
+          // console.log(tasks.json1);
+          // console.log(tasks.json2);
+          let templateenvase = ``;
+          dataenvase.forEach((task) => {
+            let lotesenvase = task.LOTES;
+            templateenvase += `<tr taskId="${task.COD_FORMULACION}">
+      
+                                <td data-titulo="MATERIALES" taskcodigoproducto=${
+                                  task.COD_PRODUCTO
+                                }>${task.DES_PRODUCTO}</td>
+                                <td data-titulo="CANTIDAD" >${
+                                  task.CANTIDAD_TOTAL
+                                }</td>
+                                <td data-titulo="LOTE"><input  class='lotesx' type='text' readonly value="${lote(
+                                  lotesenvase
+                                )}"/></td>
+      
+                      </tr>`;
+          });
+
+          let templateinsumo = ``;
+          datainsumo.forEach((task) => {
+            let lotesinsumo = task.LOTES;
+            templateinsumo += `<tr taskId="${task.COD_FORMULACION}">
+        
+                                  <td data-titulo="MATERIALES" insumocodigoproducto=${
+                                    task.COD_PRODUCTO
+                                  }>${task.DES_PRODUCTO}</td>
+                                  <td data-titulo="CANTIDAD" >${
+                                    task.CANTIDAD_TOTAL
+                                  }</td>
+                                  <td data-titulo="LOTE" ><input type='text' readonly value="${lote(
+                                    lotesinsumo
+                                  )}"/></td>
+                        </tr>`;
+          });
+
+          $("#tablacalculoregistroenvase").html(templateenvase);
+          $("#tablainsumosavancetotal").html(templateinsumo);
+        }
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
       },
     });
 

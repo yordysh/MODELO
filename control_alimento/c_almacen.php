@@ -3125,11 +3125,17 @@ class c_almacen
 
             // $datos = $mostrar->ConsultarCantidadProduccion($codigoproducto, $codigoproduccion, $cantidadinsumo);
             $cantidadproduccionkg = $mostrar->ValorProduccionCantidad($codigoproducto, $codigoproduccion);
+            // var_dump($cantidadproduccionkg['CANTIDAD_PRODUCIDA']);
+            // var_dump($cantidadinsumo);
+            // exit();
+            $valorunicoproduccion = $cantidadproduccionkg['CANTIDAD_PRODUCIDA'];
             if ($cantidadinsumo > $cantidadproduccionkg['CANTIDAD_PRODUCIDA']) {
 
-                $json = "malo";
-                $jsonstring = json_encode($json);
-                echo $jsonstring;
+                // $json = "estado1";
+                // $jsonstring = json_encode($json);
+                // echo $jsonstring;
+                $response = array('estado' => 'estado1', 'valorunicoproduccion' => $valorunicoproduccion, 'cantidad' => $cantidadinsumo);
+                echo json_encode($response);
                 exit;
             } elseif ($cantidadinsumo <= $cantidadproduccionkg['CANTIDAD_PRODUCIDA']) {
                 $envases = $mostrar->ValoresEnvases($codigoproducto);
@@ -3142,8 +3148,9 @@ class c_almacen
 
                     $dataalmacen = $mostrar->MostrarAlmaceninsumos(trim($row->COD_PRODUCTO));
                     // var_dump($dataalmacen);
-                    $valor_numerico = $dataalmacen['STOCK_ACTUAL'];
-                    var_dump($valor_numerico);
+                    $valor_numerico = floatval($dataalmacen["STOCK_ACTUAL"]);
+                    // var_dump($row->COD_PRODUCTO);
+                    // var_dump($valor_numerico);
 
                     if (trim($row->COD_PRODUCTO) == "00161") {
                         $CANTIDAD_TOTAL = ceil($cantidadenvase / $row->CANTIDA);
@@ -3152,9 +3159,16 @@ class c_almacen
                     } else {
                         $CANTIDAD_TOTAL = $cantidadenvase;
                     }
+                    // echo "h";
+                    // var_dump($CANTIDAD_TOTAL);
                     $valor_envase = floatval($CANTIDAD_TOTAL);
                     if ($valor_envase > $valor_numerico) {
-                        $json[] = "no valido";
+                        // $json = "estado2";
+                        // $jsonstring = json_encode($json);
+                        // echo $jsonstring;
+                        $responseenvase = array('estado' => 'estado2', 'descripcionenvase' => $row->DES_PRODUCTO, 'cantidadenvase' => $CANTIDAD_TOTAL);
+                        echo json_encode($responseenvase);
+                        exit;
                     } else {
                         $json[] = array(
 
@@ -3167,60 +3181,47 @@ class c_almacen
                         );
                     }
                 }
-                $jsonstring = json_encode($json);
-                echo $jsonstring;
+                // $jsonstring = json_encode($json);
+                // echo $jsonstring;
+
+                $jsoninsumo = array();
+                foreach ($insumos as $row) {
+
+                    $dataalmacen = $mostrar->MostrarAlmaceninsumos(trim($row->COD_PRODUCTO));
+                    $valor_numerico = floatval($dataalmacen["STOCK_ACTUAL"]);
+
+                    $resultado = (($row->CAN_FORMULACION * $cantidadinsumo) / $row->CANTIDAD_FORMULACION);
+                    $CANTIDAD_TOTAL = number_format($resultado, 3);
+
+                    if ($CANTIDAD_TOTAL > $valor_numerico) {
+                        // $jsoninsumo = "estado3";
+                        // $jsonstring = json_encode($jsoninsumo);
+                        // echo $jsonstring
+                        $responseinsumo = array('estado' => 'estado3', 'descripcioninsumo' => $row->DES_PRODUCTO, 'cantidaddeinsumo' => $CANTIDAD_TOTAL);
+                        echo json_encode($responseinsumo);
+                        exit;
+                    } else {
+                        $jsoninsumo[] = array(
+
+                            "COD_COD_FORMULACION" => $row->COD_FORMULACION,
+                            "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                            "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                            "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
+                            "LOTES" => c_almacen::c_producto_lote($row->COD_PRODUCTO, $CANTIDAD_TOTAL),
+                        );
+                    }
+                }
+                // $jsonstring = json_encode($json);
+                // echo $jsonstring;
+                $datos = array(
+                    'json1' => $json,
+                    'json2' => $jsoninsumo
+                );
+
+                // Convierte el arreglo a JSON
+                $datos_json = json_encode($datos);
+                echo $datos_json;
             }
-
-            // if ($datos['tipoe'] == 0) {
-
-            //     $json = array();
-            //     foreach ($datos['respuestae'] as $row) {
-            //         // $dataalmacen = $mostrar->MostrarAlmaceninsumos(trim($row->COD_PRODUCTO));
-            //         // $valor_numerico = floatval($dataalmacen);
-            //         if (trim($row->COD_PRODUCTO) == "00161") {
-            //             $CANTIDAD_TOTAL = ceil($cantidadenvase / $row->CANTIDA);
-            //         } else if (trim($row->COD_PRODUCTO) == '00061') {
-            //             $CANTIDAD_TOTAL = ceil($cantidadinsumo / 30);
-            //         } else {
-            //             $CANTIDAD_TOTAL = $cantidadenvase;
-            //         }
-            //         $valor_envase = floatval($CANTIDAD_TOTAL);
-            //         // var_dump($valor_numerico);
-
-            //         // if ($valor_numerico >= $valor_envase) {
-            //         $json['respuestae'][] = array(
-
-            //             "COD_COD_FORMULACION" => $row->COD_FORMULACION,
-            //             "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
-            //             "DES_PRODUCTO" => $row->DES_PRODUCTO,
-            //             // $CANTIDAD_TOTAL = ceil(($row->CANTIDA * $cantidadenvase) / $row->CANTIDAD_FORMULACION),
-            //             "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
-            //             "LOTES" => c_almacen::c_producto_lote($row->COD_PRODUCTO, $CANTIDAD_TOTAL),
-            //         );
-
-            //         // }
-            //         // else {
-            //         //     $json = "controlno";
-            //         //     $jsonstring = json_encode($json);
-            //         //     echo $jsonstring;
-            //         // }
-            //     }
-            //     $json['tipoe'] = 0;
-            //     $jsonstring = json_encode($json);
-            //     echo $jsonstring;
-            // } else {
-            //     $json = array();
-            //     foreach ($datos['respuestae'] as $row) {
-            //         $json['respuestae'] = array(
-            //             "COD_PRODUCCION" => $row->COD_PRODUCCION,
-            //             "CANTIDAD_PRODUCIDA" => $row->CANTIDAD_PRODUCIDA,
-            //             "VALOR_KG" => $row->VALOR_KG,
-            //             "DES_PRODUCTO" => $row->DES_PRODUCTO,
-
-            //         );
-            //     }
-            //     $json['tipoe'] = 1;
-            // }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }

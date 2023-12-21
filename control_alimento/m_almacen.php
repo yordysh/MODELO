@@ -3220,8 +3220,8 @@ class m_almacen
       $stm = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$codigoproducto'");
       $stm->execute();
       $consulta = $stm->fetch(PDO::FETCH_ASSOC);
-      $resultadoformula = $consulta['STOCK_ACTUAL'];
-      return $resultadoformula;
+      // $resultadoformula = $consulta['STOCK_ACTUAL'];
+      return $consulta;
     } catch (Exception $e) {
       die($e->getMessage());
     }
@@ -3248,8 +3248,6 @@ class m_almacen
       $stmverificardatos = $this->bd->prepare("SELECT MAX(CANTIDAD_PRODUCIDA) AS CANTIDAD_PRODUCIDA FROM T_TMPPRODUCCION WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
       $stmverificardatos->execute();
       $consultacodigoformulacion = $stmverificardatos->fetch(PDO::FETCH_ASSOC);
-
-
 
       return $consultacodigoformulacion;
     } catch (Exception $e) {

@@ -456,6 +456,30 @@ $(function () {
     });
   });
   /*--------------------------------------------------------------- */
+  /*--------- Cuando doy click en deposito me activa ------------- */
+  $("#selectformapago").click((e) => {
+    let pago = $("#selectformapago").val();
+    if (pago == "D") {
+      $("#imagensum").prop("disabled", false);
+    } else {
+      $("#imagensum").prop("disabled", true);
+    }
+  });
+  /*------------------------------------------------------------- */
+
+  /*------------ Cuando doy click en el boton añadir una imagen ----- */
+  $("#imagensum").click((e) => {
+    var imagenBoton = $("<button>")
+      .addClass("btn btn-info text-center visualizar")
+      .append(
+        $("<i>").addClass("icon-plus text-white").css("font-size", "1.em")
+      );
+    var nuevaFila = $("<tr>").append(
+      $("<td>").addClass("text-center").append(imagenBoton)
+    );
+    $("#tablaimagenes").append(nuevaFila);
+  });
+  /*---------------------------------------------------------------- */
 });
 function isJSON(str) {
   try {

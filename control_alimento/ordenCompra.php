@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-$codusuario = $_SESSION["cod"];
-$codoficina = $_SESSION["ofi"];
-// $codusuario = '0002';
-// $codoficina = 'SMP2';
+// $codusuario = $_SESSION["cod"];
+// $codoficina = $_SESSION["ofi"];
+$codusuario = '0002';
+$codoficina = 'SMP2';
 
 ?>
 <?php
@@ -227,6 +227,28 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                                 </select>
                             </div>
                         </div>
+                        <!-- Text input moneda-->
+                        <div class="form-outline mb-4">
+                            <button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button>
+                        </div>
+                        <!-- Tabla para subir imagenes-->
+                        <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
+                            <div class="row g-4 top-div">
+                                <center><label class="title_table">DEPOSITO</label></center>
+                            </div>
+                            <table id="tbimagenes" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">SUBIR IMAGEN</th>
+                                        <th class="thtitulo" scope="col">VISUALIZAR</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaimagenes">
+
+                                </tbody>
+                            </table>
+                        </div>
+
                         <!-- Text observacion-->
                         <div class="form-outline mb-4">
                             <label class="form-label">Observación</label>
@@ -288,8 +310,8 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
     <?php
     require_once "modalproveedor.php";
     ?>
-    <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-3.7.0.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/ajaxOrdenCompra.js?v=0.001"></script>
     <script src="../js/menu_a.js"></script>

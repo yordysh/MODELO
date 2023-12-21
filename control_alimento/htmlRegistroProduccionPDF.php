@@ -163,7 +163,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         echo '<td class="tdcentrado">CANTIDAD(Unid.)</td>';
         echo '<td class="tdcentrado">' . $filas->CANTIDAD . '</td>';
         echo '<td class="tdcentrado">PESO TOTAL:</td>';
-        echo '<td class="tdcentrado">' . $filas->CANT_INSUMOS . '</td>';
+        echo '<td class="tdcentrado">' . $filas->CANT_INSUMOS . ' kg' . '</td>';
         echo '</tr>';
 
         echo '<tr>';
