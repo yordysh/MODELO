@@ -311,6 +311,28 @@ $(function () {
       datosSeleccionadosInsumos.push(datosFila);
     });
 
+    const dataimagenes = [];
+
+    $("#tablaimagenes tr").each(function () {
+      const filaimagen = $(this);
+
+      // Obtener el ID del elemento actual
+      const elementoId = filaimagen.attr("id");
+      const fileInput = filaimagen.find("td:eq(1) input[type=file]")[0];
+
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const datosFilaImagen = {
+          elementoId: elementoId,
+          imagenval: $(fileInput).attr("fotoimagen"),
+          file: file,
+        };
+        dataimagenes.push(datosFilaImagen);
+      }
+    });
+
+    console.log(dataimagenes);
+
     if (!personal) {
       Swal.fire({
         icon: "info",
@@ -388,72 +410,72 @@ $(function () {
       });
       return;
     }
-    const accion = "guardarinsumoscompras";
+    // const accion = "guardarinsumoscompras";
 
-    $.ajax({
-      url: "./c_almacen.php",
-      type: "POST",
-      data: {
-        accion: accion,
-        fecha: fecha,
-        empresa: empresa,
-        personalcod: personalcod,
-        oficina: oficina,
-        proveedor: proveedor,
-        proveedordireccion: proveedordireccion,
-        proveedorruc: proveedorruc,
-        proveedordni: proveedordni,
-        formapago: formapago,
-        moneda: moneda,
-        observacion: observacion,
-        datosSeleccionadosInsumos: datosSeleccionadosInsumos,
-        idcompraaprobada: idcompraaprobada,
-      },
-      beforeSend: function () {
-        $(".preloader").css("opacity", "1");
-        $(".preloader").css("display", "block");
-      },
-      success: function (response) {
-        if (response == "ok") {
-          Swal.fire({
-            title: "¡Guardado exitoso!",
-            text: "Los datos se han guardado correctamente.",
-            icon: "success",
-            allowOutsideClick: false,
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              $("#fecha").val(fechaActual);
-              $("#selectempresa").val("00003").trigger("change");
-              $("#personal").val("");
-              $("#selectoficina").val("00026").trigger("change");
-              $("#proveedor").val("");
-              $("#direccion").val("");
-              $("#ruc_principal").val("");
-              $("#dni_principal").val("");
-              $("#observacionorden").val("");
-              $("#selectformapago").val("E").trigger("change");
-              $("#selectmoneda").val("S").trigger("change");
-              $("#tablainsumoscomprar").empty();
+    // $.ajax({
+    //   url: "./c_almacen.php",
+    //   type: "POST",
+    //   data: {
+    //     accion: accion,
+    //     fecha: fecha,
+    //     empresa: empresa,
+    //     personalcod: personalcod,
+    //     oficina: oficina,
+    //     proveedor: proveedor,
+    //     proveedordireccion: proveedordireccion,
+    //     proveedorruc: proveedorruc,
+    //     proveedordni: proveedordni,
+    //     formapago: formapago,
+    //     moneda: moneda,
+    //     observacion: observacion,
+    //     datosSeleccionadosInsumos: datosSeleccionadosInsumos,
+    //     idcompraaprobada: idcompraaprobada,
+    //   },
+    //   beforeSend: function () {
+    //     $(".preloader").css("opacity", "1");
+    //     $(".preloader").css("display", "block");
+    //   },
+    //   success: function (response) {
+    //     if (response == "ok") {
+    //       Swal.fire({
+    //         title: "¡Guardado exitoso!",
+    //         text: "Los datos se han guardado correctamente.",
+    //         icon: "success",
+    //         allowOutsideClick: false,
+    //         confirmButtonText: "Aceptar",
+    //       }).then((result) => {
+    //         if (result.isConfirmed) {
+    //           $("#fecha").val(fechaActual);
+    //           $("#selectempresa").val("00003").trigger("change");
+    //           $("#personal").val("");
+    //           $("#selectoficina").val("00026").trigger("change");
+    //           $("#proveedor").val("");
+    //           $("#direccion").val("");
+    //           $("#ruc_principal").val("");
+    //           $("#dni_principal").val("");
+    //           $("#observacionorden").val("");
+    //           $("#selectformapago").val("E").trigger("change");
+    //           $("#selectmoneda").val("S").trigger("change");
+    //           $("#tablainsumoscomprar").empty();
 
-              $("#nombreproveedor").val("");
-              $("#direccionproveedor").val("");
-              $("#ruc").val("");
-              $("#dniproveedor").val("");
-              $("#tablainsumoscomprarprecio").empty();
-              cargarOrdenCompraAprobada();
-            }
-          });
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error al cargar los datos de la tabla:", error);
-      },
-      complete: function () {
-        $(".preloader").css("opacity", "0");
-        $(".preloader").css("display", "none");
-      },
-    });
+    //           $("#nombreproveedor").val("");
+    //           $("#direccionproveedor").val("");
+    //           $("#ruc").val("");
+    //           $("#dniproveedor").val("");
+    //           $("#tablainsumoscomprarprecio").empty();
+    //           cargarOrdenCompraAprobada();
+    //         }
+    //       });
+    //     }
+    //   },
+    //   error: function (xhr, status, error) {
+    //     console.error("Error al cargar los datos de la tabla:", error);
+    //   },
+    //   complete: function () {
+    //     $(".preloader").css("opacity", "0");
+    //     $(".preloader").css("display", "none");
+    //   },
+    // });
   });
   /*--------------------------------------------------------------- */
   /*--------- Cuando doy click en deposito me activa ------------- */
@@ -463,23 +485,69 @@ $(function () {
       $("#imagensum").prop("disabled", false);
     } else {
       $("#imagensum").prop("disabled", true);
+      $("#tablaimagenes").empty();
     }
   });
   /*------------------------------------------------------------- */
 
   /*------------ Cuando doy click en el boton añadir una imagen ----- */
+  $("#tablaimagenes").on("change", ".idimagenorden", function () {
+    var archivoSeleccionado = $(this).prop("files")[0];
+    var urlArchivo = URL.createObjectURL(archivoSeleccionado);
+    var imagenSeleccionada = $("<img>")
+      .attr({
+        src: urlArchivo,
+        id: "imgcompra",
+      })
+      .css({
+        width: "200px",
+        height: "150px",
+        borderRadius: "80px",
+      });
+
+    $(this)
+      .closest("tr")
+      .find(".archivosubido")
+      .empty()
+      .append(imagenSeleccionada);
+
+    console.log("Archivo seleccionado:", archivoSeleccionado);
+  });
+
   $("#imagensum").click((e) => {
-    var imagenBoton = $("<button>")
-      .addClass("btn btn-info text-center visualizar")
+    var imagenBoton = $("<input>")
+      .attr("type", "file")
+      .attr("id", "fotoimagen")
+      .attr("name", "inputimagensubir")
+      .addClass("idimagenorden");
+
+    var imagenBotonDelete = $("<button>")
+      .addClass("btn btn-danger text-center delete")
+      .css("margin-right", "5px")
       .append(
-        $("<i>").addClass("icon-plus text-white").css("font-size", "1.em")
+        $("<i>").addClass("icon-trash text-white").css("font-size", "1.em")
       );
-    var nuevaFila = $("<tr>").append(
-      $("<td>").addClass("text-center").append(imagenBoton)
+
+    var imagenPredeterminadaURL = "./images/camara.png";
+
+    var nuevaFila = $("<tr id='filaTabla'>").append(
+      $("<td>").addClass("text-center").append(imagenBotonDelete),
+      $("<td>").addClass("text-center").append(imagenBoton),
+      $("<td>")
+        .addClass("text-center archivosubido")
+        .append("<img src='" + imagenPredeterminadaURL + "' alt='imgcompra'>")
     );
+
     $("#tablaimagenes").append(nuevaFila);
   });
+
   /*---------------------------------------------------------------- */
+  /*------ Al darle click en el tacho de la iamgen eliminara fila */
+  $(document).on("click", ".delete", function () {
+    var filaAEliminar = $(this).closest("#filaTabla");
+    filaAEliminar.remove();
+  });
+  /*------------------------------------------------------------ */
 });
 function isJSON(str) {
   try {

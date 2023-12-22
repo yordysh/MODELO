@@ -208,7 +208,9 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                                     </div>
                                 </div>
                             </div>
-
+                            <?php
+                            require_once "modalproveedor.php";
+                            ?>
                             <!-- Text input FORMA DE PAGO-->
                             <div class="form-outline mb-4 estiloselect">
                                 <label class="form-label">F.pago</label>
@@ -229,6 +231,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                         </div>
                         <!-- Text input moneda-->
                         <div class="form-outline mb-4">
+                            <!-- <input type="file" id="inputArchivo"  style="display:none;"> -->
                             <button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button>
                         </div>
                         <!-- Tabla para subir imagenes-->
@@ -239,6 +242,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                             <table id="tbimagenes" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
+                                        <th class="thtitulo" scope="col">ACCION</th>
                                         <th class="thtitulo" scope="col">SUBIR IMAGEN</th>
                                         <th class="thtitulo" scope="col">VISUALIZAR</th>
                                     </tr>
@@ -303,13 +307,12 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                         </div>
                 </div>
         </section>
+
     </main>
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
         Covifarma-2023
     </footer>
-    <?php
-    require_once "modalproveedor.php";
-    ?>
+
     <script src="./js/jquery-3.7.0.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/sweetalert2.all.min.js"></script>
