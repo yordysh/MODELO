@@ -557,6 +557,9 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_insumos_compras($idcompraaprobada);
     echo $respuesta;
 } elseif ($accion == 'guardarinsumoscompras') {
+    var_dump($_FILES['file']['name']);
+
+
     $fecha = trim($_POST['fecha']);
     $empresa = trim($_POST['empresa']);
     $personalcod = trim($_POST['personalcod']);
@@ -571,6 +574,8 @@ if ($accion == 'insertar') {
     $datosSeleccionadosInsumos = $_POST['datosSeleccionadosInsumos'];
     $idcompraaprobada = $_POST['idcompraaprobada'];
 
+
+    exit();
     $respuesta = c_almacen::c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
     echo $respuesta;
 } elseif ($accion == 'mostrarcompracomprobante') {

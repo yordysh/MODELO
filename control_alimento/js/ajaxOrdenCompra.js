@@ -277,7 +277,9 @@ $(function () {
   /*--------- insertar orden de compra de los insumos con precio-----*/
 
   $("#insertarOrdenCompraInsumos").on("click", (e) => {
+    // $("#formulariocompraordend").submit((e) => {
     e.preventDefault();
+
     let fecha = $("#fecha").val();
     let empresa = $("#selectempresa").val();
     let personal = $("#personal").val();
@@ -315,24 +317,14 @@ $(function () {
 
     $("#tablaimagenes tr").each(function () {
       const filaimagen = $(this);
-
-      // Obtener el ID del elemento actual
-      const elementoId = filaimagen.attr("id");
       const fileInput = filaimagen.find("td:eq(1) input[type=file]")[0];
 
-      if (fileInput.files.length > 0) {
+      if (fileInput && fileInput.files.length > 0) {
         const file = fileInput.files[0];
-        const datosFilaImagen = {
-          elementoId: elementoId,
-          imagenval: $(fileInput).attr("fotoimagen"),
-          file: file,
-        };
-        dataimagenes.push(datosFilaImagen);
+        dataimagenes.push(file);
       }
     });
-
     console.log(dataimagenes);
-
     if (!personal) {
       Swal.fire({
         icon: "info",
@@ -411,71 +403,99 @@ $(function () {
       return;
     }
     // const accion = "guardarinsumoscompras";
+    const formData = new FormData();
+    formData.append("accion", "guardarinsumoscompras");
+    formData.append("fecha", $("#fecha").val());
+    formData.append("empresa", $("#selectempresa").val());
+    formData.append(" personal", $("#personal").val());
+    formData.append("personalcod", $("#codpersonal").val());
+    formData.append("oficina", $("#selectoficina").val());
+    formData.append("proveedor", $("#proveedor").val());
+    formData.append("proveedordireccion", $("#direccion").val());
+    formData.append("proveedorruc", $("#ruc_principal").val());
+    formData.append("proveedordni", $("#dni_principal").val());
+    formData.append("formapago", $("#selectformapago").val());
+    formData.append("moneda", $("#selectmoneda").val());
+    formData.append("observacion", $("#observacionorden").val());
+    formData.append(
+      "idcompraaprobada",
+      $("#tmostrarordencompraaprobado tr:eq(1)").attr(
+        "id_orden_compra_aprobada"
+      )
+    );
+    formData.append("datosSeleccionadosInsumos", datosSeleccionadosInsumos);
+    // formData.append("dataimagenes", JSON.stringify(dataimagenes));
+    for (let i = 0; i < dataimagenes.length; i++) {
+      formData.append("file[]", dataimagenes[i]);
+    }
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      // data: {
+      //   accion: accion,
+      //   fecha: fecha,
+      //   empresa: empresa,
+      //   personalcod: personalcod,
+      //   oficina: oficina,
+      //   proveedor: proveedor,
+      //   proveedordireccion: proveedordireccion,
+      //   proveedorruc: proveedorruc,
+      //   proveedordni: proveedordni,
+      //   formapago: formapago,
+      //   moneda: moneda,
+      //   observacion: observacion,
+      //   datosSeleccionadosInsumos: datosSeleccionadosInsumos,
+      //   idcompraaprobada: idcompraaprobada,
+      //   dataimagenes: dataimagenes,
+      // },
+      data: formData,
+      contentType: false,
+      processData: false,
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
+      success: function (response) {
+        if (response == "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos se han guardado correctamente.",
+            icon: "success",
+            allowOutsideClick: false,
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#fecha").val(fechaActual);
+              $("#selectempresa").val("00003").trigger("change");
+              $("#personal").val("");
+              $("#selectoficina").val("00026").trigger("change");
+              $("#proveedor").val("");
+              $("#direccion").val("");
+              $("#ruc_principal").val("");
+              $("#dni_principal").val("");
+              $("#observacionorden").val("");
+              $("#selectformapago").val("E").trigger("change");
+              $("#selectmoneda").val("S").trigger("change");
+              $("#tablainsumoscomprar").empty();
 
-    // $.ajax({
-    //   url: "./c_almacen.php",
-    //   type: "POST",
-    //   data: {
-    //     accion: accion,
-    //     fecha: fecha,
-    //     empresa: empresa,
-    //     personalcod: personalcod,
-    //     oficina: oficina,
-    //     proveedor: proveedor,
-    //     proveedordireccion: proveedordireccion,
-    //     proveedorruc: proveedorruc,
-    //     proveedordni: proveedordni,
-    //     formapago: formapago,
-    //     moneda: moneda,
-    //     observacion: observacion,
-    //     datosSeleccionadosInsumos: datosSeleccionadosInsumos,
-    //     idcompraaprobada: idcompraaprobada,
-    //   },
-    //   beforeSend: function () {
-    //     $(".preloader").css("opacity", "1");
-    //     $(".preloader").css("display", "block");
-    //   },
-    //   success: function (response) {
-    //     if (response == "ok") {
-    //       Swal.fire({
-    //         title: "¡Guardado exitoso!",
-    //         text: "Los datos se han guardado correctamente.",
-    //         icon: "success",
-    //         allowOutsideClick: false,
-    //         confirmButtonText: "Aceptar",
-    //       }).then((result) => {
-    //         if (result.isConfirmed) {
-    //           $("#fecha").val(fechaActual);
-    //           $("#selectempresa").val("00003").trigger("change");
-    //           $("#personal").val("");
-    //           $("#selectoficina").val("00026").trigger("change");
-    //           $("#proveedor").val("");
-    //           $("#direccion").val("");
-    //           $("#ruc_principal").val("");
-    //           $("#dni_principal").val("");
-    //           $("#observacionorden").val("");
-    //           $("#selectformapago").val("E").trigger("change");
-    //           $("#selectmoneda").val("S").trigger("change");
-    //           $("#tablainsumoscomprar").empty();
-
-    //           $("#nombreproveedor").val("");
-    //           $("#direccionproveedor").val("");
-    //           $("#ruc").val("");
-    //           $("#dniproveedor").val("");
-    //           $("#tablainsumoscomprarprecio").empty();
-    //           cargarOrdenCompraAprobada();
-    //         }
-    //       });
-    //     }
-    //   },
-    //   error: function (xhr, status, error) {
-    //     console.error("Error al cargar los datos de la tabla:", error);
-    //   },
-    //   complete: function () {
-    //     $(".preloader").css("opacity", "0");
-    //     $(".preloader").css("display", "none");
-    //   },
-    // });
+              $("#nombreproveedor").val("");
+              $("#direccionproveedor").val("");
+              $("#ruc").val("");
+              $("#dniproveedor").val("");
+              $("#tablainsumoscomprarprecio").empty();
+              cargarOrdenCompraAprobada();
+            }
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
+      },
+    });
   });
   /*--------------------------------------------------------------- */
   /*--------- Cuando doy click en deposito me activa ------------- */

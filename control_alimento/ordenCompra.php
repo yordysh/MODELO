@@ -105,7 +105,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
         <section>
             <div class="container g-4 row">
                 <div class="main">
-                    <form method="post" action="" id="formulariocompraorden">
+                    <form method="post" action="" id="formulariocompraordend">
                         <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">
                         <input type="hidden" id="vroficina" name="vroficina" value="<?php echo $codoficina; ?>">
 
@@ -280,7 +280,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                         <!-- Insertar nuevas cantidades -->
                         <div class="contenedorpdf">
                             <div class="">
-                                <button id="insertarOrdenCompraInsumos" class="btn btn-primary boton-insertar">Guardar</button>
+                                <button type="submit" id="insertarOrdenCompraInsumos" class="btn btn-primary boton-insertar">Guardar</button>
                             </div>
                             <div class="estilorequerimiento">
                                 <select name="select_requerimiento" id="idrequerimientotemp">
@@ -305,6 +305,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                                 <a class="btn btn-success" href="#" onclick="generarPDF()">VISUALIZAR ORDEN COMPRA</a>
                             </div>
                         </div>
+                    </form>
                 </div>
         </section>
 
