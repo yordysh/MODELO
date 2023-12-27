@@ -324,7 +324,6 @@ $(function () {
         dataimagenes.push(file);
       }
     });
-    console.log(dataimagenes);
     if (!personal) {
       Swal.fire({
         icon: "info",
@@ -402,6 +401,31 @@ $(function () {
       });
       return;
     }
+
+    var inputfilevacio = false;
+    var tablaVacia = true;
+    $("#tbimagenes tbody input").each(function () {
+      if ($(this).val() === "") {
+        inputfilevacio = true;
+      }
+    });
+    if (formapago === "D" && $("#tbimagenes tbody tr").length > 0) {
+      tablaVacia = false;
+    }
+
+    // Mostrar la alerta solo si formapago es "D" y la tabla está vacía
+    if (formapago === "D" && tablaVacia) {
+      Swal.fire({
+        icon: "info",
+        text: "La tabla está vacía. Debes añadir al menos una imagen.",
+      });
+    } else if (inputfilevacio) {
+      // Mostrar la alerta si hay algún campo de archivo vacío
+      Swal.fire({
+        icon: "info",
+        text: "Debes seleccionar una imagen.",
+      });
+    }
     // const accion = "guardarinsumoscompras";
     const formData = new FormData();
     formData.append("accion", "guardarinsumoscompras");
@@ -423,31 +447,18 @@ $(function () {
         "id_orden_compra_aprobada"
       )
     );
-    formData.append("datosSeleccionadosInsumos", datosSeleccionadosInsumos);
-    // formData.append("dataimagenes", JSON.stringify(dataimagenes));
+    for (let j = 0; j < datosSeleccionadosInsumos.length; j++) {
+      const objetoInsumo = datosSeleccionadosInsumos[j];
+      const objetoInsumoString = JSON.stringify(objetoInsumo);
+      formData.append("datosSeleccionadosInsumos[]", objetoInsumoString);
+    }
+
     for (let i = 0; i < dataimagenes.length; i++) {
       formData.append("file[]", dataimagenes[i]);
     }
     $.ajax({
       url: "./c_almacen.php",
       type: "POST",
-      // data: {
-      //   accion: accion,
-      //   fecha: fecha,
-      //   empresa: empresa,
-      //   personalcod: personalcod,
-      //   oficina: oficina,
-      //   proveedor: proveedor,
-      //   proveedordireccion: proveedordireccion,
-      //   proveedorruc: proveedorruc,
-      //   proveedordni: proveedordni,
-      //   formapago: formapago,
-      //   moneda: moneda,
-      //   observacion: observacion,
-      //   datosSeleccionadosInsumos: datosSeleccionadosInsumos,
-      //   idcompraaprobada: idcompraaprobada,
-      //   dataimagenes: dataimagenes,
-      // },
       data: formData,
       contentType: false,
       processData: false,
@@ -477,6 +488,8 @@ $(function () {
               $("#selectformapago").val("E").trigger("change");
               $("#selectmoneda").val("S").trigger("change");
               $("#tablainsumoscomprar").empty();
+              $("#tablaimagenes").empty();
+              $("#imagensum").prop("disabled", true);
 
               $("#nombreproveedor").val("");
               $("#direccionproveedor").val("");

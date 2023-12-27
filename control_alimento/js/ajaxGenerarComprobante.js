@@ -216,33 +216,6 @@ $(function () {
     });
   });
   /*------------------------------------------------------------- */
-  /*----------------------AL SELECCIONAR EN DOLARES-----------------*/
-  // $("#selectmoneda").on("input", function () {
-  //   let tipomonedacambio = $("#selectmoneda").val();
-  //   if (tipomonedacambio === "D") {
-  //     const accion = "consultadecambiodemoneda";
-
-  //     $.ajax({
-  //       url: "./c_almacen.php",
-  //       type: "POST",
-  //       data: {
-  //         accion: accion,
-  //       },
-  //       success: function (response) {
-  //         if (isJSON(response)) {
-  //           let tipocambio = JSON.parse(response);
-  //           console.log(tipocambio);
-  //           $("#tipocambio").val(tipocambio[0].VENTA);
-  //         }
-  //       },
-  //       error: function (xhr, status, error) {
-  //         console.error("Error al cargar los datos:", error);
-  //       },
-  //     });
-  //   } else {
-  //     $("#tipocambio").val("");
-  //   }
-  // });
 
   // $("#tipocambiosunat").on("input", function () {
   function cargarcambiosunat() {
@@ -294,6 +267,7 @@ $(function () {
 
     const fileInput = document.getElementById("foto");
     const file = fileInput.files[0];
+    console.log(file);
     formData.append("foto", file);
 
     let serieform = $("#serie").val();

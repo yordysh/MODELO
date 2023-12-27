@@ -366,7 +366,7 @@ if ($accion == 'insertar') {
     $codpersonal = ($_POST['codpersonal']);
     $union = ($_POST['union']);
     $unionEnvase = ($_POST['unionEnvase']);
-    // $unionItem = ($_POST['unionItem']); 
+    // $unionItem = ($_POST['unionItem']);
     $unionItem = json_decode($_POST['unionItem']);
 
 
@@ -557,7 +557,9 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_insumos_compras($idcompraaprobada);
     echo $respuesta;
 } elseif ($accion == 'guardarinsumoscompras') {
-    var_dump($_FILES['file']['name']);
+    // $totalimagenes = count($_FILES['file']['name']);
+    // var_dump("total " . $totalimagenes);
+    // var_dump($_FILES['file']['name']);
 
 
     $fecha = trim($_POST['fecha']);
@@ -573,10 +575,24 @@ if ($accion == 'insertar') {
     $observacion = strtoupper(trim($_POST['observacion']));
     $datosSeleccionadosInsumos = $_POST['datosSeleccionadosInsumos'];
     $idcompraaprobada = $_POST['idcompraaprobada'];
+    // $dataimagenesfile = $_FILES['file']['name'];
 
 
-    exit();
-    $respuesta = c_almacen::c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
+    if (isset($_FILES['file'])) {
+        $dataimagenesfile = $_FILES['file'];
+        $respuesta = c_almacen::c_guardar_insumos_compras_imagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile);
+    } else {
+        $respuesta = c_almacen::c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
+    }
+
+
+    // var_dump($_FILES['file']);
+    // exit;
+    echo $respuesta;
+} elseif ($accion == 'reporteordencompra') {
+    $idrequerimientotemp = trim($_POST['idrequerimientotemp']);
+
+    $respuesta = c_almacen::c_generar_reporte_orden_compra($idrequerimientotemp);
     echo $respuesta;
 } elseif ($accion == 'mostrarcompracomprobante') {
     $respuesta = c_almacen::c_mostrar_compra_comprobante();
@@ -613,7 +629,6 @@ if ($accion == 'insertar') {
     $serie = trim($_POST['serie']);
     $correlativo = trim($_POST['correlativo']);
     $observacion = trim($_POST['observacion']);
-
 
     if (isset($_FILES['foto'])) {
         // Validar que se haya seleccionado una imagen
@@ -3619,12 +3634,11 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada)
+    static function c_guardar_insumos_compras_imagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile)
     {
         $m_formula = new m_almacen();
 
-
-        $respuesta = $m_formula->GuardarInsumosCompras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
+        $respuesta = $m_formula->GuardarInsumosComprasImagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile);
 
         if ($respuesta) {
             return "ok";
@@ -3632,7 +3646,40 @@ class c_almacen
             return "error";
         };
     }
+    static function c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada)
+    {
+        $m_formula = new m_almacen();
+        $respuesta = $m_formula->GuardarInsumosCompras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
+        if ($respuesta) {
+            return "ok";
+        } else {
+            return "error";
+        };
+    }
+    static function c_generar_reporte_orden_compra($idrequerimientotemp)
+    {
+        try {
 
+            $mostrar = new m_almacen();
+            $cab = $mostrar->MostrarReporteOrdenCompra($idrequerimientotemp);
+            for ($i = 0; $i < count($cab); $i++) {
+                $item = $mostrar->MostrarFacturaItemPDF($cab[$i][0]);
+                $valor = $mostrar->MostrarImagenFactura($cab[$i][0]);
+
+                // $imagen = !empty($valor) && isset($valor[$i]["IMAGEN"]) ? base64_encode($valor[$i]["IMAGEN"]) : "";
+                $cab[$i][7] = '5';
+                array_push($cab[$i], $item);
+            }
+            $dato = array(
+                'd' => $cab,
+                'c' => count($cab),
+            );
+
+            echo json_encode($dato, JSON_FORCE_OBJECT);
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
 
 

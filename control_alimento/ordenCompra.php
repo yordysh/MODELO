@@ -21,6 +21,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../librerias/jquery_ajax/js/ajax_libs_jquery_3.3.1_jquery.min.js"></script>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/responsiveOrdenCompra.css">
     <!--====== Favicon Icon ======-->
@@ -30,7 +31,10 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
     <link rel="stylesheet" href="./styleIcons/style.css">
     <link rel="stylesheet" href="./css/select2.min.css">
     <title>Covifarma</title>
-
+    <!-- Agregar la librería jsPDF -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="./js/jsordencompra.js"></script>
 </head>
 
 <body>
@@ -302,7 +306,8 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
 
                             </div>
                             <div>
-                                <a class="btn btn-success" href="#" onclick="generarPDF()">VISUALIZAR ORDEN COMPRA</a>
+                                <!-- <a class="btn btn-success" href="#" onclick="generarPDF()">VISUALIZAR ORDEN COMPRA</a> -->
+                                <button id="generarPDF" class="btn btn-success estilodosimetria">VISUALIZAR ORDEN COMPRA</button>
                             </div>
                         </div>
                     </form>
@@ -320,7 +325,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
     <script src="./js/ajaxOrdenCompra.js?v=0.001"></script>
     <script src="../js/menu_a.js"></script>
     <script src="./js/select2.min.js"></script>
-    <script>
+    <!-- <script>
         function generarPDF() {
             var seleccion = document.getElementById("idrequerimientotemp").value;
             // Enviar los valores a tu script de generación de PDF
@@ -329,7 +334,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                 seleccion;
             window.open(url, "_blank");
         }
-    </script>
+    </script> -->
 </body>
 
 </html>
