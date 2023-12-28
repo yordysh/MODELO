@@ -3665,9 +3665,16 @@ class c_almacen
             for ($i = 0; $i < count($cab); $i++) {
                 $item = $mostrar->MostrarFacturaItemPDF($cab[$i][0]);
                 $valor = $mostrar->MostrarImagenFactura($cab[$i][0]);
+                $codigo = $valor["COD_TMPCOMPROBANTE"];
+                if (isset($codigo)) {
+                    $vg = $codigo;
+                } else {
+                    $vg = '';
+                }
+                var_dump($vg);
 
                 // $imagen = !empty($valor) && isset($valor[$i]["IMAGEN"]) ? base64_encode($valor[$i]["IMAGEN"]) : "";
-                $cab[$i][7] = '5';
+                // $cab[$i][6] = $imagen;
                 array_push($cab[$i], $item);
             }
             $dato = array(
