@@ -16,10 +16,8 @@ function exportardatoscompra(obj) {
     let fecha = l[1];
     let hora = l[2];
     let proveedor = l[3];
-    let material = l[7];
+    let material = l[8];
     let imagenes = l[6];
-    console.log(imagenes);
-
     if (i % 1 == 0 && i != 0) {
       doc.addPage();
     }
@@ -31,33 +29,114 @@ function exportardatoscompra(obj) {
       doc.roundedRect(x, y, width, height, radius, radius, "FD"); // 'FD' para dibujar y rellenar
     }
     // Cabecera de la factura dentro de un rectángulo con esquinas ovaladas
-    roundedRect(15, 5, 150, 60, 10);
+    roundedRect(15, 10, 150, 54, 10);
+
+    function roundedTopSombreado(
+      x,
+      y,
+      width,
+      height,
+      radiusTopLeft,
+      radiusTopRight
+    ) {
+      doc.setDrawColor(0);
+      doc.setFillColor(212, 138, 212); // Color blanco
+
+      doc.moveTo(x + radiusTopLeft, y);
+      doc.lineTo(x + width - radiusTopRight, y);
+      doc.curveTo(
+        x + width - radiusTopRight / 2,
+        y,
+        x + width,
+        y + radiusTopRight / 2,
+        x + width,
+        y + radiusTopRight
+      );
+      doc.lineTo(x + width, y + height);
+      doc.lineTo(x, y + height);
+      doc.lineTo(x, y + radiusTopLeft);
+      doc.curveTo(
+        x,
+        y + radiusTopLeft / 2,
+        x + radiusTopLeft / 2,
+        y,
+        x + radiusTopLeft,
+        y
+      );
+
+      doc.fill();
+    }
+    // Uso de la función con fondo de altura 20 y radios de borde para las esquinas superiores
+    roundedTopSombreado(15, 10, 150, 10, 10, 10);
+
+    function roundedBottomSombreado(
+      x,
+      y,
+      width,
+      height,
+      radiusBottomLeft,
+      radiusBottomRight
+    ) {
+      doc.setDrawColor(0);
+      doc.setFillColor(200, 182, 242);
+
+      doc.moveTo(x, y);
+      doc.lineTo(x + width, y);
+      doc.lineTo(x + width, y + height - radiusBottomRight);
+      doc.curveTo(
+        x + width,
+        y + height - radiusBottomRight / 2,
+        x + width - radiusBottomRight / 2,
+        y + height,
+        x + width - radiusBottomRight,
+        y + height
+      );
+      doc.lineTo(x + radiusBottomLeft, y + height);
+      doc.curveTo(
+        x + radiusBottomLeft / 2,
+        y + height,
+        x,
+        y + height - radiusBottomLeft / 2,
+        x,
+        y + height - radiusBottomLeft
+      );
+
+      doc.fill();
+    }
+    // Uso de la función con fondo de altura 20 y radios de borde para las esquinas superiores
+    roundedBottomSombreado(15.3, 20.1, 149.3, 43.5, 10, 10);
+
     // Texto en la cabecera
     doc.setFontSize(14);
-    doc.text("Factura", 80, 20);
-    doc.setFontSize(10);
-    doc.text("N°: " + numerofactura, 20, 30);
-    doc.text("Fecha: " + fecha, 20, 40);
-    doc.text("Hora: " + hora, 20, 50);
-    doc.text("Proveedor: " + proveedor, 20, 60);
+    // Pongo de color blanco la letra
+    doc.setTextColor(255, 255, 255);
+    doc.text("Factura", 80, 17);
+    doc.setFontSize(12);
+    doc.text("N°: " + numerofactura, 20, 25);
+    doc.text("Fecha: " + fecha, 20, 35);
+    doc.text("Hora: " + hora, 20, 45);
+    doc.text("Proveedor: " + proveedor, 20, 55);
+    // Reseteo el color y pongo por defecto (black)
+    doc.setTextColor(0, 0, 0);
     // Línea divisoria entre la cabecera y el cuerpo
     doc.setLineWidth(0.5);
-    doc.line(10, 80, 200, 80);
+    doc.line(10, 72, 200, 72);
     // generar la data productos
     let suma = 0;
     let yPos;
     $.each(material, function (j, k) {
-      yPos = 100 + j * 20;
+      yPos = 90 + j * 15;
       let valorsumacantidad = parseFloat(k[4]);
       // Cuerpo de la factura
-      doc.text("Descripción", 10, 90);
-      doc.text("Cantidad", 95, 90);
+      doc.setFontSize(10);
+      doc.text("Producto", 10, 80);
+      doc.text("Cantidad", 95, 80);
       // doc.text("Precio Unitario", 120, 90);
-      doc.text("Total", 170, 90);
+      doc.text("Total", 170, 80);
       // DAta de productos
+      doc.setFontSize(8);
       doc.text(k[2], 10, yPos);
       doc.text(k[3], 95, yPos);
-      // doc.text("$50.00", 130, yPos);
       doc.text(k[4], 170, yPos);
       // Línea divisoria entre las filas
       yPos += 5; // ajuste de vertical
@@ -68,15 +147,31 @@ function exportardatoscompra(obj) {
     // Total
     doc.text("Total:", 120, yPos + 10); // Ajusta la posición vertical aquí
     doc.text(suma.toString(), 170, yPos + 10);
-    // imageRow.push({
-    //   image: "data:image/png;base64," + imagenes,
-    //   width: 250,
-    //   height: 90,
-    // });
-    // var logo = new Image();
-    // logo.src = "data:image/png;base64," + imagenes;
-    // console.log(imagenes);
-    // doc.addImage(logo, "PNG", 10, 10, 50, 70);
+
+    if (imagenes[0] == null) {
+      doc.text("", 10, 10);
+    } else {
+      let imagesPerRow = 3; // Número máximo de imágenes por fila
+      let imagesInCurrentRow = 0;
+      let offsetY;
+      $.each(imagenes, function (f, q) {
+        if (imagesInCurrentRow === 0) {
+          offsetY = f > 0 ? offsetY + 80 : 0;
+        }
+
+        var logo = new Image();
+        logo.src = "data:image/png;base64," + q;
+
+        var offsetX = 10 + f * 60;
+        doc.addImage(logo, "PNG", offsetX, 20 + yPos + offsetY, 50, 70);
+        imagesInCurrentRow++;
+
+        if (imagesInCurrentRow === imagesPerRow) {
+          // Se alcanzó el número máximo de imágenes por fila, reiniciar contador
+          imagesInCurrentRow = 0;
+        }
+      });
+    }
   });
   window.open(doc.output("bloburl"), "_blank");
 }

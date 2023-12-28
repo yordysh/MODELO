@@ -557,11 +557,6 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_insumos_compras($idcompraaprobada);
     echo $respuesta;
 } elseif ($accion == 'guardarinsumoscompras') {
-    // $totalimagenes = count($_FILES['file']['name']);
-    // var_dump("total " . $totalimagenes);
-    // var_dump($_FILES['file']['name']);
-
-
     $fecha = trim($_POST['fecha']);
     $empresa = trim($_POST['empresa']);
     $personalcod = trim($_POST['personalcod']);
@@ -3665,21 +3660,28 @@ class c_almacen
             for ($i = 0; $i < count($cab); $i++) {
                 $item = $mostrar->MostrarFacturaItemPDF($cab[$i][0]);
                 $valor = $mostrar->MostrarImagenFactura($cab[$i][0]);
-                $codigo = $valor["COD_TMPCOMPROBANTE"];
-                if (isset($codigo)) {
-                    $vg = $codigo;
+
+                $imagen = [];
+                for ($j = 0; $j < count($valor); $j++) {
+                    $imagen[] =  base64_encode($valor[$j][2]);
+                }
+
+                if (isset($imagen)) {
+                    $vg = $imagen;
                 } else {
                     $vg = '';
                 }
-                var_dump($vg);
+                // var_dump($codigo);
+                // var_dump($cab[$i][0]);
 
-                // $imagen = !empty($valor) && isset($valor[$i]["IMAGEN"]) ? base64_encode($valor[$i]["IMAGEN"]) : "";
-                // $cab[$i][6] = $imagen;
+                //$imagen = !empty($valor) && isset($valor[$i]["IMAGEN"]) ? base64_encode($valor[$i]["IMAGEN"]) : "";
+                $cab[$i][6] = $vg;
+                $cab[$i][7] = count($cab);
                 array_push($cab[$i], $item);
             }
             $dato = array(
                 'd' => $cab,
-                'c' => count($cab),
+                // 'c' => count($cab),
             );
 
             echo json_encode($dato, JSON_FORCE_OBJECT);

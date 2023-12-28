@@ -921,10 +921,12 @@ $(function () {
         data: { accion: accion },
         success: function (response) {
           let task = JSON.parse(response);
+          console.log(task);
           if (task.length > 0) {
             // let task = JSON.parse(response);
             codrequerimiento = task[0].COD_TMPREQUERIMIENTO;
             codordencompra = task[0].COD_ORDEN_COMPRA;
+
             let htmlContent = "<h1>¡Listo para producción!</h1>";
             htmlContent += "<ul>";
             task.forEach(function (producto) {
@@ -943,6 +945,7 @@ $(function () {
             }).then((result) => {
               if (result.isConfirmed) {
                 const accion = "actualizarrequerimientoitem";
+
                 $.ajax({
                   url: "../control_alimento/c_almacen.php",
                   type: "POST",

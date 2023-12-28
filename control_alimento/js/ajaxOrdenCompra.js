@@ -524,6 +524,36 @@ $(function () {
   /*------------------------------------------------------------- */
 
   /*------------ Cuando doy click en el boton añadir una imagen ----- */
+  // Función para manejar las mutaciones en la tabla
+  function handleTableMutations(mutationsList, observer) {
+    mutationsList.forEach((mutation) => {
+      if (mutation.addedNodes.length > 0) {
+        // Al menos un nodo ha sido agregado a la tabla
+        mutation.addedNodes.forEach((node) => {
+          if (
+            node.nodeType === 1 &&
+            node.tagName === "TR" &&
+            $(node).closest("#tablaimagenes").length > 0
+          ) {
+            // Mostrar la alerta indicando que se añadió una nueva fila
+            Swal.fire({
+              icon: "success",
+              title: "Se añadio una nueva fila",
+              showConfirmButton: false,
+              timer: 900,
+            });
+          }
+        });
+      }
+    });
+  }
+  // Crear un nuevo objeto MutationObserver con la función de manejo
+  const observer = new MutationObserver(handleTableMutations);
+
+  // Configurar el observer para observar cambios en la tabla y sus descendientes
+  const config = { childList: true, subtree: true };
+  observer.observe(document.getElementById("tablaimagenes"), config);
+
   $("#tablaimagenes").on("change", ".idimagenorden", function () {
     var archivoSeleccionado = $(this).prop("files")[0];
     var urlArchivo = URL.createObjectURL(archivoSeleccionado);
