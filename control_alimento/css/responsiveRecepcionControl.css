@@ -2,9 +2,6 @@ main {
   width: 88%;
   margin: 0 auto;
   padding: 6em;
-  /*border-style: solid;
-        border-width: 1px;
-        border-radius: 8px;*/
   height: 57%;
 }
 
@@ -331,6 +328,12 @@ section {
   margin-left: 35rem;
   margin-right: 15px;
 }
+
+/* .fixed-header {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+} */
 /*-------------- Estilo de responsive ---------------------*/
 
 @media screen and (max-width: 1370px) {
@@ -379,29 +382,6 @@ section {
     padding-top: 6em;
     height: 57%;
   }
-  /* 
-  [data-titulo] {
-    text-align: left !important;
-  }
-  .table-responsive table tr {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid grey;
-  }
-
-  .table-responsive table td[data-titulo] {
-    display: flex;
-  }
-
-  .table-responsive table td[data-titulo]::before {
-    content: attr(data-titulo);
-    width: 150px;
-    font-weight: bold;
-  } 
-
-  .table-responsive table thead {
-    display: none;
-  }*/
 
   #selectInfra {
     width: 100%;
@@ -538,25 +518,7 @@ section {
   .contenedor {
     display: block;
   }
-  /* .table-responsive table tr {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid grey;
-  }
 
-  .table-responsive table td[data-titulo] {
-    display: flex;
-  }
-
-  .table-responsive table td[data-titulo]::before {
-    content: attr(data-titulo);
-    width: 150px;
-    font-weight: bold;
-  }
-
-  .table-responsive table thead {
-    display: none;
-  } */
   .buttonproveedor {
     padding: 0;
     height: 0;

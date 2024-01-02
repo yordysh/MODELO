@@ -22,7 +22,6 @@ $(function () {
   $("#selectProductoCombo").change(function () {
     let idp = $("#selectProductoCombo").val();
     let idProductoCombo = $(this).find("option:selected").attr("id_reque");
-
     $.ajax({
       data: {
         idProductoCombo: idProductoCombo,
@@ -45,11 +44,11 @@ $(function () {
   });
   /*------------------------------------------------------------------------------ */
   /*---------Verficar si el producto seleccionado es menor a productos iguales-------------- */
-  $("#selectProductoCombo").on("change", (e) => {
-    e.preventDefault();
+  // $(".selectProducto").on("change", (e) => {
+  $("#selectProductoCombo").change(function () {
+    // e.preventDefault();
     let idrequerimiento = $(this).find("option:selected").attr("id_reque");
     let codigoproductoverifica = $("#selectProductoCombo").val();
-
     let accion = "verificaregistromenorconproducto";
 
     $.ajax({

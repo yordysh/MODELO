@@ -10,7 +10,7 @@
                     <input type="hidden" id="taskId">
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre de infraestructura</label>
-                        <input type="text" id="nombreinfraestructura" name="nombreinfraestructura" class="form-control" required>
+                        <input type="text" id="nombreinfraestructura" name="nombreinfraestructura" class="form-control" oninput="this.value = this.value.toUpperCase()" required>
                     </div>
                 </form>
             </div>

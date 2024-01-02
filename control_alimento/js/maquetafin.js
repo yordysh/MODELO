@@ -791,8 +791,8 @@ function generar_pdfSensorial() {
                         doc.line(6, 32, 6, 128); //primera linea vertical/**/  //50
                         doc.line(21, 32, 21, 128); //segunda linea vertical
                         doc.line(39, 32, 39, 128); //tercera linea vertical
-                        doc.line(81, 32, 81, 128); // cuarta linea vertical
-                        doc.line(95, 32, 95, 128); //quinta linea vertical
+                        doc.line(88, 32, 88, 128); // cuarta linea vertical
+                        doc.line(99, 32, 99, 128); //quinta linea vertical
                         doc.line(111, 32, 111, 128); //sexta linea vertical
 
                         doc.line(124, 43.5, 124, 128); //septima linea vertical
@@ -815,8 +815,10 @@ function generar_pdfSensorial() {
                         doc.text("HORA DEL", 22, 38);
                         doc.text("ANALISIS ", 22, 42);
                         doc.text("NOMBRE DEL PRODUCTO", 40, 38);
-                        doc.text("Nº LOTE ", 82, 38);
-                        doc.text("Nº BACH.", 96, 38);
+                        doc.text("Nº", 89, 38);
+                        doc.text("LOTE ", 89, 42);
+                        doc.text("Nº", 100, 38);
+                        doc.text("BACH.", 100, 42);
                         doc.text("EVALUACIÓN SENSORIAL", 112, 38);
                         doc.text("(PRODUCTO EN POLVO)", 112, 42);
                         doc.text("Color", 112, 47);
@@ -847,8 +849,8 @@ function generar_pdfSensorial() {
                                 doc.text(formatDateAnio(item1.items[i].FECHA), 8, s - 2); // Columna de Fecha
                                 doc.text(item1.items[i].HORA, 24, s - 2); // Columna de Hora del Analisis
                                 doc.text(item1.items[i].DES_PRODUCTO, 39.5, s - 2); // Columna de Nombre del Producto
-                                doc.text(item1.items[i].NUM_PRODUCION_LOTE, 84, s - 2); // Columna de Número de Lote
-                                doc.text(item1.items[i].N_BACHADA, 98, s - 2); // Columna de Número de Bachada.
+                                doc.text(item1.items[i].NUM_PRODUCION_LOTE, 89, s - 2); // Columna de Número de Lote
+                                doc.text(item1.items[i].N_BACHADA, 102, s - 2); // Columna de Número de Bachada.
 
                                 if (item1.items[i].EVA_POL_COL === '1') {
                                     doc.addImage(imgCheck.src, 'PNG', 114, s - 4, 2, 2);

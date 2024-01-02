@@ -571,7 +571,7 @@ class m_almacen
             $FECHA_TOTAL = date('d-m-Y', strtotime($FECHA_TOTAL . '+1 day'));
           }
 
-          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_ZONA,COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS,VERSION,CODIGO,COD_PERSONAL) VALUES('$valorSeleccionado','$NOMBRE_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','$NDIAS','$VERSION','$codigo','$codpersonal')");
+          $stm1 = $this->bd->prepare("INSERT INTO T_ALERTA(COD_ZONA,COD_INFRAESTRUCTURA,FECHA_CREACION,FECHA_TOTAL,N_DIAS_POS,VERSION,CODIGO,COD_PERSONAL) VALUES('$valorSeleccionado','$NOMBRE_INFRAESTRUCTURA','$FECHA','$FECHA_TOTAL','2','$VERSION','$codigo','$codpersonal')");
         }
         $actualizainfra = $this->bd->prepare("UPDATE T_INFRAESTRUCTURA SET NDIAS='$NDIAS' WHERE COD_ZONA='$valorSeleccionado' AND COD_INFRAESTRUCTURA='$NOMBRE_INFRAESTRUCTURA'");
         $actualizainfra->execute();
@@ -4709,55 +4709,61 @@ class m_almacen
     }
   }
 
-  public function selecciondestockactual($codigodeproducto)
-  {
-    try {
-      $valorstock = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$codigodeproducto'");
-      $valorstock->execute();
-      $valstock = $valorstock->fetch(PDO::FETCH_ASSOC);
-      $codigostock = $valstock['STOCK_ACTUAL'];
-      return $codigostock;
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
+  // public function selecciondestockactual($codigodeproducto)
+  // {
+  //   try {
+  //     $valorstock = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$codigodeproducto'");
+  //     $valorstock->execute();
+  //     $valstock = $valorstock->fetch(PDO::FETCH_ASSOC);
+  //     $codigostock = $valstock['STOCK_ACTUAL'];
+  //     return $codigostock;
+  //   } catch (Exception $e) {
+  //     die($e->getMessage());
+  //   }
+  // }
 
   public function actualizar_requerimiento_item($codrequerimiento, $codordencompra)
   {
     try {
       $this->bd->beginTransaction();
+      $mostrar = new m_almacen();
+
       $mostrardatospdf = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='A' WHERE COD_REQUERIMIENTO='$codrequerimiento'");
       $actualizaritemrequerimiento = $mostrardatospdf->execute();
+
       $actualizarestadooc = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='C' WHERE COD_ORDEN_COMPRA='$codordencompra'");
       $actualizarestadooc->execute();
 
-      // $codigoproductoconta = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPORDEN_COMPRA_ITEM WHERE COD_ORDEN_COMPRA='$codordencompra'");
-      // $codigoproductoconta->execute();
-      // $codCont = $codigoproductoconta->fetch(PDO::FETCH_ASSOC);
-      // $codigoproCont = $codCont['COUNT'];
+      $codigoproductoconta = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPORDEN_COMPRA_ITEM WHERE COD_ORDEN_COMPRA='$codordencompra'");
+      $codigoproductoconta->execute();
+      $codCont = $codigoproductoconta->fetch(PDO::FETCH_ASSOC);
+      $codigoproCont = $codCont['COUNT'];
 
-      // $codigoproducto = $this->bd->prepare("SELECT COD_PRODUCTO,CANTIDAD_MINIMA FROM T_TMPORDEN_COMPRA_ITEM WHERE COD_ORDEN_COMPRA='$codordencompra'");
-      // $codigoproducto->execute();
+      $codigoproducto = $this->bd->prepare("SELECT COD_PRODUCTO,CANTIDAD_MINIMA FROM T_TMPORDEN_COMPRA_ITEM WHERE COD_ORDEN_COMPRA='$codordencompra'");
+      $codigoproducto->execute();
+      $cod = $codigoproducto->fetchAll(PDO::FETCH_ASSOC);
 
+      foreach ($cod as $producto) {
+        $codigopro = trim($producto['COD_PRODUCTO']);
+        $cantidad = floatval(trim($producto['CANTIDAD_MINIMA']));
 
-      // $mostrar = new m_almacen();
-      // for ($c = 0; $c < $codigoproCont; $c++) {
-      //   $cod = $codigoproducto->fetch(PDO::FETCH_ASSOC);
-      //   $codigopro = trim($cod['COD_PRODUCTO']);
-      //   $cantidad = floatval(trim($cod['CANTIDAD_MINIMA']));
+        $valorstock = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$codigopro'");
+        $valorstock->execute();
+        $valstock = $valorstock->fetch(PDO::FETCH_ASSOC);
+        $codigostock = $valstock['STOCK_ACTUAL'];
+        $suma = $cantidad + floatval($codigostock);
 
-      //   $stockanterior = $mostrar->selecciondestockactual($codigopro);
-      //   $suma = $cantidad + floatval($stockanterior);
-
-      //   $actualizaalmacen = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET STOCK_ACTUAL='$suma',STOCK_ANTERIOR='$stockanterior' WHERE COD_PRODUCTO='$codigopro'");
-      //   $actualizaalmacen->execute();
-      // }
+        $actualizaalmacen = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET STOCK_ACTUAL='$suma', STOCK_ANTERIOR='$codigostock' WHERE COD_PRODUCTO='$codigopro'");
+        $actualizaalmacen->execute();
+      }
 
       $actualizaritemrequerimiento = $this->bd->commit();
       return $actualizaritemrequerimiento;
     } catch (Exception $e) {
       $this->bd->rollBack();
-      die($e->getMessage());
+      // die($e->getMessage());
+      echo "Error: " . $e->getMessage();
+      return false;
     }
   }
 
@@ -5690,6 +5696,19 @@ class m_almacen
       return $insertaractualizarcontrol;
     } catch (Exception $e) {
       $this->bd->rollBack();
+      die($e->getMessage());
+    }
+  }
+  public function MostrarCantidadCajas($codigoproducto, $codigorequerimiento)
+  {
+    try {
+
+      $mostarcajas = $this->bd->prepare("SELECT CAN_CAJA FROM T_TMPPRODUCCION WHERE COD_REQUERIMIENTO='$codigorequerimiento' AND COD_PRODUCTO='$codigoproducto'");
+      $mostarcajas->execute();
+      $datoscaja = $mostarcajas->fetchAll(PDO::FETCH_OBJ);
+
+      return $datoscaja;
+    } catch (Exception $e) {
       die($e->getMessage());
     }
   }

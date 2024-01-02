@@ -726,6 +726,11 @@ if ($accion == 'insertar') {
 } else if ($accion == 'slclotes') {
     $producto = $_POST['producto'];
     c_almacen::c_lotesproducto($producto);
+} else if ($accion == 'consultadecajas') {
+    $cantidadenvases = trim($_POST['cantidadenvases']);
+    $codigoproducto = trim($_POST['codigoproducto']);
+    // $codigorequerimiento = trim($_POST['codigorequerimiento']);
+    c_almacen::c_consulta_cajas($cantidadenvases, $codigoproducto);
 }
 
 
@@ -3969,7 +3974,60 @@ class c_almacen
             return "error";
         };
     }
+    static function c_consulta_cajas($cantidadenvases, $codigoproducto)
+    {
+        try {
 
+            $mostrar = new m_almacen();
+
+            $envases = $mostrar->ValoresEnvases($codigoproducto);
+
+            if (!$envases) {
+                // throw new Exception("Hubo un error en la consulta");
+                $json = [];
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+            $json = array();
+            foreach ($envases as $row) {
+
+                $dataalmacen = $mostrar->MostrarAlmaceninsumos(trim($row->COD_PRODUCTO));
+                // var_dump($dataalmacen);
+                $valor_numerico = floatval($dataalmacen["STOCK_ACTUAL"]);
+                // var_dump($row->COD_PRODUCTO);
+                // var_dump($valor_numerico);
+
+                if (trim($row->COD_PRODUCTO) == "00161") {
+                    $CANTIDAD_TOTAL = ceil($cantidadenvases / $row->CANTIDA);
+                } else if (trim($row->COD_PRODUCTO) == '00061') {
+                    $CANTIDAD_TOTAL = ceil(($cantidadenvases * (0.6)) / 30);
+                } else {
+                    $CANTIDAD_TOTAL = $cantidadenvases;
+                }
+                // echo "h";
+                // var_dump($CANTIDAD_TOTAL);
+                $valor_envase = floatval($CANTIDAD_TOTAL);
+                if ($valor_envase > $valor_numerico) {
+                    $responseenvase = array('estado' => 'estado2', 'descripcionenvase' => $row->DES_PRODUCTO, 'cantidadenvase' => $CANTIDAD_TOTAL);
+                    echo json_encode($responseenvase);
+                    exit;
+                } else {
+                    $json[] = array(
+
+                        "COD_COD_FORMULACION" => $row->COD_FORMULACION,
+                        "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        // "CANTIDAD_TOTAL" => $CANTIDAD_TOTAL,
+                        // "LOTES" => c_almacen::c_producto_lote($row->COD_PRODUCTO, $CANTIDAD_TOTAL),
+                    );
+                }
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
     /*funciones agregadas */
     static function c_reportekardex($producto, $fechaini, $fechafin, $lote)
     {

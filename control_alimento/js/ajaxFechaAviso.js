@@ -954,8 +954,17 @@ $(function () {
                     codrequerimiento: codrequerimiento,
                     codordencompra: codordencompra,
                   },
+                  beforeSend: function () {
+                    $(".preloader").css("opacity", "1");
+                    $(".preloader").css("display", "block");
+                  },
                   success: function (response) {
+                    console.log(response);
                     resolve("La actualización se realizó con éxito");
+                  },
+                  complete: function () {
+                    $(".preloader").css("opacity", "0");
+                    $(".preloader").css("display", "none");
                   },
                   error: function (xhr, status, error) {
                     console.error(

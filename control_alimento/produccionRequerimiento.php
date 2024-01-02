@@ -128,42 +128,46 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 </tbody>
                             </table>
                         </div>
+                        <div class="row">
+                            <!-- Text input producto seleccionado-->
+                            <div class=" col-md-4 form-outline mb-4">
+                                <label class="form-label">Producto</label>
+                                <input type="hidden" id="idhiddencodrequerimiento">
+                                <input type="hidden" id="idhiddenproducto">
+                                <input type="text" id="productorequerimientoitem" class="form-control" name="" disabled>
+                            </div>
+                            <!-- Text input numero de produccion-->
+                            <div class="col-md-4 form-outline mb-4">
+                                <label class="form-label">Lote produccion</label>
+                                <input type="text" id="numeroproduccion" class="form-control" name="" required>
+                            </div>
 
-                        <!-- Text input producto seleccionado-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Producto</label>
-                            <input type="hidden" id="idhiddencodrequerimiento">
-                            <input type="hidden" id="idhiddenproducto">
-                            <input type="text" id="productorequerimientoitem" class="form-control" name="" disabled>
-                        </div>
-                        <!-- Text input numero de produccion-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Lote produccion</label>
-                            <input type="text" id="numeroproduccion" class="form-control" name="" required>
-                        </div>
-
-                        <!-- Text input cantidad produccion-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Cantidad produccion</label>
-                            <input type="text" id="cantidadhiddentotalrequerimiento" class="form-control" name="" disabled>
-                        </div>
-                        <!-- Text input fecha inicio-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Fecha producción</label>
-                            <!-- <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y'); ?>-12-31"> -->
-                            <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric">
+                            <!-- Text input cantidad produccion-->
+                            <div class=" col-md-4 form-outline mb-4">
+                                <label class="form-label">Cantidad produccion</label>
+                                <input type="text" id="cantidadhiddentotalrequerimiento" class="form-control" name="" disabled>
+                            </div>
                         </div>
 
-                        <!-- Text input fecha inicio-->
-                        <div class=" form-outline mb-4">
-                            <label class="form-label">Fecha vencimiento</label>
-                            <!-- <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y'); ?>-01-01" max="<?php echo date('Y'); ?>-12-31"> -->
-                            <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric">
-                        </div>
-                        <!-- Text input cantidad por caja-->
-                        <div class="form-outline mb-4">
-                            <label class="form-label">Cantidad por caja</label>
-                            <input type="number" id="cantidadcaja" class="form-control" name="" value="20" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
+                        <div class="row">
+                            <!-- Text input fecha inicio-->
+                            <div class="col-md-4 form-outline mb-4">
+                                <label class="form-label">Fecha producción</label>
+                                <!-- <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y'); ?>-12-31"> -->
+                                <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric">
+                            </div>
+
+                            <!-- Text input fecha inicio-->
+                            <div class="col-md-4 form-outline mb-4">
+                                <label class="form-label">Fecha vencimiento</label>
+                                <!-- <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y'); ?>-01-01" max="<?php echo date('Y'); ?>-12-31"> -->
+                                <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric">
+                            </div>
+                            <!-- Text input cantidad por caja-->
+                            <div class="col-md-4 form-outline mb-4">
+                                <label class="form-label">Cantidad por caja</label>
+                                <input type="number" id="cantidadcaja" class="form-control" name="" value="20" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
+                            </div>
                         </div>
                         <!-- Text input Observacion-->
                         <div class="form-outline mb-4">

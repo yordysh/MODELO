@@ -153,22 +153,46 @@ function exportardatoscompra(obj) {
     } else {
       let imagesPerRow = 3; // Número máximo de imágenes por fila
       let imagesInCurrentRow = 0;
-      let offsetY;
+      let offsetY = 0;
+      let pageHeight = 297; // Altura de la página en unidades del documento (ajusta según tus necesidades)
+      let maxImageHeight = 70; // Altura máxima de la imagen (ajusta según tus necesidades)
+      let availableSpace = pageHeight - (20 + yPos + offsetY); // Espacio disponible en la página
+      let currentPage = doc.internal.getCurrentPageInfo().pageNumber;
+
       $.each(imagenes, function (f, q) {
         if (imagesInCurrentRow === 0) {
-          offsetY = f > 0 ? offsetY + 80 : 0;
+          offsetY = f > 0 ? offsetY + maxImageHeight : 0;
+          availableSpace = pageHeight - (20 + yPos + offsetY);
+        }
+
+        // Verificar si hay suficiente espacio para la imagen en la página actual
+        if (availableSpace < maxImageHeight) {
+          // Agregar una nueva página si no hay suficiente espacio
+          doc.addPage();
+          offsetY = 0;
+          yPos = 0;
+          availableSpace = pageHeight - 20;
+          currentPage++;
         }
 
         var logo = new Image();
         logo.src = "data:image/png;base64," + q;
 
-        var offsetX = 10 + f * 60;
-        doc.addImage(logo, "PNG", offsetX, 20 + yPos + offsetY, 50, 70);
+        var offsetX = 10 + (imagesInCurrentRow % imagesPerRow) * 60;
+        doc.addImage(
+          logo,
+          "PNG",
+          offsetX,
+          20 + yPos + offsetY,
+          50,
+          maxImageHeight
+        );
         imagesInCurrentRow++;
 
         if (imagesInCurrentRow === imagesPerRow) {
-          // Se alcanzó el número máximo de imágenes por fila, reiniciar contador
+          // Se alcanzó el número máximo de imágenes por fila, reiniciar contador y offsetY
           imagesInCurrentRow = 0;
+          offsetY = 0;
         }
       });
     }

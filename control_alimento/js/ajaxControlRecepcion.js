@@ -48,7 +48,7 @@ $(function () {
                             <td class='encabezado-especial' data-titulo="FECHA DE INGRESO" >${task.FECHA_EMISION}</td>
                             <td data-titulo="HORA">${task.HORA}</td>
                             <td data-titulo="PRODUCTO" codigoproducto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CODIGO DE LOTE"><input class='codigolote' id='codigolote'maxlength='20'/></td>
+                            <td data-titulo="CODIGO DE LOTE"><input class='codigolote' id='codigolote'maxlength='20' /></td>
                             <td data-titulo="F.V"><input type='date' class='fechavencimiento'/></td>
                             <td data-titulo="PROVEEDOR" codigoproveedor='${task.COD_PROVEEDOR}'>${task.NOM_PROVEEDOR}</td>
                             <td data-titulo="G.Remisión"> <input class="form-check-input remision" type="checkbox" value="" id="remision"></td>
