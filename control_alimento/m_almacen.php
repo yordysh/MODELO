@@ -1850,7 +1850,7 @@ class m_almacen
   public function MostrarListaMaestraPDF()
   {
     try {
-      $stm = $this->bd->prepare("SELECT COD_PRODUCTO,ABR_PRODUCTO,DES_PRODUCTO FROM T_PRODUCTO WHERE COD_PRODUCCION  IS NOT NULL AND COD_CATEGORIA='00002'");
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO,COD_PRODUCCION,ABR_PRODUCTO,DES_PRODUCTO FROM T_PRODUCTO WHERE COD_PRODUCCION  IS NOT NULL AND COD_CATEGORIA='00002'");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -2574,18 +2574,18 @@ class m_almacen
   {
     try {
       $stm = $this->bd->prepare("SELECT TI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
-                                  TI.CANTIDAD AS CANTIDAD, TA.STOCK_ACTUAL AS STOCK_ACTUAL, COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA 
-                                  FROM T_TMPREQUERIMIENTO_INSUMO TI INNER JOIN T_PRODUCTO TP ON TI.COD_PRODUCTO = TP.COD_PRODUCTO 
-                                  LEFT JOIN T_TMPCANTIDAD_MINIMA TC ON TI.COD_PRODUCTO = TC.COD_PRODUCTO
-                                  LEFT JOIN T_TMPALMACEN_INSUMOS TA ON TA.COD_PRODUCTO=TP.COD_PRODUCTO
-                                  WHERE TI.COD_REQUERIMIENTO = '$cod_formulacion'
-                                  UNION ALL
-                                  SELECT TE.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TE.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
-                                  TE.CANTIDAD AS CANTIDAD, TA.STOCK_ACTUAL AS STOCK_ACTUAL, COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA 
-                                  FROM T_TMPREQUERIMIENTO_ENVASE TE INNER JOIN T_PRODUCTO TP ON TE.COD_PRODUCTO = TP.COD_PRODUCTO 
-                                  LEFT JOIN T_TMPCANTIDAD_MINIMA TC ON TE.COD_PRODUCTO = TC.COD_PRODUCTO
-                                  LEFT JOIN T_TMPALMACEN_INSUMOS TA ON TA.COD_PRODUCTO=TP.COD_PRODUCTO
-                                  WHERE TE.COD_REQUERIMIENTO = '$cod_formulacion'
+                                    TI.CANTIDAD AS CANTIDAD, TA.STOCK_ACTUAL AS STOCK_ACTUAL, COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA,  COALESCE(TC.PRECIO_PRODUCTO, 0) AS PRECIO_PRODUCTO 
+                                    FROM T_TMPREQUERIMIENTO_INSUMO TI INNER JOIN T_PRODUCTO TP ON TI.COD_PRODUCTO = TP.COD_PRODUCTO 
+                                    LEFT JOIN T_TMPCANTIDAD_MINIMA TC ON TI.COD_PRODUCTO = TC.COD_PRODUCTO
+                                    LEFT JOIN T_TMPALMACEN_INSUMOS TA ON TA.COD_PRODUCTO=TP.COD_PRODUCTO
+                                    WHERE TI.COD_REQUERIMIENTO = '$cod_formulacion'
+                                    UNION ALL
+                                    SELECT TE.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TE.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
+                                    TE.CANTIDAD AS CANTIDAD, TA.STOCK_ACTUAL AS STOCK_ACTUAL, COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA, COALESCE(TC.PRECIO_PRODUCTO, 0) AS PRECIO_PRODUCTO 
+                                    FROM T_TMPREQUERIMIENTO_ENVASE TE INNER JOIN T_PRODUCTO TP ON TE.COD_PRODUCTO = TP.COD_PRODUCTO 
+                                    LEFT JOIN T_TMPCANTIDAD_MINIMA TC ON TE.COD_PRODUCTO = TC.COD_PRODUCTO
+                                    LEFT JOIN T_TMPALMACEN_INSUMOS TA ON TA.COD_PRODUCTO=TP.COD_PRODUCTO
+                                    WHERE TE.COD_REQUERIMIENTO = '$cod_formulacion'
                                   ");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
@@ -2613,7 +2613,8 @@ class m_almacen
   public function InsertarOrdenCompraItem($union, $idRequerimiento, $codpersonal)
   {
     try {
-
+      var_dump($union);
+      exit;
 
       $this->bd->beginTransaction();
       $cod = new m_almacen();
@@ -5712,6 +5713,110 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
+  public function contarduplicadoproveedorproducto($codigoprovedor, $codigoproducto)
+  {
+    $repetir = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPCANTIDAD_MINIMA WHERE COD_PRODUCTO='$codigoproducto' AND COD_PROVEEDOR='$codigoprovedor'");
+    $repetir->execute();
+    $result = $repetir->fetch(PDO::FETCH_ASSOC);
+    $count = intval($result['COUNT']);
+
+    return $count;
+  }
+
+  public function InsertarProveedorProducto($selectmoneda, $precioproducto, $cantidadMinima, $selectprovedores, $selectproductosproveedores)
+  {
+    try {
+
+      $cod = new m_almacen();
+      $codigo_cantidad_minima = $cod->generarCodigoCantidadMinima();
+      $valorduplicado = $cod->contarduplicadoproveedorproducto($selectprovedores, $selectproductosproveedores);
+
+      if ($valorduplicado == 0) {
+        $mostarcajas = $this->bd->prepare("INSERT INTO T_TMPCANTIDAD_MINIMA(COD_CANTIDAD_MINIMA,COD_PRODUCTO,COD_PROVEEDOR,CANTIDAD_MINIMA,PRECIO_PRODUCTO,TIPO_MONEDA)
+                                           VALUES('$codigo_cantidad_minima','$selectproductosproveedores','$selectprovedores','$cantidadMinima','$precioproducto','$selectmoneda')");
+        $datoscajas = $mostarcajas->execute();
+        return $datoscajas;
+      }
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function MostrarProductoProveedores()
+  {
+    try {
+
+      $mostarproductos = $this->bd->prepare("SELECT * FROM T_PRODUCTO  
+      WHERE COD_PRODUCCION  IS NOT NULL AND (COD_CATEGORIA='00002' OR COD_CATEGORIA='00008')");
+      $mostarproductos->execute();
+      $datosproducprov = $mostarproductos->fetchAll(PDO::FETCH_OBJ);
+
+      return $datosproducprov;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function BuscarListarProveedorProducto($buscarProveedorPrecios)
+  {
+    try {
+      $mostarproductos = $this->bd->prepare("SELECT TC.COD_CANTIDAD_MINIMA AS COD_CANTIDAD_MINIMA,TC.COD_PRODUCTO AS COD_PRODUCTO,
+                                              TP.DES_PRODUCTO AS DES_PRODUCTO, TC.CANTIDAD_MINIMA AS CANTIDAD_MINIMA,
+                                              TC.PRECIO_PRODUCTO AS PRECIO_PRODUCTO, TC.TIPO_MONEDA AS TIPO_MONEDA, T.NOM_PROVEEDOR AS NOM_PROVEEDOR,
+                                              T.COD_PROVEEDOR AS COD_PROVEEDOR FROM T_TMPCANTIDAD_MINIMA TC
+                                              INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TC.COD_PRODUCTO
+                                              INNER JOIN T_PROVEEDOR T ON T.COD_PROVEEDOR=TC.COD_PROVEEDOR WHERE TP.DES_PRODUCTO LIKE '$buscarProveedorPrecios%'");
+      $mostarproductos->execute();
+      $datosproducprov = $mostarproductos->fetchAll(PDO::FETCH_OBJ);
+
+      return $datosproducprov;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function  SelectProveedorPrecios($cod_mini)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT TC.COD_CANTIDAD_MINIMA AS COD_CANTIDAD_MINIMA,TC.COD_PRODUCTO AS COD_PRODUCTO,
+      TP.DES_PRODUCTO AS DES_PRODUCTO, TC.CANTIDAD_MINIMA AS CANTIDAD_MINIMA,
+      TC.PRECIO_PRODUCTO AS PRECIO_PRODUCTO, TC.TIPO_MONEDA AS TIPO_MONEDA, T.NOM_PROVEEDOR AS NOM_PROVEEDOR,
+      T.COD_PROVEEDOR AS COD_PROVEEDOR FROM T_TMPCANTIDAD_MINIMA TC
+      INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TC.COD_PRODUCTO
+      INNER JOIN T_PROVEEDOR T ON T.COD_PROVEEDOR=TC.COD_PROVEEDOR WHERE TC.COD_CANTIDAD_MINIMA='$cod_mini'");
+      $stm->execute();
+
+      return $stm;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function ActualizaTablaProveedorPrecios($codminimo, $cantidadMinima, $precioproducto, $selectmoneda)
+  {
+    try {
+      $this->bd->beginTransaction();
+
+      $cod = new m_almacen();
+      // $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
+      // $nombre = 'LBS-PHS-FR-01';
+
+      // if ($repetir == 0) {
+      $stmt = $this->bd->prepare("UPDATE T_TMPCANTIDAD_MINIMA SET CANTIDAD_MINIMA ='$cantidadMinima',
+                                   PRECIO_PRODUCTO='$precioproducto', TIPO_MONEDA='$selectmoneda' WHERE COD_CANTIDAD_MINIMA = '$codminimo'");
+
+      $update = $stmt->execute();
+
+      $update = $this->bd->commit();
+
+      return $update;
+      // }
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+
 
   /*funcion agregadas */
   public function m_lotes_producto($codproducto)

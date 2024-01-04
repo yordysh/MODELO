@@ -81,7 +81,7 @@ $datalistaenvases = $mostrar->MostrarListaMaestraEnvasesPDF();
             font-size: 16px;
             width: 20px;
             padding: 5px 0 5px 100px;
-            border-right: none;
+            /* border-right: none; */
         }
 
         .thlab {
@@ -130,9 +130,10 @@ $datalistaenvases = $mostrar->MostrarListaMaestraEnvasesPDF();
         <?php
         echo '<thead>';
         echo '<tr>';
-        echo '<th colspan="2" style="background-color:#a75cf2;">LISTA DE INSUMOS</th>';
+        echo '<th colspan="3" style="background-color:#a75cf2;">LISTA DE INSUMOS</th>';
         echo '</tr>';
         echo '<tr>';
+        echo '<th class="thlabsabell">CODIGO</th>';
         echo '<th class="thlabsabell">ABREVIATURA</th>';
         echo '<th class="thlab">PRODUCTO</th>';
         echo '</tr>';
@@ -143,7 +144,7 @@ $datalistaenvases = $mostrar->MostrarListaMaestraEnvasesPDF();
 
         foreach ($datalista as $row) {
             echo '<tr>';
-
+            echo '<td class="cabecera">' . $row["COD_PRODUCCION"] . '</td>';
             echo '<td class="cabecera">' . $row["ABR_PRODUCTO"] . '</td>';
             echo '<td class="cabecera">' . $row["DES_PRODUCTO"] . '</td>';
 
@@ -158,10 +159,11 @@ $datalistaenvases = $mostrar->MostrarListaMaestraEnvasesPDF();
         <?php
         echo '<thead>';
         echo '<tr>';
-        echo '<th colspan="2" style="background-color:#a75cf2;">LISTA DE ENVASES</th>';
+        echo '<th colspan="3" style="background-color:#a75cf2;">LISTA DE ENVASES</th>';
         echo '</tr>';
         echo '<tr>';
-        echo '<th class="thlabsabell">ABREVIATURA</th>';
+        echo '<th class="thlabsabell" >CODIGO</th>';
+        echo '<th class="thlabsabell" >ABREVIATURA</th>';
         echo '<th class="thlab">PRODUCTO</th>';
         echo '</tr>';
 
@@ -171,7 +173,7 @@ $datalistaenvases = $mostrar->MostrarListaMaestraEnvasesPDF();
 
         foreach ($datalistaenvases as $rowenvases) {
             echo '<tr>';
-
+            echo '<td class="cabecera">' . $row["COD_PRODUCCION"] . '</td>';
             echo '<td class="cabecera">' . $rowenvases["ABR_PRODUCTO"] . '</td>';
             echo '<td class="cabecera">' . $rowenvases["DES_PRODUCTO"] . '</td>';
 

@@ -183,10 +183,12 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <table id="tTotalinsumoscomprar" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
-                                    <th class="thtitulo" scope="col">INSUMOS</th>
-                                    <th class="thtitulo" scope="col">FALTANTE</th>
-                                    <th class="thtitulo" scope="col">POR COMPRA</th>
-
+                                    <th class="thtitulo" scope="col">PRODUCTO</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD FALTANTE</th>
+                                    <th class="thtitulo" scope="col">STOCK ACTUAL</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD MINIMA</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD POR COMPRA</th>
+                                    <th class="thtitulo" scope="col">PRECIO MINIMO</th>
                                 </tr>
                             </thead>
                             <tbody id="tablatotalinsumosrequeridoscomprar">

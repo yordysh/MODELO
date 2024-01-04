@@ -199,10 +199,23 @@ $(function () {
                               task.COD_PRODUCTO
                             }'>${task.DES_PRODUCTO}</td>
                             <td data-titulo="CANTIDAD FALTANTE"  style="text-align:center;">${insumo_pedir}</td>
+                            <td data-titulo="STOCK ACTUAL"  style="text-align:center;">${
+                              task.STOCK_ACTUAL
+                            }</td>
+                            <td data-titulo="CANTIDAD MINIMA"  style="text-align:center;">${
+                              task.CANTIDAD_MINIMA == 0
+                                ? "Falta cantidad minina"
+                                : task.CANTIDAD_MINIMA
+                            }</td>
                             <td data-titulo="CANTIDAD POR COMPRA"  style="text-align:center;">${
                               isNaN(cantidadtotalminima)
                                 ? "Falta cantidad minina"
                                 : cantidadtotalminima
+                            }</td>
+                            <td data-titulo="PRECIO MINIMO"  style="text-align:center;">${
+                              task.PRECIO_PRODUCTO == 0
+                                ? "Falta cantidad minina"
+                                : task.PRECIO_PRODUCTO
                             }</td>
                           </tr>`;
             }
@@ -259,7 +272,8 @@ $(function () {
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let id_producto_insumo = $(this).find("td:eq(0)").attr("id_producto");
       let cantidad_producto_insumo = $(this).find("td:eq(1)").text();
-      let cantidad_total_minima = $(this).find("td:eq(2)").text();
+      // let cantidad_total_minima = $(this).find("td:eq(2)").text();
+      let cantidad_total_minima = $(this).find("td:eq(4)").text();
       cantidadesTotalesMinimas.push(cantidad_total_minima);
       valoresCapturadosVenta.push(
         id_producto_insumo,

@@ -731,9 +731,33 @@ if ($accion == 'insertar') {
     $codigoproducto = trim($_POST['codigoproducto']);
     // $codigorequerimiento = trim($_POST['codigorequerimiento']);
     c_almacen::c_consulta_cajas($cantidadenvases, $codigoproducto);
+} else if ($accion == 'insertarproveedorproducto') {
+    $selectprovedores = trim($_POST['selectprovedores']);
+    $selectproductosproveedores = trim($_POST['selectproductosproveedores']);
+    $cantidadMinima = trim($_POST['cantidadMinima']);
+    $precioproducto = trim($_POST['precioproducto']);
+    $selectmoneda = $_POST['selectmoneda'];
+
+    c_almacen::c_insertar_proveedor_producto($selectmoneda, $precioproducto, $cantidadMinima, $selectprovedores, $selectproductosproveedores);
+} else if ($accion == 'buscarProveedorPrecios') {
+    $buscarProveedorPrecios = $_POST['buscarProveedorPrecios'];
+
+    c_almacen::c_buscar_listar_proveedor_producto($buscarProveedorPrecios);
+} elseif ($accion == 'editarproveedorprecios') {
+    $cod_mini = trim($_POST['cod_mini']);
+    $respuesta = c_almacen::c_editar_proveedor_precios($cod_mini);
+    echo $respuesta;
+} elseif ($accion == 'actualizarproveedorproducto') {
+    $codminimo = trim($_POST['codminimo']);
+    $selectproductosproveedores = trim($_POST['selectproductosproveedores']);
+    $selectprovedores = trim($_POST['selectprovedores']);
+    $cantidadMinima = trim($_POST['cantidadMinima']);
+    $precioproducto = trim($_POST['precioproducto']);
+    $selectmoneda = trim($_POST['selectmoneda']);
+
+    $respuesta = c_almacen::c_actualizar_proveedores_productos($codminimo, $selectproductosproveedores, $selectprovedores, $cantidadMinima, $precioproducto, $selectmoneda);
+    echo $respuesta;
 }
-
-
 
 
 
@@ -2768,21 +2792,52 @@ class c_almacen
 
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarSiCompra($cod_formulacion);
+
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
             }
-            $json = array();
+            // $json = array();
+            // foreach ($datos as $row) {
+            //     $p1=trim($row->COD_PRODUCTO);
+            //     $json[] = array(
+            //         "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+            //         "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
+            //         "DES_PRODUCTO" => $row->DES_PRODUCTO,
+            //         "CANTIDAD" => $row->CANTIDAD,
+            //         "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
+            //         "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+            //         "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
+            //     );
+            // }
+
+            // $jsonstring = json_encode($json);
+            // echo $jsonstring;
+            $agrupados = array();
+
             foreach ($datos as $row) {
-                $json[] = array(
-                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-                    "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
-                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                    "CANTIDAD" => $row->CANTIDAD,
-                    "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
-                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
-                );
+                $codigo_producto = trim($row->COD_PRODUCTO);
+
+                // Verificar si el grupo ya existe
+                if (!isset($agrupados[$codigo_producto])) {
+                    $agrupados[$codigo_producto] = array(
+                        "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                        "COD_PRODUCTO" => $codigo_producto,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CANTIDAD" => $row->CANTIDAD,
+                        "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
+                        "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                        "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
+                    );
+                } else {
+                    // Si el grupo ya existe, comparar precios y actualizar si es menor
+                    if ($row->PRECIO_PRODUCTO < $agrupados[$codigo_producto]["PRECIO_PRODUCTO"]) {
+                        $agrupados[$codigo_producto]["PRECIO_PRODUCTO"] = $row->PRECIO_PRODUCTO;
+                    }
+                }
             }
 
+            // Convertir el array agrupado a formato JSON
+            $json = array_values($agrupados); // Reindexar el array para evitar claves no numéricas
             $jsonstring = json_encode($json);
             echo $jsonstring;
         } catch (Exception $e) {
@@ -4028,6 +4083,117 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
+
+
+    static function c_insertar_proveedor_producto($selectmoneda, $precioproducto, $cantidadMinima, $selectprovedores, $selectproductosproveedores)
+    {
+        $m_formula = new m_almacen();
+
+        $respuestaproveedor = $m_formula->InsertarProveedorProducto($selectmoneda, $precioproducto, $cantidadMinima, $selectprovedores, $selectproductosproveedores);
+
+        if ($respuestaproveedor) {
+            echo "ok";
+        } else {
+            echo "error";
+        };
+    }
+    static function c_buscar_listar_proveedor_producto($buscarProveedorPrecios)
+    {
+        try {
+
+            if (!empty($buscarProveedorPrecios)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->BuscarListarProveedorProducto($buscarProveedorPrecios);
+
+                if (!$datos) {
+                    // throw new Exception("Hubo un error en la consulta");
+                    $json = [];
+                    $jsonstring = json_encode($json);
+                    echo $jsonstring;
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_CANTIDAD_MINIMA" => $row->COD_CANTIDAD_MINIMA,
+                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                        "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
+                        "TIPO_MONEDA" => $row->TIPO_MONEDA,
+                        "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
+                        "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->BuscarListarProveedorProducto($buscarProveedorPrecios);
+
+                if (!$datos) {
+                    throw new Exception("Hubo un error en la consulta");
+                }
+                $json = array();
+                foreach ($datos as $row) {
+                    $json[] = array(
+                        "COD_CANTIDAD_MINIMA" => $row->COD_CANTIDAD_MINIMA,
+                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                        "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
+                        "TIPO_MONEDA" => $row->TIPO_MONEDA,
+                        "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
+                        "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+                    );
+                }
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_editar_proveedor_precios($cod_mini)
+    {
+        $mostrar = new m_almacen();
+
+        if (isset($cod_mini)) {
+            $selectZ = $mostrar->SelectProveedorPrecios($cod_mini);
+
+            $json = array();
+            foreach ($selectZ as $row) {
+                $json[] = array(
+                    "COD_CANTIDAD_MINIMA" => $row['COD_CANTIDAD_MINIMA'],
+                    "DES_PRODUCTO" => $row['DES_PRODUCTO'],
+                    "COD_PRODUCTO" => trim($row['COD_PRODUCTO']),
+                    "CANTIDAD_MINIMA" => $row['CANTIDAD_MINIMA'],
+                    "PRECIO_PRODUCTO" => $row['PRECIO_PRODUCTO'],
+                    "TIPO_MONEDA" => $row['TIPO_MONEDA'],
+                    "NOM_PROVEEDOR" => $row['NOM_PROVEEDOR'],
+                    "COD_PROVEEDOR" => $row['COD_PROVEEDOR'],
+                );
+            }
+
+            $jsonstring = json_encode($json[0]);
+            echo $jsonstring;
+        }
+    }
+    static function c_actualizar_proveedores_productos($codminimo, $selectproductosproveedores, $selectprovedores, $cantidadMinima, $precioproducto, $selectmoneda)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($codminimo) && isset($selectproductosproveedores) && isset($selectprovedores)) {
+
+            $respuestapro = $m_formula->ActualizaTablaProveedorPrecios($codminimo, $cantidadMinima, $precioproducto, $selectmoneda);
+            if ($respuestapro) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
+
     /*funciones agregadas */
     static function c_reportekardex($producto, $fechaini, $fechafin, $lote)
     {
