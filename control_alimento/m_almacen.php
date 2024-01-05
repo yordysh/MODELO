@@ -2574,14 +2574,16 @@ class m_almacen
   {
     try {
       $stm = $this->bd->prepare("SELECT TI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
-                                    TI.CANTIDAD AS CANTIDAD, TA.STOCK_ACTUAL AS STOCK_ACTUAL, COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA,  COALESCE(TC.PRECIO_PRODUCTO, 0) AS PRECIO_PRODUCTO 
+                                    TI.CANTIDAD AS CANTIDAD, TA.STOCK_ACTUAL AS STOCK_ACTUAL, COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA,
+                                    COALESCE(TC.PRECIO_PRODUCTO, 0) AS PRECIO_PRODUCTO, TC.COD_PROVEEDOR AS COD_PROVEEDOR
                                     FROM T_TMPREQUERIMIENTO_INSUMO TI INNER JOIN T_PRODUCTO TP ON TI.COD_PRODUCTO = TP.COD_PRODUCTO 
                                     LEFT JOIN T_TMPCANTIDAD_MINIMA TC ON TI.COD_PRODUCTO = TC.COD_PRODUCTO
                                     LEFT JOIN T_TMPALMACEN_INSUMOS TA ON TA.COD_PRODUCTO=TP.COD_PRODUCTO
                                     WHERE TI.COD_REQUERIMIENTO = '$cod_formulacion'
                                     UNION ALL
                                     SELECT TE.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TE.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
-                                    TE.CANTIDAD AS CANTIDAD, TA.STOCK_ACTUAL AS STOCK_ACTUAL, COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA, COALESCE(TC.PRECIO_PRODUCTO, 0) AS PRECIO_PRODUCTO 
+                                    TE.CANTIDAD AS CANTIDAD, TA.STOCK_ACTUAL AS STOCK_ACTUAL, COALESCE(TC.CANTIDAD_MINIMA, 0) AS CANTIDAD_MINIMA,
+                                    COALESCE(TC.PRECIO_PRODUCTO, 0) AS PRECIO_PRODUCTO, TC.COD_PROVEEDOR AS COD_PROVEEDOR
                                     FROM T_TMPREQUERIMIENTO_ENVASE TE INNER JOIN T_PRODUCTO TP ON TE.COD_PRODUCTO = TP.COD_PRODUCTO 
                                     LEFT JOIN T_TMPCANTIDAD_MINIMA TC ON TE.COD_PRODUCTO = TC.COD_PRODUCTO
                                     LEFT JOIN T_TMPALMACEN_INSUMOS TA ON TA.COD_PRODUCTO=TP.COD_PRODUCTO
@@ -2613,8 +2615,6 @@ class m_almacen
   public function InsertarOrdenCompraItem($union, $idRequerimiento, $codpersonal)
   {
     try {
-      var_dump($union);
-      exit;
 
       $this->bd->beginTransaction();
       $cod = new m_almacen();
@@ -2622,30 +2622,25 @@ class m_almacen
       $codigo_orden_compra = $cod->generarCodigoOrdenCompra();
 
 
-
-      // $zonaHorariaPeru = new DateTimeZone('America/Lima');
-      // $horaActualPeru = new DateTime('now', $zonaHorariaPeru);
-      // $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
-
-
       $fecha_actual = $cod->c_horaserversql('F');
-      $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
-      $fecha_generado_orden_compra  = $fecha_convertida->format('d/m/Y');
-      // $fecha_actual = '05/10/2023';
-      // $fecha_generado_orden_compra = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
 
-      $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,FECHA,COD_TMPREQUERIMIENTO)
-                                                VALUES ('$codigo_orden_compra','$fecha_generado_orden_compra','$idRequerimiento')");
+      $stmPedidoCompras = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,FECHA,COD_TMPREQUERIMIENTO,COD_USU)
+                                                VALUES ('$codigo_orden_compra',CONVERT(datetime, '$fecha_actual', 103),'$idRequerimiento','$codpersonal')");
       $insert = $stmPedidoCompras->execute();
       $cantidad_minima = 0;
-      for ($i = 0; $i < count($union); $i += 3) {
-        $codProducto = $union[$i];
-        $canInsu = ($union[$i + 1]);
-        $canMinInsu = $union[$i + 2];
+      // for ($i = 0; $i < count($union); $i += 3) {
+      foreach ($union as $row) {
+        // $codProducto = $union[$i];
+        // $canInsu = ($union[$i + 1]);
+        // $canMinInsu = $union[$i + 2];
+        $codProducto = $row['id_producto_insumo'];
+        $canInsu = ($row['cantidad_producto_insumo']);
+        $canMinInsu = $row['cantidad_total_minima'];
+        $id_proveedor = trim($row['id_proveedor']);
 
 
-        $stmPedidoOrden = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA_ITEM(COD_ORDEN_COMPRA,COD_PRODUCTO,CANTIDAD_MINIMA,CANTIDAD_INSUMO_ENVASE)
-                                                  VALUES ('$codigo_orden_compra','$codProducto','$canMinInsu','$canInsu')");
+        $stmPedidoOrden = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA_ITEM(COD_ORDEN_COMPRA,COD_PRODUCTO,CANTIDAD_MINIMA,CANTIDAD_INSUMO_ENVASE,COD_PROVEEDOR)
+                                                  VALUES ('$codigo_orden_compra','$codProducto','$canMinInsu','$canInsu','$id_proveedor')");
         $insert = $stmPedidoOrden->execute();
         $cantidad_minima = $cantidad_minima + $canMinInsu;
       }
@@ -2653,20 +2648,7 @@ class m_almacen
       $stmActualizarordencompra->execute();
 
 
-      $fecha_actual = $cod->c_horaserversql('F');
-      $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
-      $fecha_generado  = $fecha_convertida->format('d/m/Y');
-
-
-      // $fecha_actual = '05/10/2023';
-      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
-
-      // $maquina = os_info();
-      // $maquina = 'user';
-
-
-
-      $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
+      $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA=CONVERT(datetime, '$fecha_actual', 103) WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $stmActualizar->execute();
 
       $stmupdate = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='C' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
@@ -4196,8 +4178,27 @@ class m_almacen
     try {
 
       $stmInsumosCompras = $this->bd->prepare("SELECT CI.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, CI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
-                                                CI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA FROM T_TMPORDEN_COMPRA_ITEM CI
-                                                INNER JOIN T_PRODUCTO TP ON CI.COD_PRODUCTO=TP.COD_PRODUCTO WHERE CI.COD_ORDEN_COMPRA='$idcompraaprobada' AND CI.ESTADO='P'");
+                                                CI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA,TAL.STOCK_ACTUAL AS STOCK_ACTUAL, CI.COD_PROVEEDOR AS COD_PROVEEDOR, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR FROM T_TMPORDEN_COMPRA_ITEM CI
+                                                INNER JOIN T_PRODUCTO TP ON CI.COD_PRODUCTO=TP.COD_PRODUCTO
+                                                INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=CI.COD_PROVEEDOR
+                                                INNER JOIN T_TMPALMACEN_INSUMOS TAL ON TAL.COD_PRODUCTO=CI.COD_PRODUCTO
+                                                WHERE CI.COD_ORDEN_COMPRA='$idcompraaprobada' AND CI.ESTADO='P'");
+      $stmInsumosCompras->execute();
+      $datos = $stmInsumosCompras->fetchAll(PDO::FETCH_OBJ);
+      // $datos = $stmInsumosCompras->fetchAll(PDO::FETCH_NUM);
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function MostrarPrecioPorCantidad($codproducto, $codProveedor)
+  {
+    try {
+      $stmInsumosCompras = $this->bd->prepare("SELECT TC.COD_PROVEEDOR AS COD_PROVEEDOR, TC.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TC.CANTIDAD_MINIMA AS CANTIDAD_MINIMA,
+                                                TC.PRECIO_PRODUCTO AS PRECIO_PRODUCTO, TC.TIPO_MONEDA AS TIPO_MONEDA FROM T_TMPCANTIDAD_MINIMA TC
+                                                INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TC.COD_PRODUCTO
+                                                WHERE TC.COD_PRODUCTO='$codproducto' AND TC.COD_PROVEEDOR='$codProveedor'");
       $stmInsumosCompras->execute();
       $datos = $stmInsumosCompras->fetchAll(PDO::FETCH_OBJ);
 
@@ -4206,6 +4207,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
   public function MostrarCodRequerimientoTEMP()
   {
     try {
@@ -4219,7 +4221,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function   MostrarProveedores()
+  public function MostrarProveedores()
   {
     try {
 
@@ -4418,14 +4420,14 @@ class m_almacen
     }
   }
 
-  public function GuardarInsumosCompras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada)
+  public function GuardarInsumosCompras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada)
   {
     try {
       $this->bd->beginTransaction();
       $codigo = new m_almacen();
-
+      var_dump($proveedorruc);
       // var_dump($datosSeleccionadosInsumos);
-      // exit;
+      exit;
       // $fechaFormateada = DateTime::createFromFormat('Y-m-d', $fecha);
 
       $stmexisteproveedor = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_PROVEEDOR WHERE RUC_PROVEEDOR='$proveedorruc'");
@@ -4472,8 +4474,8 @@ class m_almacen
       $horaMinutosSegundos = $horaActualPeru->format('H:i');
 
 
-      $stminsertarcomprobante = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE(COD_TMPCOMPROBANTE,COD_PROVEEDOR,COD_EMPRESA,OFICINA,TIPO_MONEDA,F_PAGO,FECHA_REALIZADA,COD_USUARIO,COD_ORDEN_COMPRA,OBSERVACION,HORA)
-                                                    VALUES('$codigocomprobante','$verificacodprove','$empresa','$oficina','$moneda','$formapago',CONVERT(DATE, '$fecha', 23),'$personalcod','$idcompraaprobada','$observacion','$horaMinutosSegundos')");
+      $stminsertarcomprobante = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE(COD_TMPCOMPROBANTE,COD_PROVEEDOR,COD_EMPRESA,OFICINA,FECHA_REALIZADA,COD_USUARIO,COD_ORDEN_COMPRA,OBSERVACION,HORA)
+                                                    VALUES('$codigocomprobante','$verificacodprove','$empresa','$oficina',CONVERT(DATE, '$fecha', 23),'$personalcod','$idcompraaprobada','$observacion','$horaMinutosSegundos')");
       $stminsertarcomprobante->execute();
       $sumordenitem = 0;
       foreach ($datosSeleccionadosInsumos as $insumoString) {
@@ -4484,8 +4486,9 @@ class m_almacen
           $codigoproducto = $insumoArray["codproducto"];
           $cantidad = $insumoArray["cantidad"];
           $precio = $insumoArray["precio"];
+          $idmoneda = $insumoArray["id_moneda"];
 
-          $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET ESTADO='O', MONTO='$precio', COD_TMPCOMPROBANTE='$codigocomprobante' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_PRODUCTO='$codigoproducto'");
+          $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET ESTADO='O', MONTO='$precio', TIPO_MONEDA='$idmoneda', COD_TMPCOMPROBANTE='$codigocomprobante' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_PRODUCTO='$codigoproducto'");
           $stmactualizaitemcompra->execute();
           $sumordenitem = $sumordenitem + $precio;
         } else {

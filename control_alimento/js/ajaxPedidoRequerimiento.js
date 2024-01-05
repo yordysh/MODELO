@@ -212,11 +212,13 @@ $(function () {
                                 ? "Falta cantidad minina"
                                 : cantidadtotalminima
                             }</td>
-                            <td data-titulo="PRECIO MINIMO"  style="text-align:center;">${
-                              task.PRECIO_PRODUCTO == 0
-                                ? "Falta cantidad minina"
-                                : task.PRECIO_PRODUCTO
-                            }</td>
+                            <td data-titulo="PRECIO MINIMO" id_proveedor='${
+                              task.COD_PROVEEDOR
+                            }' style="text-align:center;">${
+                task.PRECIO_PRODUCTO == 0
+                  ? "Falta cantidad minina"
+                  : task.PRECIO_PRODUCTO
+              }</td>
                           </tr>`;
             }
           });
@@ -274,12 +276,14 @@ $(function () {
       let cantidad_producto_insumo = $(this).find("td:eq(1)").text();
       // let cantidad_total_minima = $(this).find("td:eq(2)").text();
       let cantidad_total_minima = $(this).find("td:eq(4)").text();
+      let id_proveedor = $(this).find("td:eq(5)").attr("id_proveedor");
       cantidadesTotalesMinimas.push(cantidad_total_minima);
-      valoresCapturadosVenta.push(
-        id_producto_insumo,
-        cantidad_producto_insumo,
-        cantidad_total_minima
-      );
+      valoresCapturadosVenta.push({
+        id_producto_insumo: id_producto_insumo,
+        cantidad_producto_insumo: cantidad_producto_insumo,
+        cantidad_total_minima: cantidad_total_minima,
+        id_proveedor: id_proveedor,
+      });
     });
 
     if (taskcodrequhiddenvalidar === "") {

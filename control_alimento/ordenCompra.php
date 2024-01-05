@@ -13,6 +13,7 @@ require_once "m_almacen.php";
 $mostrar = new m_almacen();
 $dataProveedores = $mostrar->MostrarProveedores();
 $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -132,7 +133,9 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                                 </tbody>
                             </table>
                         </div>
-
+                        <?php
+                        require_once "modalproveedor.php";
+                        ?>
                         <!-- Tabla total insumos por comprar-->
                         <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
                             <div class="row g-4 top-div">
@@ -142,8 +145,11 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                                 <thead>
                                     <tr>
                                         <th class="thtitulo" scope="col">MATERIAL</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
-                                        <!-- <th class="thtitulo" scope="col">PRECIO</th> -->
+                                        <th class="thtitulo" scope="col">CAN.COMPRA</th>
+                                        <th class="thtitulo" scope="col">STOCK</th>
+                                        <th class="thtitulo" scope="col">PROVEEDOR</th>
+                                        <th class="thtitulo" scope="col">F.pago</th>
+                                        <th class="thtitulo" scope="col">IMAGEN</th>
                                         <th class="thtitulo" scope="col">SELECCIONAR</th>
                                     </tr>
                                 </thead>
@@ -198,7 +204,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                         </div>
                         <div class="estiloordencompra">
                             <!-- Text input proveedor-->
-                            <div class="form-outline mb-4 estiloproveedor">
+                            <!-- <div class="form-outline mb-4 estiloproveedor">
                                 <div class="estiloordencompra">
                                     <div class="estiloproveedor">
                                         <label class="form-label">Proveedor</label>
@@ -211,33 +217,30 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                                         <button type='button' class="custom-icon" data-bs-toggle="modal" data-bs-target="#mostrarproveedor"><i class="icon-add-user"></i></button>
                                     </div>
                                 </div>
-                            </div>
-                            <?php
-                            require_once "modalproveedor.php";
-                            ?>
+                            </div> -->
+
                             <!-- Text input FORMA DE PAGO-->
-                            <div class="form-outline mb-4 estiloselect">
+                            <!-- <div class="form-outline mb-4 estiloselect">
                                 <label class="form-label">F.pago</label>
                                 <select id="selectformapago" class="form-select" aria-label="Default select example">
                                     <option value="E" selected>EFECTIVO</option>
                                     <option value="D">DEPOSITO</option>
                                 </select>
-                            </div>
+                            </div> -->
 
                             <!-- Text input moneda-->
-                            <div class="form-outline mb-4 estiloselect">
+                            <!-- <div class="form-outline mb-4 estiloselect">
                                 <label class="form-label">Moneda</label>
                                 <select id="selectmoneda" class="form-select" aria-label="Default select example">
                                     <option value="S" selected>SOLES</option>
                                     <option value="D">DOLARES</option>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
                         <!-- Text input moneda-->
-                        <div class="form-outline mb-4">
-                            <!-- <input type="file" id="inputArchivo"  style="display:none;"> -->
+                        <!-- <div class="form-outline mb-4">
                             <button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button>
-                        </div>
+                        </div> -->
                         <!-- Tabla para subir imagenes-->
                         <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
                             <div class="row g-4 top-div">
@@ -271,8 +274,10 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                                 <thead>
                                     <tr>
                                         <th class="thtitulo" scope="col">MATERIAL</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
-                                        <th class="thtitulo" scope="col">PRECIO</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD COMPRA</th>
+                                        <th class="thtitulo" scope="col">PRECIO MINIMO</th>
+                                        <th class="thtitulo" scope="col">PRECIO TOTAL</th>
+                                        <th class="thtitulo" scope="col">MONEDA</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablainsumoscomprarprecio">

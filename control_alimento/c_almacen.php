@@ -556,6 +556,12 @@ if ($accion == 'insertar') {
     $idcompraaprobada = trim($_POST['idcompraaprobada']);
     $respuesta = c_almacen::c_mostrar_insumos_compras($idcompraaprobada);
     echo $respuesta;
+} elseif ($accion == 'mostrarprecioporcantidad') {
+    $codproducto = trim($_POST['codproducto']);
+    $cantidad = ($_POST['cantidad']);
+    $codProveedor = $_POST['codProveedor'];
+    $respuesta = c_almacen::c_mostrar_precios_por_cantidad($codproducto, $cantidad, $codProveedor);
+    echo $respuesta;
 } elseif ($accion == 'guardarinsumoscompras') {
     $fecha = trim($_POST['fecha']);
     $empresa = trim($_POST['empresa']);
@@ -572,12 +578,11 @@ if ($accion == 'insertar') {
     $idcompraaprobada = $_POST['idcompraaprobada'];
     // $dataimagenesfile = $_FILES['file']['name'];
 
-
     if (isset($_FILES['file'])) {
         $dataimagenesfile = $_FILES['file'];
         $respuesta = c_almacen::c_guardar_insumos_compras_imagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile);
     } else {
-        $respuesta = c_almacen::c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
+        $respuesta = c_almacen::c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
     }
 
 
@@ -2827,11 +2832,13 @@ class c_almacen
                         "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
                         "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
                         "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
+                        "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
                     );
                 } else {
                     // Si el grupo ya existe, comparar precios y actualizar si es menor
                     if ($row->PRECIO_PRODUCTO < $agrupados[$codigo_producto]["PRECIO_PRODUCTO"]) {
                         $agrupados[$codigo_producto]["PRECIO_PRODUCTO"] = $row->PRECIO_PRODUCTO;
+                        $agrupados[$codigo_producto]["COD_PROVEEDOR"] = $row->COD_PROVEEDOR;
                     }
                 }
             }
@@ -3671,8 +3678,12 @@ class c_almacen
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarInsumosCompras($idcompraaprobada);
 
+
             if (!$datos) {
-                throw new Exception("Hubo un error en la consulta");
+                // throw new Exception("Hubo un error en la consulta");
+                $json = [];
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
             }
             $json = array();
             foreach ($datos as $row) {
@@ -3681,8 +3692,49 @@ class c_almacen
                     "COD_PRODUCTO" => $row->COD_PRODUCTO,
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                    "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
+                    "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+                    "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
                 );
             }
+
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_mostrar_precios_por_cantidad($codproducto, $cantidad, $codProveedor)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarPrecioPorCantidad($codproducto, $codProveedor);
+
+            if (!$datos) {
+                // throw new Exception("Hubo un error en la consulta");
+                $json = [];
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                // $totalprecio = $row->PRECIO_PRODUCTO;
+                $divi = ($cantidad / $row->CANTIDAD_MINIMA);
+
+                $totalprecio = $divi * $row->PRECIO_PRODUCTO;
+
+                $json[] = array(
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => trim($row->DES_PRODUCTO),
+                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                    "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
+                    "PRECIO_TOTAL" => $totalprecio,
+                    "TIPO_MONEDA" => $row->TIPO_MONEDA,
+                    "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+                );
+            }
+
             $jsonstring = json_encode($json);
             echo $jsonstring;
         } catch (Exception $e) {
@@ -3701,10 +3753,10 @@ class c_almacen
             return "error";
         };
     }
-    static function c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada)
+    static function c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni,   $observacion, $datosSeleccionadosInsumos, $idcompraaprobada)
     {
         $m_formula = new m_almacen();
-        $respuesta = $m_formula->GuardarInsumosCompras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
+        $respuesta = $m_formula->GuardarInsumosCompras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
         if ($respuesta) {
             return "ok";
         } else {

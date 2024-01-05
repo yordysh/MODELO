@@ -20,6 +20,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre proveedor</label>
+                        <input type="hidden" id="codigoproveedor" name="codproveedor">
                         <input type="text" id="nombreproveedor" name="nombreproveedor" class="form-control" required>
                     </div>
                     <div class="mb-3">

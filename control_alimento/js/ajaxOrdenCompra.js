@@ -122,7 +122,7 @@ $(function () {
       success: function (response) {
         if (isJSON(response)) {
           let task = JSON.parse(response);
-
+          $("#codigoproveedor").val(task[0].COD_PROVEEDOR);
           $("#nombreproveedor").val(task[0].NOM_PROVEEDOR);
           $("#direccionproveedor").val(task[0].DIR_PROVEEDOR);
           $("#ruc").val(task[0].RUC_PROVEEDOR);
@@ -162,12 +162,15 @@ $(function () {
   /*-------------------- Guardar datos modal----------------- */
   $("#ponerproveedor").on("click", (e) => {
     e.preventDefault();
-
+    let selectproveedor = $("#codigoproveedor").val();
+    console.log(selectproveedor);
     let nombreProveedor = $("#nombreproveedor").val();
     let direccionProveedor = $("#direccionproveedor").val();
     let ruc = $("#ruc").val();
     let dniProveedor = $("#dniproveedor").val();
 
+    $("#codproveedor").val(selectproveedor);
+    $("#proveedor").val(nombreProveedor);
     $("#proveedor").val(nombreProveedor);
     $("#direccion").val(direccionProveedor);
     $("#ruc_principal").val(ruc);
@@ -228,8 +231,23 @@ $(function () {
           tasks.forEach((task) => {
             template += `<tr id_orden_compra_item='${task.COD_ORDEN_COMPRA}'>
                             <td data-titulo='MATERIAL' codigo_producto='${task.COD_PRODUCTO}' style='text-align: center;'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo='CANTIDAD' style='text-align: center;'>${task.CANTIDAD_MINIMA}</td>
-                            <!-- <td data-titulo='PRECIO' style='text-align: center;'><input type='number'/></td> -->
+                            <td data-titulo='CAN.COMPRA' style='text-align: center;'>${task.CANTIDAD_MINIMA}</td>
+                            <td data-titulo='STOCK' style='text-align: center;'>${task.STOCK_ACTUAL}</td>
+                             <td data-titulo='PROVEEDOR' style='text-align: center;'>
+                             <input type="hidden" id="codproveedor" value="${task.COD_PROVEEDOR}" class="form-control">
+                             <input type="hidden" id="direccion" class="form-control">
+                             <input type="hidden" id="ruc_principal" class="form-control">
+                             <input type="hidden" id="dni_principal" class="form-control">
+                             <input type="text" id="proveedor" class="form-control" value="${task.NOM_PROVEEDOR}" disabled>
+                             <button type='button' class="custom-icon" data-bs-toggle="modal" data-bs-target="#mostrarproveedor"><i class="icon-add-user"></i></button>
+                             </td>
+                             <td data-titulo='PROVEEDOR' style='text-align: center;'>
+                             <select id="selectformapago" class="form-select" aria-label="Default select example">
+                             <option value="E" selected>EFECTIVO</option>
+                             <option value="D">DEPOSITO</option>
+                             </select>
+                             </td>
+                             <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
                             <td data-titulo='SELECCIONAR' style='text-align: center;'><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" ></td>
                             </tr>`;
           });
@@ -244,32 +262,82 @@ $(function () {
     });
   }
   /*------------------------------------------------------ */
+
   /*------- Check mostrar los añadidos en tabla detalle----- */
   $(document).on("click", "#flexCheckDefault", (e) => {
     let filaActual = $(e.target).closest("tr");
-    let producto = filaActual.find("td:eq(0)").text();
+    // let producto = filaActual.find("td:eq(0)").text();
     let codproducto = filaActual.find("td:eq(0)").attr("codigo_producto");
     let cantidad = filaActual.find("td:eq(1)").text();
+    let codProveedor = filaActual.find("#codproveedor").val();
+    let selectformapago = filaActual.find("#selectformapago").val();
 
-    let tisumos = $("#tinsumoscomprarprecio tbody");
+    // let tisumos = $("#tinsumoscomprarprecio tbody");
 
-    if (e.target.checked) {
-      tisumos.append(
-        "<tr><td data-titulo='MATERIAL' codigo_prod='" +
-          codproducto +
-          "' style='text-align:center;'>" +
-          producto +
-          "</td><td data-titulo='CANTIDAD' style='text-align:center;'>" +
-          cantidad +
-          "</td><td data-titulo='PRECIO'><input type='number' /></td></tr>"
-      );
-    } else {
-      tisumos.find("tr").each(function () {
-        if ($(this).find("td:eq(0)").attr("codigo_prod") === codproducto) {
-          $(this).remove();
+    // if (e.target.checked) {
+    //   tisumos.append(
+    //     "<tr><td data-titulo='MATERIAL' codigo_prod='" +
+    //       codproducto +
+    //       "' style='text-align:center;'>" +
+    //       producto +
+    //       "</td><td data-titulo='CANTIDAD' style='text-align:center;'>" +
+    //       cantidad +
+    //       "</td><td data-titulo='PRECIO'><input type='number' /></td></tr>"
+    //   );
+    // } else {
+    //   tisumos.find("tr").each(function () {
+    //     if ($(this).find("td:eq(0)").attr("codigo_prod") === codproducto) {
+    //       $(this).remove();
+    //     }
+    //   });
+    // }
+    const accion = "mostrarprecioporcantidad";
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        accion: accion,
+        codproducto: codproducto,
+        cantidad: cantidad,
+        codProveedor: codProveedor,
+      },
+      success: function (response) {
+        let tasks = JSON.parse(response);
+        let tisumos = $("#tinsumoscomprarprecio tbody");
+        if (e.target.checked) {
+          let newRow = ``;
+          tasks.forEach((task) => {
+            let moneda = task.TIPO_MONEDA;
+            if (moneda == "S") {
+              moneda = "SOLES";
+            } else {
+              moneda = "DOLARES";
+            }
+            newRow = `<tr>
+
+            <td data-titulo="MATERIAL" style="text-align:center;" codigo_prod="${task.COD_PRODUCTO}">${task.DES_PRODUCTO}</td>
+            <td data-titulo="CANTIDAD COMPRA" style="text-align:center;">${cantidad}</td>
+            <td data-titulo="PRECIO MINIMO" style="text-align:center;">${task.PRECIO_PRODUCTO}</td>
+            <td data-titulo="PRECIO TOTAL" style="text-align:center;">${task.PRECIO_TOTAL}</td>
+            <td data-titulo="MONEDA" style="text-align:center;" id_moneda="${task.TIPO_MONEDA}">${moneda}</td>
+            <td><input type="hidden" value="${selectformapago}"></td>
+            </tr>`;
+          });
+          $("#tablainsumoscomprarprecio").append(newRow);
+        } else {
+          tasks.forEach((task) => {
+            tisumos.find("tr").each(function () {
+              if (
+                $(this).find("td:eq(0)").attr("codigo_prod") ===
+                task.COD_PRODUCTO
+              ) {
+                $(this).remove();
+              }
+            });
+          });
         }
-      });
-    }
+      },
+    });
   });
 
   /*------------------------------------------------------- */
@@ -303,12 +371,16 @@ $(function () {
       const codproducto = fila.find("td:eq(0)").attr("codigo_prod");
       const desproducto = fila.find("td:eq(0)").text();
       const cantidad = fila.find("td:eq(1)").text();
-      const precio = fila.find("td:eq(2) input").val();
+      const precio = fila.find("td:eq(3)").text();
+      const id_moneda = fila.find("td:eq(4)").attr("id_moneda");
+      const f_pago = fila.find("td:eq(5) input").val();
       const datosFila = {
         codproducto: codproducto,
         // desproducto: desproducto,
         cantidad: cantidad,
         precio: precio,
+        id_moneda: id_moneda,
+        f_pago: f_pago,
       };
       datosSeleccionadosInsumos.push(datosFila);
     });
@@ -359,27 +431,27 @@ $(function () {
       });
       return;
     }
-    if (!proveedor) {
-      Swal.fire({
-        icon: "info",
-        text: "Añada un proveedor.",
-      });
-      return;
-    }
-    if (!formapago) {
-      Swal.fire({
-        icon: "info",
-        text: "Seleccione una forma de pago.",
-      });
-      return;
-    }
-    if (!moneda) {
-      Swal.fire({
-        icon: "info",
-        text: "Seleccione tipo de moneda.",
-      });
-      return;
-    }
+    // if (!proveedor) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     text: "Añada un proveedor.",
+    //   });
+    //   return;
+    // }
+    // if (!formapago) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     text: "Seleccione una forma de pago.",
+    //   });
+    //   return;
+    // }
+    // if (!moneda) {
+    //   Swal.fire({
+    //     icon: "info",
+    //     text: "Seleccione tipo de moneda.",
+    //   });
+    //   return;
+    // }
     if (!observacion) {
       Swal.fire({
         icon: "info",
@@ -512,13 +584,23 @@ $(function () {
   });
   /*--------------------------------------------------------------- */
   /*--------- Cuando doy click en deposito me activa ------------- */
-  $("#selectformapago").click((e) => {
-    let pago = $("#selectformapago").val();
-    if (pago == "D") {
-      $("#imagensum").prop("disabled", false);
+  $("body").on("change", "#selectformapago", function () {
+    // Obtén el valor seleccionado
+    var formaPago = $(this).val();
+
+    // Obtén el botón de imagen dentro de la fila actual
+    var fila = $(this).closest("tr");
+    var botonImagen = fila.find("#imagensum");
+
+    // Verifica la forma de pago y habilita/deshabilita el botón de imagen
+    if (formaPago === "D") {
+      // Si la forma de pago es DEPOSITO, habilita el botón de imagen
+      botonImagen.prop("disabled", false);
     } else {
-      $("#imagensum").prop("disabled", true);
-      $("#tablaimagenes").empty();
+      // En otros casos, deshabilita el botón de imagen y realiza cualquier otra lógica necesaria
+      botonImagen.prop("disabled", true);
+      // También puedes hacer otras cosas aquí, como vaciar un contenedor de imágenes
+      fila.find("#tablaimagenes").empty();
     }
   });
   /*------------------------------------------------------------- */
@@ -577,7 +659,8 @@ $(function () {
     console.log("Archivo seleccionado:", archivoSeleccionado);
   });
 
-  $("#imagensum").click((e) => {
+  // $("#imagensum").click((e) => {
+  $(document).on("click", "#imagensum", function (e) {
     var imagenBoton = $("<input>")
       .attr("type", "file")
       .attr("id", "fotoimagen")
