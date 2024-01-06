@@ -187,62 +187,28 @@ $(function () {
   //   $("#mostrarproveedor").modal("hide");
   //   $(".modal-backdrop").remove();
   // });
-  $("#ponerproveedor").on("click", (e) => {
-    e.preventDefault();
+  $(".btn-open-modal").on("click", function () {
+    const taskId = $(this).data("task-id");
+    // Set the task ID in the modal for reference
+    $("#mostrarproveedor").data("task-id", taskId);
+  });
+  $("#ponerproveedor").on("click", function () {
+    const taskId = $("#mostrarproveedor").data("task-id");
+    const selectedProveedor = $("#selectproveedor").val();
+    const nombreProveedor = $("#nombreproveedor").val();
+    const direccionProveedor = $("#direccionproveedor").val();
+    const rucProveedor = $("#ruc").val();
+    const dniProveedor = $("#dniproveedor").val();
 
-    // Find the closest row to the clicked button
-    let row = $(e.target).closest("tr");
+    // Update the corresponding row with the selected values
+    $(`#orden-compra-item-${taskId} .codproveedor`).val(selectedProveedor);
+    $(`#orden-compra-item-${taskId} .direccion`).val(direccionProveedor);
+    $(`#orden-compra-item-${taskId} .ruc_principal`).val(rucProveedor);
+    $(`#orden-compra-item-${taskId} .dni_principal`).val(dniProveedor);
+    $(`#orden-compra-item-${taskId} .proveedor`).val(nombreProveedor);
 
-    let selectproveedor = row.find("#codproveedor").val();
-    let nombreProveedor = row.find("#proveedor").val();
-    let direccionProveedor = row.find("#direccion").val();
-    let ruc = row.find("#ruc_principal").val();
-    let dniProveedor = row.find("#dni_principal").val();
-
-    // Update the values in the current row
-    row.find("#codproveedor").val(selectproveedor);
-    row.find("#proveedor").val(nombreProveedor);
-    row.find("#direccion").val(direccionProveedor);
-    row.find("#ruc_principal").val(ruc);
-    row.find("#dni_principal").val(dniProveedor);
-    if (!nombreProveedor) {
-      Swal.fire({
-        icon: "info",
-        title: "Campo vacio",
-        text: "Ingrese un nombre de proveedor.",
-      });
-      return;
-    }
-    if (!ruc && !dniProveedor) {
-      Swal.fire({
-        icon: "info",
-        title: "Campo vacio",
-        text: "Ingrese RUC o DNI.",
-      });
-      return;
-    }
-    if (dniProveedor && dniProveedor.length < 8) {
-      Swal.fire({
-        icon: "info",
-        title: "Cantidad errónea",
-        text: "Ingrese DNI mínimo 8 números.",
-      });
-      return;
-    }
-
-    if (ruc.length < 11) {
-      Swal.fire({
-        icon: "info",
-        title: "Cantidad erronea",
-        text: "Ingrese RUC minimo 11 numeros.",
-      });
-      return;
-    }
-    $("#mostrarproveedor").on("hidden.bs.modal", function () {
-      $("body").css("overflow", "auto");
-    });
+    // Close the modal
     $("#mostrarproveedor").modal("hide");
-    $(".modal-backdrop").remove();
   });
 
   /*-------------------------------------------------------- */
@@ -259,7 +225,7 @@ $(function () {
           let tasks = JSON.parse(response);
           let template = ``;
           tasks.forEach((task) => {
-            template += `<tr id_orden_compra_item='${task.COD_ORDEN_COMPRA}'>
+            template += `<tr class="orden-compra-row" id_orden_compra_item='${task.COD_ORDEN_COMPRA}'>
                             <td data-titulo='MATERIAL' codigo_producto='${task.COD_PRODUCTO}' style='text-align: center;'>${task.DES_PRODUCTO}</td>
                             <td data-titulo='CAN.COMPRA' style='text-align: center;'>${task.CANTIDAD_MINIMA}</td>
                             <td data-titulo='STOCK' style='text-align: center;'>${task.STOCK_ACTUAL}</td>
