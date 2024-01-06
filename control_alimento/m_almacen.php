@@ -4260,7 +4260,7 @@ class m_almacen
     $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
     return $codigoAumento;
   }
-  public function GuardarInsumosComprasImagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile)
+  public function GuardarInsumosComprasImagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile)
   {
     try {
       $this->bd->beginTransaction();
@@ -4316,8 +4316,8 @@ class m_almacen
       $horaMinutosSegundos = $horaActualPeru->format('H:i');
 
 
-      $stminsertarcomprobante = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE(COD_TMPCOMPROBANTE,COD_PROVEEDOR,COD_EMPRESA,OFICINA,TIPO_MONEDA,F_PAGO,FECHA_REALIZADA,COD_USUARIO,COD_ORDEN_COMPRA,OBSERVACION,HORA)
-                                                    VALUES('$codigocomprobante','$verificacodprove','$empresa','$oficina','$moneda','$formapago',CONVERT(DATE, '$fecha', 23),'$personalcod','$idcompraaprobada','$observacion','$horaMinutosSegundos')");
+      $stminsertarcomprobante = $this->bd->prepare("INSERT INTO T_TMPCOMPROBANTE(COD_TMPCOMPROBANTE,COD_PROVEEDOR,COD_EMPRESA,OFICINA,FECHA_REALIZADA,COD_USUARIO,COD_ORDEN_COMPRA,OBSERVACION,HORA)
+                                                    VALUES('$codigocomprobante','$verificacodprove','$empresa','$oficina',CONVERT(DATE, '$fecha', 23),'$personalcod','$idcompraaprobada','$observacion','$horaMinutosSegundos')");
       $stminsertarcomprobante->execute();
       $sumordenitem = 0;
       foreach ($datosSeleccionadosInsumos as $insumoString) {

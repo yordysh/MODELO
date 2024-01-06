@@ -571,8 +571,8 @@ if ($accion == 'insertar') {
     $proveedordireccion = trim($_POST['proveedordireccion']);
     $proveedorruc = trim($_POST['proveedorruc']);
     $proveedordni = trim($_POST['proveedordni']);
-    $formapago = trim($_POST['formapago']);
-    $moneda = trim($_POST['moneda']);
+    // $formapago = trim($_POST['formapago']);
+    // $moneda = trim($_POST['moneda']);
     $observacion = strtoupper(trim($_POST['observacion']));
     $datosSeleccionadosInsumos = $_POST['datosSeleccionadosInsumos'];
     $idcompraaprobada = $_POST['idcompraaprobada'];
@@ -580,7 +580,7 @@ if ($accion == 'insertar') {
 
     if (isset($_FILES['file'])) {
         $dataimagenesfile = $_FILES['file'];
-        $respuesta = c_almacen::c_guardar_insumos_compras_imagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile);
+        $respuesta = c_almacen::c_guardar_insumos_compras_imagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile);
     } else {
         $respuesta = c_almacen::c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
     }
@@ -3712,8 +3712,9 @@ class c_almacen
             $datos = $mostrar->MostrarPrecioPorCantidad($codproducto, $codProveedor);
 
             if (!$datos) {
+
                 // throw new Exception("Hubo un error en la consulta");
-                $json = [];
+                $json = array();
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
             }
@@ -3741,11 +3742,11 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function c_guardar_insumos_compras_imagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile)
+    static function c_guardar_insumos_compras_imagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile)
     {
         $m_formula = new m_almacen();
 
-        $respuesta = $m_formula->GuardarInsumosComprasImagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $formapago, $moneda,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile);
+        $respuesta = $m_formula->GuardarInsumosComprasImagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile);
 
         if ($respuesta) {
             return "ok";

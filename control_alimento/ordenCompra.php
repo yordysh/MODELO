@@ -148,7 +148,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                                         <th class="thtitulo" scope="col">CAN.COMPRA</th>
                                         <th class="thtitulo" scope="col">STOCK</th>
                                         <th class="thtitulo" scope="col">PROVEEDOR</th>
-                                        <th class="thtitulo" scope="col">F.pago</th>
+                                        <th class="thtitulo" scope="col">F.PAGO</th>
                                         <th class="thtitulo" scope="col">IMAGEN</th>
                                         <th class="thtitulo" scope="col">SELECCIONAR</th>
                                     </tr>
