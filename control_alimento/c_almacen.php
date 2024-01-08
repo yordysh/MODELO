@@ -556,6 +556,10 @@ if ($accion == 'insertar') {
     $idcompraaprobada = trim($_POST['idcompraaprobada']);
     $respuesta = c_almacen::c_mostrar_insumos_compras($idcompraaprobada);
     echo $respuesta;
+} elseif ($accion == 'mostrarproveedoresporproducto') {
+    $codigoProducto = trim($_POST['codigoProducto']);
+    $respuesta = c_almacen::c_mostrar_proveedores_por_producto($codigoProducto);
+    echo $respuesta;
 } elseif ($accion == 'mostrarprecioporcantidad') {
     $codproducto = trim($_POST['codproducto']);
     $cantidad = ($_POST['cantidad']);
@@ -567,24 +571,25 @@ if ($accion == 'insertar') {
     $empresa = trim($_POST['empresa']);
     $personalcod = trim($_POST['personalcod']);
     $oficina = trim($_POST['oficina']);
-    $proveedor = strtoupper(trim($_POST['proveedor']));
-    $proveedordireccion = trim($_POST['proveedordireccion']);
-    $proveedorruc = trim($_POST['proveedorruc']);
-    $proveedordni = trim($_POST['proveedordni']);
+    // $proveedor = strtoupper(trim($_POST['proveedor']));
+    // $proveedordireccion = trim($_POST['proveedordireccion']);
+    // $proveedorruc = trim($_POST['proveedorruc']);
+    // $proveedordni = trim($_POST['proveedordni']);
     // $formapago = trim($_POST['formapago']);
     // $moneda = trim($_POST['moneda']);
     $observacion = strtoupper(trim($_POST['observacion']));
     $datosSeleccionadosInsumos = $_POST['datosSeleccionadosInsumos'];
     $idcompraaprobada = $_POST['idcompraaprobada'];
     // $dataimagenesfile = $_FILES['file']['name'];
-
+    // var_dump($_FILES['file']);
+    // exit;
     if (isset($_FILES['file'])) {
-        $dataimagenesfile = $_FILES['file'];
-        $respuesta = c_almacen::c_guardar_insumos_compras_imagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile);
-    } else {
-        $respuesta = c_almacen::c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni,  $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
-    }
 
+        $dataimagenesfile = $_FILES['file'];
+        $respuesta = c_almacen::c_guardar_insumos_compras_imagen($fecha, $empresa,  $personalcod,  $oficina, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile);
+    } else {
+        $respuesta = c_almacen::c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
+    }
 
     // var_dump($_FILES['file']);
     // exit;
@@ -3704,6 +3709,40 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
+    static function c_mostrar_proveedores_por_producto($codigoProducto)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarProveedoresPorProducto($codigoProducto);
+
+
+            if (!$datos) {
+                // throw new Exception("Hubo un error en la consulta");
+                $json = [];
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_CANTIDAD_MINIMA" => $row->COD_CANTIDAD_MINIMA,
+                    "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+                    "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
+                    "RUC_PROVEEDOR" => $row->RUC_PROVEEDOR,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                    "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
+                );
+            }
+
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
     static function c_mostrar_precios_por_cantidad($codproducto, $cantidad, $codProveedor)
     {
         try {
@@ -3742,11 +3781,11 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
-    static function c_guardar_insumos_compras_imagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile)
+    static function c_guardar_insumos_compras_imagen($fecha, $empresa,  $personalcod,  $oficina, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile)
     {
         $m_formula = new m_almacen();
 
-        $respuesta = $m_formula->GuardarInsumosComprasImagen($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile);
+        $respuesta = $m_formula->GuardarInsumosComprasImagen($fecha, $empresa,  $personalcod,  $oficina, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada, $dataimagenesfile);
 
         if ($respuesta) {
             return "ok";
@@ -3754,10 +3793,10 @@ class c_almacen
             return "error";
         };
     }
-    static function c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni,   $observacion, $datosSeleccionadosInsumos, $idcompraaprobada)
+    static function c_guardar_insumos_compras($fecha, $empresa,  $personalcod,  $oficina, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada)
     {
         $m_formula = new m_almacen();
-        $respuesta = $m_formula->GuardarInsumosCompras($fecha, $empresa,  $personalcod,  $oficina,  $proveedor, $proveedordireccion, $proveedorruc, $proveedordni, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
+        $respuesta = $m_formula->GuardarInsumosCompras($fecha, $empresa,  $personalcod,  $oficina, $observacion, $datosSeleccionadosInsumos, $idcompraaprobada);
         if ($respuesta) {
             return "ok";
         } else {

@@ -26,11 +26,11 @@ $(function () {
     // } catch (error) {
     //   console.error("Error executing alertaControl():");
     // }
-    try {
-      await alertaOrdenCompra();
-    } catch (error) {
-      console.error("Error executing alertaORdenCompra");
-    }
+    // try {
+    //   await alertaOrdenCompra();
+    // } catch (error) {
+    //   console.error("Error executing alertaORdenCompra");
+    // }
 
     // if (valor == 1) {
     //   swal.close();

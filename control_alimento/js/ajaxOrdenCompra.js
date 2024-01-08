@@ -81,31 +81,51 @@ $(function () {
 
   /*--------------------------------------------------------------------------- */
 
-  /*-----------CLICK DE PROVEEDOR Y PONER INPUTS------------------*/
-  $("#selectproveedor").change((e) => {
+  /*-----------CLICK DE PROVEEDOR Y PONER PROVEEDOR E INPUTS------------------*/
+  // $("#selectproveedor").change((e) => {
+  //   e.preventDefault();
+  //   const idprovee = $("#selectproveedor").val();
+
+  //   const accion = "mostrarlistaproveedores";
+
+  //   $.ajax({
+  //     url: "./c_almacen.php",
+  //     type: "POST",
+  //     data: { accion: accion, idprovee: idprovee },
+  //     success: function (response) {
+  //       if (isJSON(response)) {
+  //         let task = JSON.parse(response);
+  //         $("#codigoproveedor").val(task[0].COD_PROVEEDOR);
+  //         $("#nombreproveedor").val(task[0].NOM_PROVEEDOR);
+  //         $("#direccionproveedor").val(task[0].DIR_PROVEEDOR);
+  //         $("#ruc").val(task[0].RUC_PROVEEDOR);
+  //         $("#dniproveedor").val(task[0].DNI_PROVEEDOR);
+  //         $("#selectproveedor").val("none").trigger("change");
+  //       }
+  //     },
+  //     error: function (xhr, status, error) {
+  //       console.error("Error al cargar los datos :", error);
+  //     },
+  //   });
+  // });
+  $(document).on("click", "#clickproveedorseleccioando", function (e) {
     e.preventDefault();
-    const idprovee = $("#selectproveedor").val();
+    const filaproveedor = $(this).closest("tr");
+    let codigoproductop = filaproveedor
+      .find("td:eq(0)")
+      .attr("codigoproductop");
+    let codigoproveedor = filaproveedor
+      .find("td:eq(3)")
+      .attr("codigo_proveedor");
+    let nombreproveedorprod = filaproveedor.find("td:eq(3)").text();
 
-    const accion = "mostrarlistaproveedores";
-
-    $.ajax({
-      url: "./c_almacen.php",
-      type: "POST",
-      data: { accion: accion, idprovee: idprovee },
-      success: function (response) {
-        if (isJSON(response)) {
-          let task = JSON.parse(response);
-          $("#codigoproveedor").val(task[0].COD_PROVEEDOR);
-          $("#nombreproveedor").val(task[0].NOM_PROVEEDOR);
-          $("#direccionproveedor").val(task[0].DIR_PROVEEDOR);
-          $("#ruc").val(task[0].RUC_PROVEEDOR);
-          $("#dniproveedor").val(task[0].DNI_PROVEEDOR);
-          $("#selectproveedor").val("none").trigger("change");
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error al cargar los datos :", error);
-      },
+    $("#tablainsumoscomprar tr").each(function () {
+      const filain = $(this);
+      const filaponer = filain.find("td:eq(0)").attr("codigo_producto");
+      if (filaponer == codigoproductop) {
+        filain.find("td:eq(3) input").val(nombreproveedorprod);
+        filain.find("td:eq(3) input#codproveedor").val(codigoproveedor);
+      }
     });
   });
   /*--------------------------------------------------------------*/
@@ -187,30 +207,54 @@ $(function () {
   //   $("#mostrarproveedor").modal("hide");
   //   $(".modal-backdrop").remove();
   // });
-  $(".btn-open-modal").on("click", function () {
-    const taskId = $(this).data("task-id");
-    // Set the task ID in the modal for reference
-    $("#mostrarproveedor").data("task-id", taskId);
+  /*----Proveedores */
+  $(document).on("click", "#btn-usuario", function (e) {
+    var fila = $(this).closest("tr");
+    var codigoProducto = fila
+      .find('td[data-titulo="MATERIAL"]')
+      .attr("codigo_producto");
+    const accion = "mostrarproveedoresporproducto";
+
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: { accion: accion, codigoProducto: codigoProducto },
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
+      success: function (data) {
+        if (isJSON(data)) {
+          Swal.fire({
+            title: "¡Se mostrara proveedores!",
+            text: "Lista de proveedores.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              let datas = JSON.parse(data);
+              let template = ``;
+              datas.forEach((task) => {
+                template += `<tr class="orden-compra-row" id_cantidad_minima='${task.COD_CANTIDAD_MINIMA}'>
+                              <td data-titulo='MATERIAL' codigoproductop='${task.COD_PRODUCTO}' style='text-align: center;'>${task.DES_PRODUCTO}</td>
+                              <td data-titulo='CANTIDAD MINIMA' style='text-align: center;'>${task.CANTIDAD_MINIMA}</td>
+                              <td data-titulo='PRECIO MINIMO' style='text-align: center;'>${task.PRECIO_PRODUCTO}</td>
+                              <td data-titulo='PROVEEDOR' style='text-align: center;' codigo_proveedor='${task.COD_PROVEEDOR}'>${task.NOM_PROVEEDOR}</td>
+                               <td data-titulo='RUC' style='text-align: center;'>${task.RUC_PROVEEDOR}</td>
+                               <td data-titulo='SELECCIONE PROVEEDOR' style="text-align:center;"><button class="custom-icon"  id="clickproveedorseleccioando"><i class="icon-check"></i></button></td>
+                              </tr>`;
+              });
+              $("#tablaproveedores").html(template);
+            }
+          });
+        }
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
+      },
+    });
   });
-  $("#ponerproveedor").on("click", function () {
-    const taskId = $("#mostrarproveedor").data("task-id");
-    const selectedProveedor = $("#selectproveedor").val();
-    const nombreProveedor = $("#nombreproveedor").val();
-    const direccionProveedor = $("#direccionproveedor").val();
-    const rucProveedor = $("#ruc").val();
-    const dniProveedor = $("#dniproveedor").val();
-
-    // Update the corresponding row with the selected values
-    $(`#orden-compra-item-${taskId} .codproveedor`).val(selectedProveedor);
-    $(`#orden-compra-item-${taskId} .direccion`).val(direccionProveedor);
-    $(`#orden-compra-item-${taskId} .ruc_principal`).val(rucProveedor);
-    $(`#orden-compra-item-${taskId} .dni_principal`).val(dniProveedor);
-    $(`#orden-compra-item-${taskId} .proveedor`).val(nombreProveedor);
-
-    // Close the modal
-    $("#mostrarproveedor").modal("hide");
-  });
-
   /*-------------------------------------------------------- */
   /*--------- mostrar insumos comprar ----------------------*/
   function mostrarinsumos(idcompraaprobada) {
@@ -231,11 +275,9 @@ $(function () {
                             <td data-titulo='STOCK' style='text-align: center;'>${task.STOCK_ACTUAL}</td>
                              <td data-titulo='PROVEEDOR' style='text-align: center;'>
                              <input type="hidden" id="codproveedor" value="${task.COD_PROVEEDOR}" class="form-control">
-                             <input type="hidden" id="direccion" class="form-control">
-                             <input type="hidden" id="ruc_principal" class="form-control">
-                             <input type="hidden" id="dni_principal" class="form-control">
                              <input type="text" id="proveedor" class="form-control" value="${task.NOM_PROVEEDOR}" disabled>
-                             <button type='button' class="custom-icon btn-open-modal" data-bs-toggle="modal" data-bs-target="#mostrarproveedor"><i class="icon-add-user"></i></button>
+                             <!-- <button type='button' class="custom-icon abrir-modal" data-bs-toggle="modal" data-bs-target="#mostrarproveedor"><i class="icon-add-user"></i></button> -->
+                             <button id="btn-usuario" type='button' class="custom-icon"><i class="icon-users"></i></button>
                              </td>
                              <td data-titulo='F.PAGO' style='text-align: center;'>
                              <select id="selectformapago" class="form-select" aria-label="Default select example">
@@ -257,6 +299,7 @@ $(function () {
       },
     });
   }
+
   /*------------------------------------------------------ */
 
   /*------- Check mostrar los añadidos en tabla detalle----- */
@@ -320,7 +363,6 @@ $(function () {
               <td data-titulo="MONEDA" style="text-align:center;" id_moneda="${task.TIPO_MONEDA}">${moneda}</td>
               <td><input id="formapago" type="hidden" value="${selectformapago}"></td>
               <td><input id="codigoproveedor" type="hidden" value="${codproveedor}"></td>
-              <td><input id="rucpro" type="text" value="${rucprovedores}"></td>
               </tr>`;
             });
             $("#tablainsumoscomprarprecio").append(newRow);
@@ -359,12 +401,12 @@ $(function () {
     let personal = $("#personal").val();
     let personalcod = $("#codpersonal").val();
     let oficina = $("#selectoficina").val();
-    let proveedor = $("#proveedor").val();
-    let proveedordireccion = $("#direccion").val();
-    let proveedorruc = $("#ruc_principal").val();
-    let proveedordni = $("#dni_principal").val();
-    let formapago = $("#selectformapago").val();
-    let moneda = $("#selectmoneda").val();
+    // let proveedor = $("#proveedor").val();
+    // let proveedordireccion = $("#direccion").val();
+    // let proveedorruc = $("#ruc_principal").val();
+    // let proveedordni = $("#dni_principal").val();
+    // let formapago = $("#selectformapago").val();
+    // let moneda = $("#selectmoneda").val();
     let observacion = $("#observacionorden").val();
     let idcompraaprobada = $("#tmostrarordencompraaprobado tr:eq(1)").attr(
       "id_orden_compra_aprobada"
@@ -404,13 +446,14 @@ $(function () {
         dataimagenes.push(file);
       }
     });
-    // if (!personal) {
-    //   Swal.fire({
-    //     icon: "info",
-    //     text: "Dar check en listado de documentos aprobados.",
-    //   });
-    //   return;
-    // }
+
+    if (!personal) {
+      Swal.fire({
+        icon: "info",
+        text: "Dar check en listado de documentos aprobados.",
+      });
+      return;
+    }
     // if (!$("input[type=checkbox]:checked").length) {
     //   Swal.fire({
     //     icon: "info",
@@ -474,13 +517,13 @@ $(function () {
     //   });
     //   return;
     // }
-    // if (!observacion) {
-    //   Swal.fire({
-    //     icon: "info",
-    //     text: "Escriba una observación.",
-    //   });
-    //   return;
-    // }
+    if (!observacion) {
+      Swal.fire({
+        icon: "info",
+        text: "Escriba una observación.",
+      });
+      return;
+    }
 
     // var inputVacioEncontrado = false;
     // $("#tinsumoscomprarprecio tbody input").each(function () {
@@ -528,12 +571,12 @@ $(function () {
     formData.append(" personal", $("#personal").val());
     formData.append("personalcod", $("#codpersonal").val());
     formData.append("oficina", $("#selectoficina").val());
-    formData.append("proveedor", $("#proveedor").val());
-    formData.append("proveedordireccion", $("#direccion").val());
-    formData.append("proveedorruc", $("#ruc_principal").val());
-    formData.append("proveedordni", $("#dni_principal").val());
-    formData.append("formapago", $("#selectformapago").val());
-    formData.append("moneda", $("#selectmoneda").val());
+    // formData.append("proveedor", $("#proveedor").val());
+    // formData.append("proveedordireccion", $("#direccion").val());
+    // formData.append("proveedorruc", $("#ruc_principal").val());
+    // formData.append("proveedordni", $("#dni_principal").val());
+    // formData.append("formapago", $("#selectformapago").val());
+    // formData.append("moneda", $("#selectmoneda").val());
     formData.append("observacion", $("#observacionorden").val());
     formData.append(
       "idcompraaprobada",
@@ -579,8 +622,8 @@ $(function () {
               $("#ruc_principal").val("");
               $("#dni_principal").val("");
               $("#observacionorden").val("");
-              $("#selectformapago").val("E").trigger("change");
-              $("#selectmoneda").val("S").trigger("change");
+              // $("#selectformapago").val("E").trigger("change");
+              // $("#selectmoneda").val("S").trigger("change");
               $("#tablainsumoscomprar").empty();
               $("#tablaimagenes").empty();
               $("#imagensum").prop("disabled", true);
@@ -590,6 +633,7 @@ $(function () {
               $("#ruc").val("");
               $("#dniproveedor").val("");
               $("#tablainsumoscomprarprecio").empty();
+              $("#tablaproveedores").empty();
               cargarOrdenCompraAprobada();
             }
           });
@@ -613,6 +657,7 @@ $(function () {
     // Obtén el botón de imagen dentro de la fila actual
     var fila = $(this).closest("tr");
     var botonImagen = fila.find("#imagensum");
+    let codigoprod = fila.find("td:eq(0)").attr("codigo_producto");
 
     // Verifica la forma de pago y habilita/deshabilita el botón de imagen
     if (formaPago === "D") {
@@ -621,6 +666,14 @@ $(function () {
     } else {
       // En otros casos, deshabilita el botón de imagen y realiza cualquier otra lógica necesaria
       botonImagen.prop("disabled", true);
+
+      $("#tablaimagenes tr").each(function () {
+        const filaimagen = $(this);
+        const fileInput = filaimagen.find("td:eq(3) input").val();
+        if (fileInput == codigoprod) {
+          filaimagen.remove();
+        }
+      });
       // También puedes hacer otras cosas aquí, como vaciar un contenedor de imágenes
       fila.find("#tablaimagenes").empty();
     }
@@ -681,8 +734,13 @@ $(function () {
     console.log("Archivo seleccionado:", archivoSeleccionado);
   });
 
-  // $("#imagensum").click((e) => {
   $(document).on("click", "#imagensum", function (e) {
+    e.preventDefault();
+    var fila = $(this).closest("tr");
+    var codigoProductoImagen = fila
+      .find('td[data-titulo="MATERIAL"]')
+      .attr("codigo_producto");
+
     var imagenBoton = $("<input>")
       .attr("type", "file")
       .attr("id", "fotoimagen")
@@ -697,13 +755,18 @@ $(function () {
       );
 
     var imagenPredeterminadaURL = "./images/camara.png";
+    var codigo = $("<input>")
+      .attr("type", "hidden")
+      .attr("id", "idproducto")
+      .val(codigoProductoImagen);
 
     var nuevaFila = $("<tr id='filaTabla'>").append(
       $("<td>").addClass("text-center").append(imagenBotonDelete),
       $("<td>").addClass("text-center").append(imagenBoton),
       $("<td>")
         .addClass("text-center archivosubido")
-        .append("<img src='" + imagenPredeterminadaURL + "' alt='imgcompra'>")
+        .append("<img src='" + imagenPredeterminadaURL + "' alt='imgcompra'>"),
+      $("<td>").addClass("text-center").append(codigo)
     );
 
     $("#tablaimagenes").append(nuevaFila);

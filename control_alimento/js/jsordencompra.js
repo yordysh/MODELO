@@ -129,10 +129,11 @@ function exportardatoscompra(obj) {
       let valorsumacantidad = parseFloat(k[4]);
       // Cuerpo de la factura
       doc.setFontSize(10);
-      doc.text("Producto", 10, 80);
-      doc.text("Cantidad", 95, 80);
+      doc.text("Proveedor", 10, 80);
+      doc.text("Producto", 30, 80);
+      doc.text("Cantidad", 75, 80);
       // doc.text("Precio Unitario", 120, 90);
-      doc.text("Total", 170, 80);
+      doc.text("Total", 160, 80);
       // DAta de productos
       doc.setFontSize(8);
       doc.text(k[2], 10, yPos);
@@ -210,31 +211,31 @@ function buscarimgguardada() {
       accion: "reporteordencompra",
       idrequerimientotemp: idrequerimientotemp,
     },
-    beforeSend: function () {
-      vmensj = swal.fire({
-        title: "Cargando!",
-        html: "Espere mientras se cargan los datos no cierre el sistema... <b></b>",
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        showConfirmButton: false,
-      });
-    },
+    // beforeSend: function () {
+    //   vmensj = swal.fire({
+    //     title: "Cargando!",
+    //     html: "Espere mientras se cargan los datos no cierre el sistema... <b></b>",
+    //     allowOutsideClick: false,
+    //     allowEscapeKey: false,
+    //     showConfirmButton: false,
+    //   });
+    // },
     success: function (re) {
       try {
         obj = JSON.parse(re);
         console.log(obj);
-        exportardatoscompra(obj);
+        // exportardatoscompra(obj);
       } catch (e) {
         console.log(e);
-        Mensaje1("Error al buscar datos " + message, "info");
+        // Mensaje1("Error al buscar datos " + message, "info");
       }
-      vmensj.close();
+      // vmensj.close();
     },
     // complete: function () {
     //   vmensj.close();
     // },
   }); /**/
 }
-function Mensaje1(texto, icono) {
-  Swal.fire({ icon: icono, title: texto, heightAuto: false });
-}
+// function Mensaje1(texto, icono) {
+//   Swal.fire({ icon: icono, title: texto, heightAuto: false });
+// }

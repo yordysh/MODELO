@@ -115,7 +115,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                         <input type="hidden" id="vroficina" name="vroficina" value="<?php echo $codoficina; ?>">
 
                         <!-- Tabla total requerimiento pedido-->
-                        <div class="table-responsive" style="overflow-x: hidden;height: 150px!important; margin-top:30px;margin-bottom:20px;">
+                        <div class="table-responsive" style="overflow: scroll;height: 150px!important; margin-top:30px;margin-bottom:20px;">
                             <div class="row g-4 top-div">
                                 <center><label class="title_table">DOCUMENTOS APROBADOS</label></center>
                             </div>
@@ -134,10 +134,31 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                             </table>
                         </div>
                         <?php
-                        require_once "modalproveedor.php";
+                        // require_once "modalproveedor.php";
                         ?>
+                        <!-- Tabla de proveedores-->
+                        <div class="table-responsive" style="overflow-x: hidden;height: 350px!important; margin-top:30px;margin-bottom:20px;">
+                            <div class="row g-4 top-div">
+                                <center><label class="title_table">LISTA DE PROVEEDORES</label></center>
+                            </div>
+                            <table id="tmostrarordencompraaprobado" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">MATERIAL</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD MINIMA</th>
+                                        <th class="thtitulo" scope="col">PRECIO MINIMO</th>
+                                        <th class="thtitulo" scope="col">PROVEEDOR</th>
+                                        <th class="thtitulo" scope="col">RUC</th>
+                                        <th class="thtitulo" scope="col">SELECCIONE PROVEEDOR</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaproveedores">
+
+                                </tbody>
+                            </table>
+                        </div>
                         <!-- Tabla total insumos por comprar-->
-                        <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
+                        <div class="table-responsive" style="overflow-x: hidden;height: 600px!important; margin-top:30px;margin-bottom:20px;">
                             <div class="row g-4 top-div">
                                 <center><label class="title_table">INSUMOS POR COMPRAR</label></center>
                             </div>
@@ -201,41 +222,6 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                                 <option value="00040">SMP9</option>
                                 <option value="00041">SMP10</option>
                             </select>
-                        </div>
-                        <div class="estiloordencompra">
-                            <!-- Text input proveedor-->
-                            <!-- <div class="form-outline mb-4 estiloproveedor">
-                                <div class="estiloordencompra">
-                                    <div class="estiloproveedor">
-                                        <label class="form-label">Proveedor</label>
-                                        <input type="text" id="proveedor" class="form-control" disabled>
-                                        <input type="hidden" id="direccion" class="form-control">
-                                        <input type="hidden" id="ruc_principal" class="form-control">
-                                        <input type="hidden" id="dni_principal" class="form-control">
-                                    </div>
-                                    <div class="buttonproveedor">
-                                        <button type='button' class="custom-icon" data-bs-toggle="modal" data-bs-target="#mostrarproveedor"><i class="icon-add-user"></i></button>
-                                    </div>
-                                </div>
-                            </div> -->
-
-                            <!-- Text input FORMA DE PAGO-->
-                            <!-- <div class="form-outline mb-4 estiloselect">
-                                <label class="form-label">F.pago</label>
-                                <select id="selectformapago" class="form-select" aria-label="Default select example">
-                                    <option value="E" selected>EFECTIVO</option>
-                                    <option value="D">DEPOSITO</option>
-                                </select>
-                            </div> -->
-
-                            <!-- Text input moneda-->
-                            <!-- <div class="form-outline mb-4 estiloselect">
-                                <label class="form-label">Moneda</label>
-                                <select id="selectmoneda" class="form-select" aria-label="Default select example">
-                                    <option value="S" selected>SOLES</option>
-                                    <option value="D">DOLARES</option>
-                                </select>
-                            </div> -->
                         </div>
                         <!-- Text input moneda-->
                         <!-- <div class="form-outline mb-4">
