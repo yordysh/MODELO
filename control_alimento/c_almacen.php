@@ -471,8 +471,8 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'rechazarpendienterequerimiento') {
     $cod_requerimiento_pedido = trim($_POST['cod_requerimiento_pedido']);
     $codpersonal = trim($_POST['codpersonal']);
-    $observacion = strtoupper(trim($_POST['observacion']));
-    $respuesta = c_almacen::c_rechazar_pendiente_requerimiento($cod_requerimiento_pedido, $codpersonal, $observacion);
+    // $observacion = strtoupper(trim($_POST['observacion']));
+    $respuesta = c_almacen::c_rechazar_pendiente_requerimiento($cod_requerimiento_pedido, $codpersonal);
     echo $respuesta;
 } elseif ($accion == 'convalidocantidadproduccion') {
 
@@ -753,6 +753,14 @@ if ($accion == 'insertar') {
     $buscarProveedorPrecios = $_POST['buscarProveedorPrecios'];
 
     c_almacen::c_buscar_listar_proveedor_producto($buscarProveedorPrecios);
+} else if ($accion == 'cambiarestadocantidadminima') {
+    $taskId = $_POST['taskId'];
+
+    c_almacen::c_cambiar_estado_cantidad_minima($taskId);
+} else if ($accion == 'cambiarestado') {
+    $id = $_POST['id'];
+
+    c_almacen::c_cambiar_estado($id);
 } elseif ($accion == 'editarproveedorprecios') {
     $cod_mini = trim($_POST['cod_mini']);
     $respuesta = c_almacen::c_editar_proveedor_precios($cod_mini);
@@ -2804,54 +2812,59 @@ class c_almacen
             $datos = $mostrar->MostrarSiCompra($cod_formulacion);
 
             if (!$datos) {
-                throw new Exception("Hubo un error en la consulta");
+                // throw new Exception("Hubo un error en la consulta");
+                $json = array();
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
             }
-            // $json = array();
-            // foreach ($datos as $row) {
-            //     $p1=trim($row->COD_PRODUCTO);
-            //     $json[] = array(
-            //         "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-            //         "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
-            //         "DES_PRODUCTO" => $row->DES_PRODUCTO,
-            //         "CANTIDAD" => $row->CANTIDAD,
-            //         "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
-            //         "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
-            //         "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
-            //     );
-            // }
-
-            // $jsonstring = json_encode($json);
-            // echo $jsonstring;
-            $agrupados = array();
-
+            $json = array();
             foreach ($datos as $row) {
-                $codigo_producto = trim($row->COD_PRODUCTO);
 
-                // Verificar si el grupo ya existe
-                if (!isset($agrupados[$codigo_producto])) {
-                    $agrupados[$codigo_producto] = array(
-                        "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-                        "COD_PRODUCTO" => $codigo_producto,
-                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                        "CANTIDAD" => $row->CANTIDAD,
-                        "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
-                        "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
-                        "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
-                        "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
-                    );
-                } else {
-                    // Si el grupo ya existe, comparar precios y actualizar si es menor
-                    if ($row->PRECIO_PRODUCTO < $agrupados[$codigo_producto]["PRECIO_PRODUCTO"]) {
-                        $agrupados[$codigo_producto]["PRECIO_PRODUCTO"] = $row->PRECIO_PRODUCTO;
-                        $agrupados[$codigo_producto]["COD_PROVEEDOR"] = $row->COD_PROVEEDOR;
-                    }
-                }
+                $json[] = array(
+                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CANTIDAD" => $row->CANTIDAD,
+                    "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
+                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                    "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
+                    "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+                    "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
+                );
             }
 
-            // Convertir el array agrupado a formato JSON
-            $json = array_values($agrupados); // Reindexar el array para evitar claves no numéricas
             $jsonstring = json_encode($json);
             echo $jsonstring;
+            // $agrupados = array();
+
+            // foreach ($datos as $row) {
+            //     $codigo_producto = trim($row->COD_PRODUCTO);
+
+            //     // Verificar si el grupo ya existe
+            //     if (!isset($agrupados[$codigo_producto])) {
+            //         $agrupados[$codigo_producto] = array(
+            //             "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+            //             "COD_PRODUCTO" => $codigo_producto,
+            //             "DES_PRODUCTO" => $row->DES_PRODUCTO,
+            //             "CANTIDAD" => $row->CANTIDAD,
+            //             "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
+            //             "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+            //             "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
+            //             "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+            //         );
+            //     } else {
+            //         // Si el grupo ya existe, comparar precios y actualizar si es menor
+            //         if ($row->PRECIO_PRODUCTO < $agrupados[$codigo_producto]["PRECIO_PRODUCTO"]) {
+            //             $agrupados[$codigo_producto]["PRECIO_PRODUCTO"] = $row->PRECIO_PRODUCTO;
+            //             $agrupados[$codigo_producto]["COD_PROVEEDOR"] = $row->COD_PROVEEDOR;
+            //         }
+            //     }
+            // }
+
+            // // Convertir el array agrupado a formato JSON
+            // $json = array_values($agrupados); // Reindexar el array para evitar claves no numéricas
+            // $jsonstring = json_encode($json);
+            // echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -2918,6 +2931,7 @@ class c_almacen
                         "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                        "ESTADO" => $row->ESTADO,
                     );
                 }
                 $jsonstring = json_encode($json);
@@ -2936,6 +2950,7 @@ class c_almacen
                         "COD_PRODUCTO" => $row->COD_PRODUCTO,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                        "ESTADO" => $row->ESTADO,
                     );
                 }
                 $jsonstring = json_encode($json);
@@ -3190,12 +3205,12 @@ class c_almacen
         }
     }
 
-    static function  c_rechazar_pendiente_requerimiento($cod_requerimiento_pedido, $codpersonal, $observacion)
+    static function  c_rechazar_pendiente_requerimiento($cod_requerimiento_pedido, $codpersonal)
     {
         $mostrar = new m_almacen();
 
         if (isset($cod_requerimiento_pedido)) {
-            $respuesta = $mostrar->RechazarPendienteRequerimiento($cod_requerimiento_pedido, $codpersonal, $observacion);
+            $respuesta = $mostrar->RechazarPendienteRequerimiento($cod_requerimiento_pedido, $codpersonal);
             if ($respuesta) {
                 return "ok";
             } else {
@@ -4199,7 +4214,7 @@ class c_almacen
 
                 if (!$datos) {
                     // throw new Exception("Hubo un error en la consulta");
-                    $json = [];
+                    $json = array();
                     $jsonstring = json_encode($json);
                     echo $jsonstring;
                 }
@@ -4210,6 +4225,7 @@ class c_almacen
                         "COD_PRODUCTO" => $row->COD_PRODUCTO,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                        "ESTADO" => trim($row->ESTADO),
                         "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
                         "TIPO_MONEDA" => $row->TIPO_MONEDA,
                         "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
@@ -4223,7 +4239,10 @@ class c_almacen
                 $datos = $mostrar->BuscarListarProveedorProducto($buscarProveedorPrecios);
 
                 if (!$datos) {
-                    throw new Exception("Hubo un error en la consulta");
+                    // throw new Exception("Hubo un error en la consulta");
+                    $json = array();
+                    $jsonstring = json_encode($json);
+                    echo $jsonstring;
                 }
                 $json = array();
                 foreach ($datos as $row) {
@@ -4232,6 +4251,7 @@ class c_almacen
                         "COD_PRODUCTO" => $row->COD_PRODUCTO,
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                        "ESTADO" => trim($row->ESTADO),
                         "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
                         "TIPO_MONEDA" => $row->TIPO_MONEDA,
                         "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
@@ -4240,6 +4260,37 @@ class c_almacen
                 }
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_cambiar_estado_cantidad_minima($taskId)
+    {
+        try {
+            $mostrar = new m_almacen();
+            $datos = $mostrar->CambiarEstadoCantidadMinima($taskId);
+
+            if ($datos) {
+                echo "ok";
+            } else {
+                echo "error";
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_cambiar_estado($id)
+    {
+        try {
+            $mostrar = new m_almacen();
+            $datos = $mostrar->CambiarEstado($id);
+
+            if ($datos) {
+                echo "ok";
+            } else {
+                echo "error";
             }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();

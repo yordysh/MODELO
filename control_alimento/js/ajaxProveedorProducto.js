@@ -92,7 +92,7 @@ $(function () {
       success: function (response) {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
-
+          console.log(tasks);
           let template = ``;
           tasks.forEach((task) => {
             let tipomoneda = task.TIPO_MONEDA;
@@ -103,14 +103,21 @@ $(function () {
               moneda = "DOLARES";
             }
             template += `<tr taskId="${task.COD_CANTIDAD_MINIMA}">
+            <td data-titulo="PRIORIZA" style="text-align:center;"><input  class="form-check-input" type="checkbox" ${
+              task.ESTADO === "A" ? "checked" : ""
+            } id="checkproveedor"></td>
             <td data-titulo="PROVEEDOR">${task.NOM_PROVEEDOR}</td>
             <td data-titulo="PRODUCTOS">${task.DES_PRODUCTO}</td>
             <td data-titulo="CANTIDAD">${task.CANTIDAD_MINIMA}</td>
             <td data-titulo="PRECIO">${task.PRECIO_PRODUCTO}</td>
             <td data-titulo="MONEDA">${moneda}</td>
 
-            <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_CANTIDAD_MINIMA="${task.COD_CANTIDAD_MINIMA}"><i class="icon-trash"></i></button></td>
-            <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_CANTIDAD_MINIMA="${task.COD_CANTIDAD_MINIMA}"><i class="icon-edit"></i></button></td>
+            <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_CANTIDAD_MINIMA="${
+              task.COD_CANTIDAD_MINIMA
+            }"><i class="icon-trash"></i></button></td>
+            <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_CANTIDAD_MINIMA="${
+              task.COD_CANTIDAD_MINIMA
+            }"><i class="icon-edit"></i></button></td>
 
         </tr>`;
           });
@@ -150,14 +157,21 @@ $(function () {
                 moneda = "DOLARES";
               }
               template += `<tr taskId="${task.COD_CANTIDAD_MINIMA}">
+              <td data-titulo="PRIORIZA" style="text-align:center;"><input  class="form-check-input" type="checkbox" ${
+                task.ESTADO === "A" ? "checked" : ""
+              } id="checkproveedor"></td>
               <td data-titulo="PROVEEDOR">${task.NOM_PROVEEDOR}</td>
               <td data-titulo="PRODUCTOS">${task.DES_PRODUCTO}</td>
               <td data-titulo="CANTIDAD">${task.CANTIDAD_MINIMA}</td>
               <td data-titulo="PRECIO">${task.PRECIO_PRODUCTO}</td>
               <td data-titulo="MONEDA">${moneda}</td>
   
-              <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_CANTIDAD_MINIMA="${task.COD_CANTIDAD_MINIMA}"><i class="icon-trash"></i></button></td>
-              <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_CANTIDAD_MINIMA="${task.COD_CANTIDAD_MINIMA}"><i class="icon-edit"></i></button></td>
+              <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_CANTIDAD_MINIMA="${
+                task.COD_CANTIDAD_MINIMA
+              }"><i class="icon-trash"></i></button></td>
+              <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_CANTIDAD_MINIMA="${
+                task.COD_CANTIDAD_MINIMA
+              }"><i class="icon-edit"></i></button></td>
   
           </tr>`;
             });
@@ -253,6 +267,44 @@ $(function () {
       }
     });
   });
+  /*--------------------------------------------------------------------- */
+  /*-------------------------------Check cambio de estado cantidad minima------------ */
+  $("#tablacantidadminima").on("click", "#checkproveedor", function () {
+    var value = $(this).val();
+    var taskId = $(this).closest("tr").attr("taskId");
+    if ($(this).prop("checked")) {
+      const accion = "cambiarestadocantidadminima";
+      $.ajax({
+        url: "./c_almacen.php",
+        data: { accion: accion, taskId: taskId },
+        type: "POST",
+        success: function (response) {
+          if (response == "ok") {
+            fetchTasks();
+          }
+        },
+      });
+
+      // alert("Checkbox checked for task ID " + taskId + " with value " + value);
+      // You can perform additional actions when the checkbox is checked
+    } else {
+      var id = $(this).closest("tr").attr("taskId");
+      const accion = "cambiarestado";
+      $.ajax({
+        url: "./c_almacen.php",
+        data: { accion: accion, id: id },
+        type: "POST",
+        success: function (response) {
+          if (response == "ok") {
+            fetchTasks();
+          }
+        },
+      });
+
+      // You can perform additional actions when the checkbox is unchecked
+    }
+  });
+  /*-------------------------------------------------------------------------------- */
 });
 function isJSON(str) {
   try {

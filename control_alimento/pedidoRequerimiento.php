@@ -100,6 +100,11 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
     <?php
     require_once('../menulista/index.php');
     ?>
+    <style>
+        .form-select {
+            width: auto;
+        }
+    </style>
     <main>
         <section>
             <div class="container g-4 row">
@@ -176,22 +181,45 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                     </form>
 
                     <!-- Tabla total a comprar insumos-->
-                    <div class="table-responsive" style="overflow-x: hidden;height: 300px; margin-top:20px;">
+                    <div class="table-responsive" style="overflow-x: auto; overflow-y: auto;height: 500px; margin-top:20px;">
                         <div class="row g-4 top-div">
                             <center><label class="title_table">INSUMOS Y ENVASES POR COMPRAR</label></center>
                         </div>
                         <table id="tTotalinsumoscomprar" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
+                                    <th class="thtitulo" scope="col">PROVEEDOR</th>
                                     <th class="thtitulo" scope="col">PRODUCTO</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD POR COMPRA</th>
+                                    <th class="thtitulo" scope="col">PRECIO TOTAL</th>
+                                    <th class="thtitulo" scope="col">F.PAGO</th>
+                                    <th class="thtitulo" scope="col">IMAGEN</th>
                                     <th class="thtitulo" scope="col">CANTIDAD FALTANTE</th>
                                     <th class="thtitulo" scope="col">STOCK ACTUAL</th>
                                     <th class="thtitulo" scope="col">CANTIDAD MINIMA</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD POR COMPRA</th>
                                     <th class="thtitulo" scope="col">PRECIO MINIMO</th>
                                 </tr>
                             </thead>
                             <tbody id="tablatotalinsumosrequeridoscomprar">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Tabla de imagenes -->
+                    <div class="table-responsive" style="overflow-x: hidden;height: 200px!important; margin-top:30px;margin-bottom:20px;">
+                        <div class="row g-4 top-div">
+                            <center><label class="title_table">DEPOSITO</label></center>
+                        </div>
+                        <table id="tbimagenes" class="table table-sm mb-3 table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="thtitulo" scope="col">ACCION</th>
+                                    <th class="thtitulo" scope="col">SUBIR IMAGEN</th>
+                                    <th class="thtitulo" scope="col">VISUALIZAR</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaimagenes">
 
                             </tbody>
                         </table>
@@ -202,9 +230,12 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <div class="ctnBtn">
                             <input type="hidden" id="taskcodrequhiddenvalidar">
-                            <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-primary boton-insertar">Guardar</button>
+                            <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-info boton-insertar">Proceso</button>
                             <input type="text" id="mensajecompleto" style="width: 270px; font-weight:bold; display:none;" value="Insumos completos en el almacen" disabled>
                             <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
+                        </div>
+                        <div>
+                            <button id="insertarCompraInsumosFinal" name="insertarfinal" class="btn btn-primary boton-insertar">Guardar</button>
                         </div>
                     </div>
                 </div>

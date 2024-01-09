@@ -183,6 +183,24 @@ $(function () {
             let insumo_pedir = (task.CANTIDAD - task.STOCK_ACTUAL).toFixed(3);
             let total_comprar = Math.ceil(insumo_pedir / task.CANTIDAD_MINIMA);
             let cantidadtotalminima = total_comprar * task.CANTIDAD_MINIMA;
+
+            let preciototal =
+              (insumo_pedir * task.PRECIO_PRODUCTO) / task.CANTIDAD_MINIMA;
+
+            // Limitar a dos decimales usando toFixed
+            preciototal = preciototal.toFixed(2);
+
+            // Convertir de nuevo a número para realizar el redondeo manual
+            preciototal = parseFloat(preciototal);
+
+            // Redondear según tu criterio
+            const segundoDecimal = Math.floor((preciototal * 100) % 10);
+            if (segundoDecimal > 4) {
+              preciototal = Math.ceil(preciototal * 10) / 10;
+            } else {
+              preciototal = Math.round(preciototal * 10) / 10;
+            }
+
             if (insumo_pedir > 0) {
               if (task.CANTIDAD_MINIMA == 0) {
                 Swal.fire({
@@ -195,9 +213,30 @@ $(function () {
               template += `<tr codigorequerimientototal="${
                 task.COD_REQUERIMIENTO
               }">
+              <td data-titulo="PROVEEDOR"  style="text-align:center;" codigo_proveedor='${
+                task.COD_PROVEEDOR
+              }'>${task.NOM_PROVEEDOR}</td>
                             <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${
                               task.COD_PRODUCTO
                             }'>${task.DES_PRODUCTO}</td>
+                            <td data-titulo="CANTIDAD POR COMPRA"  style="text-align:center;">${
+                              isNaN(cantidadtotalminima)
+                                ? "Falta cantidad minina"
+                                : cantidadtotalminima
+                            }</td>
+                            <td data-titulo="PRECIO TOTAL"  style="text-align:center;">${
+                              isNaN(preciototal)
+                                ? "Falta cantidad minina"
+                                : preciototal
+                            }</td>
+                            <td data-titulo='F.PAGO' style='text-align: center;'>
+                            <select id="selectformapago" class="form-select" aria-label="Default select example">
+                            <option value="E" selected>EFECTIVO</option>
+                            <option value="D">DEPOSITO</option>
+                            <option value="C">CREDITO</option>
+                            </select>
+                            </td>
+                            <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
                             <td data-titulo="CANTIDAD FALTANTE"  style="text-align:center;">${insumo_pedir}</td>
                             <td data-titulo="STOCK ACTUAL"  style="text-align:center;">${
                               task.STOCK_ACTUAL
@@ -207,11 +246,7 @@ $(function () {
                                 ? "Falta cantidad minina"
                                 : task.CANTIDAD_MINIMA
                             }</td>
-                            <td data-titulo="CANTIDAD POR COMPRA"  style="text-align:center;">${
-                              isNaN(cantidadtotalminima)
-                                ? "Falta cantidad minina"
-                                : cantidadtotalminima
-                            }</td>
+                            
                             <td data-titulo="PRECIO MINIMO" id_proveedor='${
                               task.COD_PROVEEDOR
                             }' style="text-align:center;">${
@@ -260,9 +295,11 @@ $(function () {
 
     let valoresCapturadosVenta = [];
 
-    let idRequerimiento = $("#tablaproductorequerido tr").attr(
-      "codigorequerimiento"
-    );
+    // let idRequerimiento = $("#tablaproductorequerido tr").attr(
+    //   "codigorequerimiento"
+    // );
+
+    let idRequerimiento = $("#tablamostartotalpendientes tr").attr("taskId");
 
     let tablainsumorequerido = $("#tablaproductorequerido");
     let tablainsumos = $("#tablainsumorequerido");
@@ -442,6 +479,36 @@ $(function () {
       },
     });
   }
+
+  /*--------- Cuando doy click en deposito me activa ------------- */
+  $("body").on("change", "#selectformapago", function () {
+    // Obtén el valor seleccionado
+    var formaPago = $(this).val();
+
+    // Obtén el botón de imagen dentro de la fila actual
+    var fila = $(this).closest("tr");
+    var botonImagen = fila.find("#imagensum");
+    let codigoprod = fila.find("td:eq(1)").attr("id_producto");
+
+    // Verifica la forma de pago y habilita/deshabilita el botón de imagen
+    if (formaPago === "D") {
+      // Si la forma de pago es DEPOSITO, habilita el botón de imagen
+      botonImagen.prop("disabled", false);
+    } else if (formaPago == "C" || formaPago == "E") {
+      // En otros casos, deshabilita el botón de imagen y realiza cualquier otra lógica necesaria
+      botonImagen.prop("disabled", true);
+
+      $("#tablaimagenes tr").each(function () {
+        const filaimagen = $(this);
+        const fileInput = filaimagen.find("td:eq(3) input").val();
+        if (fileInput == codigoprod) {
+          filaimagen.remove();
+        }
+      });
+      // También puedes hacer otras cosas aquí, como vaciar un contenedor de imágenes
+      fila.find("#tablaimagenes").empty();
+    }
+  });
 });
 function isJSON(str) {
   try {

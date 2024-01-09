@@ -111,6 +111,7 @@ $dataproductosproveedor = $mostrar->MostrarProductoProveedores();
                         <table id="tcantidadminima" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
+                                    <th>PRIORIZA</th>
                                     <th class="" scope="col">PROVEEDOR</th>
                                     <th class="" scope="col">PRODUCTOS</th>
                                     <th class="" scope="col">CANTIDAD</th>
