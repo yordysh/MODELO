@@ -169,8 +169,9 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 <thead>
                                     <tr>
                                         <th class="thtitulo" scope="col">INSUMOS</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
-                                        <th></th>
+                                        <th class="thtitulo" scope="col">CANTIDAD TOTAL</th>
+                                        <!-- <th class="thtitulo" scope="col">CANTIDAD FALTANTE</th> -->
+                                        <th class="thtitulo" scope="col">STOCK ACTUAL</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablainsumorequerido">
@@ -181,7 +182,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                     </form>
 
                     <!-- Tabla total a comprar insumos-->
-                    <div class="table-responsive" style="overflow-x: auto; overflow-y: auto;height: 500px; margin-top:20px;">
+                    <div class="table-responsive" style="overflow-x: auto; overflow-y: auto;height: 800px !important; margin-top:20px;">
                         <div class="row g-4 top-div">
                             <center><label class="title_table">INSUMOS Y ENVASES POR COMPRAR</label></center>
                         </div>
@@ -192,12 +193,10 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                     <th class="thtitulo" scope="col">PRODUCTO</th>
                                     <th class="thtitulo" scope="col">CANTIDAD POR COMPRA</th>
                                     <th class="thtitulo" scope="col">PRECIO TOTAL</th>
+                                    <th class="thtitulo" scope="col">FECHA ENTREGA</th>
                                     <th class="thtitulo" scope="col">F.PAGO</th>
                                     <th class="thtitulo" scope="col">IMAGEN</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD FALTANTE</th>
-                                    <th class="thtitulo" scope="col">STOCK ACTUAL</th>
-                                    <th class="thtitulo" scope="col">CANTIDAD MINIMA</th>
-                                    <th class="thtitulo" scope="col">PRECIO MINIMO</th>
+                                    <th class="thtitulo" scope="col">PRECIO</th>
                                 </tr>
                             </thead>
                             <tbody id="tablatotalinsumosrequeridoscomprar">
@@ -230,12 +229,12 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <div class="ctnBtn">
                             <input type="hidden" id="taskcodrequhiddenvalidar">
-                            <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-info boton-insertar">Proceso</button>
+                            <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-primary boton-insertar">Guardar</button>
                             <input type="text" id="mensajecompleto" style="width: 270px; font-weight:bold; display:none;" value="Insumos completos en el almacen" disabled>
                             <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
                         </div>
                         <div>
-                            <button id="insertarCompraInsumosFinal" name="insertarfinal" class="btn btn-primary boton-insertar">Guardar</button>
+                            <button id="procesoordencompra" name="insertarfinal" class="btn btn-info boton-insertar">Proceso</button>
                         </div>
                     </div>
                 </div>

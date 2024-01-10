@@ -341,9 +341,9 @@ td {
 .boton-insertar {
   padding: 10px 50px;
   font-size: 16px;
-
   box-sizing: border-box;
   margin-top: 25px;
+  color: #fff !important;
 }
 
 .contenedorpdfverificar {

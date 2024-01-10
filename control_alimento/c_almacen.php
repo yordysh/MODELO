@@ -449,6 +449,12 @@ if ($accion == 'insertar') {
         $respuesta = c_almacen::c_actualizar_orden_compra_item($idRequerimiento);
         echo $respuesta;
     }
+} elseif ($accion == 'insertarordencompraitemtemporal') {
+    $idRequerimiento = $_POST['idRequerimiento'];
+    $valorcapturado = $_POST['valorcapturado'];
+
+    $respuesta = c_almacen::c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado);
+    echo $respuesta;
 } elseif ($accion == 'mostrarproduccionrequerimiento') {
 
     // $cod_formulacion = trim($_POST['cod_formulacion']);
@@ -2897,6 +2903,16 @@ class c_almacen
             };
         }
     }
+    static function c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado)
+    {
+        $m_formula = new m_almacen();
+        $respuestaorde = $m_formula->InsertarOrdenCompraTemp($idRequerimiento, $valorcapturado);
+        if ($respuestaorde) {
+            return "ok";
+        } else {
+            return "error";
+        };
+    }
 
     static function c_insertar_cantidad_minima($selectCantidadminima, $cantidadMinima)
     {
@@ -3142,17 +3158,27 @@ class c_almacen
 
 
             $mostrar = new m_almacen();
-            $datos = $mostrar->MostrarProductoInsumoPorRequerimiento($cod_formulacion);
+            // $datos = $mostrar->MostrarProductoInsumoPorRequerimiento($cod_formulacion);
+            $datos = $mostrar->MostrarSiCompra($cod_formulacion);
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
             }
             $json = array();
             foreach ($datos as $row) {
                 $json[] = array(
+                    // "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    // "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    // "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    // "CANTIDAD" => $row->CANTIDAD,
                     "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
                     "COD_PRODUCTO" => $row->COD_PRODUCTO,
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "CANTIDAD" => $row->CANTIDAD,
+                    "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
+                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                    "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
+                    "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+                    "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
 
                 );
             }
