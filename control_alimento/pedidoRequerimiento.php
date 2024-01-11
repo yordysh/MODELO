@@ -12,7 +12,7 @@ require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
 $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
-
+$mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +30,12 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
     <link rel="stylesheet" href="./styleIcons/style.css">
     <link rel="stylesheet" href="./css/select2.min.css">
     <title>Covifarma</title>
+
+    <!-- Agregar la librería jsPDF -->
+    <script src="../librerias/jquery_ajax/js/ajax_libs_jquery_3.3.1_jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="./js/jsordencomprapdf.js"></script>
 
 </head>
 
@@ -236,6 +242,29 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <div>
                             <button id="procesoordencompra" name="insertarfinal" class="btn btn-info boton-insertar">Proceso</button>
                         </div>
+                    </div>
+                    <div class="estilorequerimiento">
+                        <select name="select_requerimiento" id="idrequerimientotemp">
+                            <?php
+                            $primerRequerimiento = reset($mostrarrequerimiento);
+                            foreach ($mostrarrequerimiento as $reque) {
+                                echo '<option value="' . $reque->COD_REQUERIMIENTO . '"';
+                                if ((int)$reque->COD_REQUERIMIENTO === (int)$primerRequerimiento->COD_REQUERIMIENTO) {
+                                    echo ' selected';
+                                }
+                                echo '>';
+                                echo $reque->COD_REQUERIMIENTO;
+                                echo '</option>';
+                            }
+                            ?>
+                        </select>
+
+
+
+                    </div>
+                    <div>
+                        <!-- <a class="btn btn-success" href="#" onclick="generarPDF()">VISUALIZAR ORDEN COMPRA</a> -->
+                        <button id="generarOrdenPDF" class="btn btn-success">VISUALIZAR ORDEN COMPRA</button>
                     </div>
                 </div>
             </div>

@@ -439,12 +439,28 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'insertarordencompraitem') {
 
     $idRequerimiento = trim($_POST['idRequerimiento']);
+    // var_dump($_POST['codigoproveedorimagenes']$_FILES['file']);
+
+    // var_dump($file);
+    // exit();
+
     if (isset($_POST['union'])) {
         $union = $_POST['union'];
         $idRequerimiento = $_POST['idRequerimiento'];
         $codpersonal = $_POST['codpersonal'];
-        $respuesta = c_almacen::c_insertar_orden_compra_item($union, $idRequerimiento,  $codpersonal);
-        echo $respuesta;
+
+
+
+        if (isset($_FILES['file'])) {
+
+            $dataimagenesfile = $_FILES['file'];
+            $codigoproveedorimagenes = $_POST['codigoproveedorimagenes'];
+            $respuesta = c_almacen::c_insertar_orden_compra_item($union, $file, $codigoproveedorimagenes, $idRequerimiento,  $codpersonal);
+        } else {
+            $respuesta = c_almacen::c_insertar_orden_compra_item_sinimagen($union, $idRequerimiento,  $codpersonal);
+        }
+        // $respuesta = c_almacen::c_insertar_orden_compra_item($union, $file, $idRequerimiento,  $codpersonal);
+        // echo $respuesta;
     } else {
         $respuesta = c_almacen::c_actualizar_orden_compra_item($idRequerimiento);
         echo $respuesta;
@@ -604,6 +620,11 @@ if ($accion == 'insertar') {
     $idrequerimientotemp = trim($_POST['idrequerimientotemp']);
 
     $respuesta = c_almacen::c_generar_reporte_orden_compra($idrequerimientotemp);
+    echo $respuesta;
+} elseif ($accion == 'reporteordencomprapdf') {
+    $idrequerimientotemp = trim($_POST['idrequerimientotemp']);
+
+    $respuesta = c_almacen::c_generar_reporte_orden_compra_pdf($idrequerimientotemp);
     echo $respuesta;
 } elseif ($accion == 'mostrarcompracomprobante') {
     $respuesta = c_almacen::c_mostrar_compra_comprobante();
@@ -2876,12 +2897,12 @@ class c_almacen
         }
     }
 
-    static function c_insertar_orden_compra_item($union, $idRequerimiento, $codpersonal)
+    static function c_insertar_orden_compra_item($union, $file, $codigoproveedorimagenes, $idRequerimiento, $codpersonal)
     {
         $m_formula = new m_almacen();
 
         if (isset($idRequerimiento)) {
-            $respuesta = $m_formula->InsertarOrdenCompraItem($union, $idRequerimiento, $codpersonal);
+            $respuesta = $m_formula->InsertarOrdenCompraItem($union, $file, $codigoproveedorimagenes, $idRequerimiento, $codpersonal);
             if ($respuesta) {
                 return "ok";
             } else {
@@ -2889,6 +2910,20 @@ class c_almacen
             };
         }
     }
+    static function c_insertar_orden_compra_item_sinimagen($union, $idRequerimiento,  $codpersonal)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($idRequerimiento)) {
+            $respuesta = $m_formula->InsertarOrdenCompraItemSinImagen($union, $idRequerimiento, $codpersonal);
+            if ($respuesta) {
+                return "ok";
+            } else {
+                return "error";
+            };
+        }
+    }
+
     static function c_actualizar_orden_compra_item($idRequerimiento)
     {
         $m_formula = new m_almacen();
@@ -3874,6 +3909,47 @@ class c_almacen
             }
             $dato = array(
                 'd' => $cab,
+                // 'c' => count($cab),
+            );
+
+            echo json_encode($dato, JSON_FORCE_OBJECT);
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    static function c_generar_reporte_orden_compra_pdf($idrequerimientotemp)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $cabecera = $mostrar->MostrarReporteOrdenCompraPDF($idrequerimientotemp);
+
+            for ($i = 0; $i < count($cabecera); $i++) {
+                $cabecera[$i][3] = trim($cabecera[$i][3]);
+                $cabecera[$i][2] = convFecSistema($cabecera[$i][2]);
+                $item = $mostrar->MostrarFacturaItemTempPDF($cabecera[$i][0]);
+                // $valor = $mostrar->MostrarImagenFactura($cab[$i][0]);
+
+                // $imagen = [];
+                // for ($j = 0; $j < count($valor); $j++) {
+                //     $imagen[] =  base64_encode($valor[$j][2]);
+                // }
+
+                // if (isset($imagen)) {
+                //     $vg = $imagen;
+                // } else {
+                //     $vg = '';
+                // }
+                // var_dump($codigo);
+                // var_dump($cab[$i][0]);
+
+                //$imagen = !empty($valor) && isset($valor[$i]["IMAGEN"]) ? base64_encode($valor[$i]["IMAGEN"]) : "";
+                // $cab[$i][6] = $vg;
+                // $cab[$i][7] = count($cab);
+                array_push($cabecera[$i], $item);
+            }
+            $dato = array(
+                'cabecera' => $cabecera,
                 // 'c' => count($cab),
             );
 

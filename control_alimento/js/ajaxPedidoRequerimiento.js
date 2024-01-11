@@ -315,32 +315,40 @@ $(function () {
     let taskcodrequhiddenvalidar = $("#taskcodrequhiddenvalidar").val();
     let codpersonal = $("#codpersonal").val();
     let cantidadesTotalesMinimas = [];
+    let fechaentregaalert = [];
 
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let id_proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
       let id_producto_insumo = $(this).find("td:eq(1)").attr("id_producto");
-      let cantidad_producto_insumo = $(this).find("td:eq(1)").text();
+      let cantidad_producto_insumo = $(this).find("td:eq(2)").text();
       // let cantidad_total_minima = $(this).find("td:eq(2)").text();
-      let cantidad_total_minima = $(this).find("td:eq(4)").text();
+      let monto = $(this).find("td:eq(3)").text();
+      let fechaentrega = $(this).find("td:eq(4) input").val();
+      let formapago = $(this).find("td:eq(5)").find("select").val();
 
-      cantidadesTotalesMinimas.push(cantidad_total_minima);
+      fechaentregaalert.push(fechaentrega);
       valoresCapturadosVenta.push({
         id_proveedor: id_proveedor,
         id_producto_insumo: id_producto_insumo,
         cantidad_producto_insumo: cantidad_producto_insumo,
-        cantidad_total_minima: cantidad_total_minima,
+        monto: monto,
+        formapago: formapago,
+        fechaentrega: fechaentrega,
       });
     });
 
     const dataimagenes = [];
+    const codigoproveedorimagenes = [];
 
     $("#tablaimagenes tr").each(function () {
       const filaimagen = $(this);
       const fileInput = filaimagen.find("td:eq(1) input[type=file]")[0];
+      const codigoproveedor = filaimagen.find("td:eq(4) input").val();
 
       if (fileInput && fileInput.files.length > 0) {
         const file = fileInput.files[0];
         dataimagenes.push(file);
+        codigoproveedorimagenes.push({ codigoproveedor });
       }
     });
 
@@ -353,13 +361,12 @@ $(function () {
       });
       return;
     }
-
-    for (let i = 0; i < cantidadesTotalesMinimas.length; i++) {
-      if (cantidadesTotalesMinimas[i] === "Falta cantidad minina") {
+    for (let i = 0; i < fechaentregaalert.length; i++) {
+      if (fechaentregaalert[i] === "") {
         Swal.fire({
           title: "¡Error!",
-          text: "Añadir un valor de cantidad minima del producto",
-          icon: "error",
+          text: "Añadir una fecha de entrega",
+          icon: "info",
           confirmButtonText: "Aceptar",
         });
         // break;
@@ -367,17 +374,42 @@ $(function () {
       }
     }
 
-    const accion = "insertarordencompraitem";
+    const formData = new FormData();
+    formData.append("accion", "insertarordencompraitem");
+    formData.append("idRequerimiento", idRequerimiento);
+    formData.append("codpersonal", codpersonal);
+
+    for (let j = 0; j < valoresCapturadosVenta.length; j++) {
+      const objetoInsumo = valoresCapturadosVenta[j];
+      const objetoInsumoString = JSON.stringify(objetoInsumo);
+      formData.append("union[]", objetoInsumoString);
+    }
+
+    for (let i = 0; i < dataimagenes.length; i++) {
+      formData.append("file[]", dataimagenes[i]);
+    }
+    for (let l = 0; l < codigoproveedorimagenes.length; l++) {
+      const objetoproveedor = codigoproveedorimagenes[l];
+      const proveedor = JSON.stringify(objetoproveedor);
+      formData.append("codigoproveedorimagenes[]", proveedor);
+
+      //formData.append("codigoproveedorimagenes[]", codigoproveedorimagenes[i]);
+    }
+
+    // const accion = "insertarordencompraitem";
 
     $.ajax({
       type: "POST",
       url: "./c_almacen.php",
-      data: {
-        accion: accion,
-        union: valoresCapturadosVenta,
-        idRequerimiento: idRequerimiento,
-        codpersonal: codpersonal,
-      },
+      // data: {
+      //   accion: accion,
+      //   union: valoresCapturadosVenta,
+      //   idRequerimiento: idRequerimiento,
+      //   codpersonal: codpersonal,
+      // },
+      data: formData,
+      contentType: false,
+      processData: false,
       beforeSend: function () {
         $(".preloader").css("opacity", "1");
         $(".preloader").css("display", "block");
@@ -531,6 +563,109 @@ $(function () {
     }
   });
   /*------------------------------------------------------------- */
+  /**---------------click en input imagen-- */
+  // Función para manejar las mutaciones en la tabla
+  function handleTableMutations(mutationsList, observer) {
+    mutationsList.forEach((mutation) => {
+      if (mutation.addedNodes.length > 0) {
+        // Al menos un nodo ha sido agregado a la tabla
+        mutation.addedNodes.forEach((node) => {
+          if (
+            node.nodeType === 1 &&
+            node.tagName === "TR" &&
+            $(node).closest("#tablaimagenes").length > 0
+          ) {
+            // Mostrar la alerta indicando que se añadió una nueva fila
+            Swal.fire({
+              icon: "success",
+              title: "Se añadio una nueva fila",
+              showConfirmButton: false,
+              timer: 900,
+            });
+          }
+        });
+      }
+    });
+  }
+  // Crear un nuevo objeto MutationObserver con la función de manejo
+  const observer = new MutationObserver(handleTableMutations);
+
+  // Configurar el observer para observar cambios en la tabla y sus descendientes
+  const config = { childList: true, subtree: true };
+  observer.observe(document.getElementById("tablaimagenes"), config);
+  /*-------------------------------------------------------------------------- */
+
+  $("#tablaimagenes").on("change", ".idimagenorden", function () {
+    var archivoSeleccionado = $(this).prop("files")[0];
+    var urlArchivo = URL.createObjectURL(archivoSeleccionado);
+    var imagenSeleccionada = $("<img>")
+      .attr({
+        src: urlArchivo,
+        id: "imgcompra",
+      })
+      .css({
+        width: "200px",
+        height: "150px",
+        borderRadius: "80px",
+      });
+
+    $(this)
+      .closest("tr")
+      .find(".archivosubido")
+      .empty()
+      .append(imagenSeleccionada);
+
+    console.log("Archivo seleccionado:", archivoSeleccionado);
+  });
+
+  $(document).on("click", "#imagensum", function (e) {
+    e.preventDefault();
+    var fila = $(this).closest("tr");
+    var codigoProductoImagen = fila
+      .find('td[data-titulo="PRODUCTO"]')
+      .attr("id_producto");
+
+    var codigoProveedor = fila
+      .find('td[data-titulo="PROVEEDOR"]')
+      .attr("codigo_proveedor");
+
+    var imagenBoton = $("<input>")
+      .attr("type", "file")
+      .attr("id", "fotoimagen")
+      .attr("name", "inputimagensubir")
+      .addClass("idimagenorden");
+
+    var imagenBotonDelete = $("<button>")
+      .addClass("btn btn-danger text-center delete")
+      .css("margin-right", "5px")
+      .append(
+        $("<i>").addClass("icon-trash text-white").css("font-size", "1.em")
+      );
+
+    var imagenPredeterminadaURL = "./images/camara.png";
+    var codigo = $("<input>")
+      .attr("type", "hidden")
+      .attr("id", "idproducto")
+      .val(codigoProductoImagen);
+
+    var codigoproveedorinput = $("<input>")
+      .attr("type", "hidden")
+      .attr("id", "idproducto")
+      .val(codigoProveedor);
+
+    var nuevaFila = $("<tr id='filaTabla'>").append(
+      $("<td>").addClass("text-center").append(imagenBotonDelete),
+      $("<td>").addClass("text-center").append(imagenBoton),
+      $("<td>")
+        .addClass("text-center archivosubido")
+        .append("<img src='" + imagenPredeterminadaURL + "' alt='imgcompra'>"),
+      $("<td>").addClass("text-center").append(codigo),
+      $("<td>").addClass("text-center").append(codigoproveedorinput)
+    );
+
+    $("#tablaimagenes").append(nuevaFila);
+  });
+  /*---------------------------------------------- */
   /*------------------- Proceso de la orden de compra------------ */
   $("#procesoordencompra").click((e) => {
     e.preventDefault();
