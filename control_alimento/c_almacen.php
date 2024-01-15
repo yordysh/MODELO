@@ -455,7 +455,7 @@ if ($accion == 'insertar') {
 
             $dataimagenesfile = $_FILES['file'];
             $codigoproveedorimagenes = $_POST['codigoproveedorimagenes'];
-            $respuesta = c_almacen::c_insertar_orden_compra_item($union, $file, $codigoproveedorimagenes, $idRequerimiento,  $codpersonal);
+            $respuesta = c_almacen::c_insertar_orden_compra_item($union, $dataimagenesfile, $codigoproveedorimagenes, $idRequerimiento,  $codpersonal);
         } else {
             $respuesta = c_almacen::c_insertar_orden_compra_item_sinimagen($union, $idRequerimiento,  $codpersonal);
         }
@@ -712,8 +712,8 @@ if ($accion == 'insertar') {
     echo $respuesta;
 } elseif ($accion == 'actualizarrequerimientoitem') {
     $codrequerimiento  = trim($_POST['codrequerimiento']);
-    $codordencompra  = trim($_POST['codordencompra']);
-    $respuesta = c_almacen::c_actualizar_requerimiento_item($codrequerimiento, $codordencompra);
+    $valoresorden  = $_POST['valoresorden'];
+    $respuesta = c_almacen::c_actualizar_requerimiento_item($codrequerimiento, $valoresorden);
     echo $respuesta;
 } elseif ($accion == 'mostrarvaloresporcodigorequerimiento') {
     $selectrequerimiento = trim($_POST['selectrequerimiento']);
@@ -2897,16 +2897,16 @@ class c_almacen
         }
     }
 
-    static function c_insertar_orden_compra_item($union, $file, $codigoproveedorimagenes, $idRequerimiento, $codpersonal)
+    static function c_insertar_orden_compra_item($union, $dataimagenesfile, $codigoproveedorimagenes, $idRequerimiento, $codpersonal)
     {
         $m_formula = new m_almacen();
 
         if (isset($idRequerimiento)) {
-            $respuesta = $m_formula->InsertarOrdenCompraItem($union, $file, $codigoproveedorimagenes, $idRequerimiento, $codpersonal);
-            if ($respuesta) {
-                return "ok";
+            $respuestaordenc = $m_formula->InsertarOrdenCompraItem($union, $dataimagenesfile, $codigoproveedorimagenes, $idRequerimiento, $codpersonal);
+            if ($respuestaordenc) {
+                echo "ok";
             } else {
-                return "error";
+                echo "error";
             };
         }
     }
@@ -2915,11 +2915,11 @@ class c_almacen
         $m_formula = new m_almacen();
 
         if (isset($idRequerimiento)) {
-            $respuesta = $m_formula->InsertarOrdenCompraItemSinImagen($union, $idRequerimiento, $codpersonal);
-            if ($respuesta) {
-                return "ok";
+            $respuestasin = $m_formula->InsertarOrdenCompraItemSinImagen($union, $idRequerimiento, $codpersonal);
+            if ($respuestasin) {
+                echo "ok";
             } else {
-                return "error";
+                echo "error";
             };
         }
     }
@@ -3624,10 +3624,14 @@ class c_almacen
 
                 foreach ($datos as $row) {
                     $json[] = array(
+                        "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                        "COD_REQUERIMIENTOTEMP" => trim($row->COD_REQUERIMIENTOTEMP),
                         "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
-                        "COD_PRODUCTO" => $row->COD_PRODUCTO,
-                        "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
-                        "COD_TMPREQUERIMIENTO" => $row->COD_TMPREQUERIMIENTO,
+                        "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+                        "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
+                        "ABR_PRODUCTO" => trim($row->ABR_PRODUCTO),
+                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                        "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,
                     );
                 }
                 $jsonstring = json_encode($json);
@@ -3928,7 +3932,7 @@ class c_almacen
                 $cabecera[$i][3] = trim($cabecera[$i][3]);
                 $cabecera[$i][2] = convFecSistema($cabecera[$i][2]);
                 $item = $mostrar->MostrarFacturaItemTempPDF($cabecera[$i][0]);
-                // $valor = $mostrar->MostrarImagenFactura($cab[$i][0]);
+                // $valor = $mostrar->MostrarImagenFactura($cabecera[$i][0]);
 
                 // $imagen = [];
                 // for ($j = 0; $j < count($valor); $j++) {
@@ -3943,8 +3947,8 @@ class c_almacen
                 // var_dump($codigo);
                 // var_dump($cab[$i][0]);
 
-                //$imagen = !empty($valor) && isset($valor[$i]["IMAGEN"]) ? base64_encode($valor[$i]["IMAGEN"]) : "";
-                // $cab[$i][6] = $vg;
+                // $imagen = !empty($valor) && isset($valor[$i]["IMAGEN"]) ? base64_encode($valor[$i]["IMAGEN"]) : "";
+                // $cab[$i][8] = $vg;
                 // $cab[$i][7] = count($cab);
                 array_push($cabecera[$i], $item);
             }
@@ -3952,7 +3956,7 @@ class c_almacen
                 'cabecera' => $cabecera,
                 // 'c' => count($cab),
             );
-
+            var_dump($dato);
             echo json_encode($dato, JSON_FORCE_OBJECT);
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
@@ -4113,10 +4117,10 @@ class c_almacen
         };
     }
 
-    static function  c_actualizar_requerimiento_item($codrequerimiento, $codordencompra)
+    static function  c_actualizar_requerimiento_item($codrequerimiento, $valoresorden)
     {
         $m_formula = new m_almacen();
-        $respuesta = $m_formula->actualizar_requerimiento_item($codrequerimiento, $codordencompra);
+        $respuesta = $m_formula->actualizar_requerimiento_item($codrequerimiento, $valoresorden);
 
         if ($respuesta) {
             return "ok";

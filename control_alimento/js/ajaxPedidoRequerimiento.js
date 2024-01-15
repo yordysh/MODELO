@@ -314,7 +314,6 @@ $(function () {
     let tablatotal = $("#tablatotalinsumosrequeridoscomprar");
     let taskcodrequhiddenvalidar = $("#taskcodrequhiddenvalidar").val();
     let codpersonal = $("#codpersonal").val();
-    let cantidadesTotalesMinimas = [];
     let fechaentregaalert = [];
 
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
@@ -327,6 +326,7 @@ $(function () {
       let formapago = $(this).find("td:eq(5)").find("select").val();
 
       fechaentregaalert.push(fechaentrega);
+
       valoresCapturadosVenta.push({
         id_proveedor: id_proveedor,
         id_producto_insumo: id_producto_insumo,
@@ -424,12 +424,13 @@ $(function () {
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
-              $("#taskcodrequerimiento").val("");
-              $("#taskcodrequhiddenvalidar").val("");
-              $("#mensajecompleto").css("display", "none");
-              tablainsumorequerido.empty();
-              tablainsumos.empty();
-              tablatotal.empty();
+              // $("#taskcodrequerimiento").val("");
+              // $("#taskcodrequhiddenvalidar").val("");
+              // $("#mensajecompleto").css("display", "none");
+              // tablainsumorequerido.empty();
+              // $("#tablaimagenes").empty();
+              // tablainsumos.empty();
+              // tablatotal.empty();
               mostrarRequerimientoTotal();
               mostrarPendientes();
             }

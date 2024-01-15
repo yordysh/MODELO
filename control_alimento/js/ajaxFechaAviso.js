@@ -26,11 +26,11 @@ $(function () {
     // } catch (error) {
     //   console.error("Error executing alertaControl():");
     // }
-    // try {
-    //   await alertaOrdenCompra();
-    // } catch (error) {
-    //   console.error("Error executing alertaORdenCompra");
-    // }
+    try {
+      await alertaOrdenCompra();
+    } catch (error) {
+      console.error("Error executing alertaORdenCompra");
+    }
 
     // if (valor == 1) {
     //   swal.close();
@@ -924,18 +924,48 @@ $(function () {
           console.log(task);
           if (task.length > 0) {
             // let task = JSON.parse(response);
-            codrequerimiento = task[0].COD_TMPREQUERIMIENTO;
-            codordencompra = task[0].COD_ORDEN_COMPRA;
-
+            codrequerimiento = task[0].COD_REQUERIMIENTO;
             let htmlContent = "<h1>¡Listo para producción!</h1>";
-            htmlContent += "<ul>";
+            // htmlContent += "<ul>";
+            // task.forEach(function (producto) {
+            //   htmlContent +=
+            //     "<li style='list-style:none;'>" +
+            //     producto.ABR_PRODUCTO +
+            //     "</li>";
+            // });
+            // htmlContent += "</ul";
+            htmlContent += "<table>";
+            htmlContent += "<thead>";
+            htmlContent += "<tr>";
+            htmlContent += "<th style='margin-rigth:15px;'> Producto</th>";
+            htmlContent += "<th> Cantidad pedida</th>";
+            htmlContent += "<th> Cantidad llegada</th>";
+            htmlContent += "</tr>";
+            htmlContent += "</thead>";
+
+            htmlContent += "<tbody id='tbodyordencompra'>";
+
             task.forEach(function (producto) {
               htmlContent +=
-                "<li style='list-style:none;'>" +
+                "<tr codigocompraorde='" +
+                producto.COD_ORDEN_COMPRA +
+                "'  codtempreque='" +
+                producto.COD_REQUERIMIENTOTEMP +
+                "'>";
+              htmlContent +=
+                "<td codigoproducto='" +
+                producto.COD_PRODUCTO +
+                "'  codigoproveedororden='" +
+                producto.COD_PROVEEDOR +
+                "'>" +
                 producto.ABR_PRODUCTO +
-                "</li>";
+                "</td>";
+              htmlContent += "<td>" + producto.CANTIDAD_INSUMO_ENVASE + "</td>";
+              htmlContent += "<td><input /></td>";
+              htmlContent += "</tr>";
             });
-            htmlContent += "</ul";
+            htmlContent += "</tbody>";
+            htmlContent += "</table";
             Swal.fire({
               title: "Compra de insumos",
               icon: "question",
@@ -944,15 +974,37 @@ $(function () {
               showCloseButton: true,
             }).then((result) => {
               if (result.isConfirmed) {
-                const accion = "actualizarrequerimientoitem";
+                let valoresorden = [];
+                $("#tbodyordencompra tr").each(function () {
+                  let codigocompraorde = $(this).attr("codigocompraorde");
+                  let codtempreque = $(this).attr("codtempreque");
+                  let codigoproductocompra = $(this)
+                    .find("td:eq(0)")
+                    .attr("codigoproducto");
+                  let codigoproveedororden = $(this)
+                    .find("td:eq(0)")
+                    .attr("codigoproveedororden");
+                  let cantidadpedida = $(this).find("td:eq(1)").text();
+                  let cantidadllegada = $(this).find("td:eq(2) input").val();
+                  valoresorden.push({
+                    codigocompraorde: codigocompraorde,
+                    codtempreque: codtempreque,
+                    codigoproductocompra: codigoproductocompra,
+                    codigoproveedororden: codigoproveedororden,
+                    cantidadpedida: cantidadpedida,
+                    cantidadllegada: cantidadllegada,
+                  });
+                });
+                console.log(valoresorden);
 
+                const accion = "actualizarrequerimientoitem";
                 $.ajax({
                   url: "../control_alimento/c_almacen.php",
                   type: "POST",
                   data: {
                     accion: accion,
                     codrequerimiento: codrequerimiento,
-                    codordencompra: codordencompra,
+                    valoresorden: valoresorden,
                   },
                   beforeSend: function () {
                     $(".preloader").css("opacity", "1");

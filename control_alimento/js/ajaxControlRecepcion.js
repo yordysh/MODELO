@@ -11,7 +11,7 @@ $(function () {
   }
   //----------------------------------------------------------------//
   $("#selectrequerimiento").change(function () {
-    let selectrequerimiento = $("#selectrequerimiento").val();
+    let selectrequerimiento = $("#idrequerimientoorden").val();
 
     const accion = "mostrarvaloresporcodigorequerimiento";
     $.ajax({

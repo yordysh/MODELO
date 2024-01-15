@@ -217,29 +217,29 @@ function buscarordencompra() {
       accion: "reporteordencomprapdf",
       idrequerimientotemp: idrequerimientotemp,
     },
-    // beforeSend: function () {
-    //   vmensj = swal.fire({
-    //     title: "Cargando!",
-    //     html: "Espere mientras se cargan los datos no cierre el sistema... <b></b>",
-    //     allowOutsideClick: false,
-    //     allowEscapeKey: false,
-    //     showConfirmButton: false,
-    //   });
-    // },
+    beforeSend: function () {
+      vmensj = swal.fire({
+        title: "Cargando!",
+        html: "Espere mientras se cargan los datos no cierre el sistema... <b></b>",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+      });
+    },
     success: function (re) {
       try {
         obj = JSON.parse(re);
         console.log(obj);
-        exportardatoscomprapdf(obj);
+        // exportardatoscomprapdf(obj);
       } catch (e) {
         console.log(e);
         // Mensaje1("Error al buscar datos " + message, "info");
       }
       // vmensj.close();
     },
-    // complete: function () {
-    //   vmensj.close();
-    // },
+    complete: function () {
+      vmensj.close();
+    },
   }); /**/
 }
 function Mensaje1(texto, icono) {

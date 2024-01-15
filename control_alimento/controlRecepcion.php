@@ -96,12 +96,12 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                         <!-- Text input empresa-->
                         <div class="form-outline mb-4 custom-input">
                             <label class="form-label">Requerimiento</label>
-                            <select id="selectrequerimiento" class="form-select" aria-label="Default select example">
+                            <select name="select_requerimiento" id="idrequerimientoorden">
                                 <option value="none" selected disabled>Seleccione requerimiento</option>
                                 <?php
 
                                 foreach ($dataRequerimiento as $lista) {
-                                    echo '<option value="' . $lista->COD_REQUERIMIENTO . '" class="option">' . $lista->COD_REQUERIMIENTO . '</option>';
+                                    echo '<option value="' . $lista->COD_REQUERIMIENTOTEMP . '" class="option">' . $lista->COD_REQUERIMIENTOTEMP . '</option>';
                                 }
                                 ?>
                             </select>
