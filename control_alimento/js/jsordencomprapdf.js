@@ -40,7 +40,7 @@ function exportardatoscomprapdf(obj) {
       radiusTopRight
     ) {
       doc.setDrawColor(0);
-      doc.setFillColor(212, 138, 212); // Color blanco
+      doc.setFillColor(162, 201, 252); // Color azul
 
       doc.moveTo(x + radiusTopLeft, y);
       doc.lineTo(x + width - radiusTopRight, y);
@@ -78,7 +78,7 @@ function exportardatoscomprapdf(obj) {
       radiusBottomRight
     ) {
       doc.setDrawColor(0);
-      doc.setFillColor(200, 182, 242);
+      doc.setFillColor(188, 199, 212);
 
       doc.moveTo(x, y);
       doc.lineTo(x + width, y);
@@ -110,7 +110,7 @@ function exportardatoscomprapdf(obj) {
     doc.setFontSize(14);
     // Pongo de color blanco la letra
     doc.setTextColor(255, 255, 255);
-    doc.text("Factura", 80, 17);
+    doc.text("ORDEN DE COMPRA", 80, 17);
     doc.setFontSize(12);
     doc.text("N°: " + numerofactura, 20, 25);
     doc.text("Fecha: " + fecha, 20, 35);
@@ -130,14 +130,15 @@ function exportardatoscomprapdf(obj) {
       // Cuerpo de la factura
       doc.setFontSize(10);
       doc.text("Producto", 10, 80);
-      doc.text("Cantidad", 95, 80);
-      // doc.text("Precio Unitario", 120, 90);
+      doc.text("Peso", 90, 80);
+      doc.text("Precio Unitario", 120, 80);
       doc.text("Total", 170, 80);
 
       // DAta de productos
       doc.setFontSize(8);
       doc.text(k[2], 10, yPos);
-      doc.text(k[3], 95, yPos);
+      doc.text(k[3], 90, yPos);
+      doc.text(k[5], 120, yPos);
       doc.text(k[4], 170, yPos);
       // Línea divisoria entre las filas
       yPos += 5; // ajuste de vertical
@@ -150,10 +151,12 @@ function exportardatoscomprapdf(obj) {
     sumaigv = igv + suma;
     doc.setFont("helvetica", "bold");
     doc.text("Sub Total:", 150, yPos + 10);
-    doc.text("Importe Total:", 150, yPos + 15); // Ajusta la posición vertical aquí
+    doc.text("IGV 18%:", 150, yPos + 15);
+    doc.text("Importe Total:", 150, yPos + 20); // Ajusta la posición vertical aquí
     doc.setFont("helvetica", "normal");
     doc.text(suma.toString(), 170, yPos + 10);
-    doc.text(sumaigv.toString(), 170, yPos + 15);
+    doc.text(igv.toString(), 170, yPos + 15);
+    doc.text(sumaigv.toString(), 170, yPos + 20);
 
     // if (imagenes[0] == null) {
     //   doc.text("", 10, 10);
@@ -230,7 +233,7 @@ function buscarordencompra() {
       try {
         obj = JSON.parse(re);
         console.log(obj);
-        // exportardatoscomprapdf(obj);
+        exportardatoscomprapdf(obj);
       } catch (e) {
         console.log(e);
         // Mensaje1("Error al buscar datos " + message, "info");

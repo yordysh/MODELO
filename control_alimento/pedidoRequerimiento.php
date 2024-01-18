@@ -12,7 +12,8 @@ require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
 $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
-$mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
+// $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
+$mostrarrequerimiento = $mostrar->MostrarTPMRequerimiento();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -176,7 +177,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                                     <tr>
                                         <th class="thtitulo" scope="col">INSUMOS</th>
                                         <th class="thtitulo" scope="col">CANTIDAD TOTAL</th>
-                                        <!-- <th class="thtitulo" scope="col">CANTIDAD FALTANTE</th> -->
+                                        <th class="thtitulo" scope="col">CANTIDAD FALTANTE</th>
                                         <th class="thtitulo" scope="col">STOCK ACTUAL</th>
                                     </tr>
                                 </thead>
@@ -186,7 +187,6 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                             </table>
                         </div>
                     </form>
-
                     <!-- Tabla total a comprar insumos-->
                     <div class="table-responsive" style="overflow-x: auto; overflow-y: auto;height: 800px !important; margin-top:20px;">
                         <div class="row g-4 top-div">
@@ -203,6 +203,7 @@ $mostrarrequerimiento = $mostrar->MostrarCodRequerimientoTEMP();
                                     <th class="thtitulo" scope="col">F.PAGO</th>
                                     <th class="thtitulo" scope="col">IMAGEN</th>
                                     <th class="thtitulo" scope="col">PRECIO</th>
+                                    <th class="thtitulo" scope="col">OTRAS CANTIDADES</th>
                                 </tr>
                             </thead>
                             <tbody id="tablatotalinsumosrequeridoscomprar">

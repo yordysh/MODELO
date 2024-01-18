@@ -914,7 +914,7 @@ $(function () {
   async function alertaOrdenCompra() {
     return new Promise((resolve, reject) => {
       const accion = "mostrarordencompraalmacenalerta";
-      var codrequerimiento, codordencompra;
+      var codrequerimiento;
       $.ajax({
         url: "../control_alimento/c_almacen.php",
         type: "POST",
@@ -926,14 +926,6 @@ $(function () {
             // let task = JSON.parse(response);
             codrequerimiento = task[0].COD_REQUERIMIENTO;
             let htmlContent = "<h1>¡Listo para producción!</h1>";
-            // htmlContent += "<ul>";
-            // task.forEach(function (producto) {
-            //   htmlContent +=
-            //     "<li style='list-style:none;'>" +
-            //     producto.ABR_PRODUCTO +
-            //     "</li>";
-            // });
-            // htmlContent += "</ul";
             htmlContent += "<table>";
             htmlContent += "<thead>";
             htmlContent += "<tr>";

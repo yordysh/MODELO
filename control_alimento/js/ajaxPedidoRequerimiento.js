@@ -147,6 +147,11 @@ $(function () {
             let restainsumopedir = (task.CANTIDAD - task.STOCK_ACTUAL).toFixed(
               3
             );
+            if (restainsumopedir >= 0) {
+              restainsumopedir;
+            } else {
+              restainsumopedir = "SUFICIENTE";
+            }
             // let total_comprar = Math.ceil(
             //   restainsumopedir / task.CANTIDAD_MINIMA
             // );
@@ -159,7 +164,7 @@ $(function () {
                           <td data-titulo="CANTIDAD TOTAL"  style="text-align:center;">${parseFloat(
                             task.CANTIDAD
                           ).toFixed(2)}</td>
-                          <!-- <td data-titulo="CANTIDAD FALTANTE"  style="text-align:center;">${restainsumopedir}</td> -->
+                          <td data-titulo="CANTIDAD FALTANTE"  style="text-align:center;">${restainsumopedir}</td>
                             <td data-titulo="STOCK ACTUAL"  style="text-align:center;">${
                               task.STOCK_ACTUAL
                             }</td>
@@ -185,83 +190,117 @@ $(function () {
         cod_formulacion: cod_formulacion,
       },
       success: function (response) {
-        // console.log(JSON.parse(response));
+        // let t = JSON.parse(response);
+        // console.log(t);
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
-
+          console.log(tasks);
           let template = ``;
 
           tasks.forEach((task) => {
-            let insumo_pedir = (task.CANTIDAD - task.STOCK_ACTUAL).toFixed(3);
-            let total_comprar = Math.ceil(insumo_pedir / task.CANTIDAD_MINIMA);
-            let cantidadtotalminima = total_comprar * task.CANTIDAD_MINIMA;
-
-            let preciototal =
-              (cantidadtotalminima * task.PRECIO_PRODUCTO) /
-              task.CANTIDAD_MINIMA;
-
-            // Limitar a dos decimales usando toFixed
-            preciototal = preciototal.toFixed(2);
-
-            // Convertir de nuevo a número para realizar el redondeo manual
-            preciototal = parseFloat(preciototal);
-
-            // Redondear según tu criterio
-            // const segundoDecimal = Math.floor((preciototal * 100) % 10);
-            // if (segundoDecimal > 4) {
-            //   preciototal = Math.ceil(preciototal * 10) / 10;
-            // } else {
-            //   preciototal = Math.round(preciototal * 10) / 10;
-            // }
-
-            if (insumo_pedir > 0) {
-              if (task.CANTIDAD_MINIMA == 0) {
-                Swal.fire({
-                  icon: "error",
-                  title: "Añadir cantidad minima",
-                  text: "Producto no tiene cantidad minima a comprar, verificar en la tabla cantidades a comprar.",
-                });
-              }
-
+            if (task.COD_ORDEN_COMPRA) {
               template += `<tr codigorequerimientototal="${
-                task.COD_REQUERIMIENTO
+                task.COD_REQUERIMIENTO_TEMP
               }">
               <td data-titulo="PROVEEDOR"  style="text-align:center;" codigo_proveedor='${
                 task.COD_PROVEEDOR
-              }'>${task.NOM_PROVEEDOR}</td>
+              }'>${task.NOM_PROVEEDOR_TEMP}</td>
                             <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${
-                              task.COD_PRODUCTO
-                            }'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CANTIDAD POR COMPRA"  style="text-align:center;">${
-                              isNaN(cantidadtotalminima)
-                                ? "Falta cantidad minina"
-                                : cantidadtotalminima
-                            }</td>
+                              task.COD_PRODUCTO_TEMP
+                            }'>${task.DES_PRODUCTO_TEMP}</td>
+                            <td data-titulo="CANTIDAD POR COMPRA"  style="text-align:center;"><input value="${
+                              task.CANTIDAD_INSUMO_ENVASE
+                            }" /></td>
                             <td data-titulo="PRECIO TOTAL"  style="text-align:center;">${
-                              isNaN(preciototal)
-                                ? "Falta cantidad minina"
-                                : preciototal
+                              task.MONTO
                             }</td>
-                            <td data-titulo="FECHA ENTREGA"  style="text-align:center;"><input id="fechaentrega" type="date" /></td>
+                            <td data-titulo="FECHA ENTREGA"  style="text-align:center;"><input class="fecha-entrega" id="fechaentrega" type="date" value="${
+                              task.FECHA_REALIZADA
+                            }"/></td>
                             <td data-titulo='F.PAGO' style='text-align: center;'>
                             <select id="selectformapago" class="form-select" aria-label="Default select example">
-                            <option value="E" selected>EFECTIVO</option>
-                            <option value="D">DEPOSITO</option>
-                            <option value="C">CREDITO</option>
+                            <option value="E" ${
+                              task.F_PAGO === "E" ? "selected" : ""
+                            }>EFECTIVO</option>
+                            <option value="D" ${
+                              task.F_PAGO === "D" ? "selected" : ""
+                            }>DEPOSITO</option>
+                            <option value="C" ${
+                              task.F_PAGO === "C" ? "selected" : ""
+                            }>CREDITO</option>
                             </select>
                             </td>
-                            <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>                         
+                            <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
                             <td data-titulo="PRECIO" id_proveedor='${
-                              task.COD_PROVEEDOR
+                              task.COD_PROVEEDOR_TEMP
                             }' style="text-align:center;">${
-                task.PRECIO_PRODUCTO == 0
-                  ? "Falta cantidad minina"
-                  : task.PRECIO_PRODUCTO
+                task.PRECIO_MINIMO
               }</td>
+                            <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success">OTROS</button></td>
                           </tr>`;
+            } else {
+              let insumo_pedir = (task.CANTIDAD - task.STOCK_ACTUAL).toFixed(3);
+              let total_comprar = Math.ceil(
+                insumo_pedir / task.CANTIDAD_MINIMA
+              );
+              let cantidadtotalminima = total_comprar * task.CANTIDAD_MINIMA;
+              let preciototal =
+                (cantidadtotalminima * task.PRECIO_PRODUCTO) /
+                task.CANTIDAD_MINIMA;
+              // Limitar a dos decimales usando toFixed
+              preciototal = preciototal.toFixed(2);
+              // Convertir de nuevo a número para realizar el redondeo manual
+              preciototal = parseFloat(preciototal);
+
+              if (insumo_pedir > 0) {
+                if (task.CANTIDAD_MINIMA == 0) {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Añadir cantidad minima",
+                    text: "Producto no tiene cantidad minima a comprar, verificar en la tabla cantidades a comprar.",
+                  });
+                }
+                const fechaActual = new Date().toISOString().split("T")[0];
+                template += `<tr codigorequerimientototal="${
+                  task.COD_REQUERIMIENTO
+                }">
+                <td data-titulo="PROVEEDOR"  style="text-align:center;" codigo_proveedor='${
+                  task.COD_PROVEEDOR
+                }'>${task.NOM_PROVEEDOR}</td>
+                              <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${
+                                task.COD_PRODUCTO
+                              }'>${task.DES_PRODUCTO}</td>
+                              <td data-titulo="CANTIDAD POR COMPRA"  style="text-align:center;">${
+                                isNaN(cantidadtotalminima)
+                                  ? "Falta cantidad minina"
+                                  : cantidadtotalminima
+                              }</td>
+                              <td data-titulo="PRECIO TOTAL"  style="text-align:center;">${
+                                isNaN(preciototal)
+                                  ? "Falta cantidad minina"
+                                  : preciototal
+                              }</td>
+                              <td data-titulo="FECHA ENTREGA"  style="text-align:center;"><input class="fecha-entrega" id="fechaentrega" type="date" value="${fechaActual}"/></td>
+                              <td data-titulo='F.PAGO' style='text-align: center;'>
+                              <select id="selectformapago" class="form-select" aria-label="Default select example">
+                              <option value="E" selected>EFECTIVO</option>
+                              <option value="D">DEPOSITO</option>
+                              <option value="C">CREDITO</option>
+                              </select>
+                              </td>
+                              <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
+                              <td data-titulo="PRECIO" id_proveedor='${
+                                task.COD_PROVEEDOR
+                              }' style="text-align:center;">${
+                  task.PRECIO_PRODUCTO == 0
+                    ? "Falta cantidad minina"
+                    : task.PRECIO_PRODUCTO
+                }</td>
+                <td ata-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success">OTROS</button></td>
+                            </tr>`;
+              }
             }
           });
-
           if (template === "") {
             Swal.fire({
               position: "center",
@@ -293,11 +332,101 @@ $(function () {
     });
     $("#tablatotalinsumosrequeridoscomprar").empty();
   });
-  /*--------------- VERIFICA SI LA FECHA ES DEL PROVEEODR------ */
-  // $(document).on("click", "#fechaentrega", (e) => {
+  /*--------------- VERIFICA SI ES EL MISMO PROVEEDOR PONER FECHA ------ */
+  $("body").on("change", ".fecha-entrega", function () {
+    var fechaentrega = $(this).val();
+    var fila = $(this).closest("tr");
 
-  // });
+    let codigoproveedor = fila.find("td:eq(0)").attr("codigo_proveedor");
+    $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
+      let id_proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
+
+      if (codigoproveedor === id_proveedor) {
+        let fechita = $(this).find("td:eq(4) input").val(fechaentrega);
+      }
+    });
+  });
   /*-----------------------------------------------------------*/
+
+  /*-------------------------- Dar click el boton y añade fila-------- */
+  $(document).on("click", "#modalotrascantidades", function () {
+    var currentRow = $(this).closest("tr");
+    var desProducto = currentRow.find('td[data-titulo="PRODUCTO"]').text();
+    var codProducto = currentRow
+      .find('td[data-titulo="PRODUCTO"]')
+      .attr("id_producto");
+
+    const fechaahora = new Date().toISOString().split("T")[0];
+
+    var newRow = `
+        <tr>
+        <td data-titulo="PROVEEDOR" style="text-align:center;"> 
+        <select id="selectproveedorescanmin" class="form-select">
+        <option value="none" selected disabled>Seleccione proveedor</option>
+        </select>
+        </td>
+        <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${codProducto}'>${desProducto}</td>
+        <td data-titulo="CANTIDAD POR COMPRA"><input id="cantidadcomprar"/></td>
+        <td data-titulo="PRECIO TOTAL"><input /></td>
+        <td data-titulo="FECHA ENTREGA"><input class="fecha-entrega" id="fechaentrega" type="date" value="${fechaahora}"/></td>
+        <td data-titulo="F.PAGO">
+        <select id="selectformapago" class="form-select" aria-label="Default select example">
+        <option value="E" selected>EFECTIVO</option>
+        <option value="D">DEPOSITO</option>
+        <option value="C">CREDITO</option>
+        </select>
+        </td>
+        <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
+        <td data-titulo="PRECIO" id_proveedor='' style="text-align:center;"><input /></td>
+        <td data-titulo="ELIMINAR"><button id="deletef" class="btn btn-danger icon-trash eliminarfila"></button></td>
+        </tr>
+    `;
+    const accion = "mostrarproveedorescanmin";
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: { accion: accion, cod_producto_fila: codProducto },
+      success: function (response) {
+        if (isJSON(response)) {
+          let tasks = JSON.parse(response);
+          var selectElement = currentRow.find(".selectproveedorescanmin"); // Target the specific select in the current row
+          selectElement.empty(); // Clear existing options
+          selectElement.append(
+            $("<option>", { value: "none", text: "Seleccione proveedor" })
+          ); // Add default option
+
+          tasks.forEach((item) => {
+            $("#selectproveedorescanmin").append(
+              $("<option>", {
+                value: item.COD_PROVEEDOR,
+                text: item.NOM_PROVEEDOR,
+              })
+            );
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+    currentRow.after(newRow);
+  });
+  /*----------------------------------------------------------------- */
+
+  /*---------------------Eliminar fila añadida de proveedor---------------- */
+
+  // Asigna un controlador de eventos al botón con id "deletef"
+  $(document).on("click", "#deletef", function () {
+    var fila = $(this).closest("tr");
+    fila.remove();
+  });
+
+  /*---------------------------------------------------------------------- */
+
+  /*---------------------------------Selecciono un proveedor y me lanza valores--------- */
+  $(document).on("click", "#deletef", function () {});
+  /*----------------------------------------------------------------------------------- */
+
   $("#insertarCompraInsumos").click((e) => {
     e.preventDefault();
 
@@ -667,6 +796,13 @@ $(function () {
     $("#tablaimagenes").append(nuevaFila);
   });
   /*---------------------------------------------- */
+  /*------ Al darle click en el tacho de la iamgen eliminara fila */
+  $(document).on("click", ".delete", function () {
+    var filaAEliminar = $(this).closest("#filaTabla");
+    filaAEliminar.remove();
+  });
+  /*------------------------------------------------------------ */
+
   /*------------------- Proceso de la orden de compra------------ */
   $("#procesoordencompra").click((e) => {
     e.preventDefault();
@@ -693,6 +829,7 @@ $(function () {
       let monto = $(this).find("td:eq(3)").text();
       let fechaentrega = $(this).find("td:eq(4) input").val();
       let formapago = $(this).find("td:eq(5)").find("select").val();
+      let preciomin = $(this).find("td:eq(7)").text();
 
       fechaentregaalert.push(fechaentrega);
       valoresCapturadosVentaTemp.push({
@@ -702,6 +839,7 @@ $(function () {
         monto: monto,
         formapago: formapago,
         fechaentrega: fechaentrega,
+        preciomin: preciomin,
       });
     });
 
