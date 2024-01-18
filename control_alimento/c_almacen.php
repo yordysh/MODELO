@@ -468,8 +468,9 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'insertarordencompraitemtemporal') {
     $idRequerimiento = $_POST['idRequerimiento'];
     $valorcapturado = $_POST['valorcapturado'];
+    $valoresdeinsumos = $_POST['valoresdeinsumos'];
 
-    $respuesta = c_almacen::c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado);
+    $respuesta = c_almacen::c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado, $valoresdeinsumos);
     echo $respuesta;
 } elseif ($accion == 'mostrarproduccionrequerimiento') {
 
@@ -805,6 +806,17 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'mostrarproveedorescanmin') {
     $cod_producto_fila = trim($_POST['cod_producto_fila']);
     $respuesta = c_almacen::c_mostrar_proveedores_cantidades_minimas($cod_producto_fila);
+    echo $respuesta;
+} elseif ($accion == 'mostrarcantidadpreciocalculo') {
+
+    $valorcan = $_POST['valorcan'];
+    $valorproducto = trim($_POST['valorproducto']);
+    if (isset($_POST['codigoproveedor'])) {
+        $valorproveedor = trim($_POST['codigoproveedor']);
+    } else {
+        $valorproveedor = trim($_POST['valorproveedor']);
+    }
+    $respuesta = c_almacen::c_mostrar_cantidad_precio_calculo($valorcan, $valorproveedor, $valorproducto);
     echo $respuesta;
 }
 
@@ -2948,7 +2960,6 @@ class c_almacen
 
                 $json = array();
                 foreach ($datos as $row) {
-
                     $json[] = array(
                         "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
                         "COD_PRODUCTO" => $row->COD_PRODUCTO,
@@ -3069,10 +3080,11 @@ class c_almacen
             };
         }
     }
-    static function c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado)
+    static function c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado, $valoresdeinsumos)
     {
         $m_formula = new m_almacen();
-        $respuestaorde = $m_formula->InsertarOrdenCompraTemp($idRequerimiento, $valorcapturado);
+
+        $respuestaorde = $m_formula->InsertarOrdenCompraTemp($idRequerimiento, $valorcapturado, $valoresdeinsumos);
         if ($respuestaorde) {
             return "ok";
         } else {
@@ -4598,6 +4610,43 @@ class c_almacen
                     "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
                     "TIPO_MONEDA" => trim($row->TIPO_MONEDA),
                     "ESTADO" => trim($row->ESTADO),
+                );
+            }
+
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_mostrar_cantidad_precio_calculo($valorcan, $valorproveedor, $valorproducto)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+
+            $totalcan = $mostrar->MostrarCantidadPrecioCalculo($valorproveedor, $valorproducto);
+            if (!$totalcan) {
+                $json = array();
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+            $json = array();
+            foreach ($totalcan  as $row) {
+                $resultadopagar = ($row->PRECIO_PRODUCTO * $valorcan) / $row->CANTIDAD_MINIMA;
+                $resultadodecimal = number_format($resultadopagar, 2);
+
+                $json[] = array(
+                    "COD_CANTIDAD_MINIMA" => $row->COD_CANTIDAD_MINIMA,
+                    "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
+                    "COD_PROVEEDOR" => trim($row->COD_PROVEEDOR),
+
+                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                    "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
+                    "TIPO_MONEDA" => trim($row->TIPO_MONEDA),
+                    "ESTADO" => trim($row->ESTADO),
+                    "PRECIO_PAGAR" => $resultadodecimal,
                 );
             }
 

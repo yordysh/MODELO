@@ -270,11 +270,11 @@ $(function () {
                               <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${
                                 task.COD_PRODUCTO
                               }'>${task.DES_PRODUCTO}</td>
-                              <td data-titulo="CANTIDAD POR COMPRA"  style="text-align:center;">${
-                                isNaN(cantidadtotalminima)
-                                  ? "Falta cantidad minina"
-                                  : cantidadtotalminima
-                              }</td>
+                              <td data-titulo="CANTIDAD POR COMPRA"  style="text-align:center;" valor_comprar_cantidad="${insumo_pedir}"><input id="cantidadacomprar" value="${
+                  isNaN(cantidadtotalminima)
+                    ? "Falta cantidad minina"
+                    : cantidadtotalminima
+                }"/></td>
                               <td data-titulo="PRECIO TOTAL"  style="text-align:center;">${
                                 isNaN(preciototal)
                                   ? "Falta cantidad minina"
@@ -296,7 +296,7 @@ $(function () {
                     ? "Falta cantidad minina"
                     : task.PRECIO_PRODUCTO
                 }</td>
-                <td ata-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success">OTROS</button></td>
+                <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success">OTROS</button></td>
                             </tr>`;
               }
             }
@@ -355,6 +355,9 @@ $(function () {
     var codProducto = currentRow
       .find('td[data-titulo="PRODUCTO"]')
       .attr("id_producto");
+    var comprarcantidadexacta = currentRow
+      .find('td[data-titulo="CANTIDAD POR COMPRA"]')
+      .attr("valor_comprar_cantidad");
 
     const fechaahora = new Date().toISOString().split("T")[0];
 
@@ -366,8 +369,8 @@ $(function () {
         </select>
         </td>
         <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${codProducto}'>${desProducto}</td>
-        <td data-titulo="CANTIDAD POR COMPRA"><input id="cantidadcomprar"/></td>
-        <td data-titulo="PRECIO TOTAL"><input /></td>
+        <td data-titulo="CANTIDAD POR COMPRA" cantidadcomprarexacto='${comprarcantidadexacta}'><input id="cantidadacomprar"/></td>
+        <td data-titulo="PRECIO TOTAL"></td>
         <td data-titulo="FECHA ENTREGA"><input class="fecha-entrega" id="fechaentrega" type="date" value="${fechaahora}"/></td>
         <td data-titulo="F.PAGO">
         <select id="selectformapago" class="form-select" aria-label="Default select example">
@@ -377,7 +380,7 @@ $(function () {
         </select>
         </td>
         <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
-        <td data-titulo="PRECIO" id_proveedor='' style="text-align:center;"><input /></td>
+        <td data-titulo="PRECIO" id_proveedor='' style="text-align:center;"></td>
         <td data-titulo="ELIMINAR"><button id="deletef" class="btn btn-danger icon-trash eliminarfila"></button></td>
         </tr>
     `;
@@ -389,14 +392,16 @@ $(function () {
       success: function (response) {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
-          var selectElement = currentRow.find(".selectproveedorescanmin"); // Target the specific select in the current row
-          selectElement.empty(); // Clear existing options
+          var selectElement = currentRow
+            .next()
+            .find("#selectproveedorescanmin");
+          selectElement.empty();
           selectElement.append(
             $("<option>", { value: "none", text: "Seleccione proveedor" })
-          ); // Add default option
+          );
 
           tasks.forEach((item) => {
-            $("#selectproveedorescanmin").append(
+            selectElement.append(
               $("<option>", {
                 value: item.COD_PROVEEDOR,
                 text: item.NOM_PROVEEDOR,
@@ -413,6 +418,58 @@ $(function () {
   });
   /*----------------------------------------------------------------- */
 
+  /*--------------Verifica la cantidad y precio total al cambiar------ */
+  $(document).on("keyup", "#cantidadacomprar", function () {
+    let filaescr = $(this).closest("tr");
+    var valorcan = filaescr
+      .find('td[data-titulo="CANTIDAD POR COMPRA"] input')
+      .val();
+    var valorproveedor = filaescr
+      .find('td[data-titulo="PROVEEDOR"]')
+      .attr("codigo_proveedor");
+
+    var valorproducto = filaescr
+      .find('td[data-titulo="PRODUCTO"]')
+      .attr("id_producto");
+
+    var codigoproveedor = filaescr.find("td:eq(0) select").val();
+    if (codigoproveedor == "none") {
+      Swal.fire({
+        // title: "¡Guardado exitoso!",
+        text: "Necesita seleccionar un proveedor.",
+        icon: "info",
+      });
+    }
+    const accion = "mostrarcantidadpreciocalculo";
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        accion: accion,
+        valorcan: valorcan,
+        valorproveedor: valorproveedor,
+        valorproducto: valorproducto,
+        codigoproveedor: codigoproveedor,
+      },
+      success: function (response) {
+        if (isJSON(response)) {
+          let task = JSON.parse(response);
+          let valorcambiadoprecio = filaescr
+            .find("td:eq(3)")
+            .text(task[0].PRECIO_PAGAR);
+
+          let valorpreciomin = filaescr
+            .find("td:eq(7)")
+            .text(task[0].PRECIO_PRODUCTO);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+  });
+  /*------------------------------------------------------------------ */
+
   /*---------------------Eliminar fila añadida de proveedor---------------- */
 
   // Asigna un controlador de eventos al botón con id "deletef"
@@ -423,9 +480,7 @@ $(function () {
 
   /*---------------------------------------------------------------------- */
 
-  /*---------------------------------Selecciono un proveedor y me lanza valores--------- */
-  $(document).on("click", "#deletef", function () {});
-  /*----------------------------------------------------------------------------------- */
+  /*---------------------------------Insertar los valores de proceso --------- */
 
   $("#insertarCompraInsumos").click((e) => {
     e.preventDefault();
@@ -505,7 +560,7 @@ $(function () {
 
     const formData = new FormData();
     formData.append("accion", "insertarordencompraitem");
-    formData.append("idRequerimiento", idRequerimiento);
+    formData.append("idRequerimiento", taskcodrequhiddenvalidar);
     formData.append("codpersonal", codpersonal);
 
     for (let j = 0; j < valoresCapturadosVenta.length; j++) {
@@ -575,7 +630,7 @@ $(function () {
       },
     });
   });
-
+  /*-------------------------------------------------------------------------- */
   $(document).on("click", "#eliminarinsumorequerimiento", (e) => {
     e.preventDefault();
 
@@ -807,24 +862,28 @@ $(function () {
   $("#procesoordencompra").click((e) => {
     e.preventDefault();
     let valoresCapturadosVentaTemp = [];
-
-    // let idRequerimiento = $("#tablaproductorequerido tr").attr(
-    //   "codigorequerimiento"
-    // );
-
-    let idRequerimiento = $("#tablamostartotalpendientes tr").attr("taskId");
+    let valoresdeinsumos = [];
+    let taskcodrequhiddenvalidar = $("#taskcodrequhiddenvalidar").val();
 
     let tablainsumorequerido = $("#tablaproductorequerido");
     let tablainsumos = $("#tablainsumorequerido");
     let tablatotal = $("#tablatotalinsumosrequeridoscomprar");
-    let taskcodrequhiddenvalidar = $("#taskcodrequhiddenvalidar").val();
+
     let codpersonal = $("#codpersonal").val();
     let fechaentregaalert = [];
 
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
-      let id_proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
+      let id_proveedor;
+      let proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
+
+      if (proveedor != undefined) {
+        id_proveedor = proveedor;
+      } else {
+        id_proveedor = $(this).find("td:eq(0) select").val();
+      }
+
       let id_producto_insumo = $(this).find("td:eq(1)").attr("id_producto");
-      let cantidad_producto_insumo = $(this).find("td:eq(2)").text();
+      let cantidad_producto_insumo = $(this).find("td:eq(2) input").val();
       // let cantidad_total_minima = $(this).find("td:eq(2)").text();
       let monto = $(this).find("td:eq(3)").text();
       let fechaentrega = $(this).find("td:eq(4) input").val();
@@ -843,37 +902,42 @@ $(function () {
       });
     });
 
-    // if (taskcodrequhiddenvalidar === "") {
+    $("#tablainsumorequerido tr").each(function () {
+      let productocod = $(this).find("td:eq(0)").attr("id_producto");
+      let valorpedir = $(this).find("td:eq(2)").text();
+      if (valorpedir == "SUFICIENTE") {
+        valorpedir = 0;
+      } else {
+        valorpedir;
+      }
+      valoresdeinsumos.push({
+        productocod: productocod,
+        valorpedir: valorpedir,
+      });
+    });
+
+    // if (valoresCapturadosVentaTemp.length === 0) {
     //   Swal.fire({
     //     title: "¡Error!",
-    //     text: "Añadir los pendientes para guardar.",
-    //     icon: "error",
+    //     text: "Añadir los pendientes para el proceso.",
+    //     icon: "info",
     //     confirmButtonText: "Aceptar",
     //   });
     //   return;
     // }
-    if (valoresCapturadosVentaTemp.length === 0) {
-      Swal.fire({
-        title: "¡Error!",
-        text: "Añadir los pendientes para el proceso.",
-        icon: "info",
-        confirmButtonText: "Aceptar",
-      });
-      return;
-    }
 
-    for (let i = 0; i < fechaentregaalert.length; i++) {
-      if (fechaentregaalert[i] === "") {
-        Swal.fire({
-          title: "¡Error!",
-          text: "Añadir una fecha de entrega",
-          icon: "info",
-          confirmButtonText: "Aceptar",
-        });
-        // break;
-        return;
-      }
-    }
+    // for (let i = 0; i < fechaentregaalert.length; i++) {
+    //   if (fechaentregaalert[i] === "") {
+    //     Swal.fire({
+    //       title: "¡Error!",
+    //       text: "Añadir una fecha de entrega",
+    //       icon: "info",
+    //       confirmButtonText: "Aceptar",
+    //     });
+    //     // break;
+    //     return;
+    //   }
+    // }
 
     const accion = "insertarordencompraitemtemporal";
 
@@ -883,7 +947,8 @@ $(function () {
       data: {
         accion: accion,
         valorcapturado: valoresCapturadosVentaTemp,
-        idRequerimiento: idRequerimiento,
+        idRequerimiento: taskcodrequhiddenvalidar,
+        valoresdeinsumos: valoresdeinsumos,
       },
       beforeSend: function () {
         $(".preloader").css("opacity", "1");
