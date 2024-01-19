@@ -466,12 +466,33 @@ if ($accion == 'insertar') {
         echo $respuesta;
     }
 } elseif ($accion == 'insertarordencompraitemtemporal') {
-    $idRequerimiento = $_POST['idRequerimiento'];
-    $valorcapturado = $_POST['valorcapturado'];
-    $valoresdeinsumos = $_POST['valoresdeinsumos'];
 
-    $respuesta = c_almacen::c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado, $valoresdeinsumos);
-    echo $respuesta;
+    if (isset($_POST['valorcapturado'])) {
+        $valoresdeinsumos = $_POST['valoresdeinsumos'];
+        $valorcapturado = $_POST['valorcapturado'];
+        $idRequerimiento = trim($_POST['idRequerimiento']);
+
+        if (isset($_FILES['file'])) {
+
+            $dataimagenesfile = $_FILES['file'];
+            $codigoproveedorimagenes = $_POST['codigoproveedorimagenes'];
+
+            $respuesta = c_almacen::c_insertar_orden_compra_temp_imagen($idRequerimiento, $valorcapturado, $valoresdeinsumos, $dataimagenesfile, $codigoproveedorimagenes);
+        } else {
+            $respuesta = c_almacen::c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado, $valoresdeinsumos);
+        }
+        // $respuesta = c_almacen::c_insertar_orden_compra_item($union, $file, $idRequerimiento,  $codpersonal);
+        // echo $respuesta;
+    }
+    //else {
+    //     $respuesta = c_almacen::c_actualizar_orden_compra_item($idRequerimiento);
+    //     echo $respuesta;
+    // }
+
+
+
+    // $respuesta = c_almacen::c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado, $valoresdeinsumos);
+    // echo $respuesta;
 } elseif ($accion == 'mostrarproduccionrequerimiento') {
 
     // $cod_formulacion = trim($_POST['cod_formulacion']);
@@ -3080,16 +3101,139 @@ class c_almacen
             };
         }
     }
+    static function c_insertar_orden_compra_temp_imagen($idRequerimiento, $valorcapturado, $valoresdeinsumos, $dataimagenesfile, $codigoproveedorimagenes)
+    {
+        $m_formula = new m_almacen();
+        $valorescorrectos = [];
+        foreach ($valoresdeinsumos as $stringinsumo) {
+            $insumoArray = json_decode($stringinsumo, true);
+            if ($insumoArray !== null) {
+                $nombreproducto = trim($insumoArray['nombreproducto']);
+                $id_producto = trim($insumoArray['productocod']);
+                $cantidad_producto = $insumoArray['valorpedir'];
+
+                $sumacantidad = 0;
+                foreach ($valorcapturado as $valorcapturadostring) {
+                    $insumoArrays = json_decode($valorcapturadostring, true);
+                    if ($insumoArrays !== null) {
+                        $id_producto_insumo = trim($insumoArrays['id_producto_insumo']);
+                        $cantidad_producto_insumo = $insumoArrays['cantidad_producto_insumo'];
+                        if ($id_producto_insumo == $id_producto) {
+                            $sumacantidad = $sumacantidad + $cantidad_producto_insumo;
+                        }
+                    } else {
+                        echo "Error al decodificar JSON: " . json_last_error_msg();
+                    }
+                }
+
+                if ($sumacantidad < $cantidad_producto) {
+
+                    $valorescorrectos1 = ['estado' => 'errorcantidad', 'nombreproducto' => $nombreproducto, 'cantidad' => $cantidad_producto];
+                    array_push($valorescorrectos, $valorescorrectos1);
+                }
+            } else {
+                echo "Error al decodificar JSON: " . json_last_error_msg();
+            }
+        }
+
+
+        if (count($valorescorrectos) > 0) {
+            $response = $valorescorrectos;
+            echo json_encode($response);
+            exit;
+        } else {
+
+            $respuestaorde = $m_formula->c_insertar_orden_compra_temp_imagen($idRequerimiento, $valorcapturado, $valoresdeinsumos, $dataimagenesfile, $codigoproveedorimagenes);
+            if ($respuestaorde) {
+                $response = array('estado' => 'ok');
+                echo json_encode($response);
+            } else {
+                $response = array('estado' => 'error');
+                echo json_encode($response);
+            }
+        }
+    }
     static function c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado, $valoresdeinsumos)
     {
         $m_formula = new m_almacen();
+        $count = count($valorcapturado);
+        $countinsumo = count($valoresdeinsumos);
+        $valorescorrectos = [];
+        foreach ($valoresdeinsumos as $stringinsumo) {
+            $insumoArray = json_decode($stringinsumo, true);
+            if ($insumoArray !== null) {
+                $nombreproducto = trim($insumoArray['nombreproducto']);
+                $id_producto = trim($insumoArray['productocod']);
+                $cantidad_producto = $insumoArray['valorpedir'];
 
-        $respuestaorde = $m_formula->InsertarOrdenCompraTemp($idRequerimiento, $valorcapturado, $valoresdeinsumos);
-        if ($respuestaorde) {
-            return "ok";
+                $sumacantidad = 0;
+
+                $sumacantidad = 0;
+                foreach ($valorcapturado as $valorcapturadostring) {
+                    $insumoArrays = json_decode($valorcapturadostring, true);
+                    if ($insumoArrays !== null) {
+                        $id_producto_insumo = trim($insumoArrays['id_producto_insumo']);
+                        $cantidad_producto_insumo = $insumoArrays['cantidad_producto_insumo'];
+                        if ($id_producto_insumo == $id_producto) {
+                            $sumacantidad = $sumacantidad + $cantidad_producto_insumo;
+                        }
+                    } else {
+                        echo "Error al decodificar JSON: " . json_last_error_msg();
+                    }
+                }
+
+                if ($sumacantidad < $cantidad_producto) {
+
+                    $valorescorrectos1 = ['estado' => 'errorcantidad', 'nombreproducto' => $nombreproducto, 'cantidad' => $cantidad_producto];
+                    array_push($valorescorrectos, $valorescorrectos1);
+                }
+            } else {
+                echo "Error al decodificar JSON: " . json_last_error_msg();
+            }
+
+            // for ($j = 0; $j < $countinsumo; $j++) {
+            //     $nombreproducto = trim($valoresdeinsumos[$j]['nombreproducto']);
+            //     $id_producto = trim($valoresdeinsumos[$j]['productocod']);
+            //     $cantidad_producto = $valoresdeinsumos[$j]['valorpedir'];
+            // $sumacantidad = 0;
+            // for ($i = 0; $i < $count; $i++) {
+            //     $id_producto_insumo = trim($valorcapturado[$i]['id_producto_insumo']);
+            //     $cantidad_producto_insumo = $valorcapturado[$i]['cantidad_producto_insumo'];
+            //     if ($id_producto_insumo == $id_producto) {
+            //         $sumacantidad = $sumacantidad + $cantidad_producto_insumo;
+            //     }
+            // }
+
+            // if ($sumacantidad < $cantidad_producto) {
+
+            //     $valorescorrectos1 = ['estado' => 'errorcantidad', 'nombreproducto' => $nombreproducto, 'cantidad' => $cantidad_producto];
+            //     array_push($valorescorrectos, $valorescorrectos1);
+            // }
+        }
+
+
+        if (count($valorescorrectos) > 0) {
+            $response = $valorescorrectos;
+            echo json_encode($response);
+            exit;
         } else {
-            return "error";
-        };
+            $respuestaorde = $m_formula->InsertarOrdenCompraTemp($idRequerimiento, $valorcapturado);
+            if ($respuestaorde) {
+                $response = array('estado' => 'ok');
+                echo json_encode($response);
+            } else {
+                $response = array('estado' => 'error');
+                echo json_encode($response);
+            }
+        }
+
+
+        // $respuestaorde = $m_formula->InsertarOrdenCompraTemp($idRequerimiento, $valorcapturado, $valoresdeinsumos);
+        // if ($respuestaorde) {
+        //     return "ok";
+        // } else {
+        //     return "error";
+        // };
     }
 
     static function c_insertar_cantidad_minima($selectCantidadminima, $cantidadMinima)

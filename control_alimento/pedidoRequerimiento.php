@@ -221,6 +221,7 @@ $mostrarrequerimiento = $mostrar->MostrarTPMRequerimiento();
                             <thead>
                                 <tr>
                                     <th class="thtitulo" scope="col">ACCION</th>
+                                    <th class="thtitulo" scope="col">PRODUCTO</th>
                                     <th class="thtitulo" scope="col">SUBIR IMAGEN</th>
                                     <th class="thtitulo" scope="col">VISUALIZAR</th>
                                 </tr>

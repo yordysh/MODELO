@@ -203,7 +203,7 @@ $(function () {
                 task.COD_REQUERIMIENTO_TEMP
               }">
               <td data-titulo="PROVEEDOR"  style="text-align:center;" codigo_proveedor='${
-                task.COD_PROVEEDOR
+                task.COD_PROVEEDOR_TEMP
               }'>${task.NOM_PROVEEDOR_TEMP}</td>
                             <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${
                               task.COD_PRODUCTO_TEMP
@@ -296,7 +296,7 @@ $(function () {
                     ? "Falta cantidad minina"
                     : task.PRECIO_PRODUCTO
                 }</td>
-                <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success">OTROS</button></td>
+                <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button></td>
                             </tr>`;
               }
             }
@@ -454,6 +454,7 @@ $(function () {
       success: function (response) {
         if (isJSON(response)) {
           let task = JSON.parse(response);
+          // console.log(task);
           let valorcambiadoprecio = filaescr
             .find("td:eq(3)")
             .text(task[0].PRECIO_PAGAR);
@@ -461,6 +462,15 @@ $(function () {
           let valorpreciomin = filaescr
             .find("td:eq(7)")
             .text(task[0].PRECIO_PRODUCTO);
+
+          let valorcantidad = parseFloat(task[0].CANTIDAD_MINIMA);
+          if (parseFloat(valorcan) < valorcantidad) {
+            Swal.fire({
+              text: "Necesita poner la cantidad minima que brinda el proveedor.",
+              icon: "info",
+              confirmButtonText: "Aceptar",
+            });
+          }
         }
       },
       error: function (xhr, status, error) {
@@ -809,6 +819,7 @@ $(function () {
     var codigoProductoImagen = fila
       .find('td[data-titulo="PRODUCTO"]')
       .attr("id_producto");
+    var codigoproductonombre = fila.find('td[data-titulo="PRODUCTO"]').text();
 
     var codigoProveedor = fila
       .find('td[data-titulo="PROVEEDOR"]')
@@ -835,11 +846,12 @@ $(function () {
 
     var codigoproveedorinput = $("<input>")
       .attr("type", "hidden")
-      .attr("id", "idproducto")
+      .attr("id", "idproveedor")
       .val(codigoProveedor);
 
     var nuevaFila = $("<tr id='filaTabla'>").append(
       $("<td>").addClass("text-center").append(imagenBotonDelete),
+      $("<td>").addClass("text-center").append(codigoproductonombre),
       $("<td>").addClass("text-center").append(imagenBoton),
       $("<td>")
         .addClass("text-center archivosubido")
@@ -903,6 +915,7 @@ $(function () {
     });
 
     $("#tablainsumorequerido tr").each(function () {
+      let nombreproducto = $(this).find("td:eq(0)").text();
       let productocod = $(this).find("td:eq(0)").attr("id_producto");
       let valorpedir = $(this).find("td:eq(2)").text();
       if (valorpedir == "SUFICIENTE") {
@@ -911,6 +924,7 @@ $(function () {
         valorpedir;
       }
       valoresdeinsumos.push({
+        nombreproducto: nombreproducto,
         productocod: productocod,
         valorpedir: valorpedir,
       });
@@ -938,24 +952,70 @@ $(function () {
     //     return;
     //   }
     // }
+    const dataimagenes = [];
+    const codigoproveedorimagenes = [];
 
-    const accion = "insertarordencompraitemtemporal";
+    $("#tablaimagenes tr").each(function () {
+      const filaimagen = $(this);
+      const fileInput = filaimagen.find("td:eq(2) input[type=file]")[0];
+      const codigoproveedor = filaimagen.find("td:eq(5) input").val();
+
+      if (fileInput && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        dataimagenes.push(file);
+        codigoproveedorimagenes.push({ codigoproveedor });
+      }
+    });
+
+    const formData = new FormData();
+    formData.append("accion", "insertarordencompraitemtemporal");
+    formData.append("idRequerimiento", taskcodrequhiddenvalidar);
+    // formData.append("codpersonal", codpersonal);
+
+    for (let j = 0; j < valoresCapturadosVentaTemp.length; j++) {
+      const objetoInsumotemp = valoresCapturadosVentaTemp[j];
+      const objetoInsumoStringTemp = JSON.stringify(objetoInsumotemp);
+      formData.append("valorcapturado[]", objetoInsumoStringTemp);
+    }
+
+    for (let i = 0; i < dataimagenes.length; i++) {
+      formData.append("file[]", dataimagenes[i]);
+    }
+    for (let l = 0; l < codigoproveedorimagenes.length; l++) {
+      const objetoproveedor = codigoproveedorimagenes[l];
+      const proveedor = JSON.stringify(objetoproveedor);
+      formData.append("codigoproveedorimagenes[]", proveedor);
+    }
+
+    for (let r = 0; r < valoresdeinsumos.length; r++) {
+      const objetotemp = valoresdeinsumos[r];
+      const Temp = JSON.stringify(objetotemp);
+      formData.append("valoresdeinsumos[]", Temp);
+    }
+
+    // const accion = "insertarordencompraitemtemporal";
 
     $.ajax({
       type: "POST",
       url: "./c_almacen.php",
-      data: {
-        accion: accion,
-        valorcapturado: valoresCapturadosVentaTemp,
-        idRequerimiento: taskcodrequhiddenvalidar,
-        valoresdeinsumos: valoresdeinsumos,
-      },
+      // data: {
+      //   accion: accion,
+      //   valorcapturado: valoresCapturadosVentaTemp,
+      //   idRequerimiento: taskcodrequhiddenvalidar,
+      //   valoresdeinsumos: valoresdeinsumos,
+      // },
+      data: formData,
+      contentType: false,
+      processData: false,
       beforeSend: function () {
         $(".preloader").css("opacity", "1");
         $(".preloader").css("display", "block");
       },
-      success: function (response) {
-        if (response == "ok") {
+      success: async function (response) {
+        let respuesta = JSON.parse(response);
+        // console.log(respuesta);
+        // if (!Array.isArray(respuesta)) {
+        if (respuesta.estado === "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
             text: "Los datos estan en el proceso.",
@@ -973,8 +1033,39 @@ $(function () {
               mostrarPendientes();
             }
           });
-        } else {
-          alert("eerorr");
+          // Manejar el error o ajustar la lógica según sea necesario
+          return;
+        } else if (respuesta.estado === "ok") {
+          Swal.fire({
+            title: "¡Error al guradar!",
+            text: "Los datos son incorrectos",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // $("#taskcodrequerimiento").val("");
+              // $("#taskcodrequhiddenvalidar").val("");
+              // $("#mensajecompleto").css("display", "none");
+              // tablainsumorequerido.empty();
+              // tablainsumos.empty();
+              // tablatotal.empty();
+              // mostrarRequerimientoTotal();
+              mostrarPendientes();
+            }
+          });
+        }
+        for (const element of respuesta) {
+          if (element.estado == "errorcantidad") {
+            await Swal.fire({
+              text:
+                "En el producto " +
+                element.nombreproducto +
+                " necesita poner la suma de cantidades mayor a " +
+                element.cantidad,
+              icon: "info",
+              confirmButtonText: "Aceptar",
+            });
+          }
         }
       },
       error: function (error) {
