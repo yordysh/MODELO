@@ -496,7 +496,7 @@ $(function () {
     e.preventDefault();
 
     let valoresCapturadosVenta = [];
-
+    let valoresdeinsumos = [];
     // let idRequerimiento = $("#tablaproductorequerido tr").attr(
     //   "codigorequerimiento"
     // );
@@ -510,17 +510,46 @@ $(function () {
     let codpersonal = $("#codpersonal").val();
     let fechaentregaalert = [];
 
+    // $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
+    //   let id_proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
+    //   let id_producto_insumo = $(this).find("td:eq(1)").attr("id_producto");
+    //   let cantidad_producto_insumo = $(this).find("td:eq(2)").text();
+    //   // let cantidad_total_minima = $(this).find("td:eq(2)").text();
+    //   let monto = $(this).find("td:eq(3)").text();
+    //   let fechaentrega = $(this).find("td:eq(4) input").val();
+    //   let formapago = $(this).find("td:eq(5)").find("select").val();
+
+    //   fechaentregaalert.push(fechaentrega);
+
+    //   valoresCapturadosVenta.push({
+    //     id_proveedor: id_proveedor,
+    //     id_producto_insumo: id_producto_insumo,
+    //     cantidad_producto_insumo: cantidad_producto_insumo,
+    //     monto: monto,
+    //     formapago: formapago,
+    //     fechaentrega: fechaentrega,
+    //   });
+    // });
+
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
-      let id_proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
+      let id_proveedor;
+      let proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
+
+      if (proveedor != undefined) {
+        id_proveedor = proveedor;
+      } else {
+        id_proveedor = $(this).find("td:eq(0) select").val();
+      }
+
       let id_producto_insumo = $(this).find("td:eq(1)").attr("id_producto");
-      let cantidad_producto_insumo = $(this).find("td:eq(2)").text();
+      let cantidad_producto_insumo = $(this).find("td:eq(2) input").val();
       // let cantidad_total_minima = $(this).find("td:eq(2)").text();
       let monto = $(this).find("td:eq(3)").text();
       let fechaentrega = $(this).find("td:eq(4) input").val();
       let formapago = $(this).find("td:eq(5)").find("select").val();
+      let preciomin = $(this).find("td:eq(7)").text();
 
       fechaentregaalert.push(fechaentrega);
-
       valoresCapturadosVenta.push({
         id_proveedor: id_proveedor,
         id_producto_insumo: id_producto_insumo,
@@ -528,6 +557,23 @@ $(function () {
         monto: monto,
         formapago: formapago,
         fechaentrega: fechaentrega,
+        preciomin: preciomin,
+      });
+    });
+
+    $("#tablainsumorequerido tr").each(function () {
+      let nombreproducto = $(this).find("td:eq(0)").text();
+      let productocod = $(this).find("td:eq(0)").attr("id_producto");
+      let valorpedir = $(this).find("td:eq(2)").text();
+      if (valorpedir == "SUFICIENTE") {
+        valorpedir = 0;
+      } else {
+        valorpedir;
+      }
+      valoresdeinsumos.push({
+        nombreproducto: nombreproducto,
+        productocod: productocod,
+        valorpedir: valorpedir,
       });
     });
 
@@ -536,8 +582,8 @@ $(function () {
 
     $("#tablaimagenes tr").each(function () {
       const filaimagen = $(this);
-      const fileInput = filaimagen.find("td:eq(1) input[type=file]")[0];
-      const codigoproveedor = filaimagen.find("td:eq(4) input").val();
+      const fileInput = filaimagen.find("td:eq(2) input[type=file]")[0];
+      const codigoproveedor = filaimagen.find("td:eq(5) input").val();
 
       if (fileInput && fileInput.files.length > 0) {
         const file = fileInput.files[0];
@@ -589,7 +635,11 @@ $(function () {
 
       //formData.append("codigoproveedorimagenes[]", codigoproveedorimagenes[i]);
     }
-
+    for (let r = 0; r < valoresdeinsumos.length; r++) {
+      const objetotemp = valoresdeinsumos[r];
+      const Temp = JSON.stringify(objetotemp);
+      formData.append("valoresdeinsumos[]", Temp);
+    }
     // const accion = "insertarordencompraitem";
 
     $.ajax({
@@ -608,12 +658,56 @@ $(function () {
         $(".preloader").css("opacity", "1");
         $(".preloader").css("display", "block");
       },
-      success: function (response) {
-        // console.log("respuesta" + response);
-        if (response == "ok") {
+      // success: function (response) {
+      //   // console.log("respuesta" + response);
+      //   if (response == "ok") {
+      //     Swal.fire({
+      //       title: "¡Guardado exitoso!",
+      //       text: "Los datos se han guardado correctamente.",
+      //       icon: "success",
+      //       confirmButtonText: "Aceptar",
+      //     }).then((result) => {
+      //       if (result.isConfirmed) {
+      //         // $("#taskcodrequerimiento").val("");
+      //         // $("#taskcodrequhiddenvalidar").val("");
+      //         // $("#mensajecompleto").css("display", "none");
+      //         // tablainsumorequerido.empty();
+      //         // $("#tablaimagenes").empty();
+      //         // tablainsumos.empty();
+      //         // tablatotal.empty();
+      //         mostrarRequerimientoTotal();
+      //         mostrarPendientes();
+      //       }
+      //     });
+      //   } else if (response == "error") {
+      //     Swal.fire({
+      //       title: "¡No hay registros en proceso!",
+      //       text: "Necesita hacer un proceso del requerimiento para guardar",
+      //       icon: "error",
+      //       confirmButtonText: "Aceptar",
+      //     }).then((result) => {
+      //       if (result.isConfirmed) {
+      //         // $("#taskcodrequerimiento").val("");
+      //         // $("#taskcodrequhiddenvalidar").val("");
+      //         // $("#mensajecompleto").css("display", "none");
+      //         // tablainsumorequerido.empty();
+      //         // $("#tablaimagenes").empty();
+      //         // tablainsumos.empty();
+      //         // tablatotal.empty();
+      //         mostrarRequerimientoTotal();
+      //         mostrarPendientes();
+      //       }
+      //     });
+      //   }
+      // },
+      success: async function (response) {
+        let respuesta = JSON.parse(response);
+        console.log(respuesta);
+        // if (!Array.isArray(respuesta)) {
+        if (respuesta.estado === "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
-            text: "Los datos se han guardado correctamente.",
+            text: "Los datos estan en el proceso.",
             icon: "success",
             confirmButtonText: "Aceptar",
           }).then((result) => {
@@ -622,13 +716,45 @@ $(function () {
               // $("#taskcodrequhiddenvalidar").val("");
               // $("#mensajecompleto").css("display", "none");
               // tablainsumorequerido.empty();
-              // $("#tablaimagenes").empty();
               // tablainsumos.empty();
               // tablatotal.empty();
-              mostrarRequerimientoTotal();
+              // mostrarRequerimientoTotal();
               mostrarPendientes();
             }
           });
+          // Manejar el error o ajustar la lógica según sea necesario
+          return;
+        } else if (respuesta.estado === "ok") {
+          Swal.fire({
+            title: "¡Error al guradar!",
+            text: "Los datos son incorrectos",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // $("#taskcodrequerimiento").val("");
+              // $("#taskcodrequhiddenvalidar").val("");
+              // $("#mensajecompleto").css("display", "none");
+              // tablainsumorequerido.empty();
+              // tablainsumos.empty();
+              // tablatotal.empty();
+              // mostrarRequerimientoTotal();
+              mostrarPendientes();
+            }
+          });
+        }
+        for (const element of respuesta) {
+          if (element.estado == "errorcantidad") {
+            await Swal.fire({
+              text:
+                "En el producto " +
+                element.nombreproducto +
+                " necesita poner la suma de cantidades mayor a " +
+                element.cantidad,
+              icon: "info",
+              confirmButtonText: "Aceptar",
+            });
+          }
         }
       },
       error: function (error) {
