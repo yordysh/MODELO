@@ -13,7 +13,6 @@ $(function () {
 
   mostrarPendientes();
   mostrarRequerimientoTotal();
-
   //------------- MENU BAR JS ---------------//
   // let nav = document.querySelector(".nav"),
   //   searchIcon = document.querySelector("#searchIcon"),
@@ -236,7 +235,8 @@ $(function () {
                             }' style="text-align:center;">${
                 task.PRECIO_MINIMO
               }</td>
-                            <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success">OTROS</button></td>
+ 
+                          <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button></td>
                           </tr>`;
             } else {
               let insumo_pedir = (task.CANTIDAD - task.STOCK_ACTUAL).toFixed(3);
@@ -332,6 +332,7 @@ $(function () {
     });
     $("#tablatotalinsumosrequeridoscomprar").empty();
   });
+
   /*--------------- VERIFICA SI ES EL MISMO PROVEEDOR PONER FECHA ------ */
   $("body").on("change", ".fecha-entrega", function () {
     var fechaentrega = $(this).val();
@@ -347,7 +348,32 @@ $(function () {
     });
   });
   /*-----------------------------------------------------------*/
+  /*--------------------------------------------------------- */
 
+  $("body").on("change", "#selectformapago", function () {
+    var fpago = $(this).val();
+    var filapago = $(this).closest("tr");
+
+    let codigoproveedorpago = filapago
+      .find("td:eq(0)")
+      .attr("codigo_proveedor");
+
+    $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
+      if ($(this).is(filapago)) {
+      } else {
+        let id_proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
+        let comboFechas = $(this).find("td:eq(5) select");
+
+        if (codigoproveedorpago === id_proveedor) {
+          comboFechas.prop("disabled", true).val(fpago);
+        } else {
+          comboFechas.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  /*----------------------------------------------------------- */
   /*-------------------------- Dar click el boton y añade fila-------- */
   $(document).on("click", "#modalotrascantidades", function () {
     var currentRow = $(this).closest("tr");
@@ -702,7 +728,7 @@ $(function () {
       // },
       success: async function (response) {
         let respuesta = JSON.parse(response);
-        console.log(respuesta);
+        // console.log(respuesta);
         // if (!Array.isArray(respuesta)) {
         if (respuesta.estado === "ok") {
           Swal.fire({
@@ -724,10 +750,10 @@ $(function () {
           });
           // Manejar el error o ajustar la lógica según sea necesario
           return;
-        } else if (respuesta.estado === "ok") {
+        } else if (respuesta.estado === "error") {
           Swal.fire({
-            title: "¡Error al guradar!",
-            text: "Los datos son incorrectos",
+            title: "¡Error al guardar!",
+            text: "Necesita llenar datos en el proceso",
             icon: "error",
             confirmButtonText: "Aceptar",
           }).then((result) => {
@@ -946,10 +972,24 @@ $(function () {
       .find('td[data-titulo="PRODUCTO"]')
       .attr("id_producto");
     var codigoproductonombre = fila.find('td[data-titulo="PRODUCTO"]').text();
+    // var codigoproveedornombre = fila.find('td[data-titulo="PROVEEDOR"]').text();
+    var codigoproveedorcell = fila.find('td[data-titulo="PROVEEDOR"]');
+    var codigoproveedornombre = codigoproveedorcell.text();
+
+    // Check if the selected option is not "none"
+    var selectedOption = codigoproveedorcell.find("select").val();
+    if (selectedOption && selectedOption !== "none") {
+      codigoproveedornombre = codigoproveedorcell
+        .find("select option:selected")
+        .text();
+    }
 
     var codigoProveedor = fila
       .find('td[data-titulo="PROVEEDOR"]')
       .attr("codigo_proveedor");
+    var codigoProveedor1 = fila
+      .find('td[data-titulo="PROVEEDOR"] select')
+      .val();
 
     var imagenBoton = $("<input>")
       .attr("type", "file")
@@ -969,15 +1009,23 @@ $(function () {
       .attr("type", "hidden")
       .attr("id", "idproducto")
       .val(codigoProductoImagen);
-
-    var codigoproveedorinput = $("<input>")
-      .attr("type", "hidden")
-      .attr("id", "idproveedor")
-      .val(codigoProveedor);
+    if (codigoProveedor) {
+      var codigoproveedorinput = $("<input>")
+        .attr("type", "hidden")
+        .attr("id", "idproveedor")
+        .val(codigoProveedor);
+    } else {
+      {
+        var codigoproveedorinput = $("<input>")
+          .attr("type", "hidden")
+          .attr("id", "idproveedor")
+          .val(codigoProveedor1);
+      }
+    }
 
     var nuevaFila = $("<tr id='filaTabla'>").append(
       $("<td>").addClass("text-center").append(imagenBotonDelete),
-      $("<td>").addClass("text-center").append(codigoproductonombre),
+      $("<td>").addClass("text-center").append(codigoproveedornombre),
       $("<td>").addClass("text-center").append(imagenBoton),
       $("<td>")
         .addClass("text-center archivosubido")
@@ -1021,6 +1069,7 @@ $(function () {
       }
 
       let id_producto_insumo = $(this).find("td:eq(1)").attr("id_producto");
+      let nombreproducto = $(this).find("td:eq(1)").text();
       let cantidad_producto_insumo = $(this).find("td:eq(2) input").val();
       // let cantidad_total_minima = $(this).find("td:eq(2)").text();
       let monto = $(this).find("td:eq(3)").text();
@@ -1032,6 +1081,7 @@ $(function () {
       valoresCapturadosVentaTemp.push({
         id_proveedor: id_proveedor,
         id_producto_insumo: id_producto_insumo,
+        nombreproducto: nombreproducto,
         cantidad_producto_insumo: cantidad_producto_insumo,
         monto: monto,
         formapago: formapago,
@@ -1056,28 +1106,50 @@ $(function () {
       });
     });
 
-    // if (valoresCapturadosVentaTemp.length === 0) {
-    //   Swal.fire({
-    //     title: "¡Error!",
-    //     text: "Añadir los pendientes para el proceso.",
-    //     icon: "info",
-    //     confirmButtonText: "Aceptar",
-    //   });
-    //   return;
-    // }
+    let paresUnicos = {};
 
-    // for (let i = 0; i < fechaentregaalert.length; i++) {
-    //   if (fechaentregaalert[i] === "") {
-    //     Swal.fire({
-    //       title: "¡Error!",
-    //       text: "Añadir una fecha de entrega",
-    //       icon: "info",
-    //       confirmButtonText: "Aceptar",
-    //     });
-    //     // break;
-    //     return;
-    //   }
-    // }
+    for (let i = 0; i < valoresCapturadosVentaTemp.length; i++) {
+      let codigoproducto = valoresCapturadosVentaTemp[i]["id_producto_insumo"];
+      let id_proveedor = valoresCapturadosVentaTemp[i]["id_proveedor"];
+      let nombreproducto = valoresCapturadosVentaTemp[i]["nombreproducto"];
+
+      let claveUnica = codigoproducto + "_" + id_proveedor;
+      if (paresUnicos[claveUnica]) {
+        Swal.fire({
+          title: "Se encontro duplicado de proveedor y producto",
+          text: "El producto duplicado " + nombreproducto,
+          icon: "info",
+          confirmButtonText: "Aceptar",
+        });
+
+        return;
+      } else {
+        paresUnicos[claveUnica] = true;
+      }
+    }
+    // console.log(valoresCapturadosVentaTemp);
+    if (valoresCapturadosVentaTemp.length === 0) {
+      Swal.fire({
+        title: "¡Error!",
+        text: "Añadir los pendientes para el proceso.",
+        icon: "info",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    }
+
+    for (let i = 0; i < fechaentregaalert.length; i++) {
+      if (fechaentregaalert[i] === "") {
+        Swal.fire({
+          title: "¡Error!",
+          text: "Añadir una fecha de entrega",
+          icon: "info",
+          confirmButtonText: "Aceptar",
+        });
+        // break;
+        return;
+      }
+    }
     const dataimagenes = [];
     const codigoproveedorimagenes = [];
 
@@ -1161,7 +1233,7 @@ $(function () {
           });
           // Manejar el error o ajustar la lógica según sea necesario
           return;
-        } else if (respuesta.estado === "ok") {
+        } else if (respuesta.estado === "error") {
           Swal.fire({
             title: "¡Error al guradar!",
             text: "Los datos son incorrectos",
@@ -1194,12 +1266,12 @@ $(function () {
           }
         }
       },
-      error: function (error) {
-        console.log("ERROR " + error);
-      },
       complete: function () {
         $(".preloader").css("opacity", "0");
         $(".preloader").css("display", "none");
+      },
+      error: function (error) {
+        console.log("ERROR " + error);
       },
     });
   });

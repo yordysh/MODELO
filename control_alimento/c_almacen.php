@@ -454,8 +454,7 @@ if ($accion == 'insertar') {
             $codigoproveedorimagenes = $_POST['codigoproveedorimagenes'];
             $respuesta = c_almacen::c_insertar_orden_compra_item($union, $valoresdeinsumos, $dataimagenesfile, $codigoproveedorimagenes, $idRequerimiento, $codpersonal);
         } else {
-            var_dump("else");
-            exit;
+
             $respuesta = c_almacen::c_insertar_orden_compra_item_sinimagen($union, $valoresdeinsumos, $idRequerimiento,  $codpersonal);
         }
         // $respuesta = c_almacen::c_insertar_orden_compra_item($union, $file, $idRequerimiento,  $codpersonal);
@@ -3123,16 +3122,72 @@ class c_almacen
     }
     static function c_insertar_orden_compra_item_sinimagen($union, $valoresdeinsumos, $idRequerimiento,  $codpersonal)
     {
+        // var_dump($union);
+        // // var_dump($valoresdeinsumos);
+        // exit;
         $m_formula = new m_almacen();
+        $count = count($union);
+        $countinsumo = count($valoresdeinsumos);
+        $valorescorrectos = [];
+        foreach ($valoresdeinsumos as $stringinsumo) {
+            $insumoArray = json_decode($stringinsumo, true);
+            if ($insumoArray !== null) {
+                $nombreproducto = trim($insumoArray['nombreproducto']);
+                $id_producto = trim($insumoArray['productocod']);
+                $cantidad_producto = $insumoArray['valorpedir'];
 
-        if (isset($idRequerimiento)) {
-            $respuestasin = $m_formula->InsertarOrdenCompraItemSinImagen($union, $idRequerimiento, $codpersonal);
-            if ($respuestasin) {
-                echo "ok";
+                $sumacantidad = 0;
+
+                $sumacantidad = 0;
+                foreach ($union as $valorcapturadostring) {
+                    $insumoArrays = json_decode($valorcapturadostring, true);
+                    if ($insumoArrays !== null) {
+                        $id_producto_insumo = trim($insumoArrays['id_producto_insumo']);
+                        $cantidad_producto_insumo = $insumoArrays['cantidad_producto_insumo'];
+                        if ($id_producto_insumo == $id_producto) {
+                            $sumacantidad = $sumacantidad + $cantidad_producto_insumo;
+                        }
+                    } else {
+                        echo "Error al decodificar JSON: " . json_last_error_msg();
+                    }
+                }
+
+                if ($sumacantidad < $cantidad_producto) {
+
+                    $valorescorrectos1 = ['estado' => 'errorcantidad', 'nombreproducto' => $nombreproducto, 'cantidad' => $cantidad_producto];
+                    array_push($valorescorrectos, $valorescorrectos1);
+                }
             } else {
-                echo "error";
-            };
+                echo "Error al decodificar JSON: " . json_last_error_msg();
+            }
         }
+
+
+        if (count($valorescorrectos) > 0) {
+            $response = $valorescorrectos;
+            echo json_encode($response);
+            exit;
+        } else {
+            $respuestaorde = $m_formula->InsertarOrdenCompraItemSinImagen($union, $idRequerimiento, $codpersonal);
+            if ($respuestaorde) {
+                $response = array('estado' => 'ok');
+                echo json_encode($response);
+            } else {
+                $response = array('estado' => 'error');
+                echo json_encode($response);
+            }
+        }
+
+        // $m_formula = new m_almacen();
+
+        // if (isset($idRequerimiento)) {
+        //     $respuestasin = $m_formula->InsertarOrdenCompraItemSinImagen($union, $idRequerimiento, $codpersonal);
+        //     if ($respuestasin) {
+        //         echo "ok";
+        //     } else {
+        //         echo "error";
+        //     };
+        // }
     }
 
     static function c_actualizar_orden_compra_item($idRequerimiento)
