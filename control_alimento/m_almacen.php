@@ -2839,11 +2839,11 @@ class m_almacen
             if ($row !== null) {
               $id_proveedor = $row['id_proveedor'];
               $id_producto_insumo = trim($row['id_producto_insumo']);
-              $cantidad_producto_insumo = $row['cantidad_producto_insumo'];
-              $monto = $row['monto'];
+              $cantidad_producto_insumo = floatval($row['cantidad_producto_insumo']);
+              $monto = floatval($row['monto']);
               $formapago = $row['formapago'];
               $fechaentrega = $row['fechaentrega'];
-              $preciomin = $row['preciomin'];
+              $preciomin = floatval($row['preciomin']);
 
               $repetirproveedortemp = $this->bd->prepare("SELECT COUNT(*) as COUNT FROM T_TMPORDEN_COMPRA WHERE COD_PROVEEDOR='$id_proveedor' AND COD_REQUERIMIENTO='$idRequerimiento'");
               $repetirproveedortemp->execute();
@@ -2996,11 +2996,11 @@ class m_almacen
           if ($row !== null) {
             $id_proveedor = $row['id_proveedor'];
             $id_producto_insumo = trim($row['id_producto_insumo']);
-            $cantidad_producto_insumo = $row['cantidad_producto_insumo'];
-            $monto = $row['monto'];
+            $cantidad_producto_insumo = floatval($row['cantidad_producto_insumo']);
+            $monto = floatval($row['monto']);
             $formapago = $row['formapago'];
             $fechaentrega = $row['fechaentrega'];
-            $preciomin = $row['preciomin'];
+            $preciomin = floatval($row['preciomin']);
 
             $repetirproveedortemp = $this->bd->prepare("SELECT COUNT(*) as COUNT FROM T_TMPORDEN_COMPRA WHERE COD_PROVEEDOR='$id_proveedor' AND COD_REQUERIMIENTO='$idRequerimiento'");
             $repetirproveedortemp->execute();
@@ -3175,11 +3175,11 @@ class m_almacen
           if ($row !== null) {
             $id_proveedor = $row['id_proveedor'];
             $id_producto_insumo = trim($row['id_producto_insumo']);
-            $cantidad_producto_insumo = $row['cantidad_producto_insumo'];
-            $monto = $row['monto'];
+            $cantidad_producto_insumo = floatval($row['cantidad_producto_insumo']);
+            $monto = floatval($row['monto']);
             $formapago = $row['formapago'];
             $fechaentrega = $row['fechaentrega'];
-            $preciomin = $row['preciomin'];
+            $preciomin = floatval($row['preciomin']);
 
             $repetirproveedortemp = $this->bd->prepare("SELECT COUNT(*) as COUNT FROM T_TMPORDEN_COMPRATEMP WHERE COD_PROVEEDOR='$id_proveedor' AND COD_REQUERIMIENTO='$idRequerimiento'");
             $repetirproveedortemp->execute();
@@ -3232,11 +3232,11 @@ class m_almacen
           if ($insumo !== null) {
             $proveedor = $insumo['id_proveedor'];
             $idproducto = trim($insumo['id_producto_insumo']);
-            $cantidadproducto = $insumo['cantidad_producto_insumo'];
-            $montotemp = $insumo['monto'];
+            $cantidadproducto = floatval($insumo['cantidad_producto_insumo']);
+            $montotemp = floatval($insumo['monto']);
             $formapagotemp = $insumo['formapago'];
             $fechaentregatemp = $insumo['fechaentrega'];
-            $preciomintemp = $insumo['preciomin'];
+            $preciomintemp = floatval($insumo['preciomin']);
 
             $repetirproveedortemp = $this->bd->prepare("SELECT COUNT(*) as COUNT FROM T_TMPORDEN_COMPRATEMP WHERE COD_PROVEEDOR='$proveedor' AND COD_REQUERIMIENTO='$idRequerimiento'");
             $repetirproveedortemp->execute();
@@ -3385,11 +3385,12 @@ class m_almacen
           if ($row !== null) {
             $id_proveedor = $row['id_proveedor'];
             $id_producto_insumo = trim($row['id_producto_insumo']);
-            $cantidad_producto_insumo = $row['cantidad_producto_insumo'];
-            $monto = $row['monto'];
+            $cantidad_producto_insumo = floatval($row['cantidad_producto_insumo']);
+            $monto = floatval($row['monto']);
             $formapago = $row['formapago'];
             $fechaentrega = $row['fechaentrega'];
-            $preciomin = $row['preciomin'];
+            $preciomin = floatval($row['preciomin']);
+
 
             $repetirproveedortemp = $this->bd->prepare("SELECT COUNT(*) as COUNT FROM T_TMPORDEN_COMPRATEMP WHERE COD_PROVEEDOR='$id_proveedor' AND COD_REQUERIMIENTO='$idRequerimiento'");
             $repetirproveedortemp->execute();
@@ -3462,11 +3463,11 @@ class m_almacen
           if ($insumo !== null) {
             $proveedor = $insumo['id_proveedor'];
             $idproducto = trim($insumo['id_producto_insumo']);
-            $cantidadproducto = $insumo['cantidad_producto_insumo'];
-            $montotemp = $insumo['monto'];
+            $cantidadproducto = floatval($insumo['cantidad_producto_insumo']);
+            $montotemp = floatval($insumo['monto']);
             $formapagotemp = $insumo['formapago'];
             $fechaentregatemp = $insumo['fechaentrega'];
-            $preciomintemp = $insumo['preciomin'];
+            $preciomintemp = floatval($insumo['preciomin']);
 
             $repetirproveedortemp = $this->bd->prepare("SELECT COUNT(*) as COUNT FROM T_TMPORDEN_COMPRATEMP WHERE COD_PROVEEDOR='$proveedor' AND COD_REQUERIMIENTO='$idRequerimiento'");
             $repetirproveedortemp->execute();
@@ -6651,7 +6652,7 @@ class m_almacen
                                               TC.PRECIO_PRODUCTO AS PRECIO_PRODUCTO, TC.TIPO_MONEDA AS TIPO_MONEDA, T.NOM_PROVEEDOR AS NOM_PROVEEDOR,
                                               T.COD_PROVEEDOR AS COD_PROVEEDOR FROM T_TMPCANTIDAD_MINIMA TC
                                               INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TC.COD_PRODUCTO
-                                              INNER JOIN T_PROVEEDOR T ON T.COD_PROVEEDOR=TC.COD_PROVEEDOR WHERE TP.DES_PRODUCTO LIKE '$buscarProveedorPrecios%'");
+                                              INNER JOIN T_PROVEEDOR T ON T.COD_PROVEEDOR=TC.COD_PROVEEDOR WHERE T.NOM_PROVEEDOR LIKE '$buscarProveedorPrecios%'");
       $mostarproductos->execute();
       $datosproducprov = $mostarproductos->fetchAll(PDO::FETCH_OBJ);
 
@@ -6743,7 +6744,12 @@ class m_almacen
   public function MostrarCantidadPrecioCalculo($valorproveedor, $valorproducto)
   {
     try {
-      $mostarproductos = $this->bd->prepare("SELECT * FROM T_TMPCANTIDAD_MINIMA WHERE COD_PRODUCTO='$valorproducto' AND COD_PROVEEDOR='$valorproveedor'");
+      $mostarproductos = $this->bd->prepare("SELECT CM.COD_CANTIDAD_MINIMA AS COD_CANTIDAD_MINIMA,CM.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
+                                              CM.PRECIO_PRODUCTO AS PRECIO_PRODUCTO,CM.CANTIDAD_MINIMA AS CANTIDAD_MINIMA,CM.TIPO_MONEDA AS TIPO_MONEDA, 
+                                              CM.ESTADO AS ESTADO, CM.COD_PROVEEDOR AS COD_PROVEEDOR,TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR FROM T_TMPCANTIDAD_MINIMA CM
+                                              INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=CM.COD_PRODUCTO
+                                              INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=CM.COD_PROVEEDOR
+                                              WHERE CM.COD_PRODUCTO='$valorproducto' AND CM.COD_PROVEEDOR='$valorproveedor'");
       $mostarproductos->execute();
       $datosproducprov = $mostarproductos->fetchAll(PDO::FETCH_OBJ);
 

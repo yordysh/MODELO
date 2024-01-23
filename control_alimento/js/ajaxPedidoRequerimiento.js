@@ -445,65 +445,65 @@ $(function () {
   /*----------------------------------------------------------------- */
 
   /*--------------Verifica la cantidad y precio total al cambiar------ */
-  $(document).on("keyup", "#cantidadacomprar", function () {
-    let filaescr = $(this).closest("tr");
-    var valorcan = filaescr
-      .find('td[data-titulo="CANTIDAD POR COMPRA"] input')
-      .val();
-    var valorproveedor = filaescr
-      .find('td[data-titulo="PROVEEDOR"]')
-      .attr("codigo_proveedor");
+  // $(document).on("keyup", "#cantidadacomprar", function () {
+  //   let filaescr = $(this).closest("tr");
+  //   var valorcan = filaescr
+  //     .find('td[data-titulo="CANTIDAD POR COMPRA"] input')
+  //     .val();
+  //   var valorproveedor = filaescr
+  //     .find('td[data-titulo="PROVEEDOR"]')
+  //     .attr("codigo_proveedor");
 
-    var valorproducto = filaescr
-      .find('td[data-titulo="PRODUCTO"]')
-      .attr("id_producto");
+  //   var valorproducto = filaescr
+  //     .find('td[data-titulo="PRODUCTO"]')
+  //     .attr("id_producto");
 
-    var codigoproveedor = filaescr.find("td:eq(0) select").val();
-    if (codigoproveedor == "none") {
-      Swal.fire({
-        // title: "¡Guardado exitoso!",
-        text: "Necesita seleccionar un proveedor.",
-        icon: "info",
-      });
-    }
-    const accion = "mostrarcantidadpreciocalculo";
-    $.ajax({
-      url: "./c_almacen.php",
-      type: "POST",
-      data: {
-        accion: accion,
-        valorcan: valorcan,
-        valorproveedor: valorproveedor,
-        valorproducto: valorproducto,
-        codigoproveedor: codigoproveedor,
-      },
-      success: function (response) {
-        if (isJSON(response)) {
-          let task = JSON.parse(response);
-          // console.log(task);
-          let valorcambiadoprecio = filaescr
-            .find("td:eq(3)")
-            .text(task[0].PRECIO_PAGAR);
+  //   var codigoproveedor = filaescr.find("td:eq(0) select").val();
+  //   if (codigoproveedor == "none") {
+  //     Swal.fire({
+  //       // title: "¡Guardado exitoso!",
+  //       text: "Necesita seleccionar un proveedor.",
+  //       icon: "info",
+  //     });
+  //   }
+  //   const accion = "mostrarcantidadpreciocalculo";
+  //   $.ajax({
+  //     url: "./c_almacen.php",
+  //     type: "POST",
+  //     data: {
+  //       accion: accion,
+  //       valorcan: valorcan,
+  //       valorproveedor: valorproveedor,
+  //       valorproducto: valorproducto,
+  //       codigoproveedor: codigoproveedor,
+  //     },
+  //     success: function (response) {
+  //       if (isJSON(response)) {
+  //         let task = JSON.parse(response);
+  //         // console.log(task);
+  //         let valorcambiadoprecio = filaescr
+  //           .find("td:eq(3)")
+  //           .text(task[0].PRECIO_PAGAR);
 
-          let valorpreciomin = filaescr
-            .find("td:eq(7)")
-            .text(task[0].PRECIO_PRODUCTO);
+  //         let valorpreciomin = filaescr
+  //           .find("td:eq(7)")
+  //           .text(task[0].PRECIO_PRODUCTO);
 
-          let valorcantidad = parseFloat(task[0].CANTIDAD_MINIMA);
-          if (parseFloat(valorcan) < valorcantidad) {
-            Swal.fire({
-              text: "Necesita poner la cantidad minima que brinda el proveedor.",
-              icon: "info",
-              confirmButtonText: "Aceptar",
-            });
-          }
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error al cargar los datos de la tabla:", error);
-      },
-    });
-  });
+  //         let valorcantidad = parseFloat(task[0].CANTIDAD_MINIMA);
+  //         if (parseFloat(valorcan) < valorcantidad) {
+  //           Swal.fire({
+  //             text: "Necesita poner la cantidad minima que brinda el proveedor.",
+  //             icon: "info",
+  //             confirmButtonText: "Aceptar",
+  //           });
+  //         }
+  //       }
+  //     },
+  //     error: function (xhr, status, error) {
+  //       console.error("Error al cargar los datos de la tabla:", error);
+  //     },
+  //   });
+  // });
   /*------------------------------------------------------------------ */
 
   /*---------------------Eliminar fila añadida de proveedor---------------- */
@@ -536,26 +536,80 @@ $(function () {
     let codpersonal = $("#codpersonal").val();
     let fechaentregaalert = [];
 
-    // $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
-    //   let id_proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
-    //   let id_producto_insumo = $(this).find("td:eq(1)").attr("id_producto");
-    //   let cantidad_producto_insumo = $(this).find("td:eq(2)").text();
-    //   // let cantidad_total_minima = $(this).find("td:eq(2)").text();
-    //   let monto = $(this).find("td:eq(3)").text();
-    //   let fechaentrega = $(this).find("td:eq(4) input").val();
-    //   let formapago = $(this).find("td:eq(5)").find("select").val();
+    $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
+      let proveedorcantidad = $(this).find("td:eq(0)").attr("codigo_proveedor");
 
-    //   fechaentregaalert.push(fechaentrega);
+      if (proveedorcantidad != undefined) {
+        id_proveedor = proveedorcantidad;
+      } else {
+        id_proveedor = $(this).find("td:eq(0) select").val();
+      }
 
-    //   valoresCapturadosVenta.push({
-    //     id_proveedor: id_proveedor,
-    //     id_producto_insumo: id_producto_insumo,
-    //     cantidad_producto_insumo: cantidad_producto_insumo,
-    //     monto: monto,
-    //     formapago: formapago,
-    //     fechaentrega: fechaentrega,
-    //   });
-    // });
+      let valorcantidad = $(this)
+        .find('td[data-titulo="CANTIDAD POR COMPRA"] input')
+        .val();
+
+      let codigoproducto = $(this)
+        .find('td[data-titulo="PRODUCTO"]')
+        .attr("id_producto");
+      let productonombre = $(this).find('td[data-titulo="PRODUCTO"]').text();
+
+      let codigoproveedorcant = $(this).find("td:eq(0) select").val();
+      if (codigoproveedorcant == "none") {
+        Swal.fire({
+          // title: "¡Guardado exitoso!",
+          text:
+            "Necesita seleccionar un proveedor del producto " +
+            productonombre +
+            ".",
+          icon: "info",
+        });
+      }
+
+      const accion = "mostrarcantidadpreciocalculo";
+      $.ajax({
+        url: "./c_almacen.php",
+        type: "POST",
+        data: {
+          accion: accion,
+          valorcan: valorcantidad,
+          valorproveedor: proveedorcantidad,
+          valorproducto: codigoproducto,
+          codigoproveedor: codigoproveedorcant,
+        },
+        success: function (response) {
+          if (isJSON(response)) {
+            let task = JSON.parse(response);
+            // console.log(task);
+            let valorcambiadoprecio = $(this)
+              .find("td:eq(3)")
+              .text(task[0].PRECIO_PAGAR);
+
+            let valorpreciomin = $(this)
+              .find("td:eq(7)")
+              .text(task[0].PRECIO_PRODUCTO);
+
+            let valorcantidadx = parseFloat(task[0].CANTIDAD_MINIMA);
+            if (parseFloat(valorcantidad) < valorcantidadx) {
+              Swal.fire({
+                text:
+                  "Necesita poner la cantidad minima que brinda el proveedor " +
+                  task[0].NOM_PROVEEDOR +
+                  " del producto " +
+                  task[0].DES_PRODUCTO +
+                  ".",
+                icon: "info",
+                confirmButtonText: "Aceptar",
+              });
+              return;
+            }
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error al cargar los datos de la tabla:", error);
+        },
+      });
+    });
 
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let id_proveedor;
@@ -602,6 +656,28 @@ $(function () {
         valorpedir: valorpedir,
       });
     });
+
+    let paresUnicos = {};
+
+    for (let i = 0; i < valoresCapturadosVenta.length; i++) {
+      let codigoproducto = valoresCapturadosVenta[i]["id_producto_insumo"];
+      let id_proveedor = valoresCapturadosVenta[i]["id_proveedor"];
+      let nombreproducto = valoresCapturadosVenta[i]["nombreproducto"];
+
+      let claveUnica = codigoproducto + "_" + id_proveedor;
+      if (paresUnicos[claveUnica]) {
+        Swal.fire({
+          title: "Se encontro duplicado de proveedor y producto",
+          text: "El producto duplicado " + nombreproducto,
+          icon: "info",
+          confirmButtonText: "Aceptar",
+        });
+
+        return;
+      } else {
+        paresUnicos[claveUnica] = true;
+      }
+    }
 
     const dataimagenes = [];
     const codigoproveedorimagenes = [];
@@ -1057,6 +1133,81 @@ $(function () {
 
     let codpersonal = $("#codpersonal").val();
     let fechaentregaalert = [];
+
+    $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
+      let proveedorcantidad = $(this).find("td:eq(0)").attr("codigo_proveedor");
+
+      if (proveedorcantidad != undefined) {
+        id_proveedor = proveedorcantidad;
+      } else {
+        id_proveedor = $(this).find("td:eq(0) select").val();
+      }
+
+      let valorcantidad = $(this)
+        .find('td[data-titulo="CANTIDAD POR COMPRA"] input')
+        .val();
+
+      let codigoproducto = $(this)
+        .find('td[data-titulo="PRODUCTO"]')
+        .attr("id_producto");
+      let productonombre = $(this).find('td[data-titulo="PRODUCTO"]').text();
+
+      let codigoproveedorcant = $(this).find("td:eq(0) select").val();
+      if (codigoproveedorcant == "none") {
+        Swal.fire({
+          // title: "¡Guardado exitoso!",
+          text:
+            "Necesita seleccionar un proveedor del producto " +
+            productonombre +
+            ".",
+          icon: "info",
+        });
+      }
+
+      const accion = "mostrarcantidadpreciocalculo";
+      $.ajax({
+        url: "./c_almacen.php",
+        type: "POST",
+        data: {
+          accion: accion,
+          valorcan: valorcantidad,
+          valorproveedor: proveedorcantidad,
+          valorproducto: codigoproducto,
+          codigoproveedor: codigoproveedorcant,
+        },
+        success: function (response) {
+          if (isJSON(response)) {
+            let task = JSON.parse(response);
+            // console.log(task);
+            let valorcambiadoprecio = $(this)
+              .find("td:eq(3)")
+              .text(task[0].PRECIO_PAGAR);
+
+            let valorpreciomin = $(this)
+              .find("td:eq(7)")
+              .text(task[0].PRECIO_PRODUCTO);
+
+            let valorcantidadx = parseFloat(task[0].CANTIDAD_MINIMA);
+            if (parseFloat(valorcantidad) < valorcantidadx) {
+              Swal.fire({
+                text:
+                  "Necesita poner la cantidad minima que brinda el proveedor " +
+                  task[0].NOM_PROVEEDOR +
+                  " del producto " +
+                  task[0].DES_PRODUCTO +
+                  ".",
+                icon: "info",
+                confirmButtonText: "Aceptar",
+              });
+              return;
+            }
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error al cargar los datos de la tabla:", error);
+        },
+      });
+    });
 
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let id_proveedor;

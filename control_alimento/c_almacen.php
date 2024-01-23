@@ -477,6 +477,7 @@ if ($accion == 'insertar') {
 
             $respuesta = c_almacen::c_insertar_orden_compra_temp_imagen($idRequerimiento, $valorcapturado, $valoresdeinsumos, $dataimagenesfile, $codigoproveedorimagenes);
         } else {
+
             $respuesta = c_almacen::c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado, $valoresdeinsumos);
         }
         // $respuesta = c_almacen::c_insertar_orden_compra_item($union, $file, $idRequerimiento,  $codpersonal);
@@ -1676,20 +1677,7 @@ class c_almacen
             echo '<option value="' . $datos[$i]["ID_LI"] . '">' . $datos[$i]["CANTIDAD_LITROS"] . '</option>';
         }
     }
-    // static function c_insertar_litros($litrosadd)
-    // {
-    //     $mostrar = new m_almacen();
-    //     if (isset($litrosadd) ) {
 
-    //         $respuesta = $mostrar->insertarLitros($litrosadd);
-    //         if ($respuesta) {
-
-    //             return "ok";
-    //         } else {
-    //             return "error";
-    //         };
-    //     }
-    // }
     static function c_selectCombo($selectSolucion, $selectPreparacion, $selectCantidad, $selectML, $selectL, $textAreaObservacion, $textAreaAccion, $selectVerificacion, $valorextra)
     {
         $mostrar = new m_almacen();
@@ -3122,9 +3110,6 @@ class c_almacen
     }
     static function c_insertar_orden_compra_item_sinimagen($union, $valoresdeinsumos, $idRequerimiento,  $codpersonal)
     {
-        // var_dump($union);
-        // // var_dump($valoresdeinsumos);
-        // exit;
         $m_formula = new m_almacen();
         $count = count($union);
         $countinsumo = count($valoresdeinsumos);
@@ -3320,6 +3305,7 @@ class c_almacen
             echo json_encode($response);
             exit;
         } else {
+
             $respuestaorde = $m_formula->InsertarOrdenCompraTemp($idRequerimiento, $valorcapturado);
             if ($respuestaorde) {
                 $response = array('estado' => 'ok');
@@ -4885,7 +4871,9 @@ class c_almacen
                 $json[] = array(
                     "COD_CANTIDAD_MINIMA" => $row->COD_CANTIDAD_MINIMA,
                     "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "COD_PROVEEDOR" => trim($row->COD_PROVEEDOR),
+                    "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
 
                     "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
                     "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
