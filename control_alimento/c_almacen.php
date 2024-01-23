@@ -3050,14 +3050,6 @@ class c_almacen
     {
         $m_formula = new m_almacen();
 
-        // if (isset($idRequerimiento)) {
-        //     $respuestaordenc = $m_formula->InsertarOrdenCompraItem($union, $dataimagenesfile, $codigoproveedorimagenes, $idRequerimiento, $codpersonal);
-        //     if ($respuestaordenc) {
-        //         echo "ok";
-        //     } else {
-        //         echo "error";
-        //     };
-        // }
         $valorescorrectos = [];
         foreach ($valoresdeinsumos as $stringinsumo) {
             $insumoArray = json_decode($stringinsumo, true);

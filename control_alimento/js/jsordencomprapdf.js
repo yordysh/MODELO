@@ -22,95 +22,95 @@ function exportardatoscomprapdf(obj) {
       doc.addPage();
     }
     // Función para dibujar un rectángulo con esquinas ovaladas
-    function roundedRect(x, y, width, height, radius) {
-      doc.setLineWidth(0.5);
-      doc.setDrawColor(0);
-      doc.setFillColor(255, 255, 255); // Color blanco
-      doc.roundedRect(x, y, width, height, radius, radius, "FD"); // 'FD' para dibujar y rellenar
-    }
+    // function roundedRect(x, y, width, height, radius) {
+    //   doc.setLineWidth(0.5);
+    //   doc.setDrawColor(0);
+    //   doc.setFillColor(255, 255, 255); // Color blanco
+    //   doc.roundedRect(x, y, width, height, radius, radius, "FD"); // 'FD' para dibujar y rellenar
+    // }
     // Cabecera de la factura dentro de un rectángulo con esquinas ovaladas
-    roundedRect(15, 10, 150, 54, 10);
+    // roundedRect(15, 10, 150, 54, 10);
 
-    function roundedTopSombreado(
-      x,
-      y,
-      width,
-      height,
-      radiusTopLeft,
-      radiusTopRight
-    ) {
-      doc.setDrawColor(0);
-      doc.setFillColor(162, 201, 252); // Color azul
+    // function roundedTopSombreado(
+    //   x,
+    //   y,
+    //   width,
+    //   height,
+    //   radiusTopLeft,
+    //   radiusTopRight
+    // ) {
+    //   doc.setDrawColor(0);
+    //   doc.setFillColor(162, 201, 252); // Color azul
 
-      doc.moveTo(x + radiusTopLeft, y);
-      doc.lineTo(x + width - radiusTopRight, y);
-      doc.curveTo(
-        x + width - radiusTopRight / 2,
-        y,
-        x + width,
-        y + radiusTopRight / 2,
-        x + width,
-        y + radiusTopRight
-      );
-      doc.lineTo(x + width, y + height);
-      doc.lineTo(x, y + height);
-      doc.lineTo(x, y + radiusTopLeft);
-      doc.curveTo(
-        x,
-        y + radiusTopLeft / 2,
-        x + radiusTopLeft / 2,
-        y,
-        x + radiusTopLeft,
-        y
-      );
+    //   doc.moveTo(x + radiusTopLeft, y);
+    //   doc.lineTo(x + width - radiusTopRight, y);
+    //   doc.curveTo(
+    //     x + width - radiusTopRight / 2,
+    //     y,
+    //     x + width,
+    //     y + radiusTopRight / 2,
+    //     x + width,
+    //     y + radiusTopRight
+    //   );
+    //   doc.lineTo(x + width, y + height);
+    //   doc.lineTo(x, y + height);
+    //   doc.lineTo(x, y + radiusTopLeft);
+    //   doc.curveTo(
+    //     x,
+    //     y + radiusTopLeft / 2,
+    //     x + radiusTopLeft / 2,
+    //     y,
+    //     x + radiusTopLeft,
+    //     y
+    //   );
 
-      doc.fill();
-    }
+    //   doc.fill();
+    // }
     // Uso de la función con fondo de altura 20 y radios de borde para las esquinas superiores
-    roundedTopSombreado(15, 10, 150, 10, 10, 10);
+    // roundedTopSombreado(15, 10, 150, 10, 10, 10);
 
-    function roundedBottomSombreado(
-      x,
-      y,
-      width,
-      height,
-      radiusBottomLeft,
-      radiusBottomRight
-    ) {
-      doc.setDrawColor(0);
-      doc.setFillColor(188, 199, 212);
+    // function roundedBottomSombreado(
+    //   x,
+    //   y,
+    //   width,
+    //   height,
+    //   radiusBottomLeft,
+    //   radiusBottomRight
+    // ) {
+    //   doc.setDrawColor(0);
+    //   doc.setFillColor(188, 199, 212);
 
-      doc.moveTo(x, y);
-      doc.lineTo(x + width, y);
-      doc.lineTo(x + width, y + height - radiusBottomRight);
-      doc.curveTo(
-        x + width,
-        y + height - radiusBottomRight / 2,
-        x + width - radiusBottomRight / 2,
-        y + height,
-        x + width - radiusBottomRight,
-        y + height
-      );
-      doc.lineTo(x + radiusBottomLeft, y + height);
-      doc.curveTo(
-        x + radiusBottomLeft / 2,
-        y + height,
-        x,
-        y + height - radiusBottomLeft / 2,
-        x,
-        y + height - radiusBottomLeft
-      );
+    //   doc.moveTo(x, y);
+    //   doc.lineTo(x + width, y);
+    //   doc.lineTo(x + width, y + height - radiusBottomRight);
+    //   doc.curveTo(
+    //     x + width,
+    //     y + height - radiusBottomRight / 2,
+    //     x + width - radiusBottomRight / 2,
+    //     y + height,
+    //     x + width - radiusBottomRight,
+    //     y + height
+    //   );
+    //   doc.lineTo(x + radiusBottomLeft, y + height);
+    //   doc.curveTo(
+    //     x + radiusBottomLeft / 2,
+    //     y + height,
+    //     x,
+    //     y + height - radiusBottomLeft / 2,
+    //     x,
+    //     y + height - radiusBottomLeft
+    //   );
 
-      doc.fill();
-    }
+    //   doc.fill();
+    // }
     // Uso de la función con fondo de altura 20 y radios de borde para las esquinas superiores
-    roundedBottomSombreado(15.3, 20.1, 149.3, 43.5, 10, 10);
+    // roundedBottomSombreado(15.3, 20.1, 149.3, 43.5, 10, 10);
 
     // Texto en la cabecera
     doc.setFontSize(14);
     // Pongo de color blanco la letra
-    doc.setTextColor(255, 255, 255);
-    doc.text("ORDEN DE COMPRA", 65, 17);
+    // doc.setTextColor(255, 255, 255);
+    doc.text("ORDEN DE COMPRA", 70, 17);
     doc.setFontSize(12);
     doc.text("N°: " + numerofactura, 20, 25);
     doc.text("Fecha: " + fecha, 20, 35);

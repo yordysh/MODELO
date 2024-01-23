@@ -444,68 +444,6 @@ $(function () {
   });
   /*----------------------------------------------------------------- */
 
-  /*--------------Verifica la cantidad y precio total al cambiar------ */
-  // $(document).on("keyup", "#cantidadacomprar", function () {
-  //   let filaescr = $(this).closest("tr");
-  //   var valorcan = filaescr
-  //     .find('td[data-titulo="CANTIDAD POR COMPRA"] input')
-  //     .val();
-  //   var valorproveedor = filaescr
-  //     .find('td[data-titulo="PROVEEDOR"]')
-  //     .attr("codigo_proveedor");
-
-  //   var valorproducto = filaescr
-  //     .find('td[data-titulo="PRODUCTO"]')
-  //     .attr("id_producto");
-
-  //   var codigoproveedor = filaescr.find("td:eq(0) select").val();
-  //   if (codigoproveedor == "none") {
-  //     Swal.fire({
-  //       // title: "¡Guardado exitoso!",
-  //       text: "Necesita seleccionar un proveedor.",
-  //       icon: "info",
-  //     });
-  //   }
-  //   const accion = "mostrarcantidadpreciocalculo";
-  //   $.ajax({
-  //     url: "./c_almacen.php",
-  //     type: "POST",
-  //     data: {
-  //       accion: accion,
-  //       valorcan: valorcan,
-  //       valorproveedor: valorproveedor,
-  //       valorproducto: valorproducto,
-  //       codigoproveedor: codigoproveedor,
-  //     },
-  //     success: function (response) {
-  //       if (isJSON(response)) {
-  //         let task = JSON.parse(response);
-  //         // console.log(task);
-  //         let valorcambiadoprecio = filaescr
-  //           .find("td:eq(3)")
-  //           .text(task[0].PRECIO_PAGAR);
-
-  //         let valorpreciomin = filaescr
-  //           .find("td:eq(7)")
-  //           .text(task[0].PRECIO_PRODUCTO);
-
-  //         let valorcantidad = parseFloat(task[0].CANTIDAD_MINIMA);
-  //         if (parseFloat(valorcan) < valorcantidad) {
-  //           Swal.fire({
-  //             text: "Necesita poner la cantidad minima que brinda el proveedor.",
-  //             icon: "info",
-  //             confirmButtonText: "Aceptar",
-  //           });
-  //         }
-  //       }
-  //     },
-  //     error: function (xhr, status, error) {
-  //       console.error("Error al cargar los datos de la tabla:", error);
-  //     },
-  //   });
-  // });
-  /*------------------------------------------------------------------ */
-
   /*---------------------Eliminar fila añadida de proveedor---------------- */
 
   // Asigna un controlador de eventos al botón con id "deletef"
@@ -742,17 +680,10 @@ $(function () {
       const Temp = JSON.stringify(objetotemp);
       formData.append("valoresdeinsumos[]", Temp);
     }
-    // const accion = "insertarordencompraitem";
 
     $.ajax({
       type: "POST",
       url: "./c_almacen.php",
-      // data: {
-      //   accion: accion,
-      //   union: valoresCapturadosVenta,
-      //   idRequerimiento: idRequerimiento,
-      //   codpersonal: codpersonal,
-      // },
       data: formData,
       contentType: false,
       processData: false,
@@ -760,48 +691,6 @@ $(function () {
         $(".preloader").css("opacity", "1");
         $(".preloader").css("display", "block");
       },
-      // success: function (response) {
-      //   // console.log("respuesta" + response);
-      //   if (response == "ok") {
-      //     Swal.fire({
-      //       title: "¡Guardado exitoso!",
-      //       text: "Los datos se han guardado correctamente.",
-      //       icon: "success",
-      //       confirmButtonText: "Aceptar",
-      //     }).then((result) => {
-      //       if (result.isConfirmed) {
-      //         // $("#taskcodrequerimiento").val("");
-      //         // $("#taskcodrequhiddenvalidar").val("");
-      //         // $("#mensajecompleto").css("display", "none");
-      //         // tablainsumorequerido.empty();
-      //         // $("#tablaimagenes").empty();
-      //         // tablainsumos.empty();
-      //         // tablatotal.empty();
-      //         mostrarRequerimientoTotal();
-      //         mostrarPendientes();
-      //       }
-      //     });
-      //   } else if (response == "error") {
-      //     Swal.fire({
-      //       title: "¡No hay registros en proceso!",
-      //       text: "Necesita hacer un proceso del requerimiento para guardar",
-      //       icon: "error",
-      //       confirmButtonText: "Aceptar",
-      //     }).then((result) => {
-      //       if (result.isConfirmed) {
-      //         // $("#taskcodrequerimiento").val("");
-      //         // $("#taskcodrequhiddenvalidar").val("");
-      //         // $("#mensajecompleto").css("display", "none");
-      //         // tablainsumorequerido.empty();
-      //         // $("#tablaimagenes").empty();
-      //         // tablainsumos.empty();
-      //         // tablatotal.empty();
-      //         mostrarRequerimientoTotal();
-      //         mostrarPendientes();
-      //       }
-      //     });
-      //   }
-      // },
       success: async function (response) {
         let respuesta = JSON.parse(response);
         // console.log(respuesta);
@@ -1048,11 +937,9 @@ $(function () {
       .find('td[data-titulo="PRODUCTO"]')
       .attr("id_producto");
     var codigoproductonombre = fila.find('td[data-titulo="PRODUCTO"]').text();
-    // var codigoproveedornombre = fila.find('td[data-titulo="PROVEEDOR"]').text();
     var codigoproveedorcell = fila.find('td[data-titulo="PROVEEDOR"]');
     var codigoproveedornombre = codigoproveedorcell.text();
 
-    // Check if the selected option is not "none"
     var selectedOption = codigoproveedorcell.find("select").val();
     if (selectedOption && selectedOption !== "none") {
       codigoproveedornombre = codigoproveedorcell
@@ -1342,17 +1229,9 @@ $(function () {
       formData.append("valoresdeinsumos[]", Temp);
     }
 
-    // const accion = "insertarordencompraitemtemporal";
-
     $.ajax({
       type: "POST",
       url: "./c_almacen.php",
-      // data: {
-      //   accion: accion,
-      //   valorcapturado: valoresCapturadosVentaTemp,
-      //   idRequerimiento: taskcodrequhiddenvalidar,
-      //   valoresdeinsumos: valoresdeinsumos,
-      // },
       data: formData,
       contentType: false,
       processData: false,

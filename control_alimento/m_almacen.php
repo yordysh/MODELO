@@ -2648,161 +2648,6 @@ class m_almacen
   }
   public function InsertarOrdenCompraItem($idRequerimiento, $union, $valoresdeinsumos, $dataimagenesfile, $codigoproveedorimagenes)
   {
-    // try {
-
-    //   $this->bd->beginTransaction();
-    //   $cod = new m_almacen();
-
-
-
-    //   $codigo_orden_compra = $cod->generarCodigoOrdenCompra();
-    //   $totalimagenesfile = count($_FILES['file']['name']);
-
-    //   $fecha_actual = $cod->c_horaserversql('F');
-
-    //   $zonaHorariaPeruRequerimiento = new DateTimeZone('America/Lima');
-    //   $horaActualPeruRequerimiento = new DateTime('now', $zonaHorariaPeruRequerimiento);
-    //   $horaactual = $horaActualPeruRequerimiento->format('H:i');
-
-    //   $stmCodreq = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) as COD_REQUERIMIENTO FROM T_REQUERIMIENTOTEMP");
-    //   $stmCodreq->execute();
-    //   $resultadoRe = $stmCodreq->fetch(PDO::FETCH_ASSOC);
-    //   $maxCodigoRe = $resultadoRe['COD_REQUERIMIENTO'];
-    //   $nuevoCodigoReq = $maxCodigoRe + 1;
-    //   $insertar = $codigoAumentoReq = str_pad($nuevoCodigoReq, 8, '0', STR_PAD_LEFT);
-
-    //   $contarordentemporal = $this->bd->prepare("SELECT COUNT(*) as COUNT FROM T_TMPORDEN_COMPRATEMP WHERE COD_REQUERIMIENTO='$idRequerimiento'");
-    //   $contarordentemporal->execute();
-    //   $resultadoconte = $contarordentemporal->fetch(PDO::FETCH_ASSOC);
-    //   $contar = $resultadoconte['COUNT'];
-
-
-    //   if ($contar > 0) {
-    //     foreach ($union as $insumoString) {
-    //       $insumoArray = json_decode($insumoString, true);
-
-    //       // Verifica si la decodificación fue exitosa
-    //       if ($insumoArray !== null) {
-    //         $id_proveedor = $insumoArray["id_proveedor"];
-    //         $id_producto_insumo = $insumoArray["id_producto_insumo"];
-    //         $cantidad_producto_insumo = $insumoArray["cantidad_producto_insumo"];
-    //         $monto = $insumoArray["monto"];
-    //         $formapago = $insumoArray["formapago"];
-    //         $fechaentrega = $insumoArray["fechaentrega"];
-
-    //         $repetirproveedortemp = $this->bd->prepare("SELECT COUNT(*) as COUNT FROM T_TMPORDEN_COMPRA WHERE COD_PROVEEDOR='$id_proveedor' AND COD_REQUERIMIENTO='$idRequerimiento'");
-    //         // var_dump($repetirproveedortemp);
-    //         $repetirproveedortemp->execute();
-    //         $resultcount = $repetirproveedortemp->fetch(PDO::FETCH_ASSOC);
-    //         $count = $resultcount['COUNT'];
-
-    //         $stm = $this->bd->prepare("SELECT MAX(COD_ORDEN_COMPRA) as COD_ORDEN_COMPRA FROM T_TMPORDEN_COMPRA");
-    //         $stm->execute();
-    //         $resultado = $stm->fetch(PDO::FETCH_ASSOC);
-    //         $maxCodigo = intval($resultado['COD_ORDEN_COMPRA']);
-    //         $nuevoCodigo = $maxCodigo + 1;
-    //         $codigoAumento = str_pad($nuevoCodigo, 9, '0', STR_PAD_LEFT);
-
-    //         if ($count == 0) {
-
-    //           $stmActualizarOrden = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA(COD_ORDEN_COMPRA,COD_REQUERIMIENTO,COD_REQUERIMIENTOTEMP,HORA,COD_PROVEEDOR,F_PAGO,FECHA_REALIZADA)
-    //                                                      VALUES('$codigoAumento','$idRequerimiento','$maxCodigoRe','$horaactual','$id_proveedor','$formapago',CONVERT(DATE, '$fechaentrega', 23))");
-    //           $stmActualizarOrden->execute();
-
-    //           $stmActualizar = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA_ITEM(COD_ORDEN_COMPRA,COD_PRODUCTO,CANTIDAD_INSUMO_ENVASE,MONTO,COD_TMPCOMPROBANTE)
-    //                                                      VALUES('$codigoAumento','$id_producto_insumo','$cantidad_producto_insumo','$monto','$idRequerimiento')");
-    //           $stmActualizar->execute();
-    //         } else {
-    //           $codigoordencompra = $this->bd->prepare("SELECT COD_ORDEN_COMPRA FROM T_TMPORDEN_COMPRA WHERE COD_PROVEEDOR='$id_proveedor' AND COD_REQUERIMIENTO='$idRequerimiento'");
-    //           $codigoordencompra->execute();
-    //           $codigoresultado = $codigoordencompra->fetch(PDO::FETCH_ASSOC);
-    //           $proveedorcodigoorden = $codigoresultado['COD_ORDEN_COMPRA'];
-
-
-    //           $stmActualizar = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA_ITEM(COD_ORDEN_COMPRA,COD_PRODUCTO,CANTIDAD_INSUMO_ENVASE,MONTO,COD_TMPCOMPROBANTE)
-    //                                                      VALUES('$proveedorcodigoorden','$id_producto_insumo','$cantidad_producto_insumo','$monto','$idRequerimiento')");
-    //           $stmActualizar->execute();
-    //         }
-    //       } else {
-    //         // Manejar el error de decodificación, si es necesario
-    //         echo "Error al decodificar JSON: " . json_last_error_msg();
-    //       }
-    //     }
-
-    //     if ($totalimagenesfile > 0) {
-    //       for ($total = 0; $total < $totalimagenesfile; $total++) {
-    //         if (isset($dataimagenesfile)) {
-    //           // Validar que se haya seleccionado una imagen
-    //           if (empty($_FILES['file']['name'][$total])) {
-    //             echo json_encode(array('status' => 'error', 'message' => 'Debe seleccionar una imagen.'));
-    //             exit;
-    //           }
-
-    //           // Obtener la información sobre el archivo
-    //           $imagen_info = getimagesize($_FILES['file']['tmp_name'][$total]);
-    //           $imagen_tipo = $imagen_info['mime'];
-
-    //           // Verificar que el tipo de archivo sea JPEG o PNG
-    //           if ($imagen_tipo !== 'image/jpeg' && $imagen_tipo !== 'image/png') {
-    //             echo json_encode(array('status' => 'error', 'message' => 'Formato de imagen no válido. Solo se permiten imágenes JPEG, JPG, PNG.'));
-    //             exit;
-    //           }
-    //           // Verificar el tipo de archivo y usar la función adecuada para crear el recurso de imagen
-    //           if ($imagen_tipo === 'image/jpeg') {
-    //             $calidad = 30;
-    //             $imagen_comprimida = imagecreatefromjpeg($_FILES['file']['tmp_name'][$total]);
-    //             ob_start();
-    //             imagejpeg($imagen_comprimida, null, $calidad);
-    //             $imagen_comprimida_binaria = ob_get_contents();
-    //             ob_end_clean();
-    //             $hex = bin2hex($imagen_comprimida_binaria);
-    //             $imagen = '0x' . $hex;
-    //             imagedestroy($imagen_comprimida);
-    //           } elseif ($imagen_tipo === 'image/png') {
-    //             $calidad = 5;
-    //             $imagen_comprimida = imagecreatefrompng($_FILES['file']['tmp_name'][$total]);
-    //             ob_start();
-    //             imagepng($imagen_comprimida, null, $calidad);
-    //             $imagen_comprimida_binaria = ob_get_contents();
-    //             ob_end_clean();
-    //             $hex = bin2hex($imagen_comprimida_binaria);
-    //             $imagen = '0x' . $hex;
-    //             imagedestroy($imagen_comprimida);
-    //           }
-
-    //           $decodedData = json_decode($codigoproveedorimagenes[$total], true);
-
-    //           // Verifica si la decodificación fue exitosa
-    //           if ($decodedData !== null) {
-    //             $codigoproveedor = $decodedData['codigoproveedor'];
-
-    //             $codcompraord = $this->bd->prepare("SELECT MAX(COD_ORDEN_COMPRA) as COD_ORDEN_COMPRA FROM T_TMPORDEN_COMPRA WHERE COD_PROVEEDOR='$codigoproveedor' AND COD_REQUERIMIENTO='$idRequerimiento'");
-    //             $codcompraord->execute();
-    //             $resultado = $codcompraord->fetch(PDO::FETCH_ASSOC);
-    //             $Finalcompraorden = $resultado['COD_ORDEN_COMPRA'];
-
-    //             $insertdataimagen = $this->bd->prepare("INSERT INTO T_TMPORDEN_COMPRA_IMAGENES(COD_ORDEN_COMPRA,IMAGEN)
-    //             VALUES('$Finalcompraorden',$imagen)");
-    //             $insertdataimagen->execute();
-    //           } else {
-    //             echo "Error al decodificar JSON en el índice $total\n";
-    //           }
-    //         } else {
-    //           // La variable imagen no existe
-    //           $imagen = null;
-    //           echo json_encode(array('status' => 'error', 'message' => 'No hay imagen seleccionada.'));
-    //           exit;
-    //         }
-    //       }
-    //     }
-
-    //     $insertar = $this->bd->commit();
-
-    //     return $insertar;
-    //   } else {
-    //     return;
-    //   }
-    // } 
     try {
       $this->bd->beginTransaction();
       $cod = new m_almacen();
@@ -3060,9 +2905,6 @@ class m_almacen
       $this->bd->beginTransaction();
       $cod = new m_almacen();
       $fecha_generado = $cod->c_horaserversql('F');
-      // $fecha_actual = '25/09/2023';
-      // $fecha_generado = date_create_from_format('d/m/Y', $fecha_actual)->format('Y-m-d');
-
       $stmActualizarOrden = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='A',FECHA='$fecha_generado' WHERE COD_REQUERIMIENTO='$idRequerimiento'");
       $insertar = $stmActualizarOrden->execute();
 
@@ -3541,7 +3383,6 @@ class m_almacen
   public function InsertarCantidadMinima($selectCantidadminima, $cantidadMinima)
   {
     try {
-
       $cod = new m_almacen();
 
       $codigo_cantidad_minima = $cod->generarCodigoCantidadMinima();
@@ -3595,10 +3436,6 @@ class m_almacen
       $this->bd->beginTransaction();
 
       $cod = new m_almacen();
-      // $repetir = $cod->contarRegistrosZona($NOMBRE_T_ZONA_AREAS);
-      // $nombre = 'LBS-PHS-FR-01';
-
-      // if ($repetir == 0) {
       $stmt = $this->bd->prepare("UPDATE T_TMPCANTIDAD_MINIMA SET CANTIDAD_MINIMA ='$cantidadMinima' WHERE COD_CANTIDAD_MINIMA = '$codminimo'");
 
       $update = $stmt->execute();
@@ -4186,13 +4023,6 @@ class m_almacen
         $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
         $respuesta['tipo'] = 0;
       } else {
-
-        // $stmformulacionenvase = $this->bd->prepare("SELECT TPRO.COD_PRODUCCION AS COD_PRODUCCION, TPRO.CANTIDAD_PRODUCIDA AS CANTIDAD_PRODUCIDA, TP.DES_PRODUCTO AS DES_PRODUCTO FROM T_TMPPRODUCCION TPRO 
-        // INNER JOIN T_PRODUCTO TP ON TPRO.COD_PRODUCTO=TP.COD_PRODUCTO
-        // WHERE TPRO.COD_PRODUCCION='$codigoproduccion' AND TPRO.COD_PRODUCTO='$codigoproducto'");
-        // $stmformulacionenvase->execute();
-        // $respuesta['respuesta'] = $stmformulacionenvase->fetchAll(PDO::FETCH_OBJ);
-        // $respuesta['tipo'] = 1;
         $valorderequerimiento = $this->bd->prepare("SELECT MAX(COD_REQUERIMIENTO) AS COD_REQUERIMIENTO FROM T_TMPPRODUCCION WHERE COD_PRODUCCION='$codigoproduccion'");
         $valorderequerimiento->execute();
         $resultadoreuqerimiento = $valorderequerimiento->fetch(PDO::FETCH_ASSOC);
@@ -4237,7 +4067,6 @@ class m_almacen
   public function NumeroBachadaGenerado($codigoproducto, $codigoproduccion)
   {
     try {
-      // $this->bd->beginTransaction();
       $malamacen = new m_almacen();
       $fechadehoy = $malamacen->c_horaserversql('F');
 
@@ -4422,28 +4251,13 @@ class m_almacen
         }
 
         $suminsumos = 0;
-        // foreach ($cantidadformula as $insumos) {
-        //   $codProducto = $insumos['COD_PRODUCTO'];
-        //   $canFormulacion = $insumos['CAN_FORMULACION'];
 
-        //   $resultadoformula = round((($cantidad * $canFormulacion) / $cantidadformulait), 3);
-
-
-        //   $stmInsertarInsumo = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM(COD_AVANCE_INSUMOS,COD_PRODUCTO,CANTIDAD)
-        //   VALUES ('$codigo_de_avance_insumo','$codProducto','$resultadoformula')");
-
-        //   $stmInsertarInsumo->execute();
-        //   $suminsumos = $suminsumos + $resultadoformula;
-        // }
 
         for ($i = 0; $i < count($valoresCapturadosProduccioninsumo); $i += 3) {
           $codProductoAvanceinsumo = trim($valoresCapturadosProduccioninsumo[$i]);
           $cantidadcapturainsumo = trim($valoresCapturadosProduccioninsumo[$i + 1]);
           $cantidadloteinsumo = ($valoresCapturadosProduccioninsumo[$i + 2]);
 
-          // $partes = explode("-", $cantidadloteinsumo);
-
-          // $codigoconvertido = trim($partes[0]);
 
 
           if ($valoresCapturadosProduccioninsumo[$i + 2] == '0') {
@@ -4984,12 +4798,6 @@ class m_almacen
   public function MostrarOrdenDeCompraAprobada()
   {
     try {
-
-      // $stmOrdenCompraAprobada = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TOC.FECHA AS FECHA,TP.NOM_PERSONAL AS NOM_PERSONAL FROM T_TMPORDEN_COMPRA  TOC
-      //                                                 INNER JOIN T_REQUERIMIENTOTEMP TR ON TOC.COD_REQUERIMIENTO=TR.COD_REQUERIMIENTO
-      //                                                 INNER JOIN T_USUARIO TU ON TU.COD_USUARIO=TR.USU_REGISTRO
-      //                                                 INNER JOIN T_PERSONAL TP ON TP.COD_PERSONAL=TU.COD_PERSONAL WHERE TOC.ESTADO='T'");
-
       $stmOrdenCompraAprobada = $this->bd->prepare("SELECT COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, COD_REQUERIMIENTO AS COD_REQUERIMIENTO,
                                                       FECHA AS FECHA FROM T_TMPORDEN_COMPRA  WHERE ESTADO='T'");
       $stmOrdenCompraAprobada->execute();
@@ -5004,7 +4812,6 @@ class m_almacen
   public function MostrarInsumosCompras($idcompraaprobada)
   {
     try {
-
       $stmInsumosCompras = $this->bd->prepare("SELECT CI.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, CI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
                                                 CI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA,TAL.STOCK_ACTUAL AS STOCK_ACTUAL, CI.COD_PROVEEDOR AS COD_PROVEEDOR, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR FROM T_TMPORDEN_COMPRA_ITEM CI
                                                 INNER JOIN T_PRODUCTO TP ON CI.COD_PRODUCTO=TP.COD_PRODUCTO
@@ -5023,7 +4830,6 @@ class m_almacen
   public function MostrarProveedoresPorProducto($codigoProducto)
   {
     try {
-
       $stmInsumosCompras = $this->bd->prepare("SELECT TCAN.COD_CANTIDAD_MINIMA AS COD_CANTIDAD_MINIMA, TCAN.COD_PROVEEDOR AS COD_PROVEEDOR, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR, TPRO.RUC_PROVEEDOR AS RUC_PROVEEDOR,
                                                 TCAN.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO, TCAN.CANTIDAD_MINIMA AS CANTIDAD_MINIMA,TCAN.PRECIO_PRODUCTO AS PRECIO_PRODUCTO 
                                                 FROM T_TMPCANTIDAD_MINIMA TCAN INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TCAN.COD_PROVEEDOR INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TCAN.COD_PRODUCTO
@@ -5054,7 +4860,6 @@ class m_almacen
   public function MostrarCodRequerimientoTEMP()
   {
     try {
-
       $stmInsumosCompras = $this->bd->prepare("SELECT TOP 5 *FROM T_REQUERIMIENTOTEMP ORDER BY COD_REQUERIMIENTO DESC;");
       $stmInsumosCompras->execute();
       $datos = $stmInsumosCompras->fetchAll(PDO::FETCH_OBJ);
@@ -5094,7 +4899,6 @@ class m_almacen
   public function   MostrarProveedoresId($id)
   {
     try {
-
       $stmproveedores = $this->bd->prepare("SELECT COD_PROVEEDOR,NOM_PROVEEDOR,DIR_PROVEEDOR,RUC_PROVEEDOR,DNI_PROVEEDOR FROM T_PROVEEDOR WHERE COD_PROVEEDOR='$id'");
       $stmproveedores->execute();
       $datosproveedor = $stmproveedores->fetchAll(PDO::FETCH_OBJ);
@@ -5370,8 +5174,6 @@ class m_almacen
       $actualizacodigoperson = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET COD_USU='$personalcod' WHERE COD_ORDEN_COMPRA='$idcompraaprobada'");
       $actualizacodigoperson->execute();
 
-      // $stmactualizaitemcompra = $this->bd->prepare("UPDATE T_TMPCOMPROBANTE SET MONTO_TOTAL='$sumordenitem' WHERE COD_ORDEN_COMPRA='$idcompraaprobada' AND COD_TMPCOMPROBANTE='$codigocomprobante'");
-      // $stmactualizaitemcompra->execute();
 
       $insertOCI = $this->bd->commit();
       return $insertOCI;
@@ -5383,13 +5185,6 @@ class m_almacen
   public function MostrarReporteOrdenCompra($idrequerimientotemp)
   {
     try {
-
-      // $stmmostrarcompracomprobante = $this->bd->prepare("SELECT TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE , CONVERT(VARCHAR, TC.FECHA_REALIZADA, 105) AS FECHA_REALIZADA, 
-      //                                                     TC.HORA AS HORA, TP.NOM_PROVEEDOR AS NOM_PROVEEDOR,TC.MONTO_TOTAL AS MONTO_TOTAL,
-      //                                                     TOR.COD_REQUERIMIENTO AS COD_REQUERIMIENTO FROM T_TMPCOMPROBANTE TC
-      //                                                     INNER JOIN T_PROVEEDOR TP ON TP.COD_PROVEEDOR = TC.COD_PROVEEDOR
-      //                                                     INNER JOIN T_TMPORDEN_COMPRA TOR ON TOR.COD_ORDEN_COMPRA=TC.COD_ORDEN_COMPRA
-      //                                                     WHERE TOR.COD_REQUERIMIENTO='$idrequerimientotemp'");
       $stmmostrarcompracomprobante = $this->bd->prepare("SELECT COD_ORDEN_COMPRA,FECHA_REALIZADA,HORA FROM T_TMPORDEN_COMPRA 
                                                           WHERE COD_REQUERIMIENTO='$idrequerimientotemp'");
       $stmmostrarcompracomprobante->execute();
@@ -5560,11 +5355,6 @@ class m_almacen
   {
     try {
 
-      // $mostrardatospdf = $this->bd->prepare("SELECT TC.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR, TP.DES_PRODUCTO AS DES_PRODUCTO,
-      //                                         TI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA,TI.MONTO AS MONTO FROM T_TMPCOMPROBANTE TC
-      //                                         INNER JOIN T_TMPORDEN_COMPRA_ITEM TI ON TI.COD_TMPCOMPROBANTE=TC.COD_TMPCOMPROBANTE
-      //                                         INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TC.COD_PROVEEDOR
-      //                                         INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO= TI.COD_PRODUCTO WHERE TC.COD_TMPCOMPROBANTE='$codtmpcomprobante'");
       $mostrardatospdf = $this->bd->prepare("SELECT TOI.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TOI.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO,
                                               TOI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA,TOI.MONTO AS MONTO, TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR FROM T_TMPORDEN_COMPRA_ITEM TOI
                                               INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TOI.COD_PRODUCTO
@@ -5594,19 +5384,6 @@ class m_almacen
       error_log($e->getMessage());
     }
   }
-
-  // public function selecciondestockactual($codigodeproducto)
-  // {
-  //   try {
-  //     $valorstock = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$codigodeproducto'");
-  //     $valorstock->execute();
-  //     $valstock = $valorstock->fetch(PDO::FETCH_ASSOC);
-  //     $codigostock = $valstock['STOCK_ACTUAL'];
-  //     return $codigostock;
-  //   } catch (Exception $e) {
-  //     die($e->getMessage());
-  //   }
-  // }
 
   public function actualizar_requerimiento_item($codrequerimiento, $valoresorden)
   {
@@ -5747,8 +5524,6 @@ class m_almacen
           $producto = trim($dato["producto"]);
           $codigolote = $dato["codigolote"];
           $fechav = $dato["fechavencimiento"];
-          // $fechaConvertidaven = date_create($fechav);
-          // $fechavencimiento = $fechaConvertidaven->format('Y/m/d');
           $proveedor = $dato["proveedor"];
           $remision = $dato["remision"];
           $boleta = $dato["boleta"];
@@ -5973,16 +5748,12 @@ class m_almacen
         foreach ($datos as $dato) {
           $idcomprobante = $dato["idcomprobante"];
           $fechaingresoC = $dato["fechaingreso"];
-          // $fechaConvertida = date_create($fechaingresoC);
-          // $fechaingreso = $fechaConvertida->format('Y-m-d');
 
           $hora = $dato["hora"];
 
           $producto = trim($dato["producto"]);
           $codigolote = trim($dato["codigolote"]);
           $fechaven = $dato["fechavencimiento"];
-          // $fechaConvertidaven = date_create($fechaven);
-          // $fechavencimiento = $fechaConvertidaven->format('Y-m-d');
 
           $proveedor = $dato["proveedor"];
           $remision = $dato["remision"];
@@ -6652,7 +6423,9 @@ class m_almacen
                                               TC.PRECIO_PRODUCTO AS PRECIO_PRODUCTO, TC.TIPO_MONEDA AS TIPO_MONEDA, T.NOM_PROVEEDOR AS NOM_PROVEEDOR,
                                               T.COD_PROVEEDOR AS COD_PROVEEDOR FROM T_TMPCANTIDAD_MINIMA TC
                                               INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TC.COD_PRODUCTO
-                                              INNER JOIN T_PROVEEDOR T ON T.COD_PROVEEDOR=TC.COD_PROVEEDOR WHERE T.NOM_PROVEEDOR LIKE '$buscarProveedorPrecios%'");
+                                              INNER JOIN T_PROVEEDOR T ON T.COD_PROVEEDOR=TC.COD_PROVEEDOR 
+                                              WHERE T.NOM_PROVEEDOR LIKE '$buscarProveedorPrecios%'
+                                              OR TP.DES_PRODUCTO LIKE '$buscarProveedorPrecios%'");
       $mostarproductos->execute();
       $datosproducprov = $mostarproductos->fetchAll(PDO::FETCH_OBJ);
 
