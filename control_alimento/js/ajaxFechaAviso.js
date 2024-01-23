@@ -945,15 +945,19 @@ $(function () {
                 producto.COD_REQUERIMIENTOTEMP +
                 "'>";
               htmlContent +=
-                "<td codigoproducto='" +
+                "<td class='td-producto' codigoproducto='" +
                 producto.COD_PRODUCTO +
                 "'  codigoproveedororden='" +
                 producto.COD_PROVEEDOR +
                 "'>" +
                 producto.ABR_PRODUCTO +
                 "</td>";
-              htmlContent += "<td>" + producto.CANTIDAD_INSUMO_ENVASE + "</td>";
-              htmlContent += "<td><input /></td>";
+              htmlContent +=
+                "<td class='td-cantidad'>" +
+                producto.CANTIDAD_INSUMO_ENVASE +
+                "</td>";
+              htmlContent +=
+                "<td>  <input class='form-check-input td-checkbox' type='checkbox' value='' id='checkedvalor' checked></td>";
               htmlContent += "</tr>";
             });
             htmlContent += "</tbody>";
@@ -977,7 +981,9 @@ $(function () {
                     .find("td:eq(0)")
                     .attr("codigoproveedororden");
                   let cantidadpedida = $(this).find("td:eq(1)").text();
-                  let cantidadllegada = $(this).find("td:eq(2) input").val();
+                  let cantidadllegada = $(this)
+                    .find("td:eq(2) input:checkbox")
+                    .prop("checked");
                   valoresorden.push({
                     codigocompraorde: codigocompraorde,
                     codtempreque: codtempreque,

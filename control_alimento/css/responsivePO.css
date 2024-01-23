@@ -327,6 +327,13 @@ td {
   border: none;
   margin-top: 25px;
 }
+.custom-icon-calcular-envases {
+  background-color: #0d7921;
+  color: white;
+  padding: 9px;
+  border-radius: 100%;
+  border: none;
+}
 .btncalcular {
   margin-top: 32px;
   margin-left: 7px;

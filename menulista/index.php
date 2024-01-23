@@ -113,7 +113,6 @@ $fechaactualservidor = $mostrar->c_horaserversql('F');
     <script src="../control_alimento/js/jquery-3.7.0.min.js"></script>
 
     <script src="../control_alimento/js/ajaxFechaAviso.js"></script>
-    <!-- <script src="../control_alimento/js/alerta.js"></script> -->
 </body>
 
 </html>

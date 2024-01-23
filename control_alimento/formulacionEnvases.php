@@ -145,7 +145,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                                 </div>
                                 <!-- <button id="botonCalcularEnvasesProducto" name="insert" class="btn btn-success bt-Total">Insertar envases </button> -->
                                 <div class="btncalcular">
-                                    <button class="custom-icon-calcular" name="insert" id="botonCalcularEnvasesProducto"><i class="icon-circle-with-plus"></i></button>
+                                    <button class="custom-icon-calcular-envases" name="insert" id="botonCalcularEnvasesProducto"><i class="icon-circle-with-plus"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -162,7 +162,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                                 </tbody>
                             </table>
                         </div>
-                        <button id="botonCalcularProductosEnvases" type="submit" name="insert" class="btn btn-primary bt-Total">Total de productos</button>
+                        <button id="botonCalcularProductosEnvases" type="submit" name="insert" class="btn btn-primary bt-Total">Guardar formulacion</button>
                         <a class="btn btn-success estilopdf" href="#" onclick="generarPDF()"> Lista maestra</a>
                         <div class="table-responsive " style="height: 200px !important; margin-top:20px;margin-bottom:100px;">
                             <table id="tbProEnVa" class="table table-sm mb-3 table-hover">
@@ -170,6 +170,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                                     <tr>
                                         <th class="" scope="col">PRODUCTO</th>
                                         <th class="" scope="col">CANTIDAD</th>
+                                        <th class="" scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaProductoEnvases">
@@ -177,7 +178,22 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                                 </tbody>
                             </table>
                         </div>
+                        <div class="row g-4 ">
+                            <center><label class="title">MOSTRAR VALORES DE INSUMOS Y ENVASES</label></center>
+                        </div>
+                        <div class="table-responsive" style="height: 300px; margin-top:20px;">
+                            <table id="tbinsumo" class="table table-sm mb-3 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="" scope="col">INSUMOS</th>
+                                        <th class="" scope="col">CANTIDAD</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablamostrarinsumos">
 
+                                </tbody>
+                            </table>
+                        </div>
 
                     </form>
                 </div>

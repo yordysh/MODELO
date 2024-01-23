@@ -289,12 +289,19 @@ $(function () {
                       <td data-titulo='Insumos' style='display:none;'>${selectInsumosCombo}</td>
                       <td data-titulo='Insumo'>${selectInsumosTexto}</td>
                       <td data-titulo='Cantidad'>${cantidadInsumos}</td>
+                      
                     </tr>`;
       $("#tablaInsumos").append(newRow);
       $("#selectInsumosCombo").val("none").trigger("change");
       $("#cantidadInsumos").val("");
     }
   });
+  /*--------------Eliminar fila de insumo--------------------- */
+  // $("#tablaInsumos").on("click", "#btneliminarfila", function () {
+  //   // Find the closest 'tr' element and remove it
+  //   $(this).closest("tr").remove();
+  // });
+  /*--------------------------------------------------------- */
 
   $("#botonCalcularEnvasesProducto").click((e) => {
     e.preventDefault();
@@ -422,9 +429,10 @@ $(function () {
           } else {
             let template = ``;
             tasks.forEach((task) => {
-              template += `<tr taskId="">
-                      <td data-titulo="CODIGO" >${task.DES_PRODUCTO}</td>
+              template += `<tr taskId="" cod_formula='${task.COD_FORMULACION}'>
+                      <td data-titulo="CODIGO" cod_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
                       <td data-titulo="CANTIDAD PRODUCTO">${task.CAN_FORMULACION}</td>
+                      <td data-titulo="VER"><button class="custom-icon" ><i id='observarformula' class='icon-eye'></i></button></td>
                   </tr>`;
             });
             $("#tablaProductoEnvases").html(template);
@@ -437,6 +445,42 @@ $(function () {
     });
   }
   //---------------------------------------------------------------------------------//
+  /*------------------------- Mostrar insumos y envases de la formulacion---------- */
+  $(document).on("click", "#observarformula", function () {
+    let fila = $(this).closest("tr");
+    let codigoformulacion = fila.attr("cod_formula");
+    let codigoproducto = fila.find("td:eq(0)").attr("cod_producto");
+    const accion = "mostrarlosvaloresinsumosenvases";
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        accion: accion,
+        codigoformulacion: codigoformulacion,
+        codigoproducto: codigoproducto,
+        // selectProductoCombo: $("#selectProductoCombo").val(),
+      },
+      success: function (response) {
+        if (isJSON(response)) {
+          let tasks = JSON.parse(response);
+          let template = ``;
+          tasks.forEach((task) => {
+            template += `<tr taskId="" cod_formula='${task.COD_FORMULACION}'>
+                      <td data-titulo="CODIGO" cod_producto='${
+                        task.COD_PRODUCTO
+                      }'>${task.DES_PRODUCTO}</td>
+                      <td data-titulo="CANTIDAD PRODUCTO"><input value='${parseFloat(
+                        task.CAN_FORMULACION
+                      ).toFixed(3)}' /></td>
+                      <td></td>
+                  </tr>`;
+          });
+          $("#tablamostrarinsumos").html(template);
+        }
+      },
+    });
+  });
+  /*------------------------------------------------------------------------------ */
 
   /*Carga de loading hasta que de la respuesta*/
   function showLoading() {
@@ -450,3 +494,11 @@ $(function () {
   }
   /*---------------------------------------*/
 });
+function isJSON(str) {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}

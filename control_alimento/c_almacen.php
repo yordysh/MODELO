@@ -437,8 +437,6 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_si_hay_compra($cod_formulacion);
     echo $respuesta;
 } elseif ($accion == 'insertarordencompraitem') {
-    // $idRequerimiento = trim($_POST['idRequerimiento']);
-    // var_dump($_POST['codigoproveedorimagenes']$_FILES['file']);
     if (isset($_POST['union'])) {
         $valoresdeinsumos = $_POST['valoresdeinsumos'];
 
@@ -796,6 +794,7 @@ if ($accion == 'insertar') {
     $precioproducto = trim($_POST['precioproducto']);
     $selectmoneda = $_POST['selectmoneda'];
 
+
     c_almacen::c_insertar_proveedor_producto($selectmoneda, $precioproducto, $cantidadMinima, $selectprovedores, $selectproductosproveedores);
 } else if ($accion == 'buscarProveedorPrecios') {
     $buscarProveedorPrecios = $_POST['buscarProveedorPrecios'];
@@ -837,6 +836,13 @@ if ($accion == 'insertar') {
         $valorproveedor = trim($_POST['valorproveedor']);
     }
     $respuesta = c_almacen::c_mostrar_cantidad_precio_calculo($valorcan, $valorproveedor, $valorproducto);
+    echo $respuesta;
+} elseif ($accion == 'mostrarlosvaloresinsumosenvases') {
+
+    $codigoformulacion = trim($_POST['codigoformulacion']);
+    $codigoproducto = trim($_POST['codigoproducto']);
+
+    $respuesta = c_almacen::c_mostrar_insumos_envases($codigoformulacion, $codigoproducto);
     echo $respuesta;
 }
 
@@ -2602,6 +2608,8 @@ class c_almacen
                 $json = array();
                 foreach ($datos as $row) {
                     $json[] = array(
+                        "COD_FORMULACION" => $row->COD_FORMULACION,
+                        "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "CAN_FORMULACION" => $row->CAN_FORMULACION,
                     );
@@ -3979,7 +3987,6 @@ class c_almacen
     static function c_mostrar_orden_compra_alerta()
     {
         try {
-
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarOrdenDeCompraAlerta();
 
@@ -4872,6 +4879,37 @@ class c_almacen
                     "TIPO_MONEDA" => trim($row->TIPO_MONEDA),
                     "ESTADO" => trim($row->ESTADO),
                     "PRECIO_PAGAR" => $resultadodecimal,
+                );
+            }
+
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_mostrar_insumos_envases($codigoformulacion, $codigoproducto)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+
+            $mostrarinsumoenvase = $mostrar->MostrarInsumosEnvases($codigoformulacion, $codigoproducto);
+
+            if (!$mostrarinsumoenvase) {
+                $json = array();
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+            $json = array();
+            foreach ($mostrarinsumoenvase  as $row) {
+
+                $json[] = array(
+                    "COD_FORMULACION" => $row->COD_FORMULACION,
+                    "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CAN_FORMULACION" => $row->CAN_FORMULACION,
                 );
             }
 

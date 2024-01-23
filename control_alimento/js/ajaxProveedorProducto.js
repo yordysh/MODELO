@@ -92,7 +92,6 @@ $(function () {
       success: function (response) {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
-          console.log(tasks);
           let template = ``;
           tasks.forEach((task) => {
             let tipomoneda = task.TIPO_MONEDA;
@@ -109,7 +108,9 @@ $(function () {
             <td data-titulo="PROVEEDOR">${task.NOM_PROVEEDOR}</td>
             <td data-titulo="PRODUCTOS">${task.DES_PRODUCTO}</td>
             <td data-titulo="CANTIDAD">${task.CANTIDAD_MINIMA}</td>
-            <td data-titulo="PRECIO">${task.PRECIO_PRODUCTO}</td>
+            <td data-titulo="PRECIO">${parseFloat(task.PRECIO_PRODUCTO).toFixed(
+              2
+            )}</td>
             <td data-titulo="MONEDA">${moneda}</td>
 
             <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_CANTIDAD_MINIMA="${

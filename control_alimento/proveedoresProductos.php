@@ -85,7 +85,7 @@ $dataproductosproveedor = $mostrar->MostrarProductoProveedores();
                                 </div>
                                 <div class="mb-3 col-md-4">
                                     <label class="form-label">Cantidad minima venta</label>
-                                    <input class="form-control" type="number" id="cantidadMinima" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required></input>
+                                    <input class="form-control" type="number" id="cantidadMinima" required></input>
                                 </div>
                                 <div class="mb-3 col-md-4">
                                     <label class="form-label">Precio por (kg o unidades)</label>

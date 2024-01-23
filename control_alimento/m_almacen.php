@@ -2109,7 +2109,7 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00002'");
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00002'AND COD_PRODUCCION IS NOT NULL");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -2122,7 +2122,7 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00008'");
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00008' AND COD_PRODUCCION IS NOT NULL");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -2246,8 +2246,8 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT P.DES_PRODUCTO AS DES_PRODUCTO, F.CAN_FORMULACION AS CAN_FORMULACION
-                                 FROM T_PRODUCTO AS P INNER JOIN T_TMPFORMULACION AS F ON P.COD_PRODUCTO=F.COD_PRODUCTO");
+      $stm = $this->bd->prepare("SELECT F.COD_FORMULACION AS COD_FORMULACION,F.COD_PRODUCTO AS COD_PRODUCTO,P.DES_PRODUCTO AS DES_PRODUCTO, F.CAN_FORMULACION AS CAN_FORMULACION
+                                  FROM T_PRODUCTO AS P INNER JOIN T_TMPFORMULACION AS F ON P.COD_PRODUCTO=F.COD_PRODUCTO");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
@@ -5390,20 +5390,21 @@ class m_almacen
     try {
       $this->bd->beginTransaction();
       $mostrar = new m_almacen();
-
+      // var_dump($valoresorden);
+      // exit;
       foreach ($valoresorden as $row) {
         $codigocompraorde = $row['codigocompraorde'];
         $codtempreque = $row['codtempreque'];
         $codigoproductocompra = $row['codigoproductocompra'];
         $codigoproveedororden = $row['codigoproveedororden'];
         $cantidadpedida = floatval($row['cantidadpedida']);
-        $cantidadllegada = floatval($row['cantidadllegada']);
+        $cantidadllegada = $row['cantidadllegada'];
 
-        $resultado = $cantidadpedida - $cantidadllegada;
-        if ($resultado == 0) {
+        // $resultado = $cantidadpedida - $cantidadllegada;
+        if ($cantidadllegada == "true") {
           $codigoproducto = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='C' WHERE COD_ORDEN_COMPRA='$codigocompraorde' AND COD_PROVEEDOR='$codigoproveedororden' AND COD_REQUERIMIENTO='$codrequerimiento'");
           $codigoproducto->execute();
-          $codigoproducto = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET CANTIDAD_LLEGADA='$cantidadllegada', ESTADO='C' WHERE COD_ORDEN_COMPRA='$codigocompraorde' AND COD_PRODUCTO='$codigoproductocompra'");
+          $codigoproducto = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET CANTIDAD_LLEGADA='1', ESTADO='C' WHERE COD_ORDEN_COMPRA='$codigocompraorde' AND COD_PRODUCTO='$codigoproductocompra'");
           $codigoproducto->execute();
 
           $buscarcodigoeninsumo = $this->bd->prepare("SELECT MAX(COD_PRODUCTO) AS COD_PRODUCTO FROM T_TMPREQUERIMIENTO_INSUMO WHERE COD_REQUERIMIENTO='$codrequerimiento' AND COD_PRODUCTO='$codigoproductocompra'");
@@ -5419,7 +5420,7 @@ class m_almacen
             $codigoproductoenvase->execute();
           }
         } else {
-          $codigoproducto = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET CANTIDAD_LLEGADA='$cantidadllegada' WHERE COD_ORDEN_COMPRA='$codigocompraorde' AND COD_PRODUCTO='$codigoproductocompra'");
+          $codigoproducto = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET CANTIDAD_LLEGADA='0' WHERE COD_ORDEN_COMPRA='$codigocompraorde' AND COD_PRODUCTO='$codigoproductocompra'");
           $codigoproducto->execute();
         }
       }
@@ -6405,7 +6406,7 @@ class m_almacen
 
       // $mostarproductos = $this->bd->prepare("SELECT * FROM T_PRODUCTO  
       // WHERE COD_PRODUCCION  IS NOT NULL AND (COD_CATEGORIA='00002' OR COD_CATEGORIA='00008')");
-      $mostarproductos = $this->bd->prepare("SELECT * FROM T_PRODUCTO");
+      $mostarproductos = $this->bd->prepare("SELECT * FROM T_PRODUCTO WHERE COD_PRODUCCION IS NOT NULL");
       $mostarproductos->execute();
       $datosproducprov = $mostarproductos->fetchAll(PDO::FETCH_OBJ);
 
@@ -6532,6 +6533,21 @@ class m_almacen
     }
   }
 
+  public function MostrarInsumosEnvases($codigoformulacion, $codigoproducto)
+  {
+    try {
+      $mostarproductos = $this->bd->prepare("SELECT TFI.COD_FORMULACION AS COD_FORMULACION, TFI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
+      TFI.CAN_FORMULACION AS CAN_FORMULACION  FROM T_TMPFORMULACION_ITEM TFI 
+      INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TFI.COD_PRODUCTO WHERE TFI.COD_FORMULACION='$codigoformulacion'");
+
+      $mostarproductos->execute();
+      $datosproducprov = $mostarproductos->fetchAll(PDO::FETCH_OBJ);
+
+      return $datosproducprov;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 
 
   /*funcion agregadas */

@@ -356,37 +356,23 @@ a {
   padding: 0 0 20px 20px;
 }
 /*-----------------------------------*/
-/*------------estilos de subrayas----------------------------*/
-/* .nav ul li a.activo::before,
-.nav ul li a.activo::after {
-  content: "";
-  position: absolute;
-  border-bottom: 2px solid #fff;
-  opacity: 0;
-  transition: 0.2s;
+
+/*------------Alerta estilo ancho td----------------------*/
+.td-producto {
+  width: 40%;
 }
-.nav ul li a.activo:hover::before,
-.nav ul li a:hover::before {
-  opacity: 1;
-  width: 50%;
+
+.td-cantidad {
+  width: 30%;
+  text-align: center;
 }
-.nav ul li a.activo:hover::after,
-.nav ul li a:hover::after {
-  opacity: 1;
+
+.td-checkbox {
   width: 30%;
 }
-.nav ul.menu-vertical li a::before {
-  bottom: 0px;
-  width: 70%;
-  right: 0;
+input#checkedvalor {
+  margin-left: 45px;
 }
-.nav ul.menu-vertical li a::after {
-  bottom: -5px;
-  width: 40%;
-  left: 0;
-} */
-/*--------------------------------------------------------*/
-
 /*-------------------------------------------------------*/
 
 @media screen and (max-width: 950px) {
