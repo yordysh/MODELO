@@ -101,11 +101,12 @@ $(function () {
       return;
     }
   });
-
+  /*----------Guarda la formula completa con insumos y envases------ */
   $("#botonCalcularProductosEnvases").click((e) => {
     e.preventDefault();
     let tablaEnvase = $("#tablaEnvasesCadaProducto");
     let tablaInsumo = $("#tablaInsumos");
+    let codigopersonal = $("#codpersonal").val();
 
     let productoSeleccionado = $("#selectProductoCombo").val();
     let cantidadTotal = $("#cantidadTotal").val();
@@ -136,26 +137,47 @@ $(function () {
     let tbInsumos = $("#tablaInsumos tr");
     let dataInsumo = [];
 
-    for (let i = 0; i < tbInsumos.length; i++) {
-      let row = tbInsumos[i];
-      let columns = $(row).find("td");
-      let insumo = $(columns[0]).text();
-      let cantidad = $(columns[2]).text();
+    $("#tablaInsumos tr").each(function () {
+      let codigoproductoinsumo = $(this).find("td:eq(0)").attr("cod_producto");
+      let nombreproductoinsumo = $(this).find("td:eq(0)").text();
+      let cantidadinsumo = $(this).find("td:eq(1) input").val();
+      dataInsumo.push({
+        codigoproductoinsumo: codigoproductoinsumo,
+        nombreproductoinsumo: nombreproductoinsumo,
+        cantidadinsumo: cantidadinsumo,
+      });
+    });
 
-      dataInsumo.push({ insumo, cantidad });
-    }
+    // for (let i = 0; i < tbInsumos.length; i++) {
+    //   let row = tbInsumos[i];
+    //   let columns = $(row).find("td");
+    //   let insumo = $(columns[0]).text();
+    //   let cantidad = $(columns[2]).text();
 
-    let tbEnvases = $("#tablaEnvasesCadaProducto tr");
+    //   dataInsumo.push({ insumo, cantidad });
+    // }
+
+    // let tbEnvases = $("#tablaEnvasesCadaProducto tr");
     let dataEnvase = [];
+    $("#tablaEnvasesCadaProducto tr").each(function () {
+      let codigoproductoenvase = $(this)
+        .find("td:eq(0)")
+        .attr("cod_producto_envase");
 
-    for (let i = 0; i < tbEnvases.length; i++) {
-      let rowenvase = tbEnvases[i];
-      let columns = $(rowenvase).find("td");
-      let envase = $(columns[0]).text();
-      let cantidadEnvase = $(columns[2]).text();
+      let cantidadenvase = $(this).find("td:eq(1) input").val();
+      dataEnvase.push({
+        codigoproductoenvase: codigoproductoenvase,
+        cantidadenvase: cantidadenvase,
+      });
+    });
+    // for (let i = 0; i < tbEnvases.length; i++) {
+    //   let rowenvase = tbEnvases[i];
+    //   let columns = $(rowenvase).find("td");
+    //   let envase = $(columns[0]).text();
+    //   let cantidadEnvase = $(columns[2]).text();
 
-      dataEnvase.push({ envase, cantidadEnvase });
-    }
+    //   dataEnvase.push({ envase, cantidadEnvase });
+    // }
     if (dataInsumo.length === 0 || dataEnvase.length === 0) {
       Swal.fire({
         icon: "error",
@@ -164,12 +186,14 @@ $(function () {
       });
       return;
     }
+
     const accion = "insertarProductoEnvase";
     $.ajax({
       url: "./c_almacen.php",
       dataType: "text",
       data: {
         accion: accion,
+        codigopersonal: codigopersonal,
         selectProductoCombo: productoSeleccionado,
         cantidadTotal: cantidadTotal,
         dataInsumo: dataInsumo,
@@ -180,8 +204,9 @@ $(function () {
         $(".preloader").css("display", "block");
       },
       type: "POST",
-      success: function (response) {
-        if (response === "ok") {
+      success: function (respuestas) {
+        let respuesta = JSON.parse(respuestas);
+        if (respuesta.estado === "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
             text: "Los datos se han guardado correctamente.",
@@ -191,18 +216,19 @@ $(function () {
             if (result.isConfirmed) {
               mostrarProductoEnvase();
               $("#selectProductoCombo").val("none").trigger("change");
-
+              $("#selectProductoCombo").prop("disabled", false);
+              $("#cantidadTotal").prop("disabled", false);
               tablaInsumo.empty();
               tablaEnvase.empty();
 
               $("#cantidadTotal").val("");
             }
           });
-        } else {
+        } else if (respuesta.estado === "error") {
           Swal.fire({
             icon: "error",
-            title: "Formulacion producto",
-            text: "Por favor, elige otro producto.",
+            title: "Error de codigo",
+            text: "Error al insertar.",
           }).then((resultado) => {
             if (resultado.isConfirmed || resultado.isDismissed) {
               $("#selectProductoCombo").val("none").trigger("change");
@@ -213,7 +239,92 @@ $(function () {
               $("#cantidadTotal").val("");
             }
           });
+        } else if (respuesta.estado === "cantidaddiferente") {
+          Swal.fire({
+            icon: "error",
+            title: "La cantidad es diferente a la formulación del producto.",
+            // text: "Error al insertar.",
+          }).then((resultado) => {
+            if (resultado.isConfirmed || resultado.isDismissed) {
+              $("#selectProductoCombo").val("none").trigger("change");
+              $("#selectProductoCombo").prop("disabled", false);
+              $("#cantidadTotal").prop("disabled", false);
+              tablaInsumo.empty();
+              tablaEnvase.empty();
+
+              $("#cantidadTotal").val("");
+            }
+          });
+        } else if (respuesta.estado === "nuevaformula") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos de la nueva formulación se han guardado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              mostrarProductoEnvase();
+              $("#selectProductoCombo").val("none").trigger("change");
+              $("#selectProductoCombo").prop("disabled", false);
+              $("#cantidadTotal").prop("disabled", false);
+
+              tablaInsumo.empty();
+              tablaEnvase.empty();
+
+              $("#cantidadTotal").val("");
+            }
+          });
+        } else if (respuesta.estado === "sumainsumodiferente") {
+          Swal.fire({
+            icon: "error",
+            title:
+              "La suma de los insumos es diferente a la cantidad de la formulación.",
+            // text: "Error al insertar.",
+          }).then((resultado) => {
+            if (resultado.isConfirmed || resultado.isDismissed) {
+              $("#selectProductoCombo").val("none").trigger("change");
+              $("#selectProductoCombo").prop("disabled", false);
+              $("#cantidadTotal").prop("disabled", false);
+              tablaInsumo.empty();
+              tablaEnvase.empty();
+
+              $("#cantidadTotal").val("");
+            }
+          });
         }
+        // if (response === "ok") {
+        //   Swal.fire({
+        //     title: "¡Guardado exitoso!",
+        //     text: "Los datos se han guardado correctamente.",
+        //     icon: "success",
+        //     confirmButtonText: "Aceptar",
+        //   }).then((result) => {
+        //     if (result.isConfirmed) {
+        //       mostrarProductoEnvase();
+        //       $("#selectProductoCombo").val("none").trigger("change");
+
+        //       tablaInsumo.empty();
+        //       tablaEnvase.empty();
+
+        //       $("#cantidadTotal").val("");
+        //     }
+        //   });
+        // } else {
+        //   Swal.fire({
+        //     icon: "error",
+        //     title: "Formulacion producto",
+        //     text: "Por favor, elige otro producto.",
+        //   }).then((resultado) => {
+        //     if (resultado.isConfirmed || resultado.isDismissed) {
+        //       $("#selectProductoCombo").val("none").trigger("change");
+
+        //       tablaInsumo.empty();
+        //       tablaEnvase.empty();
+
+        //       $("#cantidadTotal").val("");
+        //     }
+        //   });
+        // }
       },
       complete: function () {
         $(".preloader").css("opacity", "0");
@@ -221,7 +332,7 @@ $(function () {
       },
     });
   });
-
+  /*-------------------------------------------------------------- */
   $("#botonCalcularInsumos").click((e) => {
     e.preventDefault();
     let selectInsumosCombo = $("#selectInsumosCombo").val();
@@ -286,22 +397,16 @@ $(function () {
       });
 
       let newRow = `<tr>
-                      <td data-titulo='Insumos' style='display:none;'>${selectInsumosCombo}</td>
-                      <td data-titulo='Insumo'>${selectInsumosTexto}</td>
-                      <td data-titulo='Cantidad'>${cantidadInsumos}</td>
+                     <!-- <td data-titulo='Insumos' style='display:none;'>${selectInsumosCombo}</td> -->
+                      <td data-titulo='Insumo'cod_producto='${selectInsumosCombo}'>${selectInsumosTexto}</td>
+                      <td data-titulo='Cantidad'><input value='${cantidadInsumos}' /></td>
                       
                     </tr>`;
-      $("#tablaInsumos").append(newRow);
+      $("#tablaInsumos").prepend(newRow);
       $("#selectInsumosCombo").val("none").trigger("change");
       $("#cantidadInsumos").val("");
     }
   });
-  /*--------------Eliminar fila de insumo--------------------- */
-  // $("#tablaInsumos").on("click", "#btneliminarfila", function () {
-  //   // Find the closest 'tr' element and remove it
-  //   $(this).closest("tr").remove();
-  // });
-  /*--------------------------------------------------------- */
 
   $("#botonCalcularEnvasesProducto").click((e) => {
     e.preventDefault();
@@ -371,39 +476,14 @@ $(function () {
         text: "Se añadio los registros.",
       });
       let newRow = `<tr>
-                    <td  data-titulo='Envases' style='display:none;'>${selectEnvasesProductoCombo}</td>
-                    <td  data-titulo='Envase'>${selectEnvasesTexto}</td>
-                    <td  data-titulo='Cantidad'>${cantidadEnvaseProducto}</td>
+                   <!-- <td  data-titulo='Envases' style='display:none;'>${selectEnvasesProductoCombo}</td> -->
+                    <td  data-titulo='Envase' cod_producto_envase='${selectEnvasesProductoCombo}'>${selectEnvasesTexto}</td>
+                    <td  data-titulo='Cantidad'><input value='${cantidadEnvaseProducto}' /></td>
                   </tr>`;
-      $("#tablaEnvasesCadaProducto").append(newRow);
+      $("#tablaEnvasesCadaProducto").prepend(newRow);
       $("#selectEnvasesProductoCombo").val("none").trigger("change");
       $("#cantidadEnvaseProducto").val("");
     }
-    // const accion = "insertarenvasesporproducto";
-    // $.ajax({
-    //   url: "./c_almacen.php",
-    //   data: {
-    //     accion: accion,
-    //     selectProductoCombo: $("#taskIdProducto").val(),
-    //     selectEnvasesProductoCombo: $("#selectEnvasesProductoCombo").val(),
-    //     cantidadEnvaseProducto: $("#cantidadEnvaseProducto").val(),
-    //   },
-
-    //   type: "POST",
-    //   success: function (response) {
-    //     console.log(response);
-    //     mostrarEnvases();
-    //     $("#selectEnvasesProductoCombo").append(
-    //       $("<option>", {
-    //         value: "none",
-    //         text: "Seleccione envases",
-    //         disabled: true,
-    //         selected: true,
-    //       })
-    //     );
-    //     $("#cantidadEnvaseProducto").val("");
-    //   },
-    // });
   });
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
 
@@ -446,11 +526,38 @@ $(function () {
   }
   //---------------------------------------------------------------------------------//
   /*------------------------- Mostrar insumos y envases de la formulacion---------- */
-  $(document).on("click", "#observarformula", function () {
+  $(document).on("click", "#observarformula", function (e) {
+    e.preventDefault();
     let fila = $(this).closest("tr");
     let codigoformulacion = fila.attr("cod_formula");
     let codigoproducto = fila.find("td:eq(0)").attr("cod_producto");
-    const accion = "mostrarlosvaloresinsumosenvases";
+    const accionformula = "codigoformulavalor";
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        accion: accionformula,
+        codigoformulacion: codigoformulacion,
+        codigoproducto: codigoproducto,
+      },
+      success: function (responsecabecera) {
+        if (isJSON(responsecabecera)) {
+          let formula = JSON.parse(responsecabecera);
+          $("#selectProductoCombo").prop("disabled", true);
+          $("#selectProductoCombo").append(
+            new Option(
+              formula[0].DES_PRODUCTO,
+              formula[0].COD_PRODUCTO,
+              true,
+              true
+            )
+          );
+          $("#cantidadTotal").val(formula[0].CAN_FORMULACION);
+          $("#cantidadTotal").prop("disabled", true);
+        }
+      },
+    });
+    const accion = "mostrarlosvaloresinsumosformula";
     $.ajax({
       url: "./c_almacen.php",
       type: "POST",
@@ -458,29 +565,81 @@ $(function () {
         accion: accion,
         codigoformulacion: codigoformulacion,
         codigoproducto: codigoproducto,
-        // selectProductoCombo: $("#selectProductoCombo").val(),
       },
       success: function (response) {
         if (isJSON(response)) {
-          let tasks = JSON.parse(response);
-          let template = ``;
-          tasks.forEach((task) => {
-            template += `<tr taskId="" cod_formula='${task.COD_FORMULACION}'>
-                      <td data-titulo="CODIGO" cod_producto='${
-                        task.COD_PRODUCTO
-                      }'>${task.DES_PRODUCTO}</td>
-                      <td data-titulo="CANTIDAD PRODUCTO"><input value='${parseFloat(
-                        task.CAN_FORMULACION
-                      ).toFixed(3)}' /></td>
-                      <td></td>
-                  </tr>`;
+          Swal.fire({
+            title: "¡Se añadio los valores!",
+            text: "Los datos se han añadido a sus respectivas tablas.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              let tasks = JSON.parse(response);
+
+              let template = ``;
+              tasks.forEach((task) => {
+                template += `<tr taskId="" cod_formula='${
+                  task.COD_FORMULACION
+                }'>
+                          <td data-titulo="CODIGO" cod_producto='${
+                            task.COD_PRODUCTO
+                          }'>${task.DES_PRODUCTO}</td>
+                          <td data-titulo="CANTIDAD PRODUCTO"><input value='${parseFloat(
+                            task.CAN_FORMULACION
+                          ).toFixed(3)}' /></td>
+                          <td><button class='btn btn-danger' id='btneliminarfilainsumo'><i class='icon-trash'></i></button></td>
+                      </tr>`;
+              });
+              $("#tablaInsumos").html(template);
+            }
           });
-          $("#tablamostrarinsumos").html(template);
+        }
+      },
+    });
+
+    const accionenvase = "mostrarlosvaloresenvaseformula";
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        accion: accionenvase,
+        codigoformulacionenvase: codigoformulacion,
+        codigoproductoenvase: codigoproducto,
+      },
+      success: function (responseenvase) {
+        if (isJSON(responseenvase)) {
+          let tasksenvase = JSON.parse(responseenvase);
+
+          let templateenvase = ``;
+          tasksenvase.forEach((taskenvase) => {
+            templateenvase += `<tr taskId="" cod_formula='${taskenvase.COD_FORMULACION_ENVASE}'>
+                          <td data-titulo="ENVASES" cod_producto_envase='${taskenvase.COD_PRODUCTO_ENVASE}'>${taskenvase.DES_PRODUCTO_ENVASE}</td>
+                          <td data-titulo="CANTIDAD"><input value='${taskenvase.CAN_FORMULACION_ENVASE}' /></td>
+                          <td><button class='btn btn-danger' id='btneliminarfilaenvase'><i class='icon-trash'></i></button></td>
+                      </tr>`;
+          });
+          $("#tablaEnvasesCadaProducto").html(templateenvase);
         }
       },
     });
   });
   /*------------------------------------------------------------------------------ */
+
+  /*--------------Eliminar fila de insumo--------------------- */
+  $("#tablaInsumos").on("click", "#btneliminarfilainsumo", function () {
+    // Find the closest 'tr' element and remove it
+    $(this).closest("tr").remove();
+  });
+  $("#tablaEnvasesCadaProducto").on(
+    "click",
+    "#btneliminarfilaenvase",
+    function () {
+      // Find the closest 'tr' element and remove it
+      $(this).closest("tr").remove();
+    }
+  );
+  /*--------------------------------------------------------- */
 
   /*Carga de loading hasta que de la respuesta*/
   function showLoading() {

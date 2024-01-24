@@ -312,12 +312,13 @@ if ($accion == 'insertar') {
     echo $respuesta;
 } elseif ($accion == 'insertarProductoEnvase') {
 
+    $codigopersonal = trim($_POST['codigopersonal']);
     $selectProductoCombo = trim($_POST['selectProductoCombo']);
     $cantidadTotal = trim($_POST['cantidadTotal']);
     $dataInsumo = ($_POST['dataInsumo']);
     $dataEnvase = ($_POST['dataEnvase']);
 
-    $respuesta = c_almacen::c_insertar_producto_combo($selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
+    $respuesta = c_almacen::c_insertar_producto_combo($codigopersonal, $selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
     echo $respuesta;
 } elseif ($accion == 'buscarenvaseproducto') {
     $respuesta = c_almacen::c_buscar_producto_envase();
@@ -837,12 +838,25 @@ if ($accion == 'insertar') {
     }
     $respuesta = c_almacen::c_mostrar_cantidad_precio_calculo($valorcan, $valorproveedor, $valorproducto);
     echo $respuesta;
-} elseif ($accion == 'mostrarlosvaloresinsumosenvases') {
+} elseif ($accion == 'codigoformulavalor') {
+    $codigoformulacion = trim($_POST['codigoformulacion']);
+    $codigoproducto = trim($_POST['codigoproducto']);
+
+    $respuesta = c_almacen::c_mostrar_producto_formula($codigoformulacion, $codigoproducto);
+    echo $respuesta;
+} elseif ($accion == 'mostrarlosvaloresinsumosformula') {
 
     $codigoformulacion = trim($_POST['codigoformulacion']);
     $codigoproducto = trim($_POST['codigoproducto']);
 
-    $respuesta = c_almacen::c_mostrar_insumos_envases($codigoformulacion, $codigoproducto);
+    $respuesta = c_almacen::c_mostrar_insumos_formula($codigoformulacion, $codigoproducto);
+    echo $respuesta;
+} elseif ($accion == 'mostrarlosvaloresenvaseformula') {
+
+    $codigoformulacionenvase = trim($_POST['codigoformulacionenvase']);
+    $codigoproductoenvase = trim($_POST['codigoproductoenvase']);
+
+    $respuesta = c_almacen::c_mostrar_envases_formula($codigoformulacionenvase, $codigoproductoenvase);
     echo $respuesta;
 }
 
@@ -2585,17 +2599,49 @@ class c_almacen
 
 
 
-    static function c_insertar_producto_combo($selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase)
+    static function c_insertar_producto_combo($codigopersonal, $selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase)
     {
         $m_formula = new m_almacen();
 
         if (isset($selectProductoCombo) && isset($cantidadTotal) && isset($dataInsumo) && isset($dataEnvase)) {
-            $respuesta = $m_formula->InsertarProductoCombo($selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
-            if ($respuesta) {
-                return "ok";
-            } else {
-                return "error";
-            };
+
+            $consultadeproductoycantidad = $m_formula->ConsultarFormulaDuplicado($selectProductoCombo);
+
+            if (floatval($consultadeproductoycantidad) == floatval($cantidadTotal)) {
+                $sumainsumo = 0;
+
+                foreach ($dataInsumo as $insumo) {
+                    $cantidadinsumo = floatval(trim($insumo['cantidadinsumo']));
+                    $sumainsumo = $sumainsumo + $cantidadinsumo;
+                }
+                if ($sumainsumo == floatval($cantidadTotal)) {
+                    $respuesta = $m_formula->InsertarProductoCombo($codigopersonal, $selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
+                    if ($respuesta) {
+                        $respuesta = array('estado' => 'ok');
+                        echo json_encode($respuesta);
+                    } else {
+                        $respuesta = array('estado' => 'error');
+                        echo json_encode($respuesta);
+                    };
+                } else {
+                    $respuesta = array('estado' => 'sumainsumodiferente');
+                    echo json_encode($respuesta);
+                }
+                // $respuesta = array('estado' => 'perfecto');
+                // echo json_encode($respuesta);
+            } else if ($consultadeproductoycantidad == NULL) {
+                $respuesta = $m_formula->InsertarProductoCombo($codigopersonal, $selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
+                if ($respuesta) {
+                    $respuesta = array('estado' => 'nuevaformula');
+                    echo json_encode($respuesta);
+                } else {
+                    $respuesta = array('estado' => 'errornuevaformula');
+                    echo json_encode($respuesta);
+                };
+            } else if (floatval($consultadeproductoycantidad) != floatval($cantidadTotal)) {
+                $respuesta = array('estado' => 'cantidaddiferente');
+                echo json_encode($respuesta);
+            }
         }
     }
     static function c_buscar_producto_envase()
@@ -4889,13 +4935,44 @@ class c_almacen
         }
     }
 
-    static function c_mostrar_insumos_envases($codigoformulacion, $codigoproducto)
+    static function c_mostrar_producto_formula($codigoformulacion, $codigoproducto)
     {
         try {
 
             $mostrar = new m_almacen();
 
-            $mostrarinsumoenvase = $mostrar->MostrarInsumosEnvases($codigoformulacion, $codigoproducto);
+            $mostrarproductoformulacombo = $mostrar->MostrarProductoFormula($codigoformulacion, $codigoproducto);
+
+            if (!$mostrarproductoformulacombo) {
+                $json = array();
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+            $json = array();
+            foreach ($mostrarproductoformulacombo  as $row) {
+
+                $json[] = array(
+                    "COD_FORMULACION" => $row->COD_FORMULACION,
+                    "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "CAN_FORMULACION" => $row->CAN_FORMULACION,
+                );
+            }
+
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_mostrar_insumos_formula($codigoformulacion, $codigoproducto)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+
+            $mostrarinsumoenvase = $mostrar->MostrarInsumosFormula($codigoformulacion, $codigoproducto);
 
             if (!$mostrarinsumoenvase) {
                 $json = array();
@@ -4910,6 +4987,37 @@ class c_almacen
                     "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "CAN_FORMULACION" => $row->CAN_FORMULACION,
+                );
+            }
+
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_mostrar_envases_formula($codigoformulacionenvase, $codigoproductoenvase)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+
+            $mostrarenvase = $mostrar->MostrarEnvasesFormula($codigoformulacionenvase, $codigoproductoenvase);
+
+            if (!$mostrarenvase) {
+                $json = array();
+                $jsonstring = json_encode($json);
+                echo $jsonstring;
+            }
+            $json = array();
+            foreach ($mostrarenvase  as $row) {
+
+                $json[] = array(
+                    "COD_FORMULACION_ENVASE" => $row->COD_FORMULACION_ENVASE,
+                    "COD_PRODUCTO_ENVASE" => trim($row->COD_PRODUCTO_ENVASE),
+                    "DES_PRODUCTO_ENVASE" => $row->DES_PRODUCTO_ENVASE,
+                    "CAN_FORMULACION_ENVASE" => $row->CAN_FORMULACION_ENVASE,
                 );
             }
 

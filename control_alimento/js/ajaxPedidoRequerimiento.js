@@ -232,9 +232,9 @@ $(function () {
                             <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
                             <td data-titulo="PRECIO" id_proveedor='${
                               task.COD_PROVEEDOR_TEMP
-                            }' style="text-align:center;">${
+                            }' style="text-align:center;">${parseFloat(
                 task.PRECIO_MINIMO
-              }</td>
+              ).toFixed(2)}</td>
  
                           <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button></td>
                           </tr>`;
@@ -294,7 +294,7 @@ $(function () {
                               }' style="text-align:center;">${
                   task.PRECIO_PRODUCTO == 0
                     ? "Falta cantidad minina"
-                    : task.PRECIO_PRODUCTO
+                    : parseFloat(task.PRECIO_PRODUCTO).toFixed(2)
                 }</td>
                 <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button></td>
                             </tr>`;

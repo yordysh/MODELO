@@ -1,4 +1,9 @@
 <?php
+session_start();
+$codusuario = $_SESSION["cod"];
+// $codusuario = '00004';
+?>
+<?php
 require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
@@ -57,6 +62,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                 <div class="main">
                     <form method="post" action="" id="formularioEnvasesFormula">
                         <input type="hidden" id="codanexo" name="codanexo " value="<?php echo $codanexo; ?>">
+                        <input type="hidden" id="codpersonal" name="codpersonal" value="<?php echo $codusuario; ?>">
                         <!-- Text input -->
                         <div class="form-outline mb-4">
                             <input id="taskIdProducto" type="hidden" class="form-control" name="taskIdProducto" />
@@ -178,23 +184,6 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                                 </tbody>
                             </table>
                         </div>
-                        <div class="row g-4 ">
-                            <center><label class="title">MOSTRAR VALORES DE INSUMOS Y ENVASES</label></center>
-                        </div>
-                        <div class="table-responsive" style="height: 300px; margin-top:20px;">
-                            <table id="tbinsumo" class="table table-sm mb-3 table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="" scope="col">INSUMOS</th>
-                                        <th class="" scope="col">CANTIDAD</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablamostrarinsumos">
-
-                                </tbody>
-                            </table>
-                        </div>
-
                     </form>
                 </div>
             </div>

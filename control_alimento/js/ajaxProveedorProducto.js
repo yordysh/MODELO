@@ -23,7 +23,42 @@ $(function () {
     let cantidadMinima = $("#cantidadMinima").val();
     let precioproducto = $("#precioproducto").val();
     let selectmoneda = $("#selectmoneda").val();
-
+    if (!selectprovedores) {
+      Swal.fire({
+        title: "¡Necesita seleccionar un proveedor!",
+        icon: "info",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    } else if (!selectproductosproveedores) {
+      Swal.fire({
+        title: "¡Necesita seleccionar un producto!",
+        icon: "info",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    } else if (!cantidadMinima) {
+      Swal.fire({
+        title: "¡Necesita insertar una cantidad!",
+        icon: "info",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    } else if (!precioproducto) {
+      Swal.fire({
+        title: "¡Necesita insertar un precio!",
+        icon: "info",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    } else if (!selectmoneda) {
+      Swal.fire({
+        title: "¡Necesita seleccionar tipo de moneda!",
+        icon: "info",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    }
     const accion =
       edit === false
         ? "insertarproveedorproducto"
