@@ -120,7 +120,7 @@ $datalistaenvases = $mostrar->MostrarListaMaestraEnvasesPDF();
             </tr>
             </tr>
             <tr>
-                <td>Fecha: Agosto 2023</td>
+                <td>Fecha: Enero 2024</td>
             </tr>
 
         </table>
@@ -172,8 +172,10 @@ $datalistaenvases = $mostrar->MostrarListaMaestraEnvasesPDF();
         echo '<tbody class="columns">';
 
         foreach ($datalistaenvases as $rowenvases) {
+
+
             echo '<tr>';
-            echo '<td class="cabecera">' . $row["COD_PRODUCCION"] . '</td>';
+            echo '<td class="cabecera">' . $rowenvases["COD_PRODUCCION"] . '</td>';
             echo '<td class="cabecera">' . $rowenvases["ABR_PRODUCTO"] . '</td>';
             echo '<td class="cabecera">' . $rowenvases["DES_PRODUCTO"] . '</td>';
 

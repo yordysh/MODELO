@@ -321,7 +321,10 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_insertar_producto_combo($codigopersonal, $selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
     echo $respuesta;
 } elseif ($accion == 'buscarenvaseproducto') {
-    $respuesta = c_almacen::c_buscar_producto_envase();
+
+    $buscarregistro = trim($_POST['buscarregistro']);
+
+    $respuesta = c_almacen::c_buscar_producto_envase($buscarregistro);
     echo $respuesta;
 } elseif ($accion == 'seleccionarProduccion') {
 
@@ -2644,26 +2647,53 @@ class c_almacen
             }
         }
     }
-    static function c_buscar_producto_envase()
+    static function c_buscar_producto_envase($buscarregistro)
     {
         try {
             $mostrar = new m_almacen();
-            $datos = $mostrar->MostrarProductoEnvase();
 
-            if ($datos) {
-                $json = array();
-                foreach ($datos as $row) {
-                    $json[] = array(
-                        "COD_FORMULACION" => $row->COD_FORMULACION,
-                        "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
-                        "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                        "CAN_FORMULACION" => $row->CAN_FORMULACION,
-                    );
+            if (!empty($buscarregistro)) {
+                $datos = $mostrar->MostrarProductoEnvase($buscarregistro);
+
+                if ($datos) {
+                    $json = array();
+                    foreach ($datos as $row) {
+                        $json[] = array(
+                            "COD_FORMULACION" => $row->COD_FORMULACION,
+                            "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
+                            "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
+                            "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                            "CAN_FORMULACION" => $row->CAN_FORMULACION,
+                        );
+                    }
+                    $jsonstring = json_encode($json);
+                    echo $jsonstring;
+                } else {
+                    $json = array();
+                    $jsonstring = json_encode($json);
+                    echo $jsonstring;
                 }
-                $jsonstring = json_encode($json);
-                echo $jsonstring;
             } else {
-                echo "No hay datos";
+
+                $datos = $mostrar->MostrarProductoEnvase($buscarregistro);
+                if ($datos) {
+                    $json = array();
+                    foreach ($datos as $row) {
+                        $json[] = array(
+                            "COD_FORMULACION" => $row->COD_FORMULACION,
+                            "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
+                            "ABR_PRODUCTO" => $row->ABR_PRODUCTO,
+                            "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                            "CAN_FORMULACION" => $row->CAN_FORMULACION,
+                        );
+                    }
+                    $jsonstring = json_encode($json);
+                    echo $jsonstring;
+                } else {
+                    $json = array();
+                    $jsonstring = json_encode($json);
+                    echo $jsonstring;
+                }
             }
         } catch (Exception $e) {
             echo "[]";

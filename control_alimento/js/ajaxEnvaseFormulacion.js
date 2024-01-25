@@ -23,45 +23,37 @@ $(function () {
   //------------- Busqueda con ajax registro envases----------------//
 
   $("#search").keyup(() => {
-    if ($("#search").val()) {
-      var search = $("#search").val();
-      const accion = "buscarregistroenvase";
-      $.ajax({
-        url: "./c_almacen.php",
-        data: { accion: accion, buscarregistro: search },
-        type: "POST",
-        success: function (response) {
-          if (!response.error) {
-            let tasks = JSON.parse(response);
+    // if ($("#search").val()) {
+    var search = $("#search").val();
+    const accion = "buscarenvaseproducto";
+    $.ajax({
+      url: "./c_almacen.php",
+      data: { accion: accion, buscarregistro: search },
+      type: "POST",
+      success: function (response) {
+        let tasks = JSON.parse(response);
 
-            let template = ``;
-            tasks.forEach((task) => {
-              template += `<tr taskId="${task.COD_AVANCE_INSUMOS}">
-    
-                  <td data-titulo="FECHA" style="text-align:rigth;">${task.FEC_GENERADO}</td>
-                  <td data-titulo="N°BACHADA" style="text-align:rigth;">${task.N_BACHADA}</td>
-                  <td data-titulo="PRODUCTO" style="text-align:rigth;">${task.ABR_PRODUCTO}</td>
-                  <td data-titulo="PRESENTACION" style="text-align:rigth;">${task.PESO_NETO} ${task.UNI_MEDIDA}</td>
-                  <td data-titulo="CANTIDAD FRASCOS" style="text-align:rigth;">${task.CANTIDAD_ENVASES}</td>
-                  <td data-titulo="CANTIDAD TAPAS" style="text-align:rigth;">${task.CANTIDAD_TAPAS}</td>
-                  <td data-titulo="CANTIDAD SCOOPS" style="text-align:rigth;">${task.CANTIDAD_SCOOPS}</td>
-                  <td data-titulo="CANTIDAD ALUPOL" style="text-align:rigth;">${task.CANTIDAD_ALUPOL}</td>
-                  <td data-titulo="CANTIDAD CAJAS" style="text-align:rigth;">${task.CANTIDAD_CAJAS}</td>
-                  <td data-titulo="LOTE" style="text-align:rigth;">${task.FECHA}</td>
-    
-                  <td  style="text-align:center;"><button class="btn btn-danger task-delete" data-COD_AVANCE_INSUMOS="${task.COD_AVANCE_INSUMOS}"><i class="icon-trash"></i></button></td>
-                  <td  style="text-align:center;"><button class="btn btn-success task-update" name="editar" id="edit" data-COD_AVANCE_INSUMOS="${task.COD_AVANCE_INSUMOS}"><i class="icon-edit"></i></button></td>
-    
-              </tr>`;
-            });
-
-            $("#tablaRegistroEnvase").html(template);
-          }
-        },
-      });
-    } else {
-      fetchTasks();
-    }
+        // if (tasks.length === 0) {
+        //   let template = `<tr>
+        //           <td colspan="2" style="text-align: center;">No data available</td>
+        //       </tr>`;
+        //   $("#tablaProductoEnvases").html(template);
+        // } else {
+        let template = ``;
+        tasks.forEach((task) => {
+          template += `<tr taskId="" cod_formula='${task.COD_FORMULACION}'>
+                        <td data-titulo="CODIGO" cod_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
+                        <td data-titulo="CANTIDAD PRODUCTO">${task.CAN_FORMULACION}</td>
+                        <td data-titulo="VER"><button class="custom-icon" ><i id='observarformula' class='icon-eye'></i></button></td>
+                    </tr>`;
+        });
+        $("#tablaProductoEnvases").html(template);
+        // }
+      },
+    });
+    // } else {
+    //   fetchTasks();
+    // }
   });
 
   $("#cantidadTotal").keyup((e) => {
@@ -488,6 +480,7 @@ $(function () {
   //----------------- Muestra respuesta y añade a mi tabla lo añadido --------------- //
 
   function mostrarProductoEnvase() {
+    var search = "";
     const accion = "buscarenvaseproducto";
 
     $.ajax({
@@ -495,31 +488,26 @@ $(function () {
       type: "POST",
       data: {
         accion: accion,
-        // selectProductoCombo: $("#selectProductoCombo").val(),
+        buscarregistro: search,
       },
       success: function (response) {
-        try {
-          let tasks = JSON.parse(response);
+        let tasks = JSON.parse(response);
 
-          if (tasks.length === 0) {
-            let template = `<tr>
+        if (tasks.length === 0) {
+          let template = `<tr>
                   <td colspan="2" style="text-align: center;">No data available</td>
               </tr>`;
-            $("#tablaProductoEnvases").html(template);
-          } else {
-            let template = ``;
-            tasks.forEach((task) => {
-              template += `<tr taskId="" cod_formula='${task.COD_FORMULACION}'>
+          $("#tablaProductoEnvases").html(template);
+        } else {
+          let template = ``;
+          tasks.forEach((task) => {
+            template += `<tr taskId="" cod_formula='${task.COD_FORMULACION}'>
                       <td data-titulo="CODIGO" cod_producto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
                       <td data-titulo="CANTIDAD PRODUCTO">${task.CAN_FORMULACION}</td>
                       <td data-titulo="VER"><button class="custom-icon" ><i id='observarformula' class='icon-eye'></i></button></td>
                   </tr>`;
-            });
-            $("#tablaProductoEnvases").html(template);
-          }
-        } catch (e) {
-          console.log("No hay lista []:");
-          // Handle error condition here if needed
+          });
+          $("#tablaProductoEnvases").html(template);
         }
       },
     });

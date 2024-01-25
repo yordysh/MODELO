@@ -1850,7 +1850,8 @@ class m_almacen
   public function MostrarListaMaestraPDF()
   {
     try {
-      $stm = $this->bd->prepare("SELECT COD_PRODUCTO,COD_PRODUCCION,ABR_PRODUCTO,DES_PRODUCTO FROM T_PRODUCTO WHERE COD_PRODUCCION  IS NOT NULL AND COD_CATEGORIA='00002'");
+      $stm = $this->bd->prepare("SELECT COD_PRODUCTO,COD_PRODUCCION,ABR_PRODUCTO,DES_PRODUCTO FROM T_PRODUCTO 
+      WHERE COD_PRODUCCION  IS NOT NULL AND COD_CATEGORIA='00002' ORDER BY DES_PRODUCTO ASC");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -1863,7 +1864,8 @@ class m_almacen
   public function MostrarListaMaestraEnvasesPDF()
   {
     try {
-      $stm = $this->bd->prepare("SELECT COD_PRODUCTO,ABR_PRODUCTO,DES_PRODUCTO FROM T_PRODUCTO WHERE COD_PRODUCCION  IS NOT NULL AND COD_CATEGORIA='00008'");
+      $stm = $this->bd->prepare("SELECT COD_PRODUCCION,COD_PRODUCTO,ABR_PRODUCTO,DES_PRODUCTO FROM T_PRODUCTO WHERE COD_PRODUCCION 
+      IS NOT NULL AND COD_CATEGORIA='00008' ORDER BY DES_PRODUCTO ASC");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -2286,12 +2288,13 @@ class m_almacen
       die($e->getMessage());
     }
   }
-  public function MostrarProductoEnvase()
+  public function MostrarProductoEnvase($buscarregistro)
   {
     try {
 
-      $stm = $this->bd->prepare("SELECT F.COD_FORMULACION AS COD_FORMULACION,F.COD_PRODUCTO AS COD_PRODUCTO,P.DES_PRODUCTO AS DES_PRODUCTO, F.CAN_FORMULACION AS CAN_FORMULACION
-                                  FROM T_PRODUCTO AS P INNER JOIN T_TMPFORMULACION AS F ON P.COD_PRODUCTO=F.COD_PRODUCTO");
+      $stm = $this->bd->prepare("SELECT F.COD_FORMULACION AS COD_FORMULACION,F.COD_PRODUCTO AS COD_PRODUCTO,P.ABR_PRODUCTO AS ABR_PRODUCTO,P.DES_PRODUCTO AS DES_PRODUCTO, F.CAN_FORMULACION AS CAN_FORMULACION
+                                  FROM T_PRODUCTO AS P INNER JOIN T_TMPFORMULACION AS F ON P.COD_PRODUCTO=F.COD_PRODUCTO 
+                                  WHERE P.DES_PRODUCTO LIKE '%$buscarregistro%'");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
