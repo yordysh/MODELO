@@ -64,10 +64,10 @@ $dompdf->render();
 $canvas = $dompdf->getCanvas();
 $font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
 
-$canvas->page_text(1480, 81, "{PAGE_NUM}/{PAGE_COUNT}", $font, 12, array(0, 0, 0));
+$canvas->page_text(480, 70, "{PAGE_NUM}/{PAGE_COUNT}", $font, 12, array(0, 0, 0));
 
 if ($dompdf == true) {
-    $dompdf->stream('Monitoreo.pdf', array('Attachment' => 0));
+    $dompdf->stream('ListaMaestra.pdf', array('Attachment' => 0));
 } else {
-    $dompdf->stream('Monitoreo.pdf', array('Attachment' => false));
+    $dompdf->stream('ListaMaestra.pdf', array('Attachment' => false));
 }

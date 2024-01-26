@@ -423,7 +423,12 @@ $(function () {
             .find("#selectproveedorescanmin");
           selectElement.empty();
           selectElement.append(
-            $("<option>", { value: "none", text: "Seleccione proveedor" })
+            $("<option>", {
+              value: "none",
+              text: "Seleccione proveedor",
+              disabled: true,
+              selected: true,
+            })
           );
 
           tasks.forEach((item) => {
@@ -875,6 +880,87 @@ $(function () {
     }
   });
   /*------------------------------------------------------------- */
+  /*--------------Verifica la cantidad y precio total al cambiar------ */
+  $(document).on("keyup", "#cantidadacomprar", function () {
+    let filaescr = $(this).closest("tr");
+    var valorcan = filaescr
+      .find('td[data-titulo="CANTIDAD POR COMPRA"] input')
+      .val();
+    var valorproveedor = filaescr
+      .find('td[data-titulo="PROVEEDOR"]')
+      .attr("codigo_proveedor");
+
+    var valorproducto = filaescr
+      .find('td[data-titulo="PRODUCTO"]')
+      .attr("id_producto");
+
+    var codigoproveedor = filaescr.find("td:eq(0) select").val();
+    console.log(codigoproveedor);
+    if (codigoproveedor == null) {
+      Swal.fire({
+        // title: "¡Guardado exitoso!",
+        text: "Necesita seleccionar un proveedor.",
+        icon: "info",
+      });
+      return;
+    }
+
+    var duplicado = false;
+    $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
+      let proveedorcantidad = $(this).find("td:eq(0)").attr("codigo_proveedor");
+      let producto = $(this).find("td:eq(1)").attr("id_producto");
+
+      if (codigoproveedor == proveedorcantidad && valorproducto == producto) {
+        duplicado = true;
+        return false;
+      }
+    });
+
+    if (duplicado) {
+      Swal.fire({
+        text: "El proveedor seleccionado ya existe en la tabla.",
+        icon: "warning",
+      });
+    }
+    const accion = "mostrarcantidadpreciocalculo";
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        accion: accion,
+        valorcan: valorcan,
+        valorproveedor: valorproveedor,
+        valorproducto: valorproducto,
+        codigoproveedor: codigoproveedor,
+      },
+      success: function (response) {
+        if (isJSON(response)) {
+          let task = JSON.parse(response);
+          // console.log(task);
+          let valorcambiadoprecio = filaescr
+            .find("td:eq(3)")
+            .text(task[0].PRECIO_PAGAR);
+
+          let valorpreciomin = filaescr
+            .find("td:eq(7)")
+            .text(task[0].PRECIO_PRODUCTO);
+
+          // let valorcantidad = parseFloat(task[0].CANTIDAD_MINIMA);
+          // if (parseFloat(valorcan) < valorcantidad) {
+          //   Swal.fire({
+          //     text: "Necesita poner la cantidad minima que brinda el proveedor.",
+          //     icon: "info",
+          //     confirmButtonText: "Aceptar",
+          //   });
+          // }
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+  });
+  /*------------------------------------------------------------------ */
   /**---------------click en input imagen-- */
   // Función para manejar las mutaciones en la tabla
   function handleTableMutations(mutationsList, observer) {
@@ -1023,6 +1109,7 @@ $(function () {
 
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let proveedorcantidad = $(this).find("td:eq(0)").attr("codigo_proveedor");
+      let nombrepro = $(this).find("td:eq(0)").text();
 
       if (proveedorcantidad != undefined) {
         id_proveedor = proveedorcantidad;
@@ -1037,18 +1124,33 @@ $(function () {
       let codigoproducto = $(this)
         .find('td[data-titulo="PRODUCTO"]')
         .attr("id_producto");
-      let productonombre = $(this).find('td[data-titulo="PRODUCTO"]').text();
+      let nomproducto = $(this).find('td[data-titulo="PRODUCTO"]').text();
 
       let codigoproveedorcant = $(this).find("td:eq(0) select").val();
-      if (codigoproveedorcant == "none") {
+
+      if (!valorcantidad) {
         Swal.fire({
-          // title: "¡Guardado exitoso!",
           text:
-            "Necesita seleccionar un proveedor del producto " +
-            productonombre +
+            "Necesita añadir una cantidad " +
+            nombrepro +
+            " y el producto " +
+            nomproducto +
             ".",
           icon: "info",
+          confirmButtonText: "Aceptar",
         });
+        return;
+      }
+      if (!codigoproveedorcant) {
+        Swal.fire({
+          text:
+            "Necesita seleccionar un proveedor del producto " +
+            nomproducto +
+            ".",
+          icon: "info",
+          confirmButtonText: "Aceptar",
+        });
+        return;
       }
 
       const accion = "mostrarcantidadpreciocalculo";

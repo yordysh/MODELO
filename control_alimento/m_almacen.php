@@ -2095,10 +2095,9 @@ class m_almacen
   public function  MostrarProductoTerminado()
   {
     try {
-
-      // $stm = $this->bd->prepare("SELECT COD_PRODUCTO, DES_PRODUCTO, ABR_PRODUCTO FROM T_PRODUCTO WHERE COD_CATEGORIA='00004'");
       $stm = $this->bd->prepare("SELECT TF.COD_FORMULACION AS COD_FORMULACION,TF.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,TP.ABR_PRODUCTO AS ABR_PRODUCTO,
-      TP.COD_PRODUCCION AS COD_PRODUCCION, TP.PESO_NETO AS PESO_NETO FROM T_TMPFORMULACION TF  INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TF.COD_PRODUCTO");
+      TP.COD_PRODUCCION AS COD_PRODUCCION, TP.PESO_NETO AS PESO_NETO,TP.COD_CATEGORIA AS COD_CATEGORIA FROM T_TMPFORMULACION TF  INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TF.COD_PRODUCTO 
+      WHERE TP.COD_CATEGORIA='00004' AND COD_PRODUCCION IS NOT NULL");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -2495,6 +2494,7 @@ class m_almacen
                                 (SELECT CAN_FORMULACION FROM T_TMPFORMULACION WHERE COD_FORMULACION='$codigo_genera_formulacion') AS CAN_FORMULACION
                                 FROM T_TMPFORMULACION_ENVASE TE 
                                 INNER JOIN T_PRODUCTO AS TP ON TE.COD_PRODUCTO= TP.COD_PRODUCTO  WHERE TE.COD_FORMULACION='$codigo_genera_formulacion'");
+
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
@@ -3831,23 +3831,28 @@ class m_almacen
   public function RechazarPendienteRequerimiento($cod_requerimiento_pedido, $codpersonal)
   {
     try {
+
       $this->bd->beginTransaction();
       $cod = new m_almacen();
       $fecha_actual = $cod->c_horaserversql('F');
-      $fecha_convertida  = DateTime::createFromFormat('d/m/Y', $fecha_actual);
-      $fecha_generado  = $fecha_convertida->format('d/m/Y');
-
 
       $zonaHorariaPeru = new DateTimeZone('America/Lima');
       $horaActualPeru = new DateTime('now', $zonaHorariaPeru);
       $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
 
 
-      $stm = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='R',COD_CONFIRMACION='$codpersonal',FECHA='$fecha_generado',HORA='$horaMinutosSegundos' WHERE COD_REQUERIMIENTO = '$cod_requerimiento_pedido'");
+      $stm = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET ESTADO='R',COD_CONFIRMACION='$codpersonal',FECHA=CONVERT(DATE, GETDATE()),HORA='$horaMinutosSegundos' WHERE COD_REQUERIMIENTO = '$cod_requerimiento_pedido'");
       $actualizarRequerimiento = $stm->execute();
 
       $stmActualizar = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='R' WHERE COD_REQUERIMIENTO = '$cod_requerimiento_pedido'");
       $stmActualizar->execute();
+
+
+      $stmActualizarinsumo = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_INSUMO SET ESTADO='R' WHERE COD_REQUERIMIENTO = '$cod_requerimiento_pedido'");
+      $stmActualizarinsumo->execute();
+
+      $stmActualizarenvase = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ENVASE SET ESTADO='R' WHERE COD_REQUERIMIENTO = '$cod_requerimiento_pedido'");
+      $stmActualizarenvase->execute();
 
 
       $actualizarRequerimiento = $this->bd->commit();

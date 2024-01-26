@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-$codusuario = $_SESSION["cod"];
+// $codusuario = $_SESSION["cod"];
 // $codanexo=$_SESSION["ane"];
-// $codusuario = 'Raul';
+$codusuario = '00004';
 // $codanexo = '1010';
 
 ?>
@@ -233,40 +233,43 @@ $mostrarrequerimiento = $mostrar->MostrarTPMRequerimiento();
                     </div>
 
                     <!-- Insertar nuevas cantidades -->
-                    <div class="contenedor">
+                    <!-- <div class="contenedor"> -->
+                    <div class="row">
+                        <div class="col-md-6 ctnBtn">
+                            <!-- <div class="ctnBtn"> -->
+                            <div>
+                                <button id="procesoordencompra" name="insertarfinal" class="btn btn-info boton-proceso">Proceso</button>
+                            </div>
 
-                        <div class="ctnBtn">
                             <input type="hidden" id="taskcodrequhiddenvalidar">
                             <button id="insertarCompraInsumos" name="calcularInsEnv" class="btn btn-primary boton-insertar">Guardar</button>
                             <input type="text" id="mensajecompleto" style="width: 270px; font-weight:bold; display:none;" value="Insumos completos en el almacen" disabled>
                             <!-- <button id="boton" type="submit" name="insert" class="btn btn-primary bt-guardar">Insertar</button> -->
+                            <!-- </div> -->
                         </div>
-                        <div>
-                            <button id="procesoordencompra" name="insertarfinal" class="btn btn-info boton-insertar">Proceso</button>
-                        </div>
-                    </div>
-                    <div class="estilorequerimiento">
-                        <select name="select_requerimiento" id="idrequerimientotemp">
-                            <?php
-                            $primerRequerimiento = reset($mostrarrequerimiento);
-                            foreach ($mostrarrequerimiento as $reque) {
-                                echo '<option value="' . $reque->COD_REQUERIMIENTO . '"';
-                                if ((int)$reque->COD_REQUERIMIENTO === (int)$primerRequerimiento->COD_REQUERIMIENTO) {
-                                    echo ' selected';
+                        <!-- </div> -->
+                        <div class="col-md-6 ctnBtn">
+                            <!-- <div class="estilorequerimiento"> -->
+                            <select name="select_requerimiento" id="idrequerimientotemp" class="margin">
+                                <?php
+                                $primerRequerimiento = reset($mostrarrequerimiento);
+                                foreach ($mostrarrequerimiento as $reque) {
+                                    echo '<option value="' . $reque->COD_REQUERIMIENTO . '"';
+                                    if ((int)$reque->COD_REQUERIMIENTO === (int)$primerRequerimiento->COD_REQUERIMIENTO) {
+                                        echo ' selected';
+                                    }
+                                    echo '>';
+                                    echo $reque->COD_REQUERIMIENTO;
+                                    echo '</option>';
                                 }
-                                echo '>';
-                                echo $reque->COD_REQUERIMIENTO;
-                                echo '</option>';
-                            }
-                            ?>
-                        </select>
-
-
-
-                    </div>
-                    <div>
-                        <!-- <a class="btn btn-success" href="#" onclick="generarPDF()">VISUALIZAR ORDEN COMPRA</a> -->
-                        <button id="generarOrdenPDF" class="btn btn-success">VISUALIZAR ORDEN COMPRA</button>
+                                ?>
+                            </select>
+                            <!-- </div> -->
+                            <div>
+                                <!-- <a class="btn btn-success" href="#" onclick="generarPDF()">VISUALIZAR ORDEN COMPRA</a> -->
+                                <button id="generarOrdenPDF" class="btn btn-success margin">VISUALIZAR ORDEN COMPRA</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

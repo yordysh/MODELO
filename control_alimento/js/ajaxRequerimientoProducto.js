@@ -66,7 +66,6 @@ $(function () {
     }
     const regex = /\d+\./;
     let valorneto = $("#valorneto").val() / 10;
-    console.log(valorneto);
     let totalproducto = ($("#cantidadInsumoEnvase").val() * 100) / valorneto;
     $("#txtcantidadproductos").val(Math.round(totalproducto));
   });

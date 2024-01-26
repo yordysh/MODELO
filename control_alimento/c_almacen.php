@@ -485,15 +485,6 @@ if ($accion == 'insertar') {
         // $respuesta = c_almacen::c_insertar_orden_compra_item($union, $file, $idRequerimiento,  $codpersonal);
         // echo $respuesta;
     }
-    //else {
-    //     $respuesta = c_almacen::c_actualizar_orden_compra_item($idRequerimiento);
-    //     echo $respuesta;
-    // }
-
-
-
-    // $respuesta = c_almacen::c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado, $valoresdeinsumos);
-    // echo $respuesta;
 } elseif ($accion == 'mostrarproduccionrequerimiento') {
 
     // $cod_formulacion = trim($_POST['cod_formulacion']);
@@ -2611,6 +2602,7 @@ class c_almacen
             $consultadeproductoycantidad = $m_formula->ConsultarFormulaDuplicado($selectProductoCombo);
 
             if (floatval($consultadeproductoycantidad) == floatval($cantidadTotal)) {
+
                 $sumainsumo = 0;
 
                 foreach ($dataInsumo as $insumo) {
@@ -2699,7 +2691,6 @@ class c_almacen
             echo "[]";
         }
     }
-
 
 
 
@@ -2841,6 +2832,7 @@ class c_almacen
         try {
             $mostrar = new m_almacen();
             $datos = $mostrar->MostrarDatosEnvases($seleccionadoinsumoenvases);
+
             if (!$datos) {
                 throw new Exception("Hubo un error en la consulta");
             }
