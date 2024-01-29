@@ -66,13 +66,24 @@ $(function () {
     }
     const regex = /\d+\./;
     let valorneto = $("#valorneto").val() / 10;
+    var cantidadsachet = $("#cantidadsachet").val();
     let totalproducto = ($("#cantidadInsumoEnvase").val() * 100) / valorneto;
     $("#txtcantidadproductos").val(Math.round(totalproducto));
+    if (cantidadsachet > 1) {
+      let unidades =
+        ($("#cantidadInsumoEnvase").val() * 1000) / $("#valorneto").val();
+      let totalenvase = unidades / cantidadsachet;
+      $("#txtcantidadproductos").val(Math.round(totalenvase));
+    }
   });
   /*-----------Al seleccionar un producto me pongue su peso neto------------------ */
   $("#selectInsumoEnvase").on("change", function () {
     var peso_neto = $(this).find("option:selected").attr("peso_neto");
+    var cantidad_sachet = $(this)
+      .find("option:selected")
+      .attr("cantidad_sachet");
     $("#valorneto").val(peso_neto);
+    $("#cantidadsachet").val(cantidad_sachet);
   });
   /*----------------------------------------------------------------------------- */
   //--------------------- Insertar los valores insumos y envases ------------//

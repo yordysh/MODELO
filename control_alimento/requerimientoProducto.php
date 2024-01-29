@@ -72,7 +72,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 <select id="selectInsumoEnvase" class="form-select selectProducto" aria-label="Default select example">
                                     <option value="none" selected disabled>Seleccione producto</option>
                                     <?php foreach ($dataProductoTerminado as  $lis) { ?>
-                                        <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option" peso_neto="<?php echo $lis['PESO_NETO']; ?>"><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
+                                        <option value="<?php echo $lis['COD_PRODUCTO']; ?>" class="option" peso_neto="<?php echo $lis['PESO_NETO']; ?>" cantidad_sachet='<?php echo $lis['CANTIDAD']; ?>'><?php echo ($lis['ABR_PRODUCTO'] . " "); ?><?php echo $lis['DES_PRODUCTO']; ?></option>
                                     <?php
                                     }
 
@@ -80,6 +80,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                 </select>
                             </div>
                             <input type="hidden" id="valorneto">
+                            <input type="hidden" id="cantidadsachet">
                             <!-- Text input cantidad -->
 
                             <div class="col-md-2">
