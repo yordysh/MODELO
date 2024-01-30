@@ -113,7 +113,7 @@ $datalistaenvases = $mostrar->MostrarListaMaestraEnvasesPDF();
                 <td rowspan="4" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/img_lab.jpg')); ?>" alt="" width="100" height="50"></td>
 
                 <td rowspan="4" style="text-align: center; font-size:15px; font-weight:200; width:400px;">LISTA MAESTRA DE ENVASES Y ACCESORIOS COMPLEMENTARIOS</td>
-                <td>LBS-OP-FR-02</th>
+                <td>LBS-LM-FR-02</th>
             </tr>
             <tr>
                 <td>Versión: 04</td>

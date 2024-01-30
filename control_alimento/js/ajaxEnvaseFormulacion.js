@@ -266,6 +266,23 @@ $(function () {
               $("#cantidadTotal").val("");
             }
           });
+        } else if (respuesta.estado === "sumainsumosincorrecta") {
+          Swal.fire({
+            icon: "error",
+            title:
+              "La suma de los insumos es diferente a la cantidad base de la formulación.",
+            // text: "Error al insertar.",
+          }).then((resultado) => {
+            if (resultado.isConfirmed || resultado.isDismissed) {
+              // $("#selectProductoCombo").val("none").trigger("change");
+              $("#selectProductoCombo").prop("disabled", false);
+              $("#cantidadTotal").prop("disabled", false);
+              // tablaInsumo.empty();
+              // tablaEnvase.empty();
+
+              // $("#cantidadTotal").val("");
+            }
+          });
         } else if (respuesta.estado === "sumainsumodiferente") {
           Swal.fire({
             icon: "error",
@@ -284,39 +301,6 @@ $(function () {
             }
           });
         }
-        // if (response === "ok") {
-        //   Swal.fire({
-        //     title: "¡Guardado exitoso!",
-        //     text: "Los datos se han guardado correctamente.",
-        //     icon: "success",
-        //     confirmButtonText: "Aceptar",
-        //   }).then((result) => {
-        //     if (result.isConfirmed) {
-        //       mostrarProductoEnvase();
-        //       $("#selectProductoCombo").val("none").trigger("change");
-
-        //       tablaInsumo.empty();
-        //       tablaEnvase.empty();
-
-        //       $("#cantidadTotal").val("");
-        //     }
-        //   });
-        // } else {
-        //   Swal.fire({
-        //     icon: "error",
-        //     title: "Formulacion producto",
-        //     text: "Por favor, elige otro producto.",
-        //   }).then((resultado) => {
-        //     if (resultado.isConfirmed || resultado.isDismissed) {
-        //       $("#selectProductoCombo").val("none").trigger("change");
-
-        //       tablaInsumo.empty();
-        //       tablaEnvase.empty();
-
-        //       $("#cantidadTotal").val("");
-        //     }
-        //   });
-        // }
       },
       complete: function () {
         $(".preloader").css("opacity", "0");

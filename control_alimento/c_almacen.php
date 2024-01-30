@@ -314,7 +314,7 @@ if ($accion == 'insertar') {
 
     $codigopersonal = trim($_POST['codigopersonal']);
     $selectProductoCombo = trim($_POST['selectProductoCombo']);
-    $cantidadTotal = trim($_POST['cantidadTotal']);
+    $cantidadTotal = intval(trim($_POST['cantidadTotal']));
     $dataInsumo = ($_POST['dataInsumo']);
     $dataEnvase = ($_POST['dataEnvase']);
 
@@ -2601,7 +2601,7 @@ class c_almacen
 
             $consultadeproductoycantidad = $m_formula->ConsultarFormulaDuplicado($selectProductoCombo);
 
-            if (floatval($consultadeproductoycantidad) == floatval($cantidadTotal)) {
+            if (intval($consultadeproductoycantidad) == $cantidadTotal) {
 
                 $sumainsumo = 0;
 
@@ -2625,14 +2625,29 @@ class c_almacen
                 // $respuesta = array('estado' => 'perfecto');
                 // echo json_encode($respuesta);
             } else if ($consultadeproductoycantidad == NULL) {
-                $respuesta = $m_formula->InsertarProductoCombo($codigopersonal, $selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
-                if ($respuesta) {
+
+                $sumainsumov = 0;
+                foreach ($dataInsumo as $datas) {
+                    $cantidadinsumos = trim($datas['cantidadinsumo']);
+                    $sumainsumov = $sumainsumov + $cantidadinsumos;
+                }
+
+                if (intval($sumainsumov) == $cantidadTotal) {
+                    $respuesta = $m_formula->InsertarProductoCombo($codigopersonal, $selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
                     $respuesta = array('estado' => 'nuevaformula');
                     echo json_encode($respuesta);
                 } else {
-                    $respuesta = array('estado' => 'errornuevaformula');
+                    $respuesta = array('estado' => 'sumainsumosincorrecta');
                     echo json_encode($respuesta);
-                };
+                }
+                // $respuesta = $m_formula->InsertarProductoCombo($codigopersonal, $selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
+                // if ($respuesta) {
+                //     $respuesta = array('estado' => 'nuevaformula');
+                //     echo json_encode($respuesta);
+                // } else {
+                //     $respuesta = array('estado' => 'errornuevaformula');
+                //     echo json_encode($respuesta);
+                // };
             } else if (floatval($consultadeproductoycantidad) != floatval($cantidadTotal)) {
                 $respuesta = array('estado' => 'cantidaddiferente');
                 echo json_encode($respuesta);
@@ -2940,58 +2955,7 @@ class c_almacen
             $datos = $mostrar->MostrarSiCompra($cod_formulacion);
 
             if (count($datatemporal) > 0) {
-                // $json = array();
-                // foreach ($datos as $row) {
-                //     $COD_REQUERIMIENTO = $row->COD_REQUERIMIENTO;
-                //     $COD_PRODUCTO = $row->COD_PRODUCTO;
-                //     $DES_PRODUCTO = $row->DES_PRODUCTO;
-                //     $CANTIDAD = $row->CANTIDAD;
-                //     $STOCK_ACTUAL = $row->STOCK_ACTUAL;
-                //     $CANTIDAD_MINIMA = $row->CANTIDAD_MINIMA;
-                //     $PRECIO_PRODUCTO = $row->PRECIO_PRODUCTO;
-                //     $COD_PROVEEDOR = $row->COD_PROVEEDOR;
-                //     $NOM_PROVEEDOR = $row->NOM_PROVEEDOR;
-                //     foreach ($datatemporal as $temporal) {
-                //         $COD_ORDEN_COMPRA = $temporal->COD_ORDEN_COMPRA;
-                //         $COD_REQUERIMIENTO_TEMP = $temporal->COD_REQUERIMIENTO;
-                //         $FECHA_REALIZADA = $temporal->FECHA_REALIZADA;
-                //         $HORA = $temporal->HORA;
-                //         $COD_PROVEEDOR_TEMP = $temporal->COD_PROVEEDOR;
-                //         $NOM_PROVEEDOR_TEMP = $temporal->NOM_PROVEEDOR;
-                //         $F_PAGO = $temporal->F_PAGO;
-                //         $COD_PRODUCTO_TEMP = $temporal->COD_PRODUCTO;
-                //         $DES_PRODUCTO_TEMP = $temporal->DES_PRODUCTO;
-                //         $MONTO = $temporal->MONTO;
-                //     }
-                //     if ($COD_REQUERIMIENTO_TEMP == $COD_REQUERIMIENTO && $COD_PRODUCTO_TEMP == $COD_PRODUCTO && $COD_PROVEEDOR_TEMP == $COD_PROVEEDOR) {
 
-                //         $json[] = array(
-                //             "COD_ORDEN_COMPRA" => $COD_ORDEN_COMPRA,
-                //             "COD_REQUERIMIENTO_TEMP" => $COD_REQUERIMIENTO,
-                //             "FECHA_REALIZADA" => $FECHA_REALIZADA,
-                //             "HORA" => $HORA,
-                //             "COD_PROVEEDOR_TEMP" => $COD_PROVEEDOR_TEMP,
-                //             "NOM_PROVEEDOR_TEMP" => $NOM_PROVEEDOR_TEMP,
-                //             "F_PAGO" => $F_PAGO,
-                //             "COD_PRODUCTO_TEMP" => $COD_PRODUCTO_TEMP,
-                //             "DES_PRODUCTO_TEMP" => $DES_PRODUCTO_TEMP,
-                //             "MONTO" => $MONTO,
-                //         );
-                //     } else {
-
-                //         $json[] = array(
-                //             "COD_REQUERIMIENTO" => $COD_REQUERIMIENTO,
-                //             "COD_PRODUCTO" => $COD_PRODUCTO,
-                //             "DES_PRODUCTO" => $DES_PRODUCTO,
-                //             "CANTIDAD" => $CANTIDAD,
-                //             "STOCK_ACTUAL" => $STOCK_ACTUAL,
-                //             "CANTIDAD_MINIMA" => $CANTIDAD_MINIMA,
-                //             "PRECIO_PRODUCTO" => $PRECIO_PRODUCTO,
-                //             "COD_PROVEEDOR" => $COD_PROVEEDOR,
-                //             "NOM_PROVEEDOR" => $NOM_PROVEEDOR,
-                //         );
-                //     }
-                // }
                 $json = array();
                 foreach ($datos as $row) {
                     $foundMatch = false;
@@ -4622,16 +4586,13 @@ class c_almacen
                 $json[] = array(
                     "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
                     "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
-                    "COD_TMPCOMPROBANTE" => $row->COD_TMPCOMPROBANTE,
-                    "FECHA_EMISION" => $row->FECHA_EMISION,
                     "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "COD_PRODUCCION" => $row->COD_PRODUCCION,
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
                     "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
-                    "SERIE" => $row->SERIE,
-                    "CORRELATIVO" => $row->CORRELATIVO,
-                    "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
-                    "HORA" => $row->HORA,
+                    "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,
+                    "FECHA_EMISION" => convFecSistema($row->FECHA_EMISION),
                 );
             }
             $jsonstring = json_encode($json);

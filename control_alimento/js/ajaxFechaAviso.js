@@ -970,60 +970,61 @@ $(function () {
               showCloseButton: true,
             }).then((result) => {
               if (result.isConfirmed) {
-                let valoresorden = [];
-                $("#tbodyordencompra tr").each(function () {
-                  let codigocompraorde = $(this).attr("codigocompraorde");
-                  let codtempreque = $(this).attr("codtempreque");
-                  let codigoproductocompra = $(this)
-                    .find("td:eq(0)")
-                    .attr("codigoproducto");
-                  let codigoproveedororden = $(this)
-                    .find("td:eq(0)")
-                    .attr("codigoproveedororden");
-                  let cantidadpedida = $(this).find("td:eq(1)").text();
-                  let cantidadllegada = $(this)
-                    .find("td:eq(2) input:checkbox")
-                    .prop("checked");
-                  valoresorden.push({
-                    codigocompraorde: codigocompraorde,
-                    codtempreque: codtempreque,
-                    codigoproductocompra: codigoproductocompra,
-                    codigoproveedororden: codigoproveedororden,
-                    cantidadpedida: cantidadpedida,
-                    cantidadllegada: cantidadllegada,
-                  });
-                });
-                console.log(valoresorden);
-
-                const accion = "actualizarrequerimientoitem";
-                $.ajax({
-                  url: "../control_alimento/c_almacen.php",
-                  type: "POST",
-                  data: {
-                    accion: accion,
-                    codrequerimiento: codrequerimiento,
-                    valoresorden: valoresorden,
-                  },
-                  beforeSend: function () {
-                    $(".preloader").css("opacity", "1");
-                    $(".preloader").css("display", "block");
-                  },
-                  success: function (response) {
-                    console.log(response);
-                    resolve("La actualización se realizó con éxito");
-                  },
-                  complete: function () {
-                    $(".preloader").css("opacity", "0");
-                    $(".preloader").css("display", "none");
-                  },
-                  error: function (xhr, status, error) {
-                    console.error(
-                      "Error al cargar los datos de la tabla:",
-                      error
-                    );
-                    reject("Error al actualizar");
-                  },
-                });
+                window.location.href =
+                  "https://localhost/MODELO/control_alimento/controlRecepcion.php";
+                // let valoresorden = [];
+                // $("#tbodyordencompra tr").each(function () {
+                //   let codigocompraorde = $(this).attr("codigocompraorde");
+                //   let codtempreque = $(this).attr("codtempreque");
+                //   let codigoproductocompra = $(this)
+                //     .find("td:eq(0)")
+                //     .attr("codigoproducto");
+                //   let codigoproveedororden = $(this)
+                //     .find("td:eq(0)")
+                //     .attr("codigoproveedororden");
+                //   let cantidadpedida = $(this).find("td:eq(1)").text();
+                //   let cantidadllegada = $(this)
+                //     .find("td:eq(2) input:checkbox")
+                //     .prop("checked");
+                //   valoresorden.push({
+                //     codigocompraorde: codigocompraorde,
+                //     codtempreque: codtempreque,
+                //     codigoproductocompra: codigoproductocompra,
+                //     codigoproveedororden: codigoproveedororden,
+                //     cantidadpedida: cantidadpedida,
+                //     cantidadllegada: cantidadllegada,
+                //   });
+                // });
+                // console.log(valoresorden);
+                // const accion = "actualizarrequerimientoitem";
+                // $.ajax({
+                //   url: "../control_alimento/c_almacen.php",
+                //   type: "POST",
+                //   data: {
+                //     accion: accion,
+                //     codrequerimiento: codrequerimiento,
+                //     valoresorden: valoresorden,
+                //   },
+                //   beforeSend: function () {
+                //     $(".preloader").css("opacity", "1");
+                //     $(".preloader").css("display", "block");
+                //   },
+                //   success: function (response) {
+                //     console.log(response);
+                //     resolve("La actualización se realizó con éxito");
+                //   },
+                //   complete: function () {
+                //     $(".preloader").css("opacity", "0");
+                //     $(".preloader").css("display", "none");
+                //   },
+                //   error: function (xhr, status, error) {
+                //     console.error(
+                //       "Error al cargar los datos de la tabla:",
+                //       error
+                //     );
+                //     reject("Error al actualizar");
+                //   },
+                // });
               } else {
                 reject("El usuario no confirmó la acción");
               }

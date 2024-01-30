@@ -101,7 +101,7 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                                 <?php
 
                                 foreach ($dataRequerimiento as $lista) {
-                                    echo '<option value="' . $lista->COD_REQUERIMIENTOTEMP . '" class="option">' . $lista->COD_REQUERIMIENTOTEMP . '</option>';
+                                    echo '<option value="' . $lista->COD_REQUERIMIENTO . '" class="option">' . $lista->COD_REQUERIMIENTO . '</option>';
                                 }
                                 ?>
                             </select>
@@ -129,7 +129,9 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                                 <thead class="theadborder fixed-header">
                                     <tr>
                                         <th class="encabezado-especial thborder" rowspan="2" style="padding:40px 0;">FECHA DE INGRESO</th>
+                                        <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">REQUERIMIENTO</th>
                                         <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">HORA</th>
+                                        <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">CÓDIGO INTERNO</th>
                                         <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">PRODUCTO</th>
                                         <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">CÓDIGO DE LOTE</th>
                                         <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">F.V</th>

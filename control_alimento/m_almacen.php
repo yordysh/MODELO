@@ -4810,10 +4810,10 @@ class m_almacen
     try {
 
       $stmOrdenCompra = $this->bd->prepare("SELECT TC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA,TC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,TC.COD_REQUERIMIENTOTEMP AS COD_REQUERIMIENTOTEMP,TC.FECHA_REALIZADA AS FECHA_REALIZADA,
-      TC.COD_PROVEEDOR AS COD_PROVEEDOR,TCI.COD_PRODUCTO AS COD_PRODUCTO,TP.ABR_PRODUCTO AS ABR_PRODUCTO, TP.COD_PRODUCCION AS COD_PRODUCCION,
-      TP.DES_PRODUCTO AS DES_PRODUCTO,TCI.CANTIDAD_INSUMO_ENVASE AS CANTIDAD_INSUMO_ENVASE, TCI.ESTADO AS ESTADO FROM T_TMPORDEN_COMPRA TC
-      INNER JOIN T_TMPORDEN_COMPRA_ITEM TCI ON TC.COD_ORDEN_COMPRA=TCI.COD_ORDEN_COMPRA
-      INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TCI.COD_PRODUCTO WHERE TCI.ESTADO='P'");
+                                              TC.COD_PROVEEDOR AS COD_PROVEEDOR,TCI.COD_PRODUCTO AS COD_PRODUCTO,TP.ABR_PRODUCTO AS ABR_PRODUCTO, TP.COD_PRODUCCION AS COD_PRODUCCION,
+                                              TP.DES_PRODUCTO AS DES_PRODUCTO,TCI.CANTIDAD_INSUMO_ENVASE AS CANTIDAD_INSUMO_ENVASE, TCI.ESTADO AS ESTADO FROM T_TMPORDEN_COMPRA TC
+                                              INNER JOIN T_TMPORDEN_COMPRA_ITEM TCI ON TC.COD_ORDEN_COMPRA=TCI.COD_ORDEN_COMPRA
+                                              INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TCI.COD_PRODUCTO WHERE TCI.ESTADO='P' AND CAST(TC.FECHA_REALIZADA AS DATE) <= CAST(GETDATE() AS DATE)");
       $stmOrdenCompra->execute();
       $datos = $stmOrdenCompra->fetchAll(PDO::FETCH_OBJ);
 
@@ -5442,8 +5442,9 @@ class m_almacen
     try {
       $this->bd->beginTransaction();
       $mostrar = new m_almacen();
-      // var_dump($valoresorden);
-      // exit;
+      var_dump("codreque" . $codrequerimiento);
+      var_dump($valoresorden);
+      exit;
       foreach ($valoresorden as $row) {
         $codigocompraorde = $row['codigocompraorde'];
         $codtempreque = $row['codtempreque'];
@@ -5492,7 +5493,7 @@ class m_almacen
   {
     try {
 
-      $mostrarrequerimiento = $this->bd->prepare("SELECT DISTINCT COD_REQUERIMIENTOTEMP FROM T_TMPORDEN_COMPRA WHERE ESTADO='P'");
+      $mostrarrequerimiento = $this->bd->prepare("SELECT DISTINCT COD_REQUERIMIENTO FROM T_TMPORDEN_COMPRA WHERE ESTADO='P'");
       $mostrarrequerimiento->execute();
       $datosrequerimiento = $mostrarrequerimiento->fetchAll(PDO::FETCH_OBJ);
 
@@ -5506,10 +5507,15 @@ class m_almacen
   {
     try {
 
-      $mostrarrequerimiento = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TOC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,TOC.COD_TMPREQUERIMIENTO AS COD_TMPREQUERIMIENTO,
-      TOC.ESTADO AS ESTADO, TRI.COD_PRODUCTO AS COD_PRODUCTO,PRO.DES_PRODUCTO  AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD FROM T_TMPORDEN_COMPRA TOC 
-      INNER JOIN T_TMPREQUERIMIENTO_ITEM TRI ON TOC.COD_TMPREQUERIMIENTO=TRI.COD_REQUERIMIENTO
-      INNER JOIN T_PRODUCTO AS PRO ON PRO.COD_PRODUCTO=TRI.COD_PRODUCTO WHERE TOC.COD_REQUERIMIENTO='$selectrequerimiento'");
+      // $mostrarrequerimiento = $this->bd->prepare("SELECT TOC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TOC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,TOC.COD_TMPREQUERIMIENTO AS COD_TMPREQUERIMIENTO,
+      // TOC.ESTADO AS ESTADO, TRI.COD_PRODUCTO AS COD_PRODUCTO,PRO.DES_PRODUCTO  AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD FROM T_TMPORDEN_COMPRA TOC 
+      // INNER JOIN T_TMPREQUERIMIENTO_ITEM TRI ON TOC.COD_TMPREQUERIMIENTO=TRI.COD_REQUERIMIENTO
+      // INNER JOIN T_PRODUCTO AS PRO ON PRO.COD_PRODUCTO=TRI.COD_PRODUCTO WHERE TOC.COD_REQUERIMIENTO='$selectrequerimiento'");
+
+      $mostrarrequerimiento = $this->bd->prepare("SELECT RI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,RI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
+      RI.CANTIDAD AS CANTIDAD FROM T_TMPREQUERIMIENTO_ITEM RI 
+      INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=RI.COD_PRODUCTO WHERE RI.COD_REQUERIMIENTO='$selectrequerimiento'");
+
       $mostrarrequerimiento->execute();
       $datosrequerimiento = $mostrarrequerimiento->fetchAll(PDO::FETCH_OBJ);
 
@@ -5523,15 +5529,21 @@ class m_almacen
   {
     try {
 
-      $mostrarvalorcomprobante = $this->bd->prepare("SELECT OC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, OC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TCOMP.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE,  CONVERT(VARCHAR, TCOMI.FECHA_EMISION, 103) FECHA_EMISION, TCI.COD_PRODUCTO AS COD_PRODUCTO, TPRO.DES_PRODUCTO AS DES_PRODUCTO, 
-                                                        TCOMP.COD_PROVEEDOR AS COD_PROVEEDOR, TPV.NOM_PROVEEDOR AS NOM_PROVEEDOR, TCOMI.SERIE AS SERIE, TCOMI.CORRELATIVO AS CORRELATIVO, TCI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA, TCITEM.HORA AS HORA FROM T_TMPORDEN_COMPRA_ITEM TCI 
-                                                        INNER JOIN T_TMPCOMPROBANTE_ITEM TCOMI ON TCI.COD_TMPCOMPROBANTE=TCOMI.COD_TMPCOMPROBANTE
-                                                        INNER JOIN T_TMPORDEN_COMPRA OC ON OC.COD_ORDEN_COMPRA=TCI.COD_ORDEN_COMPRA
-                                                        INNER JOIN T_TMPCOMPROBANTE TCOMP ON TCOMP.COD_TMPCOMPROBANTE=TCOMI.COD_TMPCOMPROBANTE
-                                                        INNER JOIN T_TMPCOMPROBANTE_ITEM TCITEM ON TCITEM.COD_TMPCOMPROBANTE=TCOMP.COD_TMPCOMPROBANTE
-                                                        INNER JOIN T_PRODUCTO TPRO ON TPRO.COD_PRODUCTO=TCI.COD_PRODUCTO
-                                                        INNER JOIN T_PROVEEDOR TPV ON TPV.COD_PROVEEDOR=TCOMP.COD_PROVEEDOR
-                                                        WHERE OC.COD_REQUERIMIENTO='$selectrequerimiento'");
+      // $mostrarvalorcomprobante = $this->bd->prepare("SELECT OC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, OC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA, TCOMP.COD_TMPCOMPROBANTE AS COD_TMPCOMPROBANTE,  CONVERT(VARCHAR, TCOMI.FECHA_EMISION, 103) FECHA_EMISION, TCI.COD_PRODUCTO AS COD_PRODUCTO, TPRO.DES_PRODUCTO AS DES_PRODUCTO, 
+      //                                                   TCOMP.COD_PROVEEDOR AS COD_PROVEEDOR, TPV.NOM_PROVEEDOR AS NOM_PROVEEDOR, TCOMI.SERIE AS SERIE, TCOMI.CORRELATIVO AS CORRELATIVO, TCI.CANTIDAD_MINIMA AS CANTIDAD_MINIMA, TCITEM.HORA AS HORA FROM T_TMPORDEN_COMPRA_ITEM TCI 
+      //                                                   INNER JOIN T_TMPCOMPROBANTE_ITEM TCOMI ON TCI.COD_TMPCOMPROBANTE=TCOMI.COD_TMPCOMPROBANTE
+      //                                                   INNER JOIN T_TMPORDEN_COMPRA OC ON OC.COD_ORDEN_COMPRA=TCI.COD_ORDEN_COMPRA
+      //                                                   INNER JOIN T_TMPCOMPROBANTE TCOMP ON TCOMP.COD_TMPCOMPROBANTE=TCOMI.COD_TMPCOMPROBANTE
+      //                                                   INNER JOIN T_TMPCOMPROBANTE_ITEM TCITEM ON TCITEM.COD_TMPCOMPROBANTE=TCOMP.COD_TMPCOMPROBANTE
+      //                                                   INNER JOIN T_PRODUCTO TPRO ON TPRO.COD_PRODUCTO=TCI.COD_PRODUCTO
+      //                                                   INNER JOIN T_PROVEEDOR TPV ON TPV.COD_PROVEEDOR=TCOMP.COD_PROVEEDOR
+      //                                                   WHERE OC.COD_REQUERIMIENTO='$selectrequerimiento'");
+      $mostrarvalorcomprobante = $this->bd->prepare("SELECT OC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA,OC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,OC.FECHA_REALIZADA AS FECHA_REALIZADA,TI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,TP.COD_PRODUCCION AS COD_PRODUCCION,
+      TI.CANTIDAD_INSUMO_ENVASE AS CANTIDAD_INSUMO_ENVASE,TI.MONTO AS MONTO, OC.COD_PROVEEDOR AS COD_PROVEEDOR,TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR,CONVERT(VARCHAR, GETDATE(), 23) AS FECHA_EMISION  FROM T_TMPORDEN_COMPRA OC 
+      INNER JOIN T_TMPORDEN_COMPRA_ITEM TI ON OC.COD_ORDEN_COMPRA=TI.COD_ORDEN_COMPRA
+      INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TI.COD_PRODUCTO
+      INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=OC.COD_PROVEEDOR WHERE OC.COD_REQUERIMIENTO='$selectrequerimiento' AND CAST(OC.FECHA_REALIZADA AS DATE) <= CAST(GETDATE() AS DATE)");
+
       $mostrarvalorcomprobante->execute();
       $datosvalorcomprobante = $mostrarvalorcomprobante->fetchAll(PDO::FETCH_OBJ);
 
@@ -5563,7 +5575,8 @@ class m_almacen
       $codigo = new m_almacen();
       $codigorecepcion = $codigo->generarcodigocontrolrecepcion();
       $nombre = 'LBS-BPM-FR-09';
-
+      var_dump($datos);
+      exit;
       if ($datosTabla) {
 
         $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, CODIGO_REQUERIMIENTO)                                                       VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
@@ -5596,7 +5609,7 @@ class m_almacen
           } else {
             $factura = 'V';
           }
-          $gbf = $dato["gbf"];
+          $gbf = $dato["numerofactura"];
           $primario = $dato["primario"];
           $secundario = $dato["secundario"];
           $saco = $dato["saco"];
@@ -5799,7 +5812,7 @@ class m_almacen
 
 
         foreach ($datos as $dato) {
-          $idcomprobante = $dato["idcomprobante"];
+          $codigorequerimiento = $dato["codigorequerimiento"];
           $fechaingresoC = $dato["fechaingreso"];
 
           $hora = $dato["hora"];
@@ -5812,6 +5825,7 @@ class m_almacen
           $remision = $dato["remision"];
           $boleta = $dato["boleta"];
           $factura = $dato["factura"];
+
           if ($remision == "true") {
             $remision = 'C';
           } else {
@@ -5827,7 +5841,7 @@ class m_almacen
           } else {
             $factura = 'V';
           }
-          $gbf = $dato["gbf"];
+          $gbf = $dato["numerofactura"];
           $primario = $dato["primario"];
           $secundario = $dato["secundario"];
           $saco = $dato["saco"];
@@ -5928,8 +5942,8 @@ class m_almacen
           }
 
 
-          $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_TMPCOMPROBANTE,FECHA_INGRESO, HORA, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO,COD_PROVEEDOR, GUIA, BOLETA, FACTURA, GBF, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, CANTIDAD_MINIMA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
-                                                    VALUES('$codigorecepcion','$idcomprobante',CAST('$fechaingresoC' AS DATE),'$hora','$codigolote','$producto',CAST('$fechaven' AS DATE),'$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
+          $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_ORDEN_COMPRA,FECHA_INGRESO, HORA, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO,COD_PROVEEDOR, GUIA, BOLETA, FACTURA, GBF, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, CANTIDAD_MINIMA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
+                                                    VALUES('$codigorecepcion','$codigorequerimiento',CAST('$fechaingresoC' AS DATE),'$hora','$codigolote','$producto',CAST('$fechaven' AS DATE),'$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
 
           $insertarrecepcion->execute();
 
@@ -6010,8 +6024,8 @@ class m_almacen
           $querylote->execute();
         }
 
-        $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='F'");
-        $actualizo->execute();
+        // $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='F'");
+        // $actualizo->execute();
       }
 
       $codigo->generarVersionGeneral($nombre);
@@ -6455,9 +6469,6 @@ class m_almacen
   public function MostrarProductoProveedores()
   {
     try {
-
-      // $mostarproductos = $this->bd->prepare("SELECT * FROM T_PRODUCTO  
-      // WHERE COD_PRODUCCION  IS NOT NULL AND (COD_CATEGORIA='00002' OR COD_CATEGORIA='00008')");
       $mostarproductos = $this->bd->prepare("SELECT * FROM T_PRODUCTO WHERE COD_PRODUCCION IS NOT NULL");
       $mostarproductos->execute();
       $datosproducprov = $mostarproductos->fetchAll(PDO::FETCH_OBJ);

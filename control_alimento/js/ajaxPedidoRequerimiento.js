@@ -164,9 +164,9 @@ $(function () {
                             task.CANTIDAD
                           ).toFixed(2)}</td>
                           <td data-titulo="CANTIDAD FALTANTE"  style="text-align:center;">${restainsumopedir}</td>
-                            <td data-titulo="STOCK ACTUAL"  style="text-align:center;">${
+                            <td data-titulo="STOCK ACTUAL"  style="text-align:center;">${parseFloat(
                               task.STOCK_ACTUAL
-                            }</td>
+                            ).toFixed(2)}</td>
                           </tr>`;
           });
           $("#tablainsumorequerido").html(template);
