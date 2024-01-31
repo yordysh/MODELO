@@ -84,7 +84,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                             </div>
                             <!-- Text input cantidad -->
                             <div class="form-outline mb-4 col-md-6">
-                                <label class="form-label">Cantidad base por kilosgramos</label>
+                                <label class="form-label">En funcion al 100%</label>
                                 <input type="number" id="cantidadTotal" class="form-control" name="cantidadTotal" required>
                             </div>
                         </div>

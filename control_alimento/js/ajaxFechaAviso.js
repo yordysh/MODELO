@@ -931,7 +931,7 @@ $(function () {
             htmlContent += "<tr>";
             htmlContent += "<th style='margin-rigth:15px;'> Producto</th>";
             htmlContent += "<th> Cantidad pedida</th>";
-            htmlContent += "<th> Cantidad llegada</th>";
+            // htmlContent += "<th> Cantidad llegada</th>";
             htmlContent += "</tr>";
             htmlContent += "</thead>";
 
@@ -956,8 +956,8 @@ $(function () {
                 "<td class='td-cantidad'>" +
                 producto.CANTIDAD_INSUMO_ENVASE +
                 "</td>";
-              htmlContent +=
-                "<td>  <input class='form-check-input td-checkbox' type='checkbox' value='' id='checkedvalor' checked></td>";
+              // htmlContent +=
+              //   "<td>  <input class='form-check-input td-checkbox' type='checkbox' value='' id='checkedvalor' checked></td>";
               htmlContent += "</tr>";
             });
             htmlContent += "</tbody>";
@@ -970,8 +970,7 @@ $(function () {
               showCloseButton: true,
             }).then((result) => {
               if (result.isConfirmed) {
-                window.location.href =
-                  "https://localhost/MODELO/control_alimento/controlRecepcion.php";
+                window.location.href = "controlRecepcion.php";
                 // let valoresorden = [];
                 // $("#tbodyordencompra tr").each(function () {
                 //   let codigocompraorde = $(this).attr("codigocompraorde");

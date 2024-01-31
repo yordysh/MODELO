@@ -188,7 +188,9 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         <thead>
             <tr>
                 <th rowspan="2" class="columnafecha">FECHA DE INGRESO</th>
+                <th rowspan="2" class="columnafecha">REQUERIMIENTO</th>
                 <th rowspan="2" class="columnahora">HORA</th>
+                <th rowspan="2" class="columnahora">CODIGO INTERNO</th>
                 <th rowspan="2">PRODUCTO</th>
                 <th rowspan="2" class="columnacodigo">CÓDIGO DE LOTE</th>
                 <th rowspan="2" class="columnafv">F.V</th>
@@ -228,9 +230,12 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         <tbody>
             <?php
             foreach ($datos as $dato) {
+                $requer = "RQ-" . (intval($dato['COD_REQUERIMIENTO']));
                 echo '<tr>';
                 echo '<td>' . $dato['FECHA_INGRESO'] . '</td>';
+                echo '<td style="text-align:center;">' . $requer . '</td>';
                 echo '<td>' . $dato['HORA'] . '</td>';
+                echo '<td style="text-align:center;">' . $dato['COD_PRODUCCION'] . '</td>';
                 echo '<td>' . $dato['DES_PRODUCTO'] . '</td>';
                 echo '<td>' . $dato['CODIGO_LOTE'] . '</td>';
                 echo '<td>' . $dato['FECHA_VENCIMIENTO'] . '</td>';

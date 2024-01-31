@@ -819,6 +819,7 @@ if ($accion == 'insertar') {
     echo $respuesta;
 } elseif ($accion == 'mostrarproveedorescanmin') {
     $cod_producto_fila = trim($_POST['cod_producto_fila']);
+    // var_dump($cod_producto_fila);
     $respuesta = c_almacen::c_mostrar_proveedores_cantidades_minimas($cod_producto_fila);
     echo $respuesta;
 } elseif ($accion == 'mostrarcantidadpreciocalculo') {
@@ -2956,49 +2957,66 @@ class c_almacen
 
             if (count($datatemporal) > 0) {
 
+                // $json = array();
+                // foreach ($datos as $row) {
+                //     $foundMatch = false;
+
+                //     foreach ($datatemporal as $temporal) {
+                //         if (
+                //             $temporal->COD_REQUERIMIENTO == $row->COD_REQUERIMIENTO &&
+                //             $temporal->COD_PRODUCTO == $row->COD_PRODUCTO &&
+                //             $temporal->COD_PROVEEDOR == $row->COD_PROVEEDOR
+                //         ) {
+                //             $json[] = array(
+                //                 "COD_ORDEN_COMPRA" => $temporal->COD_ORDEN_COMPRA,
+                //                 "COD_REQUERIMIENTO_TEMP" => $temporal->COD_REQUERIMIENTO,
+                //                 "FECHA_REALIZADA" => $temporal->FECHA_REALIZADA,
+                //                 "HORA" => $temporal->HORA,
+                //                 "COD_PROVEEDOR_TEMP" => $temporal->COD_PROVEEDOR,
+                //                 "NOM_PROVEEDOR_TEMP" => $temporal->NOM_PROVEEDOR,
+                //                 "F_PAGO" => $temporal->F_PAGO,
+                //                 "COD_PRODUCTO_TEMP" => $temporal->COD_PRODUCTO,
+                //                 "DES_PRODUCTO_TEMP" => $temporal->DES_PRODUCTO,
+                //                 "MONTO" => $temporal->MONTO,
+                //                 "PRECIO_MINIMO" => $temporal->PRECIO_MINIMO,
+                //                 "CANTIDAD_INSUMO_ENVASE" => $temporal->CANTIDAD_INSUMO_ENVASE,
+                //             );
+
+                //             $foundMatch = true;
+                //             break;
+                //         }
+                //     }
+
+                //     if (!$foundMatch) {
+                //         $json[] = array(
+                //             "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                //             "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                //             "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                //             "CANTIDAD" => $row->CANTIDAD,
+                //             "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
+                //             "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
+                //             "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
+                //             "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+                //             "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
+                //         );
+                //     }
+                // }
                 $json = array();
-                foreach ($datos as $row) {
-                    $foundMatch = false;
-
-                    foreach ($datatemporal as $temporal) {
-                        if (
-                            $temporal->COD_REQUERIMIENTO == $row->COD_REQUERIMIENTO &&
-                            $temporal->COD_PRODUCTO == $row->COD_PRODUCTO &&
-                            $temporal->COD_PROVEEDOR == $row->COD_PROVEEDOR
-                        ) {
-                            $json[] = array(
-                                "COD_ORDEN_COMPRA" => $temporal->COD_ORDEN_COMPRA,
-                                "COD_REQUERIMIENTO_TEMP" => $temporal->COD_REQUERIMIENTO,
-                                "FECHA_REALIZADA" => $temporal->FECHA_REALIZADA,
-                                "HORA" => $temporal->HORA,
-                                "COD_PROVEEDOR_TEMP" => $temporal->COD_PROVEEDOR,
-                                "NOM_PROVEEDOR_TEMP" => $temporal->NOM_PROVEEDOR,
-                                "F_PAGO" => $temporal->F_PAGO,
-                                "COD_PRODUCTO_TEMP" => $temporal->COD_PRODUCTO,
-                                "DES_PRODUCTO_TEMP" => $temporal->DES_PRODUCTO,
-                                "MONTO" => $temporal->MONTO,
-                                "PRECIO_MINIMO" => $temporal->PRECIO_MINIMO,
-                                "CANTIDAD_INSUMO_ENVASE" => $temporal->CANTIDAD_INSUMO_ENVASE,
-                            );
-
-                            $foundMatch = true;
-                            break;
-                        }
-                    }
-
-                    if (!$foundMatch) {
-                        $json[] = array(
-                            "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-                            "COD_PRODUCTO" => $row->COD_PRODUCTO,
-                            "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                            "CANTIDAD" => $row->CANTIDAD,
-                            "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
-                            "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
-                            "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
-                            "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
-                            "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
-                        );
-                    }
+                foreach ($datatemporal as $temporal) {
+                    $json[] = array(
+                        "COD_ORDEN_COMPRA" => $temporal->COD_ORDEN_COMPRA,
+                        "COD_REQUERIMIENTO_TEMP" => $temporal->COD_REQUERIMIENTO,
+                        "FECHA_REALIZADA" => $temporal->FECHA_REALIZADA,
+                        "HORA" => $temporal->HORA,
+                        "COD_PROVEEDOR_TEMP" => $temporal->COD_PROVEEDOR,
+                        "NOM_PROVEEDOR_TEMP" => $temporal->NOM_PROVEEDOR,
+                        "F_PAGO" => $temporal->F_PAGO,
+                        "COD_PRODUCTO_TEMP" => $temporal->COD_PRODUCTO,
+                        "DES_PRODUCTO_TEMP" => $temporal->DES_PRODUCTO,
+                        "MONTO" => $temporal->MONTO,
+                        "PRECIO_MINIMO" => $temporal->PRECIO_MINIMO,
+                        "CANTIDAD_INSUMO_ENVASE" => $temporal->CANTIDAD_INSUMO_ENVASE,
+                    );
                 }
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
@@ -3025,62 +3043,10 @@ class c_almacen
             }
 
             if (!$datos) {
-                // throw new Exception("Hubo un error en la consulta");
                 $json = array();
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
             }
-            // $json = array();
-            // foreach ($datos as $row) {
-
-            //     $json[] = array(
-            //         "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-            //         "COD_PRODUCTO" => $row->COD_PRODUCTO,
-            //         "DES_PRODUCTO" => $row->DES_PRODUCTO,
-            //         "CANTIDAD" => $row->CANTIDAD,
-            //         "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
-            //         "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
-            //         "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
-            //         "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
-            //         "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
-            //     );
-            // }
-
-            // $jsonstring = json_encode($json);
-            // echo $jsonstring;
-
-
-
-            // $agrupados = array();
-
-            // foreach ($datos as $row) {
-            //     $codigo_producto = trim($row->COD_PRODUCTO);
-
-            //     // Verificar si el grupo ya existe
-            //     if (!isset($agrupados[$codigo_producto])) {
-            //         $agrupados[$codigo_producto] = array(
-            //             "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-            //             "COD_PRODUCTO" => $codigo_producto,
-            //             "DES_PRODUCTO" => $row->DES_PRODUCTO,
-            //             "CANTIDAD" => $row->CANTIDAD,
-            //             "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
-            //             "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
-            //             "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
-            //             "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
-            //         );
-            //     } else {
-            //         // Si el grupo ya existe, comparar precios y actualizar si es menor
-            //         if ($row->PRECIO_PRODUCTO < $agrupados[$codigo_producto]["PRECIO_PRODUCTO"]) {
-            //             $agrupados[$codigo_producto]["PRECIO_PRODUCTO"] = $row->PRECIO_PRODUCTO;
-            //             $agrupados[$codigo_producto]["COD_PROVEEDOR"] = $row->COD_PROVEEDOR;
-            //         }
-            //     }
-            // }
-
-            // // Convertir el array agrupado a formato JSON
-            // $json = array_values($agrupados); // Reindexar el array para evitar claves no numéricas
-            // $jsonstring = json_encode($json);
-            // echo $jsonstring;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }

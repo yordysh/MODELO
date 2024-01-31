@@ -151,10 +151,11 @@ $(function () {
             } else {
               restainsumopedir = "SUFICIENTE";
             }
-            // let total_comprar = Math.ceil(
-            //   restainsumopedir / task.CANTIDAD_MINIMA
-            // );
-            // let cantidadtotalminima = total_comprar * task.CANTIDAD_MINIMA;
+
+            // let newColumnContent =
+            //   restainsumopedir >= 0
+            //     ? `<td><input type="text" placeholder="Nuevo Valor"></td>`
+            //     : "";
 
             template += `<tr codigorequerimiento="${task.COD_REQUERIMIENTO}">
                           <td data-titulo="INSUMOS"  style="text-align:center;" id_producto='${
@@ -166,8 +167,12 @@ $(function () {
                           <td data-titulo="CANTIDAD FALTANTE"  style="text-align:center;">${restainsumopedir}</td>
                             <td data-titulo="STOCK ACTUAL"  style="text-align:center;">${parseFloat(
                               task.STOCK_ACTUAL
-                            ).toFixed(2)}</td>
-                          </tr>`;
+                            ).toFixed(2)}</td>`;
+            // <td data-titulo="NUEVA COLUMNA" style="text-align:center;">${newColumnContent}</td>
+            if (restainsumopedir == "SUFICIENTE") {
+              template += `<td data-titulo="AGREGAR"><button id='insertarfilaorden' class="btn btn-success"><i class="icon-circle-with-plus"></i></button></td> `;
+            }
+            template += `</tr>`;
           });
           $("#tablainsumorequerido").html(template);
         } else {
@@ -207,7 +212,7 @@ $(function () {
                             <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${
                               task.COD_PRODUCTO_TEMP
                             }'>${task.DES_PRODUCTO_TEMP}</td>
-                            <td data-titulo="CANTIDAD POR COMPRA"  style="text-align:center;"><input value="${
+                            <td data-titulo="CANTIDAD POR COMPRA"  style="text-align:center;"><input id="cantidadacomprar" value="${
                               task.CANTIDAD_INSUMO_ENVASE
                             }" /></td>
                             <td data-titulo="PRECIO TOTAL"  style="text-align:center;">${
@@ -374,6 +379,85 @@ $(function () {
   });
 
   /*----------------------------------------------------------- */
+
+  /*---------------------------------- INSERTAR NUEVA FILA DE SUFICIENTE -------------- */
+  $(document).on("click", "#insertarfilaorden", function (e) {
+    e.preventDefault();
+
+    var filaactual = $(this).closest("tr");
+
+    var descripProducto = filaactual.find('td[data-titulo="INSUMOS"]').text();
+    var codigoProducto = filaactual
+      .find('td[data-titulo="INSUMOS"]')
+      .attr("id_producto");
+
+    var comprarcantidadexactatotal = filaactual
+      .find('td[data-titulo="CANTIDAD TOTAL"]')
+      .text();
+    const fechaahoraactual = new Date().toISOString().split("T")[0];
+
+    var nuevafila = `
+    <tr>
+    <td data-titulo="PROVEEDOR" style="text-align:center;"> 
+    <select id="selectproveedorescanmin" class="form-select">
+    <option value="none" selected disabled>Seleccione proveedor</option>
+    </select>
+    </td>
+    <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${codigoProducto}'>${descripProducto}</td>
+    <td data-titulo="CANTIDAD POR COMPRA" cantidadcomprarexacto='${comprarcantidadexactatotal}'><input id="cantidadacomprar"/></td>
+    <td data-titulo="PRECIO TOTAL"></td>
+    <td data-titulo="FECHA ENTREGA"><input class="fecha-entrega" id="fechaentrega" type="date" value="${fechaahoraactual}"/></td>
+    <td data-titulo="F.PAGO">
+    <select id="selectformapago" class="form-select" aria-label="Default select example">
+    <option value="E" selected>EFECTIVO</option>
+    <option value="D">DEPOSITO</option>
+    <option value="C">CREDITO</option>
+    </select>
+    </td>
+    <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
+    <td data-titulo="PRECIO" id_proveedor='' style="text-align:center;"></td>
+    <td data-titulo="ELIMINAR"><button id="deletef" class="btn btn-danger icon-trash eliminarfila"></button></td>
+    </tr>
+`;
+    const accion = "mostrarproveedorescanmin";
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: { accion: accion, cod_producto_fila: codigoProducto },
+      success: function (response) {
+        if (isJSON(response)) {
+          let tasks = JSON.parse(response);
+
+          // var selectElement = nuevafila.find("#selectproveedorescanmin");
+          // selectElement.empty();
+          // selectElement.append(
+          //   $("<option>", {
+          //     value: "none",
+          //     text: "Seleccione proveedor",
+          //     disabled: true,
+          //     selected: true,
+          //   })
+          // );
+
+          tasks.forEach((item) => {
+            $("#selectproveedorescanmin").append(
+              $("<option>", {
+                value: item.COD_PROVEEDOR,
+                text: item.NOM_PROVEEDOR,
+              })
+            );
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+    var tabla = $(this).closest("body").find("#tTotalinsumoscomprar");
+    tabla.find("#tablatotalinsumosrequeridoscomprar").prepend(nuevafila);
+  });
+  /*---------------------------------------------------------------------------------- */
+
   /*-------------------------- Dar click el boton y añade fila-------- */
   $(document).on("click", "#modalotrascantidades", function () {
     var currentRow = $(this).closest("tr");
@@ -895,20 +979,23 @@ $(function () {
       .attr("id_producto");
 
     var codigoproveedor = filaescr.find("td:eq(0) select").val();
-    console.log(codigoproveedor);
-    if (codigoproveedor == null) {
-      Swal.fire({
-        // title: "¡Guardado exitoso!",
-        text: "Necesita seleccionar un proveedor.",
-        icon: "info",
-      });
-      return;
+    // console.log(valorproveedor + "valor");
+    // console.log(codigoproveedor);
+    if (valorproveedor == null) {
+      if (codigoproveedor == null) {
+        Swal.fire({
+          // title: "¡Guardado exitoso!",
+          text: "Necesita seleccionar un proveedor.",
+          icon: "info",
+        });
+        return;
+      }
     }
-
     var duplicado = false;
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let proveedorcantidad = $(this).find("td:eq(0)").attr("codigo_proveedor");
       let producto = $(this).find("td:eq(1)").attr("id_producto");
+      console.log(proveedorcantidad + "producto " + producto);
 
       if (codigoproveedor == proveedorcantidad && valorproducto == producto) {
         duplicado = true;

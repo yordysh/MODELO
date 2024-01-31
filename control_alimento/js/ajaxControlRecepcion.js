@@ -44,19 +44,21 @@ $(function () {
           console.log(tasks);
           let template = ``;
           tasks.forEach((task) => {
+            let quitarceros = parseInt(selectrequerimiento, 10);
+            let requerimiento = "RQ-" + quitarceros;
             template += `<tr  class="hoverable">
                             <td class='encabezado-especial' data-titulo="FECHA DE INGRESO" >${task.FECHA_EMISION}</td>
-                            <td data-titulo="REQUERIMIENTO">${task.COD_REQUERIMIENTO}</td>
-                            <td data-titulo="HORA"><input class='form-control' type='time'/></td>
+                            <td data-titulo="REQUERIMIENTO" style="text-align:center;" codigoordencompra='${task.COD_ORDEN_COMPRA}'>${requerimiento}</td>
+                            <td data-titulo="HORA"><input class='form-control' type='time' min='08:00' max='11:00' id='horaInput'/></td>
                             <td data-titulo="CODIGO INTERNO">${task.COD_PRODUCCION}</td>
                             <td data-titulo="PRODUCTO" codigoproducto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CODIGO DE LOTE"><input class='codigolote' id='codigolote'maxlength='20' /></td>
+                            <td data-titulo="CODIGO DE LOTE"><input type="text" onkeypress="return /[A-Za-z0-9]/.test(String.fromCharCode(event.which))" class='codigolote' id='codigolote' maxlength='20' /></td>
                             <td data-titulo="F.V"><input type='date' class='fechavencimiento'/></td>
                             <td data-titulo="PROVEEDOR" codigoproveedor='${task.COD_PROVEEDOR}'>${task.NOM_PROVEEDOR}</td>
                             <td data-titulo="G.Remisión"> <input class="form-check-input remision" type="checkbox" value="" id="remision" style='margin-left:20px;'></td>
                             <td data-titulo="Boleta"><input class="form-check-input boleta" type="checkbox" value="" id="boleta" style='margin-left:20px;'></td>
                             <td data-titulo="Factura"><input class="form-check-input factura" type="checkbox" value="" id="factura" style='margin-left:20px;'></td>
-                            <td data-titulo="N° GUIA,BOLETA O FACTURA"><input /></td>
+                            <td data-titulo="N° GUIA,BOLETA O FACTURA"><input  maxlength='20'/></td>
                             <td data-titulo="Primario"><input class="form-check-input primario" type="checkbox" value="" id="primario"></td>
                             <td data-titulo="Secundario"><input class="form-check-input secundario" type="checkbox" value="" id="secundario"></td>
                             <td data-titulo="Saco"><input class="form-check-input saco" type="checkbox" value="" id="saco"></td>
@@ -129,7 +131,9 @@ $(function () {
     let datos = [];
     $("#tbrecepcion tbody tr").each(function () {
       let fechaingreso = $(this).find("td:eq(0)").text();
-      let codigorequerimiento = $(this).find("td:eq(1)").text();
+      let codigoordencompra = $(this)
+        .find("td:eq(1)")
+        .attr("codigoordencompra");
       let hora = $(this).find("td:eq(2) input").val();
       let codigointerno = $(this).find("td:eq(3)").text();
       let producto = $(this).find("td:eq(4)").attr("codigoproducto");
@@ -173,7 +177,7 @@ $(function () {
 
       datos.push({
         fechaingreso: fechaingreso,
-        codigorequerimiento: codigorequerimiento,
+        codigoordencompra: codigoordencompra,
         hora: hora,
         codigointerno: codigointerno,
         producto: producto,
@@ -307,10 +311,10 @@ $(function () {
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
-              $("#selectrequerimiento").val("none").trigger("change");
-              $("#tablaproductoscantidades").empty();
-              $("#tablacontrolrecepcion").empty();
-              $("#tablacontrolrecepcionobservacion").empty();
+              // $("#selectrequerimiento").val("none").trigger("change");
+              // $("#tablaproductoscantidades").empty();
+              // $("#tablacontrolrecepcion").empty();
+              // $("#tablacontrolrecepcionobservacion").empty();
             }
           });
         }
@@ -320,5 +324,16 @@ $(function () {
         $(".preloader").css("display", "none");
       },
     });
+  });
+
+  document.getElementById("horaInput").addEventListener("input", function () {
+    var horaSeleccionada = this.value;
+    var horaMinima = "08:00";
+    var horaMaxima = "11:00";
+
+    if (horaSeleccionada < horaMinima || horaSeleccionada > horaMaxima) {
+      alert("Selecciona una hora entre 08:00 y 11:00");
+      this.value = ""; // Limpiar la entrada si es inválida
+    }
   });
 });
