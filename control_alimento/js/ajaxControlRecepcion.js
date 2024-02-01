@@ -49,7 +49,7 @@ $(function () {
             template += `<tr  class="hoverable">
                             <td class='encabezado-especial' data-titulo="FECHA DE INGRESO" >${task.FECHA_EMISION}</td>
                             <td data-titulo="REQUERIMIENTO" style="text-align:center;" codigoordencompra='${task.COD_ORDEN_COMPRA}'>${requerimiento}</td>
-                            <td data-titulo="HORA"><input class='form-control' type='time' min='08:00' max='11:00' id='horaInput'/></td>
+                            <td data-titulo="HORA"><input class='form-control' type='time'  min="08:00" max="11:00" id='horaInput'/></td>
                             <td data-titulo="CODIGO INTERNO">${task.COD_PRODUCCION}</td>
                             <td data-titulo="PRODUCTO" codigoproducto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
                             <td data-titulo="CODIGO DE LOTE"><input type="text" onkeypress="return /[A-Za-z0-9]/.test(String.fromCharCode(event.which))" class='codigolote' id='codigolote' maxlength='20' /></td>
@@ -87,11 +87,15 @@ $(function () {
 
   /*----click en check y me muestre tabla----------------- */
 
-  function agregarFila(codigoprod, checkboxId) {
+  function agregarFila(despro, codigoprod, checkboxId) {
     var nuevafila = $("<tr></tr>");
 
+    var descripcionproducto = $(
+      `<td style="text-align:center;">${despro}</td>`
+    );
+
     var columnafecha = $(
-      `<td><input type="date" codigo_productos="${codigoprod}" codigoidcheck=${checkboxId}></td>`
+      `<td style="text-align:center;"><input type="date" codigo_productos="${codigoprod}" codigoidcheck=${checkboxId}></td>`
     );
     var columnaobservacion = $(
       `<td><textarea class="form-control" id="observacioneih_${checkboxId}" rows="2"></textarea></td>`
@@ -100,7 +104,12 @@ $(function () {
       `<td><textarea class="form-control" id="acccioncorrectivaeih_${checkboxId}" rows="2"></textarea></td>`
     );
 
-    nuevafila.append(columnafecha, columnaobservacion, columnaaccioncorrectiva);
+    nuevafila.append(
+      descripcionproducto,
+      columnafecha,
+      columnaobservacion,
+      columnaaccioncorrectiva
+    );
 
     $("#tbrecepcionobservacion tbody").append(nuevafila);
   }
@@ -113,16 +122,17 @@ $(function () {
     var celda = $(e.target);
     var codigoprod = celda.data("codigoprod");
     var checkboxId = celda.attr("id");
+    var despro = celda.closest("tr").find("td:eq(4)").text();
 
     if (celda.is(":checked")) {
       eliminarFila(checkboxId);
     } else {
-      agregarFila(codigoprod, checkboxId);
+      agregarFila(despro, codigoprod, checkboxId);
     }
   });
 
   /*---------------------------------------------------- */
-
+  /*------------------------- GUARDAR LA RECEPCION ------------------------------- */
   $("#guardarrecepcion").click((e) => {
     e.preventDefault();
     let idrequerimiento = $("#idrequerimientoorden").val();
@@ -325,15 +335,20 @@ $(function () {
       },
     });
   });
+  /*----------------------------------------------------------------------------- */
 
-  document.getElementById("horaInput").addEventListener("input", function () {
-    var horaSeleccionada = this.value;
-    var horaMinima = "08:00";
-    var horaMaxima = "11:00";
+  $(document).ready(function () {
+    const horaInput = $("#horaInput");
 
-    if (horaSeleccionada < horaMinima || horaSeleccionada > horaMaxima) {
-      alert("Selecciona una hora entre 08:00 y 11:00");
-      this.value = ""; // Limpiar la entrada si es inválida
-    }
+    horaInput.on("change", function () {
+      const selectedTime = horaInput.val();
+      const minTime = "08:00";
+      const maxTime = "11:00";
+
+      if (selectedTime < minTime || selectedTime > maxTime) {
+        alert("Por favor, selecciona un horario entre las 8:00 y las 11:00");
+        horaInput.val("");
+      }
+    });
   });
 });

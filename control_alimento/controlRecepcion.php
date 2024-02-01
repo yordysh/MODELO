@@ -181,6 +181,7 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                             <table id="tbrecepcionobservacion" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
+                                        <th class="thtitulo">PRODUCTO</th>
                                         <th class="thtitulo">FECHA</th>
                                         <th class="thtitulo">OBSERVACIÓN</th>
                                         <th class="thtitulo">ACCIÓN CORRECTIVA</th>

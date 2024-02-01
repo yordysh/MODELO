@@ -2626,7 +2626,7 @@ class m_almacen
                                   INNER JOIN T_TMPORDEN_COMPRA_ITEMTEMP CI ON CI.COD_ORDEN_COMPRA=OC.COD_ORDEN_COMPRA 
                                   INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=OC.COD_PROVEEDOR
                                   INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=CI.COD_PRODUCTO
-                                  WHERE OC.COD_REQUERIMIENTO='$cod_formulacion' AND CI.ESTADO='P'");
+                                  WHERE OC.COD_REQUERIMIENTO='$cod_formulacion' AND CI.ESTADO='P' ORDER BY OC.COD_PROVEEDOR");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
