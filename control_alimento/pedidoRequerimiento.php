@@ -195,6 +195,7 @@ $mostrarrequerimiento = $mostrar->MostrarTPMRequerimiento();
                         <table id="tTotalinsumoscomprar" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
+                                    <th class="thtitulo" scope="col">ITEM</th>
                                     <th class="thtitulo" scope="col">PROVEEDOR</th>
                                     <th class="thtitulo" scope="col">PRODUCTO</th>
                                     <th class="thtitulo" scope="col">CANTIDAD POR COMPRA</th>

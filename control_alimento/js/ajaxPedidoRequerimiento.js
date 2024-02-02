@@ -200,16 +200,18 @@ $(function () {
           let tasks = JSON.parse(response);
           console.log(tasks);
           let template = ``;
-
+          let i = 1;
           tasks.forEach((task) => {
             if (task.COD_ORDEN_COMPRA) {
               let insumo_pedir = (
                 task.CANTIDAD_INSUMO_ENVASE - task.STOCK_ACTUAL
               ).toFixed(3);
-              if (insumo_pedir > 0) {
-                template += `<tr codigorequerimientototal="${
-                  task.COD_REQUERIMIENTO_TEMP
-                }">
+              // console.log(insumo_pedir);
+              // if (insumo_pedir > 0) {
+              template += `<tr codigorequerimientototal="${
+                task.COD_REQUERIMIENTO_TEMP
+              }">
+              <td data-titulo="ITEM"  style="text-align:center;">${i}</td>
               <td data-titulo="PROVEEDOR"  style="text-align:center;" codigo_proveedor='${
                 task.COD_PROVEEDOR_TEMP
               }'>${task.NOM_PROVEEDOR_TEMP}</td>
@@ -242,12 +244,16 @@ $(function () {
                             <td data-titulo="PRECIO" id_proveedor='${
                               task.COD_PROVEEDOR_TEMP
                             }' style="text-align:center;">${parseFloat(
-                  task.PRECIO_MINIMO
-                ).toFixed(2)}</td>
+                task.PRECIO_MINIMO
+              ).toFixed(2)}</td>
  
-                          <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button></td>
+                          <td data-titulo="OTRAS CANTIDADES">
+                          <button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button>
+                          <button id='eliminarfilaorden' class="btn btn-danger"><i class="icon-trash"></i></button>
+                          </td>
                           </tr>`;
-              }
+              i++;
+              // }
             } else {
               let insumo_pedir = (task.CANTIDAD - task.STOCK_ACTUAL).toFixed(3);
               let total_comprar = Math.ceil(
@@ -274,6 +280,7 @@ $(function () {
                 template += `<tr codigorequerimientototal="${
                   task.COD_REQUERIMIENTO
                 }">
+                <td data-titulo="ITEM"  style="text-align:center;">${i}</td>
                 <td data-titulo="PROVEEDOR"  style="text-align:center;" codigo_proveedor='${
                   task.COD_PROVEEDOR
                 }'>${task.NOM_PROVEEDOR}</td>
@@ -308,6 +315,7 @@ $(function () {
                 }</td>
                 <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button></td>
                             </tr>`;
+                i++;
               }
             }
           });
@@ -342,18 +350,23 @@ $(function () {
     });
     $("#tablatotalinsumosrequeridoscomprar").empty();
   });
-
+  /*--------------------------------------- ELIMINA LAFILA CUAANDO HAY COD_ORDEN_COMPRA--- */
+  $(document).on("click", "#eliminarfilaorden", function () {
+    var filas = $(this).closest("tr");
+    filas.remove();
+  });
+  /*------------------------------------------------------------------------------------- */
   /*--------------- VERIFICA SI ES EL MISMO PROVEEDOR PONER FECHA ------ */
   $("body").on("change", ".fecha-entrega", function () {
     var fechaentrega = $(this).val();
     var fila = $(this).closest("tr");
 
-    let codigoproveedor = fila.find("td:eq(0)").attr("codigo_proveedor");
+    let codigoproveedor = fila.find("td:eq(1)").attr("codigo_proveedor");
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
-      let id_proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
+      let id_proveedor = $(this).find("td:eq(1)").attr("codigo_proveedor");
 
       if (codigoproveedor === id_proveedor) {
-        let fechita = $(this).find("td:eq(4) input").val(fechaentrega);
+        let fechita = $(this).find("td:eq(5) input").val(fechaentrega);
       }
     });
   });
@@ -365,20 +378,21 @@ $(function () {
     var filapago = $(this).closest("tr");
 
     let codigoproveedorpago = filapago
-      .find("td:eq(0)")
+      .find("td:eq(1)")
       .attr("codigo_proveedor");
 
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       if ($(this).is(filapago)) {
       } else {
-        let id_proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
-        let comboFechas = $(this).find("td:eq(5) select");
+        let id_proveedor = $(this).find("td:eq(1)").attr("codigo_proveedor");
+        let comboFechas = $(this).find("td:eq(6) select");
 
         if (codigoproveedorpago === id_proveedor) {
           comboFechas.prop("disabled", true).val(fpago);
-        } else {
-          comboFechas.prop("disabled", false);
         }
+        // else {
+        //   comboFechas.prop("disabled", false);
+        // }
       }
     });
   });
@@ -645,21 +659,21 @@ $(function () {
 
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let id_proveedor;
-      let proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
+      let proveedor = $(this).find("td:eq(1)").attr("codigo_proveedor");
 
       if (proveedor != undefined) {
         id_proveedor = proveedor;
       } else {
-        id_proveedor = $(this).find("td:eq(0) select").val();
+        id_proveedor = $(this).find("td:eq(1) select").val();
       }
 
-      let id_producto_insumo = $(this).find("td:eq(1)").attr("id_producto");
-      let cantidad_producto_insumo = $(this).find("td:eq(2) input").val();
+      let id_producto_insumo = $(this).find("td:eq(2)").attr("id_producto");
+      let cantidad_producto_insumo = $(this).find("td:eq(3) input").val();
       // let cantidad_total_minima = $(this).find("td:eq(2)").text();
-      let monto = $(this).find("td:eq(3)").text();
-      let fechaentrega = $(this).find("td:eq(4) input").val();
-      let formapago = $(this).find("td:eq(5)").find("select").val();
-      let preciomin = $(this).find("td:eq(7)").text();
+      let monto = $(this).find("td:eq(4)").text();
+      let fechaentrega = $(this).find("td:eq(5) input").val();
+      let formapago = $(this).find("td:eq(6)").find("select").val();
+      let preciomin = $(this).find("td:eq(8)").text();
 
       fechaentregaalert.push(fechaentrega);
       valoresCapturadosVenta.push({
@@ -1200,13 +1214,13 @@ $(function () {
     let fechaentregaalert = [];
 
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
-      let proveedorcantidad = $(this).find("td:eq(0)").attr("codigo_proveedor");
-      let nombrepro = $(this).find("td:eq(0)").text();
+      let proveedorcantidad = $(this).find("td:eq(1)").attr("codigo_proveedor");
+      let nombrepro = $(this).find("td:eq(1)").text();
 
       if (proveedorcantidad != undefined) {
         id_proveedor = proveedorcantidad;
       } else {
-        id_proveedor = $(this).find("td:eq(0) select").val();
+        id_proveedor = $(this).find("td:eq(1) select").val();
       }
 
       let valorcantidad = $(this)
@@ -1218,7 +1232,7 @@ $(function () {
         .attr("id_producto");
       let nomproducto = $(this).find('td[data-titulo="PRODUCTO"]').text();
 
-      let codigoproveedorcant = $(this).find("td:eq(0) select").val();
+      let codigoproveedorcant = $(this).find("td:eq(1) select").val();
 
       if (!valorcantidad) {
         Swal.fire({
@@ -1292,22 +1306,22 @@ $(function () {
 
     $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
       let id_proveedor;
-      let proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
+      let proveedor = $(this).find("td:eq(1)").attr("codigo_proveedor");
 
       if (proveedor != undefined) {
         id_proveedor = proveedor;
       } else {
-        id_proveedor = $(this).find("td:eq(0) select").val();
+        id_proveedor = $(this).find("td:eq(1) select").val();
       }
 
-      let id_producto_insumo = $(this).find("td:eq(1)").attr("id_producto");
-      let nombreproducto = $(this).find("td:eq(1)").text();
-      let cantidad_producto_insumo = $(this).find("td:eq(2) input").val();
+      let id_producto_insumo = $(this).find("td:eq(2)").attr("id_producto");
+      let nombreproducto = $(this).find("td:eq(2)").text();
+      let cantidad_producto_insumo = $(this).find("td:eq(3) input").val();
       // let cantidad_total_minima = $(this).find("td:eq(2)").text();
-      let monto = $(this).find("td:eq(3)").text();
-      let fechaentrega = $(this).find("td:eq(4) input").val();
-      let formapago = $(this).find("td:eq(5)").find("select").val();
-      let preciomin = $(this).find("td:eq(7)").text();
+      let monto = $(this).find("td:eq(4)").text();
+      let fechaentrega = $(this).find("td:eq(5) input").val();
+      let formapago = $(this).find("td:eq(6)").find("select").val();
+      let preciomin = $(this).find("td:eq(8)").text();
 
       fechaentregaalert.push(fechaentrega);
       valoresCapturadosVentaTemp.push({

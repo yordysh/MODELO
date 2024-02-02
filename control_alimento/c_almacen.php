@@ -3022,6 +3022,7 @@ class c_almacen
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
             } else {
+
                 $datos = $mostrar->MostrarSiCompra($cod_formulacion);
 
                 $json = array();
@@ -3136,7 +3137,7 @@ class c_almacen
                     }
                 }
 
-                if ($sumacantidad < $cantidad_producto) {
+                if ($sumacantidad < $cantidad_producto && $sumacantidad != 0) {
 
                     $valorescorrectos1 = ['estado' => 'errorcantidad', 'nombreproducto' => $nombreproducto, 'cantidad' => $cantidad_producto];
                     array_push($valorescorrectos, $valorescorrectos1);
@@ -3213,7 +3214,7 @@ class c_almacen
                     }
                 }
 
-                if ($sumacantidad < $cantidad_producto) {
+                if ($sumacantidad < $cantidad_producto && $sumacantidad != 0) {
 
                     $valorescorrectos1 = ['estado' => 'errorcantidad', 'nombreproducto' => $nombreproducto, 'cantidad' => $cantidad_producto];
                     array_push($valorescorrectos, $valorescorrectos1);
@@ -3266,7 +3267,7 @@ class c_almacen
                         echo "Error al decodificar JSON: " . json_last_error_msg();
                     }
                 }
-                // var_dump("producto" . $nombreproducto . "sumainsumosenvase" . $sumacantidad . " sumapedida" . $cantidad_producto);
+                //var_dump("producto" . $nombreproducto . "sumainsumosenvase" . $sumacantidad . " sumapedida" . $cantidad_producto);
 
                 if (floatval($sumacantidad) < floatval($cantidad_producto) && $sumacantidad != 0) {
 
@@ -3983,6 +3984,7 @@ class c_almacen
                         "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
                         "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
                         "COD_PRODUCTO" => trim($row->COD_PRODUCTO),
+                        "COD_PRODUCCION" => trim($row->COD_PRODUCCION),
                         "ABR_PRODUCTO" => trim($row->ABR_PRODUCTO),
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,

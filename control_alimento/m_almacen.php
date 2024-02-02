@@ -4811,7 +4811,7 @@ class m_almacen
     try {
 
       $stmOrdenCompra = $this->bd->prepare("SELECT TC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA,TC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,TC.COD_REQUERIMIENTOTEMP AS COD_REQUERIMIENTOTEMP,TC.FECHA_REALIZADA AS FECHA_REALIZADA,
-                                              TC.COD_PROVEEDOR AS COD_PROVEEDOR,TCI.COD_PRODUCTO AS COD_PRODUCTO,TP.ABR_PRODUCTO AS ABR_PRODUCTO, TP.COD_PRODUCCION AS COD_PRODUCCION,
+                                              TC.COD_PROVEEDOR AS COD_PROVEEDOR,TCI.COD_PRODUCTO AS COD_PRODUCTO,TP.COD_PRODUCCION AS COD_PRODUCCION,TP.ABR_PRODUCTO AS ABR_PRODUCTO, TP.COD_PRODUCCION AS COD_PRODUCCION,
                                               TP.DES_PRODUCTO AS DES_PRODUCTO,TCI.CANTIDAD_INSUMO_ENVASE AS CANTIDAD_INSUMO_ENVASE, TCI.ESTADO AS ESTADO FROM T_TMPORDEN_COMPRA TC
                                               INNER JOIN T_TMPORDEN_COMPRA_ITEM TCI ON TC.COD_ORDEN_COMPRA=TCI.COD_ORDEN_COMPRA
                                               INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TCI.COD_PRODUCTO WHERE TCI.ESTADO='P' AND CAST(TC.FECHA_REALIZADA AS DATE) <= CAST(GETDATE() AS DATE)");
@@ -5543,7 +5543,7 @@ class m_almacen
       TI.CANTIDAD_INSUMO_ENVASE AS CANTIDAD_INSUMO_ENVASE,TI.MONTO AS MONTO, OC.COD_PROVEEDOR AS COD_PROVEEDOR,TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR,CONVERT(VARCHAR, GETDATE(), 23) AS FECHA_EMISION  FROM T_TMPORDEN_COMPRA OC 
       INNER JOIN T_TMPORDEN_COMPRA_ITEM TI ON OC.COD_ORDEN_COMPRA=TI.COD_ORDEN_COMPRA
       INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TI.COD_PRODUCTO
-      INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=OC.COD_PROVEEDOR WHERE OC.COD_REQUERIMIENTO='$selectrequerimiento' AND CAST(OC.FECHA_REALIZADA AS DATE) <= CAST(GETDATE() AS DATE)");
+      INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=OC.COD_PROVEEDOR WHERE OC.COD_REQUERIMIENTO='$selectrequerimiento' AND CAST(OC.FECHA_REALIZADA AS DATE) <= CAST(GETDATE() AS DATE) AND TI.ESTADO='P'");
 
       $mostrarvalorcomprobante->execute();
       $datosvalorcomprobante = $mostrarvalorcomprobante->fetchAll(PDO::FETCH_OBJ);
@@ -5580,7 +5580,7 @@ class m_almacen
       // exit;
       if ($datosTabla) {
 
-        $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, CODIGO_REQUERIMIENTO)                                                       VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
+        $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, COD_REQUERIMIENTO)                                                       VALUES('$codigorecepcion','$codpersonal','$idrequerimiento')");
         $insertarecepcioncompras->execute();
 
         foreach ($datos as $dato) {
@@ -5787,6 +5787,15 @@ class m_almacen
             )");
           $querylote->execute();
 
+          $stockanterior = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$producto'");
+          $stockanterior->execute();
+          $cantidadstock = $stockanterior->fetch(PDO::FETCH_ASSOC);
+          $canstock = $cantidadstock['STOCK_ACTUAL'];
+          $sumatotalstock = floatval($canstock + $cantidadminima);
+
+
+          $actualizoalmaceninsumoi = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET STOCK_ACTUAL='$sumatotalstock',STOCK_ANTERIOR='$canstock' WHERE COD_PRODUCTO='$producto'");
+          $actualizoalmaceninsumoi->execute();
 
           $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET CANTIDAD_LLEGADA='$cantidadminima' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
           $actualizo->execute();
@@ -5834,8 +5843,8 @@ class m_almacen
           $insertarobs->execute();
         }
 
-        $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='F'");
-        $actualizo->execute();
+        // $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='F'");
+        // $actualizo->execute();
       } else {
 
         $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, COD_REQUERIMIENTO)
@@ -5973,6 +5982,15 @@ class m_almacen
             $ausencia = 'A';
           }
 
+          $stockanteriorx = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$producto'");
+          $stockanteriorx->execute();
+          $cantidadstockx = $stockanteriorx->fetch(PDO::FETCH_ASSOC);
+          $canstockx = $cantidadstockx['STOCK_ACTUAL'];
+          $sumatotalstockx = floatval($canstockx + $cantidadminima);
+
+
+          $actualizoalmaceninsumoi = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET STOCK_ACTUAL='$sumatotalstockx',STOCK_ANTERIOR='$canstockx' WHERE COD_PRODUCTO='$producto'");
+          $actualizoalmaceninsumoi->execute();
 
           $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_ORDEN_COMPRA,FECHA_INGRESO, HORA, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO,COD_PROVEEDOR, GUIA, BOLETA, FACTURA, GBF, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, CANTIDAD_MINIMA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
                                                     VALUES('$codigorecepcion','$codigoordencompra',CONVERT(DATE, '$fechaingresoC', 103),'$hora','$codigolote','$producto',CAST('$fechaven' AS DATE),'$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminima','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
@@ -6612,7 +6630,6 @@ class m_almacen
 
       $stmt = $this->bd->prepare("UPDATE T_TMPCANTIDAD_MINIMA SET CANTIDAD_MINIMA ='$cantidadMinima',
                                    PRECIO_PRODUCTO='$precioproducto', TIPO_MONEDA='$selectmoneda' WHERE COD_CANTIDAD_MINIMA = '$codminimo'");
-      var_dump($stmt);
       $update = $stmt->execute();
 
       $update = $this->bd->commit();

@@ -252,7 +252,10 @@ $(function () {
             new Option(task.NOM_PROVEEDOR, task.COD_PROVEEDOR, true, true)
           );
           $("#cantidadMinima").val(task.CANTIDAD_MINIMA);
-          $("#precioproducto").val(task.PRECIO_PRODUCTO);
+          var precioProducto = parseFloat(
+            task.PRECIO_PRODUCTO.replace(",", ".")
+          );
+          $("#precioproducto").val(precioProducto);
           $("#taskId").val(task.COD_CANTIDAD_MINIMA);
           $("#selectmoneda").val(task.TIPO_MONEDA);
           edit = true;

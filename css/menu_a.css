@@ -358,8 +358,11 @@ a {
 /*-----------------------------------*/
 
 /*------------Alerta estilo ancho td----------------------*/
+.tableta {
+  width: 50rem;
+}
 .td-producto {
-  width: 40%;
+  width: 50%;
 }
 
 .td-cantidad {
@@ -374,7 +377,11 @@ input#checkedvalor {
   margin-left: 45px;
 }
 /*-------------------------------------------------------*/
-
+/*--------------- PARA PONER ANCHO ALERTA COMPRA ORDEN -----*/
+.custom-width-class {
+  width: 58rem !important;
+}
+/*------------------------------------------------------*/
 @media screen and (max-width: 950px) {
   /*-------------- Estilo de MENUBAR ---------------------*/
 

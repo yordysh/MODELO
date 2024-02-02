@@ -925,10 +925,11 @@ $(function () {
           if (task.length > 0) {
             // let task = JSON.parse(response);
             codrequerimiento = task[0].COD_REQUERIMIENTO;
-            let htmlContent = "<h1>¡Listo para producción!</h1>";
-            htmlContent += "<table>";
+            let htmlContent = "<h1>¡Lista de productos!</h1>";
+            htmlContent += "<table class='tableta'>";
             htmlContent += "<thead>";
             htmlContent += "<tr>";
+            htmlContent += "<th style='margin-rigth:15px;'>Codigo</th>";
             htmlContent += "<th style='margin-rigth:15px;'> Producto</th>";
             htmlContent += "<th> Cantidad pedida</th>";
             // htmlContent += "<th> Cantidad llegada</th>";
@@ -950,8 +951,10 @@ $(function () {
                 "'  codigoproveedororden='" +
                 producto.COD_PROVEEDOR +
                 "'>" +
-                producto.ABR_PRODUCTO +
+                producto.COD_PRODUCCION +
                 "</td>";
+              htmlContent +=
+                "<td class='td-nombre'>" + producto.DES_PRODUCTO + "</td>";
               htmlContent +=
                 "<td class='td-cantidad'>" +
                 producto.CANTIDAD_INSUMO_ENVASE +
@@ -968,6 +971,9 @@ $(function () {
               html: htmlContent,
               confirmButtonText: "Ok",
               showCloseButton: true,
+              customClass: {
+                popup: "custom-width-class",
+              },
             }).then((result) => {
               if (result.isConfirmed) {
                 window.location.href = "controlRecepcion.php";

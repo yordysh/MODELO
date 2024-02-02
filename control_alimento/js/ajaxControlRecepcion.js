@@ -49,7 +49,7 @@ $(function () {
             template += `<tr  class="hoverable">
                             <td class='encabezado-especial' data-titulo="FECHA DE INGRESO" >${task.FECHA_EMISION}</td>
                             <td data-titulo="REQUERIMIENTO" style="text-align:center;" codigoordencompra='${task.COD_ORDEN_COMPRA}'>${requerimiento}</td>
-                            <td data-titulo="HORA"><input class='form-control' type='time'  min="08:00" max="11:00" id='horaInput'/></td>
+                            <td data-titulo="HORA"><input class='form-control' type='time'  min="10:00:00" max="11:00:00" id='horaInput' class='hora'/></td>
                             <td data-titulo="CODIGO INTERNO">${task.COD_PRODUCCION}</td>
                             <td data-titulo="PRODUCTO" codigoproducto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
                             <td data-titulo="CODIGO DE LOTE"><input type="text" onkeypress="return /[A-Za-z0-9]/.test(String.fromCharCode(event.which))" class='codigolote' id='codigolote' maxlength='20' /></td>
@@ -217,14 +217,34 @@ $(function () {
         ausencia: ausencia,
       });
     });
-    console.log(datos);
+
+    let hora;
+    let gbf;
+    let guia;
+    let boleta;
+    let factura;
     let codigolote;
     let fechavencimiento;
+    let horaEmpty = false;
     let iscodigoloteEmpty = false;
     let isFechavencimientoEmpty = false;
+    let gbfEmpty = false;
+    let facturaEmpty = false;
+
     $("#tbrecepcion tbody tr").each(function () {
+      hora = $(this).find("td:eq(2) input").val();
       codigolote = $(this).find("td:eq(5) input.codigolote").val();
       fechavencimiento = $(this).find("td:eq(6) input.fechavencimiento").val();
+
+      guia = $(this).find("td:eq(8) input:checkbox").is(":checked");
+      boleta = $(this).find("td:eq(9) input:checkbox").is(":checked");
+      factura = $(this).find("td:eq(10) input:checkbox").is(":checked");
+      gbf = $(this).find("td:eq(11) input").val();
+      console.log(factura);
+      if (hora === "") {
+        horaEmpty = true;
+      }
+
       if (codigolote === "") {
         iscodigoloteEmpty = true;
       }
@@ -232,12 +252,27 @@ $(function () {
       if (fechavencimiento === "") {
         isFechavencimientoEmpty = true;
       }
+      if (factura === false && boleta === false && guia === false) {
+        facturaEmpty = true;
+      }
+
+      if (gbf === "") {
+        gbfEmpty = true;
+      }
     });
     if (!idrequerimiento) {
       Swal.fire({
         icon: "info",
         title: "Seleccione un requerimiento",
         text: "Debe de seleccionar un requerimiento.",
+      });
+      return;
+    }
+    if (horaEmpty) {
+      Swal.fire({
+        icon: "info",
+        title: "Inserte una hora",
+        text: "Debe de seleccionar una hora.",
       });
       return;
     }
@@ -254,6 +289,22 @@ $(function () {
         icon: "info",
         title: "Inserte una fecha",
         text: "Debe seleccionar una fecha en al menos una fila.",
+      });
+      return;
+    }
+    if (facturaEmpty) {
+      Swal.fire({
+        icon: "info",
+        title: "Darle check",
+        text: "Debe de darle check obligatorio GIA/BOLETA/FACTURA a cualquiera",
+      });
+      return;
+    }
+    if (gbfEmpty) {
+      Swal.fire({
+        icon: "info",
+        title: "Inserte numero de guia, boleta factura",
+        text: "Debe insertar un valor en el recuadro.",
       });
       return;
     }
@@ -338,17 +389,23 @@ $(function () {
   /*----------------------------------------------------------------------------- */
 
   $(document).on("blur", "#horaInput", function () {
-    // Get the value of the time input
     var enteredTime = $(this).val();
+    var enteredDate = new Date("2000-01-01 " + enteredTime);
 
-    // Check if the entered time is greater than or equal to 08:00 and less than 11:00
-    var isValidTime = isValidTimeRange(enteredTime, "08:00", "11:00");
-
-    // If the entered time is not within the specified range, display an alert or perform your desired action
-    if (!isValidTime) {
-      alert("Please enter a time between 08:00 and 11:00.");
-      // You can also set focus back to the input if needed
-      // $(this).focus();
+    var minHour = 8;
+    var maxHour = 11;
+    if (
+      !(enteredDate.getHours() >= minHour && enteredDate.getHours() < maxHour)
+    ) {
+      // console.log("Hora dentro del rango permitido");
+      alert("la hora debe de ser mayor o igual a 8:00 am y menor  a 11:00 am");
+      $(this).val("");
     }
+    // else {
+    //   // Do something else if the time is outside the range
+    //   alert("la hora debe de ser mayor o igual a 8:00 am y menor  a 11:00 am");
+    //   $(this).val("");
+    //   // console.log("Hora fuera del rango permitido");
+    // }
   });
 });
