@@ -337,18 +337,18 @@ $(function () {
   });
   /*----------------------------------------------------------------------------- */
 
-  $(document).ready(function () {
-    const horaInput = $("#horaInput");
+  $(document).on("blur", "#horaInput", function () {
+    // Get the value of the time input
+    var enteredTime = $(this).val();
 
-    horaInput.on("change", function () {
-      const selectedTime = horaInput.val();
-      const minTime = "08:00";
-      const maxTime = "11:00";
+    // Check if the entered time is greater than or equal to 08:00 and less than 11:00
+    var isValidTime = isValidTimeRange(enteredTime, "08:00", "11:00");
 
-      if (selectedTime < minTime || selectedTime > maxTime) {
-        alert("Por favor, selecciona un horario entre las 8:00 y las 11:00");
-        horaInput.val("");
-      }
-    });
+    // If the entered time is not within the specified range, display an alert or perform your desired action
+    if (!isValidTime) {
+      alert("Please enter a time between 08:00 and 11:00.");
+      // You can also set focus back to the input if needed
+      // $(this).focus();
+    }
   });
 });

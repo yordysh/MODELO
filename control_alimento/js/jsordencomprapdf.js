@@ -126,7 +126,10 @@ function exportardatoscomprapdf(obj) {
     let yPos;
     $.each(material, function (j, k) {
       yPos = 90 + j * 15;
-      let valorsumacantidad = parseFloat(k[4]);
+
+      let prod = parseFloat(k[3]) * parseFloat(k[5]);
+      let prodtotal = Math.ceil(prod * 100) / 100;
+      let valorsumacantidad = parseFloat(prodtotal);
       // Cuerpo de la factura
       doc.setFontSize(10);
       doc.text("Producto", 10, 80);
@@ -139,7 +142,7 @@ function exportardatoscomprapdf(obj) {
       doc.text(k[2], 10, yPos);
       doc.text(k[3], 90, yPos);
       doc.text(k[5], 120, yPos);
-      doc.text(k[4], 170, yPos);
+      doc.text(prodtotal.toString(), 170, yPos);
       // Línea divisoria entre las filas
       yPos += 5; // ajuste de vertical
       doc.line(10, yPos, 200, yPos);
@@ -149,6 +152,10 @@ function exportardatoscomprapdf(obj) {
     // Total
     igv = suma * 0.18;
     sumaigv = igv + suma;
+
+    igv = igv.toFixed(2);
+    sumaigv = sumaigv.toFixed(2);
+
     doc.setFont("helvetica", "bold");
     doc.text("Sub Total:", 150, yPos + 10);
     doc.text("IGV 18%:", 150, yPos + 15);

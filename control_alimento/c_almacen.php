@@ -3016,6 +3016,7 @@ class c_almacen
                         "MONTO" => $temporal->MONTO,
                         "PRECIO_MINIMO" => $temporal->PRECIO_MINIMO,
                         "CANTIDAD_INSUMO_ENVASE" => $temporal->CANTIDAD_INSUMO_ENVASE,
+                        "STOCK_ACTUAL" => $temporal->STOCK_ACTUAL,
                     );
                 }
                 $jsonstring = json_encode($json);
@@ -3253,8 +3254,6 @@ class c_almacen
                 $cantidad_producto = $insumoArray['valorpedir'];
 
                 $sumacantidad = 0;
-
-                $sumacantidad = 0;
                 foreach ($valorcapturado as $valorcapturadostring) {
                     $insumoArrays = json_decode($valorcapturadostring, true);
                     if ($insumoArrays !== null) {
@@ -3267,8 +3266,9 @@ class c_almacen
                         echo "Error al decodificar JSON: " . json_last_error_msg();
                     }
                 }
+                // var_dump("producto" . $nombreproducto . "sumainsumosenvase" . $sumacantidad . " sumapedida" . $cantidad_producto);
 
-                if ($sumacantidad < $cantidad_producto) {
+                if (floatval($sumacantidad) < floatval($cantidad_producto) && $sumacantidad != 0) {
 
                     $valorescorrectos1 = ['estado' => 'errorcantidad', 'nombreproducto' => $nombreproducto, 'cantidad' => $cantidad_producto];
                     array_push($valorescorrectos, $valorescorrectos1);
@@ -3276,25 +3276,6 @@ class c_almacen
             } else {
                 echo "Error al decodificar JSON: " . json_last_error_msg();
             }
-
-            // for ($j = 0; $j < $countinsumo; $j++) {
-            //     $nombreproducto = trim($valoresdeinsumos[$j]['nombreproducto']);
-            //     $id_producto = trim($valoresdeinsumos[$j]['productocod']);
-            //     $cantidad_producto = $valoresdeinsumos[$j]['valorpedir'];
-            // $sumacantidad = 0;
-            // for ($i = 0; $i < $count; $i++) {
-            //     $id_producto_insumo = trim($valorcapturado[$i]['id_producto_insumo']);
-            //     $cantidad_producto_insumo = $valorcapturado[$i]['cantidad_producto_insumo'];
-            //     if ($id_producto_insumo == $id_producto) {
-            //         $sumacantidad = $sumacantidad + $cantidad_producto_insumo;
-            //     }
-            // }
-
-            // if ($sumacantidad < $cantidad_producto) {
-
-            //     $valorescorrectos1 = ['estado' => 'errorcantidad', 'nombreproducto' => $nombreproducto, 'cantidad' => $cantidad_producto];
-            //     array_push($valorescorrectos, $valorescorrectos1);
-            // }
         }
 
 

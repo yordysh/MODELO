@@ -203,9 +203,13 @@ $(function () {
 
           tasks.forEach((task) => {
             if (task.COD_ORDEN_COMPRA) {
-              template += `<tr codigorequerimientototal="${
-                task.COD_REQUERIMIENTO_TEMP
-              }">
+              let insumo_pedir = (
+                task.CANTIDAD_INSUMO_ENVASE - task.STOCK_ACTUAL
+              ).toFixed(3);
+              if (insumo_pedir > 0) {
+                template += `<tr codigorequerimientototal="${
+                  task.COD_REQUERIMIENTO_TEMP
+                }">
               <td data-titulo="PROVEEDOR"  style="text-align:center;" codigo_proveedor='${
                 task.COD_PROVEEDOR_TEMP
               }'>${task.NOM_PROVEEDOR_TEMP}</td>
@@ -238,11 +242,12 @@ $(function () {
                             <td data-titulo="PRECIO" id_proveedor='${
                               task.COD_PROVEEDOR_TEMP
                             }' style="text-align:center;">${parseFloat(
-                task.PRECIO_MINIMO
-              ).toFixed(2)}</td>
+                  task.PRECIO_MINIMO
+                ).toFixed(2)}</td>
  
                           <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button></td>
                           </tr>`;
+              }
             } else {
               let insumo_pedir = (task.CANTIDAD - task.STOCK_ACTUAL).toFixed(3);
               let total_comprar = Math.ceil(
@@ -299,7 +304,7 @@ $(function () {
                               }' style="text-align:center;">${
                   task.PRECIO_PRODUCTO == 0
                     ? "Falta cantidad minina"
-                    : parseFloat(task.PRECIO_PRODUCTO).toFixed(2)
+                    : parseFloat(task.PRECIO_PRODUCTO).toFixed(3)
                 }</td>
                 <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button></td>
                             </tr>`;
@@ -823,19 +828,19 @@ $(function () {
             }
           });
         }
-        for (const element of respuesta) {
-          if (element.estado == "errorcantidad") {
-            await Swal.fire({
-              text:
-                "En el producto " +
-                element.nombreproducto +
-                " necesita poner la suma de cantidades mayor a " +
-                element.cantidad,
-              icon: "info",
-              confirmButtonText: "Aceptar",
-            });
-          }
-        }
+        // for (const element of respuesta) {
+        //   if (element.estado == "errorcantidad") {
+        //     await Swal.fire({
+        //       text:
+        //         "En el producto " +
+        //         element.nombreproducto +
+        //         " necesita poner la suma de cantidades mayor a " +
+        //         element.cantidad,
+        //       icon: "info",
+        //       confirmButtonText: "Aceptar",
+        //     });
+        //   }
+        // }
       },
       error: function (error) {
         console.log("ERROR " + error);
@@ -1240,29 +1245,29 @@ $(function () {
         return;
       }
 
-      const accion = "mostrarcantidadpreciocalculo";
+      const accionz = "mostrarcantidadpreciocalculo";
       $.ajax({
         url: "./c_almacen.php",
         type: "POST",
         data: {
-          accion: accion,
+          accion: accionz,
           valorcan: valorcantidad,
           valorproveedor: proveedorcantidad,
           valorproducto: codigoproducto,
           codigoproveedor: codigoproveedorcant,
         },
         success: function (response) {
+          // console.log("object");
           if (isJSON(response)) {
+            console.log("object");
             let task = JSON.parse(response);
-            // console.log(task);
+            console.log(task);
             let valorcambiadoprecio = $(this)
               .find("td:eq(3)")
               .text(task[0].PRECIO_PAGAR);
-
             let valorpreciomin = $(this)
               .find("td:eq(7)")
               .text(task[0].PRECIO_PRODUCTO);
-
             let valorcantidadx = parseFloat(task[0].CANTIDAD_MINIMA);
             if (parseFloat(valorcantidad) < valorcantidadx) {
               Swal.fire({

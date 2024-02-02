@@ -89,7 +89,7 @@ $dataproductosproveedor = $mostrar->MostrarProductoProveedores();
                                 </div>
                                 <div class="mb-3 col-md-4">
                                     <label class="form-label">Precio por (kg o unidades)</label>
-                                    <input class="form-control" type="number" id="precioproducto" required></input>
+                                    <input class="form-control" type="text" onkeypress="return /[0-9.]/.test(String.fromCharCode(event.which))" id="precioproducto" required></input>
                                 </div>
                                 <div class="mb-3 col-md-4">
                                     <label class="form-label">MONEDA</label>

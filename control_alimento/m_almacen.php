@@ -2622,10 +2622,11 @@ class m_almacen
     try {
       $stm = $this->bd->prepare("SELECT OC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA,OC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,OC.FECHA_REALIZADA AS FECHA_REALIZADA,OC.HORA AS HORA,OC.COD_PROVEEDOR AS COD_PROVEEDOR,
                                   TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR ,OC.F_PAGO AS F_PAGO,CI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO, CI.CANTIDAD_INSUMO_ENVASE AS CANTIDAD_INSUMO_ENVASE,
-                                  CI.MONTO AS MONTO, CI.PRECIO_MINIMO AS PRECIO_MINIMO FROM T_TMPORDEN_COMPRATEMP OC 
+                                  CI.MONTO AS MONTO, CI.PRECIO_MINIMO AS PRECIO_MINIMO, TA.STOCK_ACTUAL AS STOCK_ACTUAL FROM T_TMPORDEN_COMPRATEMP OC 
                                   INNER JOIN T_TMPORDEN_COMPRA_ITEMTEMP CI ON CI.COD_ORDEN_COMPRA=OC.COD_ORDEN_COMPRA 
                                   INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=OC.COD_PROVEEDOR
                                   INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=CI.COD_PRODUCTO
+                                  INNER JOIN T_TMPALMACEN_INSUMOS TA ON TA.COD_PRODUCTO=CI.COD_PRODUCTO
                                   WHERE OC.COD_REQUERIMIENTO='$cod_formulacion' AND CI.ESTADO='P' ORDER BY OC.COD_PROVEEDOR");
       $stm->execute();
       $datos = $stm->fetchAll(PDO::FETCH_OBJ);
@@ -6608,9 +6609,10 @@ class m_almacen
       // $nombre = 'LBS-PHS-FR-01';
 
       // if ($repetir == 0) {
+
       $stmt = $this->bd->prepare("UPDATE T_TMPCANTIDAD_MINIMA SET CANTIDAD_MINIMA ='$cantidadMinima',
                                    PRECIO_PRODUCTO='$precioproducto', TIPO_MONEDA='$selectmoneda' WHERE COD_CANTIDAD_MINIMA = '$codminimo'");
-
+      var_dump($stmt);
       $update = $stmt->execute();
 
       $update = $this->bd->commit();
