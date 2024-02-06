@@ -393,19 +393,20 @@ $(function () {
     var enteredDate = new Date("2000-01-01 " + enteredTime);
 
     var minHour = 8;
-    var maxHour = 11;
+    var maxHour = 12;
     if (
       !(enteredDate.getHours() >= minHour && enteredDate.getHours() < maxHour)
     ) {
       // console.log("Hora dentro del rango permitido");
-      alert("la hora debe de ser mayor o igual a 8:00 am y menor  a 11:00 am");
-      $(this).val("");
+      Swal.fire({
+        icon: "info",
+        title: "Introducir una hora correcta",
+        text: "La hora debe de ser mayor o igual a 8:00 am y menor  a 11:00 am",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $(this).val("");
+        }
+      });
     }
-    // else {
-    //   // Do something else if the time is outside the range
-    //   alert("la hora debe de ser mayor o igual a 8:00 am y menor  a 11:00 am");
-    //   $(this).val("");
-    //   // console.log("Hora fuera del rango permitido");
-    // }
   });
 });

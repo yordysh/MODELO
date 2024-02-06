@@ -267,9 +267,11 @@ $mostrarrequerimiento = $mostrar->MostrarTPMRequerimiento();
                             </select>
                             <!-- </div> -->
                             <div>
-                                <!-- <a class="btn btn-success" href="#" onclick="generarPDF()">VISUALIZAR ORDEN COMPRA</a> -->
                                 <button id="generarOrdenPDF" class="btn btn-success margin">VISUALIZAR ORDEN COMPRA</button>
                             </div>
+                            <!-- <div>                           
+                                <button id="verpdf" class="btn btn-success margin">VER CONFORMIDAD</button>
+                            </div> -->
                         </div>
                     </div>
                 </div>

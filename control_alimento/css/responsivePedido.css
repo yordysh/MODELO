@@ -251,12 +251,14 @@ section {
   border-radius: 40%;
   border: none;
 }
-
+/* button#modalotrascantidades {
+  margin-left: 35px;
+} */
 /* --------------------------------------------------------------- */
 
-td {
+/* td {
   width: 50%;
-}
+} */
 .table-responsive table {
   border-collapse: collapse;
 }

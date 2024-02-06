@@ -440,6 +440,10 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_mostrar_si_hay_compra($cod_formulacion);
     echo $respuesta;
+} elseif ($accion == 'mostrarordencompraadicional') {
+    $buscar = $_POST['buscar'];
+    $respuesta = c_almacen::c_mostrar_orden_compra_adicional($buscar);
+    echo $respuesta;
 } elseif ($accion == 'insertarordencompraitem') {
     if (isset($_POST['union'])) {
         $valoresdeinsumos = $_POST['valoresdeinsumos'];
@@ -481,6 +485,26 @@ if ($accion == 'insertar') {
         } else {
 
             $respuesta = c_almacen::c_insertar_orden_compra_temp($idRequerimiento, $valorcapturado, $valoresdeinsumos);
+        }
+        // $respuesta = c_almacen::c_insertar_orden_compra_item($union, $file, $idRequerimiento,  $codpersonal);
+        // echo $respuesta;
+    }
+} elseif ($accion == 'procesoordenadicionada') {
+
+    if (isset($_POST['valorcapturado'])) {
+        // $valoresdeinsumos = $_POST['valoresdeinsumos'];
+        $valorcapturado = $_POST['valorcapturado'];
+        // $idRequerimiento = trim($_POST['idRequerimiento']);
+
+        if (isset($_FILES['file'])) {
+
+            $dataimagenesfile = $_FILES['file'];
+            $codigoproveedorimagenes = $_POST['codigoproveedorimagenes'];
+
+            $respuesta = c_almacen::c_insertar_orden_compra_temp_imagen($idRequerimiento, $valorcapturado, $valoresdeinsumos, $dataimagenesfile, $codigoproveedorimagenes);
+        } else {
+
+            $respuesta = c_almacen::c_insertar_orden_compra_adicionada($valorcapturado);
         }
         // $respuesta = c_almacen::c_insertar_orden_compra_item($union, $file, $idRequerimiento,  $codpersonal);
         // echo $respuesta;
@@ -754,6 +778,12 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_guardar_control_recepcion($datos, $datosTabla, $idrequerimiento, $codpersonal);
     echo $respuesta;
+} elseif ($accion == 'mostrarimagenproveedor') {
+    $codigorequerimiento = $_POST['codigorequerimiento'];
+    $codigoproveedor = $_POST['codigoproveedor'];
+
+    $respuesta = c_almacen::c_mostrar_imagenes_proveedor($codigorequerimiento, $codigoproveedor);
+    echo $respuesta;
 } elseif ($accion == 'insertaryactualizaralerta') {
 
     $capturavalor = $_POST['capturavalor'];
@@ -854,6 +884,11 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_envases_formula($codigoformulacionenvase, $codigoproductoenvase);
     echo $respuesta;
 }
+
+
+
+
+
 
 
 
@@ -2133,23 +2168,6 @@ class c_almacen
                 };
             }
         }
-
-        // $insert2 = $alert->execute();
-
-        // if ($insert2) {
-        //     $response = array(
-        //         'success' => true,
-        //         'message' => 'Estado actualizado correctamente'
-        //     );
-        // } else {
-        //     $response = array(
-        //         'success' => false,
-        //         // 'message' => 'Error al actualizar el estado: ' . $conn->error
-        //     );
-        // }
-
-        // echo json_encode($response);
-
     }
     static function c_checkbox_confirma_control_pos()
     {
@@ -2952,55 +2970,12 @@ class c_almacen
 
             $mostrar = new m_almacen();
             $datatemporal = $mostrar->MostrarValorOrdenCompraTemp($cod_formulacion);
+            // $dataimagenes = $mostrar->MostrarImagenesOrdenCompraTemp($cod_formulacion);
 
             $datos = $mostrar->MostrarSiCompra($cod_formulacion);
 
             if (count($datatemporal) > 0) {
 
-                // $json = array();
-                // foreach ($datos as $row) {
-                //     $foundMatch = false;
-
-                //     foreach ($datatemporal as $temporal) {
-                //         if (
-                //             $temporal->COD_REQUERIMIENTO == $row->COD_REQUERIMIENTO &&
-                //             $temporal->COD_PRODUCTO == $row->COD_PRODUCTO &&
-                //             $temporal->COD_PROVEEDOR == $row->COD_PROVEEDOR
-                //         ) {
-                //             $json[] = array(
-                //                 "COD_ORDEN_COMPRA" => $temporal->COD_ORDEN_COMPRA,
-                //                 "COD_REQUERIMIENTO_TEMP" => $temporal->COD_REQUERIMIENTO,
-                //                 "FECHA_REALIZADA" => $temporal->FECHA_REALIZADA,
-                //                 "HORA" => $temporal->HORA,
-                //                 "COD_PROVEEDOR_TEMP" => $temporal->COD_PROVEEDOR,
-                //                 "NOM_PROVEEDOR_TEMP" => $temporal->NOM_PROVEEDOR,
-                //                 "F_PAGO" => $temporal->F_PAGO,
-                //                 "COD_PRODUCTO_TEMP" => $temporal->COD_PRODUCTO,
-                //                 "DES_PRODUCTO_TEMP" => $temporal->DES_PRODUCTO,
-                //                 "MONTO" => $temporal->MONTO,
-                //                 "PRECIO_MINIMO" => $temporal->PRECIO_MINIMO,
-                //                 "CANTIDAD_INSUMO_ENVASE" => $temporal->CANTIDAD_INSUMO_ENVASE,
-                //             );
-
-                //             $foundMatch = true;
-                //             break;
-                //         }
-                //     }
-
-                //     if (!$foundMatch) {
-                //         $json[] = array(
-                //             "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-                //             "COD_PRODUCTO" => $row->COD_PRODUCTO,
-                //             "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                //             "CANTIDAD" => $row->CANTIDAD,
-                //             "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
-                //             "CANTIDAD_MINIMA" => $row->CANTIDAD_MINIMA,
-                //             "PRECIO_PRODUCTO" => $row->PRECIO_PRODUCTO,
-                //             "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
-                //             "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
-                //         );
-                //     }
-                // }
                 $json = array();
                 foreach ($datatemporal as $temporal) {
                     $json[] = array(
@@ -3048,6 +3023,82 @@ class c_almacen
                 $json = array();
                 $jsonstring = json_encode($json);
                 echo $jsonstring;
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    static function c_mostrar_orden_compra_adicional($buscar)
+    {
+        try {
+
+            if (!empty($buscar)) {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarOrdenGuardada($buscar);
+
+                if (!$datos) {
+                    $json = array();
+                    $jsonstring = json_encode($json);
+                    echo $jsonstring;
+                } else {
+
+                    $json = array();
+                    foreach ($datos as $row) {
+                        $json[] = array(
+                            "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                            "COD_REQUERIMIENTO_TEMP" => $row->COD_REQUERIMIENTO,
+                            "FECHA_REALIZADA" => $row->FECHA_REALIZADA,
+                            "HORA" => $row->HORA,
+                            "COD_PROVEEDOR_TEMP" => $row->COD_PROVEEDOR,
+                            "NOM_PROVEEDOR_TEMP" => $row->NOM_PROVEEDOR,
+                            "F_PAGO" => $row->F_PAGO,
+                            "COD_PRODUCTO_TEMP" => $row->COD_PRODUCTO,
+                            "DES_PRODUCTO_TEMP" => $row->DES_PRODUCTO,
+                            "MONTO" => $row->MONTO,
+                            "PRECIO_MINIMO" => $row->PRECIO_MINIMO,
+                            "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,
+                            "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
+                            "CANTIDAD_LLEGADA" => $row->CANTIDAD_LLEGADA,
+                        );
+                    }
+
+                    $jsonstring = json_encode($json);
+                    echo $jsonstring;
+                }
+            } else {
+                $mostrar = new m_almacen();
+                $datos = $mostrar->MostrarOrdenGuardada($buscar);
+
+                if (!$datos) {
+                    $json = array();
+                    $jsonstring = json_encode($json);
+                    echo $jsonstring;
+                } else {
+
+                    $json = array();
+                    foreach ($datos as $row) {
+                        $json[] = array(
+                            "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                            "COD_REQUERIMIENTO_TEMP" => $row->COD_REQUERIMIENTO,
+                            "FECHA_REALIZADA" => $row->FECHA_REALIZADA,
+                            "HORA" => $row->HORA,
+                            "COD_PROVEEDOR_TEMP" => $row->COD_PROVEEDOR,
+                            "NOM_PROVEEDOR_TEMP" => $row->NOM_PROVEEDOR,
+                            "F_PAGO" => $row->F_PAGO,
+                            "COD_PRODUCTO_TEMP" => $row->COD_PRODUCTO,
+                            "DES_PRODUCTO_TEMP" => $row->DES_PRODUCTO,
+                            "MONTO" => $row->MONTO,
+                            "PRECIO_MINIMO" => $row->PRECIO_MINIMO,
+                            "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,
+                            "STOCK_ACTUAL" => $row->STOCK_ACTUAL,
+                            "CANTIDAD_LLEGADA" => $row->CANTIDAD_LLEGADA,
+                        );
+                    }
+
+                    $jsonstring = json_encode($json);
+                    echo $jsonstring;
+                }
             }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
@@ -3305,6 +3356,20 @@ class c_almacen
         // };
     }
 
+
+    static function c_insertar_orden_compra_adicionada($valorcapturado)
+    {
+        $m_formula = new m_almacen();
+
+        $respuestaorde = $m_formula->InsertarOrdenCompraItemAdicionada($valorcapturado);
+        if ($respuestaorde) {
+            $response = array('estado' => 'ok');
+            echo json_encode($response);
+        } else {
+            $response = array('estado' => 'error');
+            echo json_encode($response);
+        }
+    }
     static function c_insertar_cantidad_minima($selectCantidadminima, $cantidadMinima)
     {
         $m_formula = new m_almacen();
@@ -3988,6 +4053,7 @@ class c_almacen
                         "ABR_PRODUCTO" => trim($row->ABR_PRODUCTO),
                         "DES_PRODUCTO" => $row->DES_PRODUCTO,
                         "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,
+                        "CANTIDAD_LLEGADA" => $row->CANTIDAD_LLEGADA,
                     );
                 }
                 $jsonstring = json_encode($json);
@@ -4247,7 +4313,7 @@ class c_almacen
             $cab = $mostrar->MostrarReporteOrdenCompra($idrequerimientotemp);
             for ($i = 0; $i < count($cab); $i++) {
                 $item = $mostrar->MostrarFacturaItemPDF($cab[$i][0]);
-                $valor = $mostrar->MostrarImagenFactura($cab[$i][0]);
+                $valor = $mostrar->MostrarImagenFactura($cab[$i][1], $cab[$i][5]);
 
                 $imagen = [];
                 for ($j = 0; $j < count($valor); $j++) {
@@ -4288,11 +4354,11 @@ class c_almacen
                 $cabecera[$i][3] = trim($cabecera[$i][3]);
                 $cabecera[$i][2] = convFecSistema($cabecera[$i][2]);
                 $item = $mostrar->MostrarFacturaItemTempPDF($cabecera[$i][0]);
-                $valor = $mostrar->MostrarImagenFactura($cabecera[$i][0]);
+                $valor = $mostrar->MostrarImagenFactura($cabecera[$i][1], $cabecera[$i][5]);
 
                 $imagen = [];
                 for ($j = 0; $j < count($valor); $j++) {
-                    $imagen[] =  base64_encode($valor[$j][2]);
+                    $imagen[] =  base64_encode($valor[$j][1]);
                 }
 
                 if (isset($imagen)) {
@@ -4563,6 +4629,38 @@ class c_almacen
             return "error";
         };
         // }
+    }
+
+
+    static function c_mostrar_imagenes_proveedor($codigorequerimiento, $codigoproveedor)
+    {
+        try {
+
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarImagenesOrdenCompraTemp($codigorequerimiento, $codigoproveedor);
+
+            if (!$datos) {
+                throw new Exception("Hubo un error en la consulta");
+            }
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    // "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    // "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                    // "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    // "COD_PRODUCCION" => $row->COD_PRODUCCION,
+                    // "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    // "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+                    // "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
+                    // "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,
+                    // "FECHA_EMISION" => convFecSistema($row->FECHA_EMISION),
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
     }
 
 
@@ -4959,6 +5057,8 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
+
+
 
 
     /*funciones agregadas */

@@ -361,8 +361,8 @@ a {
 .tableta {
   width: 50rem;
 }
-.td-producto {
-  width: 50%;
+.td-nombre {
+  width: 40%;
 }
 
 .td-cantidad {

@@ -251,6 +251,7 @@ $(function () {
                           <button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button>
                           <button id='eliminarfilaorden' class="btn btn-danger"><i class="icon-trash"></i></button>
                           </td>
+                          <td data-titulo="Ver"><button id='verimagenes' class="btn btn-info"><i class="icon-eye" style="color:white !important;"></i></button></td>
                           </tr>`;
               i++;
               // }
@@ -313,8 +314,8 @@ $(function () {
                     ? "Falta cantidad minina"
                     : parseFloat(task.PRECIO_PRODUCTO).toFixed(3)
                 }</td>
-                <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button></td>
-                            </tr>`;
+                <td data-titulo="OTRAS CANTIDADES"><button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button></td>        
+                </tr>`;
                 i++;
               }
             }
@@ -350,6 +351,7 @@ $(function () {
     });
     $("#tablatotalinsumosrequeridoscomprar").empty();
   });
+
   /*--------------------------------------- ELIMINA LAFILA CUAANDO HAY COD_ORDEN_COMPRA--- */
   $(document).on("click", "#eliminarfilaorden", function () {
     var filas = $(this).closest("tr");
@@ -417,6 +419,7 @@ $(function () {
 
     var nuevafila = `
     <tr>
+    <td></td>
     <td data-titulo="PROVEEDOR" style="text-align:center;"> 
     <select id="selectproveedorescanmin" class="form-select">
     <option value="none" selected disabled>Seleccione proveedor</option>
@@ -477,6 +480,38 @@ $(function () {
   });
   /*---------------------------------------------------------------------------------- */
 
+  /*-------------------Ver imagen de proveedor------------------------------------ */
+  $(document).on("click", "#verimagenes", function (e) {
+    e.preventDefault();
+
+    var filaproveedor = $(this).closest("tr");
+    var codigorequerimiento = filaproveedor.attr("codigorequerimientototal");
+    var codigoproveedor = filaproveedor
+      .find("td:eq(1)")
+      .attr("codigo_proveedor");
+
+    const accionimage = "mostrarimagenproveedor";
+
+    $.ajax({
+      url: "./c_almacen.php",
+      type: "POST",
+      data: {
+        accion: accionimage,
+        codigorequerimiento: codigorequerimiento,
+        codigoproveedor: codigoproveedor,
+      },
+      success: function (response) {
+        if (isJSON(response)) {
+          let tasks = JSON.parse(response);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error al cargar los datos de la tabla:", error);
+      },
+    });
+  });
+  /*----------------------------------------------------------------------------- */
+
   /*-------------------------- Dar click el boton y añade fila-------- */
   $(document).on("click", "#modalotrascantidades", function () {
     var currentRow = $(this).closest("tr");
@@ -492,6 +527,7 @@ $(function () {
 
     var newRow = `
         <tr>
+        <td></td>
         <td data-titulo="PROVEEDOR" style="text-align:center;"> 
         <select id="selectproveedorescanmin" class="form-select">
         <option value="none" selected disabled>Seleccione proveedor</option>
@@ -997,7 +1033,7 @@ $(function () {
       .find('td[data-titulo="PRODUCTO"]')
       .attr("id_producto");
 
-    var codigoproveedor = filaescr.find("td:eq(0) select").val();
+    var codigoproveedor = filaescr.find("td:eq(1) select").val();
     // console.log(valorproveedor + "valor");
     // console.log(codigoproveedor);
     if (valorproveedor == null) {
@@ -1010,24 +1046,24 @@ $(function () {
         return;
       }
     }
-    var duplicado = false;
-    $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
-      let proveedorcantidad = $(this).find("td:eq(0)").attr("codigo_proveedor");
-      let producto = $(this).find("td:eq(1)").attr("id_producto");
-      console.log(proveedorcantidad + "producto " + producto);
+    // var duplicado = false;
+    // $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
+    //   let proveedorcantidad = $(this).find("td:eq(1)").attr("codigo_proveedor");
+    //   let producto = $(this).find("td:eq(2)").attr("id_producto");
+    //   console.log(proveedorcantidad + "producto " + producto);
 
-      if (codigoproveedor == proveedorcantidad && valorproducto == producto) {
-        duplicado = true;
-        return false;
-      }
-    });
+    //   if (codigoproveedor == proveedorcantidad && valorproducto == producto) {
+    //     duplicado = true;
+    //     return false;
+    //   }
+    // });
 
-    if (duplicado) {
-      Swal.fire({
-        text: "El proveedor seleccionado ya existe en la tabla.",
-        icon: "warning",
-      });
-    }
+    // if (duplicado) {
+    //   Swal.fire({
+    //     text: "El proveedor seleccionado ya existe en la tabla.",
+    //     icon: "warning",
+    //   });
+    // }
     const accion = "mostrarcantidadpreciocalculo";
     $.ajax({
       url: "./c_almacen.php",
@@ -1044,11 +1080,11 @@ $(function () {
           let task = JSON.parse(response);
           // console.log(task);
           let valorcambiadoprecio = filaescr
-            .find("td:eq(3)")
+            .find("td:eq(4)")
             .text(task[0].PRECIO_PAGAR);
 
           let valorpreciomin = filaescr
-            .find("td:eq(7)")
+            .find("td:eq(8)")
             .text(task[0].PRECIO_PRODUCTO);
 
           // let valorcantidad = parseFloat(task[0].CANTIDAD_MINIMA);
@@ -1462,10 +1498,10 @@ $(function () {
               // $("#taskcodrequerimiento").val("");
               // $("#taskcodrequhiddenvalidar").val("");
               // $("#mensajecompleto").css("display", "none");
-              // tablainsumorequerido.empty();
-              // tablainsumos.empty();
-              // tablatotal.empty();
-              // mostrarRequerimientoTotal();
+              tablainsumorequerido.empty();
+              tablainsumos.empty();
+              tablatotal.empty();
+              mostrarRequerimientoTotal();
               mostrarPendientes();
             }
           });
