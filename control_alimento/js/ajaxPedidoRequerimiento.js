@@ -13,34 +13,6 @@ $(function () {
 
   mostrarPendientes();
   mostrarRequerimientoTotal();
-  //------------- MENU BAR JS ---------------//
-  // let nav = document.querySelector(".nav"),
-  //   searchIcon = document.querySelector("#searchIcon"),
-  //   navOpenBtn = document.querySelector(".navOpenBtn"),
-  //   navCloseBtn = document.querySelector(".navCloseBtn");
-
-  // searchIcon.addEventListener("click", () => {
-  //   nav.classList.toggle("openSearch");
-  //   nav.classList.remove("openNav");
-  //   if (nav.classList.contains("openSearch")) {
-  //     return searchIcon.classList.replace(
-  //       "icon-magnifying-glass",
-  //       "icon-cross"
-  //     );
-  //   }
-  //   searchIcon.classList.replace("icon-cross", "icon-magnifying-glass");
-  // });
-
-  // navOpenBtn.addEventListener("click", () => {
-  //   nav.classList.add("openNav");
-  //   nav.classList.remove("openSearch");
-  // });
-
-  // navCloseBtn.addEventListener("click", () => {
-  //   nav.classList.remove("openNav");
-  // });
-
-  //----------------------------------------------------------------//
 
   function mostrarPendientes() {
     const accion = "buscarpendientesrequeridostotal";
@@ -194,11 +166,9 @@ $(function () {
         cod_formulacion: cod_formulacion,
       },
       success: function (response) {
-        // let t = JSON.parse(response);
-        // console.log(t);
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
-          console.log(tasks);
+          // console.log(tasks);
           let template = ``;
           let i = 1;
           tasks.forEach((task) => {
@@ -208,6 +178,7 @@ $(function () {
               ).toFixed(3);
               // console.log(insumo_pedir);
               // if (insumo_pedir > 0) {
+
               template += `<tr codigorequerimientototal="${
                 task.COD_REQUERIMIENTO_TEMP
               }">
@@ -240,7 +211,7 @@ $(function () {
                             }>CREDITO</option>
                             </select>
                             </td>
-                            <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
+                            <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled><i class="icon-camera"></i></button></td>
                             <td data-titulo="PRECIO" id_proveedor='${
                               task.COD_PROVEEDOR_TEMP
                             }' style="text-align:center;">${parseFloat(
@@ -251,7 +222,6 @@ $(function () {
                           <button id='modalotrascantidades' class="btn btn-success"><i class="icon-circle-with-plus"></i></button>
                           <button id='eliminarfilaorden' class="btn btn-danger"><i class="icon-trash"></i></button>
                           </td>
-                          <td data-titulo="Ver"><button id='verimagenes' class="btn btn-info"><i class="icon-eye" style="color:white !important;"></i></button></td>
                           </tr>`;
               i++;
               // }
@@ -318,6 +288,27 @@ $(function () {
                 </tr>`;
                 i++;
               }
+              /*--------------- VERIFICA SI ES EL MISMO PROVEEDOR PONER FECHA ------ */
+              $("body").on("change", ".fecha-entrega", function () {
+                var fechaentrega = $(this).val();
+                var fila = $(this).closest("tr");
+
+                let codigoproveedor = fila
+                  .find("td:eq(1)")
+                  .attr("codigo_proveedor");
+                $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
+                  let id_proveedor = $(this)
+                    .find("td:eq(1)")
+                    .attr("codigo_proveedor");
+
+                  if (codigoproveedor === id_proveedor) {
+                    let fechita = $(this)
+                      .find("td:eq(5) input")
+                      .val(fechaentrega);
+                  }
+                });
+              });
+              /*-----------------------------------------------------------*/
             }
           });
           if (template === "") {
@@ -358,23 +349,9 @@ $(function () {
     filas.remove();
   });
   /*------------------------------------------------------------------------------------- */
-  /*--------------- VERIFICA SI ES EL MISMO PROVEEDOR PONER FECHA ------ */
-  $("body").on("change", ".fecha-entrega", function () {
-    var fechaentrega = $(this).val();
-    var fila = $(this).closest("tr");
 
-    let codigoproveedor = fila.find("td:eq(1)").attr("codigo_proveedor");
-    $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
-      let id_proveedor = $(this).find("td:eq(1)").attr("codigo_proveedor");
-
-      if (codigoproveedor === id_proveedor) {
-        let fechita = $(this).find("td:eq(5) input").val(fechaentrega);
-      }
-    });
-  });
-  /*-----------------------------------------------------------*/
   /*--------------------------------------------------------- */
-
+  /*------------------ Activa si es Deposito bloquea los demas de mismo proveedor------------ */
   $("body").on("change", "#selectformapago", function () {
     var fpago = $(this).val();
     var filapago = $(this).closest("tr");
@@ -398,8 +375,7 @@ $(function () {
       }
     });
   });
-
-  /*----------------------------------------------------------- */
+  /*---------------------------------------------------------------------------------------- */
 
   /*---------------------------------- INSERTAR NUEVA FILA DE SUFICIENTE -------------- */
   $(document).on("click", "#insertarfilaorden", function (e) {
@@ -479,38 +455,6 @@ $(function () {
     tabla.find("#tablatotalinsumosrequeridoscomprar").prepend(nuevafila);
   });
   /*---------------------------------------------------------------------------------- */
-
-  /*-------------------Ver imagen de proveedor------------------------------------ */
-  $(document).on("click", "#verimagenes", function (e) {
-    e.preventDefault();
-
-    var filaproveedor = $(this).closest("tr");
-    var codigorequerimiento = filaproveedor.attr("codigorequerimientototal");
-    var codigoproveedor = filaproveedor
-      .find("td:eq(1)")
-      .attr("codigo_proveedor");
-
-    const accionimage = "mostrarimagenproveedor";
-
-    $.ajax({
-      url: "./c_almacen.php",
-      type: "POST",
-      data: {
-        accion: accionimage,
-        codigorequerimiento: codigorequerimiento,
-        codigoproveedor: codigoproveedor,
-      },
-      success: function (response) {
-        if (isJSON(response)) {
-          let tasks = JSON.parse(response);
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error al cargar los datos de la tabla:", error);
-      },
-    });
-  });
-  /*----------------------------------------------------------------------------- */
 
   /*-------------------------- Dar click el boton y añade fila-------- */
   $(document).on("click", "#modalotrascantidades", function () {
@@ -850,9 +794,10 @@ $(function () {
               // $("#taskcodrequerimiento").val("");
               // $("#taskcodrequhiddenvalidar").val("");
               // $("#mensajecompleto").css("display", "none");
-              // tablainsumorequerido.empty();
-              // tablainsumos.empty();
-              // tablatotal.empty();
+              tablainsumorequerido.empty();
+              tablainsumos.empty();
+              $("#tablaimagenes").empty();
+              tablatotal.empty();
               // mostrarRequerimientoTotal();
               mostrarPendientes();
             }
@@ -1446,6 +1391,7 @@ $(function () {
         codigoproveedorimagenes.push({ codigoproveedor });
       }
     });
+    // const accionverificar="versihay";
 
     const formData = new FormData();
     formData.append("accion", "insertarordencompraitemtemporal");
@@ -1501,6 +1447,7 @@ $(function () {
               tablainsumorequerido.empty();
               tablainsumos.empty();
               tablatotal.empty();
+              $("#tablaimagenes").empty();
               mostrarRequerimientoTotal();
               mostrarPendientes();
             }

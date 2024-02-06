@@ -778,12 +778,6 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_guardar_control_recepcion($datos, $datosTabla, $idrequerimiento, $codpersonal);
     echo $respuesta;
-} elseif ($accion == 'mostrarimagenproveedor') {
-    $codigorequerimiento = $_POST['codigorequerimiento'];
-    $codigoproveedor = $_POST['codigoproveedor'];
-
-    $respuesta = c_almacen::c_mostrar_imagenes_proveedor($codigorequerimiento, $codigoproveedor);
-    echo $respuesta;
 } elseif ($accion == 'insertaryactualizaralerta') {
 
     $capturavalor = $_POST['capturavalor'];
@@ -4629,38 +4623,6 @@ class c_almacen
             return "error";
         };
         // }
-    }
-
-
-    static function c_mostrar_imagenes_proveedor($codigorequerimiento, $codigoproveedor)
-    {
-        try {
-
-            $mostrar = new m_almacen();
-            $datos = $mostrar->MostrarImagenesOrdenCompraTemp($codigorequerimiento, $codigoproveedor);
-
-            if (!$datos) {
-                throw new Exception("Hubo un error en la consulta");
-            }
-            $json = array();
-            foreach ($datos as $row) {
-                $json[] = array(
-                    // "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
-                    // "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
-                    // "COD_PRODUCTO" => $row->COD_PRODUCTO,
-                    // "COD_PRODUCCION" => $row->COD_PRODUCCION,
-                    // "DES_PRODUCTO" => $row->DES_PRODUCTO,
-                    // "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
-                    // "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
-                    // "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,
-                    // "FECHA_EMISION" => convFecSistema($row->FECHA_EMISION),
-                );
-            }
-            $jsonstring = json_encode($json);
-            echo $jsonstring;
-        } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
-        }
     }
 
 

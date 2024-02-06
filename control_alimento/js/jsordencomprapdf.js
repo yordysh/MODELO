@@ -171,7 +171,7 @@ function exportardatoscomprapdf(obj) {
       let imagesPerRow = 3; // Número máximo de imágenes por fila
       let imagesInCurrentRow = 0;
       let offsetY = 0;
-      let pageHeight = 297; // Altura de la página en unidades del documento (ajusta según tus necesidades)
+      let pageHeight = 298; // Altura de la página en unidades del documento (ajusta según tus necesidades)
       let maxImageHeight = 70; // Altura máxima de la imagen (ajusta según tus necesidades)
       let availableSpace = pageHeight - (20 + yPos + offsetY); // Espacio disponible en la página
       let currentPage = doc.internal.getCurrentPageInfo().pageNumber;
@@ -200,7 +200,7 @@ function exportardatoscomprapdf(obj) {
           logo,
           "PNG",
           offsetX,
-          20 + yPos + offsetY,
+          30 + yPos + offsetY,
           50,
           maxImageHeight
         );
