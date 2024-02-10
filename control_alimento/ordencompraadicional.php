@@ -67,7 +67,9 @@ $mostrar = new m_almacen();
                                 <tr>
                                     <th class="thtitulo" scope="col">PROVEEDOR</th>
                                     <th class="thtitulo" scope="col">PRODUCTO</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD RECIBIDA</th>
                                     <th class="thtitulo" scope="col">CANTIDAD COMPRADA</th>
+                                    <th class="thtitulo" scope="col">CANTIDAD POR RECIBIR</th>
                                     <th class="thtitulo" scope="col">PRECIO TOTAL</th>
                                     <th class="thtitulo" scope="col">FECHA ENTREGA</th>
                                     <th class="thtitulo" scope="col">F.PAGO</th>

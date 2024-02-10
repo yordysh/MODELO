@@ -27,16 +27,23 @@ $(function () {
           tasks.forEach((task) => {
             template += `<tr codigorequerimientototal="${
               task.COD_REQUERIMIENTO_TEMP
-            }">
+            }" codigoordencompra="${task.COD_ORDEN_COMPRA}">
               <td data-titulo="PROVEEDOR"  style="text-align:center;" codigo_proveedor='${
                 task.COD_PROVEEDOR_TEMP
               }'>${task.NOM_PROVEEDOR_TEMP}</td>
                             <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${
                               task.COD_PRODUCTO_TEMP
                             }'>${task.DES_PRODUCTO_TEMP}</td>
-                            <td data-titulo="CANTIDAD COMPRADA"  style="text-align:center;"><input id="cantidadacomprar" value="${
+                            <td data-titulo="CANTIDAD RECIBIDA"  style="text-align:center;"><input id="cantidadacomprar" value="${parseFloat(
                               task.CANTIDAD_LLEGADA
-                            }" /></td>
+                            ).toFixed(2)}" disabled/></td>
+                            <td data-titulo="CANTIDAD COMPRADA"  style="text-align:center;">${parseFloat(
+                              task.CANTIDAD_INSUMO_ENVASE
+                            ).toFixed(2)}</td>
+                            <td data-titulo="CANTIDAD POR RECIBIR"  style="text-align:center;">${parseFloat(
+                              task.CANTIDAD_INSUMO_ENVASE -
+                                task.CANTIDAD_LLEGADA
+                            ).toFixed(2)}</td>
                             <td data-titulo="PRECIO TOTAL"  style="text-align:center;">${
                               task.MONTO
                             }</td>
@@ -56,7 +63,7 @@ $(function () {
                             }>CREDITO</option>
                             </select>
                             </td>
-                            <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
+                            <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled><i class="icon-camera"></i></button></td>
                             <td data-titulo="PRECIO" id_proveedor='${
                               task.COD_PROVEEDOR_TEMP
                             }' style="text-align:center;">${parseFloat(
@@ -153,6 +160,8 @@ $(function () {
     var currentRow = $(this).closest("tr");
     var codigoRequerimiento = currentRow.attr("codigorequerimientototal");
     var desProducto = currentRow.find('td[data-titulo="PRODUCTO"]').text();
+    var cancomprada = currentRow.find("td:eq(3)").text();
+    var canrecibir = currentRow.find("td:eq(4)").text();
     var codProducto = currentRow
       .find('td[data-titulo="PRODUCTO"]')
       .attr("id_producto");
@@ -172,6 +181,8 @@ $(function () {
         </td>
         <td data-titulo="PRODUCTO"  style="text-align:center;" id_producto='${codProducto}'>${desProducto}</td>
         <td data-titulo="CANTIDAD POR COMPRA" cantidadcomprarexacto='${comprarcantidadexacta}'><input id="cantidadacomprar"/></td>
+        <td cancomprada='${cancomprada}'></td>
+        <td canrecibir='${canrecibir}'></td>
         <td data-titulo="PRECIO TOTAL"></td>
         <td data-titulo="FECHA ENTREGA"><input class="fecha-entrega" id="fechaentrega" type="date" value="${fechaahora}"/></td>
         <td data-titulo="F.PAGO">
@@ -181,7 +192,7 @@ $(function () {
         <option value="C">CREDITO</option>
         </select>
         </td>
-        <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
+        <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled><i class="icon-camera"></i></button></td>
         <td data-titulo="PRECIO" id_proveedor='' style="text-align:center;"></td>
         <td data-titulo="ELIMINAR"><button id="deletef" class="btn btn-danger icon-trash eliminarfila"></button></td>
         </tr>
@@ -235,195 +246,10 @@ $(function () {
 
   /*---------------------------------------------------------------------- */
 
-  /*-------------- Guardar cambios de orden compra adicionada----------- */
-  $(document).on("click", "#guardarordencompraadional", function () {
-    let tablainsumosenvasesadicional = [];
-    let fechaentregaalert = [];
-    $("#tablainsumosenvasesadicional tr").each(function () {
-      let codigorequerimiento = $(this).attr("codigorequerimientototal");
-
-      let id_proveedor;
-      let proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
-
-      if (proveedor != undefined) {
-        id_proveedor = proveedor;
-      } else {
-        id_proveedor = $(this).find("td:eq(0) select").val();
-      }
-
-      let id_producto_insumo = $(this).find("td:eq(1)").attr("id_producto");
-      let nombreproducto = $(this).find("td:eq(1)").text();
-      let cantidad_producto_insumo = $(this).find("td:eq(2) input").val();
-      let monto = $(this).find("td:eq(3)").text();
-      let fechaentrega = $(this).find("td:eq(4) input").val();
-      let formapago = $(this).find("td:eq(5)").find("select").val();
-      let preciomin = $(this).find("td:eq(7)").text();
-      fechaentregaalert.push(fechaentrega);
-      tablainsumosenvasesadicional.push({
-        codigorequerimiento: codigorequerimiento,
-        id_proveedor: id_proveedor,
-        id_producto_insumo: id_producto_insumo,
-        nombreproducto: nombreproducto,
-        cantidad_producto_insumo: cantidad_producto_insumo,
-        monto: monto,
-        formapago: formapago,
-        fechaentrega: fechaentrega,
-        preciomin: preciomin,
-      });
-    });
-    console.log(tablainsumosenvasesadicional);
-    let paresUnicos = {};
-
-    for (let i = 0; i < tablainsumosenvasesadicional.length; i++) {
-      let codigoproducto =
-        tablainsumosenvasesadicional[i]["id_producto_insumo"];
-      let id_proveedor = tablainsumosenvasesadicional[i]["id_proveedor"];
-      let nombreproducto = tablainsumosenvasesadicional[i]["nombreproducto"];
-
-      let claveUnica = codigoproducto + "_" + id_proveedor;
-      if (paresUnicos[claveUnica]) {
-        Swal.fire({
-          title: "Se encontro duplicado de proveedor y producto",
-          text: "El producto duplicado " + nombreproducto,
-          icon: "info",
-          confirmButtonText: "Aceptar",
-        });
-
-        return;
-      } else {
-        paresUnicos[claveUnica] = true;
-      }
-    }
-
-    for (let i = 0; i < fechaentregaalert.length; i++) {
-      if (fechaentregaalert[i] === "") {
-        Swal.fire({
-          title: "¡Error!",
-          text: "Añadir una fecha de entrega",
-          icon: "info",
-          confirmButtonText: "Aceptar",
-        });
-        return;
-      }
-    }
-    const dataimagenes = [];
-    const codigoproveedorimagenes = [];
-
-    $("#tablaimagenes tr").each(function () {
-      const filaimagen = $(this);
-      const fileInput = filaimagen.find("td:eq(2) input[type=file]")[0];
-      const codigoproveedor = filaimagen.find("td:eq(5) input").val();
-
-      if (fileInput && fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-        dataimagenes.push(file);
-        codigoproveedorimagenes.push({ codigoproveedor });
-      }
-    });
-
-    const formData = new FormData();
-    formData.append("accion", "procesoordenadicionada");
-    // formData.append("idRequerimiento", taskcodrequhiddenvalidar);
-
-    for (let j = 0; j < tablainsumosenvasesadicional.length; j++) {
-      const objetoInsumotemp = tablainsumosenvasesadicional[j];
-      const objetoInsumoStringTemp = JSON.stringify(objetoInsumotemp);
-      formData.append("valorcapturado[]", objetoInsumoStringTemp);
-    }
-
-    for (let i = 0; i < dataimagenes.length; i++) {
-      formData.append("file[]", dataimagenes[i]);
-    }
-    for (let l = 0; l < codigoproveedorimagenes.length; l++) {
-      const objetoproveedor = codigoproveedorimagenes[l];
-      const proveedor = JSON.stringify(objetoproveedor);
-      formData.append("codigoproveedorimagenes[]", proveedor);
-    }
-
-    $.ajax({
-      type: "POST",
-      url: "./c_almacen.php",
-      data: formData,
-      contentType: false,
-      processData: false,
-      beforeSend: function () {
-        $(".preloader").css("opacity", "1");
-        $(".preloader").css("display", "block");
-      },
-      success: async function (response) {
-        let respuesta = JSON.parse(response);
-        // console.log(respuesta);
-        // if (!Array.isArray(respuesta)) {
-        if (respuesta.estado === "ok") {
-          Swal.fire({
-            title: "¡Guardado exitoso!",
-            text: "Los datos estan en el proceso.",
-            icon: "success",
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // $("#taskcodrequerimiento").val("");
-              // $("#taskcodrequhiddenvalidar").val("");
-              // $("#mensajecompleto").css("display", "none");
-              tablainsumorequerido.empty();
-              tablainsumos.empty();
-              tablatotal.empty();
-              mostrarRequerimientoTotal();
-              mostrarPendientes();
-            }
-          });
-          // Manejar el error o ajustar la lógica según sea necesario
-          return;
-        } else if (respuesta.estado === "error") {
-          Swal.fire({
-            title: "¡Error al guardar!",
-            text: "Los datos son incorrectos",
-            icon: "error",
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // $("#taskcodrequerimiento").val("");
-              // $("#taskcodrequhiddenvalidar").val("");
-              // $("#mensajecompleto").css("display", "none");
-              // tablainsumorequerido.empty();
-              // tablainsumos.empty();
-              // tablatotal.empty();
-              // mostrarRequerimientoTotal();
-              mostrarPendientes();
-            }
-          });
-        }
-        // for (const element of respuesta) {
-        //   if (element.estado == "errorcantidad") {
-        //     await Swal.fire({
-        //       text:
-        //         "En el producto " +
-        //         element.nombreproducto +
-        //         " necesita poner la suma de cantidades mayor a " +
-        //         element.cantidad,
-        //       icon: "info",
-        //       confirmButtonText: "Aceptar",
-        //     });
-        //   }
-        // }
-      },
-      complete: function () {
-        $(".preloader").css("opacity", "0");
-        $(".preloader").css("display", "none");
-      },
-      error: function (error) {
-        console.log("ERROR " + error);
-      },
-    });
-  });
-  /*------------------------------------------------------------------- */
-
   /*--------------Verifica la cantidad y precio total al cambiar------ */
   $(document).on("keyup", "#cantidadacomprar", function () {
     let filaescr = $(this).closest("tr");
-    var valorcan = filaescr
-      .find('td[data-titulo="CANTIDAD POR COMPRA"] input')
-      .val();
+    var valorcan = filaescr.find("td:eq(2) input").val();
     var valorproveedor = filaescr
       .find('td[data-titulo="PROVEEDOR"]')
       .attr("codigo_proveedor");
@@ -444,24 +270,24 @@ $(function () {
         return;
       }
     }
-    var duplicado = false;
-    $("#tablatotalinsumosrequeridoscomprar tr").each(function () {
-      let proveedorcantidad = $(this).find("td:eq(0)").attr("codigo_proveedor");
-      let producto = $(this).find("td:eq(1)").attr("id_producto");
-      console.log(proveedorcantidad + "producto " + producto);
+    // var duplicado = false;
+    // $("#tablainsumosenvasesadicional tr").each(function () {
+    //   let proveedorcantidad = $(this).find("td:eq(0)").attr("codigo_proveedor");
+    //   let producto = $(this).find("td:eq(1)").attr("id_producto");
+    //   console.log(proveedorcantidad + "producto " + producto);
 
-      if (codigoproveedor == proveedorcantidad && valorproducto == producto) {
-        duplicado = true;
-        return false;
-      }
-    });
+    //   if (codigoproveedor == proveedorcantidad && valorproducto == producto) {
+    //     duplicado = true;
+    //     return false;
+    //   }
+    // });
 
-    if (duplicado) {
-      Swal.fire({
-        text: "El proveedor seleccionado ya existe en la tabla.",
-        icon: "warning",
-      });
-    }
+    // if (duplicado) {
+    //   Swal.fire({
+    //     text: "El proveedor seleccionado ya existe en la tabla.",
+    //     icon: "warning",
+    //   });
+    // }
     const accion = "mostrarcantidadpreciocalculo";
     $.ajax({
       url: "./c_almacen.php",
@@ -478,11 +304,11 @@ $(function () {
           let task = JSON.parse(response);
 
           let valorcambiadoprecio = filaescr
-            .find("td:eq(3)")
+            .find("td:eq(5)")
             .text(task[0].PRECIO_PAGAR);
 
           let valorpreciomin = filaescr
-            .find("td:eq(7)")
+            .find("td:eq(9)")
             .text(task[0].PRECIO_PRODUCTO);
         }
       },
@@ -582,6 +408,7 @@ $(function () {
   $(document).on("click", "#imagensum", function (e) {
     e.preventDefault();
     var fila = $(this).closest("tr");
+    var codigorequerimiento = fila.attr("codigorequerimientototal");
     var codigoProductoImagen = fila
       .find('td[data-titulo="PRODUCTO"]')
       .attr("id_producto");
@@ -627,13 +454,15 @@ $(function () {
         .attr("id", "idproveedor")
         .val(codigoProveedor);
     } else {
-      {
-        var codigoproveedorinput = $("<input>")
-          .attr("type", "hidden")
-          .attr("id", "idproveedor")
-          .val(codigoProveedor1);
-      }
+      var codigoproveedorinput = $("<input>")
+        .attr("type", "hidden")
+        .attr("id", "idproveedor")
+        .val(codigoProveedor1);
     }
+    var codigorequer = $("<input>")
+      .attr("type", "hidden")
+      .attr("id", "codigorequerimiento")
+      .val(codigorequerimiento);
 
     var nuevaFila = $("<tr id='filaTabla'>").append(
       $("<td>").addClass("text-center").append(imagenBotonDelete),
@@ -643,11 +472,227 @@ $(function () {
         .addClass("text-center archivosubido")
         .append("<img src='" + imagenPredeterminadaURL + "' alt='imgcompra'>"),
       $("<td>").addClass("text-center").append(codigo),
-      $("<td>").addClass("text-center").append(codigoproveedorinput)
+      $("<td>").addClass("text-center").append(codigoproveedorinput),
+      $("<td>").addClass("text-center").append(codigorequer)
     );
 
     $("#tablaimagenes").append(nuevaFila);
   });
+
+  /*------ Al darle click en el tacho de la iamgen eliminara fila */
+  $(document).on("click", ".delete", function () {
+    var filaAEliminar = $(this).closest("#filaTabla");
+    filaAEliminar.remove();
+  });
+  /*------------------------------------------------------------ */
+
+  /*------------------- Proceso de la orden de compra------------ */
+  $("#guardarordencompraadional").click((e) => {
+    e.preventDefault();
+    let valoresCapturadosAdicional = [];
+
+    let tablatotal = $("#tablainsumosenvasesadicional");
+
+    let codpersonal = $("#codpersonal").val();
+    let fechaentregaalert = [];
+    let mostrarAlerta = false;
+    $("#tablainsumosenvasesadicional tr").each(function () {
+      let canrecibir = $(this).find("td:eq(4)").attr("canrecibir");
+      let cantidad_producto_insumo = $(this).find("td:eq(2) input").val();
+
+      if (parseFloat(cantidad_producto_insumo) < parseFloat(canrecibir)) {
+        mostrarAlerta = true;
+        return false;
+      }
+    });
+    if (mostrarAlerta) {
+      Swal.fire({
+        title: "¡Error!",
+        text: "Añadir la cantidad mayor o igual a la cantidad recibir",
+        icon: "info",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    }
+    $("#tablainsumosenvasesadicional tr").each(function () {
+      let codigorequerimiento = $(this).attr("codigorequerimientototal");
+      let codigoorden = $(this).attr("codigoordencompra");
+      let id_proveedor;
+      let codigoordencompra;
+      let proveedor = $(this).find("td:eq(0)").attr("codigo_proveedor");
+
+      if (proveedor != undefined) {
+        id_proveedor = proveedor;
+      } else {
+        id_proveedor = $(this).find("td:eq(0) select").val();
+      }
+      if (codigoorden != undefined) {
+        codigoordencompra = codigoorden;
+      } else {
+        codigoordencompra = null;
+      }
+
+      let id_producto_insumo = $(this).find("td:eq(1)").attr("id_producto");
+      let nombreproducto = $(this).find("td:eq(1)").text();
+      let cantidad_producto_insumo = $(this).find("td:eq(2) input").val();
+      let monto = $(this).find("td:eq(5)").text();
+      let fechaentrega = $(this).find("td:eq(6) input").val();
+      let formapago = $(this).find("td:eq(7)").find("select").val();
+      let preciomin = $(this).find("td:eq(9)").text();
+
+      fechaentregaalert.push(fechaentrega);
+      valoresCapturadosAdicional.push({
+        codigorequerimiento: codigorequerimiento,
+        codigoordencompra: codigoordencompra,
+        id_proveedor: id_proveedor,
+        id_producto_insumo: id_producto_insumo,
+        nombreproducto: nombreproducto,
+        cantidad_producto_insumo: cantidad_producto_insumo,
+        monto: monto,
+        formapago: formapago,
+        fechaentrega: fechaentrega,
+        preciomin: preciomin,
+      });
+    });
+
+    // let paresUnicos = {};
+
+    // for (let i = 0; i < valoresCapturadosAdicional.length; i++) {
+    //   let codigoproducto = valoresCapturadosAdicional[i]["id_producto_insumo"];
+    //   let id_proveedor = valoresCapturadosAdicional[i]["id_proveedor"];
+    //   let nombreproducto = valoresCapturadosAdicional[i]["nombreproducto"];
+
+    //   let claveUnica = codigoproducto + "_" + id_proveedor;
+    //   if (paresUnicos[claveUnica]) {
+    //     Swal.fire({
+    //       title: "Se encontro duplicado de proveedor y producto",
+    //       text: "El producto duplicado " + nombreproducto,
+    //       icon: "info",
+    //       confirmButtonText: "Aceptar",
+    //     });
+
+    //     return;
+    //   } else {
+    //     paresUnicos[claveUnica] = true;
+    //   }
+    // }
+
+    // if (valoresCapturadosAdicional.length === 0) {
+    //   Swal.fire({
+    //     title: "¡Error!",
+    //     text: "No hay pendientes",
+    //     icon: "info",
+    //     confirmButtonText: "Aceptar",
+    //   });
+    //   return;
+    // }
+
+    for (let i = 0; i < fechaentregaalert.length; i++) {
+      if (fechaentregaalert[i] === "") {
+        Swal.fire({
+          title: "¡Error!",
+          text: "Añadir una fecha de entrega",
+          icon: "info",
+          confirmButtonText: "Aceptar",
+        });
+        return;
+      }
+    }
+    const dataimagenes = [];
+    const codigoproveedorimagenes = [];
+
+    $("#tablaimagenes tr").each(function () {
+      const filaimagen = $(this);
+      const fileInput = filaimagen.find("td:eq(2) input[type=file]")[0];
+      const codigoproveedor = filaimagen.find("td:eq(5) input").val();
+      const codigorequerimiento = filaimagen.find("td:eq(6) input").val();
+      if (fileInput && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        dataimagenes.push(file);
+        codigoproveedorimagenes.push({
+          codigoproveedor: codigoproveedor,
+          codigorequerimiento: codigorequerimiento,
+        });
+      }
+    });
+
+    const formData = new FormData();
+    formData.append("accion", "insertarordencompraitemadicional");
+
+    for (let j = 0; j < valoresCapturadosAdicional.length; j++) {
+      const objetoInsumotemp = valoresCapturadosAdicional[j];
+      const objetoInsumoStringTemp = JSON.stringify(objetoInsumotemp);
+      formData.append("valorcapturadoadicional[]", objetoInsumoStringTemp);
+    }
+
+    for (let i = 0; i < dataimagenes.length; i++) {
+      formData.append("file[]", dataimagenes[i]);
+    }
+    for (let l = 0; l < codigoproveedorimagenes.length; l++) {
+      const objetoproveedor = codigoproveedorimagenes[l];
+      const proveedor = JSON.stringify(objetoproveedor);
+      formData.append("codigoproveedorimagenes[]", proveedor);
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "./c_almacen.php",
+      data: formData,
+      contentType: false,
+      processData: false,
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
+      success: async function (response) {
+        let respuesta = JSON.parse(response);
+        if (respuesta.estado === "ok") {
+          Swal.fire({
+            title: "¡Guardado exitoso!",
+            text: "Los datos estan en el proceso.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              cargarordencompraadicional();
+            }
+          });
+        } else if (respuesta.estado === "error") {
+          Swal.fire({
+            title: "¡Error al guradar!",
+            text: "Los datos son incorrectos",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              cargarordencompraadicional();
+            }
+          });
+        }
+        // for (const element of respuesta) {
+        //   if (element.estado == "errorcantidad") {
+        //     await Swal.fire({
+        //       text:
+        //         "En el producto " +
+        //         element.nombreproducto +
+        //         " necesita poner la suma de cantidades mayor a " +
+        //         element.cantidad,
+        //       icon: "info",
+        //       confirmButtonText: "Aceptar",
+        //     });
+        //   }
+        // }
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
+      },
+      error: function (error) {
+        console.log("ERROR " + error);
+      },
+    });
+  });
+  /*------------------------------------------------------------ */
 });
 function isJSON(str) {
   try {

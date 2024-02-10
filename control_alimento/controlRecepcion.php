@@ -79,6 +79,19 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
             border: 1px solid #000;
             /* padding: 10px; */
         }
+
+        th.vertical-text.thborder.padding-grf {
+            padding-left: 18px !important;
+        }
+
+        input#primario,
+        .secundario,
+        .saco,
+        .caja,
+        .cilindro,
+        .bolsa {
+            margin-left: 12px;
+        }
     </style>
     <main>
         <section>
@@ -147,9 +160,9 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                                         <!-- <th rowspan="2" class="thborder">V°B°</th> -->
                                     </tr>
                                     <tr>
-                                        <th rowspan="2" class="vertical-text thborder">G.Remisión</th>
-                                        <th class="vertical-text thborder">Boleta</th>
-                                        <th class="vertical-text thborder">Factura</th>
+                                        <th rowspan="2" class="vertical-text thborder padding-grf">G.Remisión</th>
+                                        <th class="vertical-text thborder padding-grf">Boleta</th>
+                                        <th class="vertical-text thborder padding-grf">Factura</th>
                                         <th class="vertical-text thborder" class="thborder">Primario</th>
                                         <th class="vertical-text thborder" class="thborder">Secundario</th>
                                         <th class="vertical-text thborder">Saco</th>

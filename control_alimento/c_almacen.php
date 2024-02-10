@@ -452,8 +452,6 @@ if ($accion == 'insertar') {
         $idRequerimiento = $_POST['idRequerimiento'];
         $codpersonal = $_POST['codpersonal'];
 
-
-
         if (isset($_FILES['file'])) {
 
             $dataimagenesfile = $_FILES['file'];
@@ -877,8 +875,22 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_mostrar_envases_formula($codigoformulacionenvase, $codigoproductoenvase);
     echo $respuesta;
-}
+} elseif ($accion == 'insertarordencompraitemadicional') {
 
+    $valorcapturadoadicional = $_POST['valorcapturadoadicional'];
+
+    if (isset($_FILES['file'])) {
+
+        $dataimagenesfile = $_FILES['file'];
+        $codigoproveedorimagenes = $_POST['codigoproveedorimagenes'];
+
+        $respuesta = c_almacen::c_insertar_orden_compra_adicional_imagen($valorcapturadoadicional,  $dataimagenesfile, $codigoproveedorimagenes);
+    } else {
+
+        $respuesta = c_almacen::c_insertar_orden_compra_adicional($valorcapturadoadicional);
+    }
+    // }
+}
 
 
 
@@ -3102,54 +3114,60 @@ class c_almacen
     static function c_insertar_orden_compra_item($union, $valoresdeinsumos, $dataimagenesfile, $codigoproveedorimagenes, $idRequerimiento, $codpersonal)
     {
         $m_formula = new m_almacen();
+        $verificarsihayorden = $m_formula->verificarsihayordencompra($idRequerimiento);
 
-        $valorescorrectos = [];
-        foreach ($valoresdeinsumos as $stringinsumo) {
-            $insumoArray = json_decode($stringinsumo, true);
-            if ($insumoArray !== null) {
-                $nombreproducto = trim($insumoArray['nombreproducto']);
-                $id_producto = trim($insumoArray['productocod']);
-                $cantidad_producto = $insumoArray['valorpedir'];
-
-                $sumacantidadx = 0;
-                foreach ($union as $valorcapturadostring) {
-                    $insumo = json_decode($valorcapturadostring, true);
-                    if ($insumo !== null) {
-                        $id_producto_insumo = trim($insumo['id_producto_insumo']);
-                        $cantidad_producto_insumo = $insumo['cantidad_producto_insumo'];
-
-                        if ($id_producto_insumo == $id_producto) {
-                            $sumacantidadx = $sumacantidadx + $cantidad_producto_insumo;
-                        }
-                    } else {
-                        echo "Error al decodificar JSON: " . json_last_error_msg();
-                    }
-                }
-
-                if ($sumacantidadx < $cantidad_producto) {
-
-                    $valorescorrectos1 = ['estado' => 'errorcantidad', 'nombreproducto' => $nombreproducto, 'cantidad' => $cantidad_producto];
-                    array_push($valorescorrectos, $valorescorrectos1);
-                }
-            } else {
-                echo "Error al decodificar JSON: " . json_last_error_msg();
-            }
-        }
-
-
-        if (count($valorescorrectos) > 0) {
-            $response = $valorescorrectos;
+        if ($verificarsihayorden == true) {
+            $response = array('estado' => 'errorduplicado');
             echo json_encode($response);
-            exit;
         } else {
+            $valorescorrectos = [];
+            foreach ($valoresdeinsumos as $stringinsumo) {
+                $insumoArray = json_decode($stringinsumo, true);
+                if ($insumoArray !== null) {
+                    $nombreproducto = trim($insumoArray['nombreproducto']);
+                    $id_producto = trim($insumoArray['productocod']);
+                    $cantidad_producto = $insumoArray['valorpedir'];
 
-            $respuestaorde = $m_formula->InsertarOrdenCompraItem($idRequerimiento, $union, $valoresdeinsumos, $dataimagenesfile, $codigoproveedorimagenes);
-            if ($respuestaorde) {
-                $response = array('estado' => 'ok');
+                    $sumacantidadx = 0;
+                    foreach ($union as $valorcapturadostring) {
+                        $insumo = json_decode($valorcapturadostring, true);
+                        if ($insumo !== null) {
+                            $id_producto_insumo = trim($insumo['id_producto_insumo']);
+                            $cantidad_producto_insumo = $insumo['cantidad_producto_insumo'];
+
+                            if ($id_producto_insumo == $id_producto) {
+                                $sumacantidadx = $sumacantidadx + $cantidad_producto_insumo;
+                            }
+                        } else {
+                            echo "Error al decodificar JSON: " . json_last_error_msg();
+                        }
+                    }
+
+                    if ($sumacantidadx < $cantidad_producto) {
+
+                        $valorescorrectos1 = ['estado' => 'errorcantidad', 'nombreproducto' => $nombreproducto, 'cantidad' => $cantidad_producto];
+                        array_push($valorescorrectos, $valorescorrectos1);
+                    }
+                } else {
+                    echo "Error al decodificar JSON: " . json_last_error_msg();
+                }
+            }
+
+
+            if (count($valorescorrectos) > 0) {
+                $response = $valorescorrectos;
                 echo json_encode($response);
+                exit;
             } else {
-                $response = array('estado' => 'error');
-                echo json_encode($response);
+
+                $respuestaorde = $m_formula->InsertarOrdenCompraItem($idRequerimiento, $union, $valoresdeinsumos, $dataimagenesfile, $codigoproveedorimagenes);
+                if ($respuestaorde) {
+                    $response = array('estado' => 'ok');
+                    echo json_encode($response);
+                } else {
+                    $response = array('estado' => 'error');
+                    echo json_encode($response);
+                }
             }
         }
     }
@@ -3158,67 +3176,64 @@ class c_almacen
         $m_formula = new m_almacen();
         $count = count($union);
         $countinsumo = count($valoresdeinsumos);
-        $valorescorrectos = [];
-        foreach ($valoresdeinsumos as $stringinsumo) {
-            $insumoArray = json_decode($stringinsumo, true);
-            if ($insumoArray !== null) {
-                $nombreproducto = trim($insumoArray['nombreproducto']);
-                $id_producto = trim($insumoArray['productocod']);
-                $cantidad_producto = $insumoArray['valorpedir'];
+        $verificarsihayorden = $m_formula->verificarsihayordencompra($idRequerimiento);
 
-                $sumacantidad = 0;
-
-                $sumacantidad = 0;
-                foreach ($union as $valorcapturadostring) {
-                    $insumoArrays = json_decode($valorcapturadostring, true);
-                    if ($insumoArrays !== null) {
-                        $id_producto_insumo = trim($insumoArrays['id_producto_insumo']);
-                        $cantidad_producto_insumo = $insumoArrays['cantidad_producto_insumo'];
-                        if ($id_producto_insumo == $id_producto) {
-                            $sumacantidad = $sumacantidad + $cantidad_producto_insumo;
-                        }
-                    } else {
-                        echo "Error al decodificar JSON: " . json_last_error_msg();
-                    }
-                }
-
-                if ($sumacantidad < $cantidad_producto && $sumacantidad != 0) {
-
-                    $valorescorrectos1 = ['estado' => 'errorcantidad', 'nombreproducto' => $nombreproducto, 'cantidad' => $cantidad_producto];
-                    array_push($valorescorrectos, $valorescorrectos1);
-                }
-            } else {
-                echo "Error al decodificar JSON: " . json_last_error_msg();
-            }
-        }
-
-
-        if (count($valorescorrectos) > 0) {
-            $response = $valorescorrectos;
+        if ($verificarsihayorden > 0) {
+            $response = array('estado' => 'errorduplicado');
             echo json_encode($response);
-            exit;
         } else {
-            $respuestaorde = $m_formula->InsertarOrdenCompraItemSinImagen($union, $idRequerimiento, $codpersonal);
-            if ($respuestaorde) {
-                $response = array('estado' => 'ok');
+            $valorescorrectos = [];
+            foreach ($valoresdeinsumos as $stringinsumo) {
+                $insumoArray = json_decode($stringinsumo, true);
+                if ($insumoArray !== null) {
+                    $nombreproducto = trim($insumoArray['nombreproducto']);
+                    $id_producto = trim($insumoArray['productocod']);
+                    $cantidad_producto = $insumoArray['valorpedir'];
+
+                    $sumacantidad = 0;
+
+                    $sumacantidad = 0;
+                    foreach ($union as $valorcapturadostring) {
+                        $insumoArrays = json_decode($valorcapturadostring, true);
+                        if ($insumoArrays !== null) {
+                            $id_producto_insumo = trim($insumoArrays['id_producto_insumo']);
+                            $cantidad_producto_insumo = $insumoArrays['cantidad_producto_insumo'];
+                            if ($id_producto_insumo == $id_producto) {
+                                $sumacantidad = $sumacantidad + $cantidad_producto_insumo;
+                            }
+                        } else {
+                            echo "Error al decodificar JSON: " . json_last_error_msg();
+                        }
+                    }
+
+                    if ($sumacantidad < $cantidad_producto && $sumacantidad != 0) {
+
+                        $valorescorrectos1 = ['estado' => 'errorcantidad', 'nombreproducto' => $nombreproducto, 'cantidad' => $cantidad_producto];
+                        array_push($valorescorrectos, $valorescorrectos1);
+                    }
+                } else {
+                    echo "Error al decodificar JSON: " . json_last_error_msg();
+                }
+            }
+
+
+            if (count($valorescorrectos) > 0) {
+                $response = $valorescorrectos;
                 echo json_encode($response);
+                exit;
             } else {
-                $response = array('estado' => 'error');
-                echo json_encode($response);
+                $respuestaorde = $m_formula->InsertarOrdenCompraItemSinImagen($union, $idRequerimiento, $codpersonal);
+                if ($respuestaorde) {
+                    $response = array('estado' => 'ok');
+                    echo json_encode($response);
+                } else {
+                    $response = array('estado' => 'error');
+                    echo json_encode($response);
+                }
             }
         }
-
-        // $m_formula = new m_almacen();
-
-        // if (isset($idRequerimiento)) {
-        //     $respuestasin = $m_formula->InsertarOrdenCompraItemSinImagen($union, $idRequerimiento, $codpersonal);
-        //     if ($respuestasin) {
-        //         echo "ok";
-        //     } else {
-        //         echo "error";
-        //     };
-        // }
     }
+
 
     static function c_actualizar_orden_compra_item($idRequerimiento)
     {
@@ -4615,14 +4630,12 @@ class c_almacen
     {
         $m_formula = new m_almacen();
 
-        // if (isset($datos)) {
         $respuesta = $m_formula->InsertarControlRecepcion($datos, $datosTabla, $idrequerimiento, $codpersonal);
         if ($respuesta) {
             return "ok";
         } else {
             return "error";
         };
-        // }
     }
 
 
@@ -5019,6 +5032,37 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
+    static function c_insertar_orden_compra_adicional($valorcapturadoadicional)
+    {
+        $m_formula = new m_almacen();
+        $insertarordenadicional = $m_formula->InsertarOrdenAdicional($valorcapturadoadicional);
+
+        if ($insertarordenadicional) {
+            $response = array('estado' => 'ok');
+            echo json_encode($response);
+        } else {
+            $response = array('estado' => 'error');
+            echo json_encode($response);
+        }
+    }
+
+    static function c_insertar_orden_compra_adicional_imagen($valorcapturadoadicional,  $dataimagenesfile, $codigoproveedorimagenes)
+    {
+        $m_formula = new m_almacen();
+
+        $respuestaordeimagenes = $m_formula->InsertarOrdenAdicionalImagenes($valorcapturadoadicional,  $dataimagenesfile, $codigoproveedorimagenes);
+        if ($respuestaordeimagenes) {
+            $response = array('estado' => 'ok');
+            echo json_encode($response);
+        } else {
+            $response = array('estado' => 'error');
+            echo json_encode($response);
+        }
+    }
+
+
+
+
 
 
 

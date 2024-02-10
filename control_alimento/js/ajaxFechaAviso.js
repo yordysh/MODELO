@@ -268,260 +268,6 @@ $(function () {
   }
 
   async function alertaControl() {
-    // return new Promise(async function (resolve, reject) {
-    //   function mostrarAlertasControl(datacontroles, index) {
-    //     if (index >= datacontroles.length) {
-    //       resolve();
-    //       return;
-    //     }
-    //     const task = datacontroles[index];
-    //     let accionCorrectiva;
-    //     let selectVB;
-    //     // let postergacionRadio;
-    //     Swal.fire({
-    //       title: "Información LBS-PHS-FR-03",
-    //       html: `
-    //           <div><h2 class="nombre_infra">Máquinas,equipos y utensilios:</h2> <p>${task.NOMBRE_CONTROL_MAQUINA}</p></div>
-    //             <label class='estilolabel'>
-    //                  <input type="radio" name="estado-${task.COD_ALERTA_CONTROL_MAQUINA}" value="R"> Realizado
-    //             </label>
-    //            <label class='estilolabel'>
-    //             <input type="radio" name="estado-${task.COD_ALERTA_CONTROL_MAQUINA}" value="OB"> Observado
-    //            </label>
-    //             <label class='estilolabel' id="postergacion">
-    //                 <input type="radio" name="estado-${task.COD_ALERTA_CONTROL_MAQUINA}" value="PO"> Pendiente
-    //             </label>
-    //             <h3 class='fechapostergar' style="display: none;">Fecha Postergar</h3>
-    //             <input type="date" id="fechapostergacion" style="display: none;width:250px; margin-left:140px;"/>
-    //             <h3 class='observaciontext' >Observación</h3>
-    //             <textarea class="form-control" id="observacion-${task.COD_ALERTA_CONTROL_MAQUINA}" rows="3" style="display: none;"></textarea>
-    //           <div>
-    //           <h3 class='accioncorrectiva'>Accion correctiva:</h3>
-    //           <textarea class="form-control" id="accionCorrectiva" rows='3' "></textarea>
-    //           </div>
-    //           <div>
-    //           <h3 class='vb'>V°B°:</h3>
-    //            <select id="selectVB" class="form-select selectVerif" style="width:250px; margin-left:140px;" aria-label="Default select example">
-    //               <option selected>Seleccione V°B°</option>
-    //               <option value="1">J.A.C</option>
-    //               <option value="2">A.A.C</option>
-    //             </select>
-    //           </div>
-    //          `,
-    //       icon: "info",
-    //       width: 600,
-    //       allowOutsideClick: false,
-    //       confirmButtonText: "Aceptar",
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
-    //         const observacionButtonRadio = document.querySelector(
-    //           `input[name="estado-${task.COD_ALERTA_CONTROL_MAQUINA}"][value="OB"]`
-    //         );
-    //         const realizadoRadio = document.querySelector(
-    //           `input[name="estado-${task.COD_ALERTA_CONTROL_MAQUINA}"][value="R"]`
-    //         );
-    //         const postergacionRadio = document.querySelector(
-    //           `input[name="estado-${task.COD_ALERTA_CONTROL_MAQUINA}"][value="PO"]`
-    //         );
-    //         const observacionTextarea = document.querySelector(
-    //           `#observacion-${task.COD_ALERTA_CONTROL_MAQUINA}`
-    //         );
-    //         const observacionTextAreavalor = observacionTextarea.value;
-    //         accionCorrectiva =
-    //           document.getElementById("accionCorrectiva").value;
-    //         selectVB = $("#selectVB option:selected").text();
-    //         const fechapostergacion =
-    //           document.getElementById("fechapostergacion").value;
-    //         // if (postergacionRadio.checked) {
-    //         //   $("#modalcontrolalertas").modal("show");
-    //         //   valor = postergacionRadio.checked ? 1 : 0;
-    //         //   const modalConfirmButton = document.querySelector(
-    //         //     "#modalcontrolalertas .guardar"
-    //         //   );
-    //         //   modalConfirmButton.addEventListener("click", function () {
-    //         //     const fechaPostergacionControl = $(
-    //         //       "#fecha_postergacion_control"
-    //         //     ).val();
-    //         //     const accion = "actualizaalertacontrolpos";
-    //         //     $.ajax({
-    //         //       url: "../control_alimento/c_almacen.php",
-    //         //       method: "POST",
-    //         //       data: {
-    //         //         accion: accion,
-    //         //         estado: "PO",
-    //         //         taskId: task.COD_ALERTA_CONTROL_MAQUINA,
-    //         //         ndiaspos: task.N_DIAS_POS,
-    //         //         taskFecha: task.FECHA_TOTAL,
-    //         //         observacionTextArea: observacionTextAreavalor,
-    //         //         accionCorrectiva: accionCorrectiva,
-    //         //         selectVB: selectVB,
-    //         //         codigocontrolmaquina: task.COD_CONTROL_MAQUINA,
-    //         //         fechapostergacioncontrol: fechaPostergacionControl,
-    //         //       },
-    //         //       beforeSend: function () {
-    //         //         $(".preloader").css("opacity", "1");
-    //         //         $(".preloader").css("display", "block");
-    //         //       },
-    //         //       dataType: "text",
-    //         //     })
-    //         //       .done(function (response) {
-    //         //         $("#fecha_postergacion_control").val("");
-    //         //         $("#modalcontrolalertas").modal("hide");
-    //         //         mostrarAlertasControl(datacontroles, index + 1);
-    //         //       })
-    //         //       .fail(function (jqXHR, textStatus, errorThrown) {
-    //         //         console.error("AJAX Error:", textStatus, errorThrown);
-    //         //       })
-    //         //       .always(function () {
-    //         //         $(".preloader").css("opacity", "0");
-    //         //         $(".preloader").css("display", "none");
-    //         //       });
-    //         //   });
-    //         // } else {
-    //         if (
-    //           realizadoRadio.checked ||
-    //           observacionButtonRadio.checked ||
-    //           postergacionRadio.checked
-    //         ) {
-    //           const estado = realizadoRadio.checked
-    //             ? "R"
-    //             : observacionButtonRadio.checked
-    //             ? "OB"
-    //             : "PO";
-    //           const accion = "actualizaalertacontrol";
-    //           $.ajax({
-    //             url: "../control_alimento/c_almacen.php",
-    //             method: "POST",
-    //             data: {
-    //               accion: accion,
-    //               estado: estado,
-    //               taskId: task.COD_ALERTA_CONTROL_MAQUINA,
-    //               ndiaspos: task.N_DIAS_POS,
-    //               taskFecha: task.FECHA_TOTAL,
-    //               observacionTextArea: observacionTextAreavalor,
-    //               accionCorrectiva: accionCorrectiva,
-    //               selectVB: selectVB,
-    //               codigocontrolmaquina: task.COD_CONTROL_MAQUINA,
-    //               fechapostergacioncontrol: fechapostergacion,
-    //             },
-    //             beforeSend: function () {
-    //               $(".preloader").css("opacity", "1");
-    //               $(".preloader").css("display", "block");
-    //             },
-    //             dataType: "text",
-    //           })
-    //             .done(function (response) {
-    //               mostrarAlertasControl(datacontroles, index + 1);
-    //             })
-    //             .fail(function (jqXHR, textStatus, errorThrown) {
-    //               console.error("AJAX Error:", textStatus, errorThrown);
-    //             })
-    //             .always(function () {
-    //               $(".preloader").css("opacity", "0");
-    //               $(".preloader").css("display", "none");
-    //             });
-    //         }
-    //         // }
-    //       }
-    //     });
-    //     const realizadoRadio = document.querySelector(
-    //       `input[name="estado-${task.COD_ALERTA_CONTROL_MAQUINA}"][value="R"]`
-    //     );
-    //     const accionCorrectivax = document.getElementById("accionCorrectiva");
-    //     const postergacionRadio = document.querySelector(
-    //       `input[name="estado-${task.COD_ALERTA_CONTROL_MAQUINA}"][value="PO"]`
-    //     );
-    //     const accionvb = document.getElementById("selectVB");
-    //     const fechapostergacion = document.getElementById("fechapostergacion");
-    //     const observacionButtonRadio = document.querySelector(
-    //       `input[name="estado-${task.COD_ALERTA_CONTROL_MAQUINA}"][value="OB"]`
-    //     );
-    //     const h3accion = document.querySelector(".accioncorrectiva");
-    //     const h4obs = document.querySelector(".observaciontext");
-    //     const h3vb = document.querySelector(".vb");
-    //     const h3fecha = document.querySelector(".fechapostergar");
-    //     const observacionTextarea = document.querySelector(
-    //       `#observacion-${task.COD_ALERTA_CONTROL_MAQUINA}`
-    //     );
-    //     observacionTextarea.style.display = "none";
-    //     accionCorrectivax.style.display = "none";
-    //     h3accion.style.display = "none";
-    //     accionvb.style.display = "none";
-    //     h4obs.style.display = "none";
-    //     h3vb.style.display = "none";
-    //     postergacionRadio.addEventListener("click", function () {
-    //       observacionTextarea.style.display = this.checked ? "block" : "none";
-    //       h4obs.style.display = this.checked ? "block" : "none";
-    //       accionCorrectivax.style.display = this.checked ? "block" : "none";
-    //       h3accion.style.display = this.checked ? "block" : "none";
-    //       accionvb.style.display = this.checked ? "block" : "none";
-    //       h3vb.style.display = this.checked ? "block" : "none";
-    //       h3fecha.style.display = this.checked ? "block" : "none";
-    //       fechapostergacion.style.display = this.checked ? "block" : "none";
-    //     });
-    //     /*------FECHA BLOQUEAR------------------------------------------- */
-    //     var fechaPostergacionInput =
-    //       document.getElementById("fechapostergacion");
-    //     var fechaActual = new Date();
-    //     var fechaMinima = new Date(fechaActual);
-    //     fechaMinima.setDate(fechaActual.getDate() + 1);
-    //     var fechaMaxima = new Date(fechaActual);
-    //     fechaMaxima.setDate(fechaActual.getDate() + 3);
-    //     var fechaMinimaString = fechaMinima.toISOString().split("T")[0];
-    //     var fechaMaximaString = fechaMaxima.toISOString().split("T")[0];
-    //     fechaPostergacionInput.setAttribute("min", fechaMinimaString);
-    //     fechaPostergacionInput.setAttribute("max", fechaMaximaString);
-    //     /*----------------------------------------------------------*/
-    //     observacionButtonRadio.addEventListener("click", function () {
-    //       observacionTextarea.style.display = this.checked ? "block" : "none";
-    //       h4obs.style.display = this.checked ? "block" : "none";
-    //       accionCorrectivax.style.display = this.checked ? "block" : "none";
-    //       h3accion.style.display = this.checked ? "block" : "none";
-    //       accionvb.style.display = this.checked ? "block" : "none";
-    //       h3vb.style.display = this.checked ? "block" : "none";
-    //       $("#fechapostergacion").val("");
-    //       h3fecha.style.display = "none";
-    //       fechapostergacion.style.display = "none";
-    //     });
-    //     realizadoRadio.addEventListener("click", function () {
-    //       if (this.checked) {
-    //         observacionTextarea.style.display = "none";
-    //         accionCorrectivax.style.display = "none";
-    //         accionvb.style.display = "none";
-    //         h3accion.style.display = "none";
-    //         h4obs.style.display = "none";
-    //         h3vb.style.display = "none";
-    //         h3fecha.style.display = "none";
-    //         fechapostergacion.style.display = "none";
-    //         $("#fechapostergacion").val("");
-    //       }
-    //     });
-    //   }
-    //   const accion = "fechaalertacontrol";
-    //   $.ajax({
-    //     url: "../control_alimento/c_almacen.php",
-    //     method: "POST",
-    //     dataType: "text",
-    //     data: { accion: accion },
-    //     beforeSend: function () {
-    //       $(".preloader").css("opacity", "1");
-    //       $(".preloader").css("display", "block");
-    //     },
-    //     success: function (dataControl) {
-    //       const datacontroles = JSON.parse(dataControl);
-    //       console.log(datacontroles);
-    //       mostrarAlertasControl(datacontroles, 0);
-    //     },
-    //     complete: function () {
-    //       $(".preloader").css("opacity", "0");
-    //       $(".preloader").css("display", "none");
-    //     },
-    //     error: function (jqXHR, textStatus, errorThrown) {
-    //       console.error("Error in alerta AJAX:", textStatus, errorThrown);
-    //       reject(errorThrown);
-    //     },
-    //   });
-    // });
     return new Promise(function (resolve, reject) {
       const accion = "fechaalertacontrol";
       $.ajax({
@@ -555,90 +301,98 @@ $(function () {
   }
 
   async function alertaOrdenCompra() {
-    return new Promise((resolve, reject) => {
-      const accion = "mostrarordencompraalmacenalerta";
-      var codrequerimiento;
-      $.ajax({
-        url: "../control_alimento/c_almacen.php",
-        type: "POST",
-        data: { accion: accion },
-        success: function (response) {
-          let task = JSON.parse(response);
-          console.log(task);
-          if (task.length > 0) {
-            // let task = JSON.parse(response);
-            codrequerimiento = task[0].COD_REQUERIMIENTO;
-            let htmlContent = "<h1>¡Lista de productos!</h1>";
-            htmlContent += "<table class='tableta'>";
-            htmlContent += "<thead>";
-            htmlContent += "<tr>";
-            htmlContent += "<th style='margin-rigth:15px;'>Codigo</th>";
-            htmlContent += "<th style='margin-rigth:15px;'> Producto</th>";
-            htmlContent += "<th> Cantidad pedida</th>";
-            htmlContent += "<th> Cantidad recibida</th>";
-            htmlContent += "</tr>";
-            htmlContent += "</thead>";
-
-            htmlContent += "<tbody id='tbodyordencompra'>";
-
-            task.forEach(function (producto) {
-              htmlContent +=
-                "<tr codigocompraorde='" +
-                producto.COD_ORDEN_COMPRA +
-                "'  codtempreque='" +
-                producto.COD_REQUERIMIENTOTEMP +
-                "'>";
-              htmlContent +=
-                "<td class='td-producto' codigoproducto='" +
-                producto.COD_PRODUCTO +
-                "'  codigoproveedororden='" +
-                producto.COD_PROVEEDOR +
-                "'>" +
-                producto.COD_PRODUCCION +
-                "</td>";
-              htmlContent +=
-                "<td class='td-nombre'>" + producto.DES_PRODUCTO + "</td>";
-              htmlContent +=
-                "<td class='td-cantidad'>" +
-                producto.CANTIDAD_INSUMO_ENVASE +
-                "</td>";
-              htmlContent +=
-                "<td class='td-cantidad-llegada'>" +
-                (producto.CANTIDAD_LLEGADA == null
-                  ? 0
-                  : producto.CANTIDAD_LLEGADA) +
-                "</td>";
+    if (
+      !window.location.pathname.endsWith(
+        "/control_alimento/controlRecepcion.php"
+      )
+    ) {
+      return new Promise((resolve, reject) => {
+        const accion = "mostrarordencompraalmacenalerta";
+        var codrequerimiento;
+        $.ajax({
+          url: "../control_alimento/c_almacen.php",
+          type: "POST",
+          data: { accion: accion },
+          success: function (response) {
+            let task = JSON.parse(response);
+            console.log(task);
+            if (task.length > 0) {
+              // let task = JSON.parse(response);
+              codrequerimiento = task[0].COD_REQUERIMIENTO;
+              let htmlContent = "<h1>¡Lista de productos!</h1>";
+              htmlContent += "<table class='tableta'>";
+              htmlContent += "<thead>";
+              htmlContent += "<tr>";
+              htmlContent += "<th style='margin-rigth:15px;'>Codigo</th>";
+              htmlContent += "<th style='margin-rigth:15px;'> Producto</th>";
+              htmlContent += "<th> Cantidad pedida</th>";
+              htmlContent += "<th> Cantidad recibida</th>";
               htmlContent += "</tr>";
-            });
-            htmlContent += "</tbody>";
-            htmlContent += "</table";
-            Swal.fire({
-              title: "Compra de insumos",
-              icon: "question",
-              html: htmlContent,
-              confirmButtonText: "Ok",
-              showCloseButton: true,
-              customClass: {
-                popup: "custom-width-class",
-              },
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.href =
-                  "../control_alimento/controlRecepcion.php";
-              } else {
-                reject("El usuario no confirmó la acción");
-              }
-            });
-          } else {
-            console.log("vacio");
-          }
-        },
-        error: function (xhr, status, error) {
-          console.error("Error al cargar los datos de la tabla:", error);
-          reject("Error al cargar datos de la tabla");
-        },
+              htmlContent += "</thead>";
+
+              htmlContent += "<tbody id='tbodyordencompra'>";
+
+              task.forEach(function (producto) {
+                htmlContent +=
+                  "<tr codigocompraorde='" +
+                  producto.COD_ORDEN_COMPRA +
+                  "'  codtempreque='" +
+                  producto.COD_REQUERIMIENTOTEMP +
+                  "'>";
+                htmlContent +=
+                  "<td class='td-producto' codigoproducto='" +
+                  producto.COD_PRODUCTO +
+                  "'  codigoproveedororden='" +
+                  producto.COD_PROVEEDOR +
+                  "'>" +
+                  producto.COD_PRODUCCION +
+                  "</td>";
+                htmlContent +=
+                  "<td class='td-nombre'>" + producto.DES_PRODUCTO + "</td>";
+                htmlContent +=
+                  "<td class='td-cantidad'>" +
+                  parseFloat(producto.CANTIDAD_INSUMO_ENVASE).toFixed(2) +
+                  "</td>";
+                htmlContent +=
+                  "<td class='td-cantidad-llegada'>" +
+                  (producto.CANTIDAD_LLEGADA == null
+                    ? 0
+                    : parseFloat(producto.CANTIDAD_LLEGADA)
+                  ).toFixed(2) +
+                  "</td>";
+                htmlContent += "</tr>";
+              });
+              htmlContent += "</tbody>";
+              htmlContent += "</table";
+
+              Swal.fire({
+                title: "Compra de insumos",
+                icon: "question",
+                html: htmlContent,
+                confirmButtonText: "Ok",
+                showCloseButton: true,
+                customClass: {
+                  popup: "custom-width-class",
+                },
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.href =
+                    "../control_alimento/controlRecepcion.php";
+                } else {
+                  reject("El usuario no confirmó la acción");
+                }
+              });
+            } else {
+              console.log("vacio");
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error("Error al cargar los datos de la tabla:", error);
+            reject("Error al cargar datos de la tabla");
+          },
+        });
       });
-    });
+    }
   }
   alertax();
   alertacontrolaviso();

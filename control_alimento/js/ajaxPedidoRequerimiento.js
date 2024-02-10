@@ -12,7 +12,7 @@ $(function () {
   //-------------------------------------------//
 
   mostrarPendientes();
-  mostrarRequerimientoTotal();
+  // mostrarRequerimientoTotal();
 
   function mostrarPendientes() {
     const accion = "buscarpendientesrequeridostotal";
@@ -168,7 +168,7 @@ $(function () {
       success: function (response) {
         if (isJSON(response)) {
           let tasks = JSON.parse(response);
-          // console.log(tasks);
+          console.log(tasks);
           let template = ``;
           let i = 1;
           tasks.forEach((task) => {
@@ -276,7 +276,7 @@ $(function () {
                               <option value="C">CREDITO</option>
                               </select>
                               </td>
-                              <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
+                              <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled><i class="icon-camera"></i></button></td>
                               <td data-titulo="PRECIO" id_proveedor='${
                                 task.COD_PROVEEDOR
                               }' style="text-align:center;">${
@@ -488,7 +488,7 @@ $(function () {
         <option value="C">CREDITO</option>
         </select>
         </td>
-        <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled>Añadir imagen</button></td>
+        <td data-titulo='IMAGEN'><button id='imagensum' class="btn btn-success" disabled><i class="icon-camera"></i></button></td>
         <td data-titulo="PRECIO" id_proveedor='' style="text-align:center;"></td>
         <td data-titulo="ELIMINAR"><button id="deletef" class="btn btn-danger icon-trash eliminarfila"></button></td>
         </tr>
@@ -781,8 +781,6 @@ $(function () {
       },
       success: async function (response) {
         let respuesta = JSON.parse(response);
-        // console.log(respuesta);
-        // if (!Array.isArray(respuesta)) {
         if (respuesta.estado === "ok") {
           Swal.fire({
             title: "¡Guardado exitoso!",
@@ -798,7 +796,6 @@ $(function () {
               tablainsumos.empty();
               $("#tablaimagenes").empty();
               tablatotal.empty();
-              // mostrarRequerimientoTotal();
               mostrarPendientes();
             }
           });
@@ -819,6 +816,21 @@ $(function () {
               // tablainsumos.empty();
               // tablatotal.empty();
               // mostrarRequerimientoTotal();
+              mostrarPendientes();
+            }
+          });
+        } else if (respuesta.estado === "errorduplicado") {
+          Swal.fire({
+            title: "¡Error al guardar!",
+            text: "Ya se inserto en el guardado",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              tablainsumorequerido.empty();
+              tablainsumos.empty();
+              $("#tablaimagenes").empty();
+              tablatotal.empty();
               mostrarPendientes();
             }
           });
@@ -942,19 +954,18 @@ $(function () {
     // Obtén el botón de imagen dentro de la fila actual
     var fila = $(this).closest("tr");
     var botonImagen = fila.find("#imagensum");
-    let codigoprod = fila.find("td:eq(1)").attr("id_producto");
+    let codigoprod = fila.find("td:eq(2)").attr("id_producto");
 
     // Verifica la forma de pago y habilita/deshabilita el botón de imagen
     if (formaPago === "D") {
       // Si la forma de pago es DEPOSITO, habilita el botón de imagen
       botonImagen.prop("disabled", false);
     } else if (formaPago == "C" || formaPago == "E") {
-      // En otros casos, deshabilita el botón de imagen y realiza cualquier otra lógica necesaria
       botonImagen.prop("disabled", true);
 
       $("#tablaimagenes tr").each(function () {
         const filaimagen = $(this);
-        const fileInput = filaimagen.find("td:eq(3) input").val();
+        const fileInput = filaimagen.find("td:eq(4) input").val();
         if (fileInput == codigoprod) {
           filaimagen.remove();
         }
@@ -1444,11 +1455,12 @@ $(function () {
               // $("#taskcodrequerimiento").val("");
               // $("#taskcodrequhiddenvalidar").val("");
               // $("#mensajecompleto").css("display", "none");
+              // window.location.reload();
               tablainsumorequerido.empty();
               tablainsumos.empty();
               tablatotal.empty();
               $("#tablaimagenes").empty();
-              mostrarRequerimientoTotal();
+              // mostrarRequerimientoTotal();
               mostrarPendientes();
             }
           });
