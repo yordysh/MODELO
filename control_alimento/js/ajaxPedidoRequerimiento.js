@@ -173,12 +173,6 @@ $(function () {
           let i = 1;
           tasks.forEach((task) => {
             if (task.COD_ORDEN_COMPRA) {
-              let insumo_pedir = (
-                task.CANTIDAD_INSUMO_ENVASE - task.STOCK_ACTUAL
-              ).toFixed(3);
-              // console.log(insumo_pedir);
-              // if (insumo_pedir > 0) {
-
               template += `<tr codigorequerimientototal="${
                 task.COD_REQUERIMIENTO_TEMP
               }">
@@ -224,7 +218,6 @@ $(function () {
                           </td>
                           </tr>`;
               i++;
-              // }
             } else {
               let insumo_pedir = (task.CANTIDAD - task.STOCK_ACTUAL).toFixed(3);
               let total_comprar = Math.ceil(
@@ -234,9 +227,7 @@ $(function () {
               let preciototal =
                 (cantidadtotalminima * task.PRECIO_PRODUCTO) /
                 task.CANTIDAD_MINIMA;
-              // Limitar a dos decimales usando toFixed
               preciototal = preciototal.toFixed(2);
-              // Convertir de nuevo a número para realizar el redondeo manual
               preciototal = parseFloat(preciototal);
 
               if (insumo_pedir > 0) {
@@ -789,14 +780,12 @@ $(function () {
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
-              // $("#taskcodrequerimiento").val("");
-              // $("#taskcodrequhiddenvalidar").val("");
-              // $("#mensajecompleto").css("display", "none");
               tablainsumorequerido.empty();
               tablainsumos.empty();
               $("#tablaimagenes").empty();
               tablatotal.empty();
               mostrarPendientes();
+              $("body").off("change", ".fecha-entrega");
             }
           });
           // Manejar el error o ajustar la lógica según sea necesario
@@ -1452,19 +1441,14 @@ $(function () {
             confirmButtonText: "Aceptar",
           }).then((result) => {
             if (result.isConfirmed) {
-              // $("#taskcodrequerimiento").val("");
-              // $("#taskcodrequhiddenvalidar").val("");
-              // $("#mensajecompleto").css("display", "none");
-              // window.location.reload();
               tablainsumorequerido.empty();
               tablainsumos.empty();
               tablatotal.empty();
               $("#tablaimagenes").empty();
-              // mostrarRequerimientoTotal();
               mostrarPendientes();
+              $("body").off("change", ".fecha-entrega");
             }
           });
-          // Manejar el error o ajustar la lógica según sea necesario
           return;
         } else if (respuesta.estado === "error") {
           Swal.fire({

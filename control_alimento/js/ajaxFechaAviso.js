@@ -308,7 +308,7 @@ $(function () {
     ) {
       return new Promise((resolve, reject) => {
         const accion = "mostrarordencompraalmacenalerta";
-        var codrequerimiento;
+        // var codrequerimiento;
         $.ajax({
           url: "../control_alimento/c_almacen.php",
           type: "POST",
@@ -318,7 +318,7 @@ $(function () {
             console.log(task);
             if (task.length > 0) {
               // let task = JSON.parse(response);
-              codrequerimiento = task[0].COD_REQUERIMIENTO;
+              // codrequerimiento = task[0].COD_REQUERIMIENTO;
               let htmlContent = "<h1>¡Lista de productos!</h1>";
               htmlContent += "<table class='tableta'>";
               htmlContent += "<thead>";

@@ -890,6 +890,15 @@ if ($accion == 'insertar') {
         $respuesta = c_almacen::c_insertar_orden_compra_adicional($valorcapturadoadicional);
     }
     // }
+} elseif ($accion == 'verificarvaloresformulacion') {
+
+    $codigorequerimiento = $_POST['codigorequerimiento'];
+    $codigoproducto = $_POST['codigoproducto'];
+    $valorcantidad = floatval($_POST['valorcantidad']);
+
+    $respuesta = c_almacen::c_verificar_formula_orden_compra($codigorequerimiento, $codigoproducto, $valorcantidad);
+
+    // }
 }
 
 
@@ -4571,6 +4580,8 @@ class c_almacen
             $json = array();
             foreach ($datos as $row) {
                 $json[] = array(
+                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "CANTIDAD" => $row->CANTIDAD,
 
@@ -5059,7 +5070,19 @@ class c_almacen
             echo json_encode($response);
         }
     }
+    static function c_verificar_formula_orden_compra($codigorequerimiento, $codigoproducto, $valorcantidad)
+    {
+        $m_formula = new m_almacen();
 
+        $respuestaordeimagenes = $m_formula->VerificarFormulaOrdenCompra($codigorequerimiento, $codigoproducto, $valorcantidad);
+        if ($respuestaordeimagenes) {
+            $response = array('estado' => 'ok');
+            echo json_encode($response);
+        } else {
+            $response = array('estado' => 'error');
+            echo json_encode($response);
+        }
+    }
 
 
 

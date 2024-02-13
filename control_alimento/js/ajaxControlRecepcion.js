@@ -23,10 +23,11 @@ $(function () {
           let tasks = JSON.parse(response);
           let template = ``;
           tasks.forEach((task) => {
-            template += `<tr">
-                            <td data-titulo="PRODUCTOS" style='text-align:center;'>${task.DES_PRODUCTO}</td>
+            template += `<tr codigorequerimiento='${task.COD_REQUERIMIENTO}'">
+                            <td data-titulo="PRODUCTOS" style='text-align:center;' codigoproducto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
                             <td data-titulo="CANTIDAD TOTAL" style='text-align:center;'>${task.CANTIDAD}</td>
-                         </tr>`;
+                            <td data-titulo="VERIFICAR" style='text-align:center;'><button class="btn btn-warning" id="consultadeproduccion"><i class="icon-check" style="color:white;"></i></button></td>
+                            </tr>`;
           });
           $("#tablaproductoscantidades").html(template);
         }
@@ -53,7 +54,7 @@ $(function () {
                             <td data-titulo="CODIGO INTERNO">${task.COD_PRODUCCION}</td>
                             <td data-titulo="PRODUCTO" codigoproducto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
                             <td data-titulo="CODIGO DE LOTE"><input type="text" onkeypress="return /[A-Za-z0-9]/.test(String.fromCharCode(event.which))" class='codigolote' id='codigolote' maxlength='20' /></td>
-                            <td data-titulo="F.V"><input type='date' class='fechavencimiento'/></td>
+                            <td data-titulo="F.V"><input type='date' class='fechavencimiento' id='fechavencimiento'/></td>
                             <td data-titulo="PROVEEDOR" codigoproveedor='${task.COD_PROVEEDOR}'>${task.NOM_PROVEEDOR}</td>
                             <td data-titulo="G.Remisión"> <input class="form-check-input remision" type="checkbox" value="" id="remision" style='margin-left:20px;'></td>
                             <td data-titulo="Boleta"><input class="form-check-input boleta" type="checkbox" value="" id="boleta" style='margin-left:20px;'></td>
@@ -132,6 +133,23 @@ $(function () {
   });
 
   /*---------------------------------------------------- */
+
+  /*-------------------------------------FECHA VENCIMIENTO-------------------- */
+
+  var fechaAct = new Date();
+  var siguienteAnio = fechaAct.getFullYear() + 1;
+
+  var fechaMin = new Date(siguienteAnio, 0, 1);
+  var fechaMinimaFormato = fechaMin.toISOString().slice(0, 10);
+
+  $("#tablacontrolrecepcion tr").each(function () {
+    let fechavencimientoInput = $(this).find("td:eq(6) input.fechavencimiento");
+
+    // Establece el valor del input en cada fila
+    fechavencimientoInput.val(fechaMinimaFormato);
+  });
+
+  /*------------------------------------------------------------------------- */
   /*------------------------- GUARDAR LA RECEPCION ------------------------------- */
   $("#guardarrecepcion").click((e) => {
     e.preventDefault();
@@ -240,7 +258,7 @@ $(function () {
       boleta = $(this).find("td:eq(9) input:checkbox").is(":checked");
       factura = $(this).find("td:eq(10) input:checkbox").is(":checked");
       gbf = $(this).find("td:eq(11) input").val();
-      console.log(factura);
+
       if (hora === "") {
         horaEmpty = true;
       }
@@ -373,9 +391,9 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               // $("#selectrequerimiento").val("none").trigger("change");
-              // $("#tablaproductoscantidades").empty();
-              // $("#tablacontrolrecepcion").empty();
-              // $("#tablacontrolrecepcionobservacion").empty();
+              $("#tablaproductoscantidades").empty();
+              $("#tablacontrolrecepcion").empty();
+              $("#tablacontrolrecepcionobservacion").empty();
             }
           });
         }
@@ -409,4 +427,34 @@ $(function () {
       });
     }
   });
+
+  /*--------------------------CONSULTA DE FORMULACION ORDEN COMPRA-------------------- */
+  $(document).on("click", "#consultadeproduccion", (e) => {
+    e.preventDefault();
+    let capturaTr = $(e.currentTarget).closest("tr");
+    let codigorequerimiento = capturaTr.attr("codigorequerimiento");
+    let codigoproducto = capturaTr.find("td:eq(0)").attr("codigoproducto");
+    let valorcantidad = capturaTr.find("td:eq(1)").text();
+
+    const accionrequerimento = "verificarvaloresformulacion";
+    $.ajax({
+      url: "./c_almacen.php",
+      data: {
+        accion: accionrequerimento,
+        codigorequerimiento: codigorequerimiento,
+        codigoproducto: codigoproducto,
+        valorcantidad: valorcantidad,
+      },
+      type: "POST",
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
+      success: function (response) {
+        if (response == "ok") {
+        }
+      },
+    });
+  });
+  /*--------------------------------------------------------------------------------- */
 });

@@ -87,15 +87,14 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         }
 
         .columnafecha:nth-child(1) {
-            width: 100px;
+            width: 90px;
         }
 
-        .columnahora:nth-child(2) {
+        .columnarequerimiento:nth-child(2) {
             width: 80px;
         }
 
-        .columnacodigo:nth-child(4),
-        .columnafv:nth-child(5) {
+        .columnacodigo:nth-child(4) {
             width: 80px;
         }
 
@@ -103,8 +102,8 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             width: 110px;
         }
 
-        .columnavb:nth-child(15) {
-            width: 70px;
+        .columnafv:nth-child(7) {
+            width: 90px !important;
         }
 
         .mover-derecha {
@@ -154,6 +153,14 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         .imagen {
             text-align: center;
         }
+
+        /* .vertical-text {
+            writing-mode: vertical-lr;
+            margin-right: -40px;
+            margin-top: 100px;
+            transform: rotate(270deg);
+
+        } */
     </style>
     <!-- Table titulo-->
     <header>
@@ -188,9 +195,9 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         <thead>
             <tr>
                 <th rowspan="2" class="columnafecha">FECHA DE INGRESO</th>
-                <th rowspan="2" class="columnafecha">REQUERIMIENTO</th>
+                <th rowspan="2" class="columnarequerimiento">REQUERIMIENTO</th>
                 <th rowspan="2" class="columnahora">HORA</th>
-                <th rowspan="2" class="columnahora">CODIGO INTERNO</th>
+                <th rowspan="2" class="columnacodigo">CODIGO INTERNO</th>
                 <th rowspan="2">PRODUCTO</th>
                 <th rowspan="2" class="columnacodigo">CÓDIGO DE LOTE</th>
                 <th rowspan="2" class="columnafv">F.V</th>
@@ -203,28 +210,28 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 <th colspan="3">CONTROL DEL PRODUCTO</th>
                 <th colspan="3">DEL PERSONAL DE TRANSPORTE</th>
                 <th colspan="4">CONDICIONES DEL TRANSPORTE</th>
-                <th rowspan="2" class="columnavb">V°B°</th>
+                <th rowspan="2" class="">V°B°</th>
             </tr>
             <tr>
-                <th class="vertical-text">G.Remisión</th>
-                <th class="vertical-text">Boleta</th>
-                <th class="vertical-text">Factura</th>
-                <th class="vertical-text">Primario</th>
-                <th class="vertical-text">Secundario</th>
-                <th class="vertical-text">Saco</th>
-                <th class="vertical-text">Caja</th>
-                <th class="vertical-text">Cilindro</th>
-                <th class="vertical-text">bolsa</th>
-                <th class="vertical-text">Envase integro/ hermético</th>
-                <th class="vertical-text">Certificado de calidad</th>
-                <th class="vertical-text">Rotulación conforme</th>
-                <th class="vertical-text">Aplicación de las BPD</th>
-                <th class="vertical-text">Higiene & salud</th>
-                <th class="vertical-text">Indumentaria completa y limpia</th>
-                <th class="vertical-text">Limpio</th>
-                <th class="vertical-text">Exclusivo</th>
-                <th class="vertical-text">Hermético</th>
-                <th class="vertical-text">Ausencia de plagas</th>
+                <th> <label for="" class="vertical-text">G.Remisión</label></th>
+                <th class="">Boleta</th>
+                <th class="">Factura</th>
+                <th class="">Primario</th>
+                <th class="">Secundario</th>
+                <th class="">Saco</th>
+                <th class="">Caja</th>
+                <th class="">Cilindro</th>
+                <th class="">bolsa</th>
+                <th class="">Envase integro/ hermético</th>
+                <th class="">Certificado de calidad</th>
+                <th class="">Rotulación conforme</th>
+                <th class="">Aplicación de las BPD</th>
+                <th class="">Higiene & salud</th>
+                <th class="">Indumentaria completa y limpia</th>
+                <th class="">Limpio</th>
+                <th class="">Exclusivo</th>
+                <th class="">Hermético</th>
+                <th class="">Ausencia de plagas</th>
             </tr>
         </thead>
         <tbody>
@@ -234,7 +241,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 echo '<tr>';
                 echo '<td>' . $dato['FECHA_INGRESO'] . '</td>';
                 echo '<td style="text-align:center;">' . $requer . '</td>';
-                echo '<td>' . $dato['HORA'] . '</td>';
+                echo '<td style="text-align:center;">' . $dato['HORA'] . '</td>';
                 echo '<td style="text-align:center;">' . $dato['COD_PRODUCCION'] . '</td>';
                 echo '<td>' . $dato['DES_PRODUCTO'] . '</td>';
                 echo '<td>' . $dato['CODIGO_LOTE'] . '</td>';
@@ -286,24 +293,24 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 } else {
                     echo '<td></td>';
                 }
-                echo '<td>' . $dato['CANTIDAD_MINIMA'] . '</td>';
+                echo '<td style="text-align:center;">' . $dato['CANTIDAD_MINIMA'] . '</td>';
                 if ($dato['ENVASE'] == 'C') {
-                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                    echo '<td class="imagen" style="width:30px!important;"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                 } else {
                     echo '<td><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
                 }
                 if ($dato['CERTIFICADO'] == 'C') {
-                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                    echo '<td class="imagen" style="width:40px!important;"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                 } else {
                     echo '<td><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
                 }
                 if ($dato['ROTULACION'] == 'C') {
-                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                    echo '<td class="imagen" style="width:45px!important;"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                 } else {
                     echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
                 }
                 if ($dato['APLICACION'] == 'C') {
-                    echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
+                    echo '<td class="imagen" ><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/check.png')) . '" alt=""></td>';
                 } else {
                     echo '<td class="imagen"><img src="data:image/png;base64,' . base64_encode(file_get_contents('./images/aspa.png')) . '" alt=""></td>';
                 }

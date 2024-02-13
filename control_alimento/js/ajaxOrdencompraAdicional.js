@@ -540,6 +540,8 @@ $(function () {
       let formapago = $(this).find("td:eq(7)").find("select").val();
       let preciomin = $(this).find("td:eq(9)").text();
 
+      let canrecibir = $(this).find("td:eq(4)").text();
+
       fechaentregaalert.push(fechaentrega);
       valoresCapturadosAdicional.push({
         codigorequerimiento: codigorequerimiento,
@@ -552,6 +554,7 @@ $(function () {
         formapago: formapago,
         fechaentrega: fechaentrega,
         preciomin: preciomin,
+        canrecibir: canrecibir,
       });
     });
 
@@ -655,6 +658,7 @@ $(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               cargarordencompraadicional();
+              $("#tablaimagenes").empty();
             }
           });
         } else if (respuesta.estado === "error") {
