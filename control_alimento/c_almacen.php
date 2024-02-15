@@ -513,6 +513,14 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_mostrar_producccion_por_requerimiento();
     echo $respuesta;
+} elseif ($accion == 'verficaalmacentemp') {
+    $cod_produccion_requerimiento = trim($_POST['cod_produccion_requerimiento']);
+    $codigoproducto = trim($_POST['codigoproducto']);
+    $cantidadrequerimientototal = $_POST['cantidadrequerimientototal'];
+
+
+    $respuesta = c_almacen::c_verifica_cantidad_almacen($cod_produccion_requerimiento, $codigoproducto, $cantidadrequerimientototal);
+    echo $respuesta;
 } elseif ($accion == 'insertarproducciontotal') {
     $codpersonal = trim($_POST['codpersonal']);
     $codrequerimientoproduccion = trim($_POST['codrequerimientoproduccion']);
@@ -889,15 +897,6 @@ if ($accion == 'insertar') {
 
         $respuesta = c_almacen::c_insertar_orden_compra_adicional($valorcapturadoadicional);
     }
-    // }
-} elseif ($accion == 'verificarvaloresformulacion') {
-
-    $codigorequerimiento = $_POST['codigorequerimiento'];
-    $codigoproducto = $_POST['codigoproducto'];
-    $valorcantidad = floatval($_POST['valorcantidad']);
-
-    $respuesta = c_almacen::c_verificar_formula_orden_compra($codigorequerimiento, $codigoproducto, $valorcantidad);
-
     // }
 }
 
@@ -3690,6 +3689,42 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
+
+
+    static function c_verifica_cantidad_almacen($cod_produccion_requerimiento, $codigoproducto, $cantidadrequerimientototal)
+    {
+        $m_formula = new m_almacen();
+        $codformulacion = $m_formula->VerificaCodFormulacion($codigoproducto);
+        $valoresformula = $m_formula->InsumosFormulacion($codformulacion);
+        $cont = 0;
+        $valoresinsumos = [];
+        foreach ($valoresformula as $form) {
+            $codinsumo = trim($form["COD_PRODUCTO"]);
+            $desproducto = trim($form["DES_PRODUCTO"]);
+            $cantidadinsumo = floatval($form["CAN_FORMULACION"]);
+            $cantidadformula = floatval($form["CANTIDAD"]);
+
+            $totalcantidad = round(($cantidadrequerimientototal * $cantidadinsumo) / $cantidadformula, 3);
+            $valoresalmacen = $m_formula->AlmacenVerificarProductoCantidad($codinsumo);
+            $valoresalmacenv = floatval($valoresalmacen["STOCK_ACTUAL"]);
+
+            if ($totalcantidad > $valoresalmacenv) {
+                $faltante = $totalcantidad - $valoresalmacenv;
+                $falta = round($faltante, 2);
+                $cont++;
+                $valoresinsumos[] = ["descripcion" => $desproducto, "cantidad" => $falta];
+            }
+        }
+
+        if ($cont > 0) {
+            $response = array('estado' => 'error', "insumos" => $valoresinsumos);
+            echo json_encode($response);
+        } else {
+            $response = array('estado' => 'ok');
+            echo json_encode($response);
+        }
+    }
+
     static function c_insertar_produccion_total($codpersonal, $codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja)
     {
         $m_formula = new m_almacen();
@@ -5070,19 +5105,13 @@ class c_almacen
             echo json_encode($response);
         }
     }
-    static function c_verificar_formula_orden_compra($codigorequerimiento, $codigoproducto, $valorcantidad)
-    {
-        $m_formula = new m_almacen();
-
-        $respuestaordeimagenes = $m_formula->VerificarFormulaOrdenCompra($codigorequerimiento, $codigoproducto, $valorcantidad);
-        if ($respuestaordeimagenes) {
-            $response = array('estado' => 'ok');
-            echo json_encode($response);
-        } else {
-            $response = array('estado' => 'error');
-            echo json_encode($response);
-        }
-    }
+    // static function c_verificar_formula_orden_compra($codigorequerimiento, $codigoproducto, $valorcantidad)
+    // {
+    //     $m_formula = new m_almacen();
+    //     $consultadeproductosrequerimiento = $m_formula->MostrarRequeriItem($codigorequerimiento);
+    //     $codigoformula = $m_formula->VerificaCodFormulacion($codigoproducto);
+    //     $codigoformula = $m_formula->InsumosFormulacion($codigoformula);
+    // }
 
 
 

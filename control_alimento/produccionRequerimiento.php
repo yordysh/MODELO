@@ -114,7 +114,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         </div>
 
                         <!-- Tabla total requerimiento pedido-->
-                        <div class="table-responsive" style="overflow: scroll;height: 200px!important; margin-top:20px;margin-bottom:50px;">
+                        <div class="table-responsive" style="overflow: scroll;height: 400px!important; margin-top:20px;margin-bottom:50px;">
                             <table id="tmostrarproduccionrequerimiento" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>

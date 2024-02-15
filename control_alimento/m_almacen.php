@@ -3874,7 +3874,7 @@ class m_almacen
 
       $stmCalculo = $this->bd->prepare("SELECT TRI.COD_REQUERIMIENTO AS COD_REQUERIMIENTO, TRI.COD_PRODUCTO AS COD_PRODUCTO, 
                                           TP.DES_PRODUCTO AS DES_PRODUCTO, TRI.CANTIDAD AS CANTIDAD FROM T_TMPREQUERIMIENTO_ITEM TRI 
-                                          INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO WHERE TRI.ESTADO='A'");
+                                          INNER JOIN T_PRODUCTO TP ON TRI.COD_PRODUCTO=TP.COD_PRODUCTO WHERE TRI.ESTADO='P'");
 
       $stmCalculo->execute();
       $datos = $stmCalculo->fetchAll(PDO::FETCH_OBJ);
@@ -3931,7 +3931,6 @@ class m_almacen
       $zonaHorariaPeru = new DateTimeZone('America/Lima');
       $horaActualPeru = new DateTime('now', $zonaHorariaPeru);
       $horaMinutosSegundos = $horaActualPeru->format('H:i:s');
-
 
 
       $stmCodProducto = $this->bd->prepare("SELECT MAX(COD_FORMULACION) AS COD_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codproductoproduccion'");
@@ -4024,7 +4023,7 @@ class m_almacen
 
       if ($contarordencompra == 0) {
         $stmProducciontototal = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION(COD_PRODUCCION, COD_REQUERIMIENTO, COD_CATEGORIA, COD_PRODUCTO, NUM_PRODUCION_LOTE, CAN_PRODUCCION,CANTIDAD_PRODUCIDA, FEC_GENERADO,HOR_GENERADO,FEC_VENCIMIENTO, OBSERVACION,UNI_MEDIDA,BARRA_INICIO,BARRA_FIN, USU_REGISTRO,MAQUINA, COD_ALMACEN,CAN_CAJA)
-        VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$cantidadtotalproduccion','$dateTInicio','$horaMinutosSegundos','$dateTVencimiento','$textAreaObservacion','UNIDAD','$resultadoFinalI','$resultadoFinalFin','$codpersonal','$maquina','00017','$cantidadcaja')");
+        VALUES ('$codigo_de_produccion_generado','$codrequerimientoproduccion', '$codigo_categoria','$codproductoproduccion','$numeroproduccion','$cantidadtotalproduccion','$cantidadtotalproduccion',CONVERT(DATETIME, '$fechainicio', 120),'$horaMinutosSegundos',CONVERT(DATETIME, '$fechavencimiento', 120),'$textAreaObservacion','UNIDAD','$resultadoFinalI','$resultadoFinalFin','$codpersonal','$maquina','00017','$cantidadcaja')");
 
         $insert = $stmProducciontototal->execute();
 
@@ -4038,8 +4037,17 @@ class m_almacen
 
           $stmProduccionitem = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_ITEM(COD_PRODUCCION, COD_PRODUCTO,  CAN_PRODUCCION)
                                                     VALUES ('$codigo_de_produccion_generado','$codProductoitem','$totalInsumos')");
-
           $stmProduccionitem->execute();
+
+          $consultadestock = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOSTEMP WHERE COD_PRODUCTO='$codProductoitem'");
+          $consultadestock->execute();
+          $valorstock = $consultadestock->fetch(PDO::FETCH_ASSOC);
+          $valstock = floatval($valorstock['STOCK_ACTUAL']);
+
+          $valorresta = $valstock - $totalInsumos;
+
+          $actualizaalmacentemp = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOSTEMP SET STOCK_ACTUAL='$valorresta',STOCK_ANTERIOR='$valstock' WHERE COD_PRODUCTO='$codProductoitem'");
+          $actualizaalmacentemp->execute();
         }
 
         foreach ($consultaEnvase as $rowEnvase) {
@@ -4051,8 +4059,17 @@ class m_almacen
 
           $stmProduccionenvases = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_ENVASE(COD_PRODUCCION, COD_PRODUCTO,  CAN_PRODUCCION_ENVASE)
                                                     VALUES ('$codigo_de_produccion_generado','$codProductoenvase','$totalEnvases')");
-
           $stmProduccionenvases->execute();
+
+          // $consultadestockenvase = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOSTEMP WHERE COD_PRODUCTO='$codProductoitem'");
+          // $consultadestockenvase->execute();
+          // $valorstockenvase = $consultadestockenvase->fetch(PDO::FETCH_ASSOC);
+          // $valstockenvase = floatval($valorstockenvase['STOCK_ACTUAL']);
+
+          // $valorrestaenvase = $valstockenvase - $totalEnvases;
+
+          // $actualizaalmacentemp = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOSTEMP SET STOCK_ACTUAL='$valorrestaenvase',STOCK_ANTERIOR='$valstockenvase' WHERE COD_PRODUCTO='$codProductoitem'");
+          // $actualizaalmacentemp->execute();
         }
 
         $stmActualiza = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ITEM SET ESTADO='T' WHERE COD_REQUERIMIENTO='$codrequerimientoproduccion' AND COD_PRODUCTO='$codproductoproduccion'");
@@ -6020,6 +6037,9 @@ class m_almacen
           $actualizoalmaceninsumoi = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET STOCK_ACTUAL='$sumatotalstockx',STOCK_ANTERIOR='$canstockx' WHERE COD_PRODUCTO='$producto'");
           $actualizoalmaceninsumoi->execute();
 
+          $actualizoalmaceninsumoi = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOSTEMP SET STOCK_ACTUAL='$sumatotalstockx',STOCK_ANTERIOR='$canstockx' WHERE COD_PRODUCTO='$producto'");
+          $actualizoalmaceninsumoi->execute();
+
           $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET CANTIDAD_LLEGADA='$cantidadminima' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
           $actualizo->execute();
 
@@ -6293,15 +6313,17 @@ class m_almacen
           )");
           $querylote->execute();
 
-          // $stockanteriorx = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$producto'");
-          // $stockanteriorx->execute();
-          // $cantidadstockx = $stockanteriorx->fetch(PDO::FETCH_ASSOC);
-          // $canstockx = $cantidadstockx['STOCK_ACTUAL'];
-          // $sumatotalstockx = floatval($canstockx + $cantidadminimas);
+          $stockanteriorx = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$producto'");
+          $stockanteriorx->execute();
+          $cantidadstockx = $stockanteriorx->fetch(PDO::FETCH_ASSOC);
+          $canstockx = $cantidadstockx['STOCK_ACTUAL'];
+          $sumatotalstockx = floatval($canstockx + $cantidadminimas);
 
 
-          // $actualizoalmaceninsumoi = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET STOCK_ACTUAL='$sumatotalstockx',STOCK_ANTERIOR='$canstockx' WHERE COD_PRODUCTO='$producto'");
-          // $actualizoalmaceninsumoi->execute();
+          $actualizoalmaceninsumoi = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET STOCK_ACTUAL='$sumatotalstockx',STOCK_ANTERIOR='$canstockx' WHERE COD_PRODUCTO='$producto'");
+          $actualizoalmaceninsumoi->execute();
+          $actualizoalmaceninsumoi = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOSTEMP SET STOCK_ACTUAL='$sumatotalstockx',STOCK_ANTERIOR='$canstockx' WHERE COD_PRODUCTO='$producto'");
+          $actualizoalmaceninsumoi->execute();
 
           $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET CANTIDAD_LLEGADA='$cantidadminimas' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
           $actualizo->execute();
@@ -7269,6 +7291,73 @@ class m_almacen
     }
   }
 
+
+  // public function MostrarRequeriItem($codigorequerimiento)
+  // {
+  //   try {
+
+  //     $totalinsumo = $this->bd->prepare("SELECT COD_PRODUCTO,CANTIDAD FROM T_TMPREQUERIMIENTO_ITEM WHERE COD_REQUERIMIENTO='$codigorequerimiento'");
+  //     $totalinsumo->execute();
+  //     $totalinsumoorden = $totalinsumo->fetchAll(PDO::FETCH_ASSOC);
+
+  //     return $totalinsumoorden;
+  //   } catch (Exception $e) {
+  //     die($e->getMessage());
+  //     echo $e->getLine();
+  //   }
+  // }
+  public function VerificaCodFormulacion($codigoproducto)
+  {
+    try {
+
+      $codigo = new m_almacen();
+      $codigorecepcion = $codigo->generarcodigocontrolrecepcion();
+
+      $valordecodformulacion = $this->bd->prepare("SELECT COD_FORMULACION FROM T_TMPFORMULACION WHERE COD_PRODUCTO='$codigoproducto'");
+      $valordecodformulacion->execute();
+      $codigoresultado = $valordecodformulacion->fetch(PDO::FETCH_ASSOC);
+      $formulacod = $codigoresultado['COD_FORMULACION'];
+
+      return  $formulacod;
+    } catch (Exception $e) {
+      die($e->getMessage());
+      echo $e->getLine();
+    }
+  }
+  public function InsumosFormulacion($codigoformula)
+  {
+    try {
+      $totalinsumo = $this->bd->prepare("SELECT TFI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,TFI.CAN_FORMULACION AS CAN_FORMULACION,TF.CAN_FORMULACION AS CANTIDAD FROM T_TMPFORMULACION_ITEM TFI 
+      INNER JOIN T_TMPFORMULACION TF ON TF.COD_FORMULACION=TFI.COD_FORMULACION
+      INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TFI.COD_PRODUCTO WHERE TFI.COD_FORMULACION='$codigoformula'");
+      $totalinsumo->execute();
+      $totalinsumoorden = $totalinsumo->fetchAll(PDO::FETCH_ASSOC);
+
+
+      return $totalinsumoorden;
+    } catch (Exception $e) {
+      die($e->getMessage());
+      echo $e->getLine();
+    }
+  }
+
+  public function AlmacenVerificarProductoCantidad($codinsumo)
+  {
+    try {
+
+      $totalinsumo = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOSTEMP WHERE COD_PRODUCTO='$codinsumo'");
+      $totalinsumo->execute();
+      $totalinsumoorden = $totalinsumo->fetch(PDO::FETCH_ASSOC);
+
+
+
+      return $totalinsumoorden;
+    } catch (Exception $e) {
+      die($e->getMessage());
+      echo $e->getLine();
+    }
+  }
+
   public function  VerificarFormulaOrdenCompra($codigorequerimiento, $codigoproducto, $valorcantidad)
   {
     try {
@@ -7303,6 +7392,25 @@ class m_almacen
       return $insertarecepcioncompras;
     } catch (Exception $e) {
       $this->bd->rollBack();
+      die($e->getMessage());
+      echo $e->getLine();
+    }
+  }
+
+  public function  MostrarOrdenComprada($requerimiento)
+  {
+    try {
+
+      $totalinsumo = $this->bd->prepare("SELECT O.COD_PROVEEDOR AS COD_PROVEEDOR,TPR.NOM_PROVEEDOR AS NOM_PROVEEDOR,OI.COD_PRODUCTO AS COD_PRODUCTO,
+      TP.DES_PRODUCTO AS DES_PRODUCTO, OI.CANTIDAD_INSUMO_ENVASE AS CANTIDAD_INSUMO_ENVASE FROM T_TMPORDEN_COMPRA_ITEMTEMP OI 
+      INNER JOIN T_TMPORDEN_COMPRATEMP O ON O.COD_ORDEN_COMPRA=OI.COD_ORDEN_COMPRA
+      INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=OI.COD_PRODUCTO
+      INNER JOIN T_PROVEEDOR TPR ON TPR.COD_PROVEEDOR=O.COD_PROVEEDOR WHERE COD_TMPCOMPROBANTE='$requerimiento' ORDER BY TP.DES_PRODUCTO ASC");
+      $totalinsumo->execute();
+      $totalinsumoorden = $totalinsumo->fetchAll(PDO::FETCH_ASSOC);
+
+      return $totalinsumoorden;
+    } catch (Exception $e) {
       die($e->getMessage());
       echo $e->getLine();
     }

@@ -26,7 +26,6 @@ $(function () {
             template += `<tr codigorequerimiento='${task.COD_REQUERIMIENTO}'">
                             <td data-titulo="PRODUCTOS" style='text-align:center;' codigoproducto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
                             <td data-titulo="CANTIDAD TOTAL" style='text-align:center;'>${task.CANTIDAD}</td>
-                            <td data-titulo="VERIFICAR" style='text-align:center;'><button class="btn btn-warning" id="consultadeproduccion"><i class="icon-check" style="color:white;"></i></button></td>
                             </tr>`;
           });
           $("#tablaproductoscantidades").html(template);
@@ -427,34 +426,4 @@ $(function () {
       });
     }
   });
-
-  /*--------------------------CONSULTA DE FORMULACION ORDEN COMPRA-------------------- */
-  $(document).on("click", "#consultadeproduccion", (e) => {
-    e.preventDefault();
-    let capturaTr = $(e.currentTarget).closest("tr");
-    let codigorequerimiento = capturaTr.attr("codigorequerimiento");
-    let codigoproducto = capturaTr.find("td:eq(0)").attr("codigoproducto");
-    let valorcantidad = capturaTr.find("td:eq(1)").text();
-
-    const accionrequerimento = "verificarvaloresformulacion";
-    $.ajax({
-      url: "./c_almacen.php",
-      data: {
-        accion: accionrequerimento,
-        codigorequerimiento: codigorequerimiento,
-        codigoproducto: codigoproducto,
-        valorcantidad: valorcantidad,
-      },
-      type: "POST",
-      beforeSend: function () {
-        $(".preloader").css("opacity", "1");
-        $(".preloader").css("display", "block");
-      },
-      success: function (response) {
-        if (response == "ok") {
-        }
-      },
-    });
-  });
-  /*--------------------------------------------------------------------------------- */
 });

@@ -172,7 +172,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
 
                         <input type="hidden" id="taskId">
                         <button style="margin-bottom: 80px;" id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary boton-insertar">Guardar</button>
-
+                        <button style="margin-bottom: 55px;" id="requerimientoorden" name="requerimiento" class="btn btn-success">Requerimiento</button>
                     </form>
                 </div>
             </div>

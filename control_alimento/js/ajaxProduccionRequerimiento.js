@@ -130,28 +130,68 @@ $(function () {
     let cod_produccion_requerimiento = capturaTr.attr(
       "taskproduccionrequerimiento"
     );
-
-    $("#idhiddencodrequerimiento").val(cod_produccion_requerimiento);
-    $("#idhiddenproducto").val(codigoproducto);
-    $("#productorequerimientoitem").val(nombreproducto);
-    $("#cantidadhiddentotalrequerimiento").val(cantidadrequerimientototal);
-    if (capturaTr) {
-      Swal.fire({
-        title: "¡Se añadio correctamente!",
-        text: "Los datos se añadieron correctamente al formulario.",
-        icon: "success",
-        confirmButtonText: "Aceptar",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $("#numeroproduccion").val("");
-          // document.getElementById("fechainicio").value = fechaMinima;
-          $("#fechainicio").val("");
-          $("#fechavencimiento").val("");
-          $("#textAreaObservacion").val("");
-          $("#cantidadcaja").val("20");
+    const accionverificarsihayalmacen = "verficaalmacentemp";
+    $.ajax({
+      type: "POST",
+      url: "./c_almacen.php",
+      data: {
+        accion: accionverificarsihayalmacen,
+        cod_produccion_requerimiento: cod_produccion_requerimiento,
+        codigoproducto: codigoproducto,
+        cantidadrequerimientototal: cantidadrequerimientototal,
+      },
+      beforeSend: function () {
+        $(".preloader").css("opacity", "1");
+        $(".preloader").css("display", "block");
+      },
+      success: function (response) {
+        let valor = JSON.parse(response);
+        if (valor.estado == "error") {
+          // console.log(valor);
+          var textoInsumos = "";
+          valor.insumos.forEach(function (insumo) {
+            textoInsumos +=
+              insumo.descripcion + " falta " + insumo.cantidad + ", ";
+          });
+          // console.log(textoInsumos);
+          textoInsumos = textoInsumos.slice(0, -2);
+          Swal.fire({
+            title: "¡No se hace producción!",
+            text: "Los insumos a comprar: \n" + textoInsumos + ".",
+            icon: "info",
+            confirmButtonText: "Aceptar",
+          });
+        } else if (valor.estado == "ok") {
+          Swal.fire({
+            title: "¡Se añadio correctamente!",
+            text: "Los datos se añadieron correctamente al formulario.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#idhiddencodrequerimiento").val(cod_produccion_requerimiento);
+              $("#idhiddenproducto").val(codigoproducto);
+              $("#productorequerimientoitem").val(nombreproducto);
+              $("#cantidadhiddentotalrequerimiento").val(
+                cantidadrequerimientototal
+              );
+              $("#numeroproduccion").val("");
+              $("#fechainicio").val("");
+              $("#fechavencimiento").val("");
+              $("#textAreaObservacion").val("");
+              $("#cantidadcaja").val("20");
+            }
+          });
         }
-      });
-    }
+      },
+      error: function (error) {
+        console.log("ERROR " + error);
+      },
+      complete: function () {
+        $(".preloader").css("opacity", "0");
+        $(".preloader").css("display", "none");
+      },
+    });
   });
   /* -------------------- Cuando escribe en cantidad de caja con decimal lanza alerta --------------- */
   $("#cantidadcaja").keyup((e) => {

@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-// $codusuario = $_SESSION["cod"];
+$codusuario = $_SESSION["cod"];
 // $codanexo=$_SESSION["ane"];
-$codusuario = '00004';
+// $codusuario = '00004';
 // $codanexo = '1010';
 
 ?>
@@ -250,7 +250,6 @@ $mostrarrequerimiento = $mostrar->MostrarTPMRequerimiento();
                         </div>
                         <!-- </div> -->
                         <div class="col-md-6 ctnBtn">
-                            <!-- <div class="estilorequerimiento"> -->
                             <select name="select_requerimiento" id="idrequerimientotemp" class="margin">
                                 <?php
                                 $primerRequerimiento = reset($mostrarrequerimiento);
@@ -265,13 +264,12 @@ $mostrarrequerimiento = $mostrar->MostrarTPMRequerimiento();
                                 }
                                 ?>
                             </select>
-                            <!-- </div> -->
                             <div>
                                 <button id="generarOrdenPDF" class="btn btn-success margin">VISUALIZAR ORDEN COMPRA</button>
                             </div>
-                            <!-- <div>                           
-                                <button id="verpdf" class="btn btn-success margin">VER CONFORMIDAD</button>
-                            </div> -->
+                            <div class="">
+                                <a class="btn btn-info margin" href="#" onclick="generarPDF()">LISTA COMPRA</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -287,6 +285,26 @@ $mostrarrequerimiento = $mostrar->MostrarTPMRequerimiento();
     <script src="./js/ajaxPedidoRequerimiento.js?v=0.001"></script>
     <script src="../js/menu_a.js"></script>
     <script src="./js/select2.min.js"></script>
+
+    <script>
+        function generarPDF() {
+            var requerimiento = document.getElementById("idrequerimientotemp").value;
+
+
+            // if (!mesSeleccionado) {
+            //     Swal.fire({
+            //         title: "¡Error!",
+            //         text: "Seleccionar un mes",
+            //         icon: "error",
+            //         confirmButtonText: "Aceptar",
+            //     });
+            //     return;
+            // }
+            // Enviar los valores a tu script de generación de PDF
+            var url = "pdf-lista-orden-compra.php?requerimiento=" + requerimiento;
+            window.open(url, "_blank");
+        }
+    </script>
 </body>
 
 </html>
