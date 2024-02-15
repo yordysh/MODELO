@@ -4486,6 +4486,7 @@ class m_almacen
         $dias = $diferencia->days;
 
         $fecha_actual = $codigoInsumosAvances->c_horaserversql('F');
+
         $fecha_formateada = DateTime::createFromFormat('d/m/Y', $fecha_actual)->format('Y-m-d');
         $nueva_fecha_vencimiento = date('d/m/Y', strtotime($fecha_formateada . ' + ' . $dias . ' days'));
 
