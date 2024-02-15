@@ -10,7 +10,7 @@ require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
 $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
-
+$mostrarrequerimiento = $mostrar->MostrarTPMRequerimiento();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -171,8 +171,28 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <!-- Insertar nuevas cantidades -->
 
                         <input type="hidden" id="taskId">
-                        <button style="margin-bottom: 80px;" id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary boton-insertar">Guardar</button>
-                        <button style="margin-bottom: 55px;" id="requerimientoorden" name="requerimiento" class="btn btn-success">Requerimiento</button>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button style="margin-bottom: 80px;" id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary boton-insertar">Guardar</button>
+                            </div>
+                            <div class="col-md-6">
+                                <select name="select_requerimiento" id="idrequerimientotemp" class="margin">
+                                    <?php
+                                    $primerRequerimiento = reset($mostrarrequerimiento);
+                                    foreach ($mostrarrequerimiento as $reque) {
+                                        echo '<option value="' . $reque->COD_REQUERIMIENTO . '"';
+                                        if ((int)$reque->COD_REQUERIMIENTO === (int)$primerRequerimiento->COD_REQUERIMIENTO) {
+                                            echo ' selected';
+                                        }
+                                        echo '>';
+                                        echo $reque->COD_REQUERIMIENTO;
+                                        echo '</option>';
+                                    }
+                                    ?>
+                                </select>
+                                <button style="margin-top: 20px;" id="requerimientoorden" name="requerimiento" class="btn btn-success" href="#" onclick="generarPDF()">Requerimiento</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -187,6 +207,14 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
     <script src="./js/ajaxRequerimientoProducto.js?v=0.001"></script>
     <script src="../js/menu_a.js"></script>
     <script src="./js/select2.min.js"></script>
+    <script>
+        function generarPDF() {
+            var requerimiento = document.getElementById("idrequerimientotemp").value;
+
+            var url = "pdf-lista-requerimiento.php?requerimiento=" + requerimiento;
+            window.open(url, "_blank");
+        }
+    </script>
 </body>
 
 </html>

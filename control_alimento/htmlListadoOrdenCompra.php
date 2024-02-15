@@ -151,6 +151,7 @@
          <thead>
              <tr>
                  <th class="">PROVEEDOR</th>
+                 <th class="">CODIGO</th>
                  <th class="">PRODUCTO</th>
                  <th class="">CANTIDAD</th>
              </tr>
@@ -160,6 +161,7 @@
             foreach ($totalproductos as $row) {
                 echo '<tr>';
                 echo '<td style="font-size:13px;">' . $row["NOM_PROVEEDOR"] . '</td>';
+                echo '<td style="font-size:13px; text-align:center;">' . $row["COD_PRODUCCION"] . '</td>';
                 echo '<td style="font-size:13px;">' . $row["DES_PRODUCTO"] . '</td>';
                 echo '<td style="font-size:13px; text-align:center;">' . $row["CANTIDAD_INSUMO_ENVASE"] . '</td>';
                 echo '</tr>';
