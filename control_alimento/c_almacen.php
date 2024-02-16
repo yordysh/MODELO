@@ -773,14 +773,16 @@ if ($accion == 'insertar') {
     echo $respuesta;
 } elseif ($accion == 'insertardatoscontrolrecepcion') {
     $datos = $_POST['datos'];
+
+    $idrequerimiento = $_POST["idrequerimiento"];
+    $codpersonal = trim($_POST['codpersonal']);
+
     if (isset($_POST['datosTabla'])) {
 
         $datosTabla = $_POST['datosTabla'];
     } else {
         $datosTabla = null;
     }
-    $idrequerimiento = trim($_POST['idrequerimiento']);
-    $codpersonal = trim($_POST['codpersonal']);
 
     $respuesta = c_almacen::c_guardar_control_recepcion($datos, $datosTabla, $idrequerimiento, $codpersonal);
     echo $respuesta;

@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-// $codusuario = $_SESSION["cod"];
+$codusuario = $_SESSION["cod"];
 // $codoficina = $_SESSION["ofi"];
 
 // $codanexo=$_SESSION["ane"];
-$codusuario = '0002';
-$codoficina = 'SMP2';
+// $codusuario = '0002';
+// $codoficina = 'SMP2';
 
 ?>
 <?php
@@ -208,7 +208,7 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                         <button style="margin-bottom: 80px;" id="guardarrecepcion" name="guardarrecepcion" class="btn btn-primary">Guardar</button>
                         <div class="aniomes">
                             <div class="styleanmes"><label for="mes">Seleccione el año:</label>
-                                <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
+                                <input type="number" id="anio" name="anio" min="1900" max="2100" value="<?php echo date('Y') ?>">
                             </div>
                             <div class="styleanmes"> <label for="mes">Seleccione el mes:</label>
                                 <select id="mes" name="mes">

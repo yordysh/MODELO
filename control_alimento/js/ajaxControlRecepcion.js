@@ -154,7 +154,8 @@ $(function () {
     e.preventDefault();
     let idrequerimiento = $("#idrequerimientoorden").val();
     let codpersonal = $("#codpersonal").val();
-
+    console.log(idrequerimiento);
+    console.log(codpersonal);
     let datos = [];
     $("#tbrecepcion tbody tr").each(function () {
       let fechaingreso = $(this).find("td:eq(0)").text();
@@ -370,10 +371,10 @@ $(function () {
       url: "./c_almacen.php",
       data: {
         accion: accioninsertardatos,
-        datos: datos,
-        datosTabla: datosTabla,
         idrequerimiento: idrequerimiento,
         codpersonal: codpersonal,
+        datos: datos,
+        datosTabla: datosTabla,
       },
       type: "POST",
       beforeSend: function () {

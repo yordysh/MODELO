@@ -1,3 +1,11 @@
+var svgString;
+$(document).ready(function () {
+  window.jsPDF = window.jspdf.jsPDF;
+  $("#generarPDF").on("click", function () {
+    //exportardosimetria();
+    buscarimgguardada();
+  });
+});
 function exportardosimetria(obj) {
   var doc = new jsPDF("p", "mm", [297, 210]);
   let can = obj["c"] - 1;
@@ -135,9 +143,9 @@ function exportardosimetria(obj) {
       $.each(material, function (j, k) {
         doc.text("" + index, position, altura); //correlativo numerico
         doc.text("" + k[2], 90, altura); //codigo produccion
-        doc.text("" + k[3], 107, altura); //materia prima
-        doc.text("" + k[4], 125, altura); //lote prima
-        if (k[6] == "g") {
+        // doc.text("" + k[3], 107, altura); //materia prima
+        doc.text("" + k[3], 125, altura); //lote prima
+        if (k[5] == "g") {
           // Dibujar un check con líneas en la posición (50, 50)
           doc.line(che2X_1, che1Y_1, che2X_1 + 1, che1Y_1 + 1); // Dibujar una línea diagonal más corta
           doc.line(che2X_1 + 1, che1Y_1 + 1, che2X_1 + 3, che1Y_1 - 1); // Dibujar otra línea diagonal más corta
@@ -146,7 +154,8 @@ function exportardosimetria(obj) {
           doc.line(che1X_1, che1Y_1, che1X_1 + 1, che1Y_1 + 1); // Dibujar una línea diagonal más corta
           doc.line(che1X_1 + 1, che1Y_1 + 1, che1X_1 + 3, che1Y_1 - 1); // Dibujar otra línea diagonal más corta
         } //gramos o kilos
-        doc.text("" + k[5], 190, altura); //peso
+        doc.text("" + k[4], 190, altura); //peso
+        // doc.text("" + k[5], 190, altura); //peso
         index++;
         if (index > 9) {
           position = 82;
@@ -281,4 +290,42 @@ function exportardosimetria(obj) {
     }
   });
   window.open(doc.output("bloburl"), "_blank");
+}
+
+function buscarimgguardada() {
+  $.ajax({
+    dataType: "text",
+    type: "POST",
+    url: "c_reporte_docimetria.php",
+    data: {
+      accion: "reporte",
+    },
+    beforeSend: function () {
+      vmensj = swal.fire({
+        title: "Cargando!",
+        html: "Espere mientras se cargan los datos no cierre el sistema... <b></b>",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+      });
+    },
+    success: function (re) {
+      try {
+        obj = JSON.parse(re);
+        console.log(obj);
+        // console.log(obj["m"]);
+        exportardosimetria(obj);
+      } catch ({ name, message }) {
+        Mensaje1("Error al buscar datos " + message, "info");
+      }
+      vmensj.close();
+    },
+    complete: function () {
+      vmensj.close();
+    },
+  }); /**/
+}
+
+function Mensaje1(texto, icono) {
+  Swal.fire({ icon: icono, title: texto, heightAuto: false });
 }

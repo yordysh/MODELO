@@ -4495,7 +4495,7 @@ class m_almacen
         $stmActualizaproduccion->execute();
 
         $stmInsertarInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS(COD_AVANCE_INSUMOS,N_BACHADA,COD_PRODUCTO,COD_PRODUCCION,CANTIDAD,FEC_VENCIMIENTO,COD_OPERARIO)
-          VALUES ('$codigo_de_avance_insumo','$numero_generado_bachada','$codigoproducto','$codigoproduccion','$cantidadtotalenvases','$nueva_fecha_vencimiento','$codoperario')");
+          VALUES ('$codigo_de_avance_insumo','$numero_generado_bachada','$codigoproducto','$codigoproduccion','$cantidadtotalenvases',CONVERT(DATE, '$fecha_actual', 103),'$codoperario')");
 
         $stmInsertarInsumoAvance->execute();
 
@@ -4833,9 +4833,6 @@ class m_almacen
             $valorfechavencimi = $stmfechavencimi->fetch(PDO::FETCH_ASSOC);
             $codfechavencimi = $valorfechavencimi['FEC_VENCIMIENTO'];
 
-            $formato = 'Y-m-d H:i:s.u';
-            $fecha_datetime_venci = DateTime::createFromFormat($formato, $codfechavencimi);
-            $dateFechavencimi = $fecha_datetime_venci->format('d/m/Y');
 
             $stmcodigoAumEls = $this->bd->prepare("SELECT MAX(NUM_LOTE) AS NUM_LOTE  FROM T_TMPPRODUCCION_BARRAS_GRUPO WHERE COD_PRODUCTO='$codigoproducto'");
             $stmcodigoAumEls->execute();
@@ -4869,7 +4866,7 @@ class m_almacen
                 $valorfinbarraif = $valoriniciobaraif + $valorcancajaEls - 1;
               }
               $insertarproducbarra = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS_GRUPO(COD_PRODUCTO,DES_PRODUCTO,N_CAJA,CANTIDAD,ABR_PRODUCTO,BARRA_INI,BARRA_FIN,COD_PRODUCCION,NUM_LOTE,PRODUCCION,FECHA,FEC_VENCIMIENTO,N_PRODUCCION_G)
-              VALUES('$codigoproducto','$desprod','$num_cajas_else','$valorcancajaEls','$abrprod','$valoriniciobaraif','$valorfinbarraif','$codigoproduccion','$num_lote','$codproduccionlote',GETDATE(),'$dateFechavencimi','$codproduccionlote')");
+              VALUES('$codigoproducto','$desprod','$num_cajas_else','$valorcancajaEls','$abrprod','$valoriniciobaraif','$valorfinbarraif','$codigoproduccion','$num_lote','$codproduccionlote',GETDATE(),CONVERT(DATETIME,'$codfechavencimi',120),'$codproduccionlote')");
               $cantidadtotalenvases = $cantidadtotalenvases - $valorcancajaEls;
             } else {
 
@@ -4888,7 +4885,7 @@ class m_almacen
               }
 
               $insertarproducbarra = $this->bd->prepare("INSERT INTO T_TMPPRODUCCION_BARRAS_GRUPO(COD_PRODUCTO,DES_PRODUCTO,N_CAJA,CANTIDAD,ABR_PRODUCTO,BARRA_INI,BARRA_FIN,COD_PRODUCCION,NUM_LOTE,PRODUCCION,FECHA,FEC_VENCIMIENTO,N_PRODUCCION_G)
-              VALUES('$codigoproducto','$desprod','$num_cajas_else','$cantidadtotalenvases','$abrprod','$valoriniciobara','$valorfinbarraEls','$codigoproduccion','$num_lote','$codproduccionlote',GETDATE(),'$dateFechavencimi','$codproduccionlote')");
+              VALUES('$codigoproducto','$desprod','$num_cajas_else','$cantidadtotalenvases','$abrprod','$valoriniciobara','$valorfinbarraEls','$codigoproduccion','$num_lote','$codproduccionlote',GETDATE(),CONVERT(DATETIME, '$codfechavencimi', 120),'$codproduccionlote')");
               // $cantidad = 0;
             }
 
@@ -6131,127 +6128,128 @@ class m_almacen
           $fechaven = $dato["fechavencimiento"];
 
           $proveedor = $dato["proveedor"];
-          $remision = $dato["remision"];
-          $boleta = $dato["boleta"];
-          $factura = $dato["factura"];
+          $remisionx = $dato["remision"];
+          $boletax = $dato["boleta"];
+          $facturax = $dato["factura"];
 
-          if ($remision == "true") {
-            $remision = 'C';
+          if ($remisionx == "true") {
+            $remisionx = 'C';
           } else {
-            $remision = 'V';
+            $remisionx = 'V';
           }
-          if ($boleta == "true") {
-            $boleta = 'C';
+          if ($boletax == "true") {
+            $boletax = 'C';
           } else {
-            $boleta = 'V';
+            $boletax = 'V';
           }
-          if ($factura == "true") {
-            $factura = 'C';
+          if ($facturax == "true") {
+            $facturax = 'C';
           } else {
-            $factura = 'V';
+            $facturax = 'V';
           }
-          $gbf = $dato["numerofactura"];
-          $primario = $dato["primario"];
-          $secundario = $dato["secundario"];
-          $saco = $dato["saco"];
-          $caja = $dato["caja"];
-          $cilindro = $dato["cilindro"];
-          $bolsa = $dato["bolsa"];
+          $gbfx = $dato["numerofactura"];
+          $primariox = $dato["primario"];
 
-          if ($primario == "true") {
-            $primario = 'C';
-          } else {
-            $primario = 'V';
-          }
-          if ($secundario == "true") {
-            $secundario = 'C';
-          } else {
-            $secundario = 'V';
-          }
-          if ($saco == "true") {
-            $saco = 'C';
-          } else {
-            $saco = 'V';
-          }
-          if ($caja == "true") {
-            $caja = 'C';
-          } else {
-            $caja = 'V';
-          }
-          if ($cilindro == "true") {
-            $cilindro = 'C';
-          } else {
-            $cilindro = 'V';
-          }
-          if ($bolsa == "true") {
-            $bolsa = 'C';
-          } else {
-            $bolsa = 'V';
-          }
-          $cantidadminimas =  $dato["cantidadminima"];
-          $eih =  $dato["eih"];
-          $cdc =  $dato["cdc"];
-          $rotulacion =  $dato["rotulacion"];
-          $aplicacion =  $dato["aplicacion"];
-          $higienesalud =  $dato["higienesalud"];
-          $indumentaria =  $dato["indumentaria"];
-          $limpio =  $dato["limpio"];
-          $exclusivo =  $dato["exclusivo"];
-          $hermetico =  $dato["hermetico"];
-          $ausencia =  $dato["ausencia"];
-          if ($eih == "true") {
-            $eih =  'C';
-          } else {
-            $eih =  'A';
-          }
-          if ($cdc == "true") {
-            $cdc =  'C';
-          } else {
-            $cdc =  'A';
-          }
-          if ($rotulacion == "true") {
-            $rotulacion =  'C';
-          } else {
-            $rotulacion =  'A';
-          }
-          if ($aplicacion == "true") {
-            $aplicacion =  'C';
-          } else {
-            $aplicacion =  'A';
-          }
-          if ($higienesalud == "true") {
-            $higienesalud =  'C';
-          } else {
-            $higienesalud =  'A';
-          }
-          if ($indumentaria == "true") {
-            $indumentaria =  'C';
-          } else {
-            $indumentaria =  'A';
-          }
-          if ($limpio == "true") {
-            $limpio =  'C';
-          } else {
-            $limpio =  'A';
-          }
-          if ($exclusivo == "true") {
-            $exclusivo =  'C';
-          } else {
-            $exclusivo =  'A';
-          }
-          if ($hermetico == "true") {
-            $hermetico =  'C';
-          } else {
-            $hermetico =  'A';
-          }
-          if ($ausencia == "true") {
-            $ausencia = 'C';
-          } else {
-            $ausencia = 'A';
-          }
+          $secundariox = $dato["secundario"];
+          $sacox = $dato["saco"];
+          $cajax = $dato["caja"];
+          $cilindrox = $dato["cilindro"];
+          $bolsax = $dato["bolsa"];
 
+          if ($primariox == "true") {
+            $primariox = 'C';
+          } else {
+            $primariox = 'V';
+          }
+          if ($secundariox == "true") {
+            $secundariox = 'C';
+          } else {
+            $secundariox = 'V';
+          }
+          if ($sacox == "true") {
+            $sacox = 'C';
+          } else {
+            $sacox = 'V';
+          }
+          if ($cajax == "true") {
+            $cajax = 'C';
+          } else {
+            $cajax = 'V';
+          }
+          if ($cilindrox == "true") {
+            $cilindrox = 'C';
+          } else {
+            $cilindrox = 'V';
+          }
+          if ($bolsax == "true") {
+            $bolsax = 'C';
+          } else {
+            $bolsax = 'V';
+          }
+          $cantidadminimas =  floatval($dato["cantidadminima"]);
+
+          $eihx = $dato["eih"];
+          $cdcx =  $dato["cdc"];
+          $rotulacionx = $dato["rotulacion"];
+          $aplicacionx =  $dato["aplicacion"];
+          $higienesaludx =  $dato["higienesalud"];
+          $indumentariax =  $dato["indumentaria"];
+          $limpiox =  $dato["limpio"];
+          $exclusivox =  $dato["exclusivo"];
+          $hermeticox =  $dato["hermetico"];
+          $ausenciax =  $dato["ausencia"];
+          if ($eihx == "true") {
+            $eihx =  'C';
+          } else {
+            $eihx =  'A';
+          }
+          if ($cdcx == "true") {
+            $cdcx =  'C';
+          } else {
+            $cdcx =  'A';
+          }
+          if ($rotulacionx == "true") {
+            $rotulacionx =  'C';
+          } else {
+            $rotulacionx =  'A';
+          }
+          if ($aplicacionx == "true") {
+            $aplicacionx =  'C';
+          } else {
+            $aplicacionx =  'A';
+          }
+          if ($higienesaludx == "true") {
+            $higienesaludx =  'C';
+          } else {
+            $higienesaludx =  'A';
+          }
+          if ($indumentariax == "true") {
+            $indumentariax =  'C';
+          } else {
+            $indumentariax =  'A';
+          }
+          if ($limpiox == "true") {
+            $limpiox =  'C';
+          } else {
+            $limpiox =  'A';
+          }
+          if ($exclusivox == "true") {
+            $exclusivox =  'C';
+          } else {
+            $exclusivox =  'A';
+          }
+          if ($hermeticox == "true") {
+            $hermeticox =  'C';
+          } else {
+            $hermeticox =  'A';
+          }
+          if ($ausenciax == "true") {
+            $ausenciax = 'C';
+          } else {
+            $ausenciax = 'A';
+          }
           $insertarrecepcion = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS_ITEM(COD_TMPCONTROL_RECEPCION_COMPRAS, COD_ORDEN_COMPRA,FECHA_INGRESO, HORA, CODIGO_LOTE,COD_PRODUCTO, FECHA_VENCIMIENTO,COD_PROVEEDOR, GUIA, BOLETA, FACTURA, GBF, PRIMARIO, SECUNDARIO, SACO, CAJA, CILINDRO, BOLSA, CANTIDAD_MINIMA, ENVASE, CERTIFICADO, ROTULACION, APLICACION, HIGIENE, INDUMENTARIA, LIMPIO, EXCLUSIVO, HERMETICO, AUSENCIA)
-                                                  VALUES('$codigorecepcion','$codigoordencompra',CONVERT(DATE, '$fechaingresoC', 103),'$hora','$codigolote','$producto',CAST('$fechaven' AS DATE),'$proveedor','$remision','$boleta','$factura','$gbf','$primario','$secundario','$saco','$caja','$cilindro','$bolsa','$cantidadminimas','$eih','$cdc','$rotulacion','$aplicacion','$higienesalud','$indumentaria','$limpio','$exclusivo','$hermetico','$ausencia')");
+          VALUES('$codigorecepcion','$codigoordencompra',CONVERT(DATE, '$fechaingresoC', 103),'$hora','$codigolote','$producto',CAST('$fechaven' AS DATE),'$proveedor','$remisionx','$boletax','$facturax','$gbfx','$primariox','$secundariox','$sacox','$cajax','$cilindrox','$bolsax','$cantidadminimas','$eihx','$cdcx','$rotulacionx','$aplicacionx','$higienesaludx','$indumentariax','$limpiox','$exclusivox','$hermeticox','$ausenciax')");
 
           $insertarrecepcion->execute();
 
@@ -6292,8 +6290,9 @@ class m_almacen
           }
 
 
-          $ltresta = number_format($valores + $cantidadminimas, 3);
-          $lkardex = number_format($kardex + $cantidadminimas, 3);
+          $ltresta = number_format($valores + $cantidadminimas, 2);
+          $lkardex = number_format($kardex + $cantidadminimas, 2);
+
 
           $kardexegresos = $this->bd->prepare("SELECT CANT_EGRESO  FROM T_TMPKARDEX_PRODUCCION WHERE CODIGO='$valorcodigokar'");
           $kardexegresos->execute();
@@ -6306,29 +6305,30 @@ class m_almacen
           $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigorecepcion; //descripcion de la compra cambiar la descripcion
 
 
+
           $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(
-          COD_PRODUCTO,
-          ABR_PRODUCTO,
-          LOTE,
-          DESCRIPCION,
-          COD_INGRESO,
-          CANT_INGRESO,
-          SALDO,
-          USU_REGISTRO,
-          HORA_REGISTRO,
-          KARDEX) 
-          VALUES(
-          '$producto',
-          '$valorabrprod',
-          '$codigolote',
-          '$descripcion'
-          ,'$codigorecepcion', 
-          '$cantidadminimas'
-          ,CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1)
-          ,'$codpersonal'
-          ,'$hora_actual'
-          ,CONVERT(numeric(9,2), REPLACE('$lkardex', ',', ''), 1)
-          )");
+            COD_PRODUCTO,
+            ABR_PRODUCTO,
+            LOTE,
+            DESCRIPCION,
+            COD_INGRESO,
+            CANT_INGRESO,
+            SALDO,
+            USU_REGISTRO,
+            HORA_REGISTRO,
+            KARDEX) 
+            VALUES(
+            '$producto',
+            '$valorabrprod',
+            '$codigolote',
+            '$descripcion'
+            ,'$codigorecepcion', 
+           '$cantidadminimas'
+            ,CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1)
+            ,'$codpersonal'
+            ,'$hora_actual'
+            ,CONVERT(numeric(9,2), REPLACE('$lkardex', ',', ''), 1)
+            )");
           $querylote->execute();
 
           $stockanteriorx = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$producto'");
@@ -6366,13 +6366,6 @@ class m_almacen
           $calculoinsumoenvase->execute();
           $totalinsumoenvase = $calculoinsumoenvase->fetch(PDO::FETCH_ASSOC);
           $siexiste = intval($totalinsumoenvase['COUNT']);
-
-
-
-
-
-
-
 
 
           if ($cantid == $cantidax) {
