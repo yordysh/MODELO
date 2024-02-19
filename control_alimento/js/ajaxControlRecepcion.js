@@ -154,8 +154,7 @@ $(function () {
     e.preventDefault();
     let idrequerimiento = $("#idrequerimientoorden").val();
     let codpersonal = $("#codpersonal").val();
-    console.log(idrequerimiento);
-    console.log(codpersonal);
+
     let datos = [];
     $("#tbrecepcion tbody tr").each(function () {
       let fechaingreso = $(this).find("td:eq(0)").text();
@@ -171,37 +170,133 @@ $(function () {
         .val();
       let proveedor = $(this).find("td:eq(7)").attr("codigoproveedor");
       let remision = $(this).find("td:eq(8) input.remision").is(":checked");
+      if (remision) {
+        remision = "1";
+      } else {
+        remision = "0";
+      }
       let boleta = $(this).find("td:eq(9) input.boleta").is(":checked");
+      if (boleta) {
+        boleta = "1";
+      } else {
+        boleta = "0";
+      }
       let factura = $(this).find("td:eq(10) input.factura ").is(":checked");
+      if (factura) {
+        factura = "1";
+      } else {
+        factura = "0";
+      }
       let numerofactura = $(this).find("td:eq(11) input").val();
 
       let primario = $(this).find("td:eq(12) input.primario").is(":checked");
+      if (primario) {
+        primario = "1";
+      } else {
+        primario = "0";
+      }
       let secundario = $(this)
         .find("td:eq(13) input.secundario")
         .is(":checked");
+
+      if (secundario) {
+        secundario = "1";
+      } else {
+        secundario = "0";
+      }
       let saco = $(this).find("td:eq(14) input.saco").is(":checked");
+      if (saco) {
+        saco = "1";
+      } else {
+        saco = "0";
+      }
       let caja = $(this).find("td:eq(15) input.caja").is(":checked");
+      if (caja) {
+        caja = "1";
+      } else {
+        caja = "0";
+      }
       let cilindro = $(this).find("td:eq(16) input.cilindro").is(":checked");
+      if (cilindro) {
+        cilindro = "1";
+      } else {
+        cilindro = "0";
+      }
       let bolsa = $(this).find("td:eq(17) input.bolsa").is(":checked");
+      if (bolsa) {
+        bolsa = "1";
+      } else {
+        bolsa = "0";
+      }
       let cantidadminima = $(this).find("td:eq(18) input").val();
       let eih = $(this).find("td:eq(19) input.eih").is(":checked");
+      if (eih) {
+        eih = "1";
+      } else {
+        eih = "0";
+      }
       let cdc = $(this).find("td:eq(20) input.cdc").is(":checked");
+      if (cdc) {
+        cdc = "1";
+      } else {
+        cdc = "0";
+      }
       let rotulacion = $(this)
         .find("td:eq(21) input.rotulacion")
         .is(":checked");
+      if (rotulacion) {
+        rotulacion = "1";
+      } else {
+        rotulacion = "0";
+      }
       let aplicacion = $(this)
         .find("td:eq(22) input.aplicacion")
         .is(":checked");
+      if (aplicacion) {
+        aplicacion = "1";
+      } else {
+        aplicacion = "0";
+      }
       let higienesalud = $(this)
         .find("td:eq(23) input.higienesalud")
         .is(":checked");
+      if (higienesalud) {
+        higienesalud = "1";
+      } else {
+        higienesalud = "0";
+      }
       let indumentaria = $(this)
         .find("td:eq(24) input.indumentaria")
         .is(":checked");
+      if (indumentaria) {
+        indumentaria = "1";
+      } else {
+        indumentaria = "0";
+      }
       let limpio = $(this).find("td:eq(25) input.limpio").is(":checked");
+      if (limpio) {
+        limpio = "1";
+      } else {
+        limpio = "0";
+      }
       let exclusivo = $(this).find("td:eq(26) input.exclusivo").is(":checked");
+      if (exclusivo) {
+        exclusivo = "1";
+      } else {
+        exclusivo = "0";
+      }
       let hermetico = $(this).find("td:eq(27) input.hermetico").is(":checked");
+      if (hermetico) {
+        hermetico = "1";
+      } else {
+        hermetico = "0";
+      }
       let ausencia = $(this).find("td:eq(28) input.ausencia").is(":checked");
+      if (ausencia) {
+        ausencia = "1";
+      } else {
+        ausencia = "0";
+      }
 
       datos.push({
         fechaingreso: fechaingreso,
@@ -235,7 +330,7 @@ $(function () {
         ausencia: ausencia,
       });
     });
-
+    console.log(datos);
     let hora;
     let gbf;
     let guia;

@@ -5825,7 +5825,8 @@ class m_almacen
   {
     try {
       $this->bd->beginTransaction();
-
+      // var_dump($datos);
+      // exit;
       $codigo = new m_almacen();
       $codigorecepcion = $codigo->generarcodigocontrolrecepcion();
       $nombre = 'LBS-BPM-FR-09';
@@ -6132,17 +6133,17 @@ class m_almacen
           $boletax = $dato["boleta"];
           $facturax = $dato["factura"];
 
-          if ($remisionx == "true") {
+          if ($remisionx == "1") {
             $remisionx = 'C';
           } else {
             $remisionx = 'V';
           }
-          if ($boletax == "true") {
+          if ($boletax == "1") {
             $boletax = 'C';
           } else {
             $boletax = 'V';
           }
-          if ($facturax == "true") {
+          if ($facturax == "1") {
             $facturax = 'C';
           } else {
             $facturax = 'V';
@@ -6156,32 +6157,32 @@ class m_almacen
           $cilindrox = $dato["cilindro"];
           $bolsax = $dato["bolsa"];
 
-          if ($primariox == "true") {
+          if ($primariox == "1") {
             $primariox = 'C';
           } else {
             $primariox = 'V';
           }
-          if ($secundariox == "true") {
+          if ($secundariox == "1") {
             $secundariox = 'C';
           } else {
             $secundariox = 'V';
           }
-          if ($sacox == "true") {
+          if ($sacox == "1") {
             $sacox = 'C';
           } else {
             $sacox = 'V';
           }
-          if ($cajax == "true") {
+          if ($cajax == "1") {
             $cajax = 'C';
           } else {
             $cajax = 'V';
           }
-          if ($cilindrox == "true") {
+          if ($cilindrox == "1") {
             $cilindrox = 'C';
           } else {
             $cilindrox = 'V';
           }
-          if ($bolsax == "true") {
+          if ($bolsax == "1") {
             $bolsax = 'C';
           } else {
             $bolsax = 'V';
@@ -6198,52 +6199,52 @@ class m_almacen
           $exclusivox =  $dato["exclusivo"];
           $hermeticox =  $dato["hermetico"];
           $ausenciax =  $dato["ausencia"];
-          if ($eihx == "true") {
+          if ($eihx == "1") {
             $eihx =  'C';
           } else {
             $eihx =  'A';
           }
-          if ($cdcx == "true") {
+          if ($cdcx == "1") {
             $cdcx =  'C';
           } else {
             $cdcx =  'A';
           }
-          if ($rotulacionx == "true") {
+          if ($rotulacionx == "1") {
             $rotulacionx =  'C';
           } else {
             $rotulacionx =  'A';
           }
-          if ($aplicacionx == "true") {
+          if ($aplicacionx == "1") {
             $aplicacionx =  'C';
           } else {
             $aplicacionx =  'A';
           }
-          if ($higienesaludx == "true") {
+          if ($higienesaludx == "1") {
             $higienesaludx =  'C';
           } else {
             $higienesaludx =  'A';
           }
-          if ($indumentariax == "true") {
+          if ($indumentariax == "1") {
             $indumentariax =  'C';
           } else {
             $indumentariax =  'A';
           }
-          if ($limpiox == "true") {
+          if ($limpiox == "1") {
             $limpiox =  'C';
           } else {
             $limpiox =  'A';
           }
-          if ($exclusivox == "true") {
+          if ($exclusivox == "1") {
             $exclusivox =  'C';
           } else {
             $exclusivox =  'A';
           }
-          if ($hermeticox == "true") {
+          if ($hermeticox == "1") {
             $hermeticox =  'C';
           } else {
             $hermeticox =  'A';
           }
-          if ($ausenciax == "true") {
+          if ($ausenciax == "1") {
             $ausenciax = 'C';
           } else {
             $ausenciax = 'A';
@@ -6306,92 +6307,92 @@ class m_almacen
 
 
 
-          $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(
-            COD_PRODUCTO,
-            ABR_PRODUCTO,
-            LOTE,
-            DESCRIPCION,
-            COD_INGRESO,
-            CANT_INGRESO,
-            SALDO,
-            USU_REGISTRO,
-            HORA_REGISTRO,
-            KARDEX) 
-            VALUES(
-            '$producto',
-            '$valorabrprod',
-            '$codigolote',
-            '$descripcion'
-            ,'$codigorecepcion', 
-           '$cantidadminimas'
-            ,CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1)
-            ,'$codpersonal'
-            ,'$hora_actual'
-            ,CONVERT(numeric(9,2), REPLACE('$lkardex', ',', ''), 1)
-            )");
-          $querylote->execute();
+          // $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(
+          //   COD_PRODUCTO,
+          //   ABR_PRODUCTO,
+          //   LOTE,
+          //   DESCRIPCION,
+          //   COD_INGRESO,
+          //   CANT_INGRESO,
+          //   SALDO,
+          //   USU_REGISTRO,
+          //   HORA_REGISTRO,
+          //   KARDEX) 
+          //   VALUES(
+          //   '$producto',
+          //   '$valorabrprod',
+          //   '$codigolote',
+          //   '$descripcion'
+          //   ,'$codigorecepcion', 
+          //  '$cantidadminimas'
+          //   ,CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1)
+          //   ,'$codpersonal'
+          //   ,'$hora_actual'
+          //   ,CONVERT(numeric(9,2), REPLACE('$lkardex', ',', ''), 1)
+          //   )");
+          // $querylote->execute();
 
-          $stockanteriorx = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$producto'");
-          $stockanteriorx->execute();
-          $cantidadstockx = $stockanteriorx->fetch(PDO::FETCH_ASSOC);
-          $canstockx = $cantidadstockx['STOCK_ACTUAL'];
-          $sumatotalstockx = floatval($canstockx + $cantidadminimas);
-
-
-          $actualizoalmaceninsumoi = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET STOCK_ACTUAL='$sumatotalstockx',STOCK_ANTERIOR='$canstockx' WHERE COD_PRODUCTO='$producto'");
-          $actualizoalmaceninsumoi->execute();
-          $actualizoalmaceninsumoi = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOSTEMP SET STOCK_ACTUAL='$sumatotalstockx',STOCK_ANTERIOR='$canstockx' WHERE COD_PRODUCTO='$producto'");
-          $actualizoalmaceninsumoi->execute();
-
-          $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET CANTIDAD_LLEGADA='$cantidadminimas' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
-          $actualizo->execute();
-
-          $actualizote = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEMTEMP SET CANTIDAD_LLEGADA='$cantidadminimas' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
-          $actualizote->execute();
-
-          $ver = $this->bd->prepare("SELECT CANTIDAD_LLEGADA FROM T_TMPORDEN_COMPRA_ITEM WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento'");
-          $ver->execute();
-          $valorcantidadllegada = $ver->fetch(PDO::FETCH_ASSOC);
-          $canllegadax = $valorcantidadllegada['CANTIDAD_LLEGADA'];
-
-          $can = $this->bd->prepare("SELECT CANTIDAD_INSUMO_ENVASE FROM T_TMPORDEN_COMPRA_ITEMTEMP WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento'AND COD_PRODUCTO='$producto'");
-          $can->execute();
-          $valorcantida = $can->fetch(PDO::FETCH_ASSOC);
-          $cantidax = floatval($valorcantida['CANTIDAD_INSUMO_ENVASE']);
-
-          $cantid = floatval($cantidadminimas);
+          // $stockanteriorx = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$producto'");
+          // $stockanteriorx->execute();
+          // $cantidadstockx = $stockanteriorx->fetch(PDO::FETCH_ASSOC);
+          // $canstockx = $cantidadstockx['STOCK_ACTUAL'];
+          // $sumatotalstockx = floatval($canstockx + $cantidadminimas);
 
 
-          $calculoinsumoenvase = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPREQUERIMIENTO_INSUMO WHERE COD_REQUERIMIENTO='$idrequerimiento' AND COD_PRODUCTO='$producto'");
-          $calculoinsumoenvase->execute();
-          $totalinsumoenvase = $calculoinsumoenvase->fetch(PDO::FETCH_ASSOC);
-          $siexiste = intval($totalinsumoenvase['COUNT']);
+          // $actualizoalmaceninsumoi = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET STOCK_ACTUAL='$sumatotalstockx',STOCK_ANTERIOR='$canstockx' WHERE COD_PRODUCTO='$producto'");
+          // $actualizoalmaceninsumoi->execute();
+          // $actualizoalmaceninsumoi = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOSTEMP SET STOCK_ACTUAL='$sumatotalstockx',STOCK_ANTERIOR='$canstockx' WHERE COD_PRODUCTO='$producto'");
+          // $actualizoalmaceninsumoi->execute();
+
+          // $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET CANTIDAD_LLEGADA='$cantidadminimas' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
+          // $actualizo->execute();
+
+          // $actualizote = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEMTEMP SET CANTIDAD_LLEGADA='$cantidadminimas' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
+          // $actualizote->execute();
+
+          // $ver = $this->bd->prepare("SELECT CANTIDAD_LLEGADA FROM T_TMPORDEN_COMPRA_ITEM WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento'");
+          // $ver->execute();
+          // $valorcantidadllegada = $ver->fetch(PDO::FETCH_ASSOC);
+          // $canllegadax = $valorcantidadllegada['CANTIDAD_LLEGADA'];
+
+          // $can = $this->bd->prepare("SELECT CANTIDAD_INSUMO_ENVASE FROM T_TMPORDEN_COMPRA_ITEMTEMP WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento'AND COD_PRODUCTO='$producto'");
+          // $can->execute();
+          // $valorcantida = $can->fetch(PDO::FETCH_ASSOC);
+          // $cantidax = floatval($valorcantida['CANTIDAD_INSUMO_ENVASE']);
+
+          // $cantid = floatval($cantidadminimas);
 
 
-          if ($cantid == $cantidax) {
-            $modifica = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEMTEMP SET ESTADO='C' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
-            $modifica->execute();
+          // $calculoinsumoenvase = $this->bd->prepare("SELECT COUNT(*) AS COUNT FROM T_TMPREQUERIMIENTO_INSUMO WHERE COD_REQUERIMIENTO='$idrequerimiento' AND COD_PRODUCTO='$producto'");
+          // $calculoinsumoenvase->execute();
+          // $totalinsumoenvase = $calculoinsumoenvase->fetch(PDO::FETCH_ASSOC);
+          // $siexiste = intval($totalinsumoenvase['COUNT']);
 
-            $modificaalerta = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET ESTADO='C' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
-            $modificaalerta->execute();
 
-            $modificaordencompraestado = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRATEMP SET ESTADO='C' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_REQUERIMIENTO='$idrequerimiento' AND COD_PROVEEDOR='$proveedor'");
-            $modificaordencompraestado->execute();
+          // if ($cantid == $cantidax) {
+          //   $modifica = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEMTEMP SET ESTADO='C' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
+          //   $modifica->execute();
 
-            if ($siexiste > 0) {
-              $modificainsumoreq = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_INSUMO SET ESTADO='C' WHERE  COD_REQUERIMIENTO='$idrequerimiento' AND COD_PRODUCTO='$producto'");
-              $modificainsumoreq->execute();
-            } else {
-              $modificaenvasereq = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ENVASE SET ESTADO='C' WHERE  COD_REQUERIMIENTO='$idrequerimiento' AND COD_PRODUCTO='$producto'");
-              $modificaenvasereq->execute();
-            }
-          } else {
-            $modificaordencompraestadoz = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRATEMP SET ESTADO='F' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_REQUERIMIENTO='$idrequerimiento' AND COD_PROVEEDOR='$proveedor'");
-            $modificaordencompraestadoz->execute();
+          //   $modificaalerta = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEM SET ESTADO='C' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
+          //   $modificaalerta->execute();
 
-            $modificaz = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEMTEMP SET ESTADO='F' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
-            $modificaz->execute();
-          }
+          //   $modificaordencompraestado = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRATEMP SET ESTADO='C' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_REQUERIMIENTO='$idrequerimiento' AND COD_PROVEEDOR='$proveedor'");
+          //   $modificaordencompraestado->execute();
+
+          //   if ($siexiste > 0) {
+          //     $modificainsumoreq = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_INSUMO SET ESTADO='C' WHERE  COD_REQUERIMIENTO='$idrequerimiento' AND COD_PRODUCTO='$producto'");
+          //     $modificainsumoreq->execute();
+          //   } else {
+          //     $modificaenvasereq = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO_ENVASE SET ESTADO='C' WHERE  COD_REQUERIMIENTO='$idrequerimiento' AND COD_PRODUCTO='$producto'");
+          //     $modificaenvasereq->execute();
+          //   }
+          // } else {
+          //   $modificaordencompraestadoz = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRATEMP SET ESTADO='F' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_REQUERIMIENTO='$idrequerimiento' AND COD_PROVEEDOR='$proveedor'");
+          //   $modificaordencompraestadoz->execute();
+
+          //   $modificaz = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEMTEMP SET ESTADO='F' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
+          //   $modificaz->execute();
+          // }
         }
       }
 
