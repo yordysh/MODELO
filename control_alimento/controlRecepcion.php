@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-$codusuario = $_SESSION["cod"];
+// $codusuario = $_SESSION["cod"];
 // $codoficina = $_SESSION["ofi"];
 
 // $codanexo=$_SESSION["ane"];
-// $codusuario = '0002';
+$codusuario = '0002';
 // $codoficina = 'SMP2';
 
 ?>
@@ -137,7 +137,7 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                         <div class="row g-4 top-div">
                             <center><label class="title">CONTROL DE RECEPCION DE MATERIA PRIMA</label></center>
                         </div>
-                        <div id="tablarecepcion" class="" style="overflow: scroll;height: 400px; margin-top:20px;">
+                        <div id="tablarecepcion" class="" style="overflow: scroll;height: 600px; margin-top:20px;">
                             <table id="tbrecepcion" class="table table-sm mb-3 table-fixed">
                                 <thead class="theadborder fixed-header">
                                     <tr>

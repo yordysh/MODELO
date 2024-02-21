@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-$codusuario = $_SESSION["cod"];
-// $codusuario = '0004';
+// $codusuario = $_SESSION["cod"];
+$codusuario = '0004';
 ?>
 
 <?php

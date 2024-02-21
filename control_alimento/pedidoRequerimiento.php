@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-$codusuario = $_SESSION["cod"];
+// $codusuario = $_SESSION["cod"];
 // $codanexo=$_SESSION["ane"];
-// $codusuario = '00004';
+$codusuario = '00004';
 // $codanexo = '1010';
 
 ?>

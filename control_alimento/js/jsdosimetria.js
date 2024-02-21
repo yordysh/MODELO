@@ -33,7 +33,7 @@ function exportardosimetria(obj) {
       }
       limitleft = 6;
       var logo = new Image();
-      logo.src = "../imagen/labsabel.png";
+      logo.src = "./images/img_lab.jpg";
       doc.setFont(undefined, "normal");
       doc.setFontSize(12);
       doc.line(6, 6.5, 6, 293); //primera linea vertical
@@ -143,9 +143,9 @@ function exportardosimetria(obj) {
       $.each(material, function (j, k) {
         doc.text("" + index, position, altura); //correlativo numerico
         doc.text("" + k[2], 90, altura); //codigo produccion
-        // doc.text("" + k[3], 107, altura); //materia prima
-        doc.text("" + k[3], 125, altura); //lote prima
-        if (k[5] == "g") {
+        doc.text("" + k[3], 107, altura); //materia prima
+        doc.text("" + k[4], 125, altura); //lote prima
+        if (k[6] == "g") {
           // Dibujar un check con líneas en la posición (50, 50)
           doc.line(che2X_1, che1Y_1, che2X_1 + 1, che1Y_1 + 1); // Dibujar una línea diagonal más corta
           doc.line(che2X_1 + 1, che1Y_1 + 1, che2X_1 + 3, che1Y_1 - 1); // Dibujar otra línea diagonal más corta
@@ -154,7 +154,7 @@ function exportardosimetria(obj) {
           doc.line(che1X_1, che1Y_1, che1X_1 + 1, che1Y_1 + 1); // Dibujar una línea diagonal más corta
           doc.line(che1X_1 + 1, che1Y_1 + 1, che1X_1 + 3, che1Y_1 - 1); // Dibujar otra línea diagonal más corta
         } //gramos o kilos
-        doc.text("" + k[4], 190, altura); //peso
+        doc.text("" + k[5], 190, altura); //peso
         // doc.text("" + k[5], 190, altura); //peso
         index++;
         if (index > 9) {

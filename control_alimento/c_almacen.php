@@ -772,10 +772,10 @@ if ($accion == 'insertar') {
     $respuesta = c_almacen::c_mostrar_valores_comprobante($selectrequerimiento);
     echo $respuesta;
 } elseif ($accion == 'insertardatoscontrolrecepcion') {
-    $datos = $_POST['datos'];
 
     $idrequerimiento = $_POST["idrequerimiento"];
     $codpersonal = trim($_POST['codpersonal']);
+    $datos = $_POST['datos'];
 
     if (isset($_POST['datosTabla'])) {
 
@@ -5107,13 +5107,7 @@ class c_almacen
             echo json_encode($response);
         }
     }
-    // static function c_verificar_formula_orden_compra($codigorequerimiento, $codigoproducto, $valorcantidad)
-    // {
-    //     $m_formula = new m_almacen();
-    //     $consultadeproductosrequerimiento = $m_formula->MostrarRequeriItem($codigorequerimiento);
-    //     $codigoformula = $m_formula->VerificaCodFormulacion($codigoproducto);
-    //     $codigoformula = $m_formula->InsumosFormulacion($codigoformula);
-    // }
+
 
 
 
