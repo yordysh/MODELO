@@ -25,7 +25,8 @@ $(function () {
           tasks.forEach((task) => {
             template += `<tr codigorequerimiento='${task.COD_REQUERIMIENTO}'">
                             <td data-titulo="PRODUCTOS" style='text-align:center;' codigoproducto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
-                            <td data-titulo="CANTIDAD TOTAL" style='text-align:center;'>${task.CANTIDAD}</td>
+                            <td data-titulo="CANTIDAD (KG)" style='text-align:center;'>${task.CANTIDAD}</td>
+                            <td data-titulo="UNIDADES" style='text-align:center;'>${task.TOTAL_PRODUCTO}</td>
                             </tr>`;
           });
           $("#tablaproductoscantidades").html(template);

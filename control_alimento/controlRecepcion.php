@@ -125,7 +125,8 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                                 <thead>
                                     <tr>
                                         <th class="thtitulo" scope="col">PRODUCTOS</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD TOTAL</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD (KG)</th>
+                                        <th class="thtitulo" scope="col">UNIDADES</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaproductoscantidades">
@@ -137,7 +138,7 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                         <div class="row g-4 top-div">
                             <center><label class="title">CONTROL DE RECEPCION DE MATERIA PRIMA</label></center>
                         </div>
-                        <div id="tablarecepcion" class="" style="overflow: scroll;height: 600px; margin-top:20px;">
+                        <div id="tablarecepcion" class="" style="overflow: scroll;height: 600px;width:89rem; margin-top:20px;">
                             <table id="tbrecepcion" class="table table-sm mb-3 table-fixed">
                                 <thead class="theadborder fixed-header">
                                     <tr>
@@ -206,11 +207,13 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                             </table>
                         </div>
                         <button style="margin-bottom: 80px;" id="guardarrecepcion" name="guardarrecepcion" class="btn btn-primary">Guardar</button>
-                        <div class="aniomes">
-                            <div class="styleanmes"><label for="mes">Seleccione el año:</label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="mes">Seleccione el año:</label>
                                 <input type="number" id="anio" name="anio" min="1900" max="2100" value="<?php echo date('Y') ?>">
                             </div>
-                            <div class="styleanmes"> <label for="mes">Seleccione el mes:</label>
+                            <div class="col-md-4">
+                                <label for="mes">Seleccione el mes:</label>
                                 <select id="mes" name="mes">
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="01">Enero</option>
@@ -227,8 +230,8 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                                     <option value="12">Diciembre</option>
                                 </select>
                             </div>
-                            <div class="botonpdf">
-                                <a class="btn btn-primary " href="#" onclick="generarPDF()">PDF</a>
+                            <div class="col-md-4">
+                                <a class="btn btn-success style='witdh:40px !important;'" href="#" onclick="generarPDF()">PDF</a>
                             </div>
                         </div>
                     </form>

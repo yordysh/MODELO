@@ -2,12 +2,13 @@
 require_once "m_almacen.php";
 require_once "../funciones/f_funcion.php";
 
-$requerimiento = $_GET['requerimiento'];
+$codigoproducto = $_GET['codigo'];
+$fechainicio = $_GET['fechainicio'];
+$fechafin = $_GET['fechafin'];
 
 $mostrar = new m_almacen();
-
-$totalproductos = $mostrar->MostrarListaRequerimiento($requerimiento);
-
+$totalkardexmostrar = $mostrar->MostrarListaKardexProducto($codigoproducto, $fechainicio, $fechafin);
+$totallote = $mostrar->m_total_x_lote($codigoproducto, '');
 $fechaDateTime = new DateTime();
 $anio = $fechaDateTime->format('Y');
 $mesExtra = intval($fechaDateTime->format('m'));
@@ -38,7 +39,7 @@ $mesversion = $mesesEnLetras[$mesExtra];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/img_lab.jpg')); ?>" type="images/png">
-    <title>Lista de requerimiento</title>
+    <title>Lista de kardex</title>
 </head>
 
 <body>
@@ -132,8 +133,8 @@ $mesversion = $mesesEnLetras[$mesExtra];
             <tr>
                 <td rowspan="3" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/img_lab.jpg')); ?>" alt="" width="100" height="50"></td>
 
-                <td rowspan="3" style="text-align: center; font-size:15px; font-weight:200; width:400px;">LISTA DE REQUERIMIENTO - <?php echo $anio; ?></td>
-                <td>Requerimiento: <?php echo $requerimiento; ?></th>
+                <td rowspan="3" style="text-align: center; font-size:15px; font-weight:200; width:400px;">LISTA DE KARDEX - <?php echo $anio; ?></td>
+                <td>Requerimiento: </th>
             </tr>
             <tr>
                 <td>Página:</td>
@@ -150,22 +151,34 @@ $mesversion = $mesesEnLetras[$mesExtra];
     <table style="margin-top: 10px;">
         <thead>
             <tr>
-                <th class="">CODIGO</th>
-                <th class="">PRODUCTO</th>
-                <th class="">CANTIDAD EN KG</th>
-                <th class="">CANTIDAD EN UNIDADES</th>
+                <th class="">CÓDIGO PRODUCTO</th>
+                <th class="">INSUMO</th>
+                <th class="">LOTE</th>
+                <th class="">FECHA</th>
+                <th class="">DESCRIPCIÓN</th>
+                <th class="">INGRESO</th>
+                <th class="">SALIDA</th>
+                <th class="">SALDO</th>
             </tr>
         </thead>
         <?php
         echo "<tbody>";
-        foreach ($totalproductos as $row) {
+        foreach ($totalkardexmostrar as $row) {
             echo '<tr>';
             echo '<td style="font-size:13px; text-align:center;">' . $row["COD_PRODUCCION"] . '</td>';
-            echo '<td style="font-size:13px;">' . $row["DES_PRODUCTO"] . '</td>';
-            echo '<td style="font-size:13px; text-align:center;">' . $row["CANTIDAD"] . '</td>';
-            echo '<td style="font-size:13px; text-align:center;">' . $row["TOTAL_PRODUCTO"] . '</td>';
+            echo '<td style="font-size:13px; text-align:center;">' . $row["ABR_PRODUCTO"] . "-" . $row["DES_PRODUCTO"] . '</td>';
+            echo '<td style="font-size:13px; text-align:center;">' . $row["LOTE"] . '</td>';
+            echo '<td style="font-size:13px; text-align:center;">' . convFecSistema($row["FEC_REGISTRO"]) . '</td>';
+            echo '<td style="font-size:13px; text-align:center;">' . $row["DESCRIPCION"] . '</td>';
+            echo '<td style="font-size:13px; text-align:center;">' . $row["CANT_INGRESO"] . '</td>';
+            echo '<td style="font-size:13px; text-align:center;">' . $row["CANT_EGRESO"] . '</td>';
+            echo '<td style="font-size:13px; text-align:center;">' . $row["SALDO"] . '</td>';
             echo '</tr>';
         }
+        echo '<tr>';
+        echo '<td colspan="6">Total</td>';
+        echo '<td colspan="2" style="text-align:center;">' . $totallote[0][0] . '</td>';
+        echo '</tr>';
         echo "</tbody>";
         ?>
     </table>

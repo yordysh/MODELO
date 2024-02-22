@@ -383,7 +383,7 @@ $(function () {
     //   },
     // });
   });
-
+  /*---------Guardar avance -----------------------*/
   $("#botonguardarregistro").click((e) => {
     e.preventDefault();
 
@@ -539,6 +539,7 @@ $(function () {
       },
     });
   });
+  /*--------------------------------------------- */
   function actualizarCombo() {
     const accion = "actualizarcomboproduccionproducto";
     $.ajax({

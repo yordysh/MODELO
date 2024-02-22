@@ -569,8 +569,8 @@ if ($accion == 'insertar') {
     $valoresCapturadosProduccioninsumo = ($_POST['valoresCapturadosProduccioninsumo']);
     $codigoproducto = trim($_POST['codigoproducto']);
     $codigoproduccion = trim($_POST['codigoproduccion']);
-    $cantidad = trim($_POST['cantidad']);
-    $cantidadtotalenvases = trim($_POST['cantidadtotalenvases']);
+    $cantidad = floatval(trim($_POST['cantidad']));
+    $cantidadtotalenvases = floatval(trim($_POST['cantidadtotalenvases']));
     $codpersonal = trim($_POST['codpersonal']);
     $codoperario = trim($_POST['codoperario']);
 
@@ -4621,7 +4621,7 @@ class c_almacen
                     "COD_PRODUCTO" => $row->COD_PRODUCTO,
                     "DES_PRODUCTO" => $row->DES_PRODUCTO,
                     "CANTIDAD" => $row->CANTIDAD,
-
+                    "TOTAL_PRODUCTO" => $row->TOTAL_PRODUCTO,
                 );
             }
             $jsonstring = json_encode($json);
@@ -5131,11 +5131,12 @@ class c_almacen
 
         if (strlen(trim($mensaje)) == 0) {
             $rpta = $m_formula->m_reportekardex($producto, $fechaini, $fechafin, $lote);
+
             $totallote = $m_formula->m_total_x_lote($producto, $lote);
             for ($i = 0; $i < count($rpta); $i++) {
-                $rpta[$i][8] = convFecSistema($rpta[$i][8]);
-                $rpta[$i][5] = (is_null($rpta[$i][5])) ? 0 : $rpta[$i][5];
-                $rpta[$i][6] = (is_null($rpta[$i][6])) ? 0 : $rpta[$i][6];
+                $rpta[$i][10] = convFecSistema($rpta[$i][10]);
+                $rpta[$i][7] = (is_null($rpta[$i][7])) ? 0 : $rpta[$i][7];
+                $rpta[$i][8] = (is_null($rpta[$i][8])) ? 0 : $rpta[$i][8];
                 array_push($rpta[$i], $totallote[0][0]);
             }
 
