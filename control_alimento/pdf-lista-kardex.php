@@ -25,7 +25,7 @@ $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
 $canvas = $dompdf->getCanvas();
 $font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
-$canvas->page_text(470, 54, "{PAGE_NUM}/{PAGE_COUNT}", $font, 11, array(0, 0, 0));
+$canvas->page_text(470, 40, "{PAGE_NUM}/{PAGE_COUNT}", $font, 11, array(0, 0, 0));
 
 if ($dompdf) {
     $dompdf->stream('Lista-kardex.pdf', array('Attachment' => 0));

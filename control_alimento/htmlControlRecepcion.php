@@ -167,7 +167,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         <table>
             <tbody>
                 <tr>
-                    <td rowspan="4" class="cabecera"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td>
+                    <td rowspan="4" class="cabecera"><img style="text-align: center; width:160px; height:90px;" src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/img_lab.jpg')); ?>" alt=""></td>
                     <td rowspan="4" style="text-align: center; font-size:25px; font-weight:200;"> CONTROL DE RECEPCIÓN DE MATERIA PRIMA E INSUMOS </td>
                     <td>Código: LBS-BPM-FR-09</td>
 
@@ -234,11 +234,23 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
                 <th class="">Ausencia de plagas</th>
             </tr>
         </thead>
+        <?php $contadorF = -1; ?>
+
         <tbody>
             <?php
             foreach ($datos as $dato) {
                 $requer = "RQ-" . (intval($dato['COD_REQUERIMIENTO']));
-                echo '<tr>';
+
+                $contadorF++;
+                if ($contadorF == 37) {
+                    echo '<tr style="page-break-before: always;">';
+                } elseif ($contadorF > 37 && $contadorF % 37 == 0) {
+                    echo '<tr style="page-break-before: always;">';
+                } else {
+                    echo '<tr>';
+                }
+
+                // echo '<tr>';
                 echo '<td>' . $dato['FECHA_INGRESO'] . '</td>';
                 echo '<td style="text-align:center;">' . $requer . '</td>';
                 echo '<td style="text-align:center;">' . $dato['HORA'] . '</td>';
@@ -355,7 +367,7 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         <tr>
             <td style="border:none;"><strong>Colocar:Conforme:</strong><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/checkobs.png')); ?>" alt="">,
                 <strong>No Conforme:</strong> <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/aspaobs.png')); ?>" alt="">, <strong>Frecuencia:</strong> Cada recepción de materia,insumos,envases y embalajes.
-                Indumentaria de la empresa:Polo,camisao casaca de la empresa,mascarilla.
+                Indumentaria de la empresa:Polo,camisa o casaca de la empresa,mascarilla.
                 Salud: Sin enfermedades, sin cortes o heridas,
                 Higiene: Cabello corto, rasurado,uñas cortas, sin objetos(anillos,aretes,etc)
             </td>
@@ -366,31 +378,46 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
     </table>
     <!-------------------------->
     <!-- Table Observacion y otros-->
-    <table style="margin-top: 5px;">
-        <thead>
-            <tr>
-                <th>FECHA</th>
-                <th>OBSERVACIÓN</th>
-                <th>ACCIONES CORRECTIVA</th>
-                <th>SUPERVISADO POR:</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
+    <?php
+    if (count($datosobservacion) > 0) {
 
-            foreach ($datosobservacion as $fils) {
-                echo '<tr>';
-                echo '<td class="cabecera">' . convFecSistema($fils['FECHA']) . '</td>';
-                echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
-                echo '<td class="cabecera">' . $fils['ACCION_CORRECTIVA'] . '</td>';
-                // echo '<td class="cabecera">' . $fils['VERIFICACION'] . '</td>';
-                echo '<td></td>';
-                echo '</tr>';
-            }
-            ?>
+        echo "<table style='margin-top: 5px;'>";
+        echo "<thead>";
+        echo " <tr>";
+        echo "<th>FECHA</th>";
+        echo "<th>OBSERVACIÓN</th>";
+        echo "<th>ACCIONES CORRECTIVA</th>";
+        echo "<th>SUPERVISADO POR:</th>";
+        echo "</tr>";
+        echo "</thead>";
+        echo "<tbody>";
 
-        </tbody>
-    </table>
+        foreach ($datosobservacion as $fils) {
+            echo '<tr>';
+            echo '<td class="cabecera">' . convFecSistema($fils['FECHA']) . '</td>';
+            echo '<td class="cabecera">' . $fils['OBSERVACION'] . '</td>';
+            echo '<td class="cabecera">' . $fils['ACCION_CORRECTIVA'] . '</td>';
+            // echo '<td class="cabecera">' . $fils['VERIFICACION'] . '</td>';
+            echo '<td></td>';
+            echo '</tr>';
+        }
+        echo "</tbody>";
+        echo "</table>";
+    } else {
+        echo "<table style='margin-top: 5px;'>";
+        echo "<thead>";
+        echo " <tr>";
+        echo "<th>FECHA</th>";
+        echo "<th>OBSERVACIÓN</th>";
+        echo "<th>ACCIONES CORRECTIVA</th>";
+        echo "<th>SUPERVISADO POR:</th>";
+        echo "</tr>";
+        echo "</thead>";
+        echo "</table>";
+    }
+    ?>
+
+
     <!-- Table firma y fecha-->
     <table style="margin-top: 50px; border:none;">
         <tr>

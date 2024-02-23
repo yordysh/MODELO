@@ -4549,8 +4549,9 @@ class m_almacen
             }
             $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigo_de_avance_insumo;
             $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(COD_PRODUCTO,ABR_PRODUCTO,LOTE,
-            DESCRIPCION,COD_EGRESO,CANT_EGRESO,SALDO,USU_REGISTRO,HORA_REGISTRO,KARDEX) VALUES('$ltproducto','$ltabr','$ltlote',
-            '$descripcion','$codigo_de_avance_insumo','$canlote',CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1),'$codpersonal','$hora_actual',CONVERT(numeric(9,2), REPLACE('$sumakardexresta', ',', ''), 1))");
+            DESCRIPCION,COD_EGRESO,CANT_EGRESO,SALDO,USU_REGISTRO,HORA_REGISTRO,KARDEX,ESTADO) VALUES('$ltproducto','$ltabr','$ltlote',
+            '$descripcion','$codigo_de_avance_insumo','$canlote',CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1),
+            '$codpersonal','$hora_actual',CONVERT(numeric(9,2), REPLACE('$sumakardexresta', ',', ''), 1),'F')");
             $querylote->execute();
             if ($querylote->errorCode() > 0) {
               $this->bd->rollBack();
@@ -4615,8 +4616,9 @@ class m_almacen
 
             $descripcion = 'SALIDA PARA LA PRODUCCION - ' . $codigo_de_avance_insumo;
             $querylote = $this->bd->prepare("INSERT INTO T_TMPKARDEX_PRODUCCION(COD_PRODUCTO,ABR_PRODUCTO,LOTE,
-            DESCRIPCION,COD_EGRESO,CANT_EGRESO,SALDO,USU_REGISTRO,HORA_REGISTRO,KARDEX) VALUES('$ltproducto','$ltabr','$ltlote',
-            '$descripcion','$codigo_de_avance_insumo','$canlote',CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1),'$codpersonal','$hora_actual',CONVERT(numeric(9,2), REPLACE('$sumakardexresta', ',', ''), 1))");
+            DESCRIPCION,COD_EGRESO,CANT_EGRESO,SALDO,USU_REGISTRO,HORA_REGISTRO,KARDEX,ESTADO) VALUES('$ltproducto','$ltabr','$ltlote',
+            '$descripcion','$codigo_de_avance_insumo','$canlote',CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1),'$codpersonal',
+            '$hora_actual',CONVERT(numeric(9,2), REPLACE('$sumakardexresta', ',', ''), 1),'F')");
             $querylote->execute();
             if ($querylote->errorCode() > 0) {
               $this->bd->rollBack();
@@ -5543,7 +5545,7 @@ class m_almacen
     try {
       $mostrardatospdf = $this->bd->prepare("SELECT CI.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA,CI.COD_PRODUCTO AS COD_PRODUCTO, TP.DES_PRODUCTO AS DES_PRODUCTO,
       CI.CANTIDAD_INSUMO_ENVASE AS CANTIDAD_INSUMO_ENVASE, CI.MONTO AS MONTO, CI.PRECIO_MINIMO AS PRECIO_MINIMO FROM T_TMPORDEN_COMPRA_ITEMTEMP CI 
-      INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=CI.COD_PRODUCTO WHERE CI.COD_ORDEN_COMPRA='$codigoordencompratemp' AND CI.ESTADO='P'");
+      INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=CI.COD_PRODUCTO WHERE CI.COD_ORDEN_COMPRA='$codigoordencompratemp'");
       $mostrardatospdf->execute();
       return $mostrardatospdf->fetchAll(PDO::FETCH_NUM);
     } catch (Exception $e) {
@@ -6324,7 +6326,8 @@ class m_almacen
             SALDO,
             USU_REGISTRO,
             HORA_REGISTRO,
-            KARDEX) 
+            KARDEX,
+            ESTADO) 
             VALUES(
             '$producto',
             '$valorabrprod',
@@ -6335,7 +6338,8 @@ class m_almacen
             ,CONVERT(numeric(9,2), REPLACE('$ltresta', ',', ''), 1)
             ,'$codpersonal'
             ,'$hora_actual'
-            ,CONVERT(numeric(9,2), REPLACE('$lkardex', ',', ''), 1)
+            ,CONVERT(numeric(9,2), REPLACE('$lkardex', ',', ''), 1),
+            'I'
             )");
           $querylote->execute();
 
@@ -7456,12 +7460,26 @@ class m_almacen
   public function MostrarListaKardexProducto($codigoproducto, $fechainicio, $fechafin)
   {
     try {
+      $fecini = retunrFechaSqlphp($fechainicio);
+      $fecfin = retunrFechaSqlphp($fechafin);
+
       $query = $this->bd->prepare("SELECT TK.CODIGO AS CODIGO,TP.COD_PRODUCCION AS COD_PRODUCCION,TK.COD_PRODUCTO AS COD_PRODUCTO,
       TP.ABR_PRODUCTO AS ABR_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,TK.LOTE AS LOTE,TK.DESCRIPCION,TK.COD_INGRESO AS COD_INGRESO,TK.CANT_INGRESO AS CANT_INGRESO,
-      TK.CANT_EGRESO AS CANT_EGRESO, TK.SALDO AS SALDO,TK.FEC_REGISTRO AS FEC_REGISTRO,TK.KARDEX AS KARDEX
+      TK.CANT_EGRESO AS CANT_EGRESO, TK.SALDO AS SALDO,TK.FEC_REGISTRO AS FEC_REGISTRO,TK.KARDEX AS KARDEX,TK.ESTADO AS ESTADO
        FROM T_TMPKARDEX_PRODUCCION TK INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TK.COD_PRODUCTO
-      WHERE TK.COD_PRODUCTO='$codigoproducto' AND TK.FEC_REGISTRO >= '$fechainicio' AND TK.FEC_REGISTRO <= '$fechafin' ORDER BY CODIGO ASC
+      WHERE CAST(TK.FEC_REGISTRO as date) >= '$fecini' AND CAST(TK.FEC_REGISTRO as date) <= '$fecfin'
+      AND TK.COD_PRODUCTO = '$codigoproducto' ORDER BY CODIGO ASC
       ");
+      $query->execute();
+      return $query->fetchAll();
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function MostrarProducto($codigoproducto)
+  {
+    try {
+      $query = $this->bd->prepare("SELECT COD_PRODUCCION,DES_PRODUCTO FROM T_PRODUCTO WHERE COD_PRODUCTO='$codigoproducto'");
       $query->execute();
       return $query->fetchAll();
     } catch (Exception $e) {
