@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-// $codusuario = $_SESSION["cod"];
-// $oficina = $_SESSION["ofi"];
-$oficina = 'SMP2';
-$codusuario = "0356";
+$codusuario = $_SESSION["cod"];
+$oficina = $_SESSION["ofi"];
+// $oficina = 'SMP2';
+// $codusuario = "0356";
 
 ?>
 
@@ -17,7 +17,6 @@ $personal = new m_almacen_consulta($oficina);
 $dataProducto = $mostrar->MostrarProductoRegistroEnvase();
 $dataNumeroProduccion = $mostrar->MostrarProduccionEnvase();
 $dataPersonal = $personal->MostrarDatosPersonal();
-// $dataPersonal = $mostrar->MostrarPersonal();
 
 ?>
 <!DOCTYPE html>

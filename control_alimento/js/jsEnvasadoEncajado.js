@@ -26,7 +26,7 @@ function exportardatoscompra() {
   doc.line(150, 13.5, 200, 13.5); // linea separacion para fecha version
   doc.line(150, 18.5, 200, 18.5); // linea separacion para fecha version
 
-  doc.setFontSize(13);
+  doc.setFontSize(15);
   doc.setFont("helvetica", "bold");
   doc.text("CONTROL DE ENVASADO Y ENCAJADO", 55, 19); //TITULO CONTROL
   doc.setFont("helvetica", "normal");

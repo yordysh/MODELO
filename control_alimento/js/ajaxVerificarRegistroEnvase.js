@@ -130,7 +130,6 @@ $(function () {
         $(".preloader").css("display", "block");
       },
       success: function (response) {
-        // console.log(response);
         let tasks = JSON.parse(response);
         if (tasks.estado === "estado1") {
           var valorunicoproduccion = tasks.valorunicoproduccion;
@@ -252,136 +251,6 @@ $(function () {
         $(".preloader").css("display", "none");
       },
     });
-
-    // let accion = "mostrarregistrosporenvases";
-    // $.ajax({
-    //   type: "POST",
-    //   url: "./c_almacen.php",
-    //   data: {
-    //     accion: accion,
-    //     codigoproduccion: codigoproduccion,
-    //     codigoproducto: codigoproducto,
-    //     cantidadenvase: $("#txtcantidadproductos").val(),
-    //     cantidadinsumo: cantidad,
-    //   },
-    //   success: function (response) {
-    //     if (isJSON(response)) {
-    //       let tasks = JSON.parse(response);
-    //       console.log(tasks);
-    //       if (tasks["tipoe"] == 0) {
-    //         let template = ``;
-    //         tasks["respuestae"].forEach((task) => {
-    //           let lotes = task.LOTES;
-    //           template += `<tr taskId="${task.COD_FORMULACION}">
-
-    //                       <td data-titulo="MATERIALES" taskcodigoproducto=${
-    //                         task.COD_PRODUCTO
-    //                       }>${task.DES_PRODUCTO}</td>
-    //                       <td data-titulo="CANTIDAD" >${
-    //                         task.CANTIDAD_TOTAL
-    //                       }</td>
-    //                       <td data-titulo="LOTE"><input  class='lotesx' type='text' readonly value="${lote(
-    //                         lotes
-    //                       )}"/></td>
-
-    //             </tr>`;
-    //         });
-
-    //         $("#tablacalculoregistroenvase").html(template);
-    //         // $("#selectProductoCombo").val("none").trigger("change");
-    //         $("#selectNumProduccion").val("none").trigger("change");
-    //         $("#cantidad").val("");
-    //         // $("#txtcantidadproductos").val("");
-    //       }
-    //       // else {
-    //       //   console.log("error");
-    //       // }
-    //     } else {
-    //       console.log("error");
-    //     }
-    //     // else if (response == "controlno") {
-    //     //   console.log("object");
-    //     // }
-    //   },
-    //   error: function (error) {
-    //     console.log("ERROR " + error);
-    //   },
-    // });
-
-    // let accioninsumos = "mostrarinsumostotales";
-
-    // $.ajax({
-    //   type: "POST",
-    //   url: "./c_almacen.php",
-    //   data: {
-    //     accion: accioninsumos,
-    //     codigoproduccion: codigoproduccion,
-    //     codigoproducto: codigoproducto,
-    //     cantidadenvase: $("#txtcantidadproductos").val(),
-    //     cantidadinsumo: cantidad,
-    //   },
-    //   beforeSend: function () {
-    //     $(".preloader").css("opacity", "1");
-    //     $(".preloader").css("display", "block");
-    //   },
-    //   success: function (response) {
-    //     if (isJSON(response)) {
-    //       let tasks = JSON.parse(response);
-
-    //       if (tasks["tipo"] == 0) {
-    //         Swal.fire({
-    //           icon: "success",
-    //           title: "Calculo de registro",
-    //           text: "Se añadio correctamente el registro.",
-    //         });
-
-    //         let template = ``;
-    //         tasks["respuesta"].forEach((task) => {
-    //           let lotes = task.LOTES;
-    //           template += `<tr taskId="${task.COD_FORMULACION}">
-
-    //                       <td data-titulo="MATERIALES" insumocodigoproducto=${
-    //                         task.COD_PRODUCTO
-    //                       }>${task.DES_PRODUCTO}</td>
-    //                       <td data-titulo="CANTIDAD" >${
-    //                         task.CANTIDAD_TOTAL
-    //                       }</td>
-    //                       <td data-titulo="LOTE" ><input type='text' readonly value="${lote(
-    //                         lotes
-    //                       )}"/></td>
-    //             </tr>`;
-    //         });
-
-    //         $("#tablainsumosavancetotal").html(template);
-    //         $("#selectNumProduccion").val("none").trigger("change");
-    //         $("#cantidad").val("");
-    //       } else {
-    //         Swal.fire({
-    //           title: "¡Supero cantidad!",
-    //           text: "Cantidad supero lo que hay en producción.",
-    //           html: `<p>La cantidad minima de  ${tasks["respuesta"].COD_PRODUCCION} ${tasks["respuesta"].DES_PRODUCTO} es ${tasks["respuesta"].CANTIDAD_PRODUCIDA} KG y TOTAL PRODUCTO es ${tasks["respuesta"].VALOR_KG} </p>`,
-    //           icon: "error",
-    //           confirmButtonText: "Aceptar",
-    //         }).then((result) => {
-    //           if (result.isConfirmed) {
-    //             $("#cantidad").val("");
-    //             // $("#selectProductoCombo").val("none").trigger("change");
-    //             $("#selectNumProduccion").val("none").trigger("change");
-    //             $("#tablacalculoregistroenvase").empty();
-    //           }
-    //         });
-    //         $("#tablacalculoregistroenvase").empty();
-    //       }
-    //     }
-    //   },
-    //   error: function (error) {
-    //     console.log("ERROR " + error);
-    //   },
-    //   complete: function () {
-    //     $(".preloader").css("opacity", "0");
-    //     $(".preloader").css("display", "none");
-    //   },
-    // });
   });
   /*---------Guardar avance -----------------------*/
   $("#botonguardarregistro").click((e) => {
@@ -591,7 +460,7 @@ function lote(lotes) {
   let text = "";
   if (lotes != null) {
     for (let l = 0; l < lotes.length; l++) {
-      text += lotes[l][1] + " - " + lotes[l][2] + " / ";
+      text += lotes[l][1] + " - " + parseFloat(lotes[l][2]).toFixed(2) + " / ";
     }
   } else {
     text = "";

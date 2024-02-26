@@ -74,7 +74,7 @@ function exportardosimetria(obj) {
       doc.line(120, 6.5, 120, 143.5); //5 linea vertical
       doc.line(165, 6.5, 165, 143.5); //6 linea vertical
 
-      doc.line(175, 12, 175, 143.5); //7 linea vertical
+      // doc.line(175, 12, 175, 143.5); //7 linea vertical
 
       doc.line(185, 6.5, 185, 148); //8 linea vertical
       doc.line(204, 6.5, 204, 148); //ultima linea vertical
@@ -87,8 +87,9 @@ function exportardosimetria(obj) {
       doc.text("/INSUMO", 105, 14);
       doc.text("CÓDIGO LOTE", 135, 12);
       doc.text("PRESENTACIÓN", 166.2, 11);
-      doc.text("g", 169, 15);
-      doc.text("KG", 178, 15);
+      // doc.text("g", 169, 15);
+      // doc.text("KG", 178, 15);
+      doc.text("KG", 173, 15);
       doc.text("CANTIDAD", 189, 11);
 
       doc.text("TOTAL", 129, 146.6); /**/
@@ -135,9 +136,10 @@ function exportardosimetria(obj) {
       let altura = 21;
       let position = 83;
       var che1X_1 = 178; // Posición X
-      var che1Y_1 = 19.5; // Posición Y
-
-      var che2X_1 = 168; // Posición X
+      // var che1Y_1 = 19.5; // Posición Y
+      var che1Y_1 = 19; // Posición Y
+      // var che2X_1 = 168; // Posición X
+      var che2X_1 = 173; // Posición X
 
       doc.setFontSize(8);
       $.each(material, function (j, k) {
@@ -145,15 +147,15 @@ function exportardosimetria(obj) {
         doc.text("" + k[2], 90, altura); //codigo produccion
         doc.text("" + k[3], 107, altura); //materia prima
         doc.text("" + k[4], 125, altura); //lote prima
-        if (k[6] == "g") {
-          // Dibujar un check con líneas en la posición (50, 50)
-          doc.line(che2X_1, che1Y_1, che2X_1 + 1, che1Y_1 + 1); // Dibujar una línea diagonal más corta
-          doc.line(che2X_1 + 1, che1Y_1 + 1, che2X_1 + 3, che1Y_1 - 1); // Dibujar otra línea diagonal más corta
-        } else {
-          //Dibujar un check con líneas en la posición (50, 50)
-          doc.line(che1X_1, che1Y_1, che1X_1 + 1, che1Y_1 + 1); // Dibujar una línea diagonal más corta
-          doc.line(che1X_1 + 1, che1Y_1 + 1, che1X_1 + 3, che1Y_1 - 1); // Dibujar otra línea diagonal más corta
-        } //gramos o kilos
+        // if (k[6] == "g") {
+        //   // Dibujar un check con líneas en la posición (50, 50)
+        doc.line(che2X_1, che1Y_1, che2X_1 + 1, che1Y_1 + 1); // Dibujar una línea diagonal más corta
+        doc.line(che2X_1 + 1, che1Y_1 + 1, che2X_1 + 3, che1Y_1 - 1); // Dibujar otra línea diagonal más corta
+        // } else {
+        //Dibujar un check con líneas en la posición (50, 50)
+        // doc.line(che1X_1, che1Y_1, che1X_1 + 1, che1Y_1 + 1); // Dibujar una línea diagonal más corta
+        // doc.line(che1X_1 + 1, che1Y_1 + 1, che1X_1 + 3, che1Y_1 - 1); // Dibujar otra línea diagonal más corta
+        // } //gramos o kilos
         doc.text("" + k[5], 190, altura); //peso
         // doc.text("" + k[5], 190, altura); //peso
         index++;
@@ -194,7 +196,7 @@ function exportardosimetria(obj) {
       doc.line(120, 151, 120, 288.4); //5 linea vertical
       doc.line(165, 151, 165, 288.4); //6 linea vertical
 
-      doc.line(175, 157, 175, 288.4); //7 linea vertical
+      // doc.line(175, 157, 175, 288.4); //7 linea vertical
 
       doc.line(185, 151, 185, 293); //8 linea vertical
       doc.line(204, 151, 204, 293); //ultima linea vertical
@@ -207,8 +209,8 @@ function exportardosimetria(obj) {
       doc.text("/INSUMO", 105, 159);
       doc.text("CÓDIGO LOTE", 135, 157);
       doc.text("PRESENTACIÓN", 166.2, 156);
-      doc.text("g", 169, 160);
-      doc.text("KG", 178, 160);
+      // doc.text("g", 169, 160);
+      doc.text("KG", 173, 160);
       doc.text("CANTIDAD", 189, 156);
 
       doc.text("TOTAL", 129, 291.6); /**/
@@ -258,7 +260,7 @@ function exportardosimetria(obj) {
       var che1X_2 = 178; // Posición X
       var che1Y_2 = 165; // Posición Y
 
-      var che2X_2 = 168; // Posición X
+      var che2X_2 = 173; // Posición X
 
       doc.setFontSize(8);
       $.each(material, function (s, a) {
@@ -266,15 +268,15 @@ function exportardosimetria(obj) {
         doc.text("" + a[2], 90, altura2); //codigo produccion
         doc.text("" + a[3], 107, altura2); //materia prima
         doc.text("" + a[4], 125, altura2); //lote prima
-        if (a[6] == "g") {
-          // Dibujar un check con líneas en la posición (50, 50)
-          doc.line(che2X_2, che1Y_2, che2X_2 + 1, che1Y_2 + 1); // Dibujar una línea diagonal más corta
-          doc.line(che2X_2 + 1, che1Y_2 + 1, che2X_2 + 3, che1Y_2 - 1); // Dibujar otra línea diagonal más corta
-        } else {
-          // Dibujar un check con líneas en la posición (50, 50)
-          doc.line(che1X_2, che1Y_2, che1X_2 + 1, che1Y_2 + 1); // Dibujar una línea diagonal más corta
-          doc.line(che1X_2 + 1, che1Y_2 + 1, che1X_2 + 3, che1Y_2 - 1); // Dibujar otra línea diagonal más corta
-        } //gramos o kilos
+        // if (a[6] == "g") {
+        // Dibujar un check con líneas en la posición (50, 50)
+        doc.line(che2X_2, che1Y_2, che2X_2 + 1, che1Y_2 + 1); // Dibujar una línea diagonal más corta
+        doc.line(che2X_2 + 1, che1Y_2 + 1, che2X_2 + 3, che1Y_2 - 1); // Dibujar otra línea diagonal más corta
+        // } else {
+        // Dibujar un check con líneas en la posición (50, 50)
+        // doc.line(che1X_2, che1Y_2, che1X_2 + 1, che1Y_2 + 1); // Dibujar una línea diagonal más corta
+        // doc.line(che1X_2 + 1, che1Y_2 + 1, che1X_2 + 3, che1Y_2 - 1); // Dibujar otra línea diagonal más corta
+        // } //gramos o kilos
         doc.text("" + a[5], 190, altura2); //peso
 
         index2++;
