@@ -6134,8 +6134,19 @@ class m_almacen
           $insertarobs->execute();
         }
 
-        // $actualizo = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA SET ESTADO='F'");
-        // $actualizo->execute();
+        $verificarr = $this->bd->prepare("SELECT COD_PRODUCTO, SUM(CAST(CANTIDAD_MINIMA AS DECIMAL(15, 2))) AS SUMA_TOTAL
+                                         FROM T_TMPCONTROL_RECEPCION_COMPRAS_ITEM WHERE COD_TMPCONTROL_RECEPCION_COMPRAS='$codigorecepcion'
+                                         GROUP BY COD_PRODUCTO");
+        $verificarr->execute();
+        $totalsumar = $verificarr->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($totalsumar as $rowr) {
+          $codigoproductor = $rowr["COD_PRODUCTO"];
+          $sumatotalproductor = $rowr["SUMA_TOTAL"];
+
+          $actualizatotalprod = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET INGRESO='$sumatotalproductor' WHERE COD_PRODUCTO='$codigoproductor'");
+          $actualizatotalprod->execute();
+        }
       } else {
 
         $insertarecepcioncompras = $this->bd->prepare("INSERT INTO T_TMPCONTROL_RECEPCION_COMPRAS(COD_TMPCONTROL_RECEPCION_COMPRAS, CODIGO_PERSONAL, COD_REQUERIMIENTO)
@@ -6423,6 +6434,20 @@ class m_almacen
             $modificaz = $this->bd->prepare("UPDATE T_TMPORDEN_COMPRA_ITEMTEMP SET ESTADO='F' WHERE COD_ORDEN_COMPRA='$codigoordencompra' AND COD_TMPCOMPROBANTE='$idrequerimiento' AND COD_PRODUCTO='$producto'");
             $modificaz->execute();
           }
+        }
+
+        $verificar = $this->bd->prepare("SELECT COD_PRODUCTO, SUM(CAST(CANTIDAD_MINIMA AS DECIMAL(15, 2))) AS SUMA_TOTAL
+                                         FROM T_TMPCONTROL_RECEPCION_COMPRAS_ITEM WHERE COD_TMPCONTROL_RECEPCION_COMPRAS='$codigorecepcion'
+                                         GROUP BY COD_PRODUCTO");
+        $verificar->execute();
+        $totalsuma = $verificar->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($totalsuma as $row) {
+          $codigoproducto = $row["COD_PRODUCTO"];
+          $sumatotalproducto = $row["SUMA_TOTAL"];
+
+          $actualizatotalprod = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET INGRESO='$sumatotalproducto' WHERE COD_PRODUCTO='$codigoproducto'");
+          $actualizatotalprod->execute();
         }
       }
 

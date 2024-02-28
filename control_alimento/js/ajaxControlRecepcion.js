@@ -44,10 +44,12 @@ $(function () {
           let tasks = JSON.parse(response);
           console.log(tasks);
           let template = ``;
+          let i = 1;
           tasks.forEach((task) => {
             let quitarceros = parseInt(selectrequerimiento, 10);
             let requerimiento = "RQ-" + quitarceros;
             template += `<tr  class="hoverable">
+                            <td data-titulo="ITEM" >${i}</td>
                             <td class='encabezado-especial' data-titulo="FECHA DE INGRESO" >${task.FECHA_EMISION}</td>
                             <td data-titulo="REQUERIMIENTO" style="text-align:center;" codigoordencompra='${task.COD_ORDEN_COMPRA}'>${requerimiento}</td>
                             <td data-titulo="HORA"><input class='form-control' type='time'  min="10:00:00" max="11:00:00" id='horaInput' class='hora'/></td>
@@ -79,6 +81,7 @@ $(function () {
                             <td data-titulo="Ausencia de plagas"><input class="form-check-input ausencia obs" type="checkbox" value="" id="ausencia" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
                             <td data-titulo="V°B°"></td>
                          </tr>`;
+            i++;
           });
           $("#tablacontrolrecepcion").html(template);
         }
@@ -159,86 +162,88 @@ $(function () {
     let datos = [];
     $("#tbrecepcion tbody tr").each(function () {
       let row = $(this);
-      let remision = row.find("td:eq(8) input.remision").is(":checked")
+      let remision = row.find("td:eq(9) input.remision").is(":checked")
         ? "1"
         : "0";
-      let boleta = row.find("td:eq(9) input.boleta").is(":checked") ? "1" : "0";
-      let factura = row.find("td:eq(10) input.factura").is(":checked")
+      let boleta = row.find("td:eq(10) input.boleta").is(":checked")
         ? "1"
         : "0";
-      let primario = row.find('td:eq(12) input[type="checkbox"]').is(":checked")
+      let factura = row.find("td:eq(11) input.factura").is(":checked")
         ? "1"
         : "0";
-      let secundario = row.find("td:eq(13) input").is(":checked") ? "1" : "0";
-      let saco = row.find('td:eq(14) input[type="checkbox"]').is(":checked")
+      let primario = row.find('td:eq(13) input[type="checkbox"]').is(":checked")
         ? "1"
         : "0";
-      let caja = row.find('td:eq(15) input[type="checkbox"]').is(":checked")
+      let secundario = row.find("td:eq(14) input").is(":checked") ? "1" : "0";
+      let saco = row.find('td:eq(15) input[type="checkbox"]').is(":checked")
         ? "1"
         : "0";
-      let cilindro = row.find('td:eq(16) input[type="checkbox"]').is(":checked")
+      let caja = row.find('td:eq(16) input[type="checkbox"]').is(":checked")
         ? "1"
         : "0";
-      let bolsa = row.find('td:eq(17) input[type="checkbox"]').is(":checked")
+      let cilindro = row.find('td:eq(17) input[type="checkbox"]').is(":checked")
         ? "1"
         : "0";
-      let eih = row.find('td:eq(19) input[type="checkbox"]').is(":checked")
+      let bolsa = row.find('td:eq(18) input[type="checkbox"]').is(":checked")
         ? "1"
         : "0";
-      let cdc = row.find('td:eq(20) input[type="checkbox"]').is(":checked")
+      let eih = row.find('td:eq(20) input[type="checkbox"]').is(":checked")
+        ? "1"
+        : "0";
+      let cdc = row.find('td:eq(21) input[type="checkbox"]').is(":checked")
         ? "1"
         : "0";
       let rotulacion = row
-        .find('td:eq(21) input[type="checkbox"]')
+        .find('td:eq(22) input[type="checkbox"]')
         .is(":checked")
         ? "1"
         : "0";
-      let aplicacion = row.find("td:eq(22) input.aplicacion").is(":checked")
+      let aplicacion = row.find("td:eq(23) input.aplicacion").is(":checked")
         ? "1"
         : "0";
-      let higienesalud = row.find("td:eq(23) input.higienesalud").is(":checked")
+      let higienesalud = row.find("td:eq(24) input.higienesalud").is(":checked")
         ? "1"
         : "0";
-      let indumentaria = row.find("td:eq(24) input.indumentaria").is(":checked")
+      let indumentaria = row.find("td:eq(25) input.indumentaria").is(":checked")
         ? "1"
         : "0";
-      let limpio = row.find('td:eq(25) input[type="checkbox"]').is(":checked")
+      let limpio = row.find('td:eq(26) input[type="checkbox"]').is(":checked")
         ? "1"
         : "0";
       let exclusivo = row
-        .find('td:eq(26) input[type="checkbox"]')
-        .is(":checked")
-        ? "1"
-        : "0";
-      let hermetico = row
         .find('td:eq(27) input[type="checkbox"]')
         .is(":checked")
         ? "1"
         : "0";
-      let ausencia = row.find('td:eq(28) input[type="checkbox"]').is(":checked")
+      let hermetico = row
+        .find('td:eq(28) input[type="checkbox"]')
+        .is(":checked")
+        ? "1"
+        : "0";
+      let ausencia = row.find('td:eq(29) input[type="checkbox"]').is(":checked")
         ? "1"
         : "0";
 
       datos.push({
-        fechaingreso: row.find("td:eq(0)").text(),
-        codigoordencompra: row.find("td:eq(1)").attr("codigoordencompra"),
-        hora: row.find("td:eq(2) input").val(),
-        codigointerno: row.find("td:eq(3)").text(),
-        producto: row.find("td:eq(4)").attr("codigoproducto"),
-        codigolote: row.find("td:eq(5) input.codigolote").val(),
-        fechavencimiento: row.find("td:eq(6) input.fechavencimiento").val(),
-        proveedor: row.find("td:eq(7)").attr("codigoproveedor"),
+        fechaingreso: row.find("td:eq(1)").text(),
+        codigoordencompra: row.find("td:eq(2)").attr("codigoordencompra"),
+        hora: row.find("td:eq(3) input").val(),
+        codigointerno: row.find("td:eq(4)").text(),
+        producto: row.find("td:eq(5)").attr("codigoproducto"),
+        codigolote: row.find("td:eq(6) input.codigolote").val(),
+        fechavencimiento: row.find("td:eq(7) input.fechavencimiento").val(),
+        proveedor: row.find("td:eq(8)").attr("codigoproveedor"),
         remision: remision,
         boleta: boleta,
         factura: factura,
-        numerofactura: row.find("td:eq(11) input").val(),
+        numerofactura: row.find("td:eq(12) input").val(),
         primario: primario,
         secundario: secundario,
         saco: saco,
         caja: caja,
         cilindro: cilindro,
         bolsa: bolsa,
-        cantidadminima: row.find("td:eq(18) input").val(),
+        cantidadminima: row.find("td:eq(19) input").val(),
         eih: eih,
         cdc: cdc,
         rotulacion: rotulacion,
@@ -252,48 +257,57 @@ $(function () {
       });
     });
 
-    let hora;
-    let gbf;
-    let guia;
-    let boleta;
-    let factura;
-    let codigolote;
-    let fechavencimiento;
+    // let hora;
+    // let gbf;
+    // let guia;
+    // let boleta;
+    // let factura;
+    // let codigolote;
+    // let fechavencimiento;
     let horaEmpty = false;
     let iscodigoloteEmpty = false;
     let isFechavencimientoEmpty = false;
     let gbfEmpty = false;
     let facturaEmpty = false;
-
+    let items = [];
     $("#tbrecepcion tbody tr").each(function () {
-      hora = $(this).find("td:eq(2) input").val();
-      codigolote = $(this).find("td:eq(5) input.codigolote").val();
-      fechavencimiento = $(this).find("td:eq(6) input.fechavencimiento").val();
+      let row = $(this);
+      let item = row.find("td:eq(0)").text();
+      let hora = row.find("td:eq(3) input").val();
+      let codigolote = row.find("td:eq(6) input.codigolote").val();
+      let fechavencimiento = row.find("td:eq(7) input.fechavencimiento").val();
 
-      guia = $(this).find("td:eq(8) input:checkbox").is(":checked");
-      boleta = $(this).find("td:eq(9) input:checkbox").is(":checked");
-      factura = $(this).find("td:eq(10) input:checkbox").is(":checked");
-      gbf = $(this).find("td:eq(11) input").val();
-
+      let guia = row.find("td:eq(9) input:checkbox").is(":checked");
+      let boleta = row.find("td:eq(10) input:checkbox").is(":checked");
+      let factura = row.find("td:eq(11) input:checkbox").is(":checked");
+      let gbf = row.find("td:eq(12) input").val();
+      items.push(item);
       if (hora === "") {
         horaEmpty = true;
+        return false;
       }
 
       if (codigolote === "") {
         iscodigoloteEmpty = true;
+        return false;
       }
 
       if (fechavencimiento === "") {
         isFechavencimientoEmpty = true;
+        return false;
       }
+
       if (factura === false && boleta === false && guia === false) {
         facturaEmpty = true;
+        return false;
       }
 
       if (gbf === "") {
         gbfEmpty = true;
+        return false;
       }
     });
+
     if (!idrequerimiento) {
       Swal.fire({
         icon: "info",
@@ -306,7 +320,10 @@ $(function () {
       Swal.fire({
         icon: "info",
         title: "Inserte una hora",
-        text: "Debe de seleccionar una hora.",
+        text:
+          "Debe de seleccionar una hora del item " +
+          items[items.length - 1] +
+          ".",
       });
       return;
     }
@@ -314,7 +331,10 @@ $(function () {
       Swal.fire({
         icon: "info",
         title: "Inserte un codigo",
-        text: "Debe de escribir un codigo lote.",
+        text:
+          "Debe de escribir un codigo lote del item " +
+          items[items.length - 1] +
+          ".",
       });
       return;
     }
@@ -322,7 +342,10 @@ $(function () {
       Swal.fire({
         icon: "info",
         title: "Inserte una fecha",
-        text: "Debe seleccionar una fecha en al menos una fila.",
+        text:
+          "Debe seleccionar una fecha del item " +
+          items[items.length - 1] +
+          ".",
       });
       return;
     }
@@ -330,7 +353,10 @@ $(function () {
       Swal.fire({
         icon: "info",
         title: "Darle check",
-        text: "Debe de darle check obligatorio GIA/BOLETA/FACTURA a cualquiera",
+        text:
+          "Debe de darle check obligatorio GIA/BOLETA/FACTURA a cualquiera del item " +
+          items[items.length - 1] +
+          ".",
       });
       return;
     }
@@ -338,7 +364,10 @@ $(function () {
       Swal.fire({
         icon: "info",
         title: "Inserte numero de guia, boleta factura",
-        text: "Debe insertar un valor en el recuadro.",
+        text:
+          "Debe insertar un valor en el recuadro del item " +
+          items[items.length - 1] +
+          ".",
       });
       return;
     }

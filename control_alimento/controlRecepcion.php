@@ -142,6 +142,7 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                             <table id="tbrecepcion" class="table table-sm mb-3 table-fixed">
                                 <thead class="theadborder fixed-header">
                                     <tr>
+                                        <th style="padding:40px 0;" class="thborder" rowspan="2">ITEM</th>
                                         <th class="encabezado-especial thborder" rowspan="2" style="padding:40px 0;">FECHA DE INGRESO</th>
                                         <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">REQUERIMIENTO</th>
                                         <th rowspan="2" style="padding:40px 0; text-align:center;" class="thborder">HORA</th>

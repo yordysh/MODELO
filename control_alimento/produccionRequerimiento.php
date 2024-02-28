@@ -103,7 +103,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
         <section>
             <div class="container g-4 row">
                 <div class="row g-4 top-div">
-                    <center><label class="title">PRODUCCION REQUERIMIENTO</label></center>
+                    <center><label class="title">PRODUCCIÓN REQUERIMIENTO</label></center>
                 </div>
                 <div class="main">
                     <form method="post" action="" id="formularioPedidoRequerimiento">
@@ -118,7 +118,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <table id="tmostrarproduccionrequerimiento" class="table table-sm mb-3 table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="thtitulo" scope="col">CODIGO</th>
+                                        <th class="thtitulo" scope="col">CÓDIGO</th>
                                         <th class="thtitulo" scope="col">PRODUCTO</th>
                                         <th class="thtitulo" scope="col">CANTIDAD(KG)</th>
                                     </tr>
