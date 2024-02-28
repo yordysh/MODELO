@@ -337,6 +337,10 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_insertar_requerimiento_producto($selectProductoCombo, $cantidadProducto);
     echo $respuesta;
+} elseif ($accion == 'buscarultimorequerimiento') {
+
+    $respuesta = c_almacen::c_buscar_ultimo_requerimiento();
+    echo $respuesta;
 } elseif ($accion == 'buscarrequerimientoproducto') {
 
     $buscarrequerimiento = trim($_POST['buscarrequerimiento']);
@@ -2829,6 +2833,24 @@ class c_almacen
         }
     }
 
+    static function c_buscar_ultimo_requerimiento()
+    {
+        try {
+            $mostrar = new m_almacen();
+            $datos = $mostrar->MostrarTPMRequerimiento();
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
 
 
 
@@ -4119,7 +4141,7 @@ class c_almacen
         echo '<option value="none" selected disabled>Seleccione produccion</option>';
         for ($i = 0; $i < count($datos); $i++) {
 
-            echo '<option value="' . $datos[$i]["COD_PRODUCCION"] . '">' . $datos[$i]["NUM_PRODUCION_LOTE"] . " " . $datos[$i]["FEC_GENERADO"] . '</option>';
+            echo '<option value="' . $datos[$i]["COD_PRODUCCION"] . '">' . $datos[$i]["NUM_PRODUCION_LOTE"] . "F.V " . $datos[$i]["FEC_GENERADO"] . '</option>';
         }
     }
 

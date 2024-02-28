@@ -558,38 +558,6 @@ $(function () {
       });
     });
 
-    // let paresUnicos = {};
-
-    // for (let i = 0; i < valoresCapturadosAdicional.length; i++) {
-    //   let codigoproducto = valoresCapturadosAdicional[i]["id_producto_insumo"];
-    //   let id_proveedor = valoresCapturadosAdicional[i]["id_proveedor"];
-    //   let nombreproducto = valoresCapturadosAdicional[i]["nombreproducto"];
-
-    //   let claveUnica = codigoproducto + "_" + id_proveedor;
-    //   if (paresUnicos[claveUnica]) {
-    //     Swal.fire({
-    //       title: "Se encontro duplicado de proveedor y producto",
-    //       text: "El producto duplicado " + nombreproducto,
-    //       icon: "info",
-    //       confirmButtonText: "Aceptar",
-    //     });
-
-    //     return;
-    //   } else {
-    //     paresUnicos[claveUnica] = true;
-    //   }
-    // }
-
-    // if (valoresCapturadosAdicional.length === 0) {
-    //   Swal.fire({
-    //     title: "¡Error!",
-    //     text: "No hay pendientes",
-    //     icon: "info",
-    //     confirmButtonText: "Aceptar",
-    //   });
-    //   return;
-    // }
-
     for (let i = 0; i < fechaentregaalert.length; i++) {
       if (fechaentregaalert[i] === "") {
         Swal.fire({
@@ -697,6 +665,29 @@ $(function () {
     });
   });
   /*------------------------------------------------------------ */
+  /*-------------- fecha no debe ser menor a la actual------------- */
+  $(document).on("blur", "#fechaentrega", function () {
+    let fechaentrega = $(this).val();
+    let fechaActual = new Date();
+
+    // Obtener el año, mes y día
+    let año = fechaActual.getFullYear();
+    let mes = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
+    let dia = ("0" + fechaActual.getDate()).slice(-2);
+    let fechaFormateada = año + "-" + mes + "-" + dia;
+
+    if (fechaentrega < fechaFormateada) {
+      Swal.fire({
+        icon: "info",
+        title: "¡La fecha de entrega no puede ser anterior a la fecha actual!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $(this).val("");
+        }
+      });
+    }
+  });
+  /*-------------------------------------------------------------- */
 });
 function isJSON(str) {
   try {

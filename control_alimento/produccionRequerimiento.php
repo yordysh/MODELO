@@ -120,7 +120,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                                     <tr>
                                         <th class="thtitulo" scope="col">CODIGO</th>
                                         <th class="thtitulo" scope="col">PRODUCTO</th>
-                                        <th class="thtitulo" scope="col">CANTIDAD</th>
+                                        <th class="thtitulo" scope="col">CANTIDAD(KG)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaproduccionrequerimiento">
@@ -138,13 +138,13 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             </div>
                             <!-- Text input numero de produccion-->
                             <div class="col-md-4 form-outline mb-4">
-                                <label class="form-label">Lote produccion</label>
+                                <label class="form-label">Lote producción</label>
                                 <input type="text" id="numeroproduccion" class="form-control" name="" required>
                             </div>
 
                             <!-- Text input cantidad produccion-->
                             <div class=" col-md-4 form-outline mb-4">
-                                <label class="form-label">Cantidad produccion</label>
+                                <label class="form-label">Cantidad producción(kg)</label>
                                 <input type="text" id="cantidadhiddentotalrequerimiento" class="form-control" name="" disabled>
                             </div>
                         </div>
@@ -152,14 +152,14 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                         <div class="row">
                             <!-- Text input fecha inicio-->
                             <div class="col-md-4 form-outline mb-4">
-                                <label class="form-label">Fecha producción</label>
+                                <label class="form-label">Fecha producción (F.P)</label>
                                 <!-- <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y'); ?>-12-31"> -->
                                 <input type="date" id="fechainicio" class="form-control" name="" inputmode="numeric">
                             </div>
 
                             <!-- Text input fecha inicio-->
                             <div class="col-md-4 form-outline mb-4">
-                                <label class="form-label">Fecha vencimiento</label>
+                                <label class="form-label">Fecha vencimiento (F.V)</label>
                                 <!-- <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y'); ?>-01-01" max="<?php echo date('Y'); ?>-12-31"> -->
                                 <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric">
                             </div>

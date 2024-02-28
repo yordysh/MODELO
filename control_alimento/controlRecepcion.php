@@ -138,7 +138,7 @@ $dataRequerimiento = $mostrar->MostrarRequerimientoEstadoT();
                         <div class="row g-4 top-div">
                             <center><label class="title">CONTROL DE RECEPCION DE MATERIA PRIMA</label></center>
                         </div>
-                        <div id="tablarecepcion" class="" style="overflow: scroll;height: 600px;width:89rem; margin-top:20px;">
+                        <div id="tablarecepcion" class="" style="overflow: scroll;height: 600px;width: 1300px!important; margin-top:20px;">
                             <table id="tbrecepcion" class="table table-sm mb-3 table-fixed">
                                 <thead class="theadborder fixed-header">
                                     <tr>

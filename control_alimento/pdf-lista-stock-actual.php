@@ -28,7 +28,7 @@ $font = $dompdf->getFontMetrics()->get_font("Arial", "normal");
 $canvas->page_text(470, 40, "{PAGE_NUM}/{PAGE_COUNT}", $font, 11, array(0, 0, 0));
 
 if ($dompdf) {
-    $dompdf->stream('Listado-orden.pdf', array('Attachment' => 0));
+    $dompdf->stream('Listado-stock-actual.pdf', array('Attachment' => 0));
 } else {
-    $dompdf->stream('Listado-orden.pdf', array('Attachment' => false));
+    $dompdf->stream('Listado-stock-actual.pdf', array('Attachment' => false));
 }

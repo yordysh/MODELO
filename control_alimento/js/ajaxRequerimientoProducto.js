@@ -717,6 +717,8 @@ $(function () {
               tablaReqEnv.empty();
               tablatotalInEn.empty();
               $("#tablasumatotalinsumo").empty();
+              // $("#idrequerimientotemp").val("000000001").trigger("change");
+              buscarultimorequerimiento();
             }
           });
         }
@@ -731,6 +733,36 @@ $(function () {
     });
   });
   //-------------------------------------------------------------------------//
+  function buscarultimorequerimiento() {
+    var accion = "buscarultimorequerimiento";
+    $.ajax({
+      type: "POST",
+      url: "./c_almacen.php",
+      data: {
+        accion: accion,
+      },
+      // beforeSend: function () {
+      //   $(".preloader").css("opacity", "1");
+      //   $(".preloader").css("display", "block");
+      // },
+      success: function (response) {
+        let r = JSON.parse(response);
+        $("#idrequerimientotemp").empty();
+        if (r.length > 0) {
+          r.forEach((item, index) => {
+            let option = $("<option>", {
+              value: item.COD_REQUERIMIENTO,
+              text: item.COD_REQUERIMIENTO,
+            });
+            if (index === 0) {
+              option.attr("selected", true);
+            }
+            $("#idrequerimientotemp").append(option);
+          });
+        }
+      },
+    });
+  }
   /*Carga de loading hasta que de la respuesta*/
   function showLoading() {
     $(".preloader").css("opacity", "1");

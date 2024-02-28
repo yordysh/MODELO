@@ -51,7 +51,6 @@ $(function () {
     var fechaActual = new Date();
     fechaActual.setDate(fechaActual.getDate() - 3);
     var fechaLimite = fechaActual.toISOString().split("T")[0];
-
     if (fechaProduc < fechaLimite) {
       Swal.fire({
         icon: "error",
@@ -80,10 +79,6 @@ $(function () {
       $(this).val("");
     }
   });
-  // $("#fechainicio").change(function () {
-  //   var fechaProduccion = $(this).val();
-  //   $("#fechavencimiento").attr("min", fechaProduccion);
-  // });
   /* -------------------------------------------------------------------------- */
 
   /*--------------------------Mostrar tabla principal pendientes-------------- */
@@ -259,15 +254,6 @@ $(function () {
       Swal.fire({
         title: "¡Error!",
         text: "Añadir fecha de vencimiento.",
-        icon: "error",
-        confirmButtonText: "Aceptar",
-      });
-      return;
-    }
-    if (textAreaObservacion === "") {
-      Swal.fire({
-        title: "¡Error!",
-        text: "Añadir la observación.",
         icon: "error",
         confirmButtonText: "Aceptar",
       });

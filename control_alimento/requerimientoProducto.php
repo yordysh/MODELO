@@ -175,21 +175,29 @@ $mostrarrequerimiento = $mostrar->MostrarTPMRequerimiento();
                             <div class="col-md-6">
                                 <button style="margin-bottom: 80px;" id="botonInsertValor" name="calcularInsEnv" class="btn btn-primary boton-insertar">Guardar</button>
                             </div>
+
                             <div class="col-md-6">
-                                <select name="select_requerimiento" id="idrequerimientotemp" class="margin">
-                                    <?php
-                                    $primerRequerimiento = reset($mostrarrequerimiento);
-                                    foreach ($mostrarrequerimiento as $reque) {
-                                        echo '<option value="' . $reque->COD_REQUERIMIENTO . '"';
-                                        if ((int)$reque->COD_REQUERIMIENTO === (int)$primerRequerimiento->COD_REQUERIMIENTO) {
-                                            echo ' selected';
+                                <?php
+                                if (count($mostrarrequerimiento) > 0) { ?>
+
+                                    <select name="select_requerimiento" id="idrequerimientotemp" class="margin">
+                                        <?php
+                                        $primerRequerimiento = reset($mostrarrequerimiento);
+                                        foreach ($mostrarrequerimiento as $reque) {
+                                            echo '<option value="' . $reque->COD_REQUERIMIENTO . '"';
+                                            if ((int)$reque->COD_REQUERIMIENTO === (int)$primerRequerimiento->COD_REQUERIMIENTO) {
+                                                echo ' selected';
+                                            }
+                                            echo '>';
+                                            echo $reque->COD_REQUERIMIENTO;
+                                            echo '</option>';
                                         }
-                                        echo '>';
-                                        echo $reque->COD_REQUERIMIENTO;
-                                        echo '</option>';
-                                    }
-                                    ?>
-                                </select>
+                                        ?>
+                                    </select>
+                                <?php } else {
+                                    echo "<select name='select_requerimiento' id='idrequerimientotemp'><option selected>Seleccione</option> </select>";
+                                }
+                                ?>
                                 <button style="margin-top: 20px;" id="requerimientoorden" name="requerimiento" class="btn btn-success" href="#" onclick="generarPDF()">Requerimiento</button>
                             </div>
                         </div>

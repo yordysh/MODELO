@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-$codusuario = $_SESSION["cod"];
-$oficina = $_SESSION["ofi"];
-// $oficina = 'SMP2';
-// $codusuario = "0356";
+// $codusuario = $_SESSION["cod"];
+// $oficina = $_SESSION["ofi"];
+$oficina = 'SMP2';
+$codusuario = "0356";
 
 ?>
 
@@ -95,10 +95,10 @@ $dataPersonal = $personal->MostrarDatosPersonal();
 
                             <!--Combo Produccion -->
                             <div class="form-outline mb-4 col-md-6">
-                                <label class="form-label">Lote produccion</label>
+                                <label class="form-label">Lote producción</label>
                                 <input type="hidden" id="hiddenproduccion">
                                 <select id="selectNumProduccion" class="form-select selectNumProduccion" aria-label="Default select example">
-                                    <option value="none" selected disabled>Seleccione produccion</option>
+                                    <option value="none" selected disabled>Seleccione producción</option>
                                 </select>
                             </div>
                         </div>
@@ -109,7 +109,7 @@ $dataPersonal = $personal->MostrarDatosPersonal();
                                 <input type="text" id="cantidad" class="form-control" name="cantidad" step="1" pattern="[0-9]+" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Total unidades estimada</label>
+                                <label class="form-label">Total (Unidades estimada)</label>
                                 <input type="text" class="form-control form-control-sm" id="txtcantidadproductos" name="txtcantidadproductos" readonly />
                             </div>
                             <!-- <div class="btncalcular"> -->
@@ -167,7 +167,10 @@ $dataPersonal = $personal->MostrarDatosPersonal();
                                 </tbody>
                             </table>
                         </div>
-
+                        <div class="estiloguardar">
+                            <button id="botonguardarregistro" type="submit" name="insert" class="btn btn-primary estiloguardar">Guardar </button>
+                        </div>
+                        <hr>
                         <!-- Crear PDF -->
                         <div class="contenedorpdfverificar">
                             <div class="separacion">
@@ -199,10 +202,6 @@ $dataPersonal = $personal->MostrarDatosPersonal();
                             <div class="dosimetria">
                                 <button id="generarPDF" class="btn btn-success estilodosimetria">DOSIMETRIA</button>
                             </div>
-                        </div>
-
-                        <div class="estiloguardar">
-                            <button id="botonguardarregistro" type="submit" name="insert" class="btn btn-primary estiloguardar">Guardar </button>
                         </div>
                     </form>
 

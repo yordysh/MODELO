@@ -109,7 +109,7 @@ function exportardosimetria(obj) {
       doc.text(codreque, 60, 39);
       doc.line(58, 40, 78, 40); //linea horizonatal
 
-      doc.text("CANTIDAD DE PRODUCTO: ", 32, 48);
+      doc.text("CANTIDAD DE PRODUCTO(KG): ", 32, 48);
       doc.text(cantidad, 50, 53);
       doc.line(32, 54, 78, 54); //linea horizonatal
 
@@ -230,7 +230,7 @@ function exportardosimetria(obj) {
       doc.text(codreque, 60, 183);
       doc.line(58, 184, 78, 184); //linea horizonatal
 
-      doc.text("CANTIDAD DE PRODUCTO: ", 32, 192);
+      doc.text("CANTIDAD DE PRODUCTO(KG): ", 32, 192);
       doc.text(cantidad, 50, 197);
       doc.line(32, 198, 78, 198); //linea horizonatal
 

@@ -5107,14 +5107,9 @@ class m_almacen
   {
     try {
 
-      $stm = $this->bd->prepare(
-        "SELECT COD_PRODUCCION, CONVERT(VARCHAR, FEC_GENERADO, 103) AS FEC_GENERADO,
+      $stm = $this->bd->prepare("SELECT COD_PRODUCCION, CONVERT(VARCHAR, FEC_VENCIMIENTO, 103) AS FEC_GENERADO,
                                   COD_PRODUCTO,NUM_PRODUCION_LOTE,ESTADO FROM T_TMPPRODUCCION 
-                                  WHERE COD_REQUERIMIENTO='$ID_PRODUCTO_COMBO' AND COD_PRODUCTO='$idp'
-                                  -- AND ESTADO='P' OR ESTADO='A'
-                                  "
-      );
-
+                                  WHERE COD_REQUERIMIENTO='$ID_PRODUCTO_COMBO' AND COD_PRODUCTO='$idp'");
       $stm->execute();
       $datos = $stm->fetchAll();
 
@@ -5213,6 +5208,7 @@ class m_almacen
       die($e->getMessage());
     }
   }
+
 
   public function MostrarListaRequerimiento($requerimiento)
   {
@@ -6011,6 +6007,11 @@ class m_almacen
           $valorkardexnuevo = $kardexcantidad['KARDEX'];
 
 
+          $valoralmacenx = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$producto'");
+          $valoralmacenx->execute();
+          $cantidadalmacenx = $valoralmacenx->fetch(PDO::FETCH_ASSOC);
+          $valoralmacencantidadx = $cantidadalmacenx['STOCK_ACTUAL'];
+
           $hora_actual = $codigo->c_horaserversql('H');
           $saldo = $this->m_saldolote($codigolote, $producto);
           $valores = 0;
@@ -6018,13 +6019,15 @@ class m_almacen
           if (count($saldo) != 0) {
             $valores = $saldo[0][3];
           } else {
-            $valores = 0;
+            // $valores = 0;
+            $valores = $valoralmacencantidadx;
           }
 
           if ($valorkardexnuevo > 0) {
             $kardex = $valorkardexnuevo;
           } else {
-            $kardex = 0;
+            // $kardex = 0;
+            $kardex = $valoralmacencantidadx;
           }
 
           $ltresta = number_format($valores + $cantidadminima, 3);
@@ -7614,13 +7617,16 @@ class m_almacen
       if (strlen($lote) != '') {
         $consulta = ' AND LOTE = ? ';
       }
-      $query = $this->bd->prepare("SELECT ISNULL(SUM(SALDO),0) as TOTAL FROM V_LOTES_PRODUCTO
-    where COD_PRODUCTO = ? AND SALDO != ? $consulta");
+      //   $query = $this->bd->prepare("SELECT ISNULL(SUM(SALDO),0) as TOTAL FROM V_LOTES_PRODUCTO
+      // where COD_PRODUCTO = ? AND SALDO != ? $consulta");
+      //   $query->bindParam(1, $producto, PDO::PARAM_STR);
+      //   $query->bindParam(2, $saldo, PDO::PARAM_STR);
+      $query = $this->bd->prepare("SELECT (ISNULL(SUM(CANT_INGRESO), 0) - ISNULL(SUM(CANT_EGRESO), 0)) AS TOTAL FROM T_TMPKARDEX_PRODUCCION
+                              WHERE COD_PRODUCTO = ?");
       $query->bindParam(1, $producto, PDO::PARAM_STR);
-      $query->bindParam(2, $saldo, PDO::PARAM_STR);
-      if (strlen($lote) != '') {
-        $query->bindParam(3, $lote, PDO::PARAM_STR);
-      }
+      // if (strlen($lote) != '') {
+      //   $query->bindParam(2, $lote, PDO::PARAM_STR);
+      // }
       $query->execute();
       return $query->fetchAll(PDO::FETCH_NUM);
     } catch (Exception $e) {
