@@ -84,6 +84,18 @@ $(function () {
             i++;
           });
           $("#tablacontrolrecepcion").html(template);
+          // $(document).ready(function () {
+          //   let fechaActual = new Date();
+          //   fechaActual.setFullYear(fechaActual.getFullYear() + 1);
+          //   let fechaMinimaFormato = fechaActual.toISOString().split("T")[0];
+
+          //   $("#tablacontrolrecepcion tr").each(function () {
+          //     let fechavencimientoInput = $(this).find(
+          //       "td:eq(7) input.fechavencimiento"
+          //     );
+          //     fechavencimientoInput.val(fechaMinimaFormato);
+          //   });
+          // });
         }
       },
     });
@@ -138,20 +150,47 @@ $(function () {
   /*---------------------------------------------------- */
 
   /*-------------------------------------FECHA VENCIMIENTO-------------------- */
+  $(document).on("blur", "#fechavencimiento", function () {
+    var fechavencimiento = $(this).val();
+    var partesFecha = fechavencimiento.split("-");
+    var an = partesFecha[0];
+    var anio = parseInt(partesFecha[0]);
+    var mes = parseInt(partesFecha[1]);
+    var dia = parseInt(partesFecha[2]);
 
-  var fechaAct = new Date();
-  var siguienteAnio = fechaAct.getFullYear() + 1;
+    var fechaActual = new Date();
+    var añoActual = fechaActual.getFullYear();
+    var mesActual = fechaActual.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
+    var diaActual = fechaActual.getDate();
 
-  var fechaMin = new Date(siguienteAnio, 0, 1);
-  var fechaMinimaFormato = fechaMin.toISOString().slice(0, 10);
-
-  $("#tablacontrolrecepcion tr").each(function () {
-    let fechavencimientoInput = $(this).find("td:eq(6) input.fechavencimiento");
-
-    // Establece el valor del input en cada fila
-    fechavencimientoInput.val(fechaMinimaFormato);
+    console.log(anio);
+    if (an.length < 5) {
+      if (
+        anio <= añoActual ||
+        mes < mesActual ||
+        (mes == mesActual && dia < diaActual)
+      ) {
+        Swal.fire({
+          icon: "info",
+          title: "¡Introducir una año superior a la actual!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $(this).val("");
+          }
+        });
+      }
+    } else if (an.length > 4) {
+      Swal.fire({
+        icon: "info",
+        title:
+          "¡Introducir la fecha correcta, el año debe de ser menor a 5 cifras!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $(this).val("");
+        }
+      });
+    }
   });
-
   /*------------------------------------------------------------------------- */
   /*------------------------- GUARDAR LA RECEPCION ------------------------------- */
   $("#guardarrecepcion").click((e) => {

@@ -84,7 +84,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                             </div>
                             <!-- Text input cantidad -->
                             <div class="form-outline mb-4 col-md-6">
-                                <label class="form-label">En funcion al 100%</label>
+                                <label class="form-label">En función al 100%</label>
                                 <input type="number" id="cantidadTotal" class="form-control" name="cantidadTotal" required>
                             </div>
                         </div>
@@ -120,7 +120,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                                 <thead>
                                     <tr>
                                         <th class="" scope="col">INSUMOS</th>
-                                        <th class="" scope="col">CANTIDAD</th>
+                                        <th class="" scope="col">CANTIDAD(KG)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaInsumos">
@@ -160,7 +160,7 @@ $dataProductoEnvases = $mostrar->MostrarProductoEnvases();
                                 <thead>
                                     <tr>
                                         <th class="" scope="col">ENVASES</th>
-                                        <th class="" scope="col">CANTIDAD</th>
+                                        <th class="" scope="col">CANTIDAD(UNIDADES)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaEnvasesCadaProducto">

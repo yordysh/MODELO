@@ -538,6 +538,12 @@ if ($accion == 'insertar') {
 
     $respuesta = c_almacen::c_insertar_produccion_total($codpersonal, $codrequerimientoproduccion, $codproductoproduccion, $numeroproduccion, $cantidadtotalproduccion, $fechainicio, $fechavencimiento,  $textAreaObservacion, $cantidadcaja);
     echo $respuesta;
+} elseif ($accion == 'verfechafinal') {
+    $fechaProduc =  $_POST['fechaProduc'];
+    $codprodproduccion = trim($_POST['codprodproduccion']);
+
+    $respuesta = c_almacen::c_ver_fecha_final($fechaProduc, $codprodproduccion);
+    echo $respuesta;
 } elseif ($accion == 'rechazarpendienterequerimiento') {
     $cod_requerimiento_pedido = trim($_POST['cod_requerimiento_pedido']);
     $codpersonal = trim($_POST['codpersonal']);
@@ -2661,8 +2667,6 @@ class c_almacen
                     $respuesta = array('estado' => 'sumainsumodiferente');
                     echo json_encode($respuesta);
                 }
-                // $respuesta = array('estado' => 'perfecto');
-                // echo json_encode($respuesta);
             } else if ($consultadeproductoycantidad == NULL) {
 
                 $sumainsumov = 0;
@@ -2679,14 +2683,6 @@ class c_almacen
                     $respuesta = array('estado' => 'sumainsumosincorrecta');
                     echo json_encode($respuesta);
                 }
-                // $respuesta = $m_formula->InsertarProductoCombo($codigopersonal, $selectProductoCombo, $cantidadTotal, $dataInsumo, $dataEnvase);
-                // if ($respuesta) {
-                //     $respuesta = array('estado' => 'nuevaformula');
-                //     echo json_encode($respuesta);
-                // } else {
-                //     $respuesta = array('estado' => 'errornuevaformula');
-                //     echo json_encode($respuesta);
-                // };
             } else if (floatval($consultadeproductoycantidad) != floatval($cantidadTotal)) {
                 $respuesta = array('estado' => 'cantidaddiferente');
                 echo json_encode($respuesta);
@@ -3760,6 +3756,24 @@ class c_almacen
                 return "ok";
             } else {
                 return "error";
+            };
+        }
+    }
+    static function c_ver_fecha_final($fechaProduc, $codprodproduccion)
+    {
+        $m_formula = new m_almacen();
+
+        if (isset($codprodproduccion)) {
+            $respuesta = $m_formula->mostrarfechafinal($codprodproduccion);
+
+            if ($respuesta) {
+                // $jsonstring = json_encode($respuesta);
+                // echo $jsonstring;
+                $response = array('estado' => 'ok', 'respuesta' => $respuesta);
+                echo json_encode($response);
+            } else {
+                $response = array('estado' => 'error');
+                echo json_encode($response);
             };
         }
     }

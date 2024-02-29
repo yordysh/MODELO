@@ -139,17 +139,6 @@ $(function () {
         cantidadinsumo: cantidadinsumo,
       });
     });
-
-    // for (let i = 0; i < tbInsumos.length; i++) {
-    //   let row = tbInsumos[i];
-    //   let columns = $(row).find("td");
-    //   let insumo = $(columns[0]).text();
-    //   let cantidad = $(columns[2]).text();
-
-    //   dataInsumo.push({ insumo, cantidad });
-    // }
-
-    // let tbEnvases = $("#tablaEnvasesCadaProducto tr");
     let dataEnvase = [];
     $("#tablaEnvasesCadaProducto tr").each(function () {
       let codigoproductoenvase = $(this)
@@ -162,14 +151,6 @@ $(function () {
         cantidadenvase: cantidadenvase,
       });
     });
-    // for (let i = 0; i < tbEnvases.length; i++) {
-    //   let rowenvase = tbEnvases[i];
-    //   let columns = $(rowenvase).find("td");
-    //   let envase = $(columns[0]).text();
-    //   let cantidadEnvase = $(columns[2]).text();
-
-    //   dataEnvase.push({ envase, cantidadEnvase });
-    // }
     if (dataInsumo.length === 0 || dataEnvase.length === 0) {
       Swal.fire({
         icon: "error",
@@ -585,9 +566,15 @@ $(function () {
 
           let templateenvase = ``;
           tasksenvase.forEach((taskenvase) => {
-            templateenvase += `<tr taskId="" cod_formula='${taskenvase.COD_FORMULACION_ENVASE}'>
-                          <td data-titulo="ENVASES" cod_producto_envase='${taskenvase.COD_PRODUCTO_ENVASE}'>${taskenvase.DES_PRODUCTO_ENVASE}</td>
-                          <td data-titulo="CANTIDAD"><input value='${taskenvase.CAN_FORMULACION_ENVASE}' /></td>
+            templateenvase += `<tr taskId="" cod_formula='${
+              taskenvase.COD_FORMULACION_ENVASE
+            }'>
+                          <td data-titulo="ENVASES" cod_producto_envase='${
+                            taskenvase.COD_PRODUCTO_ENVASE
+                          }'>${taskenvase.DES_PRODUCTO_ENVASE}</td>
+                          <td data-titulo="CANTIDAD"><input value='${parseInt(
+                            taskenvase.CAN_FORMULACION_ENVASE
+                          )}' /></td>
                           <td><button class='btn btn-danger' id='btneliminarfilaenvase'><i class='icon-trash'></i></button></td>
                       </tr>`;
           });
@@ -612,18 +599,6 @@ $(function () {
     }
   );
   /*--------------------------------------------------------- */
-
-  /*Carga de loading hasta que de la respuesta*/
-  function showLoading() {
-    $(".preloader").css("opacity", "1");
-    $(".preloader").css("display", "block");
-  }
-
-  function hideLoading() {
-    $(".preloader").css("opacity", "0");
-    $(".preloader").css("display", "none");
-  }
-  /*---------------------------------------*/
 });
 function isJSON(str) {
   try {

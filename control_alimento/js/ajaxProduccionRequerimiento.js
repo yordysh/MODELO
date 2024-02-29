@@ -48,18 +48,85 @@ $(function () {
 
   $("#fechainicio").on("blur", function () {
     var fechaProduc = $(this).val();
+    var partesFecha = fechaProduc.split("-");
+    var an = partesFecha[0];
     var fechaActual = new Date();
     fechaActual.setDate(fechaActual.getDate() - 3);
     var fechaLimite = fechaActual.toISOString().split("T")[0];
-    if (fechaProduc < fechaLimite) {
+    if (an.length < 5) {
+      if (fechaProduc < fechaLimite) {
+        Swal.fire({
+          icon: "error",
+          title: "Error de fecha ingresada",
+          text: "La fecha es menor a la fecha actual o está dentro de los últimos 3 días.",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById("fechainicio").value = fechaActualFormato;
+          }
+        });
+      } else {
+        let codprodproduccion = $("#idhiddenproducto").val();
+        var accionfecha = "verfechafinal";
+        $.ajax({
+          url: "./c_almacen.php",
+          type: "POST",
+          data: {
+            accion: accionfecha,
+            fechaProduc: fechaProduc,
+            codprodproduccion: codprodproduccion,
+          },
+          success: function (response) {
+            let r = JSON.parse(response);
+            if (r.estado == "error") {
+              Swal.fire({
+                icon: "error",
+                title:
+                  "¡Necesita un producto seleccionar para hacer el calculo de F.V!",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  document.getElementById("fechainicio").value =
+                    fechaActualFormato;
+                }
+              });
+            } else if (r.estado == "ok") {
+              let sumafecha = r.respuesta["T_VIDA"];
+              let fechaInicial = new Date($("#fechainicio").val());
+              let dia = fechaInicial.getDate();
+              let mes = fechaInicial.getMonth();
+              let año = fechaInicial.getFullYear();
+
+              año += Math.floor(sumafecha / 12);
+              mes += sumafecha % 12;
+              if (mes > 11) {
+                año++;
+                mes -= 12;
+              }
+              let nuevaFecha = new Date(año, mes, dia);
+              let nuevaFechaFormateada = `${nuevaFecha.getFullYear()}-${(
+                nuevaFecha.getMonth() + 1
+              )
+                .toString()
+                .padStart(2, "0")}-${nuevaFecha
+                .getDate()
+                .toString()
+                .padStart(2, "0")}`;
+
+              $("#fechavencimiento").val(nuevaFechaFormateada);
+            }
+          },
+        });
+      }
+    } else if (an.length > 4) {
       Swal.fire({
-        icon: "error",
-        title: "Error de fecha ingresada",
-        text: "La fecha es menor a la fecha actual o está dentro de los últimos 3 días.",
+        icon: "info",
+        title:
+          "¡Introducir la fecha correcta, el año debe de ser menor a 5 cifras!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById("fechainicio").value = fechaActualFormato;
+        }
       });
-      document.getElementById("fechainicio").value = fechaActualFormato;
     }
-    $("#fechavencimiento").val("");
   });
 
   /*------------------------------ */

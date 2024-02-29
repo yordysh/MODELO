@@ -215,9 +215,9 @@ $(function () {
                                 <td data-titulo="MATERIALES" taskcodigoproducto=${
                                   task.COD_PRODUCTO
                                 }>${task.DES_PRODUCTO}</td>
-                                <td data-titulo="CANTIDAD" >${
+                                <td data-titulo="CANTIDAD" >${parseInt(
                                   task.CANTIDAD_TOTAL
-                                }</td>
+                                )}</td>
                                 <td data-titulo="LOTE"><input  class='lotesx' type='text' readonly value="${lote(
                                   lotesenvase
                                 )}"/></td>

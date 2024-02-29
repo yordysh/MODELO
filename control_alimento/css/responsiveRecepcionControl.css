@@ -329,11 +329,11 @@ section {
   margin-right: 15px;
 }
 
-/* .fixed-header {
+.fixed-header {
   position: sticky;
   top: 0;
   background-color: #f8f9fa;
-} */
+}
 /*-------------- Estilo de responsive ---------------------*/
 
 @media screen and (max-width: 1370px) {

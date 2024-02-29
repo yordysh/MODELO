@@ -126,7 +126,7 @@ $mostrarrequerimiento = $mostrar->MostrarTPMRequerimiento();
 
                                     <tr>
                                         <th class="" scope="col">INSUMOS</th>
-                                        <th class="" scope="col">CANTIDAD</th>
+                                        <th class="" scope="col">CANTIDAD(KG)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaInsumosDatos">

@@ -4092,6 +4092,18 @@ class m_almacen
       die($e->getMessage());
     }
   }
+  public function mostrarfechafinal($codprodproduccion)
+  {
+    try {
+
+      $stm = $this->bd->prepare("SELECT T_VIDA FROM T_PRODUCTO WHERE COD_PRODUCTO='$codprodproduccion'");
+      $stm->execute();
+      $datos = $stm->fetch(PDO::FETCH_ASSOC);
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   public function RechazarPendienteRequerimiento($cod_requerimiento_pedido, $codpersonal)
   {
     try {

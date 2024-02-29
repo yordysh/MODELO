@@ -160,8 +160,7 @@ $dataProductoTerminado = $mostrar->MostrarProductoTerminado();
                             <!-- Text input fecha inicio-->
                             <div class="col-md-4 form-outline mb-4">
                                 <label class="form-label">Fecha vencimiento (F.V)</label>
-                                <!-- <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric" min="<?php echo date('Y'); ?>-01-01" max="<?php echo date('Y'); ?>-12-31"> -->
-                                <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric">
+                                <input type="date" id="fechavencimiento" class="form-control" name="" inputmode="numeric" disabled>
                             </div>
                             <!-- Text input cantidad por caja-->
                             <div class="col-md-4 form-outline mb-4">
