@@ -148,8 +148,10 @@ $mesversion = $mesesEnLetras[$mesExtra];
             <tr>
                 <th class="">CÓDIGO PRODUCTO</th>
                 <th class="">DESCRIPCIÓN</th>
+                <th class="">ENTRADA</th>
+                <th class="">SALIDA</th>
                 <th class="">STOCK ACTUAL</th>
-                <th class="">STOCK ANTERIOR</th>
+
             </tr>
         </thead>
         <?php
@@ -158,8 +160,9 @@ $mesversion = $mesesEnLetras[$mesExtra];
             echo '<tr>';
             echo '<td style="font-size:13px; text-align:center;">' . $row["COD_PRODUCCION"] . '</td>';
             echo '<td style="font-size:13px; text-align:center;">' . $row["DES_PRODUCTO"] . '</td>';
+            echo '<td style="font-size:13px; text-align:center;">' . number_format($row["INGRESO"], 3) . '</td>';
+            echo '<td style="font-size:13px; text-align:center;">' . number_format($row["SALIDA"], 3) . '</td>';
             echo '<td style="font-size:13px; text-align:center;">' . number_format($row["STOCK_ACTUAL"], 3) . '</td>';
-            echo '<td style="font-size:13px; text-align:center;">' . number_format($row["STOCK_ANTERIOR"], 3) . '</td>';
             echo '</tr>';
         }
         echo "</tbody>";

@@ -104,7 +104,7 @@ $datakardex = $mostrar->Mostrarkardex();
             </div>
         </div>
         <div class="row">
-            <div class="form-outline mb-1 col-md-3">
+            <div class="form-outline mb-1 col-md-2">
                 <label class="form-label">Producto</label>
                 <select id="selectProductokardex" class="form-select selectProducto" aria-label="Default select example" required>
                     <option value="none" selected disabled>Seleccione producto</option>
@@ -116,17 +116,20 @@ $datakardex = $mostrar->Mostrarkardex();
                     ?>
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label>FECHA INI</label>
                 <input type="date" id="txtfechainipdf" name="txtfechainipdf" class="form-control form-control-sm" />
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label>FECHA FIN</label>
                 <input type="date" id="txtfechafinpdf" name="txtfechafinpdf" class="form-control form-control-sm" />
 
             </div>
             <div class="col-md-3 mt-4">
                 <button id="kardexpdf" name="requerimiento" class="btn btn-success" href="#" onclick="generarPDF()">PDF KARDEX</button>
+            </div>
+            <div class="col-md-3 mt-4">
+                <button id="reportetotalkardex" name="requerimiento" class="btn btn-warning" href="#" onclick="generarPDFTOTAL()">KARDEX TOTAL</button>
             </div>
         </div>
     </main>
@@ -143,6 +146,11 @@ $datakardex = $mostrar->Mostrarkardex();
         fechainicio = encodeURIComponent(fechainicio);
         fechafin = encodeURIComponent(fechafin);
         var url = "pdf-lista-kardex.php?codigo=" + codproducto + "&fechainicio=" + fechainicio + "&fechafin=" + fechafin;
+        window.open(url, "_blank");
+    }
+
+    function generarPDFTOTAL() {
+        var url = "pdf-lista-stock-actual.php";
         window.open(url, "_blank");
     }
 </script>

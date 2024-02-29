@@ -257,13 +257,6 @@ $(function () {
       });
     });
 
-    // let hora;
-    // let gbf;
-    // let guia;
-    // let boleta;
-    // let factura;
-    // let codigolote;
-    // let fechavencimiento;
     let horaEmpty = false;
     let iscodigoloteEmpty = false;
     let isFechavencimientoEmpty = false;

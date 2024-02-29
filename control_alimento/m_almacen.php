@@ -4182,7 +4182,6 @@ class m_almacen
       $stm = $this->bd->prepare("SELECT STOCK_ACTUAL FROM T_TMPALMACEN_INSUMOS WHERE COD_PRODUCTO='$codigoproducto'");
       $stm->execute();
       $consulta = $stm->fetch(PDO::FETCH_ASSOC);
-      // $resultadoformula = $consulta['STOCK_ACTUAL'];
       return $consulta;
     } catch (Exception $e) {
       die($e->getMessage());
@@ -4487,20 +4486,17 @@ class m_almacen
         // $fechaInicioObj = new DateTime($fechainicio);
         // $fechaFinalObj = new DateTime($fechafinal);
 
-        // $diferencia = $fechaInicioObj->diff($fechaFinalObj);
-        // $dias = $diferencia->days;
 
         $fecha_actual = $codigoInsumosAvances->c_horaserversql('F');
 
         // $fecha_formateada = DateTime::createFromFormat('d/m/Y', $fecha_actual)->format('Y-m-d');
         // $nueva_fecha_vencimiento = date('d/m/Y', strtotime($fecha_formateada . ' + ' . $dias . ' days'));
 
-
         $stmActualizaproduccion = $this->bd->prepare("UPDATE T_TMPPRODUCCION SET CANTIDAD_PRODUCIDA='$updatetotal',ESTADO='A' WHERE COD_PRODUCTO='$codigoproducto' AND COD_PRODUCCION='$codigoproduccion'");
         $stmActualizaproduccion->execute();
 
         $stmInsertarInsumoAvance = $this->bd->prepare("INSERT INTO T_TMPAVANCE_INSUMOS_PRODUCTOS(COD_AVANCE_INSUMOS,N_BACHADA,COD_PRODUCTO,COD_PRODUCCION,CANTIDAD,FEC_VENCIMIENTO,COD_OPERARIO)
-          VALUES ('$codigo_de_avance_insumo','$numero_generado_bachada','$codigoproducto','$codigoproduccion','$cantidadtotalenvases',CONVERT(DATE, '$fecha_actual', 103),'$codoperario')");
+          VALUES ('$codigo_de_avance_insumo','$numero_generado_bachada','$codigoproducto','$codigoproduccion','$cantidadtotalenvases',CONVERT(DATE, '$fechafinal'),'$codoperario')");
 
         $stmInsertarInsumoAvance->execute();
 
@@ -4574,6 +4570,20 @@ class m_almacen
 
           $disminuyealmaceninsumos = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET STOCK_ACTUAL='$valordisminuidoenvase',STOCK_ANTERIOR='$valorestockenvase' WHERE COD_PRODUCTO='$codProductoAvance'");
           $disminuyealmaceninsumos->execute();
+        }
+
+        $totalsumadeenvase = $this->bd->prepare("SELECT COD_PRODUCTO, SUM(CAST(CANTIDAD AS DECIMAL(15, 2))) AS SUMA_TOTAL
+        FROM T_TMPAVANCE_INSUMOS_PRODUCTOS_ENVASES WHERE COD_AVANCE_INSUMOS='$codigo_de_avance_insumo'
+        GROUP BY COD_PRODUCTO");
+        $totalsumadeenvase->execute();
+        $sumenvase = $totalsumadeenvase->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($sumenvase as $rowenvase) {
+          $codigoproductoenvase = $rowenvase["COD_PRODUCTO"];
+          $sumatotalproductoenvase = $rowenvase["SUMA_TOTAL"];
+
+          $actualizatotalprod = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET SALIDA='$sumatotalproductoenvase' WHERE COD_PRODUCTO='$codigoproductoenvase'");
+          $actualizatotalprod->execute();
         }
 
         $suminsumos = 0;
@@ -4653,6 +4663,22 @@ class m_almacen
           $disminuyealmaceninsumos = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET STOCK_ACTUAL='$valordisminuido',STOCK_ANTERIOR='$valorestock' WHERE COD_PRODUCTO='$codProductoAvanceinsumo'");
           $disminuyealmaceninsumos->execute();
         }
+
+        $totalsumadeinsumos = $this->bd->prepare("SELECT COD_PRODUCTO, SUM(CAST(CANTIDAD AS DECIMAL(15, 2))) AS SUMA_TOTAL
+        FROM T_TMPAVANCE_INSUMOS_PRODUCTOS_ITEM WHERE COD_AVANCE_INSUMOS='$codigo_de_avance_insumo'
+        GROUP BY COD_PRODUCTO");
+        $totalsumadeinsumos->execute();
+        $suminsumo = $totalsumadeinsumos->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($suminsumo as $rowinsumo) {
+          $codigoproductoinsu = $rowinsumo["COD_PRODUCTO"];
+          $sumatotalproductoinsu = $rowinsumo["SUMA_TOTAL"];
+
+          $actualizatotalprod = $this->bd->prepare("UPDATE T_TMPALMACEN_INSUMOS SET SALIDA='$sumatotalproductoinsu' WHERE COD_PRODUCTO='$codigoproductoinsu'");
+          $actualizatotalprod->execute();
+        }
+
+
 
         $stmContienevalor = $this->bd->prepare("SELECT NUM_LOTE FROM T_TMPPRODUCCION_BARRAS WHERE COD_PRODUCCION='$codigoproduccion'");
         $stmContienevalor->execute();
@@ -7473,7 +7499,8 @@ class m_almacen
     try {
 
       $totalinsumo = $this->bd->prepare("SELECT TI.COD_ALMACEN AS COD_ALMACEN,TP.COD_PRODUCCION AS COD_PRODUCCION,TI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,
-                                          TI.STOCK_ACTUAL AS STOCK_ACTUAL, TI.STOCK_ANTERIOR AS STOCK_ANTERIOR FROM T_TMPALMACEN_INSUMOS TI 
+                                          TI.STOCK_ACTUAL AS STOCK_ACTUAL, TI.STOCK_ANTERIOR AS STOCK_ANTERIOR, ISNULL(TI.INGRESO,0) AS INGRESO,
+                                          ISNULL(TI.SALIDA,0) AS SALIDA FROM T_TMPALMACEN_INSUMOS TI 
                                           INNER JOIN T_PRODUCTO TP ON TI.COD_PRODUCTO=TP.COD_PRODUCTO ORDER BY TP.DES_PRODUCTO ASC");
       $totalinsumo->execute();
       $totalinsumoorden = $totalinsumo->fetchAll(PDO::FETCH_ASSOC);
