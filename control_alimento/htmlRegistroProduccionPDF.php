@@ -114,8 +114,6 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
         <table>
             <tbody>
                 <tr>
-                    <!-- <td rowspan="4" style="text-align: center;"><img src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/MODELO/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
-                    <!-- <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
                     <td rowspan="4" style="text-align: center;"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/img_lab.jpg')); ?>" style="width: 80px; height: 50px;" alt=""></td>
                     <td rowspan="4" style="text-align: center; font-size:10px; font-weigth:400;">REGISTRO DE ENVASES - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                     <td class="estilotd">LBS-OP-FR-01</td>

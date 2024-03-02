@@ -79,12 +79,9 @@ $dataProducto = $mostrar->MostrarProductoInsumos();
                         </table>
                     </div>
                     <form method="post" action="" id="formularioInsumosLab">
-
                         <!-- Text input nombre -->
                         <div class="form-outline mb-4">
                             <label class="form-label">Nombre</label>
-                            <!-- <input type="hidden" id="task_insumos_lab">
-                            <input type="text" id="nombre_insumos_lab" class="form-control" name="nombre_insumos_lab" required> -->
                             <select id="selectPrevilife" class="form-select select-Previlife" aria-label="Default select example">
                                 <option value="none" selected disabled>Seleccione producto</option>
                                 <?php foreach ($dataProducto as $lis) { ?>

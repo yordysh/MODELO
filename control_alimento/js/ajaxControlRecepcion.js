@@ -9,6 +9,66 @@ $(function () {
     document.querySelector(".preloader").style.opacity = "0";
     document.querySelector(".preloader").style.display = "none";
   }
+  /*------------Buscar por producto---------------------------- */
+  $("#search").keyup(() => {
+    let busqueda = $("#search").val();
+    let selectrequerimiento = $("#idrequerimientoorden").val();
+    const accionbusqueda = "buscarcontrolrecepcion";
+    $.ajax({
+      url: "./c_almacen.php",
+      data: {
+        accion: accionbusqueda,
+        busqueda: busqueda,
+        selectrequerimiento: selectrequerimiento,
+      },
+      type: "POST",
+      success: function (response) {
+        let r = JSON.parse(response);
+        let template = ``;
+        let i = 1;
+        r.forEach((task) => {
+          let quitarceros = parseInt(selectrequerimiento, 10);
+          let requerimiento = "RQ-" + quitarceros;
+          template += `<tr  class="hoverable">
+                          <td data-titulo="ITEM" >${i}</td>
+                          <td class='encabezado-especial' data-titulo="FECHA DE INGRESO" >${task.FECHA_EMISION}</td>
+                          <td data-titulo="REQUERIMIENTO" style="text-align:center;" codigoordencompra='${task.COD_ORDEN_COMPRA}'>${requerimiento}</td>
+                          <td data-titulo="HORA"><input class='form-control' type='time'  min="10:00:00" max="11:00:00" id='horaInput' class='hora'/></td>
+                          <td data-titulo="CODIGO INTERNO">${task.COD_PRODUCCION}</td>
+                          <td data-titulo="PRODUCTO" codigoproducto='${task.COD_PRODUCTO}'>${task.DES_PRODUCTO}</td>
+                          <td data-titulo="CODIGO DE LOTE"><input type="text" onkeypress="return /[A-Za-z0-9]/.test(String.fromCharCode(event.which))" class='codigolote' id='codigolote' maxlength='20' /></td>
+                          <td data-titulo="F.V"><input type='date' class='fechavencimiento' id='fechavencimiento'/></td>
+                          <td data-titulo="PROVEEDOR" codigoproveedor='${task.COD_PROVEEDOR}'>${task.NOM_PROVEEDOR}</td>
+                          <td data-titulo="G.Remisión"> <input class="form-check-input remision" type="checkbox" value="" id="remision" style='margin-left:20px;'></td>
+                          <td data-titulo="Boleta"><input class="form-check-input boleta" type="checkbox" value="" id="boleta" style='margin-left:20px;'></td>
+                          <td data-titulo="Factura"><input class="form-check-input factura" type="checkbox" value="" id="factura" style='margin-left:20px;'></td>
+                          <td data-titulo="N° GUIA,BOLETA O FACTURA"><input  maxlength='20'/></td>
+                          <td data-titulo="Primario"><input class="form-check-input primario" type="checkbox" value="" id="primario"></td>
+                          <td data-titulo="Secundario"><input class="form-check-input secundario" type="checkbox" value="" id="secundario"></td>
+                          <td data-titulo="Saco"><input class="form-check-input saco" type="checkbox" value="" id="saco"></td>
+                          <td data-titulo="Caja"><input class="form-check-input caja" type="checkbox" value="" id="caja"></td>
+                          <td data-titulo="Cilindro"><input class="form-check-input cilindro" type="checkbox" value="" id="cilindro"></td>
+                          <td data-titulo="Bolsa"><input class="form-check-input bolsa" type="checkbox" value="" id="bolsa"></td>
+                          <td data-titulo="CANTIDAD (Kg)"><input class="cantidadminima" value="${task.CANTIDAD_INSUMO_ENVASE}" /></td>
+                          <td data-titulo="Envase integro/Hermético"><input class="form-check-input eih obs" type="checkbox" value="" id="eih" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                          <td data-titulo="Certificado de calidad"><input class="form-check-input cdc obs" type="checkbox" value="" id="cdc" data-codigoprod='${task.COD_PRODUCTO}'  checked></td>
+                          <td data-titulo="Rotulación conforme"><input class="form-check-input rotulacion obs" type="checkbox" value="" id="rotulacion" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                          <td data-titulo="Aplicación de las BPD"><input class="form-check-input aplicacion obs" type="checkbox" value="" id="aplicacion" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                          <td data-titulo="Higiene & salud"><input class="form-check-input higienesalud obs" type="checkbox" value="" id="higienesalud" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                          <td data-titulo="Indumentaria completa y limpia"><input class="form-check-input indumentaria obs" type="checkbox" value="" id="indumentaria" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                          <td data-titulo="Limpio"><input class="form-check-input limpio obs" type="checkbox" value="" id="limpio" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                          <td data-titulo="Exclusivo"><input class="form-check-input exclusivo obs" type="checkbox" value="" id="exclusivo" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                          <td data-titulo="Hermetico"><input class="form-check-input hermetico obs" type="checkbox" value="" id="hermetico" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                          <td data-titulo="Ausencia de plagas"><input class="form-check-input ausencia obs" type="checkbox" value="" id="ausencia" data-codigoprod='${task.COD_PRODUCTO}' checked></td>
+                          <td data-titulo="V°B°"></td>
+                       </tr>`;
+          i++;
+        });
+        $("#tablacontrolrecepcion").html(template);
+      },
+    });
+  });
+  /*---------------------------------------------------------- */
   //----------------------------------------------------------------//
   $("#idrequerimientoorden").change(function () {
     let selectrequerimiento = $("#idrequerimientoorden").val();

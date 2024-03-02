@@ -58,11 +58,9 @@ $dataZona = $mostrar->MostrarAlmacenMuestra();
                         <table id="tbLimpieza" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
-                                    <!-- <th class="thtitulo" scope="col">COD. FRECUENCIA</th> -->
                                     <th class="thtitulo" scope="col">ZONA/ÁREA</th>
                                     <th class="thtitulo" scope="col">MATERIALES</th>
                                     <th class="thtitulo" scope="col">FECHA</th>
-                                    <!-- <th class="thtitulo" scope="col">VERSION</th> -->
                                     <th></th>
                                 </tr>
                             </thead>

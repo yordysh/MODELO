@@ -5,7 +5,6 @@
     $requerimiento = $_GET['requerimiento'];
 
     $mostrar = new m_almacen();
-    // $nombre = 'LBS-PHS-FR-02';
     $totalproductos = $mostrar->MostrarOrdenComprada($requerimiento);
 
     $fechaDateTime = new DateTime();

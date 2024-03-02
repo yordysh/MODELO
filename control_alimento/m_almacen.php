@@ -2535,18 +2535,6 @@ class m_almacen
       VALUES ('$codRequerimiento','$codpersonal','$horaMinutosSegundosRequerimiento')");
       $insert = $stmRequerimiento->execute();
 
-      // $sumaTotalInEn = 0;
-      // for ($i = 0; $i < count($unionItem); $i += 2) {
-
-      //   $codProductoTotal = $unionItem[$i];
-      //   $canInsuTotal = $unionItem[$i + 1];
-      //   $sumaTotalInEn =  $sumaTotalInEn + $canInsuTotal;
-
-
-      //   $stmRequeItem = $this->bd->prepare("INSERT INTO T_TMPREQUERIMIENTO_ITEM(COD_REQUERIMIENTO, COD_PRODUCTO, CANTIDAD)
-      //   VALUES ('$codRequerimiento', '$codProductoTotal', '$canInsuTotal')");
-      //   $stmRequeItem->execute();
-      // }
       $sumaTotalInEn = 0;
       $totalprod = 0;
       foreach ($unionItem->valoresCapturadosTotalEnvase as $dato) {
@@ -2558,8 +2546,6 @@ class m_almacen
         VALUES ('$codRequerimiento', '$codProductoTotal', '$canInsuTotal','$dato[2]')");
         $stmRequeItem->execute();
       }
-      // $stmSumRequerimiento = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET CANTIDAD='$sumaTotalInEn' WHERE COD_REQUERIMIENTO='$codRequerimiento'");
-      // $stmSumRequerimiento->execute();
       $stmSumRequerimiento = $this->bd->prepare("UPDATE T_TMPREQUERIMIENTO SET CANTIDAD='$sumaTotalInEn',
       TOTAL_PRODUCTO = '$totalprod' WHERE COD_REQUERIMIENTO='$codRequerimiento'");
       $stmSumRequerimiento->execute();
@@ -6514,10 +6500,28 @@ class m_almacen
         INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=TRECEP.COD_PROVEEDOR
         INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TRECEP.COD_PRODUCTO
         INNER JOIN T_TMPCONTROL_RECEPCION_COMPRAS TCR ON TCR.COD_TMPCONTROL_RECEPCION_COMPRAS=TRECEP.COD_TMPCONTROL_RECEPCION_COMPRAS
-        WHERE TCR.ESTADO='P'AND MONTH(FECHA_INGRESO) = '$mesSeleccionado' AND YEAR(FECHA_INGRESO) = '$anioSeleccionado'"
+        WHERE TCR.ESTADO='P' AND MONTH(FECHA_INGRESO) = '$mesSeleccionado' AND YEAR(FECHA_INGRESO) = '$anioSeleccionado' ORDER BY TRECEP.HORA"
       );
       $stm->execute();
       $datos = $stm->fetchAll();
+
+      return $datos;
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function BuscarControlRecepcion($busqueda, $selectrequerimiento)
+  {
+    try {
+      $stm = $this->bd->prepare(
+        "SELECT OC.COD_ORDEN_COMPRA AS COD_ORDEN_COMPRA,OC.COD_REQUERIMIENTO AS COD_REQUERIMIENTO,OC.FECHA_REALIZADA AS FECHA_REALIZADA,TI.COD_PRODUCTO AS COD_PRODUCTO,TP.DES_PRODUCTO AS DES_PRODUCTO,TP.COD_PRODUCCION AS COD_PRODUCCION,
+        TI.CANTIDAD_INSUMO_ENVASE AS CANTIDAD_INSUMO_ENVASE,TI.MONTO AS MONTO, OC.COD_PROVEEDOR AS COD_PROVEEDOR,TPRO.NOM_PROVEEDOR AS NOM_PROVEEDOR,CONVERT(VARCHAR, GETDATE(), 23) AS FECHA_EMISION  FROM T_TMPORDEN_COMPRATEMP OC 
+        INNER JOIN T_TMPORDEN_COMPRA_ITEMTEMP TI ON OC.COD_ORDEN_COMPRA=TI.COD_ORDEN_COMPRA
+        INNER JOIN T_PRODUCTO TP ON TP.COD_PRODUCTO=TI.COD_PRODUCTO
+        INNER JOIN T_PROVEEDOR TPRO ON TPRO.COD_PROVEEDOR=OC.COD_PROVEEDOR WHERE OC.COD_REQUERIMIENTO='$selectrequerimiento' AND CAST(TI.FECHA_ENTREGA AS DATE) <= CAST(GETDATE() AS DATE) AND TI.ESTADO='P' AND TP.DES_PRODUCTO LIKE '%$busqueda%'"
+      );
+      $stm->execute();
+      $datos = $stm->fetchAll(PDO::FETCH_OBJ);
 
       return $datos;
     } catch (Exception $e) {

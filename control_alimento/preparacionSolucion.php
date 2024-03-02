@@ -3,7 +3,6 @@ require_once "m_almacen.php";
 
 $mostrar = new m_almacen();
 $dataInsumos = $mostrar->MostrarSoluciones();
-// $dataUnion = $mostrar->MostrarUnion();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,14 +12,14 @@ $dataInsumos = $mostrar->MostrarSoluciones();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/responsiveControl.css">
+    <link rel="stylesheet" href="./css/responsivePreparacion.css">
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="./images/icon/covifarma-ico.ico" type="images/png">
 
     <!--====== Estilo de ICON ======-->
     <link rel="stylesheet" href="./styleIcons/style.css">
 
-    <title>Covifarma</title>
+    <title>Labsabel</title>
 </head>
 
 <body>
@@ -45,32 +44,6 @@ $dataInsumos = $mostrar->MostrarSoluciones();
     <?php
     require_once('../menulista/index.php');
     ?>
-    <!-- <nav class="nav">
-        <div class="wave"></div>
-        <i class="icon-menu navOpenBtn"></i>
-        <a class="logo" href="./"><img src="./images/logo-covifarma.png" alt=""></a>
-        <ul class="nav-links">
-            <div class="icon-cross navCloseBtn"></div>
-            <li>
-                <a class="" href="infraestructuraAccesorios.php">LBS-PHS-FR-01</a>
-            </li>
-            <li>
-                <a class="" href="#">LBS-PHS-FR-02</a>
-            </li>
-            <li>
-                <a class="" href="controlMaquinas.php">LBS-PHS-FR-03</a>
-            </li>
-            <li>
-                <a class="" href="limpiezaDesinfeccion.php">LBS-PHS-FR-04</a>
-            </li>
-
-        </ul>
-        <i class="icon-magnifying-glass search-icon" id="searchIcon"></i>
-        <div class="search-box">
-            <i class="icon-magnifying-glass search-icon"></i>
-            <input type="search" id="search" placeholder="Buscar . . ." class="form-control me-2">
-        </div>
-    </nav> -->
     <main>
         <section>
             <div class="container g-4 row">
@@ -84,14 +57,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                         <table id="tbInsumos" class="table table-sm mb-3 table-hover">
                             <thead>
                                 <tr>
-
-                                    <!-- <th class="thtitulo" scope="col">PRODUCTO SANEAMIENTO</th>
-                                    <th class="thtitulo" scope="col">PRODUCTOS</th> -->
                                     <th class="thtitulo" scope="col">CANTIDAD</th>
-                                    <!-- <th class="thtitulo" scope="col">ML</th>
-                                    <th class="thtitulo" scope="col">L</th>
-                                    <th class="thtitulo" scope="col">FECHA</th> -->
-
                                 </tr>
                             </thead>
                             <tbody id="tbPreparacion">
@@ -176,7 +142,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
                             </div>
                             <div class="aniomes">
                                 <div class="styleanmes"><label for="mes">Seleccione el año:</label>
-                                    <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
+                                    <input type="number" id="anio" name="anio" min="1900" max="2100" value="<?php echo date('Y') ?>">
                                 </div>
                                 <div class="styleanmes"> <label for="mes">Seleccione el mes:</label>
                                     <select id="mes" name="mes">
@@ -208,7 +174,7 @@ $dataInsumos = $mostrar->MostrarSoluciones();
     </main>
 
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
-        Covifarma-2023
+        Labsabel-<?php echo date('Y') ?>
     </footer>
     <?php require_once("modallitros.php"); ?>
 

@@ -61,15 +61,6 @@ $(function () {
 
     let cod_formulacion = capturaTr.attr("taskId");
 
-    // if (capturaTr) {
-    //   Swal.fire({
-    //     title: "¡Correcto!",
-    //     text: "Se añadio los registros a las tablas correspondientes.",
-    //     icon: "success",
-    //     confirmButtonText: "Aceptar",
-    //   });
-    // }
-
     const accionproductorequerimiento = "mostrarproductoporrequerimiento";
     $.ajax({
       url: "./c_almacen.php",

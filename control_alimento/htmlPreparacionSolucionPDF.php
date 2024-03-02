@@ -140,7 +140,6 @@ $versionMuestra = $mostrar->MostrarVersionGeneral($nombre);
             <tbody>
                 <tr>
                     <td rowspan="4" class="cabecera"><img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('./images/logo-covifarmaRecorte.png')); ?>" alt=""></td>
-                    <!-- <td rowspan="4" class="cabecera"><img src="http://192.168.1.102/SISTEMA/control_alimento/images/logo-covifarmaRecorte.png" alt=""></td> -->
                     <td rowspan="4" style="text-align: center; font-size:25px; font-weigth:200;">PREPARACIÓN DE SOLUCIÓN DE LIMPIEZA Y DESINFECCIÓN - <?php echo ($mesConvert . ' ' . $anioSeleccionado); ?> </td>
                     <td>LBS-PHS-FR-02</td>
 

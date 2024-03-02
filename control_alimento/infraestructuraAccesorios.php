@@ -89,60 +89,62 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
 
                         <div class="estiloordencompra">
                             <!--Combo zona areas -->
-                            <div class="form-outline mb-4 custom-infra">
+                            <div class="row">
+                                <div class="form-outline mb-4 col-sm-4">
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <label class="form-label">Zona/Areas</label>
 
-                                <label class="form-label">Zona/Areas</label>
+                                            <select id="selectInfra" class="form-select " aria-label="Default select example">
+                                                <option value="none" selected disabled>Seleccione Zona/Areas</option>
+                                                <?php foreach ($dataInfra as $lis) {
+                                                    // if ($lis->NOMBRE_T_ZONA_AREAS != "TRANSITO DE PERSONAL" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES Y VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES Y VARONES)") {
+                                                ?>
+                                                    <option value="<?php echo trim($lis->COD_ZONA); ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
+                                                <?php
+                                                }
+                                                // }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-5 mt-4">
+                                            <button style="margin-left: 20px;" type='button' class="custom-icon-zona" data-bs-toggle="modal" data-bs-target="#mostrarzonas"><i class="icon-circle-with-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                <select id="selectInfra" class="form-select selectZona" aria-label="Default select example">
-                                    <option value="none" selected disabled>Seleccione Zona/Areas</option>
-                                    <?php foreach ($dataInfra as $lis) {
-                                        // if ($lis->NOMBRE_T_ZONA_AREAS != "TRANSITO DE PERSONAL" && $lis->NOMBRE_T_ZONA_AREAS != "SS.HH(MUJERES Y VARONES)" && $lis->NOMBRE_T_ZONA_AREAS != "VESTUARIOS(MUJERES Y VARONES)") {
-                                    ?>
-                                        <option value="<?php echo trim($lis->COD_ZONA); ?>" class="option"><?php echo $lis->COD_ZONA; ?> <?php echo $lis->NOMBRE_T_ZONA_AREAS; ?></option>
-                                    <?php
-                                    }
-                                    // }
-                                    ?>
-                                </select>
+                                <!--Combo infraestructura -->
+                                <div class="form-outline mb-4 col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <input type="hidden" id="valordezonahidden">
+                                            <label class="form-label">Infraestructura</label>
+                                            <select id="seleccionzonainfraestructura" class="form-select" aria-label="Default select example">
+                                                <option value="none" selected disabled>Seleccione infraestructura</option>
 
-                                <div class="buttonzonas">
-                                    <button type='button' class="custom-icon-zona" data-bs-toggle="modal" data-bs-target="#mostrarzonas"><i class="icon-circle-with-plus"></i></button>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-4">
+                                            <button style="margin-top: 10px;" type='button' class="custom-icon" data-bs-toggle="modal" data-bs-target="#mostrarinfraestructura"><i class="icon-circle-with-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Text input dias-->
+                                <div class="form-outline mb-4 col-md-4">
+                                    <label class="form-label">Frecuencia</label>
+                                    <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
+                                    <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
+                                        <option value="0" selected disabled>Seleccione frecuencia</option>
+                                        <option value="1">Diario</option>
+                                        <option value="2">Inter-diario</option>
+                                        <option value="7">Semanal</option>
+                                        <option value="15">Quincenal</option>
+                                        <option value="30">Mensual</option>
+                                    </select>
                                 </div>
                             </div>
-
-                            <!--Combo infraestructura -->
-                            <div class="form-outline mb-4 custom-infra">
-                                <input type="hidden" id="valordezonahidden">
-                                <label class="form-label">Infraestructura</label>
-                                <select id="seleccionzonainfraestructura" class="form-select" aria-label="Default select example">
-                                    <option value="none" selected disabled>Seleccione infraestructura</option>
-
-                                </select>
-                                <div class="buttonifraestructura">
-                                    <button type='button' class="custom-icon" data-bs-toggle="modal" data-bs-target="#mostrarinfraestructura"><i class="icon-circle-with-plus"></i></button>
-                                </div>
-                            </div>
-
-                            <!-- Text input dias-->
-                            <div class="form-outline mb-4">
-                                <label class="form-label">Frecuencia</label>
-                                <!-- <input type="text" id="NDIAS" class="form-control" name="NDIAS" required> -->
-                                <select id="selectFrecuencia" class="form-select" aria-label="Default select example">
-                                    <option value="0" selected disabled>Seleccione frecuencia</option>
-                                    <option value="1">Diario</option>
-                                    <option value="2">Inter-diario</option>
-                                    <option value="7">Semanal</option>
-                                    <option value="15">Quincenal</option>
-                                    <option value="30">Mensual</option>
-                                </select>
-                            </div>
-
                         </div>
-                        <!-- Text input nombre -->
-                        <!-- <div class="form-outline mb-4">
-                            <label class="form-label">Nombre de infraestructura</label>
-                            <input type="text" id="NOMBRE_INFRAESTRUCTURA" class="form-control" name="NOMBRE_INFRAESTRUCTURA" required>
-                        </div> -->
                         <!-- Crear PDF -->
                         <div class="contenedorgeneral">
                             <div class="btonguardar">
@@ -153,7 +155,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
                             <hr style='font-weight: 800; background-color: black;'>
                             <div class="aniomes">
                                 <div class="styleanmes"><label for="mes">Seleccione el año:</label>
-                                    <input type="number" id="anio" name="anio" min="1900" max="2100" value="2023">
+                                    <input type="number" id="anio" name="anio" min="1900" max="2100" value="<?php echo date('Y') ?>">
                                 </div>
                                 <div class="styleanmes"> <label for="mes">Seleccione el mes:</label>
                                     <select id="mes" name="mes">
@@ -188,7 +190,7 @@ $dataInfra = $mostrar->MostrarAlmacenMuestra();
         ?>
     </main>
     <footer class="bg-dark p-2 mt-5 text-light position-fixed bottom-0 w-100 text-center">
-        Covifarma-2023
+        Labasabell-<?php echo date('Y') ?>
     </footer>
 
     <script src="./js/bootstrap.min.js"></script>

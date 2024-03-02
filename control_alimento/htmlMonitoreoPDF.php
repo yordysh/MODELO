@@ -155,19 +155,6 @@ $fecham = $anioSeleccionado . '-' . $mesSeleccionado;
             left: 0;
             right: 0;
         }
-
-        /* .salto {
-            page-break-inside: avoid;
-            page-break-before: auto;
-            height: 15px;
-        } */
-
-
-
-        /* .tablaSeparada {
-            page-break-inside: avoid;
-            margin-top: 330px;
-        } */
     </style>
 
     <!-- Table titulo-->
@@ -234,8 +221,6 @@ $fecham = $anioSeleccionado . '-' . $mesSeleccionado;
 
         $numeroDiasMe = date('t', strtotime($fechaTotal));
         $columnasFechaTotales = $numeroDiasMe;
-        // $numeroDiasMe = date('t', strtotime($fecham));
-        // $columnasFechaTotales = $numeroDiasMe;
 
         echo '<thead>';
         echo '<tr>';

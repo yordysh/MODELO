@@ -46,12 +46,6 @@ require_once('../menulista/index.php');
 
   <script src="../librerias/jqueryui/js/ui_1.12.1_jquery-ui.min.js"></script>
 
-  <!--
-  <script src="../librerias/jspdf/js/jspdf_1.5.3_jspdf.min.js"></script>
-
-  <script src="../librerias/jspdf/js/jspdf-autotable_3.2.3_jspdf.plugin.autotable.min.js"></script>
-  -->
-
   <script src="../librerias/datatable/js/1.10.24_js_jquery.dataTables.js"></script>
   <script src="../librerias/datatable/js/responsive_2.2.9_js_dataTables.responsive.min.js"></script>
 

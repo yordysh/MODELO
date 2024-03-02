@@ -7,10 +7,6 @@ $mostrar = new m_almacen();
 $datalista = $mostrar->MostrarListaMaestraPDF();
 $datalistaenvases = $mostrar->MostrarListaMaestraEnvasesPDF();
 
-
-// $versionEnvasesLab = $mostrar->VersionMostrarEnvasesLab();
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

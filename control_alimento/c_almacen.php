@@ -374,7 +374,6 @@ if ($accion == 'insertar') {
     $codpersonal = ($_POST['codpersonal']);
     $union = ($_POST['union']);
     $unionEnvase = ($_POST['unionEnvase']);
-    // $unionItem = ($_POST['unionItem']);
     $unionItem = json_decode($_POST['unionItem']);
 
 
@@ -780,6 +779,11 @@ if ($accion == 'insertar') {
 } elseif ($accion == 'mostrartotaldeinsumosporcomprar') {
     $selectrequerimiento = trim($_POST['selectrequerimiento']);
     $respuesta = c_almacen::c_mostrar_valores_comprobante($selectrequerimiento);
+    echo $respuesta;
+} elseif ($accion == 'buscarcontrolrecepcion') {
+    $busqueda = $_POST['busqueda'];
+    $selectrequerimiento = trim($_POST['selectrequerimiento']);
+    $respuesta = c_almacen::c_buscar_control_recepcion($busqueda, $selectrequerimiento);
     echo $respuesta;
 } elseif ($accion == 'insertardatoscontrolrecepcion') {
 
@@ -4184,7 +4188,33 @@ class c_almacen
             echo "Error: " . $e->getMessage();
         }
     }
+    static function c_buscar_control_recepcion($busqueda, $selectrequerimiento)
+    {
+        try {
 
+            $mostrar = new m_almacen();
+            $datos = $mostrar->BuscarControlRecepcion($busqueda, $selectrequerimiento);
+
+            $json = array();
+            foreach ($datos as $row) {
+                $json[] = array(
+                    "COD_REQUERIMIENTO" => $row->COD_REQUERIMIENTO,
+                    "COD_ORDEN_COMPRA" => $row->COD_ORDEN_COMPRA,
+                    "COD_PRODUCTO" => $row->COD_PRODUCTO,
+                    "COD_PRODUCCION" => $row->COD_PRODUCCION,
+                    "DES_PRODUCTO" => $row->DES_PRODUCTO,
+                    "COD_PROVEEDOR" => $row->COD_PROVEEDOR,
+                    "NOM_PROVEEDOR" => $row->NOM_PROVEEDOR,
+                    "CANTIDAD_INSUMO_ENVASE" => $row->CANTIDAD_INSUMO_ENVASE,
+                    "FECHA_EMISION" => convFecSistema($row->FECHA_EMISION),
+                );
+            }
+            $jsonstring = json_encode($json);
+            echo $jsonstring;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
 
 
